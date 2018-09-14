@@ -58,31 +58,16 @@ module.exports = {
         options: {
           useCache: true,
           useBabel: true,
-          babelOptions: {
-            babelrc: false, /* Important line */
-            presets: [
-              [
-                'env',
-                {
-                  'targets': {
-                    'browsers': ['> 5%', 'last 2 versions']
-                  },
-                  'modules': false
-                }
-              ],
-              'stage-0',
-              'react'
-            ]
-          }
+          babelCore: '@babel/core'
         }
       },
       {
         test: /\.(js|jsx)$/,
         include: path.resolve(__dirname, '../src'),
         exclude: /node_modules/,
-        use: [
-          'babel-loader'
-        ]
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.css$/,
