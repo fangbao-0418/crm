@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+.project
+libs
+.vscode
+dist
+.idea
+.vscode
+reports
+.awcache
+yarn-error.log
+coverage
