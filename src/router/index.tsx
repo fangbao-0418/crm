@@ -4,13 +4,13 @@ import {
   BrowserRouter,
   Route
 } from 'react-router-dom'
-import Index from '@/modules'
+import APP from '@/modules/common/APP'
 const isPro = process.env.NODE_ENV === 'production'
 const Router = isPro ? BrowserRouter : HashRouter
 const basename = '/'
 const router = () => (
   <Router basename={basename}>
-    <Route path='/' component={Index} />
+    <APP />
   </Router>
 )
 

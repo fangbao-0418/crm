@@ -17,7 +17,8 @@ var plugins = [
   new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
+    'window.jQuery': 'jquery',
+    APP: path.resolve(__dirname, '../src/utils/app')
   }),
   new webpack.HotModuleReplacementPlugin()
 ]
@@ -174,7 +175,10 @@ module.exports = {
     redux: 'Redux',
     'react-redux': 'ReactRedux',
     'react-router': 'ReactRouter',
-    'react-router-dom': 'ReactRouterDOM'
+    'react-router-dom': 'ReactRouterDOM',
+    imutable: 'Immutable',
+    moment: 'moment',
+    antd: 'antd'
   },
   devtool: 'source-map'
   // eval： 生成代码 每个模块都被eval执行，并且存在@sourceURL
