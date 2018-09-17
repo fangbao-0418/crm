@@ -2,6 +2,7 @@ import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './customer'
+import Detail from './detail'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -50,6 +51,7 @@ class Main extends React.Component {
           bordered
           rowKey={'customerId'}
         />
+        <Detail/>
       </div>
     )
   }
