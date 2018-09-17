@@ -30,7 +30,8 @@ var plugins = [
   new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
+    'window.jQuery': 'jquery',
+    APP: path.resolve(__dirname, '../src/utils/app')
   }),
   new UglifyJsPlugin({
     sourceMap: false,
@@ -52,7 +53,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../deploy/dist'),
     filename: 'js/[name].[chunkhash:8].js',
-    chunkFilename: 'js/[name].[chunkhash:8].js'
+    chunkFilename: 'js/[name].[chunkhash:8].js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -187,7 +189,10 @@ module.exports = {
     redux: 'Redux',
     'react-redux': 'ReactRedux',
     'react-router': 'ReactRouter',
-    'react-router-dom': 'ReactRouterDOM'
+    'react-router-dom': 'ReactRouterDOM',
+    imutable: 'Immutable',
+    moment: 'moment',
+    antd: 'antd'
   },
   devtool: ''
 }
