@@ -8,9 +8,7 @@ class App extends React.Component<Props> {
   }
   public render () {
     return (
-      <div>
-        <Main></Main>
-      </div>
+      <Main></Main>
     )
   }
 }

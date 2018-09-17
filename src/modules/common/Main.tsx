@@ -1,11 +1,13 @@
 import React from 'react'
-import { Layout, Menu, Icon } from 'antd'
-const { Header, Sider, Content } = Layout
+import { Layout, Icon } from 'antd'
+const { Header, Content } = Layout
 import {
   Route,
   Switch
 } from 'react-router-dom'
+import Menu from './Menu'
 import modules from '@/router/modules'
+const styles = require('@/stylus/main')
 export default class extends React.Component {
   public state = {
     collapsed: false
@@ -18,33 +20,8 @@ export default class extends React.Component {
   public render () {
     console.log('main')
     return (
-      <Layout>
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={this.state.collapsed}
-        >
-          <div className='logo' />
-          <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
-            <Menu.Item key='1' onClick={() => APP.history.push('/')}>
-              <Icon type='user' />
-              <span
-              >
-                首页
-              </span>
-            </Menu.Item>
-            <Menu.Item key='2' onClick={() => APP.history.push('/customer')}>
-              <Icon type='video-camera' />
-              <span>
-                我的客资
-              </span>
-            </Menu.Item>
-            <Menu.Item key='3'>
-              <Icon type='upload' />
-              <span>nav 3</span>
-            </Menu.Item>
-          </Menu>
-        </Sider>
+      <Layout className={styles.container}>
+        <Menu />
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
             <Icon
