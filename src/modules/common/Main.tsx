@@ -23,6 +23,7 @@ export default class extends React.Component {
               <Route path='/customer' component={modules.Customer} />
               <Route path='/business' component={modules.Business} />
               <Route path='/signed' component={modules.Signed} />
+              <Route path='/open' component={modules.Open} />
             </Switch>
           </Content>
         </Layout>

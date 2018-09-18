@@ -32,7 +32,13 @@ class Main extends React.Component {
     {
       title: '公海管理',
       path: '',
-      icon: <Icon type='user' />
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '公海管理',
+          path: '/open'
+        }
+      ]
     },
     {
       title: '客资管理',
