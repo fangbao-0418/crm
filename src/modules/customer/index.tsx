@@ -3,6 +3,7 @@ import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './customer'
 import Detail from './detail'
+import ContentBox from '@/modules/common/content'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -43,7 +44,7 @@ class Main extends React.Component {
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-      <div>
+      <ContentBox>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
@@ -52,7 +53,7 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         {/* <Detail /> */}
-      </div>
+      </ContentBox>
     )
   }
 }
