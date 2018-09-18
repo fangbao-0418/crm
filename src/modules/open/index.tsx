@@ -58,8 +58,8 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         <div className='mt40'>
-          <Button type="primary" className='mr10'>批量抢客户</Button>
-          <Button type="primary" className='mr10'>批量删除</Button>
+          <Button type='primary' className='mr10'>批量抢客户</Button>
+          <Button type='primary' className='mr10'>批量删除</Button>
         </div>
       </ContentBox>
     )

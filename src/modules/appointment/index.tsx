@@ -58,9 +58,9 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         <div className='mt40'>
-          <Button type="primary" className='mr10'>批量预约</Button>
-          <Button type="primary" className='mr10'>转销售</Button>
-          <Button type="primary" className='mr10'>转客资池</Button>
+          <Button type='primary' className='mr10'>批量预约</Button>
+          <Button type='primary' className='mr10'>转销售</Button>
+          <Button type='primary' className='mr10'>转客资池</Button>
         </div>
       </ContentBox>
     )

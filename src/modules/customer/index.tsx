@@ -52,9 +52,9 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         <div className='mt40'>
-          <Button type="primary" className='mr10'>全选</Button>
-          <Button type="primary" className='mr10'>手工分配</Button>
-          <Button type="primary" className='mr10'>应用自动分配</Button>
+          <Button type='primary' className='mr10'>全选</Button>
+          <Button type='primary' className='mr10'>手工分配</Button>
+          <Button type='primary' className='mr10'>应用自动分配</Button>
         </div>
       </ContentBox>
     )
