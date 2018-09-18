@@ -1,18 +1,23 @@
 import React from 'react'
-import { Table, Button, Row, Col } from 'antd'
+import { Table, Button, Row, Col, DatePicker, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
+import Modal from 'pilipa/libs/modal'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
+  sales: DetailProps[]
+  customerCity: DetailProps[]
 }
 class Main extends React.Component {
   public state: States = {
     dataSource: [],
-    selectedRowKeys: []
+    selectedRowKeys: [],
+    sales: [],
+    customerCity: []
   }
   public data: ConditionOptionProps[] = [
     {
@@ -133,6 +138,108 @@ class Main extends React.Component {
   public onSelectAllChange () {
     console.log('select')
   }
+  public appointmentAll () {
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择预约时间：</span>
+          <DatePicker
+            format={'YYYY-MM-DD'}
+            onChange={(current) => {
+              console.log(current)
+            }}
+          />
+        </div>
+      ),
+      title: '批量预约',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toSale () {
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择销售：</span>
+          <Select
+            style={{width:'200px'}}
+            onChange={(current) => {
+              console.log(current)
+            }}
+          >
+            {
+              this.state.sales.map((d) =>
+                <Select.Option key={d.value}>{d.text}</Select.Option>
+              )
+            }
+          </Select>
+        </div>
+      ),
+      title: '销售',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toOpen () {
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择转公海原因：</span>
+        </div>
+      ),
+      title: '转公海',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toCustomersCity () {
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择客资池：</span>
+          <Select
+            style={{width:'200px'}}
+            onChange={(current) => {
+              console.log(current)
+            }}
+          >
+            {
+              this.state.customerCity.map((d) =>
+                <Select.Option key={d.value}>{d.text}</Select.Option>
+              )
+            }
+          </Select>
+        </div>
+      ),
+      title: '转客资池',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -176,10 +283,10 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         <div className='mt40'>
-          <Button type='primary' className='mr10'>批量预约</Button>
-          <Button type='primary' className='mr10'>转销售</Button>
-          <Button type='primary' className='mr10'>转公海</Button>
-          <Button type='primary' className='mr10'>转客资池</Button>
+          <Button type='primary' className='mr10' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
+          <Button type='primary' className='mr10' onClick={this.toSale.bind(this)}>转销售</Button>
+          <Button type='primary' className='mr10' onClick={this.toOpen.bind(this)}>转公海</Button>
+          <Button type='primary' className='mr10' onClick={this.toCustomersCity.bind(this)}>转客资池</Button>
         </div>
       </ContentBox>
     )
