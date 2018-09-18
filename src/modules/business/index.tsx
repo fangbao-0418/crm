@@ -56,7 +56,6 @@ class Main extends React.Component {
           bordered
           rowKey={'customerId'}
         />
-        <Detail />
       </div>
     )
   }
