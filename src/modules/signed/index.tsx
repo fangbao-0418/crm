@@ -57,7 +57,16 @@ class Main extends React.Component {
             />
           </Col>
           <Col span={8}>
-            <SearchName />
+            <SearchName
+              options={[
+                {label: '客户名称', value: '1'},
+                {label: '测试名称', value: '2'}
+              ]}
+              placeholder={''}
+              onChange={(value) => {
+                console.log(value)
+              }}
+            />
           </Col>
         </Row>
       </ContentBox>
