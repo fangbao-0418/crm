@@ -1,6 +1,6 @@
 import React from 'react'
 const styles = require('./style')
-interface Props{
+interface Props {
   title: string
 }
 class Main extends React.Component<Props> {

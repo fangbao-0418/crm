@@ -1,7 +1,7 @@
 import React from 'react'
 import Top from './Top'
 const styles = require('./style')
-interface Props{
+interface Props {
   title: string
 }
 class Main extends React.Component<Props> {

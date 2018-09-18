@@ -46,7 +46,7 @@ class Main extends React.Component {
   ]
   public render () {
     return (
-      <ContentBox>
+      <ContentBox title='签约客户'>
         <Row>
           <Col span={16}>
             <Condition
