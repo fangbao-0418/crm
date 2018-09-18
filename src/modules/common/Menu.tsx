@@ -5,7 +5,7 @@ const { Sider } = Layout
 interface MenuItem {
   title: string
   path?: string
-  icon?: any
+  icon?: JSX.Element
   children?: Array<MenuItem>
 }
 const styles = require('@/stylus/main')
@@ -14,15 +14,35 @@ class Main extends React.Component {
     collapsed: false
   }
   public configs: MenuItem[] = [
-    {title: '商机管理', path: ''},
-    {title: '公海管理', path: ''},
+    {
+      title: '商机管理',
+      icon: <Icon type='user' />,
+      path: '/'
+    },
+    {
+      title: '公海管理',
+      path: '',
+      icon: <Icon type='user' />
+    },
     {
       title: '客资管理',
       path: '',
+      icon: <Icon type='user' />,
       children: [
         {
           title: '我的客资',
           path: '/customer'
+        }
+      ]
+    },
+    {
+      title: '签约客户',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '签约客户',
+          path: '/signed'
         }
       ]
     }
@@ -39,7 +59,7 @@ class Main extends React.Component {
             key={key}
             title={<span><Icon type='team' /><span>{item.title}</span></span>}
           >
-            {this.getMenuNodes(item.children)}
+            {this.getMenuNodes(item.children, key)}
           </SubMenu>
         )
       } else {
@@ -52,7 +72,7 @@ class Main extends React.Component {
               }
             }}
           >
-            <Icon type='user' />
+            {item.icon}
             <span
             >
               {item.title}
@@ -73,7 +93,11 @@ class Main extends React.Component {
         collapsed={this.state.collapsed}
       >
         <div className={styles.logo} />
-        <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
+        <Menu
+          theme='dark'
+          mode='inline'
+          defaultSelectedKeys={['1']}
+        >
           {this.getMenuNodes()}
         </Menu>
       </Sider>

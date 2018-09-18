@@ -1,8 +1,21 @@
 .container
   height: 100%
   .menu
+    :global
+      .ant-menu
+        .ant-menu-item-selected
+          background: none
+          span
+            color: #E84845
     .logo
       width: 130px
       height: 46.8px
-      background: red
-      margin: 16px auto
+      background: url('@/assets/images/logo.png') 100% 100% no-repeat
+      margin: 32px auto 20px 20px
+      cursor: pointer
+  .content
+    margin: 24px 16px
+    padding: 0
+    background: #fff
+    // min-height: 280
+    border-radius: 8px 8px 0 0 / 8px 8px 0 0
