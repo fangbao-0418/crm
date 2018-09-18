@@ -17,12 +17,28 @@ class Main extends React.Component {
     {
       title: '商机管理',
       icon: <Icon type='user' />,
-      path: '/'
+      path: '',
+      children: [
+        {
+          title: '我的商机',
+          path: '/business'
+        },
+        {
+          title: '我的预约',
+          path: '/business'
+        }
+      ]
     },
     {
       title: '公海管理',
       path: '',
-      icon: <Icon type='user' />
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '公海管理',
+          path: '/open'
+        }
+      ]
     },
     {
       title: '客资管理',
