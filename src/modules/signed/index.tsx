@@ -1,5 +1,6 @@
 import React from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, Button } from 'antd'
+import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -58,6 +59,7 @@ class Main extends React.Component {
           </Col>
           <Col span={8}>
             <SearchName
+              style={{paddingTop: '5px'}}
               options={[
                 {label: '客户名称', value: '1'},
                 {label: '测试名称', value: '2'}
@@ -69,6 +71,16 @@ class Main extends React.Component {
             />
           </Col>
         </Row>
+        <Button
+          onClick={() => {
+            const modal = new Modal({
+              title: 'xxx'
+            })
+            modal.show()
+          }}
+        >
+          测试
+        </Button>
       </ContentBox>
     )
   }

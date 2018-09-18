@@ -602,6 +602,10 @@
   version "4.7.0"
   resolved "https://registry.npmjs.org/@types/history/-/history-4.7.0.tgz#2fac51050c68f7d6f96c5aafc631132522f4aa3f"
 
+"@types/jquery@^3.3.8":
+  version "3.3.8"
+  resolved "https://registry.npmjs.org/@types/jquery/-/jquery-3.3.8.tgz#0d1849fd6708921fe75553942fe11a7743b54c9b"
+
 "@types/node@*":
   version "10.9.4"
   resolved "https://registry.npmjs.org/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
@@ -4998,6 +5002,13 @@ pify@^2.0.0:
 pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
+
+pilipa@^3.0.3-alpha.1:
+  version "3.0.3-alpha.1"
+  resolved "https://nexus.i-counting.cn/repository/accounting/pilipa/-/pilipa-3.0.3-alpha.1.tgz#d82094b4eda93321af4ed1abbd756dc30c2dc712"
+  dependencies:
+    babel-polyfill "^6.26.0"
+    classnames "^2.2.5"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"

@@ -3,7 +3,7 @@ var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const extractCommon = new MiniCssExtractPlugin({
-  filename: 'css/common',
+  filename: 'css/common.css',
   allChunks: true
 })
 var plugins = [

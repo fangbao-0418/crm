@@ -3,6 +3,8 @@ import { Input, Select, Icon } from 'antd'
 const InputGroup = Input.Group
 const Option = Select.Option
 interface Props {
+  className?: string
+  style?: React.CSSProperties
   placeholder?: string
   options: Array<{
     label: string
@@ -26,10 +28,9 @@ class Main extends React.Component<Props> {
       this.type = options[0].value
     }
     return (
-      <InputGroup compact>
+      <InputGroup compact style={this.props.style} className={this.props.className}>
         <Select
           onChange={(value) => {
-            console.log(value)
             this.type = value
           }}
           style={{ width: '30%' }}
