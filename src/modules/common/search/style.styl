@@ -1,0 +1,24 @@
+.container
+  display: inline-block
+  ul
+    li
+      padding: 5px
+      .label
+        text-align: right
+        width: 80px
+        display: inline-block
+        padding-right: 20px
+      .options
+        display: inline-block
+        .tag
+          display: inline-block
+          min-width: 80px
+          :global
+            .ant-tag
+              padding: 0 7px
+              min-width: 50px
+              text-align: center
+        .after
+          display: inline-block
+          span:first-child
+            margin-right: 5px
