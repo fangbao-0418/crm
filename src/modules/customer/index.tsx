@@ -3,7 +3,6 @@ import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './customer'
 import ContentBox from '@/modules/common/content'
-const styles = require('./index.styl')
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -52,10 +51,10 @@ class Main extends React.Component {
           bordered
           rowKey={'customerId'}
         />
-        <div className={styles.btn}>
-          <Button type="primary" className={styles.mr10}>全选</Button>
-          <Button type="primary" className={styles.mr10}>手工分配</Button>
-          <Button type="primary" className={styles.mr10}>应用自动分配</Button>
+        <div className='mt40'>
+          <Button type="primary" className='mr10'>全选</Button>
+          <Button type="primary" className='mr10'>手工分配</Button>
+          <Button type="primary" className='mr10'>应用自动分配</Button>
         </div>
       </ContentBox>
     )

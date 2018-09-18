@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'antd'
+import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
@@ -57,6 +57,12 @@ class Main extends React.Component {
           bordered
           rowKey={'customerId'}
         />
+        <div className='mt40'>
+          <Button type="primary" className='mr10'>批量预约</Button>
+          <Button type="primary" className='mr10'>转销售</Button>
+          <Button type="primary" className='mr10'>转公海</Button>
+          <Button type="primary" className='mr10'>转客资池</Button>
+        </div>
       </ContentBox>
     )
   }
