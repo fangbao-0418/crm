@@ -61,6 +61,17 @@ class Main extends React.Component {
           path: '/signed'
         }
       ]
+    },
+    {
+      title: '客户设置',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '客户设置',
+          path: '/set'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {

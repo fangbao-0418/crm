@@ -49,7 +49,7 @@ class Main extends React.Component {
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-      <ContentBox>
+      <ContentBox title='公海管理'>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}

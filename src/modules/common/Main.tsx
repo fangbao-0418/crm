@@ -25,6 +25,7 @@ export default class extends React.Component {
               <Route path='/appointment' component={modules.Appointment} />
               <Route path='/signed' component={modules.Signed} />
               <Route path='/open' component={modules.Open} />
+              <Route path='/set' component={modules.Set} />
             </Switch>
           </Content>
         </Layout>

@@ -1,10 +1,15 @@
 import React from 'react'
 const styles = require('./style')
-class Main extends React.Component {
+interface Props{
+  title: string
+}
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.top}>
-        <div className={styles.title}>我的预约</div>
+        <div className={styles.title}>
+          {this.props.title}
+        </div>
       </div>
     )
   }

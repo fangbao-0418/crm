@@ -1,11 +1,10 @@
 export interface DetailProps {
-  customerName: string
-  contactPerson: string
-  contactPhone: string
-  can: string
-  flowtime: string
-  freeDays: string
-  customerSource: string
-  createTime: string
-  leadingPerson: string
+  bigAreaName: string
+  cityName: string
+  agencyName: string
+  autoDistributeWeight: string
+  autoDistributeMaxNum: string
+  storageCapacity: string
+  maxTrackDays: string
+  maxProtectDays: string
 }
