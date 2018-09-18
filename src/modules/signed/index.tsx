@@ -8,7 +8,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: 'all',
-      label: ['入库时间'],
+      label: ['入库时间', '倒库时间'],
       options: [
         {
           label: '全部',

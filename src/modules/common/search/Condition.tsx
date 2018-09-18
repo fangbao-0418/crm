@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tag, DatePicker } from 'antd'
+import { Tag, DatePicker, Menu, Dropdown } from 'antd'
 const { RangePicker } = DatePicker
 const { CheckableTag } = Tag
 const styles = require('./style')
@@ -14,9 +14,27 @@ interface Props {
   dataSource?: ConditionOptionProps[]
   onChange?: (values?: {[field: string]: any}) => void
 }
+interface States {
+  dataSource: ConditionOptionProps[]
+  labels: string[]
+}
 class Main extends React.Component<Props> {
-  public state = {
-    dataSource: this.props.dataSource
+  public state: States = {
+    dataSource: this.props.dataSource,
+    labels: this.getLabels()
+  }
+  public componentWillReceiveProps (props: Props) {
+    this.setState({
+      dataSource: props.dataSource,
+      labels: this.getLabels(props.dataSource)
+    })
+  }
+  public getLabels (dataSource = this.props.dataSource): string[] {
+    const labels: string[] = []
+    dataSource.forEach((item) => {
+      labels.push(item.label[0])
+    })
+    return labels
   }
   public handleChange (index: number, value: string) {
     const { dataSource } = this.state
@@ -54,9 +72,32 @@ class Main extends React.Component<Props> {
     }
     return node
   }
+  public getMenuNodes (index: number) {
+    const { dataSource, labels } = this.state
+    const options = dataSource[index].label
+    const nodes: JSX.Element[] = []
+    options.forEach((item, key) => {
+      nodes.push(
+        <Menu.Item
+          onClick={() => {
+            labels[index] = item
+            this.setState({
+              labels
+            })
+          }}
+          key={`condition-label-menu-${key}`}
+        >
+          <span>{item}</span>
+        </Menu.Item>
+      )
+    })
+    return (
+      <Menu>{nodes}</Menu>
+    )
+  }
   public getChildNodes () {
     const nodes: JSX.Element[] = []
-    const { dataSource } = this.state
+    const { dataSource, labels } = this.state
     dataSource.forEach((item, index) => {
       const options = item.options
       const tagNodes: JSX.Element[] = []
@@ -74,9 +115,24 @@ class Main extends React.Component<Props> {
       tagNodes.push(
         this.getAfterNodes(index)
       )
+      const menu = this.getMenuNodes(index)
+      const label = labels[index]
       nodes.push(
         <li>
-          <label className={styles.label}>{item.label[0]}</label>
+          <label
+            className={styles.label}
+          >
+            {
+              item.label.length > 1 ? (
+                <Dropdown
+                  overlay={menu}
+                  trigger={['click']}
+                >
+                  <span>{label}</span>
+                </Dropdown>
+              ) : label
+            }
+          </label>
           <div className={styles.options}>
             {tagNodes}
           </div>
@@ -91,7 +147,6 @@ class Main extends React.Component<Props> {
         <ul>
           {this.getChildNodes()}
         </ul>
-        {/* xxx */}
       </div>
     )
   }
