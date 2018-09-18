@@ -1,8 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { DetailProps } from './customer'
-import Detail from './detail'
+import { DetailProps } from './open'
 import ContentBox from '@/modules/common/content'
 interface States {
   dataSource: DetailProps[]
@@ -24,16 +23,22 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '空置天数',
-    dataIndex: 'vacantDays'
+    dataIndex: 'freeDays'
   }, {
-    title: '城市',
-    dataIndex: 'cityName'
+    title: '跟进次数',
+    dataIndex: 'trackTimesNums'
+  }, {
+    title: '释放次数',
+    dataIndex: 'releaseTimes'
   }, {
     title: '客户来源',
     dataIndex: 'customerSource'
   }, {
-    title: '入库时间',
-    dataIndex: 'createTime'
+    title: '释放时间',
+    dataIndex: 'lastReleaseTime'
+  }, {
+    title: '释放销售',
+    dataIndex: 'lastReleaseSalesperson'
   }]
   public onSelectAllChange () {
     console.log('select')
@@ -52,7 +57,6 @@ class Main extends React.Component {
           bordered
           rowKey={'customerId'}
         />
-        {/* <Detail /> */}
       </ContentBox>
     )
   }
