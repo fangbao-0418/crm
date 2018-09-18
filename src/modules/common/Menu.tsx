@@ -25,7 +25,7 @@ class Main extends React.Component {
         },
         {
           title: '我的预约',
-          path: '/business'
+          path: '/appointment'
         }
       ]
     },
