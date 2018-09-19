@@ -8,4 +8,6 @@ export interface DetailProps {
   customerSource: string
   createTime: string
   leadingPerson: string
+  value: string
+  text: string
 }
