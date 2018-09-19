@@ -150,6 +150,7 @@ class Main extends React.Component {
         <PlanCustomer/>
       ),
       title: '分配客资',
+      footer: null,
       mask: true,
       onOk: () => {
         modal.hide()
