@@ -170,7 +170,7 @@ class Main extends React.Component {
       <ContentBox
         title='我的客资'
         rightCotent={(
-          <RightContent/>
+          <RightContent />
         )}
       >
         <div className='mt12' style={{ overflow: 'hidden' }}>
