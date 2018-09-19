@@ -1,6 +1,6 @@
 import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
-import BaseInfo from './BaseInfo'
+// import BaseInfo from '@/modules/customer/BaseInfo'
 const styles = require('./style')
 class Main extends React.Component {
   public render () {
@@ -8,7 +8,7 @@ class Main extends React.Component {
       <div className={styles.container}>
         <div className={styles.left}>
           <Profile />
-          <BaseInfo />
+          {/* <BaseInfo /> */}
         </div>
         <div className={styles.left}>
 
