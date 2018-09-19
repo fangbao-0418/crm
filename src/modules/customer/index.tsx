@@ -1,9 +1,11 @@
 import React from 'react'
 import { Table, Button, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import Modal from 'pilipa/libs/modal'
 import { DetailProps } from './customer'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
+import InfoInput from './Input'
 import SearchName from '@/modules/common/search/SearchName'
 interface States {
   dataSource: DetailProps[]
@@ -81,6 +83,12 @@ class Main extends React.Component {
     title: '入库时间',
     dataIndex: 'createTime'
   }]
+  public componentWillMount () {
+    const modal = new Modal({
+      content: <InfoInput />
+    })
+    modal.show()
+  }
   public onSelectAllChange () {
     console.log('select')
   }

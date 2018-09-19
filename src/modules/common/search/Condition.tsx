@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tag, DatePicker, Menu, Dropdown } from 'antd'
+import classNames from 'classnames'
 const { RangePicker } = DatePicker
 const { CheckableTag } = Tag
 const styles = require('./style')
@@ -13,6 +14,8 @@ export interface ConditionOptionProps {
 interface Props {
   dataSource?: ConditionOptionProps[]
   onChange?: (values?: {[field: string]: any}) => void
+  style?: React.CSSProperties
+  className?: string
 }
 interface States {
   dataSource: ConditionOptionProps[]
@@ -143,7 +146,10 @@ class Main extends React.Component<Props> {
   }
   public render () {
     return (
-      <div className={styles.container}>
+      <div
+        style={this.props.style}
+        className={classNames(styles.container, this.props.className)}
+      >
         <ul>
           {this.getChildNodes()}
         </ul>
