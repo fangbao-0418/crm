@@ -1,7 +1,8 @@
 import React from 'react'
 const styles = require('./style')
 interface Props {
-  title: string
+  title: any
+  rightContent?: any
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -9,6 +10,9 @@ class Main extends React.Component<Props> {
       <div className={styles.top}>
         <div className={styles.title}>
           {this.props.title}
+        </div>
+        <div className={styles['right-content']}>
+          {this.props.rightContent}
         </div>
       </div>
     )

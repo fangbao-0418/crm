@@ -52,11 +52,14 @@ class Main extends React.Component {
       footer: null,
       content: <Profile />
     })
-    modal.show()
+    // modal.show()
   }
   public render () {
     return (
-      <ContentBox title='签约客户'>
+      <ContentBox
+        title='签约客户'
+        rightCotent={'新增'}
+      >
         <Row>
           <Col span={16}>
             <Condition
