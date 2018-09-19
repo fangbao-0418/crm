@@ -1,7 +1,14 @@
 import React from 'react'
 import { Table } from 'antd'
+import { LinkManProps } from './man'
 const styles = require('./style')
+interface States {
+  dataSource: LinkManProps[]
+}
 class Main extends React.Component {
+  public state: States = {
+    dataSource: []
+  }
   public columns = [
     {
       title: '联系人'
