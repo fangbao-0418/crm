@@ -4,6 +4,7 @@ import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
+import RightContent from '@/modules/common/rightContent'
 import Profile from '@/modules/common/company-detail/Profile'
 class Main extends React.Component {
   public data: ConditionOptionProps[] = [
@@ -58,7 +59,9 @@ class Main extends React.Component {
     return (
       <ContentBox
         title='签约客户'
-        rightCotent={'新增'}
+        rightCotent={(
+          <RightContent/>
+        )}
       >
         <Row>
           <Col span={16}>
