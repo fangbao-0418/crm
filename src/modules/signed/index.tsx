@@ -4,7 +4,7 @@ import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
-import RightContent from '@/modules/common/rightContent'
+import RightContent from '@/modules/common/content/right-content'
 import Profile from '@/modules/common/company-detail/Profile'
 class Main extends React.Component {
   public data: ConditionOptionProps[] = [

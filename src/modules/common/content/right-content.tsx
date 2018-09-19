@@ -1,5 +1,5 @@
 import React from 'react'
-const styles = require('./index')
+const styles = require('./style')
 class Main extends React.Component {
   public render () {
     return (
