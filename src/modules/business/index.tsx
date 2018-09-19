@@ -6,6 +6,7 @@ import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
+import RightContent from '@/modules/common/content/right-content'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -246,34 +247,38 @@ class Main extends React.Component {
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-      <ContentBox title='我的商机'>
-        <div className='mt16'>
-          <Row>
-            <Col span={20}>
-              <Condition
-                dataSource={this.data}
-                onChange={(values) => {
-                  console.log(values)
-                }}
-              />
-            </Col>
-            <Col span={8}>
-              <SearchName
-                style={{paddingTop: '5px'}}
-                options={[
-                  {label: '客户名称', value: '1'},
-                  {label: '联系人', value: '2'},
-                  {label: '客户来源', value: '3'},
-                  {label: '所属销售', value: '4'},
-                  {label: '联系电话', value: '5'}
-                ]}
-                placeholder={''}
-                onChange={(value) => {
-                  console.log(value)
-                }}
-              />
-            </Col>
-          </Row>
+      <ContentBox
+        title='我的商机'
+        rightCotent={(
+          <RightContent />
+        )}
+      >
+        <div className='mt12' style={{ overflow: 'hidden' }}>
+          <div className='fl' style={{ width: 740 }}>
+            <Condition
+              dataSource={this.data}
+              onChange={(values) => {
+                console.log(values)
+              }}
+            />
+          </div>
+          <div className='fr' style={{ width: 290 }}>
+            <SearchName
+              style={{paddingTop: '5px'}}
+              options={[
+                {label: '客户名称', value: '0'},
+                {label: '联系人', value: '1'},
+                {label: '客户来源', value: '2'},
+                {label: '所属销售', value: '3'},
+                {label: '联系电话', value: '4'},
+                {label: '联系电话', value: '5'}
+              ]}
+              placeholder={''}
+              onChange={(value) => {
+                console.log(value)
+              }}
+            />
+          </div>
         </div>
         <Table
           columns={this.columns}
