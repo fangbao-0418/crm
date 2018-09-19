@@ -33,7 +33,7 @@ class Main extends React.Component<Props> {
           onChange={(value) => {
             this.type = value
           }}
-          style={{ width: '30%' }}
+          style={{ width: '35%' }}
           defaultValue={options[0].value}
         >
           {nodes}
