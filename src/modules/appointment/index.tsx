@@ -142,7 +142,7 @@ class Main extends React.Component {
       <ContentBox title='我的预约'>
         <div className='mt16'>
           <Row>
-            <Col span={20}>
+            <Col span={16}>
               <Condition
                 dataSource={this.data}
                 onChange={(values) => {

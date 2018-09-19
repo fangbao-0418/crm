@@ -2,6 +2,8 @@ import React from 'react'
 import { Row, Col, Icon } from 'antd'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
+import Modal from 'pilipa/libs/modal'
+import LinkMain from '@/modules/common/link-man'
 class Main extends React.Component {
   public render () {
     return (
@@ -30,7 +32,21 @@ class Main extends React.Component {
           <Col span={12}>
             <Input
               label={'联系人'}
-              addonAfter={<Icon style={{cursor: 'pointer'}} type='ellipsis' theme='outlined' />}
+              addonAfter={
+                (
+                  <Icon
+                    onClick={() => {
+                      const modal = new Modal({
+                        content: <LinkMain />
+                      })
+                      modal.show()
+                    }}
+                    style={{cursor: 'pointer'}}
+                    type='ellipsis'
+                    theme='outlined'
+                  />
+                )
+              }
             />
           </Col>
           <Col span={12}>
