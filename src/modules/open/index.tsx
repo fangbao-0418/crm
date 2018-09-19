@@ -5,6 +5,7 @@ import { DetailProps } from './open'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
+import Modal from 'pilipa/libs/modal'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -133,6 +134,38 @@ class Main extends React.Component {
   public onSelectAllChange () {
     console.log('select')
   }
+  public deleteAll () {
+    const modal = new Modal({
+      content: (
+        <div>你确定要删除这些客户吗？</div>
+      ),
+      title: '删除',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public pickCustomer () {
+    const modal = new Modal({
+      content: (
+        <div>你确定要批量抢客户吗？</div>
+      ),
+      title: '批量抢客户',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -175,8 +208,8 @@ class Main extends React.Component {
           rowKey={'customerId'}
         />
         <div className='mt40'>
-          <Button type='primary' className='mr10'>批量抢客户</Button>
-          <Button type='primary' className='mr10'>批量删除</Button>
+          <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
+          <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>
       </ContentBox>
     )
