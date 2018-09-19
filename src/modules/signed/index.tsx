@@ -5,7 +5,7 @@ import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
-import RightContent from '@/modules/common/content/AddButton'
+import AddButton from '@/modules/common/content/AddButton'
 import Profile from '@/modules/common/company-detail/Profile'
 import { DetailProps } from './signed'
 import ChooseSales from '@/modules/customer/chooseSales'
@@ -124,7 +124,7 @@ class Main extends React.Component {
       <ContentBox
         title='签约客户'
         rightCotent={(
-          <RightContent/>
+          <AddButton title='新增' />
         )}
       >
         <div className='mt12' style={{ overflow: 'hidden' }}>
