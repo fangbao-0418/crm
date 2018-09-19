@@ -11,6 +11,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import AddPhone from './addPhone'
 import AddCustomer from './addCustomer'
 import PlanCustomer from './planCustomer'
+import ImportResult from './importResult'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -120,6 +121,20 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  public showResult () {
+    const modal = new Modal({
+      content: (
+        <ImportResult/>
+      ),
+      footer: null,
+      title: '执行结果',
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public toOrganizationAuto () {
     const modal = new Modal({
       content: (
@@ -128,6 +143,7 @@ class Main extends React.Component {
       title: '自动分配客资',
       mask: true,
       onOk: () => {
+        this.showResult()
         modal.hide()
       },
       onCancel: () => {

@@ -9,7 +9,7 @@ class Main extends React.Component {
         <div>公司1：已经存在！</div>
         <div>公司1：已经存在！</div>
         <div className={styles.info}>是否删除已重复客户?</div>
-        <div className='fr'>
+        <div className='fr' style={{ marginTop: 20 }}>
           <Button type='primary' className='mr10'>删除</Button>
           <Button>取消</Button>
         </div>
