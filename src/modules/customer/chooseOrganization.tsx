@@ -7,7 +7,7 @@ interface States {
 }
 class Main extends React.Component {
   public state: States = {
-    data: [],
+    data: []
   }
   public render () {
     // const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>)

@@ -7,7 +7,7 @@ interface States {
 }
 class Main extends React.Component {
   public state: States = {
-    data: [],
+    data: []
   }
   public render () {
     // const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>)
@@ -16,7 +16,7 @@ class Main extends React.Component {
         <span>分配销售：</span>
         <Select
           style={{width:'200px'}}
-          mode="multiple"
+          mode='multiple'
         >
           <Option key='1'>销售1</Option>
           <Option key='2'>销售2</Option>
