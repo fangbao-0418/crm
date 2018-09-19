@@ -7,6 +7,10 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import ContentBox from '@/modules/common/content'
 import Detail from './detail'
 import SearchName from '@/modules/common/search/SearchName'
+import RightContent from '@/modules/common/content/right-content'
+import AddPhone from './addPhone'
+import AddCustomer from './addCustomer'
+import PlanCustomer from './planCustomer'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -94,13 +98,80 @@ class Main extends React.Component {
   public onSelectAllChange () {
     console.log('select')
   }
+  public addPhone () {
+    const modal = new Modal({
+      content: (
+        <AddPhone/>
+      ),
+      title: '联系人',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public addCustomer () {
+    const modal = new Modal({
+      content: (
+        <AddCustomer/>
+      ),
+      footer: null,
+      header: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toOrganizationAuto () {
+    const modal = new Modal({
+      content: (
+        <div>你确定要应用自动分配吗？</div>
+      ),
+      title: '自动分配客资',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toOrganizationByHand () {
+    const modal = new Modal({
+      content: (
+        <PlanCustomer/>
+      ),
+      title: '分配客资',
+      mask: true,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-      <ContentBox title='我的客资'>
+      <ContentBox
+        title='我的客资'
+        rightCotent={(
+          <RightContent/>
+        )}
+      >
         <div className='mt16'>
           <Row>
             <Col span={16}>
@@ -138,8 +209,8 @@ class Main extends React.Component {
         />
         <div className='mt40'>
           <Button type='primary' className='mr10'>全选</Button>
-          <Button type='primary' className='mr10'>手工分配</Button>
-          <Button type='primary' className='mr10'>应用自动分配</Button>
+          <Button type='primary' className='mr10' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
+          <Button type='primary' className='mr10' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>
       </ContentBox>
     )

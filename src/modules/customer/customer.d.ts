@@ -6,4 +6,6 @@ export interface DetailProps {
   cityName: string
   customerSource: string
   createTime: string
+  value: string
+  text: string
 }
