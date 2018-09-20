@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import Import from '@/modules/customer/Import'
+import Import from '@/modules/customer/import'
 import BaseInfo from '@/modules/customer/BaseInfo'
 class Main extends React.Component {
   public callback () {
