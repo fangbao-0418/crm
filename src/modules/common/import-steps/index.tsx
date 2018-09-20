@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Signpost from './Signpost'
 const styles = require('./style')
 interface Props {
-  step: 1 | 2 | 3
+  step: number
   config?: Array<{title: string, component: JSX.Element}>
 }
 class Main extends React.Component<Props> {

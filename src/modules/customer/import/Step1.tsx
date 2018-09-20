@@ -1,10 +1,13 @@
 import React from 'react'
-import { Select, Switch } from 'antd'
+import { Select, Switch, Button } from 'antd'
 const Option = Select.Option
 interface Status {
   isChecked: boolean
 }
-class Main extends React.Component {
+interface Props {
+  onOk?: () => void
+}
+class Main extends React.Component<Props> {
   public state: Status = {
     isChecked: true
   }
@@ -15,7 +18,7 @@ class Main extends React.Component {
   }
   public render () {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div className='text-center mt10'>
         <div>
           <span>客户来源：</span>
           <Select
@@ -25,7 +28,7 @@ class Main extends React.Component {
             <Option key='2'>啊啊</Option>
           </Select>
         </div>
-        <div>
+        <div className='mt12'>
           <span>选择城市：</span>
           <Select
             style={{width:'200px'}}
@@ -34,7 +37,7 @@ class Main extends React.Component {
             <Option key='2'>天津</Option>
           </Select>
         </div>
-        <div>
+        <div className='mt12'>
           <span>是否分配：</span>
           <Switch onChange={this.onChange.bind(this)} checked={this.state.isChecked}/>
         </div>
@@ -50,7 +53,7 @@ class Main extends React.Component {
                 <Option key='2'>机构2</Option>
               </Select>
             </div>
-            <div>
+            <div className='mt12'>
               <span>分配销售：</span>
               <Select
                 style={{width:'200px'}}
@@ -60,7 +63,19 @@ class Main extends React.Component {
                 <Option key='2'>销售2</Option>
               </Select>
             </div>
-          </div> 
+            <div className='text-right mt10'>
+              <Button
+                type='primary'
+                onClick={() => {
+                  if (this.props.onOk) {
+                    this.props.onOk()
+                  }
+                }}
+              >
+                下一步
+              </Button>
+            </div>
+          </div>
         }
       </div>
     )
