@@ -5,7 +5,7 @@ import AccountInfo from './AccountInfo'
 import BusinessInfo from './BusinessInfo'
 import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
-import CompanyList from './CompanyList' 
+import CompanyList from './CompanyList'
 import OperateList from './OperateList'
 class Main extends React.Component {
   public callback () {

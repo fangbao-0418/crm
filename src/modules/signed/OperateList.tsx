@@ -16,11 +16,6 @@ export default class extends React.Component {
     data: [],
     current: 1
   }
-  public onChange (e: any) {
-    this.setState({
-      current: e.target.value,
-    })
-  }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '操作人',
     dataIndex: 'opetarePerson'
@@ -31,6 +26,11 @@ export default class extends React.Component {
     title: '操作内容',
     dataIndex: 'opetareContent'
   }]
+  public onChange (e: any) {
+    this.setState({
+      current: e.target.value
+    })
+  }
   public render () {
     return (
       <div>
@@ -45,7 +45,6 @@ export default class extends React.Component {
           rowKey={'opetarePerson'}
         />
       </div>
-      
     )
   }
 }
