@@ -10,7 +10,7 @@ import Provider from '@/components/Provider'
 import AddPhone from './addPhone'
 import AddCustomer from '@/modules/customer/AddCustomer'
 import PlanCustomer from './planCustomer'
-import ImportResult from './importResult'
+import Result from './Result'
 import Detail from './detail'
 type DetailProps = Customer.DetailProps
 interface States {
@@ -139,7 +139,7 @@ class Main extends React.Component {
   public showResult () {
     const modal = new Modal({
       content: (
-        <ImportResult/>
+        <Result/>
       ),
       footer: null,
       title: '执行结果',

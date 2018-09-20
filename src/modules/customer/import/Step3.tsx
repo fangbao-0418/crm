@@ -1,8 +1,11 @@
 import React from 'react'
+import Result from '../Result'
 class Main extends React.Component {
   public render () {
     return (
-      <div>3</div>
+      <div className='mt40'>
+       <Result/>
+      </div>
     )
   }
 }

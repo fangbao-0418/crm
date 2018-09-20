@@ -21,7 +21,7 @@ class Main extends React.Component {
   public render () {
     return (
       <div>
-        <ImportSteps step={1} config={this.config} />
+        <ImportSteps step={3} config={this.config} />
       </div>
     )
   }
