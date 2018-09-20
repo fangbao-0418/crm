@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import BaseInfo from './BaseInfo'
+import Import from './Import'
 class Main extends React.Component {
   public callback () {
     console.log('11')
@@ -12,8 +13,8 @@ class Main extends React.Component {
           <Tabs.TabPane tab='录入客资' key='1'>
             <BaseInfo />
           </Tabs.TabPane>
-          <Tabs.TabPane tab='倒入客资' key='2'>
-            <div>222</div>
+          <Tabs.TabPane tab='导入客资' key='2'>
+            <Import />
           </Tabs.TabPane>
         </Tabs>
       </div>
