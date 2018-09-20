@@ -2,6 +2,11 @@ import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
 import { Tabs } from 'antd'
 import AccountInfo from './AccountInfo'
+import BusinessInfo from './BusinessInfo'
+import OrderInfo from './OrderInfo'
+import WorkList from './WorkList'
+import CompanyList from './CompanyList' 
+import OperateList from './OperateList'
 class Main extends React.Component {
   public callback () {
     console.log('11')
@@ -13,20 +18,21 @@ class Main extends React.Component {
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
             <div>
+              <BusinessInfo />
               <AccountInfo />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab='订单信息' key='2'>
-            <div>2</div>
+            <OrderInfo />
           </Tabs.TabPane>
-          <Tabs.TabPane tab='工单任务' key='3'>
-            <div>3</div>
+          <Tabs.TabPane tab='工单信息' key='3'>
+            <WorkList/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='相关公司' key='4'>
-            <div>4</div>
+            <CompanyList/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='操作记录' key='5'>
-            <div>5</div>
+            <OperateList/>
           </Tabs.TabPane>
         </Tabs>
       </div>
