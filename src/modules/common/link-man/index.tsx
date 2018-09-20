@@ -2,14 +2,7 @@ import React from 'react'
 import { Table, Input } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
-import { ReducerState } from '@/reducers'
-import { CustomerProps } from '@/reducers/customer'
-export interface LinkManProps {
-  contactPerson: string
-  contactPhone: string
-  customerSource: string
-  mark: string
-}
+type LinkManProps = Customer.LinkManProps
 interface Props {
   linkMan: LinkManProps[]
 }
@@ -81,7 +74,7 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default connect((state: ReducerState) => {
+export default connect((state: Reducer.State) => {
   return {
     ...state.customer
   }
