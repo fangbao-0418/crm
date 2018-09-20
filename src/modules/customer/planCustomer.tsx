@@ -3,6 +3,7 @@ import { Table } from 'antd'
 import ChooseOrganization from './chooseOrganization'
 import ChooseSales from './chooseSales'
 import ImportResult from './importResult'
+import Record from './Record'
 class Main extends React.Component {
   public render () {
     return (
@@ -10,6 +11,7 @@ class Main extends React.Component {
         <ChooseOrganization/>
         <ChooseSales/>
         <ImportResult/>
+        <Record />
       </div>
     )
   }
