@@ -9,6 +9,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import Profile from '@/modules/common/company-detail/Profile'
 import { DetailProps } from './signed'
 import ChooseSales from '@/modules/customer/chooseSales'
+import View from './View'
 const Option = Select.Option
 interface States {
   dataSource: DetailProps[]
@@ -115,6 +116,20 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  public detail () {
+    const modal = new Modal({
+      content: (
+        <View />
+      ),
+      header: null,
+      footer: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -165,6 +180,7 @@ class Main extends React.Component {
         />
         <div className='mt40'>
           <Button type='primary' onClick={this.toSale.bind(this)}>转跟进人</Button>
+          <Button type='primary' onClick={this.detail.bind(this)}>查看签约客户信息</Button>
         </div>
       </ContentBox>
     )
