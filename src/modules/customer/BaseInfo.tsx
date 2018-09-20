@@ -1,10 +1,35 @@
 import React from 'react'
-import { Row, Col, Icon } from 'antd'
+import { Row, Col, Icon, Button } from 'antd'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
 import Modal from 'pilipa/libs/modal'
 import LinkMain from '@/modules/common/link-man'
+import AddButton from '@/modules/common/content/AddButton'
+import Provider from '@/components/Provider'
 class Main extends React.Component {
+  public editLinkMan () {
+    const modal = new Modal({
+      header: (
+        <div>
+          <div className='fl font14'>联系人</div>
+          <b className='fr'>
+            <AddButton
+              onClick={() => {
+                // APP.dispatch({
+                //   type: '',
+                //   payload: {
+
+                //   }
+                // })
+              }}
+            />
+          </b>
+        </div>
+      ),
+      content: <Provider><LinkMain /></Provider>
+    })
+    modal.show()
+  }
   public render () {
     return (
       <div>
@@ -35,12 +60,7 @@ class Main extends React.Component {
               addonAfter={
                 (
                   <Icon
-                    onClick={() => {
-                      const modal = new Modal({
-                        content: <LinkMain />
-                      })
-                      modal.show()
-                    }}
+                    onClick={this.editLinkMan.bind(this)}
                     style={{cursor: 'pointer'}}
                     type='ellipsis'
                     theme='outlined'
@@ -95,6 +115,16 @@ class Main extends React.Component {
             />
           </Col>
         </Row>
+        <div className='text-right mt10'>
+          <Button
+            type='primary'
+            onClick={() => {
+              console.log('click')
+            }}
+          >
+            仅保存
+          </Button>
+        </div>
       </div>
     )
   }

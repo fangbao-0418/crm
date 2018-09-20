@@ -3,10 +3,12 @@ import Main from './Main'
 import { LocaleProvider } from 'antd'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import { RouteComponentProps, withRouter } from 'react-router'
-type Props = RouteComponentProps<any>
+import { connect, DispatchProp } from 'react-redux'
+interface Props extends RouteComponentProps<any>, DispatchProp<any> {}
 class App extends React.Component<Props> {
   public componentWillMount () {
     APP.history = this.props.history
+    APP.dispatch = this.props.dispatch
   }
   public render () {
     return (
@@ -16,4 +18,4 @@ class App extends React.Component<Props> {
     )
   }
 }
-export default withRouter(App)
+export default withRouter(connect()(App))

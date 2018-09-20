@@ -662,6 +662,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/redux-actions@^2.3.0":
+  version "2.3.0"
+  resolved "http://registry.npm.taobao.org/@types/redux-actions/download/@types/redux-actions-2.3.0.tgz#d28d7913ec86ee9e20ecb33a1fed887ecb538149"
+
 abbrev@1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/abbrev/download/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -3521,7 +3525,7 @@ intersperse@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/intersperse/download/intersperse-1.0.0.tgz#f2561fb1cfef9f5277cc3347a22886b4351a5181"
 
-invariant@^2.2.2:
+invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.4"
   resolved "http://registry.npm.taobao.org/invariant/download/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -4070,6 +4074,10 @@ lodash.camelcase@^4.3.0:
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/lodash.clonedeep/download/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+
+lodash.curry@^4.1.1:
+  version "4.1.1"
+  resolved "http://registry.npm.taobao.org/lodash.curry/download/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
 
 lodash.debounce@^4.0.0, lodash.debounce@^4.0.8:
   version "4.0.8"
@@ -5821,6 +5829,23 @@ redent@^1.0.0:
   dependencies:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
+
+reduce-reducers@^0.1.0:
+  version "0.1.5"
+  resolved "http://registry.npm.taobao.org/reduce-reducers/download/reduce-reducers-0.1.5.tgz#ff77ca8068ff41007319b8b4b91533c7e0e54576"
+
+redux-actions@^2.6.1:
+  version "2.6.1"
+  resolved "http://registry.npm.taobao.org/redux-actions/download/redux-actions-2.6.1.tgz#42c06e94739fbe6db35db3605abb105bdb3724d8"
+  dependencies:
+    invariant "^2.2.1"
+    lodash.camelcase "^4.3.0"
+    lodash.curry "^4.1.1"
+    reduce-reducers "^0.1.0"
+
+redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "http://registry.npm.taobao.org/redux-thunk/download/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
 
 redux@^4.0.0:
   version "4.0.0"

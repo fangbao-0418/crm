@@ -1,13 +1,12 @@
 import React from 'react'
-import { Table, Button, Row, Col } from 'antd'
+import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import { DetailProps } from './customer'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
-import Detail from './detail'
 import SearchName from '@/modules/common/search/SearchName'
-import RightContent from '@/modules/common/content/right-content'
+import AddButton from '@/modules/common/content/AddButton'
 import AddPhone from './addPhone'
 import AddCustomer from './addCustomer'
 import PlanCustomer from './planCustomer'
@@ -88,14 +87,6 @@ class Main extends React.Component {
     title: '入库时间',
     dataIndex: 'createTime'
   }]
-  public componentWillMount () {
-    const modal = new Modal({
-      content: (
-        <Detail />
-      )
-    })
-    modal.show()
-  }
   public onSelectAllChange () {
     console.log('select')
   }
@@ -115,7 +106,7 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public addCustomer () {
+  public add () {
     const modal = new Modal({
       content: (
         <AddCustomer/>
@@ -186,7 +177,12 @@ class Main extends React.Component {
       <ContentBox
         title='我的客资'
         rightCotent={(
-          <RightContent />
+          <AddButton
+            title='新增'
+            onClick={() => {
+              this.add()
+            }}
+          />
         )}
       >
         <div className='mt12' style={{ overflow: 'hidden' }}>
@@ -215,32 +211,6 @@ class Main extends React.Component {
               }}
             />
           </div>
-          {/* <Row>
-            <Col span={16}>
-              <Condition
-                dataSource={this.data}
-                onChange={(values) => {
-                  console.log(values)
-                }}
-              />
-            </Col>
-            <Col span={8}>
-              <SearchName
-                style={{paddingTop: '5px'}}
-                options={[
-                  {label: '客户名称', value: '1'},
-                  {label: '联系人', value: '2'},
-                  {label: '客户来源', value: '3'},
-                  {label: '所属销售', value: '4'},
-                  {label: '联系电话', value: '5'}
-                ]}
-                placeholder={''}
-                onChange={(value) => {
-                  console.log(value)
-                }}
-              />
-            </Col>
-          </Row> */}
         </div>
         <Table
           columns={this.columns}

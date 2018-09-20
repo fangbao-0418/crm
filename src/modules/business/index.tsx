@@ -6,7 +6,7 @@ import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
-import RightContent from '@/modules/common/content/right-content'
+import AddButton from '@/modules/common/content/AddButton'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -250,7 +250,7 @@ class Main extends React.Component {
       <ContentBox
         title='我的商机'
         rightCotent={(
-          <RightContent />
+          <AddButton title='新增' />
         )}
       >
         <div className='mt12' style={{ overflow: 'hidden' }}>

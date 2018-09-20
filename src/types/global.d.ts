@@ -6,4 +6,5 @@ interface CustomHistory {
 }
 declare const APP: {
   history: CustomHistory
+  dispatch: <A extends {type: any}>(action: A) => A
 }
