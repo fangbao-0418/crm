@@ -1,7 +1,7 @@
 import React from 'react'
 import { Select } from 'antd'
-import { DetailProps } from './customer'
 const Option = Select.Option
+type DetailProps = Customer.DetailProps
 interface States {
   data: DetailProps[]
 }

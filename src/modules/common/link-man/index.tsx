@@ -24,42 +24,67 @@ class Main extends React.Component<Props> {
     {
       title: '联系人',
       dataIndex: 'contactPerson',
-      render: () => {
-        return <Input />
+      render: (text, record, index) => {
+        return <Input onChange={this.onChange.bind(this, index, 'contactPerson')} value={text}/>
       }
     },
     {
       title: '联系电话',
       dataIndex: 'contactPhone',
-      render: () => {
-        return <Input />
+      render: (text, record, index) => {
+        return <Input onChange={this.onChange.bind(this, index, 'contactPhone')} value={text}/>
       }
     },
     {
       title: '来源',
       dataIndex: 'customerSource',
-      render: () => {
-        return <Input />
+      render: (text, record, index) => {
+        return <Input onChange={this.onChange.bind(this, index, 'customerSource')} value={text}/>
       }
     },
     {
       title: '备注',
       dataIndex: 'mark',
-      render: () => {
-        return <Input />
+      render: (text, record, index) => {
+        return <Input onChange={this.onChange.bind(this, index, 'mark')} value={text}/>
       }
     },
     {
       title: '操作',
       width: '80px',
       align: 'center',
-      render: () => {
+      render: (text, record, index) => {
         return (
-          <span>删除</span>
+          <span
+            onClick={() => {
+              const data = this.props.linkMan
+              data.splice(index, 1)
+              APP.dispatch({
+                type: 'change customer data',
+                payload: {
+                  linkMan: data
+                }
+              })
+            }}
+            className='href'
+          >
+            删除
+          </span>
         )
       }
     }
   ]
+  public onChange (index: number, field: string, e: React.SyntheticEvent) {
+    const value = $(e.target).val()
+    const data: any = this.props.linkMan
+    data[index][field] = value
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        linkMan: data
+      }
+    })
+  }
   public render () {
     console.log(this.props.linkMan)
     return (

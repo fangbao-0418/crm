@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import BaseInfo from './BaseInfo'
-import Import from './Import'
+import Import from '@/modules/customer/Import'
+import BaseInfo from '@/modules/customer/BaseInfo'
 class Main extends React.Component {
   public callback () {
     console.log('11')

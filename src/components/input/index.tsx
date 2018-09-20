@@ -22,9 +22,6 @@ interface Props extends InputProps {
   suffix?: React.ReactNode
   field?: string
 }
-interface States {
-  label: string
-}
 class Main extends React.Component<Props> {
   public type: any
   public state = {

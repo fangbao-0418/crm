@@ -2,15 +2,17 @@ import React from 'react'
 import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
-import { DetailProps } from './customer'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
 import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
+import Provider from '@/components/Provider'
 import AddPhone from './addPhone'
-import AddCustomer from './addCustomer'
+import AddCustomer from '@/modules/customer/AddCustomer'
 import PlanCustomer from './planCustomer'
 import ImportResult from './importResult'
+import Detail from './detail'
+type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -109,7 +111,21 @@ class Main extends React.Component {
   public add () {
     const modal = new Modal({
       content: (
-        <AddCustomer/>
+        <Provider><AddCustomer/></Provider>
+      ),
+      footer: null,
+      header: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public show () {
+    const modal = new Modal({
+      content: (
+        <Provider><Detail /></Provider>
       ),
       footer: null,
       header: null,
@@ -177,12 +193,21 @@ class Main extends React.Component {
       <ContentBox
         title='我的客资'
         rightCotent={(
-          <AddButton
-            title='新增'
-            onClick={() => {
-              this.add()
-            }}
-          />
+          <div>
+            <AddButton
+              style={{marginRight: '10px'}}
+              title='查看'
+              onClick={() => {
+                this.show()
+              }}
+            />
+            <AddButton
+              title='新增'
+              onClick={() => {
+                this.add()
+              }}
+            />
+          </div>
         )}
       >
         <div className='mt12' style={{ overflow: 'hidden' }}>

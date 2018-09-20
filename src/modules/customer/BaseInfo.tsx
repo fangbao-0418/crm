@@ -6,7 +6,8 @@ import Modal from 'pilipa/libs/modal'
 import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
-class Main extends React.Component {
+import { connect } from 'react-redux'
+class Main extends React.Component<Customer.Props> {
   public editLinkMan () {
     const modal = new Modal({
       header: (
@@ -14,14 +15,7 @@ class Main extends React.Component {
           <div className='fl font14'>联系人</div>
           <b className='fr'>
             <AddButton
-              onClick={() => {
-                APP.dispatch({
-                  type: 'change customer data',
-                  payload: {
-                    linkMan: []
-                  }
-                })
-              }}
+              onClick={this.addLinkMan.bind(this)}
             />
           </b>
         </div>
@@ -29,6 +23,25 @@ class Main extends React.Component {
       content: <Provider><LinkMain /></Provider>
     })
     modal.show()
+  }
+  public addLinkMan () {
+    const data = this.props.linkMan
+    data.push({
+      contactPerson: '',
+      contactPhone: '',
+      customerSource: '',
+      mark: ''
+    })
+    console.log(data, 'data')
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        linkMan: data
+      }
+    })
+  }
+  public handleChange (e: React.SyntheticEvent, value: any) {
+    console.log(value)
   }
   public render () {
     return (
@@ -45,11 +58,14 @@ class Main extends React.Component {
                   value: '2'
                 }]
               }
+              onChange={this.handleChange.bind(this)}
+              value={this.props.detail.customerName}
             />
           </Col>
           <Col span={12}>
             <Input
               label='法人'
+              value={this.props.detail.legalPerson}
             />
           </Col>
         </Row>
@@ -67,11 +83,13 @@ class Main extends React.Component {
                   />
                 )
               }
+              value={this.props.linkMan[0].contactPerson}
             />
           </Col>
           <Col span={12}>
             <Input
-              label='法人'
+              label='联系电话'
+              value={this.props.linkMan[0].contactPhone}
             />
           </Col>
         </Row>
@@ -129,4 +147,6 @@ class Main extends React.Component {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)
