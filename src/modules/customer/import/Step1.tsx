@@ -1,5 +1,8 @@
 import React from 'react'
-class Main extends React.Component {
+interface Props {
+  onOk?: () => void
+}
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div>1</div>
