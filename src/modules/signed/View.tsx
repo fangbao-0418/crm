@@ -1,7 +1,7 @@
 import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
-import Title from '@/modules/common/content/Title'
 import { Tabs } from 'antd'
+import AccountInfo from './AccountInfo'
 class Main extends React.Component {
   public callback () {
     console.log('11')
@@ -12,7 +12,9 @@ class Main extends React.Component {
         <Profile />
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
-            <Title/>
+            <div>
+              <AccountInfo />
+            </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab='订单信息' key='2'>
             <div>2</div>
