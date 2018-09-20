@@ -1,0 +1,33 @@
+.container
+  &:after
+    content: ''
+    clear: both
+    display: block
+  .top
+    height: 36px
+    line-height: 36px
+    padding: 8px 0
+    box-sizing: content-box;
+    .title
+      float: left
+      font-size: 14px
+      font-weight: bold
+      padding-left: 8px
+      position relative
+      &:before
+        position: absolute
+        width: 3px
+        height: 16px
+        background-color: #1890FF
+        content: ''
+        left: 0
+        top: 0
+        bottom: 0
+        margin: auto 0
+      span
+        font-size: 16px
+        color: #333
+    &:after
+      content: ''
+      clear: both
+      display: block
