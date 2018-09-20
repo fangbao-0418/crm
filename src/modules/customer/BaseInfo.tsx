@@ -15,12 +15,12 @@ class Main extends React.Component {
           <b className='fr'>
             <AddButton
               onClick={() => {
-                // APP.dispatch({
-                //   type: '',
-                //   payload: {
-
-                //   }
-                // })
+                APP.dispatch({
+                  type: 'change customer data',
+                  payload: {
+                    linkMan: []
+                  }
+                })
               }}
             />
           </b>

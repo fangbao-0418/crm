@@ -1,11 +1,8 @@
 import { combineReducers } from 'redux'
-import common, { CommonProps } from './common'
-import customer, { CustomerProps } from '@/reducers/customer'
-export interface ReducerState {
-  common: CommonProps
-  customer: CustomerProps
-}
-const reducers = combineReducers<ReducerState>({
+import common from './common'
+import customer from '@/reducers/customer'
+
+const reducers = combineReducers<Reducer.State>({
   common,
   customer
 })
