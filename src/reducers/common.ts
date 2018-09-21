@@ -1,8 +1,5 @@
-export interface CommonProps {
-  ajaxCount: number
-}
 import { handleActions } from 'redux-actions'
-export default handleActions<CommonProps>({
+export default handleActions<Common.Props>({
   'loading show': (state) => {
     let { ajaxCount } = state
     ajaxCount = ajaxCount + 1

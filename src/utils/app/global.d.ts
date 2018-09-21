@@ -10,7 +10,6 @@ declare namespace APP {
     type: ActionType
     payload?: Customer.ActionPayload
   }
-  export let actionType: ActionType
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction
 }
