@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Row, Col, DatePicker, Select, Tabs } from 'antd'
+import { Table, Button, DatePicker, Select, Tabs } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
@@ -10,6 +10,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import AddCustomer from '@/modules/customer/AddCustomer'
+import { fetchList } from './api'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -139,6 +140,13 @@ class Main extends React.Component {
     title: '当前销售',
     dataIndex: 'leadingPerson'
   }]
+  public componentWillMount () {
+    fetchList().then((res) => {
+      this.setState({
+        dataSource: res.data
+      })
+    })
+  }
   public callback () {
     console.log('11')
   }
