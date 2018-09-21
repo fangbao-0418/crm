@@ -34,6 +34,10 @@ export default class extends React.Component {
               <Route path='/center-role' component={modules.CenterRole}/>
               <Route path='/agent-account' component={modules.AgentAccount}/>
               <Route path='/direct-account' component={modules.DirectAccount}/>
+
+              <Route path='/message/list' component={modules.MessageList}/>
+              <Route path='/workorder/list' component={modules.WorkorderList}/>
+              <Route path='/workorder/show/:id' component={modules.WorkorderShow}/>
             </Switch>
           </Content>
         </Layout>

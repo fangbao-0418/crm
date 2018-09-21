@@ -111,6 +111,28 @@ class Main extends React.Component {
           path: '/direct-account'
         }
       ]
+    },
+    {
+      title: '工单管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '我的工单',
+          path: '/workorder/list'
+        }
+      ]
+    },
+    {
+      title: '消息管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '我的消息',
+          path: '/message/list'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {
