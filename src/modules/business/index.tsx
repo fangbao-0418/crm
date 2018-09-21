@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Row, Col, DatePicker, Select } from 'antd'
+import { Table, Button, Row, Col, DatePicker, Select, Tabs } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
@@ -7,6 +7,9 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
+import ToOpenReason from './ToOpenReason'
+import Provider from '@/components/Provider'
+import AddCustomer from '@/modules/customer/AddCustomer'
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -136,6 +139,9 @@ class Main extends React.Component {
     title: '当前销售',
     dataIndex: 'leadingPerson'
   }]
+  public callback () {
+    console.log('11')
+  }
   public onSelectAllChange () {
     console.log('select')
   }
@@ -196,9 +202,7 @@ class Main extends React.Component {
   public toOpen () {
     const modal = new Modal({
       content: (
-        <div>
-          <span>请选择转公海原因：</span>
-        </div>
+        <ToOpenReason/>
       ),
       title: '转公海',
       mask: true,
@@ -241,6 +245,20 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  public add () {
+    const modal = new Modal({
+      content: (
+        <Provider><AddCustomer/></Provider>
+      ),
+      footer: null,
+      header: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -250,10 +268,15 @@ class Main extends React.Component {
       <ContentBox
         title='我的商机'
         rightCotent={(
-          <AddButton title='新增' />
+          <AddButton
+            title='新增'
+            onClick={() => {
+              this.add()
+            }}
+          />
         )}
       >
-        <div className='mt12' style={{ overflow: 'hidden' }}>
+        <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
@@ -280,13 +303,44 @@ class Main extends React.Component {
             />
           </div>
         </div>
-        <Table
-          columns={this.columns}
-          dataSource={this.state.dataSource}
-          rowSelection={rowSelection}
-          bordered
-          rowKey={'customerId'}
-        />
+        <Tabs defaultActiveKey='1' onChange={this.callback}>
+          <Tabs.TabPane tab='全部(160000)' key='1'>
+            <Table
+              columns={this.columns}
+              dataSource={this.state.dataSource}
+              rowSelection={rowSelection}
+              bordered
+              rowKey={'customerId'}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='已有沟通(18000)' key='2'>
+            <Table
+              columns={this.columns}
+              dataSource={this.state.dataSource}
+              rowSelection={rowSelection}
+              bordered
+              rowKey={'customerId'}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='新客资(500)' key='3'>
+            <Table
+              columns={this.columns}
+              dataSource={this.state.dataSource}
+              rowSelection={rowSelection}
+              bordered
+              rowKey={'customerId'}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='即将被收回(53)' key='4'>
+            <Table
+              columns={this.columns}
+              dataSource={this.state.dataSource}
+              rowSelection={rowSelection}
+              bordered
+              rowKey={'customerId'}
+            />
+          </Tabs.TabPane>
+        </Tabs>
         <div className='mt40'>
           <Button type='primary' className='mr10' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
           <Button type='primary' className='mr10' onClick={this.toSale.bind(this)}>转销售</Button>
