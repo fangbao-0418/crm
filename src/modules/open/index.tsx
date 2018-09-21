@@ -173,7 +173,7 @@ class Main extends React.Component {
     }
     return (
       <ContentBox title='公海管理'>
-        <div className='mt12' style={{ overflow: 'hidden' }}>
+        <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
