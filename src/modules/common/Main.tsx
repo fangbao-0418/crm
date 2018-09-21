@@ -26,6 +26,14 @@ export default class extends React.Component {
               <Route path='/signed' component={modules.Signed} />
               <Route path='/open' component={modules.Open} />
               <Route path='/set' component={modules.Set} />
+
+              {/*权限管理*/}
+              <Route path='/center-account' component={modules.CenterAccount}/>
+              <Route path='/center-department' component={modules.CenterDepartment}/>
+              <Route path='/center-permission' component={modules.CenterPermission}/>
+              <Route path='/center-role' component={modules.CenterRole}/>
+              <Route path='/agent-account' component={modules.AgentAccount}/>
+              <Route path='/direct-account' component={modules.DirectAccount}/>
             </Switch>
           </Content>
         </Layout>
