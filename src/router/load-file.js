@@ -7,10 +7,10 @@ export { default as loadSigned } from 'bundle-loader?lazy&name=[name]!@/modules/
 export { default as loadSet } from 'bundle-loader?lazy&name=[name]!@/modules/set'
 
 // 中心用户管理
-export { default as loadCenterAccount } from 'bundle-loader?lazy&name=[name]!@/modules/centerUserManage/account' // 账户
-export { default as loadCenterDepartment } from 'bundle-loader?lazy&name=[name]!@/modules/centerUserManage/department' // 部门
-export { default as loadCenterPermission } from 'bundle-loader?lazy&name=[name]!@/modules/centerUserManage/permission' // 权限
-export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modules/centerUserManage/role' // 角色
+export { default as loadCenterAccount } from 'bundle-loader?lazy&name=[name]!@/modules/center-user-manage/account' // 账户
+export { default as loadCenterDepartment } from 'bundle-loader?lazy&name=[name]!@/modules/center-user-manage/department' // 部门
+export { default as loadCenterPermission } from 'bundle-loader?lazy&name=[name]!@/modules/center-user-manage/permission' // 权限
+export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modules/center-user-manage/role' // 角色
 
 // 用户管理
 export { default as loadAgentAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/agent-account' // 代理商账号
