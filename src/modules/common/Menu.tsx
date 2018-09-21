@@ -72,6 +72,45 @@ class Main extends React.Component {
           path: '/set'
         }
       ]
+    },
+    // 权限管理
+    {
+      title: '中心用户管理',
+      icon: <Icon type='user' />,
+      path: '',
+      children: [
+        {
+          title: '账号',
+          path: '/center-account'
+        },
+        {
+          title: '部门',
+          path: '/center-department'
+        },
+        {
+          title: '权限',
+          path: '/center-permission'
+        },
+        {
+          title: '角色',
+          path: '/center-role'
+        }
+      ]
+    },
+    {
+      title: '用户管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '代理商账号',
+          path: '/agent-account'
+        },
+        {
+          title: '直营账号',
+          path: '/direct-account'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {
