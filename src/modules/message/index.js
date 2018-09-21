@@ -1,7 +1,7 @@
 /**
  * 消息模块
  */
-import list from './views/List'
+import list from '@/modules/message/views/list'
 
 export default {
   list
