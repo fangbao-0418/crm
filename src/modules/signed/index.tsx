@@ -142,7 +142,7 @@ class Main extends React.Component {
           <AddButton title='新增' />
         )}
       >
-        <div className='mt12' style={{ overflow: 'hidden' }}>
+        <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
