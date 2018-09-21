@@ -13,5 +13,5 @@ export { default as loadCenterPermission } from 'bundle-loader?lazy&name=[name]!
 export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modules/centerUserManage/role' // 角色
 
 // 用户管理
-export { default as loadAgentAccount } from 'bundle-loader?lazy&name=[name]!@/modules/userManage/agentAccount' // 代理商账号
-export { default as loadDirectAccount } from 'bundle-loader?lazy&name=[name]!@/modules/userManage/directAccount' // 直营账号
+export { default as loadAgentAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/agent-account' // 代理商账号
+export { default as loadDirectAccount } from 'bundle-loader?lazy&name=[name]!@/modules/userManage/direct-account' // 直营账号
