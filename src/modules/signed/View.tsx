@@ -3,6 +3,7 @@ import Profile from '@/modules/common/company-detail/Profile'
 import { Tabs } from 'antd'
 import AccountInfo from './AccountInfo'
 import BusinessInfo from './BusinessInfo'
+import BaseInfo from './BaseInfo'
 import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
 import CompanyList from './CompanyList'
@@ -13,11 +14,12 @@ class Main extends React.Component {
   }
   public render () {
     return (
-      <div>
+      <div style={{ width: '700px'}}>
         <Profile />
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
             <div>
+              <BaseInfo />
               <BusinessInfo />
               <AccountInfo />
             </div>
