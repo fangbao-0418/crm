@@ -117,7 +117,7 @@ class AgentAccount extends React.Component<any, any> {
                 dataSource={tableData}
               />
             </TabPane>
-            <TabPane tab='账号' key='2'>Content of Tab Pane 2</TabPane>
+            <TabPane tab='账号' key='2'></TabPane>
             <TabPane tab='自定义角色' key='3'>Content of Tab Pane 3</TabPane>
           </Tabs>
         </div>
