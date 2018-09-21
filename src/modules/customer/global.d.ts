@@ -23,9 +23,26 @@ declare namespace Customer {
     relatedCompany?: string
     contactsList?: LinkManProps[]
   }
+  export interface AutoAssignProps {
+    bigAreaName: string
+    cityName: string
+    agencyName: string
+    autoDistributeWeight: string
+    autoDistributeMaxNum: string
+  }
+  export interface SetCapacity {
+    bigAreaName: string
+    cityName: string
+    agencyName: string
+    storageCapacity: string
+    maxTrackDays: string
+    maxProtectDays: string
+  }
   export interface Props {
     linkMan?: LinkManProps[]
     dataSource?: DetailProps[]
     detail?: DetailProps
+    autoAssign?: AutoAssignProps[]
+    setCapacity?: SetCapacity[]
   }
 }

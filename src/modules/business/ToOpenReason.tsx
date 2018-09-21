@@ -71,6 +71,7 @@ class Main extends React.Component {
                 this.data.map((item, index) => {
                   return (
                     <CheckableTag
+                      key={index}
                       children={item.label}
                       checked={item.value === this.state.value}
                       onChange={this.handleChange.bind(this, index, item.value)}
