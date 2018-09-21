@@ -14,4 +14,11 @@ export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modu
 
 // 用户管理
 export { default as loadAgentAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/agent-account' // 代理商账号
-export { default as loadDirectAccount } from 'bundle-loader?lazy&name=[name]!@/modules/userManage/direct-account' // 直营账号
+export { default as loadDirectAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/direct-account' // 直营账号
+
+// 消息
+export { default as loadMessageList } from 'bundle-loader?lazy&name=[name]!@/modules/message/views/list' // 消息列表
+
+// 工单
+export { default as loadWorkorderList } from 'bundle-loader?lazy&name=[name]!@/modules/workorder/views/list' // 工单列表
+export { default as loadWorkorderShow } from 'bundle-loader?lazy&name=[name]!@/modules/workorder/views/show' // 工单展示

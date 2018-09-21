@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'antd'
-const styles = require('./index.styl')
+const styles = require('./style')
 class Main extends React.Component {
   public callback () {
     console.log('11')

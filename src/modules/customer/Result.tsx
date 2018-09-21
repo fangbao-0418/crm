@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'antd'
-const styles = require('./index.styl')
+const styles = require('./style')
 class Main extends React.Component {
   public render () {
     return (

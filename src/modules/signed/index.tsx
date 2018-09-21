@@ -24,7 +24,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: 'all',
-      label: ['入库时间', '倒库时间'],
+      label: ['入库时间', '创建时间'],
       options: [
         {
           label: '全部',
@@ -44,6 +44,45 @@ class Main extends React.Component {
         }
       ],
       type: 'date'
+    },
+    {
+      field: 'date',
+      value: '',
+      label: ['即将到期'],
+      options: [
+        {
+          label: '一个月',
+          value: '1'
+        },
+        {
+          label: '二个月',
+          value: '2'
+        },
+        {
+          label: '三个月',
+          value: '3'
+        },
+      ],
+      type: 'date'
+    },
+    {
+      label: ['纳税类别'],
+      value: '',
+      field: 'intention',
+      options: [
+        {
+          label: '小规模',
+          value: '1'
+        },
+        {
+          label: '一般人',
+          value: '2'
+        },
+        {
+          label: '零税',
+          value: '3'
+        }
+      ]
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
@@ -138,11 +177,8 @@ class Main extends React.Component {
     return (
       <ContentBox
         title='签约客户'
-        rightCotent={(
-          <AddButton title='新增' />
-        )}
       >
-        <div className='mt12' style={{ overflow: 'hidden' }}>
+        <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}

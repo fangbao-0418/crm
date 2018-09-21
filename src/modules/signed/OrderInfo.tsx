@@ -69,6 +69,7 @@ class Main extends React.Component {
         </div>
         <div className={styles.marg}>
           <ContractInfo />
+          <ContractInfo />
         </div>
         <div>
           <Row>
