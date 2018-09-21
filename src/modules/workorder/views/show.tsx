@@ -94,6 +94,14 @@ const stateData = [
   '王小二 2018/09/02 12:02:01',
   '客户要办理代开公司和国地税申报业务,满意度55%',
   '2018/09/05 15:02:01 由张一鸣进行用户维护',
+  '外勤任务状态变为材料已确认',
+  '王小二 2018/09/02 12:02:01',
+  '客户要办理代开公司和国地税申报业务,满意度55%',
+  '2018/09/05 15:02:01 由张一鸣进行用户维护',
+  '外勤任务状态变为材料已确认',
+  '王小二 2018/09/02 12:02:01',
+  '客户要办理代开公司和国地税申报业务,满意度55%',
+  '2018/09/05 15:02:01 由张一鸣进行用户维护',
   '外勤任务状态变为材料已确认'
 ]
 class Show extends React.Component<any, any> {
@@ -101,12 +109,7 @@ class Show extends React.Component<any, any> {
     super(props)
     this.state = {
       dataSource:data,
-      stateData : [
-        '王小二 2018/09/02 12:02:01',
-        '客户要办理代开公司和国地税申报业务,满意度55%',
-        '2018/09/05 15:02:01 由张一鸣进行用户维护',
-        '外勤任务状态变为材料已确认'
-      ]
+      stateData
     }
   }
   public componentWillMount () {
@@ -132,27 +135,39 @@ class Show extends React.Component<any, any> {
         <Col span={4}>开始日期:2018/09/09</Col>
         </div>
         </Row>
-        <Row className={styles['order-list']}>{
+        <Row >{
             this.state.dataSource.map((item: any, index: any) => {
               return(
-                 <Col span={4} key={index} >
-                  <div className={styles.node}>
-                    {item.title && (<p className={styles.title}>{item.title}</p>)}
-                    {item.onLine_writeName && (<p>签单销售:{item.onLine_writeName}</p>)}
-                    {item.onLine_writeDate && (<p>签约日期:{item.onLine_writeDate}</p>)}
-                    {item.financial_state && (<p>当前状态:{item.financial_state}</p>)}
-                    {index === 0 && (<p className={styles['btn-p']}>查看合同</p>)}
-                    {item.financial_writeDate && (<p>签约日期:{item.financial_writeDate}</p>)}
-                    {item.repair_name && (<p>负责销售:{item.repair_name}</p>)}
-                    {item.outside_state && (<p>当前状态:{item.outside_state}</p>)}
-                    {item.outside_name && (<p>负责人:{item.outside_name}</p>)}
-                    {item.outside_manage && (<p>主管:{item.outside_manage}</p>)}
-                    {index === 3 && (<Button  type='primary' className={styles['btn-button']}>催办</Button>)}
-                    {item.client_state && (<p>当前状态:{item.client_state}</p>)}
-                    {item.client_name && (<p>负责客服:{item.client_name}</p>)}
-                    {item.client_complaint_date && (<p>投诉日期:{item.client_complaint_date}</p>)}
-                  </div>
-                 </Col>
+                <div key={index} className={styles['order-list']} >
+                  <Col span={3}  >
+                    <div className={styles.node}>
+                      {item.title && (<p className={styles.title}>{item.title}</p>)}
+                      {item.onLine_writeName && (<p>签单销售:{item.onLine_writeName}</p>)}
+                      {item.onLine_writeDate && (<p>签约日期:{item.onLine_writeDate}</p>)}
+                      {item.financial_state && (<p>当前状态:{item.financial_state}</p>)}
+                      {index === 0 && (<p className={styles['btn-p']}>查看合同</p>)}
+                      {item.financial_writeDate && (<p>签约日期:{item.financial_writeDate}</p>)}
+                      {item.repair_name && (<p>负责销售:{item.repair_name}</p>)}
+                      {item.outside_state && (<p>当前状态:{item.outside_state}</p>)}
+                      {item.outside_name && (<p>负责人:{item.outside_name}</p>)}
+                      {item.outside_manage && (<p>主管:{item.outside_manage}</p>)}
+                      {index === 3 && (<Button  type='primary' className={styles['btn-button']}>催办</Button>)}
+                      {item.client_state && (<p>当前状态:{item.client_state}</p>)}
+                      {item.client_name && (<p>负责客服:{item.client_name}</p>)}
+                      {item.client_complaint_date && (<p>投诉日期:{item.client_complaint_date}</p>)}
+                    </div>
+                  </Col>
+                  <Col  span={1} className={styles.arrow}>{}
+                      <Row >
+                        <div className={styles.right} >
+                        <span  className={styles.rightSide}>
+                        </span>
+                        <span  className={styles.tightR}>
+                        </span>
+                        </div>
+                      </Row>
+                  </Col>
+                </div>
               )
             })
         }</Row>
