@@ -61,7 +61,7 @@ class Main extends React.Component {
         {
           label: '三个月',
           value: '3'
-        },
+        }
       ],
       type: 'date'
     },

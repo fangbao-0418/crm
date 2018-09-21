@@ -7,10 +7,41 @@ const defaultVal: Customer.Props = {
     contactPhone: ''
   }],
   dataSource: [],
-  detail: {}
+  detail: {},
+  autoAssign: [{
+    bigAreaName: '22',
+    cityName: '222',
+    agencyName: '222',
+    autoDistributeWeight: '333',
+    autoDistributeMaxNum: '11'
+  }],
+  setCapacity:[{
+    bigAreaName: '22',
+    cityName: '222',
+    agencyName: '222',
+    storageCapacity: '11',
+    maxTrackDays: '12',
+    maxProtectDays: '22'
+  }]
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
+    payload = _.merge(_.cloneDeep(defaultVal), payload)
+    payload = Object.assign({}, state, _.cloneDeep(payload))
+    return {
+      ...state,
+      ...payload
+    }
+  },
+  'change customer set auto data': (state, { payload }) => {
+    payload = _.merge(_.cloneDeep(defaultVal), payload)
+    payload = Object.assign({}, state, _.cloneDeep(payload))
+    return {
+      ...state,
+      ...payload
+    }
+  },
+  'change customer set capacity data': (state, { payload }) => {
     payload = _.merge(_.cloneDeep(defaultVal), payload)
     payload = Object.assign({}, state, _.cloneDeep(payload))
     return {
