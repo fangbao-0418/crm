@@ -110,6 +110,7 @@ class Main extends React.Component {
   }
   public add () {
     const modal = new Modal({
+      style: 'width: 800px',
       content: (
         <Provider><AddCustomer/></Provider>
       ),
@@ -124,6 +125,7 @@ class Main extends React.Component {
   }
   public show () {
     const modal = new Modal({
+      style: 'width: 800px',
       content: (
         <Provider><Detail /></Provider>
       ),
