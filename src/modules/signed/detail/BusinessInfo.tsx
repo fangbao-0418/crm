@@ -14,7 +14,7 @@ class Main extends React.Component<Props> {
         <Form
           // onSubmit={this.handleSubmit}
         >
-          <Row className='mt12'>
+          <Row >
             <Col span={16}>
               <FormItem
                 labelCol={{span: 4}}
@@ -45,7 +45,7 @@ class Main extends React.Component<Props> {
               </FormItem>
             </Col>
           </Row>
-          <Row className='mt12'>
+          <Row >
             <Col span={24}>
               <FormItem
                 className='inline-block'

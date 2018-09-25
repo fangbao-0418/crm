@@ -1,47 +1,89 @@
 import React from 'react'
-import { Row, Col, Input, Select } from 'antd'
+import { Form, Row, Col, Input, Select } from 'antd'
+import { FormComponentProps } from 'antd/lib/form'
+import Uploader from './Uploader'
 const styles = require('../style')
 const Option = Select.Option
-class Main extends React.Component {
+const FormItem = Form.Item
+interface Props extends FormComponentProps {
+  editable?: boolean
+}
+class Main extends React.Component<Props> {
   public render () {
+    const editabled = this.props.editable
     return (
-      <div>
-        <Row className='mt12'>
+      <Form>
+        <Row >
           <Col span={7}>
-            <span>区域：</span>
-            <Select
-              style={{width:'100px'}}
+            <FormItem
+              labelCol={{span: 6}}
+              wrapperCol={{span: 18}}
+              label='区域'
             >
-              <Option key='1'>朝阳区</Option>
-              <Option key='2'>丰台区</Option>
-            </Select>
+              {editabled ? (
+                <Select
+                  style={{width:'100px'}}
+                >
+                  <Option key='1'>朝阳区</Option>
+                  <Option key='2'>丰台区</Option>
+                </Select>
+              ) : <span>xxx</span>}
+            </FormItem>
           </Col>
           <Col span={8}>
-            <span>主联系人：</span>
-            <Input className={styles['input-width']}/>
+            <FormItem
+              labelCol={{span: 6}}
+              wrapperCol={{span: 18}}
+              label='主联系人'
+            >
+              {editabled ? <Input className={styles['input-width']}/> : <span>xxx</span>}
+            </FormItem>
           </Col>
           <Col span={9}>
-            <span>主联系电话：</span>
-            <Input className={styles['input-width']}/>
+            <FormItem
+              labelCol={{span: 7}}
+              wrapperCol={{span: 17}}
+              label='主联系电话'
+            >
+              {editabled ? <Input className={styles['input-width']}/> : <span>xxx</span>}
+            </FormItem>
           </Col>
         </Row>
-        <Row className='mt12'>
+        <Row >
           <Col span={7}>
-            <span>纳税人类别：</span>
-            <Select
-              style={{width:'100px'}}
+            <FormItem
+              labelCol={{span: 10}}
+              wrapperCol={{span: 14}}
+              label='纳税人类别'
             >
-              <Option key='1'>小规模</Option>
-              <Option key='2'>一般纳税人</Option>
-            </Select>
+              {editabled ? (
+                <Select
+                  style={{width:'100px'}}
+                >
+                  <Option key='1'>小规模</Option>
+                  <Option key='2'>一般纳税人</Option>
+                </Select>
+              ) : <span>xxx</span>}
+            </FormItem>
           </Col>
           <Col span={9}>
-            <span>法人身份证号：</span>
-            <Input className={styles['input-width']}/>
+            <FormItem
+              labelCol={{span: 8}}
+              wrapperCol={{span: 16}}
+              label='法人身份证号'
+            >
+              <Uploader />
+            </FormItem>
           </Col>
           <Col span={8}>
-            <span>营业执照：</span>
-            <img/>
+            <FormItem
+              labelCol={{span: 8}}
+              wrapperCol={{span: 16}}
+              label='营业执照'
+            >
+              <Uploader className='mr5'/>
+              <Uploader />
+            </FormItem>
           </Col>
         </Row>
         <Row>
@@ -50,8 +92,8 @@ class Main extends React.Component {
             <img/>
           </Col>
         </Row>
-      </div>
+      </Form>
     )
   }
 }
-export default Main
+export default Form.create()(Main)

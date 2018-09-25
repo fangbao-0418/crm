@@ -13,5 +13,7 @@ declare namespace APP {
   }
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction
+  export const success: (msg: string) => void
+  export const error: (msg: string) => void
 }
 

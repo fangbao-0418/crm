@@ -85,7 +85,6 @@ class Main extends React.Component<Props> {
               key: this.type || this.props.field,
               value: e.target.value
             }
-            console.log(value)
             if (this.props.onChange) {
               this.props.onChange(e, value)
             }
