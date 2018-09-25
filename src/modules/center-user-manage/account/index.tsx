@@ -1,6 +1,7 @@
 import React from 'react'
 import { Input, Button, Table, Divider } from 'antd'
 import ContentBox from '@/modules/common/content'
+import AddButton from '@/modules/common/content/AddButton'
 
 const styles = require('./style')
 
@@ -83,29 +84,25 @@ class Main extends React.Component {
     }
 
     return (
-      <ContentBox title='账号'>
+      <ContentBox
+        title='账号'
+        rightCotent={(
+          <AddButton
+            title='添加账号'
+            onClick={() => {}}
+          />
+        )}
+      >
+
         <div className={styles.topWarp}>
-          <div className={styles.left}>
-            <Input
-              placeholder='请输入姓名'
-            />
-            <Input
-              placeholder='请输入手机号'
-            />
-            <Input
-              placeholder='请输入部门名称'
-            />
-          </div>
-          <div className={styles.right}>
-            <Button type='primary' style={{marginRight: '10px'}}>添加账号</Button>
-            <Button>批量删除</Button>
-          </div>
+          <Input placeholder='请输入姓名'/>
+          <Input placeholder='请输入手机号'/>
+          <Input placeholder='请输入部门名称'/>
         </div>
 
         <div style={styles.tableWrap}>
           <Table
             bordered
-            style={{paddingTop: '10px'}}
             rowSelection={rowSelection}
             dataSource={this.state.dataSource}
             columns={columns}
@@ -115,6 +112,9 @@ class Main extends React.Component {
             rowKey='id'
           />
         </div>
+
+        {this.state.dataSource.length === 0 || <Button type='primary' className={styles.delBtn}>批量删除</Button>}
+
       </ContentBox>
     )
   }

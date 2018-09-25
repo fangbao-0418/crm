@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Table, Divider } from 'antd'
 import ContentBox from '@/modules/common/content'
+import AddButton from '@/modules/common/content/AddButton'
 
 const styles = require('./style')
 
@@ -51,19 +52,22 @@ class Main extends React.Component {
         )
       }
     }]
+
     return (
-      <ContentBox title='部门'>
-        <div className={styles.topWrap}>
-          <Button type='primary'>添加一级部门</Button>
-        </div>
+      <ContentBox
+        title='部门'
+        rightCotent={(
+          <AddButton
+            title='添加一级部门'
+            onClick={() => {}}
+          />
+        )}
+      >
         <Table
-          style={{paddingTop: '10px'}}
           dataSource={this.state.dataSource}
           columns={columns}
           rowKey='id'
-          pagination={{
-            showQuickJumper: true
-          }}
+          pagination={false}
         />
       </ContentBox>
     )
