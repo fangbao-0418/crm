@@ -15,7 +15,7 @@ declare namespace Customer {
     cityName?: string
     cityCode?: string
     customerSource?: string
-    createTime?: string
+    enterStorageTime?: string
     value?: string
     text?: string
     remark?: string

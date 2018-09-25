@@ -1,10 +1,10 @@
 import React from 'react'
-import { Table } from 'antd'
+import Result from '../Result'
 class Main extends React.Component {
   public render () {
     return (
-      <div>
-        ss
+      <div className='mt40'>
+       <Result/>
       </div>
     )
   }

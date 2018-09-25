@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table, Button } from 'antd'
+import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -7,11 +8,12 @@ import ContentBox from '@/modules/common/content'
 import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
-import AddPhone from './addPhone'
-import AddCustomer from '@/modules/customer/AddCustomer'
-import PlanCustomer from './planCustomer'
+import Allot from '@/modules/customer/allot'
 import Result from './Result'
 import Detail from './detail'
+import { fetchList, fetchCityCustomerList } from './api'
+import BaseInfo from '@/modules/customer/BaseInfo'
+import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -34,42 +36,52 @@ class Main extends React.Component {
         },
         {
           label: '今天',
-          value: 'today'
+          value: '1'
         },
         {
           label: '7天',
-          value: '7d'
+          value: '7'
         },
         {
           label: '30天',
-          value: '30d'
+          value: '30'
         }
       ],
       type: 'date'
     },
     {
       label: ['所属城市'],
-      value: 'all',
-      field: 'telephoneStatus',
+      value: '110110',
+      field: 'cityCode',
       options: [
         {
-          label: '全部',
-          value: 'all'
+          label: '北京(100)',
+          value: '110110'
         },
         {
-          label: '北京',
-          value: 'wxdh'
+          label: '上海(100)',
+          value: '120110'
         },
         {
-          label: '上海',
-          value: 'zjjj'
+          label: '南京(100)',
+          value: '130110'
+        },
+        {
+          label: '天津(100)',
+          value: '140110'
         }
       ]
     }
   ]
+  public params: any = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
-    dataIndex: 'customerName'
+    dataIndex: 'customerName',
+    render: (val) => {
+      return (
+        <a onClick={this.show}>{val}</a>
+      )
+    }
   }, {
     title: '联系人',
     dataIndex: 'contactPerson'
@@ -87,35 +99,65 @@ class Main extends React.Component {
     dataIndex: 'customerSource'
   }, {
     title: '入库时间',
-    dataIndex: 'createTime'
+    dataIndex: 'enterStorageTime'
   }]
-  public onSelectAllChange () {
-    console.log('select')
+  public componentWillMount () {
+    fetchList().then((res) => {
+      this.setState({
+        dataSource: res.data
+      })
+    })
+    fetchCityCustomerList().then((res) => {
+      console.log(res)
+    })
   }
-  public addPhone () {
+  public onSelectAllChange (selectedRowKeys: string[]) {
+    console.log(selectedRowKeys)
+    this.setState({ selectedRowKeys })
+  }
+  public handleSearch (values: any) {
+    let beginDate, endDate, cityCode
+    if (values.date === 'all') {
+      beginDate = ''
+      endDate = ''
+    } else if (values.date.indexOf('至') > -1) {
+      beginDate = values.date.split('至')[0]
+      endDate = values.date.split('至')[1]
+    } else {
+      beginDate = moment().format('YYYY-MM-DD')
+      endDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+    }
+    this.params.cityCode = values.cityCode
+    this.params.beginDate = beginDate
+    this.params.endDate = endDate
+    console.log(beginDate, endDate)
+  }
+  public handleSearchType (values: any) {
+    console.log(values, 'values')
+  }
+  public add () {
     const modal = new Modal({
+      style: 'width: 800px',
       content: (
-        <AddPhone/>
+        <Provider><BaseInfo /></Provider>
       ),
-      title: '联系人',
+      footer: null,
+      title: '录入客资',
       mask: true,
-      onOk: () => {
-        modal.hide()
-      },
       onCancel: () => {
         modal.hide()
       }
     })
     modal.show()
   }
-  public add () {
+  public import () {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><AddCustomer/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
-      header: null,
+      title: '导入客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -125,7 +167,7 @@ class Main extends React.Component {
   }
   public show () {
     const modal = new Modal({
-      style: 'width: 800px',
+      style: 'width: 840px',
       content: (
         <Provider><Detail /></Provider>
       ),
@@ -172,7 +214,7 @@ class Main extends React.Component {
   public toOrganizationByHand () {
     const modal = new Modal({
       content: (
-        <PlanCustomer/>
+        <Provider><Allot /></Provider>
       ),
       title: '分配客资',
       footer: null,
@@ -198,15 +240,15 @@ class Main extends React.Component {
           <div>
             <AddButton
               style={{marginRight: '10px'}}
-              title='查看'
-              onClick={() => {
-                this.show()
-              }}
-            />
-            <AddButton
               title='新增'
               onClick={() => {
                 this.add()
+              }}
+            />
+            <AddButton
+              title='导入'
+              onClick={() => {
+                this.import()
               }}
             />
           </div>
@@ -216,26 +258,22 @@ class Main extends React.Component {
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
-              onChange={(values) => {
-                console.log(values)
-              }}
+              onChange={this.handleSearch}
             />
           </div>
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                {label: '客户名称', value: '0'},
-                {label: '联系人', value: '1'},
-                {label: '客户来源', value: '2'},
-                {label: '所属销售', value: '3'},
-                {label: '联系电话', value: '4'},
-                {label: '纳税人类别', value: '5'}
+                {label: '客户名称', value: '1'},
+                {label: '联系人', value: '2'},
+                {label: '客户来源', value: '3'},
+                {label: '城市', value: '4'},
+                {label: '联系电话', value: '5'},
+                {label: '纳税人类别', value: '6'}
               ]}
               placeholder={''}
-              onChange={(value) => {
-                console.log(value)
-              }}
+              onChange={this.handleSearchType}
             />
           </div>
         </div>

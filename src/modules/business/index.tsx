@@ -9,7 +9,7 @@ import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
-import AddCustomer from '@/modules/customer/AddCustomer'
+// import AddCustomer from '@/modules/customer/AddCustomer'
 import { fetchList } from './api'
 interface States {
   dataSource: DetailProps[]
@@ -256,7 +256,10 @@ class Main extends React.Component {
   public add () {
     const modal = new Modal({
       content: (
-        <Provider><AddCustomer/></Provider>
+        <Provider>
+          {/* <AddCustomer/> */}
+          <div></div>
+        </Provider>
       ),
       footer: null,
       header: null,
