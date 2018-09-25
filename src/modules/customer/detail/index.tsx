@@ -1,6 +1,7 @@
 import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
 import BaseInfo from '@/modules/customer/BaseInfo'
+import Record from '@/modules/customer/Record'
 import Card from '@/components/Card'
 import Tags from '@/components/tags'
 import { Button } from 'antd'
@@ -26,7 +27,8 @@ class Main extends React.Component {
             <Tags />
           </Card>
         </div>
-        <div className={styles.left}>
+        <div className={styles.right}>
+          <Record/>
         </div>
       </div>
     )

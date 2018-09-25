@@ -7,11 +7,12 @@ import ContentBox from '@/modules/common/content'
 import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
-import AddPhone from './addPhone'
-import AddCustomer from '@/modules/customer/AddCustomer'
-import PlanCustomer from './planCustomer'
+import AllotCustomer from './AllotCustomer'
 import Result from './Result'
 import Detail from './detail'
+import { fetchList, fetchCityCustomerList } from './api'
+import BaseInfo from '@/modules/customer/BaseInfo'
+import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -69,7 +70,12 @@ class Main extends React.Component {
   ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
-    dataIndex: 'customerName'
+    dataIndex: 'customerName',
+    render: (val) => {
+      return (
+        <a onClick={this.show}>{val}</a>
+      )
+    }
   }, {
     title: '联系人',
     dataIndex: 'contactPerson'
@@ -87,35 +93,45 @@ class Main extends React.Component {
     dataIndex: 'customerSource'
   }, {
     title: '入库时间',
-    dataIndex: 'createTime'
+    dataIndex: 'enterStorageTime'
   }]
-  public onSelectAllChange () {
-    console.log('select')
+  public componentWillMount () {
+    fetchList().then((res) => {
+      this.setState({
+        dataSource: res.data
+      })
+    })
+    fetchCityCustomerList().then((res) => {
+      console.log(res)
+    })
   }
-  public addPhone () {
+  public onSelectAllChange (selectedRowKeys: string[]) {
+    console.log(selectedRowKeys)
+    this.setState({ selectedRowKeys })
+  }
+  public add () {
     const modal = new Modal({
+      style: 'width: 800px',
       content: (
-        <AddPhone/>
+        <Provider><BaseInfo /></Provider>
       ),
-      title: '联系人',
+      footer: null,
+      title: '录入客资',
       mask: true,
-      onOk: () => {
-        modal.hide()
-      },
       onCancel: () => {
         modal.hide()
       }
     })
     modal.show()
   }
-  public add () {
+  public import () {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><AddCustomer/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
-      header: null,
+      title: '导入客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -125,7 +141,7 @@ class Main extends React.Component {
   }
   public show () {
     const modal = new Modal({
-      style: 'width: 800px',
+      style: 'width: 840px',
       content: (
         <Provider><Detail /></Provider>
       ),
@@ -172,7 +188,7 @@ class Main extends React.Component {
   public toOrganizationByHand () {
     const modal = new Modal({
       content: (
-        <PlanCustomer/>
+        <Provider><AllotCustomer/></Provider>
       ),
       title: '分配客资',
       footer: null,
@@ -198,15 +214,15 @@ class Main extends React.Component {
           <div>
             <AddButton
               style={{marginRight: '10px'}}
-              title='查看'
-              onClick={() => {
-                this.show()
-              }}
-            />
-            <AddButton
               title='新增'
               onClick={() => {
                 this.add()
+              }}
+            />
+            <AddButton
+              title='导入'
+              onClick={() => {
+                this.import()
               }}
             />
           </div>
