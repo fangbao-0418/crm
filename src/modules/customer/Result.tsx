@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button } from 'antd'
 const styles = require('./style')
-class Main extends React.Component {
+interface Props {
+  onCancel?: () => void
+}
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.content}>
@@ -11,7 +14,7 @@ class Main extends React.Component {
         <div className={styles.info}>是否删除已重复客户?</div>
         <div className='fr'>
           <Button type='primary' className='mr10'>删除</Button>
-          <Button>取消</Button>
+          <Button onClick={this.props.onCancel}>取消</Button>
         </div>
       </div>
     )
