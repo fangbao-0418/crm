@@ -1,11 +1,9 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import Card from '@/components/Card'
 class Main extends React.Component {
   public render () {
     return (
       <div>
-        <Card></Card>
         <Row gutter={12}>
           <Col span={8}>
             <label>当前账期：</label>
