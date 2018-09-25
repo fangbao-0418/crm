@@ -1,3 +1,3 @@
-export const changeLinkManAction = () => (dispatch) => {
+export const changeLinkManAction = () => (dispatch: any) => {
 //
 }
