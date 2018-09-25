@@ -134,6 +134,26 @@ class Main extends React.Component {
   }
   public handleSearchType (values: any) {
     console.log(values, 'values')
+    switch (values.key) {
+      case '1':
+      this.params.customerName = values.value
+      break
+      case '2':
+      this.params.contactPerson = values.value
+      break
+      case '3':
+      this.params.customerSource = values.value
+      break
+      case '4':
+      this.params.cityCode = values.value
+      break
+      case '5':
+      this.params.contactPhone = values.value
+      break
+      case '6':
+      this.params.payTaxesNature = values.value
+      break
+    }
   }
   public add () {
     const modal = new Modal({
