@@ -12,7 +12,7 @@ const options = {
   },
   proxy: {
     '/api': {
-      target: 'http://192.168.12.195:9008',
+      target: 'http://192.168.12.197:9008',
       changeOrigin: true,
       secure: false
       // pathRewrite: {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table, Button } from 'antd'
+import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -35,39 +36,44 @@ class Main extends React.Component {
         },
         {
           label: '今天',
-          value: 'today'
+          value: '1'
         },
         {
           label: '7天',
-          value: '7d'
+          value: '7'
         },
         {
           label: '30天',
-          value: '30d'
+          value: '30'
         }
       ],
       type: 'date'
     },
     {
       label: ['所属城市'],
-      value: 'all',
-      field: 'telephoneStatus',
+      value: '110110',
+      field: 'cityCode',
       options: [
         {
-          label: '全部',
-          value: 'all'
+          label: '北京(100)',
+          value: '110110'
         },
         {
-          label: '北京',
-          value: 'wxdh'
+          label: '上海(100)',
+          value: '120110'
         },
         {
-          label: '上海',
-          value: 'zjjj'
+          label: '南京(100)',
+          value: '130110'
+        },
+        {
+          label: '天津(100)',
+          value: '140110'
         }
       ]
     }
   ]
+  public params: any = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -108,6 +114,26 @@ class Main extends React.Component {
   public onSelectAllChange (selectedRowKeys: string[]) {
     console.log(selectedRowKeys)
     this.setState({ selectedRowKeys })
+  }
+  public handleSearch (values: any) {
+    let beginDate, endDate, cityCode
+    if (values.date === 'all') {
+      beginDate = ''
+      endDate = ''
+    } else if (values.date.indexOf('至') > -1) {
+      beginDate = values.date.split('至')[0]
+      endDate = values.date.split('至')[1]
+    } else {
+      beginDate = moment().format('YYYY-MM-DD')
+      endDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+    }
+    this.params.cityCode = values.cityCode
+    this.params.beginDate = beginDate
+    this.params.endDate = endDate
+    console.log(beginDate, endDate)
+  }
+  public handleSearchType (values: any) {
+    console.log(values, 'values')
   }
   public add () {
     const modal = new Modal({
@@ -232,26 +258,22 @@ class Main extends React.Component {
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
-              onChange={(values) => {
-                console.log(values)
-              }}
+              onChange={this.handleSearch}
             />
           </div>
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                {label: '客户名称', value: '0'},
-                {label: '联系人', value: '1'},
-                {label: '客户来源', value: '2'},
-                {label: '所属销售', value: '3'},
-                {label: '联系电话', value: '4'},
-                {label: '纳税人类别', value: '5'}
+                {label: '客户名称', value: '1'},
+                {label: '联系人', value: '2'},
+                {label: '客户来源', value: '3'},
+                {label: '城市', value: '4'},
+                {label: '联系电话', value: '5'},
+                {label: '纳税人类别', value: '6'}
               ]}
               placeholder={''}
-              onChange={(value) => {
-                console.log(value)
-              }}
+              onChange={this.handleSearchType}
             />
           </div>
         </div>
