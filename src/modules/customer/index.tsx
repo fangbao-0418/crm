@@ -7,7 +7,7 @@ import ContentBox from '@/modules/common/content'
 import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
-import AllotCustomer from './AllotCustomer'
+import Allot from '@/modules/customer/allot'
 import Result from './Result'
 import Detail from './detail'
 import { fetchList, fetchCityCustomerList } from './api'
@@ -188,7 +188,7 @@ class Main extends React.Component {
   public toOrganizationByHand () {
     const modal = new Modal({
       content: (
-        <Provider><AllotCustomer/></Provider>
+        <Provider><Allot /></Provider>
       ),
       title: '分配客资',
       footer: null,
