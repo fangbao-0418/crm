@@ -9,7 +9,8 @@ import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
-// import AddCustomer from '@/modules/customer/AddCustomer'
+import BaseInfo from '@/modules/customer/BaseInfo'
+import Import from '@/modules/customer/import'
 import { fetchList } from './api'
 interface States {
   dataSource: DetailProps[]
@@ -257,12 +258,26 @@ class Main extends React.Component {
     const modal = new Modal({
       content: (
         <Provider>
-          {/* <AddCustomer/> */}
-          <div></div>
+          <BaseInfo/>
         </Provider>
       ),
       footer: null,
-      header: null,
+      title: '新增',
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public import () {
+    const modal = new Modal({
+      style: 'width: 800px',
+      content: (
+        <Provider><Import /></Provider>
+      ),
+      footer: null,
+      title: '导入',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -279,12 +294,21 @@ class Main extends React.Component {
       <ContentBox
         title='我的商机'
         rightCotent={(
-          <AddButton
-            title='新增'
-            onClick={() => {
-              this.add()
-            }}
-          />
+          <div>
+            <AddButton
+              style={{marginRight: '10px'}}
+              title='新增'
+              onClick={() => {
+                this.add()
+              }}
+            />
+            <AddButton
+              title='导入'
+              onClick={() => {
+                this.import()
+              }}
+            />
+          </div>
         )}
       >
         <div className='mb12' style={{ overflow: 'hidden' }}>

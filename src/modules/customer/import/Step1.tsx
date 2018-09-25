@@ -5,15 +5,16 @@ interface Status {
   isChecked: boolean
 }
 interface Props {
-  onOk?: () => void
+  onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
+  public value: any = {a: 1}
   public state: Status = {
     isChecked: true
   }
-  public onChange (e: any) {
+  public onChange (checked: any) {
     this.setState({
-      isChecked: e.target
+      isChecked: checked
     })
   }
   public render () {
@@ -37,9 +38,9 @@ class Main extends React.Component<Props> {
             <Option key='2'>天津</Option>
           </Select>
         </div>
-        <div className='mt12'>
+        <div className='mt12' style={{ textAlign: 'left', marginLeft: 250 }}>
           <span>是否分配：</span>
-          <Switch onChange={this.onChange.bind(this)} checked={this.state.isChecked}/>
+          <Switch onChange={this.onChange.bind(this)} defaultChecked/>
         </div>
         {
           this.state.isChecked &&
@@ -63,20 +64,20 @@ class Main extends React.Component<Props> {
                 <Option key='2'>销售2</Option>
               </Select>
             </div>
-            <div className='text-right mt10'>
-              <Button
-                type='primary'
-                onClick={() => {
-                  if (this.props.onOk) {
-                    this.props.onOk()
-                  }
-                }}
-              >
-                下一步
-              </Button>
-            </div>
           </div>
         }
+        <div className='text-right mt10'>
+          <Button
+            type='primary'
+            onClick={() => {
+              if (this.props.onOk) {
+                this.props.onOk(this.value)
+              }
+            }}
+          >
+            下一步
+          </Button>
+        </div>
       </div>
     )
   }

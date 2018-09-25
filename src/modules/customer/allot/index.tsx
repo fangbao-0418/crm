@@ -2,7 +2,10 @@ import React from 'react'
 import ImportSteps from '@/modules/common/allot-steps'
 import Step1 from './Step1'
 import Step2 from './Step2'
-class Main extends React.Component {
+interface Props {
+  onClose?: () => void
+}
+class Main extends React.Component<Props> {
   public state = {
     step: 1
   }
@@ -21,7 +24,15 @@ class Main extends React.Component {
     },
     {
       title: '2、执行结果',
-      component: <Step2 />
+      component: (
+        <Step2
+          onCancel={() => {
+            if (this.props.onClose) {
+              this.props.onClose()
+            }
+          }}
+        />
+      )
     }
   ]
   public render () {

@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Button } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
+import { PaginationConfig } from 'antd/lib/pagination'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
@@ -18,11 +19,22 @@ type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
+  pagination: PaginationConfig
 }
 class Main extends React.Component {
   public state: States = {
     dataSource: [],
-    selectedRowKeys: []
+    selectedRowKeys: [],
+    pagination: {
+      current: 1,
+      pageSize: 15,
+      showQuickJumper: true,
+      showSizeChanger: true,
+      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
+      showTotal (total) {
+        return `共计 ${total} 条`
+      }
+    }
   }
   public data: ConditionOptionProps[] = [
     {
@@ -116,7 +128,8 @@ class Main extends React.Component {
     this.setState({ selectedRowKeys })
   }
   public handleSearch (values: any) {
-    let beginDate, endDate, cityCode
+    let beginDate
+    let endDate
     if (values.date === 'all') {
       beginDate = ''
       endDate = ''
@@ -134,26 +147,6 @@ class Main extends React.Component {
   }
   public handleSearchType (values: any) {
     console.log(values, 'values')
-    switch (values.key) {
-      case '1':
-      this.params.customerName = values.value
-      break
-      case '2':
-      this.params.contactPerson = values.value
-      break
-      case '3':
-      this.params.customerSource = values.value
-      break
-      case '4':
-      this.params.cityCode = values.value
-      break
-      case '5':
-      this.params.contactPhone = values.value
-      break
-      case '6':
-      this.params.payTaxesNature = values.value
-      break
-    }
   }
   public add () {
     const modal = new Modal({
@@ -162,7 +155,7 @@ class Main extends React.Component {
         <Provider><BaseInfo /></Provider>
       ),
       footer: null,
-      title: '录入客资',
+      title: '新增',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -174,11 +167,14 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import /></Provider>
+        <Provider><Import onClose={() => {modal.hide()}}/></Provider>
       ),
       footer: null,
-      title: '导入客资',
+      title: '导入',
       mask: true,
+      onOk: () => {
+
+      },
       onCancel: () => {
         modal.hide()
       }
@@ -203,7 +199,7 @@ class Main extends React.Component {
   public showResult () {
     const modal = new Modal({
       content: (
-        <Result/>
+        <Result onCancel={() => {modal.hide()}}/>
       ),
       footer: null,
       title: '执行结果',
@@ -234,7 +230,7 @@ class Main extends React.Component {
   public toOrganizationByHand () {
     const modal = new Modal({
       content: (
-        <Provider><Allot /></Provider>
+        <Provider><Allot onClose={() => {modal.hide()}}/></Provider>
       ),
       title: '分配客资',
       footer: null,
@@ -258,6 +254,13 @@ class Main extends React.Component {
         title='我的客资'
         rightCotent={(
           <div>
+            <AddButton
+              style={{marginRight: '10px'}}
+              title='查看'
+              onClick={() => {
+                this.show()
+              }}
+            />
             <AddButton
               style={{marginRight: '10px'}}
               title='新增'
@@ -284,15 +287,7 @@ class Main extends React.Component {
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={[
-                {label: '客户名称', value: '1'},
-                {label: '联系人', value: '2'},
-                {label: '客户来源', value: '3'},
-                {label: '城市', value: '4'},
-                {label: '联系电话', value: '5'},
-                {label: '纳税人类别', value: '6'}
-              ]}
-              placeholder={''}
+              placeholder={'请输入关键字'}
               onChange={this.handleSearchType}
             />
           </div>
@@ -303,6 +298,7 @@ class Main extends React.Component {
           rowSelection={rowSelection}
           bordered
           rowKey={'customerId'}
+          pagination={this.state.pagination}
         />
         <div className='mt40'>
           <Button type='primary' className='mr10'>全选</Button>
