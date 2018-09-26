@@ -1,8 +1,11 @@
-import React from 'react'
 import ContentBox from '@/modules/common/content'
+import AddButton from '@/modules/common/content/AddButton'
+import Accounting from '@/modules/user-manage/agent-account/accounting'
+import Custom from '@/modules/user-manage/agent-account/custom'
 import {
-  Button , Tabs, Table, Input
+  Button , Divider, Input, Table, Tabs
 } from 'antd'
+import React from 'react'
 
 const stylus = require('./index.styl')
 
@@ -49,10 +52,13 @@ const columns = [
     render: () => {
       return (
         <div>
-          <a className={stylus.operate} href='javascript:;'>添加子部门</a>|
-          <a className={stylus.operate} href='javascript:;'>修改</a>|
-          <a className={stylus.operate} href='javascript:;'>禁用</a>|
-          <a className={stylus.operate} href='javascript:;'>删除</a>
+          <a href='javascript:;'>添加子部门</a>
+          <Divider type='vertical'/>
+          <a href='javascript:;'>修改</a>
+          <Divider type='vertical'/>
+          <a href='javascript:;'>禁用</a>
+          <Divider type='vertical'/>
+          <a href='javascript:;'>删除</a>
         </div>
       )
     },
@@ -70,15 +76,19 @@ class AgentAccount extends React.Component<any, any> {
   public state: States = {
     dataSource: ['人力行政中心', '营销中心', '技术中心']
   }
-  public onSelecttion (value: any) {
-    console.log('onSelect', value)
-  }
-
   public render () {
     const TabPane: any = Tabs.TabPane
     return (
       <div>
-        <ContentBox title='代理商账号'>
+        <ContentBox
+          title='代理商账号'
+          rightCotent={(
+            <AddButton
+              title='添加一级部门'
+              onClick={() => {}}
+            />
+          )}
+        >
           <div className={stylus.tabcon}>
           <Tabs
             defaultActiveKey='1'
@@ -86,39 +96,20 @@ class AgentAccount extends React.Component<any, any> {
           >
             <TabPane tab='部门' key='1'>
               <div className={stylus.formitem}>
-                {/* <AutoComplete
-                  style={{ width: 200 }}
-                  dataSource={this.state.dataSource}
-                  placeholder='请输入名称'
-                  onSelect={this.onSelecttion.bind(this)}
-                /> */}
                 <Input
-                  placeholder='请输入名称'
-                  style={
-                    {
-                      width: '200px'
-                    }
-                  }
+                  placeholder='请输入公司名称'
+                  className={stylus.searchcondition}
                 />
-                <Button
-                  type='primary'
-                  style={
-                    {
-                      float:'right'
-                    }
-                  }
-                >
-                  添加一级部门
-                </Button>
               </div>
               <Table
                 className='components-table-demo-nested'
                 columns={columns}
                 dataSource={tableData}
+                pagination={false}
               />
             </TabPane>
-            <TabPane tab='账号' key='2'></TabPane>
-            <TabPane tab='自定义角色' key='3'>Content of Tab Pane 3</TabPane>
+            <TabPane tab='账号' key='2'><Accounting /></TabPane>
+            <TabPane tab='自定义角色' key='3'><Custom /></TabPane>
           </Tabs>
         </div>
         </ContentBox>
