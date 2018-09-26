@@ -6,7 +6,10 @@ const Option = Select.Option
 const FormItem = Form.Item
 
 interface Props {
-  title?: '添加账号' | '查看账号' | '修改账号' // 标题
+  info: {
+    title?: '添加账号' | '查看账号' | '修改账号' // 标题
+    visible?: boolean // 是否显示弹窗
+  }
   onOk?: () => void // 确认回调
   onCancle?: () => void // 取消回调
   form?: any
@@ -39,42 +42,41 @@ const validation = {
     ]
   },
   role: {
-    rules:[
-      {required: true, message: '请选择角色！'}
-    ]
+    rules:[{}]
+  },
+  center: {
+    rules: [{}]
   }
 }
 
 class Main extends React.Component<any, any> {
 
-  public state = {
-    isShow: false // 弹窗是否显示
-  }
-
   // 点击确认按钮
-  public clickSure = () => {
-    this.props.form.validateFields((err: any, values: any) => {
+  public confirm = () => {
+    this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
-      console.log(values)
+      console.log(val)
+      this.props.onOk(val)
     })
   }
 
-  // 隐藏弹窗
-  public hide = () => {
-    this.setState({isShow: false})
+  // 点击取消按钮
+  public cancel = () => {
+    this.props.onCancel()
   }
 
   public render () {
-    const {title, onOk, onCancle, form:{getFieldDecorator}} = this.props
+    const {info, form:{getFieldDecorator}} = this.props
     return (
       <Modal
         className={styles.modal}
-        title={title || '添加账号'}
-        visible={this.state.isShow}
+        title={info.title}
+        visible={info.visible}
+        destroyOnClose={true}
         cancelText='取消'
         okText='确定'
-        onOk={this.clickSure}
-        onCancel={this.hide}
+        onOk={this.confirm}
+        onCancel={this.cancel}
       >
 
         <Form>
@@ -119,6 +121,18 @@ class Main extends React.Component<any, any> {
             {
               getFieldDecorator('role', validation.role)(
                 <Select placeholder='请选择角色' notFoundContent='暂无数据'>
+                  <Option key='1'>11</Option>
+                  <Option key='2'>22</Option>
+                  <Option key='3'>33</Option>
+                </Select>
+              )
+            }
+          </FormItem>
+
+          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
+            {
+              getFieldDecorator('center', validation.center)(
+                <Select placeholder='请选择核算中心' notFoundContent='暂无数据'>
                   <Option key='1'>11</Option>
                   <Option key='2'>22</Option>
                   <Option key='3'>33</Option>
