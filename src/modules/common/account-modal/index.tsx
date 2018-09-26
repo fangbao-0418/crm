@@ -1,9 +1,10 @@
 import React from 'react'
-import { Modal, Form, Input, Checkbox, Button, Select } from 'antd'
+import { Modal, Form, Input, Checkbox, Button, Select, Tree } from 'antd'
 
 const styles = require('./index.styl')
 const Option = Select.Option
 const FormItem = Form.Item
+const TreeNode = Tree.TreeNode
 
 interface Props {
   info: {
@@ -15,6 +16,7 @@ interface Props {
   form?: any
 }
 
+// 过滤规则
 const validation = {
   name: {
     validateTrigger: 'onBlur',
@@ -51,6 +53,48 @@ const validation = {
 
 class Main extends React.Component<any, any> {
 
+  public state = {
+    expandedKeys: [''],
+    checkedKeys: [''],
+    treeData: [
+      {
+        title: '0-0',
+        key: '0-0',
+        children: [
+          {
+            title: '0-0-0',
+            key: '0-0-0',
+            children: [
+              { title: '0-0-0-0', key: '0-0-0-0' },
+              { title: '0-0-0-1', key: '0-0-0-1' },
+              { title: '0-0-0-2', key: '0-0-0-2' },
+              { title: '0-0-0-3', key: '0-0-0-3' },
+              { title: '0-0-0-4', key: '0-0-0-4' },
+              { title: '0-0-0-5', key: '0-0-0-5' }
+            ]
+          },
+          {
+            title: '0-0-1',
+            key: '0-0-1'
+          }
+        ]
+      },
+      {
+        title: '0-1',
+        key: '0-1',
+        children: [
+          { title: '0-1-0-0', key: '0-1-0-0' },
+          { title: '0-1-0-1', key: '0-1-0-1' },
+          { title: '0-1-0-2', key: '0-1-0-2' }
+        ]
+      },
+      {
+        title: '0-2',
+        key: '0-2'
+      }
+    ]
+  }
+
   // 点击确认按钮
   public confirm = () => {
     this.props.form.validateFields((err: any, val: any) => {
@@ -63,6 +107,35 @@ class Main extends React.Component<any, any> {
   // 点击取消按钮
   public cancel = () => {
     this.props.onCancel()
+  }
+
+  // 渲染区域树
+  public renderTreeNodes = (data: any) => {
+    return data.map((item: any) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        )
+      }
+      return <TreeNode key={item.key} {...item} />
+    })
+  }
+
+  // 区域节点展开触发
+  public onExpand = (expandedKeys: any) => {
+    console.log('onExpand', expandedKeys)
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false
+    })
+  }
+
+  // 区域勾选时触发
+  public onCheck = (checkedKeys: any) => {
+    console.log('onCheck', checkedKeys)
+    this.setState({ checkedKeys })
   }
 
   public render () {
@@ -84,7 +157,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
             {
               getFieldDecorator('name', validation.name)(
-                <Input placeholder='请输入姓名'/>
+                <Input size='small' placeholder='请输入姓名'/>
               )
             }
           </FormItem>
@@ -92,7 +165,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='手机号'>
             {
               getFieldDecorator('phone', validation.phone)(
-                <Input placeholder='请输入手机号'/>
+                <Input size='small' placeholder='请输入手机号'/>
               )
             }
           </FormItem>
@@ -100,7 +173,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='邮箱'>
             {
               getFieldDecorator('email', validation.email)(
-                <Input placeholder='请输入邮箱'/>
+                <Input size='small' placeholder='请输入邮箱'/>
               )
             }
           </FormItem>
@@ -108,7 +181,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
             {
               getFieldDecorator('department', validation.department)(
-                <Select placeholder='请选择部门' notFoundContent='暂无数据' defaultValue='1'>
+                <Select size='small' placeholder='请选择部门' notFoundContent='暂无数据' defaultValue='1'>
                   <Option value='1'>11</Option>
                   <Option value='2'>22</Option>
                   <Option value='3'>33</Option>
@@ -120,7 +193,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
             {
               getFieldDecorator('role', validation.role)(
-                <Select placeholder='请选择角色' notFoundContent='暂无数据'>
+                <Select size='small' placeholder='请选择角色' notFoundContent='暂无数据'>
                   <Option key='1'>11</Option>
                   <Option key='2'>22</Option>
                   <Option key='3'>33</Option>
@@ -132,7 +205,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
             {
               getFieldDecorator('center', validation.center)(
-                <Select placeholder='请选择核算中心' notFoundContent='暂无数据'>
+                <Select size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
                   <Option key='1'>11</Option>
                   <Option key='2'>22</Option>
                   <Option key='3'>33</Option>
@@ -142,8 +215,17 @@ class Main extends React.Component<any, any> {
           </FormItem>
 
           <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
-            <Input/>
-            <Button className={styles.btn} style={{float: 'right'}}>添加区域</Button>
+            <div className={styles.treeWrap}>
+              <Tree
+                checkable
+                onExpand={this.onExpand}
+                expandedKeys={this.state.expandedKeys}
+                onCheck={this.onCheck}
+                checkedKeys={this.state.checkedKeys}
+              >
+                {this.renderTreeNodes(this.state.treeData)}
+              </Tree>
+            </div>
           </FormItem>
 
         </Form>
