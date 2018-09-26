@@ -1,12 +1,13 @@
 import React from 'react'
 import { Input, Select, Icon } from 'antd'
+const styles = require('./style')
 const InputGroup = Input.Group
 const Option = Select.Option
 interface Props {
   className?: string
   style?: React.CSSProperties
   placeholder?: string
-  options: Array<{
+  options?: Array<{
     label: string
     value: string
   }>
@@ -15,21 +16,21 @@ interface Props {
 class Main extends React.Component<Props> {
   public type: any
   public render () {
-    const options = this.props.options || []
+    // const options = this.props.options || []
     const nodes: JSX.Element[] = []
-    if (options.length > 0) {
-      options.forEach((item) => {
-        nodes.push(
-          <Option value={item.value}>
-            {item.label}
-          </Option>
-        )
-      })
-      this.type = options[0].value
-    }
+    // if (options.length > 0) {
+    //   options.forEach((item) => {
+    //     nodes.push(
+    //       <Option value={item.value}>
+    //         {item.label}
+    //       </Option>
+    //     )
+    //   })
+    //   this.type = options[0].value
+    // }
     return (
       <InputGroup compact style={this.props.style} className={this.props.className}>
-        <Select
+        {/* <Select
           onChange={(value) => {
             this.type = value
           }}
@@ -37,7 +38,7 @@ class Main extends React.Component<Props> {
           defaultValue={options[0].value}
         >
           {nodes}
-        </Select>
+        </Select> */}
         <Input
           onChange={(e) => {
             const value = {
@@ -50,7 +51,7 @@ class Main extends React.Component<Props> {
           }}
           style={{ width: '50%' }}
           placeholder={this.props.placeholder}
-          suffix={<Icon type='search' theme='outlined' />}
+          suffix={<Icon className={styles.icon} type='search' theme='outlined' />}
         />
       </InputGroup>
     )

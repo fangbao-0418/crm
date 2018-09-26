@@ -41,7 +41,15 @@ class Main extends React.Component<Customer.Props> {
     })
   }
   public handleChange (e: React.SyntheticEvent, value: any) {
-    console.log(value)
+    const detail: any = this.props.detail
+    detail[value.key] = value.value
+    console.log(detail, 'detail')
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        detail
+      }
+    })
   }
   public render () {
     return (
@@ -96,7 +104,10 @@ class Main extends React.Component<Customer.Props> {
         <Row gutter={8} className='mt10'>
           <Col span={12}>
             <Input
+              field='customerSource'
               label={'客户来源'}
+              onChange={this.handleChange.bind(this)}
+              value={this.props.detail.customerSource}
             />
           </Col>
           <Col span={12}>
@@ -120,6 +131,7 @@ class Main extends React.Component<Customer.Props> {
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <Input
+              field='address'
               label={'公司地址'}
               value={'xxx'}
             />
@@ -128,6 +140,7 @@ class Main extends React.Component<Customer.Props> {
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <TextArea
+              onChange={this.handleChange.bind(this)}
               label={'备注'}
               value={'xxx'}
             />

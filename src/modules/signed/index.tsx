@@ -61,7 +61,7 @@ class Main extends React.Component {
         {
           label: '三个月',
           value: '3'
-        },
+        }
       ],
       type: 'date'
     },
@@ -216,7 +216,7 @@ class Main extends React.Component {
         />
         <div className='mt40'>
           <Button type='primary' onClick={this.toSale.bind(this)}>转跟进人</Button>
-          <Button type='primary' onClick={this.detail.bind(this)}>查看签约客户信息</Button>
+          <Button className='ml5' type='primary' onClick={this.detail.bind(this)}>查看签约客户信息</Button>
         </div>
       </ContentBox>
     )

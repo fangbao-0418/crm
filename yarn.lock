@@ -5025,9 +5025,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/pify/download/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-pilipa@^3.0.3-alpha.1:
-  version "3.0.3-alpha.1"
-  resolved "https://nexus.i-counting.cn/repository/accounting/pilipa/-/pilipa-3.0.3-alpha.1.tgz#d82094b4eda93321af4ed1abbd756dc30c2dc712"
+pilipa@^3.0.3-alpha.2:
+  version "3.0.3-alpha.2"
+  resolved "http://registry.npm.taobao.org/pilipa/download/pilipa-3.0.3-alpha.2.tgz#c9a35076b487204c86d4c6c6ba748ba8eae5c098"
   dependencies:
     babel-polyfill "^6.26.0"
     classnames "^2.2.5"

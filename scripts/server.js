@@ -12,7 +12,7 @@ const options = {
   },
   proxy: {
     '/api': {
-      target: 'https://x-agent.i-counting.cn/',
+      target: 'http://192.168.12.197:9008',
       changeOrigin: true,
       secure: false
       // pathRewrite: {
