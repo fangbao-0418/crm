@@ -3,7 +3,7 @@ var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const extractCommon = new MiniCssExtractPlugin({
-  filename: 'css/common.css',
+  filename: 'common.css',
   allChunks: true
 })
 var plugins = [
@@ -29,7 +29,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
+    publicPath: '/'
   },
   module: {
     rules: [

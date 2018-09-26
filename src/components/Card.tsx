@@ -3,6 +3,7 @@ import { Icon } from 'antd'
 import classNames from 'classnames'
 const styles = require('@/stylus/card')
 interface Props {
+  title?: string
   showFold?: boolean
   rightContent?: JSX.Element
 }
@@ -14,7 +15,7 @@ class Main extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div className={styles.top}>
-          <span className={styles.title}>基本信息</span>
+          <span className={styles.title}>{this.props.title}</span>
           {
             this.props.showFold && (
               <Icon

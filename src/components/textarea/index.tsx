@@ -5,6 +5,8 @@ const { TextArea } = Input
 interface Props extends TextAreaProps {
   label?: string
   labelWidth?: string
+  field?: string
+  onChange?: (e?: React.SyntheticEvent, value?: any) => void
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -27,7 +29,12 @@ class Main extends React.Component<Props> {
                 {...this.props}
                 onChange={(e) => {
                   if (this.props.onChange) {
-                    this.props.onChange(e)
+                    const target = e.target
+                    const value = {
+                      key: this.props.field,
+                      value: target.value
+                    }
+                    this.props.onChange(e, value)
                   }
                 }}
               />

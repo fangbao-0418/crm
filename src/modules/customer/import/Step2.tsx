@@ -3,7 +3,7 @@ import { Upload, Icon, message } from 'antd'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
-  onOk?: () => void
+  onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -15,7 +15,7 @@ class Main extends React.Component<Props> {
       onChange: (info: any) => {
         console.log(info)
         if (this.props.onOk) {
-          this.props.onOk()
+          this.props.onOk(info)
         }
         // const status = info.file.status;
         // if (status !== 'uploading') {
