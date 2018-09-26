@@ -17,7 +17,5 @@ export const addCustomer = (payload: {
   customerSource: number
   contactsList: Customer.LinkManProps[]
 }) => {
-  return http(`/api/customer/entry`, 'POST', {
-    data: payload
-  })
+  return http(`/api/customer/entry`, 'POST', payload)
 }
