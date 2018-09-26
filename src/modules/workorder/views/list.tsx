@@ -60,23 +60,6 @@ class Main extends React.Component<any, any> {
       selectedRowKeys: []
     }
   }
-  // 表单改变
-  public onChange (formData: any) {
-    console.log('表单改变', formData)
-  }
-
-  // 导出
-  public exportBtn () {
-    console.log('点击导出')
-    // service.delList(selectedRowKeys)
-  }
-
-  // 搜索
-  public searchBtn () {
-    const { selectedRowKeys } = this.state
-    console.log('set readed list::', selectedRowKeys)
-    // service.setReadedList(selectedRowKeys)
-  }
 
   public render () {
     const { selectedRowKeys } = this.state
@@ -136,23 +119,42 @@ class Main extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-        <Table rowSelection={rowSelection} columns={this.columns} dataSource={data} />
+        <Table rowSelection={rowSelection} onChange={this.pageChange} columns={this.columns} dataSource={data} />
         </Row>
       </HCframe>
     </div>
     )
+  }
+  // 表单改变
+  public onChange (formData: any) {
+    console.log('表单改变', formData)
+  }
+
+  // 导出
+  public exportBtn () {
+    console.log('点击导出')
+    // service.delList(selectedRowKeys)
+  }
+
+  // 搜索
+  public searchBtn () {
+    const { selectedRowKeys } = this.state
+    console.log('set readed list::', selectedRowKeys)
+    // service.setReadedList(selectedRowKeys)
   }
 
   // 查看
   public onShow (item: OrderItem) {
     APP.history.push(`${showPath}/${item.id}`)
   }
-  public rightExport = () => {
-    console.log('点击导出按钮')
-  }
+  // 选择的数组
   public onSelectChange = (selectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
+  }
+  // 分页
+  public pageChange = (selectedRowKeys: any) => {
+    console.log('pageChange changed: ', selectedRowKeys)
   }
 }
 export default Main
