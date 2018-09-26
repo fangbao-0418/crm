@@ -119,7 +119,7 @@ class Main extends React.Component {
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
-    // this.fetchList()
+    this.fetchList()
     // fetchCityCustomerList().then((res) => {
     //   console.log(res)
     // })
