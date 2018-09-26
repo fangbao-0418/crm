@@ -23,7 +23,9 @@ interface States {
 }
 class Main extends React.Component {
   public state: States = {
-    dataSource: [],
+    dataSource: [{
+      customerName: 'xxx'
+    }],
     selectedRowKeys: [],
     pagination: {
       current: 1,

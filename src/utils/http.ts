@@ -25,7 +25,8 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
   extension?: JQuery.AjaxSettings
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
-const http = (url: string, type?: RequestTypeProps, config: AjaxConfigProps = {}) => {
+const http = <D>(url: string, type?: RequestTypeProps, config?: AjaxConfigProps extends D ? D : any) => {
+  config = Object.assign({}, config)
   if (typeof type === 'object') {
     config = type
     if (typeof config.type === 'string' && RequestTypes.indexOf(config.type.toUpperCase()) > -1) {
