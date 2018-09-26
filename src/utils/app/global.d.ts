@@ -12,15 +12,16 @@ declare namespace APP {
     payload?: Customer.ActionPayload | P
   }
   export interface EnumProps {
-    EnumContactSource?: {[index: number]: string}
-    EnumCustomerNameType?: {[index: number]: string}
-    EnumCustomerSearchType?: {[index: number]: string}
-    EnumCustomerSource?: {[index: number]: string}
-    EnumCustomerStatus?: {[index: number]: string}
-    EnumCustomerType?: {[index: number]: string}
-    EnumIsValid?: {[index: number]: string}
-    EnumPayTaxesNature?: {[index: number]: string}
-    EnumSignCustomerSearchType?: {[index: number]: string}
+    EnumContactSource?: Array<{label: string, value: string}>
+    EnumCustomerNameType?: Array<{label: string, value: string}>
+    EnumCustomerSearchType?: Array<{label: string, value: string}>
+    EnumCustomerSource?: Array<{label: string, value: string}>
+    EnumCustomerStatus?: Array<{label: string, value: string}>
+    EnumCustomerType?: Array<{label: string, value: string}>
+    EnumIsValid?: Array<{label: string, value: string}>
+    EnumPayTaxesNature?: Array<{label: string, value: string}>
+    EnumSignCustomerSearchType?: Array<{label: string, value: string}>
+    [type: string]: Array<{label: string, value: string}>
   }
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction

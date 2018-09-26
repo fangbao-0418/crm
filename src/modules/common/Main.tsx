@@ -12,13 +12,11 @@ import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
   public componentWillMount () {
-    fetchEnum().then((res) => {
-      APP.keys = res.data
+    fetchEnum().then(() => {
       this.forceUpdate()
     })
   }
   public render () {
-    console.log('main')
     return (
       <Layout className={styles.container}>
         <Menu />

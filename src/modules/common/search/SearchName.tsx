@@ -8,8 +8,8 @@ interface Props {
   style?: React.CSSProperties
   placeholder?: string
   options?: Array<{
-    type: string
-    word: string
+    label: string
+    value: string
   }>
   onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {type: string, word: string}) => void
   onChange?: (value?: {type: string, word: string}) => void
@@ -17,17 +17,17 @@ interface Props {
 class Main extends React.Component<Props> {
   public type: any
   public render () {
-    const options = this.props.options || []
+    const options = this.props.options.length > 0 ? this.props.options : [{value: undefined, label: undefined}]
     const nodes: JSX.Element[] = []
     if (options.length > 0) {
       options.forEach((item) => {
         nodes.push(
-          <Option value={item.type}>
-            {item.word}
+          <Option value={item.value}>
+            {item.label}
           </Option>
         )
       })
-      this.type = options[0].type
+      this.type = options[0]
     }
     return (
       <InputGroup compact style={this.props.style} className={this.props.className}>
@@ -36,7 +36,7 @@ class Main extends React.Component<Props> {
             this.type = value
           }}
           style={{ width: '35%' }}
-          defaultValue={options[0].type}
+          defaultValue={options[0].value}
         >
           {nodes}
         </Select>

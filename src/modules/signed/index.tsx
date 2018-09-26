@@ -186,14 +186,7 @@ class Main extends React.Component {
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={[
-                {word: '客户名称', type: '0'},
-                {word: '联系人', type: '1'},
-                {word: '客户来源', type: '2'},
-                {word: '所属销售', type: '3'},
-                {word: '联系电话', type: '4'},
-                {word: '纳税类别', type: '5'}
-              ]}
+              options={APP.keys.EnumSignCustomerSearchType}
               placeholder={''}
               onChange={(value) => {
                 console.log(value)
