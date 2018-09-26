@@ -35,9 +35,20 @@ export default class extends React.Component {
               <Route path='/agent-account' component={modules.AgentAccount}/>
               <Route path='/direct-account' component={modules.DirectAccount}/>
 
+              {/* 消息 */}
               <Route path='/message/list' component={modules.MessageList}/>
+
+              {/* 工单 */}
               <Route path='/workorder/list' component={modules.WorkorderList}/>
               <Route path='/workorder/show/:id' component={modules.WorkorderShow}/>
+
+              {/* 外勤 */}
+              <Route path='/outsite/task/list' component={modules.WorkorderList}/>
+              <Route path='/outsite/task/form/:id' component={modules.WorkorderShow}/>
+              <Route path='/outsite/tasktpl/list' component={modules.WorkorderList}/>
+              <Route path='/outsite/tasktpl/form/:id' component={modules.WorkorderShow}/>
+              <Route path='/outsite/tasktpl/sublist' component={modules.WorkorderList}/>
+              <Route path='/outsite/tasktpl/subform/:id' component={modules.WorkorderShow}/>
             </Switch>
           </Content>
         </Layout>
