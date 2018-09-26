@@ -1,5 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
+import { fetchEnum } from './api'
 const { Content } = Layout
 import Top from './Top'
 import {
@@ -10,6 +11,12 @@ import Menu from './Menu'
 import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
+  public componentWillMount () {
+    fetchEnum().then((res) => {
+      APP.keys = res.data
+      this.forceUpdate()
+    })
+  }
   public render () {
     console.log('main')
     return (
