@@ -1,18 +1,21 @@
 import React from 'react'
-import { Input, Button, Table, Divider } from 'antd'
+import { Input, Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
+import AccountModal from '@/modules/common/account-modal/index'
 
 const styles = require('./style')
 
 interface State {
-  selectedRowKeys: any[],
+  selectedRowKeys: any[]
   dataSource: any[]
+  accountInfo: any
 }
 
 class Main extends React.Component {
 
   public state: State = {
+    accountInfo: {},
     selectedRowKeys: [],
     dataSource: [
       {
@@ -34,9 +37,27 @@ class Main extends React.Component {
     ]
   }
 
+  // 多选触发
   public onSelectChange = (selectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
+  }
+
+  // 显示账户弹窗
+  public showAccountModal = (title: string, info?: any) => {
+    this.setState({
+      accountInfo: {...info, title, visible: true}
+    })
+  }
+
+  // 确认删除
+  public delConfirm = () => {
+    Modal.confirm({
+      title: '删除账号',
+      content: '确定删除账号吗？',
+      onOk: () => {},
+      onCancel: () => {}
+    })
   }
 
   public render () {
@@ -64,14 +85,14 @@ class Main extends React.Component {
       },
       {
         title: '操作',
-        render: () => {
+        render: (val: any, info: any) => {
           return (
             <div>
-              <a>查看</a>
+              <a onClick={() => {this.showAccountModal('查看账户', info)}}>查看</a>
               <Divider type='vertical'/>
-              <a>修改</a>
+              <a onClick={() => {this.showAccountModal('修改账户', info)}}>修改</a>
               <Divider type='vertical'/>
-              <a>删除</a>
+              <a onClick={this.delConfirm}>删除</a>
             </div>
           )
         }
@@ -89,7 +110,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加账号'
-            onClick={() => {}}
+            onClick={() => {this.showAccountModal('查看账户')}}
           />
         )}
       >
@@ -113,8 +134,27 @@ class Main extends React.Component {
           />
         </div>
 
-        {this.state.dataSource.length === 0 || <Button type='primary' className={styles.delBtn}>批量删除</Button>}
+        {
+          this.state.dataSource.length === 0
+          || <Button
+            type='primary'
+            disabled={!this.state.selectedRowKeys.length}
+            className={styles.delBtn}
+            onClick={this.delConfirm}
+          >
+            批量删除
+          </Button>
+        }
 
+        <AccountModal
+          info={this.state.accountInfo}
+          onOk={(val: any) => {
+            console.log(445, val)
+          }}
+          onCancel={() => {
+            this.setState({accountInfo: {...this.state.accountInfo, visible: false}})
+          }}
+        />
       </ContentBox>
     )
   }
