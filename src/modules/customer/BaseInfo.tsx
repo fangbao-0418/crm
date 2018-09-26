@@ -7,6 +7,7 @@ import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { connect } from 'react-redux'
+import { addCustomer } from './api'
 class Main extends React.Component<Customer.Props> {
   public editLinkMan () {
     const modal = new Modal({
@@ -157,7 +158,13 @@ class Main extends React.Component<Customer.Props> {
             type='primary'
             onClick={() => {
               console.log(this.props.detail, 'this.props.detail')
-              // contactsList
+              const params = this.props.detail
+              params.customerNameType = '1'
+              params.contactsList = this.props.linkMan
+              console.log(params, 'params')
+              addCustomer(params).then((res) => {
+                console.log(res, 'res')
+              })
             }}
           >
             保存

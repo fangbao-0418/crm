@@ -113,23 +113,26 @@ class Main extends React.Component {
     title: '联系电话',
     dataIndex: 'contactPhone'
   }, {
+    title: '意向度',
+    dataIndex: 'contactPhone'
+  }, {
+    title: '电话状态',
+    dataIndex: 'contactPhone'
+  }, {
     title: '空置天数',
     dataIndex: 'freeDays'
-  }, {
-    title: '跟进次数',
-    dataIndex: 'trackTimesNums'
-  }, {
-    title: '释放次数',
-    dataIndex: 'releaseTimes'
   }, {
     title: '客户来源',
     dataIndex: 'customerSource'
   }, {
-    title: '释放时间',
-    dataIndex: 'lastReleaseTime'
+    title: '创建时间',
+    dataIndex: 'releaseTimes'
   }, {
     title: '释放销售',
     dataIndex: 'lastReleaseSalesperson'
+  }, {
+    title: '释放时间',
+    dataIndex: 'lastReleaseTime'
   }]
   public onSelectAllChange () {
     console.log('select')
@@ -186,12 +189,12 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                {label: '客户名称', value: '0'},
-                {label: '联系人', value: '1'},
-                {label: '客户来源', value: '2'},
-                {label: '释放销售', value: '3'},
-                {label: '联系电话', value: '4'},
-                {label: '释放原因', value: '5'}
+                {word: '客户名称', type: '0'},
+                {word: '联系人', type: '1'},
+                {word: '客户来源', type: '2'},
+                {word: '所属销售', type: '3'},
+                {word: '联系电话', type: '4'},
+                {word: '纳税类别', type: '5'}
               ]}
               placeholder={''}
               onChange={(value) => {

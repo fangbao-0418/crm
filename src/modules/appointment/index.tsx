@@ -120,113 +120,25 @@ class Main extends React.Component {
     title: '意向度',
     dataIndex: 'can'
   }, {
-    title: '跟进次数',
+    title: '电话状态',
     dataIndex: 'flowtime'
   }, {
     title: '空置天数',
     dataIndex: 'vacantDays'
   }, {
+    title: '当前销售',
+    dataIndex: 'leadingPerson'
+  }, {
     title: '客户来源',
     dataIndex: 'customerSource'
   }, {
-    title: '入库时间',
+    title: '创建时间',
     dataIndex: 'createTime'
   }, {
-    title: '当前销售',
+    title: '预约时间',
     dataIndex: 'leadingPerson'
   }]
-  public onSelectAllChange () {
-    console.log('select')
-  }
-  public appointmentAll () {
-    const modal = new Modal({
-      content: (
-        <div>
-          <span>请选择预约时间：</span>
-          <DatePicker
-            format={'YYYY-MM-DD'}
-            onChange={(current) => {
-              console.log(current)
-            }}
-          />
-        </div>
-      ),
-      title: '批量预约',
-      mask: true,
-      onOk: () => {
-        modal.hide()
-      },
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-  }
-  public toSale () {
-    const modal = new Modal({
-      content: (
-        <div>
-          <span>请选择销售：</span>
-          <Select
-            style={{width:'200px'}}
-            onChange={(current) => {
-              console.log(current)
-            }}
-          >
-            {
-              this.state.sales.map((d: any) =>
-                <Select.Option key={d.value}>{d.text}</Select.Option>
-              )
-            }
-          </Select>
-        </div>
-      ),
-      title: '销售',
-      mask: true,
-      onOk: () => {
-        modal.hide()
-      },
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-  }
-  public toCustomersCity () {
-    const modal = new Modal({
-      content: (
-        <div>
-          <span>请选择客资池：</span>
-          <Select
-            style={{width:'200px'}}
-            onChange={(current) => {
-              console.log(current)
-            }}
-          >
-            {
-              this.state.customerCity.map((d: any) =>
-                <Select.Option key={d.value}>{d.text}</Select.Option>
-              )
-            }
-          </Select>
-        </div>
-      ),
-      title: '转客资池',
-      mask: true,
-      onOk: () => {
-        modal.hide()
-      },
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-  }
   public render () {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
     return (
       <ContentBox title='我的预约'>
         <div className='mb12' style={{ overflow: 'hidden' }}>
@@ -242,12 +154,12 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                {label: '客户名称', value: '0'},
-                {label: '联系人', value: '1'},
-                {label: '客户来源', value: '2'},
-                {label: '所属销售', value: '3'},
-                {label: '联系电话', value: '4'},
-                {label: '联系电话', value: '5'}
+                {word: '客户名称', type: '0'},
+                {word: '联系人', type: '1'},
+                {word: '客户来源', type: '2'},
+                {word: '所属销售', type: '3'},
+                {word: '联系电话', type: '4'},
+                {word: '纳税类别', type: '5'}
               ]}
               placeholder={''}
               onChange={(value) => {
@@ -259,15 +171,9 @@ class Main extends React.Component {
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
-          rowSelection={rowSelection}
           bordered
           rowKey={'customerId'}
         />
-        <div className='mt40'>
-          <Button type='primary' className='mr10' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
-          <Button type='primary' className='mr10' onClick={this.toSale.bind(this)}>转销售</Button>
-          <Button type='primary' className='mr10' onClick={this.toCustomersCity.bind(this)}>转客资池</Button>
-        </div>
       </ContentBox>
     )
   }
