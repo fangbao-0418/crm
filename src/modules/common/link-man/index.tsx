@@ -13,9 +13,7 @@ const styles = require('./style')
 class Main extends React.Component<Props> {
   public dataSource = [{
     contactPerson: '22',
-    contactPhone: '222',
-    customerSource: '222',
-    mark: '333'
+    contactPhone: '222'
   }]
   public state: States = {
     dataSource: []
@@ -35,20 +33,27 @@ class Main extends React.Component<Props> {
         return <Input onChange={this.onChange.bind(this, index, 'contactPhone')} value={text}/>
       }
     },
-    {
-      title: '来源',
-      dataIndex: 'customerSource',
-      render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'customerSource')} value={text}/>
-      }
-    },
-    {
-      title: '备注',
-      dataIndex: 'mark',
-      render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'mark')} value={text}/>
-      }
-    },
+    // {
+    //   title: '来源',
+    //   dataIndex: 'customerSource',
+    //   render: (text, record, index) => {
+    //     return <Input onChange={this.onChange.bind(this, index, 'customerSource')} value={text}/>
+    //   }
+    // },
+    // {
+    //   title: '备注',
+    //   dataIndex: 'mark',
+    //   render: (text, record, index) => {
+    //     return <Input onChange={this.onChange.bind(this, index, 'mark')} value={text}/>
+    //   }
+    // },
+    // {
+    //   title: '职务',
+    //   dataIndex: 'worker',
+    //   render: (text, record, index) => {
+    //     return <Input onChange={this.onChange.bind(this, index, 'worker')} value={text}/>
+    //   }
+    // },
     {
       title: '操作',
       width: '80px',
@@ -88,7 +93,7 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props.linkMan)
     return (
-      <div style={{width: '500px'}}>
+      <div style={{width: '600px'}}>
         <Table
           dataSource={this.props.linkMan}
           columns={this.columns}
