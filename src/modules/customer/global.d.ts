@@ -4,6 +4,7 @@ declare namespace Customer {
     contactPhone: string
     customerSource?: string
     mark?: string
+    worker?: string
   }
   export type ActionPayload = Props
   export interface DetailProps {
@@ -16,11 +17,10 @@ declare namespace Customer {
     cityCode?: string
     customerSource?: string
     enterStorageTime?: string
-    value?: string
-    text?: string
     remark?: string
     userId?: string
     relatedCompany?: string
+    customerNameType?: string
     contactsList?: LinkManProps[]
   }
   export interface AutoAssignProps {

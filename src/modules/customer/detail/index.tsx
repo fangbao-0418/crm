@@ -15,11 +15,6 @@ class Main extends React.Component {
           <Card
             title='基本信息'
             showFold
-            rightContent={(
-              <Button type='primary'>
-                保存
-              </Button>
-            )}
           >
             <BaseInfo />
           </Card>

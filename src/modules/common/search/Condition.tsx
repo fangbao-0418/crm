@@ -40,14 +40,17 @@ class Main extends React.Component<Props> {
     return labels
   }
   public handleChange (index: number, value: string) {
-    const { dataSource } = this.state
+    const { dataSource, labels } = this.state
     dataSource[index].value = value
     this.setState({
       dataSource
     })
     const values: {[field: string]: any} = {}
-    dataSource.forEach((item) => {
-      values[item.field] = item.value
+    dataSource.forEach((item, index2) => {
+      values[item.field] = {
+        value: item.value,
+        lable: labels[index2]
+      }
     })
     if (this.props.onChange) {
       this.props.onChange(values)

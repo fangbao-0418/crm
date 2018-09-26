@@ -7,6 +7,7 @@ import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { connect } from 'react-redux'
+import { addCustomer } from './api'
 class Main extends React.Component<Customer.Props> {
   public editLinkMan () {
     const modal = new Modal({
@@ -20,6 +21,10 @@ class Main extends React.Component<Customer.Props> {
           </b>
         </div>
       ),
+      onOk: () => {
+        console.log(this.props.linkMan, 'linkMan')
+        modal.hide()
+      },
       content: <Provider><LinkMain /></Provider>
     })
     modal.show()
@@ -28,9 +33,10 @@ class Main extends React.Component<Customer.Props> {
     const data = this.props.linkMan
     data.push({
       contactPerson: '',
-      contactPhone: '',
-      customerSource: '',
-      mark: ''
+      contactPhone: ''
+      // customerSource: '',
+      // mark: '',
+      // worker: ''
     })
     console.log(data, 'data')
     APP.dispatch({
@@ -57,22 +63,17 @@ class Main extends React.Component<Customer.Props> {
         <Row gutter={8}>
           <Col span={12}>
             <Input
-              label={
-                [{
-                  label: '公司名',
-                  value: '1'
-                }, {
-                  label: '休闲鞋',
-                  value: '2'
-                }]
-              }
+              label={'公司名'}
+              field='customerName'
               onChange={this.handleChange.bind(this)}
               value={this.props.detail.customerName}
             />
           </Col>
           <Col span={12}>
             <Input
+              field='legalPerson'
               label='法人'
+              onChange={this.handleChange.bind(this)}
               value={this.props.detail.legalPerson}
             />
           </Col>
@@ -112,18 +113,24 @@ class Main extends React.Component<Customer.Props> {
           </Col>
           <Col span={12}>
             <Input
-              label='纳税类型'
+              field='category'
+              onChange={this.handleChange.bind(this)}
+              label='纳税类别'
             />
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
           <Col span={12}>
             <Input
+              field='cityName'
+              onChange={this.handleChange.bind(this)}
               label={'城市'}
             />
           </Col>
           <Col span={12}>
             <Input
+              field='cityCode'
+              onChange={this.handleChange.bind(this)}
               label='地区'
             />
           </Col>
@@ -132,17 +139,17 @@ class Main extends React.Component<Customer.Props> {
           <Col span={24}>
             <Input
               field='address'
+              onChange={this.handleChange.bind(this)}
               label={'公司地址'}
-              value={'xxx'}
             />
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <TextArea
+              field='remark'
               onChange={this.handleChange.bind(this)}
               label={'备注'}
-              value={'xxx'}
             />
           </Col>
         </Row>
@@ -150,10 +157,17 @@ class Main extends React.Component<Customer.Props> {
           <Button
             type='primary'
             onClick={() => {
-              console.log('click')
+              console.log(this.props.detail, 'this.props.detail')
+              const params = this.props.detail
+              params.customerNameType = '1'
+              params.contactsList = this.props.linkMan
+              console.log(params, 'params')
+              addCustomer(params).then((res) => {
+                console.log(res, 'res')
+              })
             }}
           >
-            仅保存
+            保存
           </Button>
         </div>
       </div>
