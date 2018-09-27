@@ -11,3 +11,14 @@ Object.assign(APP, {
     })
   }
 })
+APP.keys = {
+  EnumContactSource: [],
+  EnumCustomerNameType: [],
+  EnumCustomerSearchType: [],
+  EnumCustomerSource: [],
+  EnumCustomerStatus: [],
+  EnumCustomerType: [],
+  EnumIsValid: [],
+  EnumPayTaxesNature: [],
+  EnumSignCustomerSearchType: []
+}

@@ -2,12 +2,14 @@ import React from 'react'
 import { Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
+import RoleModal from './role-modal'
 
 const styles = require('./style')
 
 interface State {
   tab: number
   selectedRowKeys: any[]
+  info: any
   dataSource: any[]
 }
 
@@ -15,6 +17,10 @@ class Main extends React.Component {
   public state: State = {
     tab: 0,
     selectedRowKeys: [],
+    info: {
+      title: '',
+      visible: false
+    },
     dataSource: [
       {
         id: 1,
@@ -48,8 +54,23 @@ class Main extends React.Component {
     })
   }
 
+  // 确认禁用
+  public forbidConfirm = () => {
+    Modal.confirm({
+      title: '禁用角色',
+      content: '确定禁用角色吗？',
+      onOk: () => {},
+      onCancel: () => {}
+    })
+  }
+
+  // 修改、添加、查看角色
+  public setRole = (title: string, info?: any) => {
+    this.setState({info: {...info, title, visible: true}})
+  }
+
   public render () {
-    const { selectedRowKeys } = this.state
+    const { selectedRowKeys, info } = this.state
     const columns = [
       {
         title: '角色名称',
@@ -57,16 +78,16 @@ class Main extends React.Component {
       },
       {
         title: '操作',
-        render: () => {
+        render: (val: any, record: any) => {
           return (
             <div>
-              <a>修改</a>
+              <a onClick={() => {this.setRole('修改角色', record)}}>修改</a>
               <Divider type='vertical'/>
-              <a>添加子页面权限</a>
+              <a onClick={() => {this.setRole('添加角色')}}>添加子页面权限</a>
               <Divider type='vertical'/>
-              <a>禁用</a>
+              <a onClick={() => {this.forbidConfirm()}}>禁用</a>
               <Divider type='vertical'/>
-              <a>删除</a>
+              <a onClick={() => {this.delConfirm()}}>删除</a>
             </div>
           )
         }
@@ -84,7 +105,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加角色'
-            onClick={() => {}}
+            onClick={() => {this.setRole('添加角色')}}
           />
         )}
       >
@@ -116,6 +137,18 @@ class Main extends React.Component {
                 批量删除
               </Button>
             }
+
+            <RoleModal
+              info={info}
+              onOk={() => {
+                this.setState({info: {}})
+              }}
+              onCancel={() => {
+                this.setState({info: {...this.state.info, visible: false}})
+              }}
+            >
+
+            </RoleModal>
 
           </div>
         </div>

@@ -77,10 +77,6 @@ class Main extends React.Component {
         {
           label: '一般人',
           value: '2'
-        },
-        {
-          label: '零税',
-          value: '3'
         }
       ]
     }
@@ -190,16 +186,7 @@ class Main extends React.Component {
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={[
-                {label: '客户名称', value: '0'},
-                {label: '联系人', value: '1'},
-                {label: '客户来源', value: '2'},
-                {label: '所属销售', value: '3'},
-                {label: '联系电话', value: '4'},
-                {label: '区域', value: '6'},
-                {label: '签单销售', value: '7'},
-                {label: '跟进人', value: '8'}
-              ]}
+              options={APP.keys.EnumSignCustomerSearchType}
               placeholder={''}
               onChange={(value) => {
                 console.log(value)

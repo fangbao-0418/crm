@@ -7,6 +7,7 @@ import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { connect } from 'react-redux'
+import { addCustomer } from './api'
 class Main extends React.Component<Customer.Props> {
   public editLinkMan () {
     const modal = new Modal({
@@ -65,7 +66,7 @@ class Main extends React.Component<Customer.Props> {
               label={'公司名'}
               field='customerName'
               onChange={this.handleChange.bind(this)}
-              value={this.props.detail.customerName}
+              // value={this.props.detail.customerName}
             />
           </Col>
           <Col span={12}>
@@ -73,7 +74,7 @@ class Main extends React.Component<Customer.Props> {
               field='legalPerson'
               label='法人'
               onChange={this.handleChange.bind(this)}
-              value={this.props.detail.legalPerson}
+              // value={this.props.detail.legalPerson}
             />
           </Col>
         </Row>
@@ -107,7 +108,7 @@ class Main extends React.Component<Customer.Props> {
               field='customerSource'
               label={'客户来源'}
               onChange={this.handleChange.bind(this)}
-              value={this.props.detail.customerSource}
+              // value={this.props.detail.customerSource}
             />
           </Col>
           <Col span={12}>
@@ -157,7 +158,14 @@ class Main extends React.Component<Customer.Props> {
             type='primary'
             onClick={() => {
               console.log(this.props.detail, 'this.props.detail')
-              // contactsList
+              const params = this.props.detail
+              params.customerNameType = '1'
+              // params.contactsList = this.props.linkMan
+              params.contactsList = [{ contactPerson: '11', contactPhone: '122'}]
+              console.log(params, 'params')
+              addCustomer(params).then((res) => {
+                console.log(res, 'res')
+              })
             }}
           >
             保存

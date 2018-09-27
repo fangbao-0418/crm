@@ -1,5 +1,6 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
+import { allotCustomer } from '../api'
 const Option = Select.Option
 interface Status {
   isChecked: boolean
@@ -43,6 +44,24 @@ class Main extends React.Component<Props> {
             <Button
               type='primary'
               onClick={() => {
+                const params = {
+                  agencyId: '11',
+                  customerIds: ['1q2w', '2q2w', '3q2w'],
+                  salesPersonIds: [{
+                    id: '1',
+                    name: 'aaa'
+                  }, {
+                    id: '2',
+                    name: 'bbbb'
+                  }]
+                }
+                allotCustomer(params).then((res) => {
+                  if (res.status) {
+                    if (this.props.onOk) {
+                      this.props.onOk()
+                    }
+                  }
+                })
                 if (this.props.onOk) {
                   this.props.onOk()
                 }
