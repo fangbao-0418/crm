@@ -8,7 +8,7 @@ import SearchForm from '@/modules/message/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import Msg from '@/modules/message/services/message'
 
-const styles = require('../styles/show.styl')
+const styles = require('../../styles/show.styl')
 
 interface Props {
   data: any

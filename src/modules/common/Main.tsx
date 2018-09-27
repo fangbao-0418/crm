@@ -43,12 +43,12 @@ export default class extends React.Component {
               <Route path='/workorder/show/:id' component={modules.WorkorderShow}/>
 
               {/* 外勤 */}
-              <Route path='/outsite/task/list' component={modules.WorkorderList}/>
-              <Route path='/outsite/task/form/:id' component={modules.WorkorderShow}/>
-              <Route path='/outsite/tasktpl/list' component={modules.WorkorderList}/>
-              <Route path='/outsite/tasktpl/form/:id' component={modules.WorkorderShow}/>
-              <Route path='/outsite/tasktpl/sublist' component={modules.WorkorderList}/>
-              <Route path='/outsite/tasktpl/subform/:id' component={modules.WorkorderShow}/>
+              <Route path='/outsite/task/list' component={modules.TaskList}/>
+              <Route path='/outsite/task/form/:id' component={modules.TaskShow}/>
+              <Route path='/outsite/tasktpl/list' component={modules.TasktplList}/>
+              <Route path='/outsite/tasktpl/form/:id' component={modules.TasktplForm}/>
+              <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
+              <Route path='/outsite/tasktpl/subform/:id' component={modules.TasktplSubForm}/>
             </Switch>
           </Content>
         </Layout>

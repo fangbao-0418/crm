@@ -133,6 +133,32 @@ class Main extends React.Component {
           path: '/message/list'
         }
       ]
+    },
+    {
+      title: '任务配置',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '其他任务配置',
+          path: '/outsite/tasktpl/list'
+        },
+        {
+          title: '通办任务配置',
+          path: '/outsite/tasktpl/sublist'
+        }
+      ]
+    },
+    {
+      title: '绩效配置',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '绩效配置',
+          path: '/outsite/task/list'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {
