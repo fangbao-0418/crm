@@ -13,11 +13,12 @@ class Main extends React.Component<Props> {
     const editabled = this.props.editable
     return (
       <Form>
-        <Row >
+        <Row>
           <Col span={7}>
             <FormItem
-              labelCol={{span: 6}}
-              wrapperCol={{span: 18}}
+              style={{marginLeft: '-41px'}}
+              labelCol={{span: 8}}
+              wrapperCol={{span: 16}}
               label='区域'
             >
               {editabled ? (
@@ -31,26 +32,6 @@ class Main extends React.Component<Props> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem
-              labelCol={{span: 6}}
-              wrapperCol={{span: 18}}
-              label='主联系人'
-            >
-              {editabled ? <Input className={styles['input-width']}/> : <span>xxx</span>}
-            </FormItem>
-          </Col>
-          <Col span={9}>
-            <FormItem
-              labelCol={{span: 7}}
-              wrapperCol={{span: 17}}
-              label='主联系电话'
-            >
-              {editabled ? <Input className={styles['input-width']}/> : <span>xxx</span>}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row >
-          <Col span={7}>
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
@@ -72,24 +53,30 @@ class Main extends React.Component<Props> {
               wrapperCol={{span: 16}}
               label='法人身份证号'
             >
-              <Uploader />
+              <Input />
             </FormItem>
           </Col>
-          <Col span={8}>
+        </Row>
+        <Row >
+          <Col span={7}>
             <FormItem
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label='营业执照'
+              label='证件照片'
             >
               <Uploader className='mr5'/>
               <Uploader />
             </FormItem>
           </Col>
-        </Row>
-        <Row>
           <Col span={8}>
-            <span>法人身份证：</span>
-            <img/>
+            <FormItem
+              labelCol={{span: 10}}
+              wrapperCol={{span: 14}}
+              label='营业执照'
+            >
+              <Uploader className='mr5'/>
+              <Uploader />
+            </FormItem>
           </Col>
         </Row>
       </Form>

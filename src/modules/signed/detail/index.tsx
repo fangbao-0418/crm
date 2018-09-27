@@ -13,7 +13,7 @@ class Main extends React.Component {
     return (
       <div className={styles.container}>
         <Card
-          title='基本信息'
+          title='工商信息'
           rightContent={(
             <Icon
               className='href'
@@ -27,10 +27,12 @@ class Main extends React.Component {
             />
           )}
         >
-          <BaseInfo editable={this.state.editable} />
+          <BusinessInfo editable={this.state.editable} />
         </Card>
-        <Card title='工商信息'>
-          <BusinessInfo />
+        <Card
+          title='基本信息'
+        >
+          <BaseInfo editable={this.state.editable} />
         </Card>
         <Card title='财务信息'>
           <AccountInfo />

@@ -3,7 +3,7 @@ import { Row, Col } from 'antd'
 class Main extends React.Component {
   public render () {
     return (
-      <div>
+      <div style={{width: '790px', marginLeft: '10px'}}>
         <Row gutter={12}>
           <Col span={8}>
             <label>当前账期：</label>

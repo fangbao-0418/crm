@@ -17,7 +17,9 @@ export const fetchCityCustomerList = () => {
   return http(`/api/customer/city-stats`)
 }
 export const addCustomer = (payload: Customer.DetailProps) => {
-  return http(`/api/customer/entry`, 'POST', payload)
+  return http(`/api/customer/entry`, 'POST', {
+    data: payload
+  })
 }
 export const allotCustomer = (payload: {
   agencyId: string

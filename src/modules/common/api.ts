@@ -1,4 +1,4 @@
-import http from '@/utils/http'
+import http, { AjaxConfigProps } from '@/utils/http'
 export const fetchEnum = () => {
   return http(`/api/code-text/list`).then((res) => {
     const data: APP.EnumProps = {}
@@ -18,4 +18,17 @@ export const fetchEnum = () => {
     APP.keys = data
     return data
   })
+}
+export const fetchTags = () => {
+  return http(`/api/tags`)
+}
+export const fetchRegion = (payload: {
+  level: number,
+  parentId?: string,
+  code?: string,
+  id?: number
+} = {
+  level: 1
+}) => {
+  return http(`/v1/api/region`, payload)
 }
