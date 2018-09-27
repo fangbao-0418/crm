@@ -2,7 +2,7 @@ import React from 'react'
 import { Input, Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
-import AccountModal from '@/modules/common/account-modal/index'
+import AccountModal from './account-modal'
 
 const styles = require('./style')
 const Search = Input.Search
@@ -44,10 +44,10 @@ class Main extends React.Component {
     this.setState({ selectedRowKeys })
   }
 
-  // 显示账户弹窗
-  public showAccountModal = (title: string, info?: any) => {
+  // 查看、修改、添加账户
+  public showAccountModal = (mode: 'view' | 'modify' | 'add', info?: any) => {
     this.setState({
-      accountInfo: {...info, title, visible: true}
+      accountInfo: {...info, mode, visible: true}
     })
   }
 
@@ -89,9 +89,9 @@ class Main extends React.Component {
         render: (val: any, info: any) => {
           return (
             <div>
-              <a onClick={() => {this.showAccountModal('查看账户', info)}}>查看</a>
+              <a onClick={() => {this.showAccountModal('view', info)}}>查看</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.showAccountModal('修改账户', info)}}>修改</a>
+              <a onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
               <Divider type='vertical'/>
               <a onClick={this.delConfirm}>删除</a>
             </div>
@@ -111,7 +111,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加账号'
-            onClick={() => {this.showAccountModal('查看账户')}}
+            onClick={() => {this.showAccountModal('add')}}
           />
         )}
       >
