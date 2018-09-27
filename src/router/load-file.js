@@ -26,3 +26,11 @@ export { default as loadMessageList } from 'bundle-loader?lazy&name=[name]!@/mod
 // 工单
 export { default as loadWorkorderList } from 'bundle-loader?lazy&name=[name]!@/modules/workorder/views/list' // 工单列表
 export { default as loadWorkorderShow } from 'bundle-loader?lazy&name=[name]!@/modules/workorder/views/show' // 工单展示
+
+// 外勤
+export { default as loadTaskList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/list' // 绩效列表
+export { default as loadTaskShow } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/show' // 绩效展示
+export { default as loadTasktplList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/list' // 其他任务配置
+export { default as loadTasktplForm } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/form' // 其他任务配置展示
+export { default as loadTasktplSublist } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/sublist' // 通办任务配置
+export { default as loadTasktplSubform } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/subform' // 新增通办任务配置

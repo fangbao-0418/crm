@@ -10,7 +10,7 @@ import Msg from '@/modules/message/services/message.tsx'
 import MessageShowModal from '@/modules/message/views/show.modal'
 import MsgService from '@/modules/message/services'
 
-const styles = require('../styles/list.styl')
+const styles = require('../../styles/list.styl')
 
 const content = `哈哈还多方哈士大夫哈市的合法化撒旦法，
     这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了
