@@ -91,9 +91,9 @@ class Main extends React.Component {
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
-    render: (val) => {
+    render: (val, record) => {
       return (
-        <a onClick={this.show}>{val}</a>
+        <a onClick={this.show.bind(this, record.customerId)}>{val}</a>
       )
     }
   }, {
@@ -230,11 +230,11 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public show () {
+  public show (customerId: string) {
     const modal = new Modal({
       style: 'width: 840px',
       content: (
-        <Provider><Detail /></Provider>
+        <Provider><Detail customerId={customerId}/></Provider>
       ),
       footer: null,
       header: null,
@@ -312,13 +312,6 @@ class Main extends React.Component {
         title='我的客资'
         rightCotent={(
           <div>
-            <AddButton
-              style={{marginRight: '10px'}}
-              title='查看'
-              onClick={() => {
-                this.show()
-              }}
-            />
             <AddButton
               style={{marginRight: '10px'}}
               title='新增'

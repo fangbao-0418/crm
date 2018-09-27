@@ -36,3 +36,6 @@ export const deleteCustomer = (payload: {
 }) => {
   return http(`/api/customer/by-ids`, 'DELETE', payload)
 }
+export const viewCustomer = (id: string) => {
+  return http(`/api/open-ocean/${id}`)
+}

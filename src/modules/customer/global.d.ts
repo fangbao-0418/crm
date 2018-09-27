@@ -10,6 +10,7 @@ declare namespace Customer {
   export type ActionPayload = Props
   export interface DetailProps {
     customerName?: string
+    customerId?: string
     type?: string
     legalPerson?: string
     address?: string
@@ -22,7 +23,7 @@ declare namespace Customer {
     userId?: string
     relatedCompany?: string
     customerNameType?: string
-    contactsList?: LinkManProps[]
+    contactPersons?: LinkManProps[]
   }
   export interface AutoAssignProps {
     bigAreaName: string

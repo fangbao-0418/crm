@@ -7,11 +7,17 @@ import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { connect } from 'react-redux'
-import { addCustomer } from './api'
+import { addCustomer, viewCustomer } from './api'
 interface Props extends Customer.Props {
+  customerId?: string
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
+  public componentWillMount () {
+    viewCustomer(this.props.customerId).then((res: any) => {
+      console.log(res)
+    })
+  }
   public editLinkMan () {
     const modal = new Modal({
       header: (
@@ -164,7 +170,7 @@ class Main extends React.Component<Props> {
               const params = this.props.detail
               params.customerNameType = '1'
               // params.contactsList = this.props.linkMan
-              params.contactsList = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
+              params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
               addCustomer(params).then((res) => {
                 if (res.status === 200) {
