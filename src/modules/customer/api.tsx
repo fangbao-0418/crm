@@ -22,12 +22,17 @@ export const addCustomer = (payload: Customer.DetailProps) => {
   })
 }
 export const allotCustomer = (payload: {
-  agencyId: string
-  customerIds: string[]
-  salesPersonIds: Array<{
+  agencyId?: string
+  customerIds?: string[]
+  salesPerson?: Array<{
     id: string
     name: string
   }>
 }) => {
-  return http(`/api/customer/allocate`, 'POST', payload)
+  return http(`/api/customer/allocate`, 'PUT', payload)
+}
+export const deleteCustomer = (payload: {
+  customerIds: string[]
+}) => {
+  return http(`/api/customer/by-ids`, 'DELETE', payload)
 }

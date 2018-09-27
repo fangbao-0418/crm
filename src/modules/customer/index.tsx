@@ -10,7 +10,7 @@ import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
-import Result from './Result'
+import AllotResult from './AllotResult'
 import Detail from './detail'
 import { fetchList, fetchCityCustomerList } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
@@ -20,13 +20,13 @@ interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
   pagination: PaginationConfig
+  selectAll: boolean
 }
 class Main extends React.Component {
   public state: States = {
-    dataSource: [{
-      customerName: 'xxx'
-    }],
+    dataSource: [],
     selectedRowKeys: [],
+    selectAll: false,
     pagination: {
       current: 1,
       pageSize: 15,
@@ -87,7 +87,7 @@ class Main extends React.Component {
       ]
     }
   ]
-  public params: any = {}
+  public params: any = {cityCode: '110000'}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -174,7 +174,7 @@ class Main extends React.Component {
       this.params.createEndDate = createEndDate
     }
     this.params.cityCode = values.cityCode.value
-    // this.fetchList()
+    this.fetchList()
   }
   public handleSearchType (values: any) {
     console.log(values, 'values')
@@ -195,13 +195,13 @@ class Main extends React.Component {
       this.params.payTaxesNature = values.word
       break
     }
-    // this.fetchList()
+    this.fetchList()
   }
   public add () {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><BaseInfo /></Provider>
+        <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
       ),
       footer: null,
       title: '新增',
@@ -248,7 +248,7 @@ class Main extends React.Component {
   public showResult () {
     const modal = new Modal({
       content: (
-        <Result onCancel={() => {modal.hide()}}/>
+        <AllotResult onCancel={() => {modal.hide()}}/>
       ),
       footer: null,
       title: '执行结果',
@@ -258,6 +258,11 @@ class Main extends React.Component {
       }
     })
     modal.show()
+  }
+  public SelectAll () {
+    this.setState({
+      selectAll: true
+    })
   }
   public toOrganizationAuto () {
     const modal = new Modal({
@@ -277,9 +282,13 @@ class Main extends React.Component {
     modal.show()
   }
   public toOrganizationByHand () {
+    if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
+      APP.error('请选择需要分配客户')
+      return
+    }
     const modal = new Modal({
       content: (
-        <Provider><Allot onClose={() => {modal.hide()}}/></Provider>
+        <Provider><Allot onClose={() => {modal.hide()}} selectedRowKeys={this.state.selectedRowKeys} params={this.params} selectAll={this.state.selectAll}/></Provider>
       ),
       title: '分配客资',
       footer: null,
@@ -357,9 +366,9 @@ class Main extends React.Component {
           pagination={this.state.pagination}
         />
         <div className='mt40'>
-          <Button type='primary' className='mr10'>全选</Button>
-          <Button type='primary' className='mr10' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
-          <Button type='primary' className='mr10' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
+          <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button>
+          <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
+          <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>
       </ContentBox>
     )
