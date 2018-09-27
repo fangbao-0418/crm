@@ -8,7 +8,10 @@ import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { connect } from 'react-redux'
 import { addCustomer } from './api'
-class Main extends React.Component<Customer.Props> {
+interface Props extends Customer.Props {
+  onClose?: () => void
+}
+class Main extends React.Component<Props> {
   public editLinkMan () {
     const modal = new Modal({
       header: (
@@ -161,10 +164,13 @@ class Main extends React.Component<Customer.Props> {
               const params = this.props.detail
               params.customerNameType = '1'
               // params.contactsList = this.props.linkMan
-              params.contactsList = [{ contactPerson: '11', contactPhone: '122'}]
+              params.contactsList = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
               addCustomer(params).then((res) => {
-                console.log(res, 'res')
+                if (res.status === 200) {
+                  APP.success('新增成功')
+                  this.props.onClose()
+                }
               })
             }}
           >
