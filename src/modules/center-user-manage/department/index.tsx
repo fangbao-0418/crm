@@ -14,8 +14,8 @@ interface State {
   dataSource: any[]
 }
 
-class Main extends React.Component {
-  public state: State = {
+class Main extends React.Component<any, State> {
+  public state = {
     val: '', // 弹窗权限值
     help: '', // 验证提示
     title: '', // 弹窗标题
@@ -23,18 +23,18 @@ class Main extends React.Component {
     dataSource: [
       {
         id: 1,
+        parentId: 0,
         name: '技术部',
-        dataIndex: 'name',
-        children: [
+        organizationList: [
           {
             id: 2,
-            name: '前端',
-            dataIndex: 'name'
+            parentId: 1,
+            name: '前端'
           },
           {
             id: 3,
-            name: '后端',
-            dataIndex: 'name'
+            parentId: 1,
+            name: '后端'
           }
         ]
       }
@@ -94,6 +94,7 @@ class Main extends React.Component {
       >
         <Table
           dataSource={this.state.dataSource}
+          childrenColumnName='organizationList'
           columns={columns}
           rowKey='id'
           pagination={false}

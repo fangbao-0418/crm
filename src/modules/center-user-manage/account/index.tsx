@@ -5,6 +5,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import AccountModal from '@/modules/common/account-modal/index'
 
 const styles = require('./style')
+const Search = Input.Search
 
 interface State {
   selectedRowKeys: any[]
@@ -116,9 +117,27 @@ class Main extends React.Component {
       >
 
         <div className={styles.topWarp}>
-          <Input placeholder='请输入姓名'/>
-          <Input placeholder='请输入手机号'/>
-          <Input placeholder='请输入部门名称'/>
+          <Search
+            className={styles.search}
+            placeholder='请输入姓名'
+            onSearch={(value) => {
+              console.log(value)
+            }}
+          />
+          <Search
+            className={styles.search}
+            placeholder='请输入手机号'
+            onSearch={(value) => {
+              console.log(value)
+            }}
+          />
+          <Search
+            className={styles.search}
+            placeholder='请输入部门名称'
+            onSearch={(value) => {
+              console.log(value)
+            }}
+          />
         </div>
 
         <div style={styles.tableWrap}>
