@@ -9,6 +9,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import Profile from '@/modules/common/company-detail/Profile'
 import { DetailProps } from './signed'
 import ChooseSales from '@/modules/customer/chooseSales'
+import Provider from '@/components/Provider'
 import View from './View'
 const Option = Select.Option
 interface States {
@@ -154,7 +155,7 @@ class Main extends React.Component {
   public detail () {
     const modal = new Modal({
       content: (
-        <View />
+        <Provider><View /></Provider>
       ),
       header: null,
       footer: null,

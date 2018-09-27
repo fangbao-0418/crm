@@ -19,6 +19,7 @@ class Main extends React.Component {
             <BaseInfo />
           </Card>
           <Card title='跟进记录'>
+            <Tags className='mb10'/>
             <Tags />
           </Card>
         </div>
