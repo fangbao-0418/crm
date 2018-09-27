@@ -10,8 +10,10 @@ declare namespace Customer {
   export type ActionPayload = Props
   export interface DetailProps {
     customerName?: string
+    customerId?: string
     type?: string
     legalPerson?: string
+    payTaxesNature?: string
     address?: string
     vacantDays?: string
     cityName?: string
@@ -22,7 +24,7 @@ declare namespace Customer {
     userId?: string
     relatedCompany?: string
     customerNameType?: string
-    contactsList?: LinkManProps[]
+    contactPersons?: LinkManProps[]
   }
   export interface AutoAssignProps {
     bigAreaName: string
@@ -39,11 +41,17 @@ declare namespace Customer {
     maxTrackDays: string
     maxProtectDays: string
   }
+  export interface AssignResultProps {
+    allocatedNum: number
+    exists: Array<{name: string, id: string}>
+    total: number
+  }
   export interface Props {
     linkMan?: LinkManProps[]
     dataSource?: DetailProps[]
     detail?: DetailProps
     autoAssign?: AutoAssignProps[]
-    capacity?: CapacityProps[]
+    capacity?: CapacityProps[],
+    assignResult?: AssignResultProps
   }
 }

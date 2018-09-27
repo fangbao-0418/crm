@@ -6,7 +6,10 @@ import Card from '@/components/Card'
 import Tags from '@/components/tags'
 import { Button } from 'antd'
 const styles = require('./style')
-class Main extends React.Component {
+interface Props {
+  customerId: string
+}
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.container}>
@@ -16,7 +19,7 @@ class Main extends React.Component {
             title='基本信息'
             showFold
           >
-            <BaseInfo />
+            <BaseInfo customerId={this.props.customerId}/>
           </Card>
           <Card title='跟进记录'>
             <Tags className='mb10'/>

@@ -15,6 +15,11 @@ const defaultVal: Customer.Props = {
     autoDistributeWeight: '333',
     autoDistributeMaxNum: '11'
   }],
+  assignResult: {
+    allocatedNum: 0,
+    exists: [],
+    total: 0
+  },
   capacity:[]
 }
 export default handleActions<Customer.Props>({

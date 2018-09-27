@@ -6,12 +6,19 @@ import Modal from 'pilipa/libs/modal'
 import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
+import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
-import { addCustomer } from './api'
+import { addCustomer, viewCustomer, updateCustomer } from './api'
 interface Props extends Customer.Props {
+  customerId?: string
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
+  public componentWillMount () {
+    if (this.props.customerId) {
+      changeCustomerDetailAction(this.props.customerId)
+    }
+  }
   public editLinkMan () {
     const modal = new Modal({
       header: (
@@ -69,7 +76,7 @@ class Main extends React.Component<Props> {
               label={'公司名'}
               field='customerName'
               onChange={this.handleChange.bind(this)}
-              // value={this.props.detail.customerName}
+              value={this.props.detail.customerName}
             />
           </Col>
           <Col span={12}>
@@ -77,7 +84,7 @@ class Main extends React.Component<Props> {
               field='legalPerson'
               label='法人'
               onChange={this.handleChange.bind(this)}
-              // value={this.props.detail.legalPerson}
+              value={this.props.detail.legalPerson}
             />
           </Col>
         </Row>
@@ -111,14 +118,15 @@ class Main extends React.Component<Props> {
               field='customerSource'
               label={'客户来源'}
               onChange={this.handleChange.bind(this)}
-              // value={this.props.detail.customerSource}
+              value={this.props.detail.customerSource}
             />
           </Col>
           <Col span={12}>
             <Input
-              field='category'
+              field='payTaxesNature'
               onChange={this.handleChange.bind(this)}
               label='纳税类别'
+              value={this.props.detail.payTaxesNature}
             />
           </Col>
         </Row>
@@ -128,6 +136,7 @@ class Main extends React.Component<Props> {
               field='cityName'
               onChange={this.handleChange.bind(this)}
               label={'城市'}
+              value={this.props.detail.cityName}
             />
           </Col>
           <Col span={12}>
@@ -135,6 +144,7 @@ class Main extends React.Component<Props> {
               field='cityCode'
               onChange={this.handleChange.bind(this)}
               label='地区'
+              value={this.props.detail.cityCode}
             />
           </Col>
         </Row>
@@ -144,6 +154,7 @@ class Main extends React.Component<Props> {
               field='address'
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
+              value={this.props.detail.address}
             />
           </Col>
         </Row>
@@ -153,6 +164,7 @@ class Main extends React.Component<Props> {
               field='remark'
               onChange={this.handleChange.bind(this)}
               label={'备注'}
+              value={this.props.detail.remark}
             />
           </Col>
         </Row>
@@ -164,14 +176,22 @@ class Main extends React.Component<Props> {
               const params = this.props.detail
               params.customerNameType = '1'
               // params.contactsList = this.props.linkMan
-              params.contactsList = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
+              params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
-              addCustomer(params).then((res) => {
-                if (res.status === 200) {
-                  APP.success('新增成功')
-                  this.props.onClose()
-                }
-              })
+              if (this.props.customerId) {
+                updateCustomer(this.props.customerId, params).then((res) => {
+                  if (res.status === 200) {
+                    APP.success('修改成功')
+                  }
+                })
+              } else {
+                addCustomer(params).then((res) => {
+                  if (res.status === 200) {
+                    APP.success('新增成功')
+                    this.props.onClose()
+                  }
+                })
+              }
             }}
           >
             保存

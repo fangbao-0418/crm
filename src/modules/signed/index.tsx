@@ -8,7 +8,6 @@ import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
 import Profile from '@/modules/common/company-detail/Profile'
 import { DetailProps } from './signed'
-import ChooseSales from '@/modules/customer/chooseSales'
 import Provider from '@/components/Provider'
 import View from './View'
 const Option = Select.Option

@@ -1,24 +1,15 @@
 import React from 'react'
 import { Button } from 'antd'
+import { connect } from 'react-redux'
 const styles = require('./style')
-interface Props {
-  resultData?: {
-    allocatedNum?: number
-    total?: number
-    exists?: Array<{
-      name?: string
-      id?: string
-    }>
-  }
+interface Props extends Customer.Props {
   onCancel?: () => void
   deleteCustomer?: () => void
 }
 class Main extends React.Component<Props> {
   public render () {
     console.log(this.props)
-    const result = Object.assign({}, {
-      exists: []
-    }, this.props.resultData)
+    const result = this.props.assignResult
     return (
       <div className={styles.content}>
         <div>应分配{result.total}条，已分配{result.allocatedNum}条，{result.exists.length}条公司信息已经存在</div>
@@ -38,4 +29,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)
