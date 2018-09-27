@@ -29,14 +29,12 @@ class Main extends React.Component<Props> {
               value.customerIds = this.props.selectedRowKeys
             }
             allotCustomer(value).then((res: any) => {
-              if (res.status) {
-                this.setState({
-                  step: 2,
-                  resultData: res
-                }, () => {
-                  this.forceUpdate()
-                })
-              }
+              APP.dispatch({
+                type: 'change customer data',
+                payload: {
+                  assignResult: res
+                }
+              })
             })
           }}
         />
@@ -46,7 +44,6 @@ class Main extends React.Component<Props> {
       title: '2、执行结果',
       component: (
         <Step2
-          resultData={this.state.resultData}
           onCancel={() => {
             if (this.props.onClose) {
               this.props.onClose()
@@ -54,9 +51,12 @@ class Main extends React.Component<Props> {
           }}
           deleteCustomer={() => {
             console.log(this.state.resultData, 'resultData')
-            const payload = {
-              customerIds: ['1q2w']
-            }
+            let result = [{name: '111', id: '1000111118'}]
+            let ids: string[] = []
+            result.map((item) => {
+              ids.push(item.id)
+            })
+            const payload = ids.join(',')
             deleteCustomer(payload).then((res) => {
               if (res.status) {
                 console.log('aa')
