@@ -73,7 +73,6 @@ class Main extends React.Component {
         }
       ]
     },
-    // 权限管理
     {
       title: '中心用户管理',
       icon: <Icon type='user' />,
@@ -94,6 +93,17 @@ class Main extends React.Component {
         {
           title: '角色',
           path: '/center-role'
+        }
+      ]
+    },
+    {
+      title: '机构管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '机构管理',
+          path: '/agency-manage'
         }
       ]
     },
