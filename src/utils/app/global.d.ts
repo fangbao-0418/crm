@@ -7,9 +7,9 @@ declare namespace APP {
   }
   export type ActionType =
     'change customer data' | 'change customer set auto data' | 'change customer set capacity data'
-  interface DispatchAction<P = any> {
+  interface DispatchAction {
     type: ActionType
-    payload?: Customer.ActionPayload | P
+    payload?: Customer.ActionPayload
   }
   export interface EnumProps {
     EnumContactSource?: Array<{label: string, value: string}>

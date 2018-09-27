@@ -19,3 +19,6 @@ export const fetchEnum = () => {
     return data
   })
 }
+export const fetchTags = () => {
+  return http(`/api/tags`)
+}

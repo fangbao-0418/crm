@@ -30,7 +30,7 @@ declare namespace Customer {
     autoDistributeWeight: string
     autoDistributeMaxNum: string
   }
-  export interface SetCapacity {
+  export interface CapacityProps {
     bigAreaName: string
     cityName: string
     agencyName: string
@@ -43,6 +43,6 @@ declare namespace Customer {
     dataSource?: DetailProps[]
     detail?: DetailProps
     autoAssign?: AutoAssignProps[]
-    setCapacity?: SetCapacity[]
+    capacity?: CapacityProps[]
   }
 }

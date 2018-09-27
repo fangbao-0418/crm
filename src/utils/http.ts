@@ -5,7 +5,7 @@ $(document).ajaxSend((event, response, options) => {
   store.dispatch({type: 'loading show'})
   const { ajaxCount } = store.getState().common
   if (ajaxCount > 0 && $('.pilipa-loading').length === 0) {
-    loading.show()
+    // loading.show()
   }
 })
 
