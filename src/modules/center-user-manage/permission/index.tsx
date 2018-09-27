@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Table, Divider, Modal, Form, Input } from 'antd'
+import { Button, Table, Divider, Modal, Form, Input, Tag } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 
@@ -119,6 +119,7 @@ class Main extends React.Component {
             title={this.state.title}
             visible={this.state.visible}
             destroyOnClose={true}
+            width={700}
             onOk={() => {
               if (this.state.val === '') {
                 this.setState({help: '权限名称不能为空'})
@@ -130,22 +131,54 @@ class Main extends React.Component {
               this.setState({visible: false, help: '', val: ''})
             }}
           >
-            <FormItem
-              required
-              label='页面权限名称'
-              labelCol={{span: 8}}
-              wrapperCol={{span: 10}}
-              help={<span style={{color: 'red'}}>{this.state.help}</span>}
-            >
-              <Input
-                defaultValue={this.state.val}
-                onChange={(e) => {
-                  this.setState({
-                    val: e.target.value
-                  })
-                }}
-              />
-            </FormItem>
+            <Form>
+              <FormItem
+                required
+                label='页面权限名称'
+                labelCol={{span: 6}}
+                wrapperCol={{span: 10}}
+              >
+                <Input
+                  defaultValue={this.state.val}
+                  placeholder='请输入权限名称'
+                  onChange={(e) => {
+                    this.setState({
+                      val: e.target.value
+                    })
+                  }}
+                />
+              </FormItem>
+              <FormItem
+                required
+                label='操作权限名称'
+                labelCol={{span: 6}}
+                wrapperCol={{span: 10}}
+              >
+                <Input
+                  placeholder='请输入权限名称'
+                  onChange={(e) => {
+                    this.setState({
+                      val: e.target.value
+                    })
+                  }}
+                />
+              </FormItem>
+              <FormItem
+                required
+                label='URL'
+                labelCol={{span: 6}}
+                wrapperCol={{span: 16}}
+              >
+                <Input
+                  placeholder='请输入URL'
+                  onChange={(e) => {
+                    this.setState({
+                      val: e.target.value
+                    })
+                  }}
+                />
+              </FormItem>
+            </Form>
           </Modal>
 
         </div>
