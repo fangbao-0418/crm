@@ -23,9 +23,10 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
   type?: RequestTypeProps
   raw?: boolean
   extension?: JQuery.AjaxSettings
+  [field: string]: any
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
-const http = <D>(url: string, type?: RequestTypeProps, config?: AjaxConfigProps extends D ? D : any) => {
+const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config?: AjaxConfigProps) => {
   config = Object.assign({}, config)
   if (typeof type === 'object') {
     config = type

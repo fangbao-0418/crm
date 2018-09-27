@@ -9,5 +9,7 @@ export const fetchList = (payload: {
   pageNum?: string
   pageSize?: string
 }) => {
-  return http(`/api/customer-opportunity`, 'GET', payload)
+  return http(`/api/customer-opportunity`, 'GET', {
+    data: payload
+  })
 }
