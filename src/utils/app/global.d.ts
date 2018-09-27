@@ -11,9 +11,22 @@ declare namespace APP {
     type: ActionType
     payload?: Customer.ActionPayload | P
   }
+  export interface EnumProps {
+    EnumContactSource?: Array<{label: string, value: string}>
+    EnumCustomerNameType?: Array<{label: string, value: string}>
+    EnumCustomerSearchType?: Array<{label: string, value: string}>
+    EnumCustomerSource?: Array<{label: string, value: string}>
+    EnumCustomerStatus?: Array<{label: string, value: string}>
+    EnumCustomerType?: Array<{label: string, value: string}>
+    EnumIsValid?: Array<{label: string, value: string}>
+    EnumPayTaxesNature?: Array<{label: string, value: string}>
+    EnumSignCustomerSearchType?: Array<{label: string, value: string}>
+    [type: string]: Array<{label: string, value: string}>
+  }
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction
   export const success: (msg: string) => void
   export const error: (msg: string) => void
+  export let keys: EnumProps
 }
 
