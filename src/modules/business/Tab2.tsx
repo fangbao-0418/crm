@@ -23,7 +23,7 @@ class Main extends React.Component<Props> {
       pageSize: 15,
       showQuickJumper: true,
       showSizeChanger: true,
-      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
+      pageSizeOptions: ['10', '20', '30', '40', '50'],
       showTotal (total) {
         return `共计 ${total} 条`
       }
@@ -59,7 +59,7 @@ class Main extends React.Component<Props> {
         dataSource={this.state.dataSource}
         rowSelection={rowSelection}
         bordered
-        rowKey={'customerId'}
+        rowKey={'id'}
         pagination={this.state.pagination}
       />
     )

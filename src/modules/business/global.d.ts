@@ -3,14 +3,14 @@ declare namespace Business {
     customerName?: string
     contactPerson?: string
     contactPhone?: string
-    can?: string
-    flowtime?: string
+    intention?: string
+    telephoneStatus?: string
     freeDays?: string
-    customerSource?: string
+    source?: string
     createTime?: string
+    enterDays: string
     leadingPerson?: string
-    value?: string
-    text?: string
+    id?: string
   }
   export interface SearchProps {
     storageBeginDate?: string

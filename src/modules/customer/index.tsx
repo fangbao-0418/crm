@@ -208,7 +208,7 @@ class Main extends React.Component {
         <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
       ),
       footer: null,
-      title: '新增',
+      title: '新增客资',
       mask: true,
       onCancel: () => {
         modal.hide()
