@@ -12,6 +12,8 @@ declare namespace APP {
     payload?: Customer.ActionPayload
   }
   export interface EnumProps {
+    EnumIntentionality?: Array<{label: string, value: string}>
+    EnumContactStatus?: Array<{label: string, value: string}>
     EnumContactSource?: Array<{label: string, value: string}>
     EnumCustomerNameType?: Array<{label: string, value: string}>
     EnumCustomerSearchType?: Array<{label: string, value: string}>
