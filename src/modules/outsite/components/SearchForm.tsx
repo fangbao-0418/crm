@@ -1,10 +1,9 @@
 import React from 'react'
-import { Icon, Table, Input, Form } from 'antd'
+import { Icon, Table, Input, Form, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { MessageList, MessageItem } from '@/modules/message/types/messge'
-import { Button } from 'antd'
 import { DatePicker, Radio } from 'antd'
 import { Moment } from 'moment'
+import TaskService from '@/modules/outsite/services'
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker
 
@@ -30,6 +29,22 @@ class Main extends React.Component<any, any> {
   public componentWillMount () {
   }
 
+  public createTaskNameOptions () {
+    const dict = TaskService.taskNameDict
+    const options: Array<any> = []
+    for (const i in dict) {
+      if (i) {
+        options.push({
+          field: i,
+          label: dict[i]
+        })
+      }
+    }
+    return options.map((item: any) => {
+      return <Select.Option key={`option-${item.field}`} value={item.field}>{item.label}</Select.Option>
+    })
+  }
+
   public render () {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
 
@@ -41,10 +56,32 @@ class Main extends React.Component<any, any> {
     <div className='t-search-form'>
       <Form
         layout='inline'
+        style={{width: '50%'}}
         onChange={this.props.onSearch}
         onSubmit={this.props.onSearch}
       >
-        <DatePicker placeholder='选择日期' onChange={this.props.onDateChange} />
+        <FormItem>
+        {getFieldDecorator(`names`, {
+          rules: [{
+            required: false,
+            message: ''
+          }]
+        })(
+          <Input placeholder='请输入客户名称或者联系人' style={{width: '200px'}}/>
+        )}
+        </FormItem>
+        <FormItem>
+        {getFieldDecorator(`types`, {
+          rules: [{
+            required: false,
+            message: ''
+          }]
+        })(
+          <Select style={{width: '120px'}} value='税务'>
+            {this.createTaskNameOptions()}
+          </Select>
+        )}
+        </FormItem>
       </Form>
     </div>
     )

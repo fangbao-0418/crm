@@ -2,24 +2,37 @@ interface User {
     uid?: any
     username?: string
 }
-interface MessageItem {
-    id?: string                 // 主键id
-    title?: string              // 消息标题
-    content?: string            // 消息内容
-    readed?: boolean            // 是否已读（true:已读）
-    targetType?: string         // 消息类型，工单为:TRACK_WORK
-    target?: string             // 目标消息类型编号,如果是催单，则为工单编号
-    action?: string             // 行为，催单为：REMINDER
-    sender?: User               // 发送人，uid:用户主键 username:用户名称
-    recipient?: User            // 接受人，uid:用户主键 username:用户名称
-    createdAt?: any              // 发送时间
+interface TaskItem {
+    id?: number // id	
+    code?: string // 编号	
+    name?: string // 名称	
+    category?: string // 分类	同通办任务分类
+    customerId?: number // 客户id	
+    customerName?: string // 客户名称	
+    orderId?: number // 订单id	
+    orderNo?: string // 订单编号	
+    summary?: string // 备注	
+    templateId?: number // 模板id	通办任务id
+    parentId?: number // 父节点id	
+    userId?: number // 用户id	
+    userName?: string // 用户	
+    areaId?: number // 区域id	
+    areaName?: string // 区域名称	
+    status?: string // 状态	
+    startTime?: string // 开始时间	
+    endTime?: string // 结束时间	
+    workId?: number // 工单id	
+    workNo?: string // 工单编号	
+    officeId?: number // 机构id	
+    officeName?: string // 机构名称	
+    contacter?: any // 后台暂不确定
+    subList?: Array<TaskItem> // 子任务集合	类型为task
 }
-type MessageList = Array<MessageItem>
+type TaskList = Array<TaskItem>
 
 type Func = (...args: Array<any>) => any
 
 export {
-    Func,
-    MessageItem,
-    MessageList
+    TaskItem,
+    TaskList
 }

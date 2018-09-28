@@ -145,6 +145,21 @@ class Main extends React.Component {
       ]
     },
     {
+      title: '任务管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '外勤任务列表',
+          path: '/outsite/task/list'
+        },
+        {
+          title: '添加外勤任务',
+          path: '/outsite/task/form'
+        }
+      ]
+    },
+    {
       title: '任务配置',
       path: '',
       icon: <Icon type='user' />,
