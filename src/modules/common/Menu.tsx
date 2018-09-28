@@ -73,7 +73,6 @@ class Main extends React.Component {
         }
       ]
     },
-    // 权限管理
     {
       title: '中心用户管理',
       icon: <Icon type='user' />,
@@ -94,6 +93,17 @@ class Main extends React.Component {
         {
           title: '角色',
           path: '/center-role'
+        }
+      ]
+    },
+    {
+      title: '机构管理',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '机构管理',
+          path: '/agency-manage'
         }
       ]
     },
@@ -131,6 +141,32 @@ class Main extends React.Component {
         {
           title: '我的消息',
           path: '/message/list'
+        }
+      ]
+    },
+    {
+      title: '任务配置',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '其他任务配置',
+          path: '/outsite/tasktpl/list'
+        },
+        {
+          title: '通办任务配置',
+          path: '/outsite/tasktpl/sublist'
+        }
+      ]
+    },
+    {
+      title: '绩效配置',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '绩效配置',
+          path: '/outsite/task/list'
         }
       ]
     }

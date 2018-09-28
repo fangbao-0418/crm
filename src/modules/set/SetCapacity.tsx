@@ -2,7 +2,8 @@ import React from 'react'
 import { Table, Input } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
-type DetailProps = Customer.SetCapacity
+import { changeCapacityAction } from './actions'
+type DetailProps = Customer.CapacityProps
 interface States {
   selectedRowKeys: string[]
 }
@@ -38,13 +39,16 @@ class Main extends React.Component<Customer.Props> {
       return <Input onChange={this.onChange.bind(this, index, 'maxProtectDays')} value={text}/>
     }
   }]
+  public componentWillMount () {
+    changeCapacityAction()
+  }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
-    const dataSource: any = this.props.setCapacity
+    const dataSource: any = this.props.capacity
     dataSource[index][field] = $(e.target).val()
     APP.dispatch({
       type: 'change customer set capacity data',
       payload: {
-        setCapacity: dataSource
+        capacity: dataSource
       }
     })
   }
@@ -59,7 +63,7 @@ class Main extends React.Component<Customer.Props> {
     return (
       <Table
         columns={this.columns}
-        dataSource={this.props.setCapacity}
+        dataSource={this.props.capacity}
         rowSelection={rowSelection}
         bordered
         rowKey={'customerId'}

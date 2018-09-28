@@ -6,50 +6,42 @@ import HCframe from '@/modules/common/components/HCframe'
 import {  OrderItem } from '../types/workorder'
 const styles = require('../styles/list.styl')
 const showPath = '/workorder/show'
-const { MonthPicker, RangePicker } = DatePicker
-const dateFormat = 'YYYY/MM/DD'
-const monthFormat = 'YYYY/MM'
-
-const FormItem = Form.Item
-const Option = Select.Option
-
 const data: any = []
-for (let i = 0; i < 46; i++) {
+for (let i = 0; i < 25; i++) {
   data.push({
-    key: i,
-    workOrder: `C ${i}`,
-    name: `北京爱康鼎科技有限公司 ${i}`,
-    creatDate: `2018/09/18`,
-    creatName: `张三 ${i}`,
-    order: `gd000${i}`,
-    server: `代理记账`,
-    state: `准备材料(外勤)`
-    // take: `操作 ${i}`
+    id: i,
+    workNo: `C ${i}`,
+    customerName: `北京爱康鼎科技有限公司 ${i}`,
+    createTime: `2018/09/18`,
+    orderNo: `${i}`,
+    name: `代理记账`,
+    status: `准备材料(外勤)`,
+    managerName:`张三 ${i}`
   })
 }
 
 class Main extends React.Component<any, any> {
   public columns = [{
     title: '工单编号',
-    dataIndex: 'workOrder'
+    dataIndex: 'workNo'
   }, {
     title: '企业名称',
-    dataIndex: 'name'
+    dataIndex: 'customerName'
   }, {
     title: '创建日期',
-    dataIndex: 'creatDate'
+    dataIndex: 'createTime'
   }, {
-    title: '提单人',
-    dataIndex: 'creatName'
+    title: '负责销售',
+    dataIndex: 'managerName'
   }, {
     title: '对应订单',
-    dataIndex: 'order'
+    dataIndex: 'orderNo'
   }, {
     title: '服务内容',
-    dataIndex: 'server'
+    dataIndex: 'name'
   }, {
     title: '当前状态',
-    dataIndex: 'state'
+    dataIndex: 'status'
   }, {
     title: '操作',
     dataIndex: 'take',
@@ -67,23 +59,6 @@ class Main extends React.Component<any, any> {
     this.state = {
       selectedRowKeys: []
     }
-  }
-  // 表单改变
-  public onChange (formData: any) {
-    console.log('表单改变', formData)
-  }
-
-  // 导出
-  public exportBtn () {
-    console.log('点击导出')
-    // service.delList(selectedRowKeys)
-  }
-
-  // 搜索
-  public searchBtn () {
-    const { selectedRowKeys } = this.state
-    console.log('set readed list::', selectedRowKeys)
-    // service.setReadedList(selectedRowKeys)
   }
 
   public render () {
@@ -144,23 +119,42 @@ class Main extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-        <Table rowSelection={rowSelection} columns={this.columns} dataSource={data} />
+        <Table rowSelection={rowSelection} onChange={this.pageChange} columns={this.columns} dataSource={data} />
         </Row>
       </HCframe>
     </div>
     )
   }
+  // 表单改变
+  public onChange (formData: any) {
+    console.log('表单改变', formData)
+  }
+
+  // 导出
+  public exportBtn () {
+    console.log('点击导出')
+    // service.delList(selectedRowKeys)
+  }
+
+  // 搜索
+  public searchBtn () {
+    const { selectedRowKeys } = this.state
+    console.log('set readed list::', selectedRowKeys)
+    // service.setReadedList(selectedRowKeys)
+  }
 
   // 查看
   public onShow (item: OrderItem) {
-    APP.history.push(`${showPath}/${item.key}`)
+    APP.history.push(`${showPath}/${item.id}`)
   }
-  public rightExport = () => {
-    console.log('点击导出按钮')
-  }
+  // 选择的数组
   public onSelectChange = (selectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
+  }
+  // 分页
+  public pageChange = (selectedRowKeys: any) => {
+    console.log('pageChange changed: ', selectedRowKeys)
   }
 }
 export default Main

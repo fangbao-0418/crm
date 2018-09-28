@@ -15,14 +15,12 @@ const defaultVal: Customer.Props = {
     autoDistributeWeight: '333',
     autoDistributeMaxNum: '11'
   }],
-  setCapacity:[{
-    bigAreaName: '22',
-    cityName: '222',
-    agencyName: '222',
-    storageCapacity: '11',
-    maxTrackDays: '12',
-    maxProtectDays: '22'
-  }]
+  assignResult: {
+    allocatedNum: 0,
+    exists: [],
+    total: 0
+  },
+  capacity:[]
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
