@@ -1,28 +1,19 @@
 import React from 'react'
-import monent, { Moment } from 'moment'
+import { withRouter } from 'react-router'
 import { Modal, Icon, Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import MessageShowModal from '@/modules/message/views/show.modal'
 import Service from '@/modules/outsite/services'
 
 const styles = require('../../styles/list.styl')
 
-const content = `哈哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了
-    经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬
-    ，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多
-    方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计
-    权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去
-    玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE还多方哈士大夫哈市的合法化撒旦法，这里是内容
-    阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE`
 const data: TaskList = [
   {
     id: 1,
+    code: '0001',
     name: '测试1',
     category: 'tax',
     customerName: '客户名称',
@@ -30,6 +21,7 @@ const data: TaskList = [
     subList: [
       {
         id: 2,
+        code: '0001',
         name: '测试1',
         category: 'tax',
         customerName: '客户名称',
@@ -46,7 +38,8 @@ const data: TaskList = [
     status: 'complete',
     areaName: '华东',
     userName: '外勤',
-    startTime: '2018-09-12 18:23'
+    startTime: '2018-09-12 18:23',
+    endTime: '2018-09-12 18:23'
   }
 ]
 
@@ -64,7 +57,7 @@ interface ColProps extends TaskItem {
 }
 
 // 列表
-class Main extends React.Component {
+class Main extends React.Component<any> {
   public state: States = {
     modalTitle: '',
     modalVisible: false,
@@ -76,29 +69,29 @@ class Main extends React.Component {
       pageSize: 10
     }
   }
+  public taskid: any
   public tabList: any = [
     {key: '1', name: '待分配'},
     {key: '2', name: '已分配'},
     {key: '3', name: '已完成'}
   ]
   public columns: any = [{
-    title: '订单号',
-    dataIndex: 'orderNo',
+    title: '序列号ID',
+    dataIndex: 'code',
     render: (key: any, item: TaskItem) => {
       return <span>{item.orderNo}</span>
     }
   }, {
-    title: '客户名称',
-    dataIndex: 'customerName',
+    title: '子任务名称',
+    dataIndex: 'name',
     render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span className={item.status ? styles.icohide : styles.icocui}><i>催</i></span>
-        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
+        {item.name}
       </>)
     }
   }, {
-    title: '联系人',
+    title: '当前外勤人员',
     dataIndex: 'userName',
     render: (k: any, item: TaskItem) => {
       return (
@@ -116,53 +109,19 @@ class Main extends React.Component {
       </>)
     }
   }, {
-    title: '服务状态',
-    dataIndex: 'status',
-    render: (k: any, item: TaskItem) => {
-      return (
-      <>
-        <span>{item.status}</span>
-      </>)
-    }
-  }, {
-    title: '任务名称',
-    dataIndex: 'category',
-    render: (k: any, item: TaskItem) => {
-      return (
-      <>
-        <span>{item.category}</span>
-      </>)
-    }
-  }, {
-    title: '当前子任务',
-    dataIndex: 'subtask',
-    render: (k: any, item: TaskItem) => {
-      return (
-        <span>{item.subList.length && item.subList[0].name}</span>
-      )
-    }
-  }, {
-    title: '子任务状态',
-    dataIndex: 'subtaskStatus',
-    render: (k: any, item: TaskItem) => {
-      return (
-        <span>{item.subList.length && item.subList[0].status}</span>
-      )
-    }
-  }, {
-    title: '当前外勤人员',
-    dataIndex: 'sublistUsername',
-    render: (k: any, item: TaskItem) => {
-      return (
-        <span>{item.subList.length && item.subList[0].userName}</span>
-      )
-    }
-  }, {
-    title: '接受任务时间',
-    dataIndex: 'status',
+    title: '开始时间',
+    dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
         <span>{item.startTime}</span>
+      )
+    }
+  }, {
+    title: '结束时间',
+    dataIndex: 'endTime',
+    render: (k: any, item: TaskItem) => {
+      return (
+        <span>{item.endTime}</span>
       )
     }
   }, {
@@ -171,7 +130,9 @@ class Main extends React.Component {
     render: (k: any, item: TaskItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
+          <span className={`likebtn`} onClick={() => { this.onAuditItem.bind(this)(item) }}>审批</span>
+          <span className={`likebtn`} onClick={() => { this.onChangeUser.bind(this)(item) }}>转接任务</span>
+          <span className={`likebtn`} onClick={() => { this.onShowVoucher.bind(this)(item) }}>查看凭证</span>
         </span>
       )
     }
@@ -182,6 +143,7 @@ class Main extends React.Component {
   }
 
   public componentWillMount () {
+    this.taskid = this.props.match.params.id
     this.getList()
   }
 
@@ -229,12 +191,6 @@ class Main extends React.Component {
   // 查看
   public onShow (item: TaskItem) {
     console.log('show::', item)
-    APP.history.push(`/outsite/task/show/${item.id}`)
-  }
-
-  // 标记已读
-  public onRead (item: TaskItem) {
-    console.log('read::', item)
   }
 
   // 删除
@@ -247,26 +203,36 @@ class Main extends React.Component {
     console.log('search::', values)
   }
 
-  // 搜索 日期切换
-  public onDateChange (date: Moment, dateString: string) {
-    console.log('date change::', date)
-  }
-
-  // 批量删除
-  public delList () {
+  // 批量分配
+  public onMultiAllot () {
     const { selectedRowKeys } = this.state
     if (!selectedRowKeys.length) {
       return
     }
-    console.log('del list::', selectedRowKeys)
+    console.log('list::', selectedRowKeys)
     // service.delList(selectedRowKeys)
   }
 
-  // 批量标记为已读
-  public setReadedList () {
+  // 审批任务
+  public onAuditTask () {
     const { selectedRowKeys } = this.state
-    console.log('set readed list::', selectedRowKeys)
+    console.log('audit task::', this.taskid)
     // service.setReadedList(selectedRowKeys)
+  }
+
+  // 审批子任务
+  public onAuditItem (item: TaskItem) {
+    console.log('audit item::', item)
+  }
+
+  // 转接任务
+  public onChangeUser (item: TaskItem) {
+    console.log('change user item::', item)
+  }
+
+  // 查看凭证
+  public onShowVoucher (item: TaskItem) {
+    console.log('show voucher::', item)
   }
 
   // tab切换
@@ -285,21 +251,10 @@ class Main extends React.Component {
     }
     return (
     <div className={styles.container}>
-      <HCframe title='外勤任务'>
+      <HCframe title='客户的名称在这里显示'>
         <Row>
-          <Col span={20}>
-            <SearchForm onDateChange={this.onDateChange.bind(this)} />
-          </Col>
-          <Col span={4} style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button size={'small'} onClick={this.delList.bind(this)}>导出</Button>
-            </span>
-          </Col>
-        </Row>
-        <Row>
-          <Tabs defaultActiveKey='1' onChange={this.onTabChange}>
-            {this.tabList.map((item: any) => {
-              return (<Tabs.TabPane key={item.key} tab={item.name}>
+          <Tabs defaultActiveKey='sublist' onChange={this.onTabChange}>
+              <Tabs.TabPane key={`sublist`} tab={'任务详情'}>
                 <Table
                   columns={this.columns}
                   dataSource={this.state.dataSource}
@@ -308,8 +263,21 @@ class Main extends React.Component {
                   pagination={this.state.pageConf}
                   rowKey={'key'}
                 />
-              </Tabs.TabPane>)
-            })}
+                <div className={styles['bottom-btns']}>
+                  <Button type='primary' onClick={this.onAuditTask.bind(this)}>审批</Button>
+                  <Button type='primary' onClick={this.onMultiAllot.bind(this)}>批量分配</Button>
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
+                <div>
+                  跟进列表
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
+                <div>
+                  工单详情
+                </div>
+              </Tabs.TabPane>
           </Tabs>
         </Row>
       </HCframe>
@@ -317,4 +285,4 @@ class Main extends React.Component {
     )
   }
 }
-export default Main
+export default withRouter(Main)
