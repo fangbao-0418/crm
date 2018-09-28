@@ -15,6 +15,23 @@ const list = [
 
 class Main extends React.Component<any, any> {
 
+  public state = {
+    title: ''
+  }
+
+  public componentWillMount () {
+    const {mode} = this.props
+    let title
+    if (mode === 'view') {
+      title = '查看权限'
+    } else if (mode === 'add') {
+      title = '添加权限'
+    } else if (mode === 'modify') {
+      title = '修改权限'
+    }
+    this.setState({title})
+  }
+
   public onOk = () => {
     this.props.onOk()
   }
@@ -24,23 +41,22 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
-    const { info } = this.props
+    const { mode } = this.props
     return (
       <Modal
-        title={info.title}
-        visible={info.visible}
+        title={this.state.title}
+        visible={true}
         className={styles.wrap}
-        destroyOnClose={true}
         width={1200}
         onOk={this.onOk}
         onCancel={this.onCancel}
       >
         <Form layout='inline'>
           <FormItem className={styles.input} label='角色名称' required>
-            <Input size='small' />
+            <Input disabled={mode === 'view'} size='small' />
           </FormItem>
           <FormItem className={styles.input} label='数据共享' required>
-            <Select size='small' style={{width: '160px'}} placeholder='请选择是否数据共享'>
+            <Select disabled={mode === 'view'} size='small' style={{width: '160px'}} placeholder='请选择是否数据共享'>
               <Option value={1}>是</Option>
               <Option value={0}>否</Option>
             </Select>
