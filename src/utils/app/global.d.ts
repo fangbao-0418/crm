@@ -6,7 +6,7 @@ declare namespace APP {
     goForward (): void
   }
   export type ActionType =
-    'change customer data' | 'change customer set auto data' | 'change customer set capacity data'
+    'change customer data'
   interface DispatchAction {
     type: ActionType
     payload?: Customer.ActionPayload

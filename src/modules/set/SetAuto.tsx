@@ -2,6 +2,8 @@ import React from 'react'
 import { Table, Input } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
+import { saveAutoAssign } from './api'
+import { changeAutoAssignAction } from './actions'
 type DetailProps = Customer.AutoAssignProps
 interface States {
   selectedRowKeys: string[]
@@ -32,15 +34,19 @@ class Main extends React.Component<Customer.Props> {
       return <Input onChange={this.onChange.bind(this, index, 'autoDistributeMaxNum')} value={text}/>
     }
   }]
+  public componentWillMount () {
+    changeAutoAssignAction()
+  }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const dataSource: any = this.props.autoAssign
     dataSource[index][field] = $(e.target).val()
     APP.dispatch({
-      type: 'change customer set auto data',
+      type: 'change customer data',
       payload: {
         autoAssign: dataSource
       }
     })
+    saveAutoAssign(dataSource)
   }
   public onSelectAllChange () {
     console.log('select')

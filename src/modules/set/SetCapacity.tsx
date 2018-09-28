@@ -3,6 +3,7 @@ import { Table, Input } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from './actions'
+import { saveStorageCapacity } from './api'
 type DetailProps = Customer.CapacityProps
 interface States {
   selectedRowKeys: string[]
@@ -46,11 +47,12 @@ class Main extends React.Component<Customer.Props> {
     const dataSource: any = this.props.capacity
     dataSource[index][field] = $(e.target).val()
     APP.dispatch({
-      type: 'change customer set capacity data',
+      type: 'change customer data',
       payload: {
         capacity: dataSource
       }
     })
+    saveStorageCapacity(dataSource)
   }
   public onSelectAllChange () {
     console.log('select')

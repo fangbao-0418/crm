@@ -1,12 +1,21 @@
-import { fetchStorageCapacity } from './api'
+import { fetchStorageCapacity, fetchAutoAssign } from './api'
 export const changeCapacityAction = () => {
   fetchStorageCapacity().then((res) => {
-    console.log(res)
-    // APP.dispatch({
-    //   type: 'change customer set capacity data',
-    //   payload: {
-    //     capacity: res
-    //   }
-    // })
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        capacity: res
+      }
+    })
+  })
+}
+export const changeAutoAssignAction = () => {
+  fetchAutoAssign().then((res) => {
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        autoAssign: res
+      }
+    })
   })
 }
