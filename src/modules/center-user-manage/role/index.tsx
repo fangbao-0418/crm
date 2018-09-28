@@ -9,7 +9,8 @@ const styles = require('./style')
 interface State {
   tab: number
   selectedRowKeys: any[]
-  info: any
+  mode: 'view' | 'modify' | 'add'
+  visible: boolean
   dataSource: any[]
 }
 
@@ -17,10 +18,8 @@ class Main extends React.Component {
   public state: State = {
     tab: 0,
     selectedRowKeys: [],
-    info: {
-      title: '',
-      visible: false
-    },
+    mode: 'add',
+    visible: false,
     dataSource: [
       {
         id: 1,
@@ -65,12 +64,15 @@ class Main extends React.Component {
   }
 
   // 修改、添加、查看角色
-  public setRole = (title: string, info?: any) => {
-    this.setState({info: {...info, title, visible: true}})
+  public setRole = (mode: 'view' | 'modify' | 'add') => {
+    this.setState({
+      visible: true,
+      mode
+    })
   }
 
   public render () {
-    const { selectedRowKeys, info } = this.state
+    const { selectedRowKeys} = this.state
     const columns = [
       {
         title: '角色名称',
@@ -81,9 +83,9 @@ class Main extends React.Component {
         render: (val: any, record: any) => {
           return (
             <div>
-              <a onClick={() => {this.setRole('修改角色', record)}}>修改</a>
+              <a onClick={() => {this.setRole('view')}}>查看</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.setRole('添加角色')}}>添加子页面权限</a>
+              <a onClick={() => {this.setRole('modify')}}>修改</a>
               <Divider type='vertical'/>
               <a onClick={() => {this.forbidConfirm()}}>禁用</a>
               <Divider type='vertical'/>
@@ -105,7 +107,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加角色'
-            onClick={() => {this.setRole('添加角色')}}
+            onClick={() => {this.setRole('add')}}
           />
         )}
       >
@@ -138,17 +140,16 @@ class Main extends React.Component {
               </Button>
             }
 
-            <RoleModal
-              info={info}
-              onOk={() => {
-                this.setState({info: {}})
-              }}
-              onCancel={() => {
-                this.setState({info: {...this.state.info, visible: false}})
-              }}
-            >
-
-            </RoleModal>
+            {
+              this.state.visible &&
+              <RoleModal
+                mode={this.state.mode}
+                onOk={() => {}}
+                onCancel={() => {
+                  this.setState({visible: false})
+                }}
+              />
+            }
 
           </div>
         </div>
