@@ -49,7 +49,7 @@ class Main extends React.Component<Props> {
     dataSource.forEach((item, index2) => {
       values[item.field] = {
         value: item.value,
-        lable: labels[index2]
+        label: labels[index2]
       }
     })
     if (this.props.onChange) {

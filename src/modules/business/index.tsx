@@ -2,7 +2,6 @@ import React from 'react'
 import { Table, Button, DatePicker, Select, Tabs } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { PaginationConfig } from 'antd/lib/pagination'
-import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -12,37 +11,23 @@ import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
-import { fetchList } from './api'
 import moment from 'moment'
+import TableList from './Table'
+type DetailProps = Business.DetailProps
 interface States {
-  dataSource: DetailProps[]
-  selectedRowKeys: string[]
   sales: DetailProps[]
   customerCity: DetailProps[]
-  pagination: PaginationConfig
 }
 class Main extends React.Component {
   public state: States = {
-    dataSource: [],
-    selectedRowKeys: [],
     sales: [],
-    customerCity: [],
-    pagination: {
-      current: 1,
-      pageSize: 15,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
-    }
+    customerCity: []
   }
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
       value: 'all',
-      label: ['入库时间', '创建时间'],
+      label: ['入库时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
@@ -74,38 +59,38 @@ class Main extends React.Component {
         },
         {
           label: '0%',
-          value: '1'
+          value: '0%'
         },
         {
           label: '30%',
-          value: '2'
+          value: '30%'
         },
         {
           label: '60%',
-          value: '3'
+          value: '60%'
         },
         {
           label: '80%',
-          value: '4'
+          value: '80%'
         },
         {
           label: '100%',
-          value: '5'
+          value: '100%'
         }
       ]
     },
     {
       field: 'telephoneStatus',
-      value: '0',
+      value: '',
       label: ['电话状态'],
       options: [
         {
           label: '全部',
-          value: '0'
+          value: ''
         },
         {
           label: '无效电话',
-          value: '1'
+          value: '0'
         },
         {
           label: '无人接听',
@@ -113,20 +98,22 @@ class Main extends React.Component {
         },
         {
           label: '直接拒绝',
-          value: '3'
+          value: '1'
         },
         {
           label: '持续跟进',
-          value: '4'
+          value: '3'
         },
         {
           label: '同行',
-          value: '5'
+          value: '4'
         }
       ]
     }
   ]
-  public params: any = {}
+  public params: Business.SearchProps = {}
+  public paramsleft: Business.SearchProps = {}
+  public paramsright: Business.SearchProps = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName'
@@ -158,54 +145,72 @@ class Main extends React.Component {
     title: '入库时间',
     dataIndex: 'createTime'
   }]
-  public componentWillMount () {
-    this.fetchList()
-  }
   public fetchList () {
-    const pagination = this.state.pagination
-    this.params.pageSize = pagination.pageSize
-    this.params.pageNum = pagination.current
-    fetchList(this.params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
-      this.setState({
-        dataSource: res.data
-      })
-    })
+    console.log(this.paramsright, 'this.paramsright')
+    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    // this.params = Object.assign(this.paramsleft, this.paramsright)
+    console.log(this.params, 'params')
   }
   public handleSearch (values: any) {
     console.log(values, 'values')
+    this.paramsleft = {}
     let beginTime
     let endTime
-    if (values.date === 'all') {
+    console.log(values.date.value, 'values.date.value')
+    if (values.date.value === 'all') {
       beginTime = ''
       endTime = ''
-    } else if (values.date.indexOf('至') > -1) {
-      beginTime = values.date.split('至')[0]
-      endTime = values.date.split('至')[1]
+    } else if (values.date.value.indexOf('至') > -1) {
+      beginTime = values.date.value.split('至')[0]
+      endTime = values.date.value.split('至')[1]
     } else {
       beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
     }
-    this.params.intention = values.intention
-    this.params.telephoneStatus = values.telephoneStatus
-    this.params.beginTime = beginTime
-    this.params.endDate = endTime
-    console.log(this.params, '1')
+    console.log(beginTime, endTime)
+    console.log(values.date.label)
+    if (values.date.label === '入库时间') {
+      this.paramsleft.storageBeginDate = beginTime
+      this.paramsleft.storageEndDate = endTime
+    } else if (values.date.label === '创建时间') {
+      this.paramsleft.createBeginDate = beginTime
+      this.paramsleft.createEndDate = endTime
+    } else if (values.date.label === '最后跟进') {
+      this.paramsleft.lastTrackBeginTime = beginTime
+      this.paramsleft.lastTrackEndTime = endTime
+    }
+    this.paramsleft.intention = values.intention.value
+    this.paramsleft.telephoneStatus = values.telephoneStatus.value
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    console.log(values, 'values')
-    this.params.type = values.type
-    this.params.word = values.word
-    console.log(this.params, '2')
+    // console.log(values, 'values')
+    this.paramsright = {}
+    switch (values.key) {
+    case '0':
+      this.paramsright.customerName = values.value
+      break
+    case '1':
+      this.paramsright.contactPerson = values.value
+      break
+    case '2':
+      this.paramsright.customerSource = values.value
+      break
+    case '3':
+      this.paramsright.currentSalesperson = values.value
+      break
+    case '4':
+      this.paramsright.contactPhone = values.value
+      break
+    case '5':
+      this.paramsright.payTaxesNature = values.value
+      break
+    }
+    // this.paramsright[values.key] = values.value
     this.fetchList()
   }
   public callback () {
     console.log('11')
-  }
-  public onSelectAllChange () {
-    console.log('select')
   }
   public appointmentAll () {
     const modal = new Modal({
@@ -339,10 +344,6 @@ class Main extends React.Component {
     modal.show()
   }
   public render () {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
     return (
       <ContentBox
         title='我的商机'
@@ -374,7 +375,14 @@ class Main extends React.Component {
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={APP.keys.EnumCustomerSearchType}
+              options={[
+                { value: '0', label: '客户名称'},
+                { value: '1', label: '联系人'},
+                { value: '2', label: '客户来源'},
+                { value: '3', label: '所属销售'},
+                { value: '4', label: '联系电话'},
+                { value: '5', label: '纳税类别'}
+              ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
@@ -388,44 +396,16 @@ class Main extends React.Component {
         </div>
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='全部(160000)' key='1'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
+            <TableList columns={this.columns} params={this.params}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='已有沟通(18000)' key='2'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
+            <TableList columns={this.columns} params={this.params}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='新客资(500)' key='3'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
+            <TableList columns={this.columns} params={this.params}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='即将被收回(53)' key='4'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
+            <TableList columns={this.columns} params={this.params}/>
           </Tabs.TabPane>
         </Tabs>
         <div className='mt40'>

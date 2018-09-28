@@ -51,8 +51,8 @@ class Main extends React.Component<Props> {
           }}
           deleteCustomer={() => {
             console.log(this.state.resultData, 'resultData')
-            let result = [{name: '111', id: '1000111118'}]
-            let ids: string[] = []
+            const result = [{name: '111', id: '1000111118'}]
+            const ids: string[] = []
             result.map((item) => {
               ids.push(item.id)
             })

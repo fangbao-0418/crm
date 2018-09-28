@@ -222,7 +222,6 @@ class Main extends React.Component {
       title: '导入',
       mask: true,
       onOk: () => {
-
       },
       onCancel: () => {
         modal.hide()

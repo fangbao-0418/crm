@@ -1,14 +1,6 @@
 import http from '@/utils/http'
-export const fetchList = (payload: {
-  beginTime?: string
-  endTime?: string
-  intention?: string
-  telephoneStatus?: string
-  type?: string
-  word?: string
-  pageNum?: string
-  pageSize?: string
-}) => {
+type SearchProps = Business.SearchProps
+export const fetchList = (payload: SearchProps) => {
   return http(`/api/customer-opportunity`, 'GET', {
     data: payload
   })
