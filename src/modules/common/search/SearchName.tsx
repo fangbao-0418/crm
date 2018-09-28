@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input, Select, Icon } from 'antd'
+import _ from 'lodash'
 const styles = require('./style')
 const InputGroup = Input.Group
 const Option = Select.Option
@@ -11,11 +12,11 @@ interface Props {
     label: string
     value: string
   }>
-  onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {type: string, word: string}) => void
-  onChange?: (value?: {type: string, word: string}) => void
+  onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {value: string, key: string}) => void
+  onChange?: (value?: {value: string, key: string}) => void
 }
 class Main extends React.Component<Props> {
-  public type: any
+  public value: {key: string, value: string}
   public render () {
     const options = this.props.options.length > 0 ? this.props.options : [{value: undefined, label: undefined}]
     const nodes: JSX.Element[] = []
@@ -27,13 +28,16 @@ class Main extends React.Component<Props> {
           </Option>
         )
       })
-      this.type = options[0]
+      this.value = {
+        key: options[0].value,
+        value: options[0].value
+      }
     }
     return (
       <InputGroup compact style={this.props.style} className={this.props.className}>
         <Select
-          onChange={(value) => {
-            this.type = value
+          onChange={(value: string) => {
+            this.value.key = value
           }}
           style={{ width: '35%' }}
           defaultValue={options[0].value}
@@ -42,22 +46,16 @@ class Main extends React.Component<Props> {
         </Select>
         <Input
           onChange={(e) => {
-            const value = {
-              type: this.type,
-              word: e.target.value
-            }
+            this.value.value = e.target.value
             if (this.props.onChange) {
-              this.props.onChange(value)
+              this.props.onChange(_.cloneDeep(this.value))
             }
           }}
           onKeyDown={(e) => {
             const target: any = e.target
-            const value = {
-              type: this.type,
-              word: target.value
-            }
+            this.value.value = target.value
             if (this.props.onKeyDown) {
-              this.props.onKeyDown(e, value)
+              this.props.onKeyDown(e, _.cloneDeep(this.value))
             }
           }}
           style={{ width: '50%' }}
