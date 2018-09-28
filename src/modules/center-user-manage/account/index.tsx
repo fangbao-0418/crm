@@ -10,13 +10,15 @@ const Search = Input.Search
 interface State {
   selectedRowKeys: any[]
   dataSource: any[]
-  accountInfo: any
+  visible: boolean // 弹窗是否显示
+  mode: 'view' | 'modify' | 'add' // 弹窗的模式
 }
 
 class Main extends React.Component {
 
   public state: State = {
-    accountInfo: {},
+    mode: 'add',
+    visible: false,
     selectedRowKeys: [],
     dataSource: [
       {
@@ -45,10 +47,8 @@ class Main extends React.Component {
   }
 
   // 查看、修改、添加账户
-  public showAccountModal = (mode: 'view' | 'modify' | 'add', info?: any) => {
-    this.setState({
-      accountInfo: {...info, mode, visible: true}
-    })
+  public showAccountModal = (mode: 'view' | 'modify' | 'add') => {
+    this.setState({mode, visible: true})
   }
 
   // 确认删除
@@ -89,9 +89,9 @@ class Main extends React.Component {
         render: (val: any, info: any) => {
           return (
             <div>
-              <a onClick={() => {this.showAccountModal('view', info)}}>查看</a>
+              <a onClick={() => {this.showAccountModal('view')}}>查看</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
+              <a onClick={() => {this.showAccountModal('modify')}}>修改</a>
               <Divider type='vertical'/>
               <a onClick={this.delConfirm}>删除</a>
             </div>
@@ -165,15 +165,18 @@ class Main extends React.Component {
           </Button>
         }
 
-        <AccountModal
-          info={this.state.accountInfo}
-          onOk={(val: any) => {
-            console.log(445, val)
-          }}
-          onCancel={() => {
-            this.setState({accountInfo: {...this.state.accountInfo, visible: false}})
-          }}
-        />
+        {
+          this.state.visible &&
+          <AccountModal
+            mode={this.state.mode}
+            onOk={(val: any) => {
+              console.log(445, val)
+            }}
+            onCancel={() => {
+              this.setState({visible: false})
+            }}
+          />
+        }
       </ContentBox>
     )
   }

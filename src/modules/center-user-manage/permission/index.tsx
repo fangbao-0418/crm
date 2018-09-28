@@ -2,26 +2,22 @@ import React from 'react'
 import { Button, Table, Divider, Modal, Form, Input, Tag } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
+import PermissionModal from './permission-modal'
 
 const styles = require('./style')
-const FormItem = Form.Item
 
 interface State {
-  tab: number,
-  val: string
-  help: string
-  title: string
-  visible: boolean
+  tab: number, // tab切换
+  mode: 'view' | 'modify' | 'add' // 弹窗模式
+  visible: boolean // 弹窗是否显示
   dataSource: any[]
 }
 
 class Main extends React.Component {
   public state: State = {
-    tab: 0, // 控制tab切换
-    val: '', // 弹窗权限值
-    help: '', // 验证提示
-    title: '', // 弹窗标题
-    visible: false, // 弹窗显示
+    tab: 0,
+    mode: 'add',
+    visible: false,
     dataSource: [
       {
         id: 1,
@@ -46,8 +42,8 @@ class Main extends React.Component {
   }
 
   // 修改、添加权限
-  public setPermission = (title: string, name?: string) => {
-    this.setState({visible: true, title, val: name || ''})
+  public setPermission = (mode: 'view' | 'modify' | 'add') => {
+    this.setState({visible: true, mode})
   }
 
   // 禁用权限
@@ -76,9 +72,9 @@ class Main extends React.Component {
         render: () => {
           return (
             <div>
-              <a onClick={() => {this.setPermission('修改权限')}}>修改</a>
+              <a onClick={() => {this.setPermission('modify')}}>修改</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.setPermission('添加权限')}}>添加子页面权限</a>
+              <a onClick={() => {this.setPermission('add')}}>添加子页面权限</a>
               <Divider type='vertical'/>
               <a onClick={this.forbidPermission}>禁用</a>
               <Divider type='vertical'/>
@@ -94,7 +90,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加页面权限'
-            onClick={() => {this.setPermission('添加权限')}}
+            onClick={() => {this.setPermission('add')}}
           />
         )}
       >
@@ -115,73 +111,17 @@ class Main extends React.Component {
             />
           </div>
 
-          <Modal
-            title={this.state.title}
-            visible={this.state.visible}
-            destroyOnClose={true}
-            width={700}
-            onOk={() => {
-              if (this.state.val === '') {
-                this.setState({help: '权限名称不能为空'})
-                return
-              }
-              this.setState({visible: false})
-            }}
-            onCancel={() => {
-              this.setState({visible: false, help: '', val: ''})
-            }}
-          >
-            <Form>
-              <FormItem
-                required
-                label='页面权限名称'
-                labelCol={{span: 6}}
-                wrapperCol={{span: 10}}
-              >
-                <Input
-                  defaultValue={this.state.val}
-                  placeholder='请输入权限名称'
-                  onChange={(e) => {
-                    this.setState({
-                      val: e.target.value
-                    })
-                  }}
-                />
-              </FormItem>
-              <FormItem
-                required
-                label='操作权限名称'
-                labelCol={{span: 6}}
-                wrapperCol={{span: 10}}
-              >
-                <Input
-                  placeholder='请输入权限名称'
-                  onChange={(e) => {
-                    this.setState({
-                      val: e.target.value
-                    })
-                  }}
-                />
-              </FormItem>
-              <FormItem
-                required
-                label='URL'
-                labelCol={{span: 6}}
-                wrapperCol={{span: 16}}
-              >
-                <Input
-                  placeholder='请输入URL'
-                  onChange={(e) => {
-                    this.setState({
-                      val: e.target.value
-                    })
-                  }}
-                />
-              </FormItem>
-            </Form>
-          </Modal>
-
         </div>
+
+        {
+          this.state.visible &&
+          <PermissionModal
+            mode={this.state.mode}
+            onOk={() => {}}
+            onCancel={() => {this.setState({visible: false})}}
+          />
+        }
+
       </ContentBox>
     )
   }
