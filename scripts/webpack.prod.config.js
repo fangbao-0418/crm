@@ -189,7 +189,8 @@ module.exports = {
     'react-router-dom': 'ReactRouterDOM',
     imutable: 'Immutable',
     moment: 'moment',
-    antd: 'antd'
+    antd: 'antd',
+    'ali-oss': 'OSS'
   },
   devtool: ''
 }

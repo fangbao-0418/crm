@@ -42,3 +42,6 @@ export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
     data: payload
   })
 }
+export const fetchCityCount = () => {
+  return http(`/api/customer/stats/by-city`)
+}

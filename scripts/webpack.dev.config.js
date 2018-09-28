@@ -179,7 +179,8 @@ module.exports = {
     'react-router-dom': 'ReactRouterDOM',
     imutable: 'Immutable',
     moment: 'moment',
-    antd: 'antd'
+    antd: 'antd',
+    'ali-oss': 'OSS'
   },
   devtool: 'source-map'
   // eval： 生成代码 每个模块都被eval执行，并且存在@sourceURL

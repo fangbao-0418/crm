@@ -28,19 +28,19 @@ class Main extends React.Component {
       options: [
         {
           label: '全部',
-          value: 'all'
+          value: ''
         },
         {
           label: '今天',
-          value: 'today'
+          value: '1'
         },
         {
           label: '7天',
-          value: '7d'
+          value: '7'
         },
         {
           label: '30天',
-          value: '30d'
+          value: '30'
         }
       ],
       type: 'date'
@@ -52,15 +52,15 @@ class Main extends React.Component {
       options: [
         {
           label: '一个月',
-          value: '1'
+          value: '1month'
         },
         {
           label: '二个月',
-          value: '2'
+          value: '2month'
         },
         {
           label: '三个月',
-          value: '3'
+          value: '3month'
         }
       ],
       type: 'date'

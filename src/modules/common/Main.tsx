@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
-import { fetchEnum, fetchTags } from './api'
+import { fetchEnum } from './api'
 const { Content } = Layout
 import Top from './Top'
 import {
@@ -12,9 +12,6 @@ import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
   public componentWillMount () {
-    fetchTags().then((res) => {
-      console.log(res)
-    })
     fetchEnum().then(() => {
       this.forceUpdate()
     })

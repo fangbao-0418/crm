@@ -5,14 +5,14 @@ import {
 } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from '@/store'
-import APP from '@/modules/common/APP'
+import App from '@/modules/common/App'
 const isPro = process.env.NODE_ENV === 'production'
 const Router = isPro ? BrowserRouter : HashRouter
 const basename = '/'
 const router = () => (
   <Provider store={store}>
     <Router basename={basename}>
-      <APP />
+      <App />
     </Router>
   </Provider>
 )
