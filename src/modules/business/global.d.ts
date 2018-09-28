@@ -17,6 +17,8 @@ declare namespace Business {
     storageEndDate?: string
     createBeginDate?: string
     createEndDate?: string
+    lastTrackBeginTime?: string
+    lastTrackEndTime?: string
     pageSize?: number
     pageCurrent?: number
     telephoneStatus?: string
@@ -27,6 +29,7 @@ declare namespace Business {
     customerSource?: string
     payTaxesNature?: string
     currentSalesperson?: string
+    tab?: string
     [field: string]: any
   }
 }
