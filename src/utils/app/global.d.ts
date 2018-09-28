@@ -23,6 +23,10 @@ declare namespace APP {
     EnumSignCustomerSearchType?: Array<{label: string, value: string}>
     [type: string]: Array<{label: string, value: string}>
   }
+  interface GlobalFnProps {
+    getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
+  }
+  export const fn: GlobalFnProps
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction
   export const success: (msg: string) => void

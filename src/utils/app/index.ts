@@ -1,5 +1,7 @@
 import notification from 'pilipa/libs/notification'
+import * as fn from './fn'
 Object.assign(APP, {
+  fn,
   success: (msg: string) => {
     notification.success({
       message: msg

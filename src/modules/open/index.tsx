@@ -134,6 +134,9 @@ class Main extends React.Component {
     title: '释放时间',
     dataIndex: 'lastReleaseTime'
   }]
+  public componentWillMount () {
+    console.log(APP.fn.getDateSection(1))
+  }
   public onSelectAllChange () {
     console.log('select')
   }
