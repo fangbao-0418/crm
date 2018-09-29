@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'antd'
+import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { PaginationConfig } from 'antd/lib/pagination'
 import { fetchListRecycle } from './api'
@@ -8,6 +8,7 @@ type DetailProps = Business.DetailProps
 interface Props {
   columns: ColumnProps<DetailProps>[]
   params: Business.SearchProps
+  haneleSelectAll?: (selectedRowKeys: string[], type: number) => void
 }
 interface States {
   dataSource: DetailProps[]
@@ -54,14 +55,22 @@ class Main extends React.Component<Props> {
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-      <Table
-        columns={this.props.columns}
-        dataSource={this.state.dataSource}
-        rowSelection={rowSelection}
-        bordered
-        rowKey={'id'}
-        pagination={this.state.pagination}
-      />
+      <div>
+        <Table
+          columns={this.props.columns}
+          dataSource={this.state.dataSource}
+          rowSelection={rowSelection}
+          bordered
+          rowKey={'id'}
+          pagination={this.state.pagination}
+        />
+        <div>
+          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button>
+          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 2)}>转销售</Button>
+          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 3)}>转公海</Button>
+          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 4)}>转客资池</Button>
+        </div>
+      </div>
     )
   }
 }

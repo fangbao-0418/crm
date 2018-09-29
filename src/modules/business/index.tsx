@@ -128,7 +128,7 @@ class Main extends React.Component {
     title: '入库时间',
     dataIndex: 'enterDays'
   }]
-  componentWillMount () {
+  public componentWillMount () {
     this.fetchRecycleNum()
     this.fetchCustomerNum()
   }
