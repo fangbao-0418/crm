@@ -1,14 +1,17 @@
 import React from 'react'
-import { Row, Col, Icon, Button } from 'antd'
+import { Row, Col, Icon, Button, Select } from 'antd'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
+import FormItem from '@/components/form/Item1'
 import Modal from 'pilipa/libs/modal'
 import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
+import _ from 'lodash'
 import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
 import { addCustomer, updateCustomer } from './api'
+const Option = Select.Option
 interface Props extends Customer.Props {
   customerId?: string
   onClose?: () => void
@@ -56,10 +59,9 @@ class Main extends React.Component<Props> {
       }
     })
   }
-  public handleChange (e: React.SyntheticEvent, value: any) {
+  public handleChange (e: React.SyntheticEvent, value: {key: string, value: any}) {
     const detail: any = this.props.detail
-    detail[value.key] = value.value
-    console.log(detail, 'detail')
+    _.set(detail, value.key, value.value)
     APP.dispatch({
       type: 'change customer data',
       payload: {
@@ -92,6 +94,7 @@ class Main extends React.Component<Props> {
           <Col span={12}>
             <Input
               label={'联系人'}
+              field='contactPersons[0].contactPerson'
               addonAfter={
                 (
                   <Icon
@@ -102,32 +105,75 @@ class Main extends React.Component<Props> {
                   />
                 )
               }
-              value={this.props.linkMan[0].contactPerson}
+              onChange={this.handleChange.bind(this)}
+              value={this.props.detail.contactPersons[0].contactPerson}
             />
           </Col>
           <Col span={12}>
             <Input
               label='联系电话'
+              field='contactPersons[0].contactPhone'
+              onChange={this.handleChange.bind(this)}
               value={this.props.linkMan[0].contactPhone}
             />
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
           <Col span={12}>
-            <Input
-              field='customerSource'
-              label={'客户来源'}
-              onChange={this.handleChange.bind(this)}
-              value={this.props.detail.customerSource}
-            />
+            <FormItem
+              label='客户来源'
+            >
+              <Select
+                style={{width: '150px'}}
+                defaultValue={this.props.detail.customerSource}
+                onChange={(value) => {
+                  this.handleChange(null, {
+                    key: 'customerSource',
+                    value
+                  })
+                }}
+              >
+                {
+                  APP.keys.EnumCustomerSource.map((item) => {
+                    return (
+                      <Option
+                        key={item.value}
+                      >
+                        {item.label}
+                      </Option>
+                    )
+                  })
+                }
+              </Select>
+            </FormItem>
           </Col>
           <Col span={12}>
-            <Input
-              field='payTaxesNature'
-              onChange={this.handleChange.bind(this)}
+            <FormItem
               label='纳税类别'
-              value={this.props.detail.payTaxesNature}
-            />
+            >
+              <Select
+                style={{width: '150px'}}
+                defaultValue={APP.keys.EnumPayTaxesNature[0].value}
+                onChange={(value) => {
+                  this.handleChange(null, {
+                    key: 'payTaxesNature',
+                    value
+                  })
+                }}
+              >
+                {
+                  APP.keys.EnumPayTaxesNature.map((item) => {
+                    return (
+                      <Option
+                        key={item.value}
+                      >
+                        {item.label}
+                      </Option>
+                    )
+                  })
+                }
+              </Select>
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
