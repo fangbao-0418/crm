@@ -19,6 +19,7 @@ import Tab4 from './Tab4'
 import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
 import { appointment, toSales, toOpen, toCity } from './api'
+const styles = require('./style')
 type DetailProps = Business.DetailProps
 interface States {
   visible: boolean
@@ -393,6 +394,12 @@ class Main extends React.Component {
           </div>
         )}
       >
+        <div className={styles.note}>
+          <span className={styles['note-icon1']} />
+          <span className='mr10'>库容剩余不足10个，即将达到上限！</span>
+          <span className={styles['note-icon1']} />
+          <span>您的库容已达上限！</span>
+        </div>
         <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
@@ -433,7 +440,8 @@ class Main extends React.Component {
             <Tabs.TabPane tab='新客资(500)' key='3'>
               <Tab3 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
-            <Tabs.TabPane tab='即将被收回(53)' key='4'>
+            {/* <Tabs.TabPane tab='即将被收回(53)' key='4'> */}
+            <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>(有53个客户即将被收回！)</span></span>} key='4'>
               <Tab4 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
           </Tabs>

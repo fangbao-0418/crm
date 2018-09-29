@@ -13,8 +13,8 @@ declare namespace Open {
     id?: string
   }
   export interface SearchProps {
-    releaseTimeBegin?: string
-    releaseTimeEnd?: string
+    lastReleaseTimeBegin?: string
+    lastReleaseTimeEnd?: string
     createBeginDate?: string
     createEndDate?: string
     pageSize?: number
