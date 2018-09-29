@@ -7,11 +7,14 @@ interface OptionProps {
   value: string
 }
 interface States {
-  value: string
+  item: {label: string, value: string}
 }
-class Main extends React.Component {
+interface Props {
+  onChange: (item: {label: string, value: string}) => void
+}
+class Main extends React.Component<Props> {
   public state: States = {
-    value: ''
+    item: {label: '', value: ''}
   }
   public data: OptionProps[] = [
     {
@@ -51,13 +54,6 @@ class Main extends React.Component {
       value: '9'
     }
   ]
-  public handleChange (index: number, value: string) {
-    this.setState({
-      value
-    }, () => {
-      console.log(this.state.value)
-    })
-  }
   public render () {
     return (
       <div className={styles.reason}>
@@ -73,8 +69,13 @@ class Main extends React.Component {
                     <CheckableTag
                       key={index}
                       children={item.label}
-                      checked={item.value === this.state.value}
-                      onChange={this.handleChange.bind(this, index, item.value)}
+                      checked={item.value === this.state.item.value}
+                      onChange={() => {
+                        this.setState({
+                          item
+                        })
+                        this.props.onChange(item)
+                      }}
                     />
                   )
                 })

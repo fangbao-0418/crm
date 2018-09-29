@@ -20,6 +20,9 @@ export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modu
 export { default as loadAgentAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/agent-account' // 代理商账号
 export { default as loadDirectAccount } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage/direct-account' // 直营账号
 
+// 机构管理
+export { default as loadAgencyManage } from 'bundle-loader?lazy&name=[name]!@/modules/agency-manage' // 机构管理
+
 // 消息
 export { default as loadMessageList } from 'bundle-loader?lazy&name=[name]!@/modules/message/views/list' // 消息列表
 
@@ -28,8 +31,9 @@ export { default as loadWorkorderList } from 'bundle-loader?lazy&name=[name]!@/m
 export { default as loadWorkorderShow } from 'bundle-loader?lazy&name=[name]!@/modules/workorder/views/show' // 工单展示
 
 // 外勤
-export { default as loadTaskList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/list' // 绩效列表
-export { default as loadTaskShow } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/show' // 绩效展示
+export { default as loadTaskList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/list' // 任务列表
+export { default as loadTaskShow } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/show' // 任务详情
+export { default as loadTaskForm } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/task/form' // 添加任务
 export { default as loadTasktplList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/list' // 其他任务配置
 export { default as loadTasktplForm } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/form' // 其他任务配置展示
 export { default as loadTasktplSublist } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/sublist' // 通办任务配置

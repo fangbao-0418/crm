@@ -15,26 +15,15 @@ const defaultVal: Customer.Props = {
     autoDistributeWeight: '333',
     autoDistributeMaxNum: '11'
   }],
+  assignResult: {
+    allocatedNum: 0,
+    exists: [],
+    total: 0
+  },
   capacity:[]
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
-    payload = Object.assign({}, state, _.cloneDeep(payload))
-    return {
-      ...state,
-      ...payload
-    }
-  },
-  'change customer set auto data': (state, { payload }) => {
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
-    payload = Object.assign({}, state, _.cloneDeep(payload))
-    return {
-      ...state,
-      ...payload
-    }
-  },
-  'change customer set capacity data': (state, { payload }) => {
     payload = _.merge(_.cloneDeep(defaultVal), payload)
     payload = Object.assign({}, state, _.cloneDeep(payload))
     return {

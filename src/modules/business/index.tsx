@@ -1,8 +1,7 @@
 import React from 'react'
-import { Table, Button, DatePicker, Select, Tabs } from 'antd'
+import { DatePicker, Select, Tabs } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { PaginationConfig } from 'antd/lib/pagination'
-import { DetailProps } from './business'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -12,37 +11,33 @@ import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
-import { fetchList } from './api'
 import moment from 'moment'
+import Tab1 from './Tab1'
+import Tab2 from './Tab2'
+import Tab3 from './Tab3'
+import Tab4 from './Tab4'
+import Detail from '@/modules/customer/detail'
+import _ from 'lodash'
+import { appointment, toSales, toOpen, toCity } from './api'
+type DetailProps = Business.DetailProps
 interface States {
-  dataSource: DetailProps[]
-  selectedRowKeys: string[]
-  sales: DetailProps[]
-  customerCity: DetailProps[]
-  pagination: PaginationConfig
+  visible: boolean
+  defaultActiveKey: string
 }
+const all = [{
+  label: '全部',
+  value: ''
+}]
 class Main extends React.Component {
   public state: States = {
-    dataSource: [],
-    selectedRowKeys: [],
-    sales: [],
-    customerCity: [],
-    pagination: {
-      current: 1,
-      pageSize: 15,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
-    }
+    visible: true,
+    defaultActiveKey: '1'
   }
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
       value: 'all',
-      label: ['入库时间', '创建时间'],
+      label: ['入库时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
@@ -65,71 +60,34 @@ class Main extends React.Component {
     },
     {
       label: ['意向度'],
-      value: '0',
+      value: '',
       field: 'intention',
-      options: [
-        {
-          label: '全部',
-          value: '0'
-        },
-        {
-          label: '0%',
-          value: '1'
-        },
-        {
-          label: '30%',
-          value: '2'
-        },
-        {
-          label: '60%',
-          value: '3'
-        },
-        {
-          label: '80%',
-          value: '4'
-        },
-        {
-          label: '100%',
-          value: '5'
-        }
-      ]
+      options: all.concat(APP.keys.EnumIntentionality)
     },
     {
       field: 'telephoneStatus',
-      value: '0',
+      value: '',
       label: ['电话状态'],
-      options: [
-        {
-          label: '全部',
-          value: '0'
-        },
-        {
-          label: '无效电话',
-          value: '1'
-        },
-        {
-          label: '无人接听',
-          value: '2'
-        },
-        {
-          label: '直接拒绝',
-          value: '3'
-        },
-        {
-          label: '持续跟进',
-          value: '4'
-        },
-        {
-          label: '同行',
-          value: '5'
-        }
-      ]
+      options: all.concat(APP.keys.EnumContactStatus)
     }
   ]
-  public params: any = {}
+  public params: Business.SearchProps = {
+    tab: '1'
+  }
+  public paramsleft: Business.SearchProps = {}
+  public paramsright: Business.SearchProps = {}
+  public appointmentTime: string = ''
+  public curSale: {key: string, label: string} = { key: '', label: ''}
+  public cityCode: string = ''
+  public reason: {value: string, label: string} = { value: '', label: ''}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
-    dataIndex: 'customerName'
+    dataIndex: 'customerName',
+    render: (val, record) => {
+      return (
+        <a onClick={this.show.bind(this, record.id)}>{val}</a>
+      )
+    }
   }, {
     title: '联系人',
     dataIndex: 'contactPerson'
@@ -138,76 +96,116 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'can'
+    dataIndex: 'intention'
   }, {
     title: '电话状态',
-    dataIndex: 'flowtime'
+    dataIndex: 'telephoneStatus'
   }, {
     title: '空置天数',
-    dataIndex: 'vacantDays'
+    dataIndex: 'freeDays'
   }, {
     title: '当前销售',
     dataIndex: 'leadingPerson'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'source'
   }, {
     title: '创建时间',
     dataIndex: 'createTime'
   }, {
     title: '入库时间',
-    dataIndex: 'createTime'
+    dataIndex: 'enterDays'
   }]
-  public componentWillMount () {
-    this.fetchList()
-  }
-  public fetchList () {
-    const pagination = this.state.pagination
-    this.params.pageSize = pagination.pageSize
-    this.params.pageNum = pagination.current
-    fetchList(this.params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+  public handleSearch (values: any) {
+    this.paramsleft = {}
+    let beginTime
+    let endTime
+    if (values.date.value === 'all') {
+      beginTime = ''
+      endTime = ''
+    } else if (values.date.value.indexOf('至') > -1) {
+      beginTime = values.date.value.split('至')[0]
+      endTime = values.date.value.split('至')[1]
+    } else {
+      beginTime = moment().format('YYYY-MM-DD')
+      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+    }
+    if (values.date.label === '入库时间') {
+      this.paramsleft.storageBeginDate = beginTime
+      this.paramsleft.storageEndDate = endTime
+    } else if (values.date.label === '创建时间') {
+      this.paramsleft.createBeginDate = beginTime
+      this.paramsleft.createEndDate = endTime
+    } else if (values.date.label === '最后跟进') {
+      this.paramsleft.lastTrackBeginTime = beginTime
+      this.paramsleft.lastTrackEndTime = endTime
+    }
+    this.paramsleft.intention = values.intention.value
+    this.paramsleft.telephoneStatus = values.telephoneStatus.value
+    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params.tab = this.state.defaultActiveKey
+    this.setState({
+      visible: false
+    }, () => {
       this.setState({
-        dataSource: res.data
+        visible: true
       })
     })
   }
-  public handleSearch (values: any) {
-    console.log(values, 'values')
-    let beginTime
-    let endTime
-    if (values.date === 'all') {
-      beginTime = ''
-      endTime = ''
-    } else if (values.date.indexOf('至') > -1) {
-      beginTime = values.date.split('至')[0]
-      endTime = values.date.split('至')[1]
-    } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
-    }
-    this.params.intention = values.intention
-    this.params.telephoneStatus = values.telephoneStatus
-    this.params.beginTime = beginTime
-    this.params.endDate = endTime
-    console.log(this.params, '1')
-    this.fetchList()
-  }
   public handleSearchType (values: any) {
-    console.log(values, 'values')
-    this.params.type = values.type
-    this.params.word = values.word
-    console.log(this.params, '2')
-    this.fetchList()
+    this.paramsright = {}
+    switch (values.key) {
+    case '0':
+      this.paramsright.customerName = values.value
+      break
+    case '1':
+      this.paramsright.contactPerson = values.value
+      break
+    case '2':
+      this.paramsright.customerSource = values.value
+      break
+    case '3':
+      this.paramsright.currentSalesperson = values.value
+      break
+    case '4':
+      this.paramsright.contactPhone = values.value
+      break
+    case '5':
+      this.paramsright.payTaxesNature = values.value
+      break
+    }
+    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params.tab = this.state.defaultActiveKey
+    this.setState({
+      visible: false
+    }, () => {
+      this.setState({
+        visible: true
+      })
+    })
   }
-  public callback () {
-    console.log('11')
+  public callback (value?: string) {
+    this.params.tab = value
+    this.setState({
+      defaultActiveKey: value
+    })
   }
-  public onSelectAllChange () {
-    console.log('select')
+  public show (customerId: string) {
+    const modal = new Modal({
+      style: 'width: 840px',
+      content: (
+        <Provider><Detail customerId={customerId}/></Provider>
+      ),
+      footer: null,
+      header: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
   }
-  public appointmentAll () {
+  public appointmentAll (selectedRowKeys: string[]) {
     const modal = new Modal({
       content: (
         <div>
@@ -215,7 +213,7 @@ class Main extends React.Component {
           <DatePicker
             format={'YYYY-MM-DD'}
             onChange={(current) => {
-              console.log(current)
+              this.appointmentTime = current.format('YYYY-MM-DD')
             }}
           />
         </div>
@@ -223,6 +221,12 @@ class Main extends React.Component {
       title: '批量预约',
       mask: true,
       onOk: () => {
+        const params = { customerIdArr: selectedRowKeys }
+        console.log(params, 'params')
+        const time = this.appointmentTime
+        appointment(params, time).then((res) => {
+          APP.success('预约成功')
+        })
         modal.hide()
       },
       onCancel: () => {
@@ -231,28 +235,34 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public toSale () {
+  public toSale (selectedRowKeys: string[]) {
     const modal = new Modal({
       content: (
         <div>
           <span>请选择销售：</span>
           <Select
+            labelInValue
             style={{width:'200px'}}
-            onChange={(current) => {
-              console.log(current)
+            onChange={(val: {key: '', label: ''}) => {
+              this.curSale = val
             }}
           >
-            {
-              this.state.sales.map((d) =>
-                <Select.Option key={d.value}>{d.text}</Select.Option>
-              )
-            }
+            <Select.Option value='1'>销售1</Select.Option>
+            <Select.Option value='2'>销售2</Select.Option>
           </Select>
         </div>
       ),
       title: '销售',
       mask: true,
       onOk: () => {
+        const saleparams = {
+          customerIdArr: selectedRowKeys,
+          salesperson: this.curSale.label
+        }
+        const saleId = this.curSale.key
+        toSales(saleparams, saleId).then((res) => {
+          APP.success('操作成功')
+        })
         modal.hide()
       },
       onCancel: () => {
@@ -261,14 +271,21 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public toOpen () {
+  public toOpen (selectedRowKeys: string[]) {
     const modal = new Modal({
       content: (
-        <ToOpenReason/>
+        <ToOpenReason onChange={(item) => { this.reason = item }}/>
       ),
       title: '转公海',
       mask: true,
       onOk: () => {
+        const openparams = {
+          customerIdArr: selectedRowKeys,
+          bus_sea_memo: this.reason.label
+        }
+        toOpen(openparams).then((res) => {
+          APP.success('操作成功')
+        })
         modal.hide()
       },
       onCancel: () => {
@@ -277,28 +294,32 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public toCustomersCity () {
+  public toCustomersCity (selectedRowKeys: string[]) {
     const modal = new Modal({
       content: (
         <div>
           <span>请选择客资池：</span>
           <Select
             style={{width:'200px'}}
-            onChange={(current) => {
-              console.log(current)
+            onChange={(current: string) => {
+              this.cityCode = current
             }}
           >
-            {
-              this.state.customerCity.map((d) =>
-                <Select.Option key={d.value}>{d.text}</Select.Option>
-              )
-            }
+            <Select.Option value='110000'>北京</Select.Option>
+            <Select.Option value='120000'>天津</Select.Option>
           </Select>
         </div>
       ),
       title: '转客资池',
       mask: true,
       onOk: () => {
+        const cityparams = {
+          customerIdArr: selectedRowKeys,
+          cityCode: this.cityCode
+        }
+        toCity(cityparams).then((res) => {
+          APP.success('操作成功')
+        })
         modal.hide()
       },
       onCancel: () => {
@@ -309,13 +330,12 @@ class Main extends React.Component {
   }
   public add () {
     const modal = new Modal({
+      style: 'width: 800px',
       content: (
-        <Provider>
-          <BaseInfo/>
-        </Provider>
+        <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
       ),
       footer: null,
-      title: '新增',
+      title: '新增客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -338,11 +358,20 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public render () {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
+  public haneleSelectAll (selectedRowKeys: string[], type: number) {
+    console.log(type)
+    console.log(selectedRowKeys)
+    if (type === 1) {
+      this.appointmentAll(selectedRowKeys)
+    } else if (type === 2) {
+      this.toSale(selectedRowKeys)
+    } else if (type === 3) {
+      this.toOpen(selectedRowKeys)
+    } else if (type === 4) {
+      this.toCustomersCity(selectedRowKeys)
     }
+  }
+  public render () {
     return (
       <ContentBox
         title='我的商机'
@@ -374,7 +403,14 @@ class Main extends React.Component {
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={APP.keys.EnumCustomerSearchType}
+              options={[
+                { value: '0', label: '客户名称'},
+                { value: '1', label: '联系人'},
+                { value: '2', label: '客户来源'},
+                { value: '3', label: '所属销售'},
+                { value: '4', label: '联系电话'},
+                { value: '5', label: '纳税类别'}
+              ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
@@ -386,54 +422,22 @@ class Main extends React.Component {
             />
           </div>
         </div>
-        <Tabs defaultActiveKey='1' onChange={this.callback}>
-          <Tabs.TabPane tab='全部(160000)' key='1'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='已有沟通(18000)' key='2'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='新客资(500)' key='3'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='即将被收回(53)' key='4'>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              bordered
-              rowKey={'customerId'}
-              pagination={this.state.pagination}
-            />
-          </Tabs.TabPane>
-        </Tabs>
-        <div className='mt40'>
-          <Button type='primary' className='mr10' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
-          <Button type='primary' className='mr10' onClick={this.toSale.bind(this)}>转销售</Button>
-          <Button type='primary' className='mr10' onClick={this.toOpen.bind(this)}>转公海</Button>
-          <Button type='primary' className='mr10' onClick={this.toCustomersCity.bind(this)}>转客资池</Button>
-        </div>
+        { this.state.visible &&
+          <Tabs defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
+            <Tabs.TabPane tab='全部(160000)' key='1'>
+              <Tab1 columns={this.columns} params={this.params} haneleSelectAll={this.haneleSelectAll.bind(this)}/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab='已有沟通(18000)' key='2'>
+              <Tab2 columns={this.columns} params={this.params}/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab='新客资(500)' key='3'>
+              <Tab3 columns={this.columns} params={this.params}/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab='即将被收回(53)' key='4'>
+              <Tab4 columns={this.columns} params={this.params}/>
+            </Tabs.TabPane>
+          </Tabs>
+        }
       </ContentBox>
     )
   }

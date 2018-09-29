@@ -22,12 +22,26 @@ export const addCustomer = (payload: Customer.DetailProps) => {
   })
 }
 export const allotCustomer = (payload: {
-  agencyId: string
-  customerIds: string[]
-  salesPersonIds: Array<{
+  agencyId?: string
+  customerIds?: string[]
+  salesPerson?: Array<{
     id: string
     name: string
   }>
 }) => {
-  return http(`/api/customer/allocate`, 'POST', payload)
+  return http(`/api/customer/allocate`, 'PUT', payload)
+}
+export const deleteCustomer = (payload: string) => {
+  return http(`/api/customer/by-ids?customerIds=${payload}`, 'DELETE')
+}
+export const viewCustomer = (id: string) => {
+  return http(`/api/open-ocean/${id}`)
+}
+export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
+  return http(`/api/customer/${id}`, 'PUT', {
+    data: payload
+  })
+}
+export const fetchCityCount = () => {
+  return http(`/api/customer/stats/by-city`)
 }

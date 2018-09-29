@@ -1,19 +1,16 @@
 import React from 'react'
 import { Modal, Form, Input, Checkbox, Button, Select, Tree } from 'antd'
+import { FormComponentProps } from 'antd/lib/form'
 
 const styles = require('./index.styl')
 const Option = Select.Option
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
 
-interface Props {
-  info: {
-    title?: '添加账号' | '查看账号' | '修改账号' // 标题
-    visible?: boolean // 是否显示弹窗
-  }
-  onOk?: () => void // 确认回调
-  onCancle?: () => void // 取消回调
-  form?: any
+interface Props extends FormComponentProps {
+  mode: string
+  onOk?: (val: any) => void // 确认回调
+  onCancel?: () => void // 取消回调
 }
 
 // 过滤规则
@@ -44,16 +41,25 @@ const validation = {
     ]
   },
   role: {
-    rules:[{}]
+    rules:[
+      {required: true, message: '请选择角色！'}
+    ]
+  },
+  resource: {
+    rules:[
+      {required: true, message: '请选择是否接收资源！'}
+    ]
   },
   center: {
     rules: [{}]
   }
 }
 
-class Main extends React.Component<any, any> {
+class Main extends React.Component<Props, any> {
 
   public state = {
+    title: '',
+    isSell: false,
     expandedKeys: [''],
     checkedKeys: [''],
     treeData: [
@@ -95,6 +101,19 @@ class Main extends React.Component<any, any> {
     ]
   }
 
+  public componentWillMount () {
+    const {mode} = this.props
+    let title
+    if (mode === 'view') {
+      title = '查看权限'
+    } else if (mode === 'add') {
+      title = '添加权限'
+    } else if (mode === 'modify') {
+      title = '修改权限'
+    }
+    this.setState({title})
+  }
+
   // 点击确认按钮
   public confirm = () => {
     this.props.form.validateFields((err: any, val: any) => {
@@ -123,15 +142,6 @@ class Main extends React.Component<any, any> {
     })
   }
 
-  // 区域节点展开触发
-  public onExpand = (expandedKeys: any) => {
-    console.log('onExpand', expandedKeys)
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false
-    })
-  }
-
   // 区域勾选时触发
   public onCheck = (checkedKeys: any) => {
     console.log('onCheck', checkedKeys)
@@ -139,15 +149,14 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
-    const {info, form:{getFieldDecorator}} = this.props
+    const {mode, form:{getFieldDecorator}} = this.props
     return (
       <Modal
         className={styles.modal}
-        title={info.title}
-        visible={info.visible}
-        destroyOnClose={true}
-        cancelText='取消'
-        okText='确定'
+        title={this.state.title}
+        visible={true}
+        okButtonProps={{disabled: mode === 'view'}}
+        cancelButtonProps={{disabled: mode === 'view'}}
         onOk={this.confirm}
         onCancel={this.cancel}
       >
@@ -157,7 +166,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
             {
               getFieldDecorator('name', validation.name)(
-                <Input size='small' placeholder='请输入姓名'/>
+                <Input disabled={mode === 'view'} size='small' placeholder='请输入姓名'/>
               )
             }
           </FormItem>
@@ -165,7 +174,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='手机号'>
             {
               getFieldDecorator('phone', validation.phone)(
-                <Input size='small' placeholder='请输入手机号'/>
+                <Input disabled={mode === 'view'} size='small' placeholder='请输入手机号'/>
               )
             }
           </FormItem>
@@ -173,7 +182,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='邮箱'>
             {
               getFieldDecorator('email', validation.email)(
-                <Input size='small' placeholder='请输入邮箱'/>
+                <Input disabled={mode === 'view'} size='small' placeholder='请输入邮箱'/>
               )
             }
           </FormItem>
@@ -181,7 +190,7 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
             {
               getFieldDecorator('department', validation.department)(
-                <Select size='small' placeholder='请选择部门' notFoundContent='暂无数据' defaultValue='1'>
+                <Select disabled={mode === 'view'} size='small' placeholder='请选择部门' notFoundContent='暂无数据'>
                   <Option value='1'>11</Option>
                   <Option value='2'>22</Option>
                   <Option value='3'>33</Option>
@@ -193,7 +202,17 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
             {
               getFieldDecorator('role', validation.role)(
-                <Select size='small' placeholder='请选择角色' notFoundContent='暂无数据'>
+                <Select
+                  disabled={mode === 'view'}
+                  size='small'
+                  placeholder='请选择角色'
+                  notFoundContent='暂无数据'
+                  onSelect={
+                    (value, option) => {
+                      this.setState({isSell: value === '2'})
+                    }
+                  }
+                >
                   <Option key='1'>11</Option>
                   <Option key='2'>22</Option>
                   <Option key='3'>33</Option>
@@ -202,13 +221,23 @@ class Main extends React.Component<any, any> {
             }
           </FormItem>
 
+          {this.state.isSell && <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='接受资源'>
+            {
+              getFieldDecorator('resource', validation.resource)(
+                <Select disabled={mode === 'view'} size='small' placeholder='请选择是否接受资源' notFoundContent='暂无数据'>
+                  <Option key='1'>是</Option>
+                  <Option key='0'>否</Option>
+                </Select>
+              )
+            }
+          </FormItem>}
+
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
             {
               getFieldDecorator('center', validation.center)(
-                <Select size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
-                  <Option key='1'>11</Option>
-                  <Option key='2'>22</Option>
-                  <Option key='3'>33</Option>
+                <Select disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
+                  <Option key='1'>是</Option>
+                  <Option key='0'>否</Option>
                 </Select>
               )
             }
@@ -217,8 +246,8 @@ class Main extends React.Component<any, any> {
           <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
             <div className={styles.treeWrap}>
               <Tree
+                disabled={mode === 'view'}
                 checkable
-                onExpand={this.onExpand}
                 expandedKeys={this.state.expandedKeys}
                 onCheck={this.onCheck}
                 checkedKeys={this.state.checkedKeys}

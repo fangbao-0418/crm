@@ -3,9 +3,15 @@
  */
 import Service from '@/modules/common/services/service'
 
-class MessageService extends Service {
+class ModuleService extends Service {
   // 有全局配置后，再用全局配置
   public pageConf: any = {}
+  public taskNameDict: {[index: string]: string} = {
+    SHUIWU: '税务',
+    GONGSHANG: '工商',
+    QITA: '其他',
+    TESHU: '特殊'
+  }
   constructor () {
     super()
     this.pageConf.pageSize = 10
@@ -33,4 +39,4 @@ class MessageService extends Service {
   }
 }
 
-export default new MessageService()
+export default new ModuleService()

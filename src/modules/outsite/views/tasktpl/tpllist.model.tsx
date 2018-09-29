@@ -49,7 +49,7 @@ class Main extends React.Component<Props, any> {
                     // value={state.text}
                     placeholder='请输入子任务名称'
                     // onChange={this.handleTextChange}
-                    style={{ width: '25%',  marginLeft: '3%'}}
+                    style={{ width: '30%',  marginLeft: '3%'}}
                 />
           </Col>
           <Col style={{margin: 15}}>
@@ -57,7 +57,7 @@ class Main extends React.Component<Props, any> {
                 <Select
                     // value={state.currency}
                     // size={size}
-                    style={{ width: '25%', marginLeft: '3%' }}
+                    style={{ width: '30%', marginLeft: '3%' }}
                     // onChange={this.handleCurrencyChange}
                 >
                     <Option value='税务'>税务</Option>
@@ -71,7 +71,7 @@ class Main extends React.Component<Props, any> {
                 <Select
                     // value={state.currency}
                     // size={size}
-                    style={{ width: '25%', marginLeft: '3%' }}
+                    style={{ width: '30%', marginLeft: '3%' }}
                     // onChange={this.handleCurrencyChange}
                 >
                     <Option value='税务'>1</Option>

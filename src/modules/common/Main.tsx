@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
-import { fetchEnum, fetchTags } from './api'
+import { fetchEnum } from './api'
 const { Content } = Layout
 import Top from './Top'
 import {
@@ -12,9 +12,6 @@ import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
   public componentWillMount () {
-    fetchTags().then((res) => {
-      console.log(res)
-    })
     fetchEnum().then(() => {
       this.forceUpdate()
     })
@@ -40,6 +37,7 @@ export default class extends React.Component {
               <Route path='/center-department' component={modules.CenterDepartment}/>
               <Route path='/center-permission' component={modules.CenterPermission}/>
               <Route path='/center-role' component={modules.CenterRole}/>
+              <Route path='/agency-manage' component={modules.AgencyManage}/>
               <Route path='/agent-account' component={modules.AgentAccount}/>
               <Route path='/direct-account' component={modules.DirectAccount}/>
 
@@ -52,7 +50,8 @@ export default class extends React.Component {
 
               {/* 外勤 */}
               <Route path='/outsite/task/list' component={modules.TaskList}/>
-              <Route path='/outsite/task/form/:id' component={modules.TaskShow}/>
+              <Route path='/outsite/task/show/:id' component={modules.TaskShow}/>
+              <Route path='/outsite/task/form/:id' component={modules.TaskForm}/>
               <Route path='/outsite/tasktpl/list' component={modules.TasktplList}/>
               <Route path='/outsite/tasktpl/form/:id' component={modules.TasktplForm}/>
               <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>

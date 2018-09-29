@@ -93,7 +93,7 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props.linkMan)
     return (
-      <div style={{width: '600px'}}>
+      <div style={{width: '100%'}}>
         <Table
           dataSource={this.props.linkMan}
           columns={this.columns}

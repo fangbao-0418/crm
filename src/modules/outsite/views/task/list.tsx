@@ -1,14 +1,13 @@
 import React from 'react'
 import monent, { Moment } from 'moment'
-import { Modal, Icon, Table, Row, Col } from 'antd'
+import { Modal, Icon, Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { MessageList, MessageItem } from '@/modules/message/types/messge'
+import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
-import SearchForm from '@/modules/message/components/SearchForm'
+import SearchForm from '@/modules/outsite/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import Msg from '@/modules/message/services/message.tsx'
 import MessageShowModal from '@/modules/message/views/show.modal'
-import MsgService from '@/modules/message/services'
+import Service from '@/modules/outsite/services'
 
 const styles = require('../../styles/list.styl')
 
@@ -21,40 +20,45 @@ const content = `哈哈还多方哈士大夫哈市的合法化撒旦法，
     权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去
     玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE还多方哈士大夫哈市的合法化撒旦法，这里是内容
     阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE`
-const data = [
+const data: TaskList = [
   {
-    key: 1,
-    createdAt: '2018-09-18',
-    sender: {
-      uid: '1',
-      username: '二日'
-    },
-    title: '111消息的标题是什么呢',
-    readed: false,
-    content
-  },
-  {
-    key: 2,
-    createdAt: '2018-09-18',
-    sender: {
-      uid: '2',
-      username: '冻豆腐'
-    },
-    title: '111消息的标题是什么呢',
-    readed: true,
-    content
+    id: 1,
+    name: '测试1',
+    category: 'tax',
+    customerName: '客户名称',
+    contacter: '联系人',
+    subList: [
+      {
+        id: 2,
+        name: '测试1',
+        category: 'tax',
+        customerName: '客户名称',
+        contacter: '联系人',
+        subList: [
+
+        ],
+        status: 'complete',
+        areaName: '华东',
+        userName: '外勤'
+      }
+    ],
+    orderNo: 'sdf123123123',
+    status: 'complete',
+    areaName: '华东',
+    userName: '外勤',
+    startTime: '2018-09-12 18:23'
   }
 ]
 
 interface States {
   modalTitle: string,
   modalVisible: boolean,
-  dataSource: MessageList
+  dataSource: TaskList,
   selectedRowKeys: string[],
   showData?: any // 弹出层的数据
   pageConf?: any
 }
-interface ColProps extends MessageItem {
+interface ColProps extends TaskItem {
   dataIndex: string
   title: string
 }
@@ -68,50 +72,106 @@ class Main extends React.Component {
     selectedRowKeys: [],
     pageConf: {
       currentPage: 1,
-      total: 1
+      total: 1,
+      pageSize: 10
     }
   }
+  public tabList: any = [
+    {key: '1', name: '待分配'},
+    {key: '2', name: '已分配'},
+    {key: '3', name: '已完成'}
+  ]
   public columns: any = [{
-    title: '消息日期',
-    dataIndex: 'sendtime',
-    render: (key: any, item: MessageItem) => {
-      return <span>{item.createdAt}</span>
+    title: '订单号',
+    dataIndex: 'orderNo',
+    render: (key: any, item: TaskItem) => {
+      return <span>{item.orderNo}</span>
     }
   }, {
-    title: '消息标题',
-    dataIndex: 'title',
-    render: (k: any, item: MessageItem) => {
+    title: '客户名称',
+    dataIndex: 'customerName',
+    render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span className={item.readed ? styles.icohide : styles.icocui}><i>催</i></span>
-        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.title}</span>
+        <span className={item.status ? styles.icohide : styles.icocui}><i>催</i></span>
+        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
       </>)
     }
   }, {
-    title: '催办人',
-    dataIndex: 'sender',
-    render: (k: any, item: MessageItem) => {
+    title: '联系人',
+    dataIndex: 'userName',
+    render: (k: any, item: TaskItem) => {
       return (
-        <span>{item.sender.username}</span>
+      <>
+        <span>{item.userName}</span>
+      </>)
+    }
+  }, {
+    title: '所属区域',
+    dataIndex: 'areaName',
+    render: (k: any, item: TaskItem) => {
+      return (
+      <>
+        <span>{item.areaName}</span>
+      </>)
+    }
+  }, {
+    title: '服务状态',
+    dataIndex: 'status',
+    render: (k: any, item: TaskItem) => {
+      return (
+      <>
+        <span>{item.status}</span>
+      </>)
+    }
+  }, {
+    title: '任务名称',
+    dataIndex: 'category',
+    render: (k: any, item: TaskItem) => {
+      return (
+      <>
+        <span>{item.category}</span>
+      </>)
+    }
+  }, {
+    title: '当前子任务',
+    dataIndex: 'subtask',
+    render: (k: any, item: TaskItem) => {
+      return (
+        <span>{item.subList.length && item.subList[0].name}</span>
       )
     }
   }, {
-    title: '当前状态',
-    dataIndex: 'status',
-    render: (k: any, item: MessageItem) => {
+    title: '子任务状态',
+    dataIndex: 'subtaskStatus',
+    render: (k: any, item: TaskItem) => {
       return (
-        <span>{item.readed ? '已读' : '未读'}</span>
+        <span>{item.subList.length && item.subList[0].status}</span>
+      )
+    }
+  }, {
+    title: '当前外勤人员',
+    dataIndex: 'sublistUsername',
+    render: (k: any, item: TaskItem) => {
+      return (
+        <span>{item.subList.length && item.subList[0].userName}</span>
+      )
+    }
+  }, {
+    title: '接受任务时间',
+    dataIndex: 'status',
+    render: (k: any, item: TaskItem) => {
+      return (
+        <span>{item.startTime}</span>
       )
     }
   }, {
     title: '操作',
     dataIndex: 'operation',
-    render: (k: any, item: MessageItem) => {
+    render: (k: any, item: TaskItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
-          <span className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>|
-          <span className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
+          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
         </span>
       )
     }
@@ -126,18 +186,6 @@ class Main extends React.Component {
   }
 
   public componentDidMount () {
-    const msg = Msg({})
-    msg.evAdd('data', (cd: any) => {
-      msg.uiOpen({
-        message: '您有新的消息',
-        description: <MessageShowModal data={this.state.showData} />,
-        placement: 'bottomRight'
-      })
-    })
-    // 消息启动
-    msg.connect({
-      duration: 10000
-    })
   }
 
   // 全选反选
@@ -146,9 +194,23 @@ class Main extends React.Component {
     this.setState({selectedRowKeys})
   }
 
+  public virData () {
+    const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const item = data[0]
+    ids.map((id: number) => {
+      item.id = id
+      data.push(item)
+    })
+  }
+
   // 获取列表数据
   public getList () {
-    MsgService.getListByUserid(2).then((d: any) => {
+    this.virData()
+    this.setState({
+      dataSource: data
+    })
+    /*
+    Service.getListByUserid(2).then((d: any) => {
       const { pageSize, total, currentPage } = d
       this.setState({
         dataSource: d.records,
@@ -161,21 +223,22 @@ class Main extends React.Component {
         console.log('........', this.state)
       })
     })
+    */
   }
 
   // 查看
-  public onShow (item: MessageItem) {
+  public onShow (item: TaskItem) {
     console.log('show::', item)
-    this.modalShow(item.title, item)
+    APP.history.push(`/outsite/task/show/${item.id}`)
   }
 
   // 标记已读
-  public onRead (item: MessageItem) {
+  public onRead (item: TaskItem) {
     console.log('read::', item)
   }
 
   // 删除
-  public onDel (item: MessageItem) {
+  public onDel (item: TaskItem) {
     console.log('del::', item)
   }
 
@@ -206,26 +269,10 @@ class Main extends React.Component {
     // service.setReadedList(selectedRowKeys)
   }
 
-  public modalShow (title: string = '', showData: any = {}) {
-    this.setState({
-      modalVisible: true,
-      modalTitle: title ? title : this.state.modalTitle,
-      showData
-    })
-  }
-
-  public modalHide () {
-    this.setState({
-      modalVisible: false
-    })
-  }
-
-  public modalHandleOk () {
-    this.modalHide()
-  }
-
-  public modalHandleCancel () {
-    this.modalHide()
+  // tab切换
+  public onTabChange (key: string) {
+    console.log('tab change::', arguments)
+    // this.getList() // 不同状态参数
   }
 
   public render () {
@@ -238,39 +285,34 @@ class Main extends React.Component {
     }
     return (
     <div className={styles.container}>
-      <HCframe title='消息列表'>
+      <HCframe title='外勤任务'>
         <Row>
           <Col span={20}>
             <SearchForm onDateChange={this.onDateChange.bind(this)} />
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary' size={'small'} onClick={this.setReadedList.bind(this)}>标记为已读</Button>
-              <Button size={'small'} onClick={this.delList.bind(this)}>删除</Button>
+              <Button size={'small'} onClick={this.delList.bind(this)}>导出</Button>
             </span>
           </Col>
         </Row>
         <Row>
-          <Table
-            columns={this.columns}
-            dataSource={this.state.dataSource}
-            rowSelection={rowSelection}
-            bordered
-            pagination={this.state.pageConf}
-            rowKey={'key'}
-          />
+          <Tabs defaultActiveKey='1' onChange={this.onTabChange}>
+            {this.tabList.map((item: any) => {
+              return (<Tabs.TabPane key={item.key} tab={item.name}>
+                <Table
+                  columns={this.columns}
+                  dataSource={this.state.dataSource}
+                  rowSelection={rowSelection}
+                  bordered
+                  pagination={this.state.pageConf}
+                  rowKey={'key'}
+                />
+              </Tabs.TabPane>)
+            })}
+          </Tabs>
         </Row>
       </HCframe>
-      <Modal
-        // title={this.state.modalTitle}
-        title={`消息详情`}
-        visible={this.state.modalVisible}
-        onOk={this.modalHandleOk.bind(this)}
-        onCancel={this.modalHandleCancel.bind(this)}
-        footer={null}
-      >
-        <MessageShowModal data={this.state.showData} />
-      </Modal>
     </div>
     )
   }

@@ -6,12 +6,14 @@ declare namespace APP {
     goForward (): void
   }
   export type ActionType =
-    'change customer data' | 'change customer set auto data' | 'change customer set capacity data'
+    'change customer data'
   interface DispatchAction {
     type: ActionType
     payload?: Customer.ActionPayload
   }
   export interface EnumProps {
+    EnumIntentionality?: Array<{label: string, value: string}>
+    EnumContactStatus?: Array<{label: string, value: string}>
     EnumContactSource?: Array<{label: string, value: string}>
     EnumCustomerNameType?: Array<{label: string, value: string}>
     EnumCustomerSearchType?: Array<{label: string, value: string}>
@@ -23,6 +25,10 @@ declare namespace APP {
     EnumSignCustomerSearchType?: Array<{label: string, value: string}>
     [type: string]: Array<{label: string, value: string}>
   }
+  interface GlobalFnProps {
+    getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
+  }
+  export const fn: GlobalFnProps
   export let history: CustomHistory
   export let dispatch: (action: DispatchAction) => DispatchAction
   export const success: (msg: string) => void
