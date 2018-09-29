@@ -166,15 +166,17 @@ class Main extends React.Component<Props> {
         break
       default:
         options.forEach((item2) => {
-          tagNodes.push(
-            <div className={styles.tag}>
-              <CheckableTag
-                children={item2.label}
-                checked={item2.value === item.value}
-                onChange={this.handleChange.bind(this, index, item2.value)}
-              />
-            </div>
-          )
+          if (item2) {
+            tagNodes.push(
+              <div className={styles.tag}>
+                <CheckableTag
+                  children={item2.label}
+                  checked={item2.value === item.value}
+                  onChange={this.handleChange.bind(this, index, item2.value)}
+                />
+              </div>
+            )
+          }
         })
         tagNodes.push(
           this.getAfterNodes(index)
