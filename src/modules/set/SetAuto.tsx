@@ -1,11 +1,14 @@
 import React from 'react'
-import { Table, Input } from 'antd'
+import { Table, Input, Form, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { saveAutoAssign } from './api'
 import { changeAutoAssignAction } from './actions'
+const FormItem = Form.Item
 type DetailProps = Customer.AutoAssignProps
-class Main extends React.Component<Customer.Props> {
+interface Props extends Customer.Props, FormComponentProps {}
+class Main extends React.Component<Props> {
   public columns: ColumnProps<DetailProps>[] = [{
     title: '大区',
     dataIndex: 'bigAreaName'
@@ -20,11 +23,22 @@ class Main extends React.Component<Customer.Props> {
     dataIndex: 'autoDistributeWeight',
     render: (text, record, index) => {
       return (
-        <Input
-          onChange={this.onChange.bind(this, index, 'autoDistributeWeight')}
-          onBlur={this.save.bind(this)}
-          value={text}
-        />
+        <FormItem
+          style={{marginBottom: '0px'}}
+        >
+          {this.props.form.getFieldDecorator(`autoDistributeWeight[${index}]`, {
+            initialValue: text,
+            rules: [{
+              pattern: /^([0-9]|10)$/,
+              message: '权值只能输入0-10'
+            }]
+          })(
+          <Input
+            onChange={this.onChange.bind(this, index, 'autoDistributeWeight')}
+            value={text}
+          />
+          )}
+        </FormItem>
       )
     }
   }, {
@@ -32,11 +46,22 @@ class Main extends React.Component<Customer.Props> {
     dataIndex: 'autoDistributeMaxNum',
     render: (text, record, index) => {
       return (
-        <Input
-          onChange={this.onChange.bind(this, index, 'autoDistributeMaxNum')}
-          onBlur={this.save.bind(this)}
-          value={text}
-        />
+        <FormItem
+          style={{marginBottom: '0px'}}
+        >
+          {this.props.form.getFieldDecorator(`autoDistributeMaxNum[${index}]`, {
+            initialValue: text,
+            rules: [{
+              pattern: /^\d{1,5}$/,
+              message: '权值只能输入0-99999'
+            }]
+          })(
+            <Input
+              onChange={this.onChange.bind(this, index, 'autoDistributeMaxNum')}
+              value={text}
+            />
+          )}
+        </FormItem>
       )
     }
   }]
@@ -44,15 +69,9 @@ class Main extends React.Component<Customer.Props> {
     changeAutoAssignAction()
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
-    console.log(field)
-    let value = String($(e.target).val())
+    const value = String($(e.target).val())
     const dataSource: any = this.props.autoAssign
-    if (field === 'autoDistributeWeight' && value && /^([0-9]|10)$/.test(value) === false) {
-      value = '10'
-      APP.error('权值只能是1-10')
-    }
     dataSource[index][field] = value
-    console.log(dataSource, 'dataSource')
     APP.dispatch({
       type: 'change customer data',
       payload: {
@@ -61,18 +80,33 @@ class Main extends React.Component<Customer.Props> {
     })
   }
   public save () {
-    const dataSource: any = this.props.autoAssign
-    saveAutoAssign(dataSource)
+    this.props.form.validateFields((errors, values) => {
+      if (errors === null) {
+        const dataSource: any = this.props.autoAssign
+        saveAutoAssign(dataSource)
+        APP.success('保存成功')
+      }
+    })
   }
   public render () {
     return (
-      <Table
-        columns={this.columns}
-        dataSource={this.props.autoAssign}
-        bordered
-        rowKey={'customerId'}
-        pagination={false}
-      />
+      <div>
+        <Table
+          columns={this.columns}
+          dataSource={this.props.autoAssign}
+          bordered
+          rowKey={'customerId'}
+          pagination={false}
+        />
+        <div className='text-right mt10'>
+          <Button
+            type='primary'
+            onClick={this.save.bind(this)}
+          >
+            保存
+          </Button>
+        </div>
+      </div>
     )
   }
 }
@@ -80,4 +114,4 @@ export default connect((state: Reducer.State) => {
   return {
     ...state.customer
   }
-})(Main)
+})(Form.create()(Main))

@@ -1,14 +1,17 @@
 import React from 'react'
-import { Table, Input } from 'antd'
+import { Table, Input, Form, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from './actions'
 import { saveStorageCapacity } from './api'
+const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {
   selectedRowKeys: string[]
 }
-class Main extends React.Component<Customer.Props> {
+interface Props extends Customer.Props, FormComponentProps {}
+class Main extends React.Component<Props> {
   public state: States = {
     selectedRowKeys: []
   }
@@ -25,19 +28,70 @@ class Main extends React.Component<Customer.Props> {
     title: '销售库容',
     dataIndex: 'storageCapacity',
     render: (text, record, index) => {
-      return <Input onChange={this.onChange.bind(this, index, 'storageCapacity')} value={text}/>
+      return (
+        <FormItem
+          style={{marginBottom: '0px'}}
+        >
+          {this.props.form.getFieldDecorator(`storageCapacity[${index}]`, {
+            initialValue: text,
+            rules: [{
+              pattern: /^\d{1,6}$/,
+              message: '销售库容输入值范围（0-999999）'
+            }]
+          })(
+            <Input
+              onChange={this.onChange.bind(this, index, 'storageCapacity')}
+              value={text}
+            />
+          )}
+        </FormItem>
+      )
     }
   }, {
     title: '最大跟进期',
     dataIndex: 'maxTrackDays',
     render: (text, record, index) => {
-      return <Input onChange={this.onChange.bind(this, index, 'maxTrackDays')} value={text}/>
+      return (
+        <FormItem
+          style={{marginBottom: '0px'}}
+        >
+          {this.props.form.getFieldDecorator(`maxTrackDays[${index}]`, {
+            initialValue: text,
+            rules: [{
+              pattern: /^\d{1,4}$/,
+              message: '最大跟进期输入值范围（0-9999）'
+            }]
+          })(
+            <Input
+              onChange={this.onChange.bind(this, index, 'maxTrackDays')}
+              value={text}
+            />
+          )}
+        </FormItem>
+      )
     }
   }, {
     title: '最大保护期',
     dataIndex: 'maxProtectDays',
     render: (text, record, index) => {
-      return <Input onChange={this.onChange.bind(this, index, 'maxProtectDays')} value={text}/>
+      return (
+        <FormItem
+          style={{marginBottom: '0px'}}
+        >
+          {this.props.form.getFieldDecorator(`maxProtectDays[${index}]`, {
+            initialValue: text,
+            rules: [{
+              pattern: /^\d{1,4}$/,
+              message: '最大保护期输入值范围（0-9999）'
+            }]
+          })(
+            <Input
+              onChange={this.onChange.bind(this, index, 'maxProtectDays')}
+              value={text}
+            />
+          )}
+        </FormItem>
+      )
     }
   }]
   public componentWillMount () {
@@ -52,20 +106,35 @@ class Main extends React.Component<Customer.Props> {
         capacity: dataSource
       }
     })
-    saveStorageCapacity(dataSource)
   }
-  public onSelectAllChange () {
-    console.log('select')
+  public save () {
+    this.props.form.validateFields((errors, values) => {
+      if (errors === null) {
+        const dataSource = this.props.capacity
+        saveStorageCapacity(dataSource)
+        APP.success('保存成功')
+      }
+    })
   }
   public render () {
     return (
-      <Table
-        columns={this.columns}
-        dataSource={this.props.capacity}
-        bordered
-        rowKey={'customerId'}
-        pagination={false}
-      />
+      <div>
+        <Table
+          columns={this.columns}
+          dataSource={this.props.capacity}
+          bordered
+          rowKey={'customerId'}
+          pagination={false}
+        />
+        <div className='text-right mt10'>
+          <Button
+            type='primary'
+            onClick={this.save.bind(this)}
+          >
+            保存
+          </Button>
+        </div>
+      </div>
     )
   }
 }
@@ -73,4 +142,4 @@ export default connect((state: Reducer.State) => {
   return {
     ...state.customer
   }
-})(Main)
+})(Form.create()(Main))
