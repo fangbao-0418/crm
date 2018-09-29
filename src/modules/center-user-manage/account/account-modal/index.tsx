@@ -8,51 +8,10 @@ const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
 
 interface Props extends FormComponentProps {
-  mode: string
+  mode: string // 模式
+  info: any // 账户信息
   onOk?: (val: any) => void // 确认回调
   onCancel?: () => void // 取消回调
-}
-
-// 过滤规则
-const validation = {
-  name: {
-    validateTrigger: 'onBlur',
-    rules:[
-      {required: true, message: '请输入姓名！'}
-    ]
-  },
-  phone: {
-    validateTrigger: 'onBlur',
-    rules:[
-      {required: true, message: '请输入手机号！'},
-      {len: 11, message: '手机号格式不对！'}
-    ]
-  },
-  email: {
-    validateTrigger: 'onBlur',
-    rules:[
-      {required: true, message: '请输入邮箱！'},
-      {pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '邮箱格式不正确！'}
-    ]
-  },
-  department: {
-    rules:[
-      {required: true, message: '请选择部门！'}
-    ]
-  },
-  role: {
-    rules:[
-      {required: true, message: '请选择角色！'}
-    ]
-  },
-  resource: {
-    rules:[
-      {required: true, message: '请选择是否接收资源！'}
-    ]
-  },
-  center: {
-    rules: [{}]
-  }
 }
 
 class Main extends React.Component<Props, any> {
@@ -118,7 +77,8 @@ class Main extends React.Component<Props, any> {
   public confirm = () => {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
-      console.log(val)
+      val.region = this.state.checkedKeys
+      console.log('val:', val)
       this.props.onOk(val)
     })
   }
@@ -144,12 +104,65 @@ class Main extends React.Component<Props, any> {
 
   // 区域勾选时触发
   public onCheck = (checkedKeys: any) => {
-    console.log('onCheck', checkedKeys)
     this.setState({ checkedKeys })
   }
 
+  // 区域展开时触发
+  public onExpand = (expandedKeys: any) => {
+    this.setState({expandedKeys})
+  }
+
   public render () {
-    const {mode, form:{getFieldDecorator}} = this.props
+    const {mode, info = {}, form:{getFieldDecorator, setFieldsValue, getFieldsValue}} = this.props
+    // 过滤规则
+    const validation = {
+      name: {
+        initialValue: info.name,
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入姓名！'}
+        ]
+      },
+      phone: {
+        initialValue: info.phone,
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入手机号！'},
+          {len: 11, message: '手机号格式不对！'}
+        ]
+      },
+      email: {
+        initialValue: info.email,
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入邮箱！'},
+          {pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '邮箱格式不正确！'}
+        ]
+      },
+      department: {
+        initialValue: info.organizationName,
+        rules:[
+          {required: true, message: '请选择部门！'}
+        ]
+      },
+      role: {
+        initialValue: info.roleName,
+        rules:[
+          {required: true, message: '请选择角色！'}
+        ]
+      },
+      resource: {
+        rules:[
+          {required: true, message: '请选择是否接收资源！'}
+        ]
+      },
+      center: {
+        rules: [{}]
+      },
+      region: {
+        rules: [{}]
+      }
+    }
     return (
       <Modal
         className={styles.modal}
@@ -162,7 +175,6 @@ class Main extends React.Component<Props, any> {
       >
 
         <Form>
-
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
             {
               getFieldDecorator('name', validation.name)(
@@ -245,15 +257,20 @@ class Main extends React.Component<Props, any> {
 
           <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
             <div className={styles.treeWrap}>
-              <Tree
-                disabled={mode === 'view'}
-                checkable
-                expandedKeys={this.state.expandedKeys}
-                onCheck={this.onCheck}
-                checkedKeys={this.state.checkedKeys}
-              >
-                {this.renderTreeNodes(this.state.treeData)}
-              </Tree>
+              {
+                getFieldDecorator('region', validation.region)(
+                  <Tree
+                    disabled={mode === 'view'}
+                    checkable
+                    onExpand={this.onExpand}
+                    expandedKeys={this.state.expandedKeys}
+                    onCheck={this.onCheck}
+                    checkedKeys={this.state.checkedKeys}
+                  >
+                    {this.renderTreeNodes(this.state.treeData)}
+                  </Tree>
+                )
+              }
             </div>
           </FormItem>
 
