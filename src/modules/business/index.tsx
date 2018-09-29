@@ -36,12 +36,12 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      value: 'all',
+      value: '',
       label: ['入库时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
-          value: 'all'
+          value: ''
         },
         {
           label: '今天',
@@ -120,7 +120,7 @@ class Main extends React.Component {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (values.date.value === 'all') {
+    if (!values.date.value) {
       beginTime = ''
       endTime = ''
     } else if (values.date.value.indexOf('至') > -1) {
