@@ -58,15 +58,10 @@ class Main extends React.Component<Customer.Props> {
     console.log('select')
   }
   public render () {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
     return (
       <Table
         columns={this.columns}
         dataSource={this.props.capacity}
-        rowSelection={rowSelection}
         bordered
         rowKey={'customerId'}
         pagination={false}

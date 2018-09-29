@@ -18,7 +18,7 @@ interface Props {
 class Main extends React.Component<Props> {
   public value: {key: string, value: string}
   public render () {
-    const options = this.props.options.length > 0 ? this.props.options : [{value: undefined, label: undefined}]
+    const options = (this.props.options instanceof Array && this.props.options.length > 0) ? this.props.options : [{value: undefined, label: undefined}]
     const nodes: JSX.Element[] = []
     if (options.length > 0) {
       options.forEach((item) => {

@@ -26,8 +26,13 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
   [field: string]: any
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
-const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config?: AjaxConfigProps) => {
-  config = Object.assign({}, config)
+const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: AjaxConfigProps = {}) => {
+  let data: any
+  if (config instanceof Array) {
+    data = config
+    config = {}
+    config.data = data
+  }
   if (typeof type === 'object') {
     config = type
     if (typeof config.type === 'string' && RequestTypes.indexOf(config.type.toUpperCase()) > -1) {
@@ -41,7 +46,7 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config?: A
   }
   const extension = config.extension || {}
   delete config.extension
-  const data = config.data || config || {}
+  data = config.data || config || {}
   const headers = config.headers || undefined
   let ajaxConfig: JQuery.AjaxSettings = {
     url,

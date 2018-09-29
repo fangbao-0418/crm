@@ -5,13 +5,7 @@ import { connect } from 'react-redux'
 import { saveAutoAssign } from './api'
 import { changeAutoAssignAction } from './actions'
 type DetailProps = Customer.AutoAssignProps
-interface States {
-  selectedRowKeys: string[]
-}
 class Main extends React.Component<Customer.Props> {
-  public state: States = {
-    selectedRowKeys: []
-  }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '大区',
     dataIndex: 'bigAreaName'
@@ -25,42 +19,56 @@ class Main extends React.Component<Customer.Props> {
     title: '自动分配权值',
     dataIndex: 'autoDistributeWeight',
     render: (text, record, index) => {
-      return <Input onChange={this.onChange.bind(this, index, 'autoDistributeWeight')} value={text}/>
+      return (
+        <Input
+          onChange={this.onChange.bind(this, index, 'autoDistributeWeight')}
+          onBlur={this.save.bind(this)}
+          value={text}
+        />
+      )
     }
   }, {
     title: '自动分配日最大值',
     dataIndex: 'autoDistributeMaxNum',
     render: (text, record, index) => {
-      return <Input onChange={this.onChange.bind(this, index, 'autoDistributeMaxNum')} value={text}/>
+      return (
+        <Input
+          onChange={this.onChange.bind(this, index, 'autoDistributeMaxNum')}
+          onBlur={this.save.bind(this)}
+          value={text}
+        />
+      )
     }
   }]
   public componentWillMount () {
     changeAutoAssignAction()
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
+    console.log(field)
+    let value = String($(e.target).val())
     const dataSource: any = this.props.autoAssign
-    dataSource[index][field] = $(e.target).val()
+    if (field === 'autoDistributeWeight' && value && /^([0-9]|10)$/.test(value) === false) {
+      value = '10'
+      APP.error('权值只能是1-10')
+    }
+    dataSource[index][field] = value
+    console.log(dataSource, 'dataSource')
     APP.dispatch({
       type: 'change customer data',
       payload: {
         autoAssign: dataSource
       }
     })
+  }
+  public save () {
+    const dataSource: any = this.props.autoAssign
     saveAutoAssign(dataSource)
   }
-  public onSelectAllChange () {
-    console.log('select')
-  }
   public render () {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
     return (
       <Table
         columns={this.columns}
         dataSource={this.props.autoAssign}
-        rowSelection={rowSelection}
         bordered
         rowKey={'customerId'}
         pagination={false}

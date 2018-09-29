@@ -26,6 +26,7 @@ export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
     payload = _.merge(_.cloneDeep(defaultVal), payload)
     payload = Object.assign({}, state, _.cloneDeep(payload))
+    console.log(payload, 'payload')
     return {
       ...state,
       ...payload
