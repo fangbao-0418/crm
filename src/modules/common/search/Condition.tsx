@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tag, DatePicker, Menu, Dropdown } from 'antd'
+import DropDown from 'pilipa/libs/dropdown'
 import classNames from 'classnames'
 const { RangePicker } = DatePicker
 const { CheckableTag } = Tag
@@ -9,7 +10,10 @@ export interface ConditionOptionProps {
   options: Array<{label: string, value: string}>
   field?: string
   value?: string
-  type?: 'date'
+  type?: 'date' | 'select'
+}
+interface ValueProps {
+  [field: string]: {label: string, value: string}
 }
 interface Props {
   dataSource?: ConditionOptionProps[]
@@ -20,17 +24,28 @@ interface Props {
 interface States {
   dataSource: ConditionOptionProps[]
   labels: string[]
+  values: ValueProps
 }
 class Main extends React.Component<Props> {
   public state: States = {
     dataSource: this.props.dataSource,
-    labels: this.getLabels()
+    labels: this.getLabels(),
+    values: this.getValues()
   }
   public componentWillReceiveProps (props: Props) {
     this.setState({
       dataSource: props.dataSource,
       labels: this.getLabels(props.dataSource)
     })
+  }
+  public getValues () {
+    const values: ValueProps = {}
+    const dataSource = this.props.dataSource
+    dataSource.forEach((item) => {
+      const { field, options } = item
+      values[field] = options[0]
+    })
+    return values
   }
   public getLabels (dataSource = this.props.dataSource): string[] {
     const labels: string[] = []
@@ -107,20 +122,52 @@ class Main extends React.Component<Props> {
     dataSource.forEach((item, index) => {
       const options = item.options
       const tagNodes: JSX.Element[] = []
-      options.forEach((item2) => {
+      const type = item.type
+      switch (type) {
+      case 'select':
         tagNodes.push(
           <div className={styles.tag}>
-            <CheckableTag
-              children={item2.label}
-              checked={item2.value === item.value}
-              onChange={this.handleChange.bind(this, index, item2.value)}
+            <DropDown
+              setFields={{
+                key: 'value',
+                title: 'label'
+              }}
+              defaultValue={{
+                label: this.state.values[item.field].label
+              }}
+              data={options}
+              onChange={(value) => {
+                const values = this.state.values
+                values[item.field] = {
+                  label: value.title,
+                  value: value.key
+                }
+                this.setState({
+                  values
+                })
+                this.handleChange(index, value.key)
+              }}
             />
           </div>
         )
-      })
-      tagNodes.push(
-        this.getAfterNodes(index)
-      )
+        break
+      default:
+        options.forEach((item2) => {
+          tagNodes.push(
+            <div className={styles.tag}>
+              <CheckableTag
+                children={item2.label}
+                checked={item2.value === item.value}
+                onChange={this.handleChange.bind(this, index, item2.value)}
+              />
+            </div>
+          )
+        })
+        tagNodes.push(
+          this.getAfterNodes(index)
+        )
+        break
+      }
       const menu = this.getMenuNodes(index)
       const label = labels[index]
       nodes.push(

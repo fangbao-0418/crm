@@ -604,6 +604,10 @@
   dependencies:
     array-from "^2.1.1"
 
+"@types/ali-oss@^1.0.2":
+  version "1.0.2"
+  resolved "https://nexus.i-counting.cn/repository/accounting/@types/ali-oss/-/ali-oss-1.0.2.tgz#3f81e6d42df611939305f10752f4e5160bd3f055"
+
 "@types/classnames@^2.2.6":
   version "2.2.6"
   resolved "http://registry.npm.taobao.org/@types/classnames/download/@types/classnames-2.2.6.tgz#dbe8a666156d556ed018e15a4c65f08937c3f628"

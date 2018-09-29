@@ -1,5 +1,5 @@
 import React from 'react'
-import Main from './Main'
+import Main from '@/modules/common/Main'
 import { LocaleProvider } from 'antd'
 import { Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/lib/locale-provider/zh_CN'

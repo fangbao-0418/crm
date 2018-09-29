@@ -30,21 +30,5 @@ export default handleActions<Customer.Props>({
       ...state,
       ...payload
     }
-  },
-  'change customer set auto data': (state, { payload }) => {
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
-    payload = Object.assign({}, state, _.cloneDeep(payload))
-    return {
-      ...state,
-      ...payload
-    }
-  },
-  'change customer set capacity data': (state, { payload }) => {
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
-    payload = Object.assign({}, state, _.cloneDeep(payload))
-    return {
-      ...state,
-      ...payload
-    }
   }
 }, _.cloneDeep(defaultVal))

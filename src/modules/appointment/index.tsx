@@ -1,24 +1,42 @@
 import React from 'react'
 import { Table, Button, Row, Col, DatePicker, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { DetailProps } from './appointment'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
+import moment from 'moment'
+import { PaginationConfig } from 'antd/lib/pagination'
+import { fetchListappoint } from '@/modules/business/api'
+import Provider from '@/components/Provider'
+import Detail from '@/modules/customer/detail'
+import _ from 'lodash'
+type DetailProps = Business.DetailProps
 interface States {
   dataSource: DetailProps[]
-  selectedRowKeys: string[]
-  sales: DetailProps[]
-  customerCity: DetailProps[]
+  pagination: PaginationConfig
 }
+const all = [{
+  label: '全部',
+  value: ''
+}]
 class Main extends React.Component {
   public state: States = {
     dataSource: [],
-    selectedRowKeys: [],
-    sales: [],
-    customerCity: []
+    pagination: {
+      current: 1,
+      pageSize: 10,
+      showQuickJumper: true,
+      showSizeChanger: true,
+      pageSizeOptions: ['10', '20', '30', '40', '50'],
+      showTotal (total) {
+        return `共计 ${total} 条`
+      }
+    }
   }
+  public params: Business.SearchProps = {}
+  public paramsleft: Business.SearchProps = {}
+  public paramsright: Business.SearchProps = {}
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -31,85 +49,40 @@ class Main extends React.Component {
         },
         {
           label: '今天',
-          value: 'today'
+          value: '1'
         },
         {
           label: '7天',
-          value: '7d'
+          value: '7'
         },
         {
           label: '30天',
-          value: '30d'
+          value: '30'
         }
       ],
       type: 'date'
     },
     {
       label: ['意向度'],
-      value: '0',
+      value: '',
       field: 'intention',
-      options: [
-        {
-          label: '全部',
-          value: '0'
-        },
-        {
-          label: '0%',
-          value: '0%'
-        },
-        {
-          label: '30%',
-          value: '30%'
-        },
-        {
-          label: '60%',
-          value: '60%'
-        },
-        {
-          label: '80%',
-          value: '80%'
-        },
-        {
-          label: '100%',
-          value: '100%'
-        }
-      ]
+      options: all.concat(APP.keys.EnumIntentionality)
     },
     {
       field: 'telephoneStatus',
-      value: '0',
+      value: '',
       label: ['电话状态'],
-      options: [
-        {
-          label: '全部',
-          value: '0'
-        },
-        {
-          label: '无效电话',
-          value: '1'
-        },
-        {
-          label: '无人接听',
-          value: '2'
-        },
-        {
-          label: '直接拒绝',
-          value: '3'
-        },
-        {
-          label: '持续跟进',
-          value: '4'
-        },
-        {
-          label: '同行',
-          value: '5'
-        }
-      ]
+      options: all.concat(APP.keys.EnumContactStatus)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
-    dataIndex: 'customerName'
+    dataIndex: 'customerName',
+    render: (val, record) => {
+      return (
+        <a onClick={this.show.bind(this, record.id)}>{val}</a>
+      )
+    }
   }, {
     title: '联系人',
     dataIndex: 'contactPerson'
@@ -138,6 +111,90 @@ class Main extends React.Component {
     title: '预约时间',
     dataIndex: 'leadingPerson'
   }]
+  public componentWillMount () {
+    this.fetchList()
+  }
+  public fetchList () {
+    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    const params = _.cloneDeep(this.params)
+    const pagination = this.state.pagination
+    params.pageSize = pagination.pageSize
+    params.pageCurrent = pagination.current
+    fetchListappoint(params).then((res) => {
+      const pagination2 = { ...this.state.pagination }
+      pagination2.total = res.pageTotal
+      this.setState({
+        dataSource: res.data
+      })
+    })
+  }
+  public handleSearch (values: any) {
+    this.paramsleft = {}
+    let beginTime
+    let endTime
+    if (values.date.value === 'all') {
+      beginTime = ''
+      endTime = ''
+    } else if (values.date.value.indexOf('至') > -1) {
+      beginTime = values.date.value.split('至')[0]
+      endTime = values.date.value.split('至')[1]
+    } else {
+      beginTime = moment().format('YYYY-MM-DD')
+      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+    }
+    if (values.date.label === '入库时间') {
+      this.paramsleft.storageBeginDate = beginTime
+      this.paramsleft.storageEndDate = endTime
+    } else if (values.date.label === '创建时间') {
+      this.paramsleft.createBeginDate = beginTime
+      this.paramsleft.createEndDate = endTime
+    } else if (values.date.label === '最后跟进') {
+      this.paramsleft.lastTrackBeginTime = beginTime
+      this.paramsleft.lastTrackEndTime = endTime
+    }
+    this.paramsleft.intention = values.intention.value
+    this.paramsleft.telephoneStatus = values.telephoneStatus.value
+    this.fetchList()
+  }
+  public handleSearchType (values: any) {
+    this.paramsright = {}
+    switch (values.key) {
+    case '0':
+      this.paramsright.customerName = values.value
+      break
+    case '1':
+      this.paramsright.contactPerson = values.value
+      break
+    case '2':
+      this.paramsright.customerSource = values.value
+      break
+    case '3':
+      this.paramsright.currentSalesperson = values.value
+      break
+    case '4':
+      this.paramsright.contactPhone = values.value
+      break
+    case '5':
+      this.paramsright.payTaxesNature = values.value
+      break
+    }
+    this.fetchList()
+  }
+  public show (customerId: string) {
+    const modal = new Modal({
+      style: 'width: 840px',
+      content: (
+        <Provider><Detail customerId={customerId}/></Provider>
+      ),
+      footer: null,
+      header: null,
+      mask: true,
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     return (
       <ContentBox title='我的预约'>
@@ -145,18 +202,26 @@ class Main extends React.Component {
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
-              onChange={(values) => {
-                console.log(values)
-              }}
+              onChange={this.handleSearch.bind(this)}
             />
           </div>
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={APP.keys.EnumSignCustomerSearchType}
+              options={[
+                { value: '0', label: '客户名称'},
+                { value: '1', label: '联系人'},
+                { value: '2', label: '客户来源'},
+                { value: '3', label: '所属销售'},
+                { value: '4', label: '联系电话'},
+                { value: '5', label: '纳税类别'}
+              ]}
               placeholder={''}
-              onChange={(value) => {
-                console.log(value)
+              onKeyDown={(e, val) => {
+                if (e.keyCode === 13) {
+                  console.log(val, 'onKeyDown')
+                  this.handleSearchType(val)
+                }
               }}
             />
           </div>
@@ -165,7 +230,8 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           bordered
-          rowKey={'customerId'}
+          rowKey={'id'}
+          pagination={this.state.pagination}
         />
       </ContentBox>
     )

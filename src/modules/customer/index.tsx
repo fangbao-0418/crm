@@ -12,7 +12,7 @@ import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
-import { fetchList, fetchCityCustomerList } from './api'
+import { fetchList, fetchCityCustomerList, fetchCityCount } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
@@ -67,6 +67,7 @@ class Main extends React.Component {
       label: ['所属城市'],
       value: '110110',
       field: 'cityCode',
+      type: 'select',
       options: [
         {
           label: '北京(100)',
@@ -120,9 +121,12 @@ class Main extends React.Component {
   }]
   public componentWillMount () {
     this.fetchList()
-    // fetchCityCustomerList().then((res) => {
-    //   console.log(res)
-    // })
+    fetchCityCount().then((res) => {
+      console.log(res)
+    })
+    fetchCityCustomerList().then((res) => {
+      console.log(res)
+    })
   }
   public fetchList () {
     const pagination = this.state.pagination
@@ -204,7 +208,7 @@ class Main extends React.Component {
         <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
       ),
       footer: null,
-      title: '新增',
+      title: '新增客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -327,7 +331,7 @@ class Main extends React.Component {
           </div>
         )}
       >
-        <div className='mt12' style={{ overflow: 'hidden' }}>
+        <div className='mb10 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
