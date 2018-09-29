@@ -64,7 +64,7 @@ class Main extends React.Component<Props> {
           rowKey={'id'}
           pagination={this.state.pagination}
         />
-        <div className='mt40'>
+        <div>
           <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button>
           <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 2)}>转销售</Button>
           <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 3)}>转公海</Button>
