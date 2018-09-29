@@ -5,6 +5,11 @@ export const fetchList = (payload: SearchProps) => {
     data: payload
   })
 }
+export const getRecycleNum = (payload: SearchProps) => {
+  return http(`/api/business-opportunity/forthcoming-recycle-nums`, 'GET', {
+    data: payload
+  })
+}
 export const fetchListappoint = (payload: SearchProps) => {
   return http(`/api/customer-appointment`, 'GET', {
     data: payload

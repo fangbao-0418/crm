@@ -146,8 +146,8 @@ class Main extends React.Component {
       endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
     }
     if (values.date.label === '释放时间') {
-      this.paramsleft.releaseTimeBegin = beginTime
-      this.paramsleft.releaseTimeEnd = endTime
+      this.paramsleft.lastReleaseTimeBegin = beginTime
+      this.paramsleft.lastReleaseTimeEnd = endTime
     } else if (values.date.label === '创建时间') {
       this.paramsleft.createBeginDate = beginTime
       this.paramsleft.createEndDate = endTime
