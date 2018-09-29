@@ -40,12 +40,12 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      value: 'all',
-      label: ['入库时间', '创建时间'],
+      value: '',
+      label: ['预约时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
-          value: 'all'
+          value: ''
         },
         {
           label: '今天',
@@ -91,25 +91,25 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'can'
+    dataIndex: 'intention'
   }, {
     title: '电话状态',
-    dataIndex: 'flowtime'
+    dataIndex: 'telephoneStatus'
   }, {
     title: '空置天数',
-    dataIndex: 'vacantDays'
+    dataIndex: 'freeDays'
   }, {
     title: '当前销售',
-    dataIndex: 'leadingPerson'
+    dataIndex: 'current_salesperson'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'source'
   }, {
     title: '创建时间',
     dataIndex: 'createTime'
   }, {
     title: '预约时间',
-    dataIndex: 'leadingPerson'
+    dataIndex: 'appointmentTime'
   }]
   public componentWillMount () {
     this.fetchList()
@@ -132,7 +132,7 @@ class Main extends React.Component {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (values.date.value === 'all') {
+    if (!values.date.value) {
       beginTime = ''
       endTime = ''
     } else if (values.date.value.indexOf('至') > -1) {
@@ -142,9 +142,9 @@ class Main extends React.Component {
       beginTime = moment().format('YYYY-MM-DD')
       endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
     }
-    if (values.date.label === '入库时间') {
-      this.paramsleft.storageBeginDate = beginTime
-      this.paramsleft.storageEndDate = endTime
+    if (values.date.label === '预约时间') {
+      this.paramsleft.appointStartTime = beginTime
+      this.paramsleft.appointEndDate = endTime
     } else if (values.date.label === '创建时间') {
       this.paramsleft.createBeginDate = beginTime
       this.paramsleft.createEndDate = endTime

@@ -1,5 +1,4 @@
 import React from 'react'
-import AccountInfo from './AccountInfo'
 import BusinessInfo from './BusinessInfo'
 import BaseInfo from './BaseInfo'
 import LinkMan from './LinkMan'
@@ -39,9 +38,6 @@ class Main extends React.Component {
           title='联系方式'
         >
           <LinkMan />
-        </Card>
-        <Card title='财务信息'>
-          <AccountInfo />
         </Card>
       </div>
     )
