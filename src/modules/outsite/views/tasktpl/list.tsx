@@ -1,15 +1,17 @@
 import React from 'react'
-import { Table, Button, Row, Col } from 'antd'
+import { Table, Button, Row, Col, Modal } from 'antd'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import {  OrderItem } from '@/modules/outsite/types/outsite'
-const styles = require('@/modules/outsite/styles/list')
+import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
+const styles = require('@/modules/outsite/styles/tpllist')
 const data: any = []
 for (let i = 0; i < 25; i++) {
   data.push({
     id: i,
     workNo: `刻章 ${i}`,
     customerName: `税务 ${i}`,
+    deadline:`${i}`,
     createTime: `2018/09/18`,
     orderNo: `启用 ${i}`,
     managerName:`张三 ${i}`
@@ -23,6 +25,9 @@ class Main extends React.Component<any, any> {
     title: '任务分类',
     dataIndex: 'customerName'
   }, {
+    title: '期限(天))',
+    dataIndex: 'deadline'
+  },  {
     title: '操作时间',
     dataIndex: 'createTime'
   }, {
@@ -37,7 +42,7 @@ class Main extends React.Component<any, any> {
     render: (k: any, item: OrderItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
+          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
           <span className={`likebtn`} onClick={() => { this.onBegin.bind(this)(item) }}>启用</span>
         </span>
       )
@@ -47,10 +52,12 @@ class Main extends React.Component<any, any> {
     super(props)
     const value = props.value || {}
     this.state = {
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      modalVisible: false,
+      showData:{},
+      showTitle:''// 弹窗的标题
     }
   }
-
   public render () {
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -112,6 +119,15 @@ class Main extends React.Component<any, any> {
         <Table  columns={this.columns} dataSource={data} />
         </Row>
       </HCframe>
+      <Modal
+        title={this.state.showTitle}
+        visible={this.state.modalVisible}
+        onOk={this.modalHandleOk.bind(this)}
+        onCancel={this.modalHandleCancel.bind(this)}
+        footer={null}
+      >
+        <MessageShowModal data={this.state.showData} identifying={this.state.showTitle}/>
+      </Modal>
     </div>
     )
   }
@@ -120,10 +136,12 @@ class Main extends React.Component<any, any> {
     console.log('表单改变', formData)
   }
 
-  // 导出
+  // 新增
   public addtBtn () {
     console.log('点击新增')
+    this.setState({ showTitle: '新增' })
     // service.delList(selectedRowKeys)
+    this.modalShow()
   }
 
   // 搜索
@@ -133,13 +151,17 @@ class Main extends React.Component<any, any> {
     // service.setReadedList(selectedRowKeys)
   }
 
-  // 查看
+  // 编辑
   public onShow (item: OrderItem) {
-    console.log('点击查看')
+    console.log('点击编辑')
+    this.setState({ showTitle: '编辑' })
+    this.modalShow(item)
   }
   // 启用
   public onBegin (item: OrderItem) {
     console.log('点击启用禁用')
+    this.setState({ showTitle: '确认信息' })
+    this.modalShow(item)
   }
   // 选择的数组
   public onSelectChange = (selectedRowKeys: any) => {
@@ -149,6 +171,25 @@ class Main extends React.Component<any, any> {
   // 分页
   public pageChange = (selectedRowKeys: any) => {
     console.log('pageChange changed: ', selectedRowKeys)
+  }
+  public modalShow (showData: any = {}) {
+    this.setState({
+      modalVisible: true,
+      showData
+    })
+  }
+  public modalHide () {
+    this.setState({
+      modalVisible: false
+    })
+  }
+
+  public modalHandleOk () {
+    this.modalHide()
+  }
+
+  public modalHandleCancel () {
+    this.modalHide()
   }
 }
 export default Main

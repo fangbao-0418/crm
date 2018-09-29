@@ -71,7 +71,7 @@ class Main extends React.Component<any, any> {
                 onChange={this.props.onSearch}
                 onSubmit={this.props.onSearch}
             >
-                <span style={{ marginLeft: '3%'}}>子任务名称:</span>
+                <span style={{ marginLeft: '1%'}}>子任务名称:</span>
                 <Input
                     type='text'
                     size={size}
