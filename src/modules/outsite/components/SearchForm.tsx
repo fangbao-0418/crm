@@ -1,109 +1,89 @@
-import { Input, Select, Form, DatePicker, Button, Row } from 'antd'
 import React from 'react'
+import { Icon, Table, Input, Form, Select } from 'antd'
+import { ColumnProps } from 'antd/lib/table'
+import { DatePicker, Radio } from 'antd'
+import { Moment } from 'moment'
+import TaskService from '@/modules/outsite/services'
 
-const Option = Select.Option
-const { RangePicker } = DatePicker
+const { MonthPicker, RangePicker, WeekPicker } = DatePicker
 
+const FormItem = Form.Item
+
+interface States {
+  a?: any
+}
+interface Props {
+  onSearch: () => {}
+  dateOnChange: (d: Moment) => {}
+}
+
+function hasErrors (fieldsError: any) {
+  return Object.keys(fieldsError).some((field: any) => fieldsError[field])
+}
+
+// 搜索表单
 class Main extends React.Component<any, any> {
-  constructor (props: any) {
-    super(props)
-    const value = props.value || {}
-    this.state = {
-      text: value.text ,
-      currency: value.currency || '分类',
-      orderState: value.orderState || '状态',
-      dateArr:[]
-    }
+  public state: States = {
   }
 
-  public componentWillReceiveProps (nextProps: any) {
-    // Should be a controlled component.
-    if ('value' in nextProps) {
-      const value = nextProps.value
-      this.setState(value)
-    }
-  }
- // 输入框
-  public handleTextChange = (e: any) => {
-    const text = e.target.value
-    if (!('value' in this.props)) {
-      this.setState({ text })
-    }
-    this.triggerChange({ text })
+  public componentWillMount () {
   }
 
-  public triggerChange = (changedValue: any) => {
-    // Should provide an event to pass value to Form.
-    const onChange = this.props.onChange
-    if (onChange) {
-      onChange(Object.assign({}, this.state, changedValue))
+  public createTaskNameOptions () {
+    const dict = TaskService.taskNameDict
+    const options: Array<any> = []
+    for (const i in dict) {
+      if (i) {
+        options.push({
+          field: i,
+          label: dict[i]
+        })
+      }
     }
-  }
-  // 服务内容
-  public handleCurrencyChange = (currency: any) => {
-    if (!('value' in this.props)) {
-      this.setState({ currency })
-    }
-    this.triggerChange({ currency })
-  }
-  // 工单状态
-  public handleOrderStateChange = (orderState: any) => {
-    if (!('value' in this.props)) {
-      this.setState({ orderState })
-    }
-    this.triggerChange({ orderState })
-  }
-  // 筛选日期
-  public onDateChange = (dateArr: any) => {
-    if (!('value' in this.props)) {
-      this.setState({ dateArr })
-    }
-    this.triggerChange({ dateArr })
+    return options.map((item: any) => {
+      return <Select.Option key={`option-${item.field}`} value={item.field}>{item.label}</Select.Option>
+    })
   }
 
   public render () {
-    const { size } = this.props
-    const state = this.state
+    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
+
+    // Only show error after a field is touched.
+    const userNameError = isFieldTouched('userName') && getFieldError('userName')
+    const passwordError = isFieldTouched('password') && getFieldError('password')
+
     return (
-        <div className='t-search-form'>
-            <Form
-                layout='inline'
-                onChange={this.props.onSearch}
-                onSubmit={this.props.onSearch}
-            >
-                <span style={{ marginLeft: '1%'}}>子任务名称:</span>
-                <Input
-                    type='text'
-                    size={size}
-                    value={state.text}
-                    placeholder='请输入子任务名称'
-                    onChange={this.handleTextChange}
-                    style={{ width: '20%',  marginLeft: '3%'}}
-                />
-                <span style={{ marginLeft: '3%'}}>任务分类:</span>
-                <Select
-                    value={state.currency}
-                    size={size}
-                    style={{ width: '15%', marginLeft: '3%' }}
-                    onChange={this.handleCurrencyChange}
-                >
-                <Option value='税务'>税务</Option>
-                <Option value='工商'>工商</Option>
-                <Option value='其他'>其他</Option>
-                <Option value='特殊'>特殊</Option>
-                </Select>
-                <span style={{ marginLeft: '3%'}}>状态:</span>
-                <Select
-                    value={state.orderState}
-                    size={size}
-                    style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
-                    onChange={this.handleOrderStateChange}
-                >
-                <Option value='启用'>启用</Option>
-                <Option value='停用'>停用</Option>
-                </Select>
-            </Form>
-        </div>
+    <div className='t-search-form'>
+      <Form
+        layout='inline'
+        style={{width: '50%'}}
+        onChange={this.props.onSearch}
+        onSubmit={this.props.onSearch}
+      >
+        <FormItem>
+        {getFieldDecorator(`names`, {
+          rules: [{
+            required: false,
+            message: ''
+          }]
+        })(
+          <Input placeholder='请输入客户名称或者联系人' style={{width: '200px'}}/>
+        )}
+        </FormItem>
+        <FormItem>
+        {getFieldDecorator(`types`, {
+          rules: [{
+            required: false,
+            message: ''
+          }]
+        })(
+          <Select style={{width: '120px'}} value='税务'>
+            {this.createTaskNameOptions()}
+          </Select>
+        )}
+        </FormItem>
+      </Form>
+    </div>
     )
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Table, Button, Row, Col, Modal } from 'antd'
-import SearchForm from '@/modules/outsite/components/SearchForm'
+import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import {  OrderItem } from '@/modules/outsite/types/outsite'
+import {  OrderItem } from '@/modules/outsite/types/tploutside'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
 const styles = require('@/modules/outsite/styles/tpllist')
 const data: any = []
