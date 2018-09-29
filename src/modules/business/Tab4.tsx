@@ -2,7 +2,7 @@ import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { PaginationConfig } from 'antd/lib/pagination'
-import { fetchListRecycle, getRecycleNum } from './api'
+import { fetchListRecycle } from './api'
 import _ from 'lodash'
 type DetailProps = Business.DetailProps
 interface Props {
@@ -13,13 +13,11 @@ interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
   pagination: PaginationConfig
-  recycleNum: string
 }
 class Main extends React.Component<Props> {
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
-    recycleNum: '',
     pagination: {
       current: 1,
       pageSize: 15,
@@ -44,13 +42,6 @@ class Main extends React.Component<Props> {
       pagination2.total = res.pageTotal
       this.setState({
         dataSource: res.data
-      })
-    })
-  }
-  public fetchRecycleNum () {
-    getRecycleNum(this.props.params).then((res) => {
-      this.setState({
-        recycleNum: res.count
       })
     })
   }
