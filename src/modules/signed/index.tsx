@@ -15,6 +15,10 @@ import _ from 'lodash'
 import moment from 'moment'
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
+const all = [{
+  label: '全部',
+  value: ''
+}]
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
@@ -92,20 +96,7 @@ class Main extends React.Component {
       label: ['纳税类别'],
       value: '',
       field: 'payTaxesNature',
-      options: [
-        {
-          label: '全部',
-          value: ''
-        },
-        {
-          label: '小规模',
-          value: '1'
-        },
-        {
-          label: '一般人',
-          value: '2'
-        }
-      ]
+      options: all.concat(APP.keys.EnumPayTaxesNature)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{

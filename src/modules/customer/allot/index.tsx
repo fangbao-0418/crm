@@ -57,10 +57,8 @@ class Main extends React.Component<Props> {
               ids.push(item.id)
             })
             const payload = ids.join(',')
-            deleteCustomer(payload).then((res) => {
-              if (res.status) {
-                console.log('aa')
-              }
+            deleteCustomer(payload).then(() => {
+              APP.success('操作成功')
             })
           }}
         />

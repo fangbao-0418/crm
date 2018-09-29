@@ -8,7 +8,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
 import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
-import { addCustomer, viewCustomer, updateCustomer } from './api'
+import { addCustomer, updateCustomer } from './api'
 interface Props extends Customer.Props {
   customerId?: string
   onClose?: () => void

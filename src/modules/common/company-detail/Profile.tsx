@@ -1,6 +1,9 @@
 import React from 'react'
 const styles = require('./style')
-class Main extends React.Component {
+interface Props {
+  isShowAgent?: boolean
+}
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.profile}>
@@ -25,13 +28,16 @@ class Main extends React.Component {
             <label style={{marginLeft: '10px'}}>自主开发:</label><span>张飞</span>
             <label style={{marginLeft: '10px'}}></label><span>2018-02-10</span>
           </p>
-          <p>
-            <label>记账状态:</label><span>正常做账</span>
-            <label style={{marginLeft: '10px'}}>运营会计:</label><span>张飞飞</span>
-            <label style={{marginLeft: '10px'}}>核算会计:</label><span>张飞</span>
-            <label style={{marginLeft: '10px'}}>当前账期:</label><span>2018-09</span>
-            <label style={{marginLeft: '10px'}}>服务期止:</label><span>2019-10</span>
-          </p>
+          {
+            this.props.isShowAgent &&
+            <p>
+              <label>记账状态:</label><span>正常做账</span>
+              <label style={{marginLeft: '10px'}}>运营会计:</label><span>张飞飞</span>
+              <label style={{marginLeft: '10px'}}>核算会计:</label><span>张飞</span>
+              <label style={{marginLeft: '10px'}}>当前账期:</label><span>2018-09</span>
+              <label style={{marginLeft: '10px'}}>服务期止:</label><span>2019-10</span>
+            </p>
+          }
         </div>
       </div>
     )

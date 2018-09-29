@@ -91,25 +91,25 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'can'
+    dataIndex: 'intention'
   }, {
     title: '电话状态',
-    dataIndex: 'flowtime'
+    dataIndex: 'telephoneStatus'
   }, {
     title: '空置天数',
-    dataIndex: 'vacantDays'
+    dataIndex: 'freeDays'
   }, {
     title: '当前销售',
-    dataIndex: 'leadingPerson'
+    dataIndex: 'current_salesperson'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'source'
   }, {
     title: '创建时间',
     dataIndex: 'createTime'
   }, {
     title: '预约时间',
-    dataIndex: 'leadingPerson'
+    dataIndex: 'appointmentTime'
   }]
   public componentWillMount () {
     this.fetchList()

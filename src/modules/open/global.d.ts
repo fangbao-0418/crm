@@ -1,4 +1,4 @@
-declare namespace Business {
+declare namespace Open {
   export interface DetailProps {
     customerName?: string
     contactPerson?: string
@@ -6,23 +6,17 @@ declare namespace Business {
     intention?: string
     telephoneStatus?: string
     freeDays?: string
-    source?: string
-    createTime?: string
-    enterDays: string
-    leadingPerson?: string
-    appointmentTime?: string
+    customerSource?: string
+    createBeginDate?: string
+    lastReleaseSalesperson?: string
+    lastReleaseTime?: string
     id?: string
-    current_salesperson?: string
   }
   export interface SearchProps {
-    appointStartTime?: string
-    appointEndDate?: string
-    storageBeginDate?: string
-    storageEndDate?: string
+    releaseTimeBegin?: string
+    releaseTimeEnd?: string
     createBeginDate?: string
     createEndDate?: string
-    lastTrackBeginTime?: string
-    lastTrackEndTime?: string
     pageSize?: number
     pageCurrent?: number
     telephoneStatus?: string
@@ -31,9 +25,10 @@ declare namespace Business {
     contactPerson?: string
     contactPhone?: string
     customerSource?: string
+    lastReleaseSalesperson?: string
+    busSeaMemo?: string
     payTaxesNature?: string
-    currentSalesperson?: string
-    tab?: string
-    [field: string]: any
+    lastTrackTimeEnd?: string
+    lastTrackTimeBegin?: string
   }
 }
