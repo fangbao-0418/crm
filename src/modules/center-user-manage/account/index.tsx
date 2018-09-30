@@ -3,41 +3,82 @@ import { Input, Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import AccountModal from './account-modal'
+import { fetchAccountList, delAccount, addAccount, modifyAccount, fetchRegionList } from './api'
 
 const styles = require('./style')
 const Search = Input.Search
 
 interface State {
-  selectedRowKeys: any[]
-  dataSource: any[]
-  visible: boolean // 弹窗是否显示
+  pageTotal: number // 数据条数
+  selectedRowKeys: number[] // 选中账号
   mode: 'view' | 'modify' | 'add' // 弹窗的模式
+  visible: boolean // 弹窗是否显示
+  itemInfo: any // 选中项信息
+  dataSource: any[] // 表格数据
 }
 
 class Main extends React.Component {
 
+  public searchVal = {
+    pageCurrent: 1,
+    pageSize: 10,
+    name: '',
+    phone: '',
+    organizationName: ''
+  }
+
   public state: State = {
+    pageTotal: 100,
+    selectedRowKeys: [],
     mode: 'add',
     visible: false,
-    selectedRowKeys: [],
+    itemInfo: {},
     dataSource: [
       {
         id:3,
+        phone: '11111111333',
         name: '张三',
         email:'1@qq.com',
+        roleId: 1,
+        organizationId: 2,
         roleName:'财务',
-        phone: '11111111',
-        organizationName:'财务部'
-      },
-      {
-        id:5,
-        name: '李四',
-        email:'2@qq.com',
-        roleName:'财务1',
-        phone: '22222222',
-        organizationName:'财务部'
+        organizationName:'财务部',
+        acceptType: 0,
+        businessAccountingId: 3,
+        region: [
+          {
+            id: 1,
+            name: '负责区域A',
+            parentId: 0,
+            enableFlag: true,
+            regionFlag: true,
+            region: [
+              {
+                id: 2,
+                name: '负责区域A1',
+                parentId: 0,
+                enableFlag: true,
+                regionFlag: false
+              }
+            ]
+          }
+        ]
       }
     ]
+  }
+
+  public componentWillMount () {
+    // this.getList()
+  }
+
+  // 获取数据列表
+  public getList () {
+    fetchAccountList(this.searchVal).then((res) => {
+      this.setState({
+        dataSource: res.records,
+        pageTotal: res.pageTotal
+      })
+    })
   }
 
   // 多选触发
@@ -47,22 +88,28 @@ class Main extends React.Component {
   }
 
   // 查看、修改、添加账户
-  public showAccountModal = (mode: 'view' | 'modify' | 'add') => {
-    this.setState({mode, visible: true})
+  public showAccountModal = (mode: 'view' | 'modify' | 'add', itemInfo?: any) => {
+    this.setState({mode, itemInfo, visible: true})
   }
 
   // 确认删除
-  public delConfirm = () => {
+  public delConfirm = (type: 'batch' | 'single', id?: number) => {
     Modal.confirm({
       title: '删除账号',
       content: '确定删除账号吗？',
-      onOk: () => {},
-      onCancel: () => {}
+      onOk: () => {
+        let ids
+        type === 'batch' ? ids = this.state.selectedRowKeys : ids = [id]
+        // todo updateUser要从全局获取
+        delAccount({ids, updateUser: 111111}).then(() => {
+          this.getList()
+        })
+      }
     })
   }
 
   public render () {
-    const { selectedRowKeys } = this.state
+    const { selectedRowKeys, itemInfo, mode } = this.state
     const columns: any[] = [
       {
         title: '姓名',
@@ -89,11 +136,11 @@ class Main extends React.Component {
         render: (val: any, info: any) => {
           return (
             <div>
-              <a onClick={() => {this.showAccountModal('view')}}>查看</a>
+              <a onClick={() => {this.showAccountModal('view', info)}}>查看</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.showAccountModal('modify')}}>修改</a>
+              <a onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
               <Divider type='vertical'/>
-              <a onClick={this.delConfirm}>删除</a>
+              <a onClick={() => this.delConfirm('single', info.id)}>删除</a>
             </div>
           )
         }
@@ -111,7 +158,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加账号'
-            onClick={() => {this.showAccountModal('add')}}
+            onClick={() => this.showAccountModal('add')}
           />
         )}
       >
@@ -121,21 +168,24 @@ class Main extends React.Component {
             className={styles.search}
             placeholder='请输入姓名'
             onSearch={(value) => {
-              console.log(value)
+              this.searchVal = {...this.searchVal, name: value, phone: '', organizationName: ''}
+              this.getList()
             }}
           />
           <Search
             className={styles.search}
             placeholder='请输入手机号'
             onSearch={(value) => {
-              console.log(value)
+              this.searchVal = {...this.searchVal, name: '', phone: value, organizationName: ''}
+              this.getList()
             }}
           />
           <Search
             className={styles.search}
             placeholder='请输入部门名称'
             onSearch={(value) => {
-              console.log(value)
+              this.searchVal = {...this.searchVal, name: '', phone: '', organizationName: value}
+              this.getList()
             }}
           />
         </div>
@@ -147,7 +197,12 @@ class Main extends React.Component {
             dataSource={this.state.dataSource}
             columns={columns}
             pagination={{
-              showQuickJumper: true
+              showQuickJumper: true,
+              total: this.state.pageTotal,
+              onChange: (page, pageSize) => {
+                this.searchVal = {...this.searchVal, pageCurrent: page, pageSize}
+                this.getList()
+              }
             }}
             rowKey='id'
           />
@@ -159,7 +214,7 @@ class Main extends React.Component {
             type='primary'
             disabled={!this.state.selectedRowKeys.length}
             className={styles.delBtn}
-            onClick={this.delConfirm}
+            onClick={() => this.delConfirm('batch')}
           >
             批量删除
           </Button>
@@ -168,7 +223,8 @@ class Main extends React.Component {
         {
           this.state.visible &&
           <AccountModal
-            mode={this.state.mode}
+            info={itemInfo}
+            mode={mode}
             onOk={(val: any) => {
               console.log(445, val)
             }}

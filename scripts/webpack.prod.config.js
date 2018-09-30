@@ -190,7 +190,8 @@ module.exports = {
     imutable: 'Immutable',
     moment: 'moment',
     antd: 'antd',
-    'ali-oss': 'OSS'
+    'ali-oss': 'OSS',
+    echarts: 'echarts'
   },
   devtool: ''
 }

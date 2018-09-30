@@ -10,7 +10,7 @@ export interface ConditionOptionProps {
   options: Array<{label: string, value: string}>
   field?: string
   value?: string
-  type?: 'date' | 'select'
+  type?: 'date' | 'select' | 'month'
 }
 interface ValueProps {
   [field: string]: {label: string, value: string}
@@ -79,12 +79,25 @@ class Main extends React.Component<Props> {
     if (item.type === 'date') {
       node = (
         <div className={styles.after}>
-          <span>开始结束时间</span>
           <RangePicker
             format={'YYYY-MM-DD'}
             onChange={(current) => {
               console.log(current)
               item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
+              this.handleChange(index, item.value)
+            }}
+          />
+        </div>
+      )
+    }
+    if (item.type === 'month') {
+      node = (
+        <div className={styles.after}>
+          <RangePicker
+            format={'YYYY-MM'}
+            onChange={(current) => {
+              console.log(current)
+              item.value = [current[0].format('YYYY-MM'), current[1].format('YYYY-MM')].join('至')
               this.handleChange(index, item.value)
             }}
           />
@@ -153,15 +166,17 @@ class Main extends React.Component<Props> {
         break
       default:
         options.forEach((item2) => {
-          tagNodes.push(
-            <div className={styles.tag}>
-              <CheckableTag
-                children={item2.label}
-                checked={item2.value === item.value}
-                onChange={this.handleChange.bind(this, index, item2.value)}
-              />
-            </div>
-          )
+          if (item2) {
+            tagNodes.push(
+              <div className={styles.tag}>
+                <CheckableTag
+                  children={item2.label}
+                  checked={item2.value === item.value}
+                  onChange={this.handleChange.bind(this, index, item2.value)}
+                />
+              </div>
+            )
+          }
         })
         tagNodes.push(
           this.getAfterNodes(index)

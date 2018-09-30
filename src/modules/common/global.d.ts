@@ -1,5 +1,5 @@
 declare namespace Common {
   export interface Props {
-    ajaxCount: number
-  }
+        ajaxCount: number
+    }
 }

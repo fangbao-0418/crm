@@ -10,9 +10,13 @@ declare namespace Business {
     createTime?: string
     enterDays: string
     leadingPerson?: string
+    appointmentTime?: string
     id?: string
+    current_salesperson?: string
   }
   export interface SearchProps {
+    appointStartTime?: string
+    appointEndDate?: string
     storageBeginDate?: string
     storageEndDate?: string
     createBeginDate?: string

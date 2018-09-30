@@ -18,11 +18,19 @@ import Tab3 from './Tab3'
 import Tab4 from './Tab4'
 import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
-import { appointment, toSales, toOpen, toCity } from './api'
+import { appointment, toSales, toOpen, toCity, getRecycleNum, getCustomerNum } from './api'
+const styles = require('./style')
 type DetailProps = Business.DetailProps
 interface States {
   visible: boolean
   defaultActiveKey: string
+  recycleNum: string
+  customerNum: Array<{
+    allNums?: string
+    trackContactNums?: string
+    newCustomerNums?: string
+    ForthcomingNums?: string
+  }>
 }
 const all = [{
   label: '全部',
@@ -31,17 +39,23 @@ const all = [{
 class Main extends React.Component {
   public state: States = {
     visible: true,
-    defaultActiveKey: '1'
+    defaultActiveKey: '1',
+    recycleNum: '',
+    customerNum: [{
+      allNums: '',
+      trackContactNums: '',
+      newCustomerNums: ''
+    }]
   }
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      value: 'all',
+      value: '',
       label: ['入库时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
-          value: 'all'
+          value: ''
         },
         {
           label: '今天',
@@ -71,9 +85,7 @@ class Main extends React.Component {
       options: all.concat(APP.keys.EnumContactStatus)
     }
   ]
-  public params: Business.SearchProps = {
-    tab: '1'
-  }
+  public params: Business.SearchProps = {}
   public paramsleft: Business.SearchProps = {}
   public paramsright: Business.SearchProps = {}
   public appointmentTime: string = ''
@@ -116,11 +128,29 @@ class Main extends React.Component {
     title: '入库时间',
     dataIndex: 'enterDays'
   }]
+  public componentWillMount () {
+    this.fetchRecycleNum()
+    this.fetchCustomerNum()
+  }
+  public fetchCustomerNum () {
+    getCustomerNum(this.params).then((res) => {
+      this.setState({
+        customerNum: res
+      })
+    })
+  }
+  public fetchRecycleNum () {
+    getRecycleNum(this.params).then((res) => {
+      this.setState({
+        recycleNum: res.count
+      })
+    })
+  }
   public handleSearch (values: any) {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (values.date.value === 'all') {
+    if (!values.date.value) {
       beginTime = ''
       endTime = ''
     } else if (values.date.value.indexOf('至') > -1) {
@@ -143,6 +173,8 @@ class Main extends React.Component {
     this.paramsleft.intention = values.intention.value
     this.paramsleft.telephoneStatus = values.telephoneStatus.value
     this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.fetchRecycleNum()
+    this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
     this.setState({
       visible: false
@@ -175,6 +207,8 @@ class Main extends React.Component {
       break
     }
     this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.fetchRecycleNum()
+    this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
     this.setState({
       visible: false
@@ -393,6 +427,12 @@ class Main extends React.Component {
           </div>
         )}
       >
+        <div className={styles.note}>
+          <span className={styles['note-icon1']} />
+          <span className='mr10'>库容剩余不足10个，即将达到上限！</span>
+          <span className={styles['note-icon1']} />
+          <span>您的库容已达上限！</span>
+        </div>
         <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
@@ -424,16 +464,17 @@ class Main extends React.Component {
         </div>
         { this.state.visible &&
           <Tabs defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
-            <Tabs.TabPane tab='全部(160000)' key='1'>
+            <Tabs.TabPane tab={<span>全部({this.state.customerNum[0].allNums})</span>} key='1'>
               <Tab1 columns={this.columns} params={this.params} haneleSelectAll={this.haneleSelectAll.bind(this)}/>
             </Tabs.TabPane>
-            <Tabs.TabPane tab='已有沟通(18000)' key='2'>
+            <Tabs.TabPane tab={<span>已有沟通({this.state.customerNum[0].trackContactNums})</span>} key='2'>
               <Tab2 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
-            <Tabs.TabPane tab='新客资(500)' key='3'>
+            <Tabs.TabPane tab={<span>新客资({this.state.customerNum[0].newCustomerNums})</span>} key='3'>
               <Tab3 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
-            <Tabs.TabPane tab='即将被收回(53)' key='4'>
+            {/* <Tabs.TabPane tab='即将被收回(53)' key='4'> */}
+            <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>(有{this.state.recycleNum}个客户即将被收回！)</span></span>} key='4'>
               <Tab4 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
           </Tabs>

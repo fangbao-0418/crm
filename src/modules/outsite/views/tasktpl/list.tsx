@@ -1,219 +1,201 @@
 import React from 'react'
-import monent, { Moment } from 'moment'
-import { Modal, Icon, Table, Row, Col } from 'antd'
-import { ColumnProps } from 'antd/lib/table'
-import { MessageList, MessageItem } from '@/modules/message/types/messge'
-import { Button } from 'antd'
-import SearchForm from '@/modules/message/components/SearchForm'
+import { Table, Button, Row, Col, Modal } from 'antd'
+import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import Msg from '@/modules/message/services/message.tsx'
-import MessageShowModal from '@/modules/message/views/show.modal'
-import MsgService from '@/modules/message/services'
-
-const styles = require('../../styles/list.styl')
-
-const content = `哈哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了
-    经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬
-    ，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多
-    方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计
-    权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去
-    玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE还多方哈士大夫哈市的合法化撒旦法，这里是内容
-    阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE`
-const data = [
+import {  OrderItem } from '@/modules/outsite/types/tploutside'
+import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
+const styles = require('@/modules/outsite/styles/tpllist')
+const data: any = [
   {
-    key: 1,
-    createdAt: '2018-09-18',
-    sender: {
-      uid: '1',
-      username: '二日'
-    },
-    title: '111消息的标题是什么呢',
-    readed: false,
-    content
+    id: '3',
+    name: '网上申请',
+    priority: 'close',
+    status: 'normal', // 状态 forbidden 禁用 normal 启用
+    type: 'sub',
+    category: 'tax', // tax 税务，business 工商，others 其他，special 特殊
+
+    subList: null,
+    delFlag: 0
   },
   {
-    key: 2,
-    createdAt: '2018-09-18',
-    sender: {
-      uid: '2',
-      username: '冻豆腐'
-    },
-    title: '111消息的标题是什么呢',
-    readed: true,
-    content
+    id: '4',
+    name: '下发执照',
+    priority: 'close',
+    status: 'forbidden',
+    type: 'sub',
+    category: 'business',
+    subList: null,
+    delFlag: 0
+  },
+  {
+    id: '5',
+    name: '刻章',
+    priority: 'close',
+    status: 'normal',
+    type: 'sub',
+    category: 'others',
+    subList: null,
+    delFlag: 0
   }
 ]
-
-interface States {
-  modalTitle: string,
-  modalVisible: boolean,
-  dataSource: MessageList
-  selectedRowKeys: string[],
-  showData?: any // 弹出层的数据
-  pageConf?: any
-}
-interface ColProps extends MessageItem {
-  dataIndex: string
-  title: string
-}
-
-// 列表
-class Main extends React.Component {
-  public state: States = {
-    modalTitle: '',
-    modalVisible: false,
-    dataSource: [],
-    selectedRowKeys: [],
-    pageConf: {
-      currentPage: 1,
-      total: 1
-    }
-  }
-  public columns: any = [{
-    title: '消息日期',
-    dataIndex: 'sendtime',
-    render: (key: any, item: MessageItem) => {
-      return <span>{item.createdAt}</span>
-    }
+class Main extends React.Component<any, any> {
+  public columns = [{
+    title: '子任务名称',
+    dataIndex: 'name'
   }, {
-    title: '消息标题',
-    dataIndex: 'title',
-    render: (k: any, item: MessageItem) => {
-      return (
-      <>
-        <span className={item.readed ? styles.icohide : styles.icocui}><i>催</i></span>
-        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.title}</span>
-      </>)
-    }
+    title: '任务分类',
+    dataIndex: 'category'
   }, {
-    title: '催办人',
-    dataIndex: 'sender',
-    render: (k: any, item: MessageItem) => {
-      return (
-        <span>{item.sender.username}</span>
-      )
-    }
+    title: '期限(天))',
+    dataIndex: 'id'
+  },  {
+    title: '操作时间',
+    dataIndex: 'id'
   }, {
-    title: '当前状态',
-    dataIndex: 'status',
-    render: (k: any, item: MessageItem) => {
-      return (
-        <span>{item.readed ? '已读' : '未读'}</span>
-      )
-    }
+    title: '状态',
+    dataIndex: 'status'
   }, {
     title: '操作',
-    dataIndex: 'operation',
-    render: (k: any, item: MessageItem) => {
+    dataIndex: 'take',
+    render: (k: any, item: OrderItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
-          <span className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>|
-          <span className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
+          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
+          <span className={`likebtn`} onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'normal' ? '启用' : '禁用'}</span>
         </span>
       )
     }
   }]
-
-  public constructor (props: any, state: any) {
-    super({})
+  constructor (props: any) {
+    super(props)
+    const value = props.value || {}
+    this.state = {
+      selectedRowKeys: [],
+      modalVisible: false,
+      showData:{},
+      showTitle:''// 弹窗的标题
+    }
   }
-
-  public componentWillMount () {
-    this.getList()
-  }
-
-  public componentDidMount () {
-    const msg = Msg({})
-    msg.evAdd('data', (cd: any) => {
-      msg.uiOpen({
-        message: '您有新的消息',
-        description: <MessageShowModal data={this.state.showData} />,
-        placement: 'bottomRight'
-      })
-    })
-    // 消息启动
-    msg.connect({
-      duration: 10000
-    })
-  }
-
-  // 全选反选
-  public onSelectAllChange (selectedRowKeys: any) {
-    console.log('select')
-    this.setState({selectedRowKeys})
-  }
-
-  // 获取列表数据
-  public getList () {
-    MsgService.getListByUserid(2).then((d: any) => {
-      const { pageSize, total, currentPage } = d
-      this.setState({
-        dataSource: d.records,
-        pageConf: {
-          pageSize,
-          total,
-          currentPage
+  public render () {
+    const { selectedRowKeys } = this.state
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+      hideDefaultSelections: true,
+      selections: [{
+        key: 'all-data',
+        text: 'Select All Data',
+        onSelect: () => {
+          this.setState({
+            // selectedRowKeys: [...Array(46).keys()] // 0...45
+          })
         }
-      }, () => {
-        console.log('........', this.state)
-      })
-    })
+      }, {
+        key: 'odd',
+        text: 'Select Odd Row',
+        onSelect: (changableRowKeys: any) => {
+          let newSelectedRowKeys = []
+          newSelectedRowKeys = changableRowKeys.filter((key: any, index: any) => {
+            if (index % 2 !== 0) {
+              return false
+            }
+            return true
+          })
+          this.setState({ selectedRowKeys: newSelectedRowKeys })
+        }
+      }, {
+        key: 'even',
+        text: 'Select Even Row',
+        onSelect: (changableRowKeys: any) => {
+          let newSelectedRowKeys = []
+          newSelectedRowKeys = changableRowKeys.filter((key: any, index: any) => {
+            if (index % 2 !== 0) {
+              return true
+            }
+            return false
+          })
+          this.setState({ selectedRowKeys: newSelectedRowKeys })
+        }
+      }]
+      // onSelection: this.onSelection
+    }
+    return (
+      <div className={styles.container}>
+      <HCframe title='其他任务配置'>
+        <Row>
+          <Col span={20}>
+            <SearchForm onChange={this.onChange.bind(this)} />
+          </Col>
+          <Col span={4} style={{textAlign: 'right'}}>
+            <span className={styles.acts}>
+              <Button type='primary'  onClick={this.searchBtn.bind(this)}>搜索</Button>
+              <Button type='primary'  onClick={this.addtBtn.bind(this)}>新增</Button>
+            </span>
+          </Col>
+        </Row>
+        <Row>
+        <Table  columns={this.columns} dataSource={data} />
+        </Row>
+      </HCframe>
+      <Modal
+        title={this.state.showTitle}
+        visible={this.state.modalVisible}
+        onOk={this.modalHandleOk.bind(this)}
+        onCancel={this.modalHandleCancel.bind(this)}
+        footer={null}
+      >
+        <MessageShowModal data={this.state.showData} identifying={this.state.showTitle}/>
+      </Modal>
+    </div>
+    )
+  }
+  // 表单改变
+  public onChange (formData: any) {
+    console.log('表单改变', formData)
   }
 
-  // 查看
-  public onShow (item: MessageItem) {
-    console.log('show::', item)
-    this.modalShow(item.title, item)
-  }
-
-  // 标记已读
-  public onRead (item: MessageItem) {
-    console.log('read::', item)
-  }
-
-  // 删除
-  public onDel (item: MessageItem) {
-    console.log('del::', item)
+  // 新增
+  public addtBtn () {
+    console.log('点击新增')
+    this.setState({ showTitle: '新增' })
+    // service.delList(selectedRowKeys)
+    this.modalShow()
   }
 
   // 搜索
-  public onSearch (values: any) {
-    console.log('search::', values)
-  }
-
-  // 搜索 日期切换
-  public onDateChange (date: Moment, dateString: string) {
-    console.log('date change::', date)
-  }
-
-  // 批量删除
-  public delList () {
-    const { selectedRowKeys } = this.state
-    if (!selectedRowKeys.length) {
-      return
-    }
-    console.log('del list::', selectedRowKeys)
-    // service.delList(selectedRowKeys)
-  }
-
-  // 批量标记为已读
-  public setReadedList () {
+  public searchBtn () {
     const { selectedRowKeys } = this.state
     console.log('set readed list::', selectedRowKeys)
     // service.setReadedList(selectedRowKeys)
   }
 
-  public modalShow (title: string = '', showData: any = {}) {
+  // 编辑
+  public onShow (item: OrderItem) {
+    console.log('点击编辑')
+    this.setState({ showTitle: '编辑' })
+    this.modalShow(item)
+  }
+  // 启用
+  public onBegin (item: OrderItem) {
+    console.log('点击启用禁用')
+    this.setState({ showTitle: '确认信息' })
+    this.modalShow(item)
+  }
+  // 选择的数组
+  public onSelectChange = (selectedRowKeys: any) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys)
+    this.setState({ selectedRowKeys })
+  }
+  // 分页
+  public pageChange = (selectedRowKeys: any) => {
+    console.log('pageChange changed: ', selectedRowKeys)
+  }
+  public modalShow (showData: any = {}) {
     this.setState({
       modalVisible: true,
-      modalTitle: title ? title : this.state.modalTitle,
       showData
     })
   }
-
   public modalHide () {
     this.setState({
       modalVisible: false
@@ -226,53 +208,6 @@ class Main extends React.Component {
 
   public modalHandleCancel () {
     this.modalHide()
-  }
-
-  public render () {
-    const searchPorps = {
-      onSearch: this.onSearch.bind(this)
-    }
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
-    return (
-    <div className={styles.container}>
-      <HCframe title='消息列表'>
-        <Row>
-          <Col span={20}>
-            <SearchForm onDateChange={this.onDateChange.bind(this)} />
-          </Col>
-          <Col span={4} style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button type='primary' size={'small'} onClick={this.setReadedList.bind(this)}>标记为已读</Button>
-              <Button size={'small'} onClick={this.delList.bind(this)}>删除</Button>
-            </span>
-          </Col>
-        </Row>
-        <Row>
-          <Table
-            columns={this.columns}
-            dataSource={this.state.dataSource}
-            rowSelection={rowSelection}
-            bordered
-            pagination={this.state.pageConf}
-            rowKey={'key'}
-          />
-        </Row>
-      </HCframe>
-      <Modal
-        // title={this.state.modalTitle}
-        title={`消息详情`}
-        visible={this.state.modalVisible}
-        onOk={this.modalHandleOk.bind(this)}
-        onCancel={this.modalHandleCancel.bind(this)}
-        footer={null}
-      >
-        <MessageShowModal data={this.state.showData} />
-      </Modal>
-    </div>
-    )
   }
 }
 export default Main

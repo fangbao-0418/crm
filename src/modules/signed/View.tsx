@@ -13,7 +13,7 @@ class Main extends React.Component {
   public render () {
     return (
       <div style={{ width: '800px'}}>
-        <Profile />
+        <Profile isShowAgent={true}/>
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
             <Detail />
