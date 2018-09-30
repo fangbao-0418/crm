@@ -7,4 +7,4 @@ import 'pilipa/dist/pilipa.min.css'
 render(
   <Router />,
    document.getElementById('root')
-);
+)
