@@ -7,6 +7,7 @@ import tplList from '@/modules/outsite/views/tasktpl/list'
 import tplForm from '@/modules/outsite/views/tasktpl/form'
 import tplSubList from '@/modules/outsite/views/tasktpl/sublist'
 import tplSubForm from '@/modules/outsite/views/tasktpl/subform'
+import perList from '@/modules/outsite/views/perform/list';
 
 export default {
   list,

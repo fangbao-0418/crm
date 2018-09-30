@@ -56,6 +56,9 @@ export default class extends React.Component {
               <Route path='/outsite/tasktpl/form/:id' component={modules.TasktplForm}/>
               <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
               <Route path='/outsite/tasktpl/subform/:id' component={modules.TasktplSubForm}/>
+              <Route path='/outsite/perform/list' component={modules.PerformList}/>
+              <Route path='/outsite/data-overview' component={modules.TaskDataOverview}/>
+              <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>
             </Switch>
           </Content>
         </Layout>
