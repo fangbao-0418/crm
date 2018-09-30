@@ -117,6 +117,11 @@ class Main extends React.Component {
           this.state.visible &&
           <PermissionModal
             mode={this.state.mode}
+            info={{
+              name: '3344',
+              code: 333,
+              option: [{label: '22', value: '333'}]
+            }}
             onOk={() => {}}
             onCancel={() => {this.setState({visible: false})}}
           />
