@@ -244,7 +244,7 @@ class Main extends React.Component {
 
   // 搜索
   public onSearch (values: any) {
-    console.log('search::', values)
+    console.log('search::', arguments, values)
   }
 
   // 搜索 日期切换
@@ -288,7 +288,7 @@ class Main extends React.Component {
       <HCframe title='外勤任务'>
         <Row>
           <Col span={20}>
-            <SearchForm onDateChange={this.onDateChange.bind(this)} />
+            <SearchForm onSearch={this.onSearch.bind(this)} />
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>

@@ -180,7 +180,8 @@ module.exports = {
     imutable: 'Immutable',
     moment: 'moment',
     antd: 'antd',
-    'ali-oss': 'OSS'
+    'ali-oss': 'OSS',
+    echarts: 'echarts'
   },
   devtool: 'source-map'
   // eval： 生成代码 每个模块都被eval执行，并且存在@sourceURL

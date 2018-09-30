@@ -23,9 +23,67 @@
     display: none
 
   .bottom-btns
+    position: relative
+    top: -56px
     button 
       margin: 10px 1em
-  
+  .trackbox
+    border: 1px solid #ddd
+    border-radius: 5px
+    padding: 10px
+    .trackitem
+      margin: 20px
+      em
+        font-weight: 700
+        font-style: normal
+        padding: 0 1em 0 0 
+      p
+        color: #666
+        line-height: 1.8
+  .modalbox
+    padding: 30px
+.cancelbox
+  p
+    padding: 0px
+    color: #000
+  .cancelcont
+    padding: 15px
+    background: #f0f0f0
+    border: 1px solid #ddd
+    border-radius: 5px
+    line-height: 2
+.voucherbox
+  padding: 10px
+  img
+    max-width: 100%
+
+// 列表搜索样式
+  .show {
+    display: block
+  }
+  .hide {
+    display: none}
+  .extshow
+    display: inline-block
+    width: 40%
+    position: relative
+    .searchico
+      display:inline-block
+      // background: red
+      width: 40px
+      height: 40px
+      vertical-align: middle
+      text-align: center
+      line-height: 40px
+      font-size: 22px
+      cursor: pointer
+    .extcontent
+      position: absolute
+      padding: 20px
+      border: 1px solid #ddd
+      border-radius: 5px
+      box-shadow: 0 0 10px rgba(100, 100, 100, .3)
+      background:#fff
 :global
   .ant-modal-header
     padding:10px
@@ -35,3 +93,8 @@
       font-size: 14px
   .ant-modal-body
     padding:10px 15px
+  .t-search-form
+    position: relative
+  .ant-row:first-child
+    position: relative
+    z-index: 2
