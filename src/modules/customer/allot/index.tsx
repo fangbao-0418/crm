@@ -29,6 +29,9 @@ class Main extends React.Component<Props> {
               value.customerIds = this.props.selectedRowKeys
             }
             allotCustomer(value).then((res: any) => {
+              this.setState({
+                step: 2
+              })
               APP.dispatch({
                 type: 'change customer data',
                 payload: {

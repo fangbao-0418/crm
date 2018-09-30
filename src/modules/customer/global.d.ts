@@ -24,6 +24,9 @@ declare namespace Customer {
     userId?: string
     relatedCompany?: string
     customerNameType?: string
+    areaCode?: string
+    areaName?: string
+    isConfirmed?: string
     contactPersons?: LinkManProps[]
   }
   export interface AutoAssignProps {
