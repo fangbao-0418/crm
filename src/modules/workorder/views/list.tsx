@@ -113,8 +113,8 @@ class Main extends React.Component<any, any> {
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary' size={'small'} onClick={this.searchBtn.bind(this)}>搜索</Button>
-              <Button size={'small'} onClick={this.exportBtn.bind(this)}>导出</Button>
+              <Button type='primary'  onClick={this.searchBtn.bind(this)}>搜索</Button>
+              <Button  onClick={this.exportBtn.bind(this)}>导出</Button>
             </span>
           </Col>
         </Row>
