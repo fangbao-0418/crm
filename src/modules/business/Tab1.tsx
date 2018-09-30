@@ -8,7 +8,7 @@ type DetailProps = Business.DetailProps
 interface Props {
   columns: ColumnProps<DetailProps>[]
   params: Business.SearchProps
-  haneleSelectAll?: (selectedRowKeys: string[], type: number) => void
+  handleSelectAll?: (selectedRowKeys: string[], type: number) => void
 }
 interface States {
   dataSource: DetailProps[]
@@ -49,6 +49,12 @@ class Main extends React.Component<Props> {
   public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({ selectedRowKeys })
   }
+  public handleSelectAll (key: number) {
+    if (this.props.handleSelectAll) {
+      this.props.handleSelectAll(this.state.selectedRowKeys, key)
+    }
+    
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -65,10 +71,11 @@ class Main extends React.Component<Props> {
           pagination={this.state.pagination}
         />
         <div>
-          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button>
-          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 2)}>转销售</Button>
-          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 3)}>转公海</Button>
-          <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 4)}>转客资池</Button>
+          {/* <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button> */}
+          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 1)}>批量预约</Button>
+          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 2)}>转销售</Button>
+          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 3)}>转公海</Button>
+          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 4)}>转客资池</Button>
         </div>
       </div>
     )

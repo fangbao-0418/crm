@@ -14,7 +14,9 @@ import { addCustomer, updateCustomer } from './api'
 const Option = Select.Option
 interface Props extends Customer.Props {
   customerId?: string
+  isFlowNow?: boolean
   onClose?: () => void
+  flowNow?: () => void
 }
 class Main extends React.Component<Props> {
   public componentWillMount () {
@@ -216,13 +218,14 @@ class Main extends React.Component<Props> {
         </Row>
         <div className='text-right mt10'>
           <Button
+            className='mr5'
             type='primary'
             onClick={() => {
               console.log(this.props.detail, 'this.props.detail')
               const params = this.props.detail
               params.customerNameType = '1'
-              // params.contactsList = this.props.linkMan
-              params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
+              params.contactPersons = this.props.linkMan
+              // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
               if (this.props.customerId) {
                 updateCustomer(this.props.customerId, params).then((res) => {
@@ -242,6 +245,16 @@ class Main extends React.Component<Props> {
           >
             保存
           </Button>
+          {
+            this.props.isFlowNow &&
+            <Button
+              onClick={() => {
+                this.props.flowNow()
+              }}
+            >
+              现在跟进
+            </Button>
+          }
         </div>
       </div>
     )

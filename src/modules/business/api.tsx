@@ -48,3 +48,6 @@ export const toCity = (payload: {
 }) => {
   return http(`/api/batch-fetch-customer-pool`, 'PUT', payload)
 }
+export const getcapacityNum = () => {
+  return http(`/api/storage-capacity`)
+}
