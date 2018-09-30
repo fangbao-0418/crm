@@ -17,7 +17,7 @@ class Main extends React.Component {
   }
   public configs: MenuItem[] = [
     {
-      title: '商机管理2',
+      title: '商机管理',
       icon: <MenuIcon type='bussiness'/>,
       path: '',
       children: [
@@ -45,7 +45,7 @@ class Main extends React.Component {
     {
       title: '客资管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='customer'/>,
       children: [
         {
           title: '我的客资',
@@ -56,7 +56,7 @@ class Main extends React.Component {
     {
       title: '签约客户',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='sign'/>,
       children: [
         {
           title: '签约客户',
@@ -67,7 +67,7 @@ class Main extends React.Component {
     {
       title: '客户设置',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='set' />,
       children: [
         {
           title: '客户设置',
@@ -77,7 +77,7 @@ class Main extends React.Component {
     },
     {
       title: '中心用户管理',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='center' />,
       path: '',
       children: [
         {
@@ -101,7 +101,7 @@ class Main extends React.Component {
     {
       title: '机构管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='agency' />,
       children: [
         {
           title: '机构管理',
@@ -112,7 +112,7 @@ class Main extends React.Component {
     {
       title: '用户管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='user' />,
       children: [
         {
           title: '代理商账号',
@@ -127,7 +127,7 @@ class Main extends React.Component {
     {
       title: '工单管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='worker' />,
       children: [
         {
           title: '我的工单',
@@ -138,7 +138,7 @@ class Main extends React.Component {
     {
       title: '消息管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='message' />,
       children: [
         {
           title: '我的消息',
@@ -149,7 +149,7 @@ class Main extends React.Component {
     {
       title: '任务管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='task' />,
       children: [
         {
           title: '外勤任务列表',
@@ -164,7 +164,7 @@ class Main extends React.Component {
     {
       title: '任务配置',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='tasktpl' />,
       children: [
         {
           title: '其他任务配置',
@@ -179,7 +179,7 @@ class Main extends React.Component {
     {
       title: '绩效配置',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='perform' />,
       children: [
         {
           title: '绩效配置',
@@ -190,7 +190,7 @@ class Main extends React.Component {
     {
       title: '数据统计',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='data' />,
       children: [
         {
           title: '数据总览',

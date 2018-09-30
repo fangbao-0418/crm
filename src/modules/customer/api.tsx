@@ -13,9 +13,6 @@ export const fetchList = (payload: {
 }) => {
   return http(`/api/customer/list`, 'GET', payload)
 }
-export const fetchCityCustomerList = () => {
-  return http(`/api/customer/city-stats`)
-}
 export const addCustomer = (payload: Customer.DetailProps) => {
   return http(`/api/customer/entry`, 'POST', {
     data: payload

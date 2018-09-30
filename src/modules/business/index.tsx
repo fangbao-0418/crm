@@ -136,7 +136,7 @@ class Main extends React.Component {
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
-      this.capacityNum = res
+      this.capacityNum = res.data
     })
   }
   public fetchCustomerNum () {
@@ -247,6 +247,10 @@ class Main extends React.Component {
     modal.show()
   }
   public appointmentAll (selectedRowKeys: string[]) {
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
     const modal = new Modal({
       content: (
         <div>
@@ -262,10 +266,14 @@ class Main extends React.Component {
       title: '批量预约',
       mask: true,
       onOk: () => {
+        if (!this.appointmentTime) {
+          APP.error('请选择预约时间！')
+          return false
+        }
         const params = { customerIdArr: selectedRowKeys }
         console.log(params, 'params')
         const time = this.appointmentTime
-        appointment(params, time).then((res) => {
+        appointment(params, time).then(() => {
           APP.success('预约成功')
         })
         modal.hide()
@@ -277,6 +285,10 @@ class Main extends React.Component {
     modal.show()
   }
   public toSale (selectedRowKeys: string[]) {
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
     const modal = new Modal({
       content: (
         <div>
@@ -296,6 +308,10 @@ class Main extends React.Component {
       title: '销售',
       mask: true,
       onOk: () => {
+        if (!this.curSale.key) {
+          APP.error('请选择销售！')
+          return false
+        }
         const saleparams = {
           customerIdArr: selectedRowKeys,
           salesperson: this.curSale.label
@@ -313,6 +329,10 @@ class Main extends React.Component {
     modal.show()
   }
   public toOpen (selectedRowKeys: string[]) {
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
     const modal = new Modal({
       content: (
         <ToOpenReason onChange={(item) => { this.reason = item }}/>
@@ -320,6 +340,10 @@ class Main extends React.Component {
       title: '转公海',
       mask: true,
       onOk: () => {
+        if (!this.reason.label) {
+          APP.error('请选择原因！')
+          return false
+        }
         const openparams = {
           customerIdArr: selectedRowKeys,
           bus_sea_memo: this.reason.label
@@ -336,6 +360,10 @@ class Main extends React.Component {
     modal.show()
   }
   public toCustomersCity (selectedRowKeys: string[]) {
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
     const modal = new Modal({
       content: (
         <div>
@@ -354,6 +382,10 @@ class Main extends React.Component {
       title: '转客资池',
       mask: true,
       onOk: () => {
+        if (!this.cityCode) {
+          APP.error('请选择客资池！')
+          return false
+        }
         const cityparams = {
           customerIdArr: selectedRowKeys,
           cityCode: this.cityCode
@@ -373,7 +405,7 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><BaseInfo onClose={() => {modal.hide()}} isFlowNow={true} flowNow={() => { modal.hide()}}/></Provider>
+        <Provider><BaseInfo onClose={() => {modal.hide()}} isBussiness={true} flowNow={() => { modal.hide()}}/></Provider>
       ),
       footer: null,
       title: '新增客资',

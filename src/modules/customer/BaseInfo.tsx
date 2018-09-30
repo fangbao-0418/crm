@@ -14,7 +14,7 @@ import { addCustomer, updateCustomer } from './api'
 const Option = Select.Option
 interface Props extends Customer.Props {
   customerId?: string
-  isFlowNow?: boolean
+  isBussiness?: boolean
   onClose?: () => void
   flowNow?: () => void
 }
@@ -84,12 +84,32 @@ class Main extends React.Component<Props> {
             />
           </Col>
           <Col span={12}>
-            <Input
-              field='legalPerson'
-              label='法人'
-              onChange={this.handleChange.bind(this)}
-              value={this.props.detail.legalPerson}
-            />
+            <FormItem
+              label='客户来源'
+            >
+              <Select
+                style={{width: '150px'}}
+                defaultValue={this.props.detail.customerSource}
+                onChange={(value) => {
+                  this.handleChange(null, {
+                    key: 'customerSource',
+                    value
+                  })
+                }}
+              >
+                {
+                  APP.keys.EnumCustomerSource.map((item) => {
+                    return (
+                      <Option
+                        key={item.value}
+                      >
+                        {item.label}
+                      </Option>
+                    )
+                  })
+                }
+              </Select>
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
@@ -122,32 +142,12 @@ class Main extends React.Component<Props> {
         </Row>
         <Row gutter={8} className='mt10'>
           <Col span={12}>
-            <FormItem
-              label='客户来源'
-            >
-              <Select
-                style={{width: '150px'}}
-                defaultValue={this.props.detail.customerSource}
-                onChange={(value) => {
-                  this.handleChange(null, {
-                    key: 'customerSource',
-                    value
-                  })
-                }}
-              >
-                {
-                  APP.keys.EnumCustomerSource.map((item) => {
-                    return (
-                      <Option
-                        key={item.value}
-                      >
-                        {item.label}
-                      </Option>
-                    )
-                  })
-                }
-              </Select>
-            </FormItem>
+            <Input
+              field='legalPerson'
+              label='法人'
+              onChange={this.handleChange.bind(this)}
+              value={this.props.detail.legalPerson}
+            />
           </Col>
           <Col span={12}>
             <FormItem
@@ -179,20 +179,23 @@ class Main extends React.Component<Props> {
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
+          {
+            !this.props.isBussiness &&
+            <Col span={12}>
+              <Input
+                field='cityCode'
+                onChange={this.handleChange.bind(this)}
+                label={'城市'}
+                value={this.props.detail.cityCode}
+              />
+            </Col>
+          }
           <Col span={12}>
             <Input
-              field='cityName'
-              onChange={this.handleChange.bind(this)}
-              label={'城市'}
-              value={this.props.detail.cityName}
-            />
-          </Col>
-          <Col span={12}>
-            <Input
-              field='cityCode'
+              field='areaCode'
               onChange={this.handleChange.bind(this)}
               label='地区'
-              value={this.props.detail.cityCode}
+              value={this.props.detail.areaCode}
             />
           </Col>
         </Row>
@@ -223,7 +226,8 @@ class Main extends React.Component<Props> {
             onClick={() => {
               console.log(this.props.detail, 'this.props.detail')
               const params = this.props.detail
-              params.customerNameType = '1'
+              params.customerNameType = '1' // 后端不需要改代码所以加上
+              params.isConfirmed = '1' // 是否天眼查
               params.contactPersons = this.props.linkMan
               // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
@@ -246,7 +250,7 @@ class Main extends React.Component<Props> {
             保存
           </Button>
           {
-            this.props.isFlowNow &&
+            this.props.isBussiness &&
             <Button
               onClick={() => {
                 this.props.flowNow()

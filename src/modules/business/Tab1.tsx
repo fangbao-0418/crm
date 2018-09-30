@@ -53,7 +53,6 @@ class Main extends React.Component<Props> {
     if (this.props.handleSelectAll) {
       this.props.handleSelectAll(this.state.selectedRowKeys, key)
     }
-    
   }
   public render () {
     const rowSelection = {
