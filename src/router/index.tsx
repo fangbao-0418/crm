@@ -9,6 +9,7 @@ import App from '@/modules/common/App'
 const isPro = process.env.NODE_ENV === 'production'
 const Router = isPro ? BrowserRouter : HashRouter
 const basename = '/'
+
 const router = () => (
   <Provider store={store}>
     <Router basename={basename}>
