@@ -14,9 +14,11 @@ interface States {
   selectedRowKeys: any[],
   dataSource: any[]
   mode: 'view' | 'modify' | 'add' // 弹窗的模式
+  verification: 'empty' | 'same' | 'normal' // 为空 | 部门 | 正常状态
   assignmentVisiblity: boolean // 批量分配显示状态
   visible: boolean // 查看修改显示状态
   itemInfo: any // 选中项信息
+  val: string
 }
 
 class Accounting extends React.Component<any, any> {
@@ -51,7 +53,9 @@ class Accounting extends React.Component<any, any> {
         department: '市场部'
       }
     ],
+    val: '',
     mode: 'add',
+    verification: 'normal',
     assignmentVisiblity: false,
     visible: false,
     itemInfo: {}
@@ -78,9 +82,8 @@ class Accounting extends React.Component<any, any> {
   // 批量添加
   public assignment () {
     if (this.state.selectedRowKeys.length !== 0) {
-      this.setState({
-        assignmentVisiblity: true
-      })
+      const val = ''
+      this.setState({assignmentVisiblity: true, val})
     } else {
       Modal.info({
         title: '提示',
@@ -90,12 +93,25 @@ class Accounting extends React.Component<any, any> {
       })
     }
   }
+  // 设置错误信息
+  public getErrorInfo: any = (verification: 'empty' | 'same' | 'normal') => {
+    let errorInfo
+    if (verification === 'empty') {
+      errorInfo = {help: '部门名称不能为空', validateStatus: 'error'}
+    } else if (verification === 'same') {
+      errorInfo = {help: '部门名称重复', validateStatus: 'error'}
+    } else if (verification === 'normal') {
+      errorInfo = {help: ''}
+    }
+    return errorInfo
+  }
+
   // 查看、修改、添加账号
   public showAccountModal = (mode: 'view' | 'modify' | 'add', itemInfo?: any) => {
     this.setState({mode, itemInfo, visible: true})
   }
   public render () {
-    const { selectedRowKeys, itemInfo, mode } = this.state
+    const { verification, selectedRowKeys, itemInfo, mode } = this.state
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange
@@ -198,26 +214,38 @@ class Accounting extends React.Component<any, any> {
           <div>
             <Modal
               title='批量分配'
+              destroyOnClose={true}
               visible={this.state.assignmentVisiblity}
               onOk={() => {
-
+                if (this.state.val === '') {
+                  this.setState({verification: 'empty'})
+                  return
+                }
+                this.setState({assignmentVisiblity: false})
               }}
               onCancel={() => {
-                this.setState({
-                  assignmentVisiblity: false
-                })
+                this.setState({assignmentVisiblity: false, verification: 'normal'})
               }}
               okText='确认'
               cancelText='取消'
             >
               <Form>
                 <Formitem
+                  required
                   label='上级直属'
-                  colon
                   wrapperCol={{ span: 10 }}
                   labelCol={{ span: 4 }}
+                  {...this.getErrorInfo(verification)}
                 >
-                  <Input style={{width: '200px'}} placeholder='请输入上级直属'/>
+                  <Input
+                    style={{ width: '200px' }}
+                    placeholder='请输入上级直属'
+                    onChange={(e) => {
+                      this.setState({
+                        val: e.target.value
+                      })
+                    }}
+                  />
                 </Formitem>
               </Form>
             </Modal>

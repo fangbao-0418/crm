@@ -9,7 +9,7 @@ import { FormComponentProps } from 'antd/lib/form'
 import React from 'react'
 
 const stylus = require('./index.styl')
-const Formitem = Form.Item
+const FormItem = Form.Item
 
 interface Props extends FormComponentProps {
   mode: string // 模式
@@ -19,9 +19,12 @@ interface Props extends FormComponentProps {
 }
 
 interface States {
-  dataSource: string[]
-  mode: 'view' | 'modify' | 'add' // 弹窗的模式
-  visible: boolean // 弹窗是否显示
+  val: string // 弹窗部门值
+  mode: 'add' | 'addRoot' | 'modify' // 添加子部门 | 添加根部门 | 修改部门
+  visible: boolean // 是否展示弹窗
+  verification: 'empty' | 'same' | 'normal' // 部门为空 | 部门重复 | 正常状态
+  dataSource: any[]
+  currentInfo: any // 当前选中部门信息
   itemInfo: any // 选中项信息
 }
 
@@ -55,7 +58,10 @@ class AgentAccount extends React.Component<any, any> {
     dataSource: ['人力行政中心', '营销中心', '技术中心'],
     mode: 'add',
     visible: false,
-    itemInfo: {}
+    itemInfo: {},
+    val: '',
+    verification: 'normal',
+    currentInfo: {}
   }
   public componentWillMount () {
     const {mode} = this.props
@@ -63,18 +69,58 @@ class AgentAccount extends React.Component<any, any> {
   public addDept (info?: any) {
     this.setState({ visible: true, info })
   }
-  public render () {
-    const TabPane: any = Tabs.TabPane
-    // const {mode, info = {}, form:{getFieldDecorator}} = this.props
-    const validation = {
-      name: {
-        initialValue: this.state.itemInfo.name,
-        validateTrigger: 'onBlur',
-        rules:[
-          {required: true, message: '请输入部门名称！'}
-        ]
-      }
+
+  // 修改、添加部门
+  public setDepartment = (mode: 'add' | 'addRoot' | 'modify', currentInfo?: any) => {
+    const val = mode === 'modify' ? currentInfo.name : ''
+    currentInfo = currentInfo || {}
+    this.setState({visible: true, mode, currentInfo, val})
+  }
+
+  // 禁用部门
+  public forbidDepartment = () => {
+
+  }
+
+  // 删除部门
+  public delDepartment = () => {
+    Modal.confirm({
+      title: '删除部门',
+      content: '确定要删除部门吗？',
+      onOk: () => {},
+      onCancel: () => {}
+    })
+  }
+
+  // 设置错误信息
+  public getErrorInfo: any = (verification: 'empty' | 'same' | 'normal') => {
+    let errorInfo
+    if (verification === 'empty') {
+      errorInfo = {help: '部门名称不能为空', validateStatus: 'error'}
+    } else if (verification === 'same') {
+      errorInfo = {help: '部门名称重复', validateStatus: 'error'}
+    } else if (verification === 'normal') {
+      errorInfo = {help: ''}
     }
+    return errorInfo
+  }
+
+  // 获取弹窗标题
+  public getTitle: any = (mode: any) => {
+    let title
+    if (mode === 'add') {
+      title = '添加子部门'
+    } else if (mode === 'addRoot') {
+      title = '添加根部门'
+    } else if (mode === 'modify') {
+      title = '修改部门'
+    }
+    return title
+  }
+
+  public render () {
+    const {verification, mode, currentInfo} = this.state
+    const TabPane: any = Tabs.TabPane
     const columns = [
       { title: '部门名称', dataIndex: 'name', key: 'department',
         onHeaderCell: (column: any) => {
@@ -87,16 +133,16 @@ class AgentAccount extends React.Component<any, any> {
       },
       { title: '操作', key: 'operation',
         width: 350,
-        render: (val: any, record: any) => {
+        render: (val: any, info: any) => {
           return (
             <div>
-              <a onClick={() => { this.addDept(record) }}>添加子部门</a>
+              <a onClick={() => {this.setDepartment('add', info)}}>添加子部门</a>
               <Divider type='vertical'/>
-              <a>修改</a>
+              <a onClick={() => {this.setDepartment('modify', info)}}>修改</a>
               <Divider type='vertical'/>
-              <a href='javascript:;'>禁用</a>
+              <a onClick={() => {this.forbidDepartment()}}>禁用</a>
               <Divider type='vertical'/>
-              <a href='javascript:;'>删除</a>
+              <a onClick={() => {this.delDepartment()}}>删除</a>
             </div>
           )
         },
@@ -146,33 +192,38 @@ class AgentAccount extends React.Component<any, any> {
         </ContentBox>
         {
           this.state.visible &&
-          <div>
-            <Modal
-              title='添加部门'
-              visible={this.state.visible}
-              // onOk={this.hideModal}
-              onCancel={() => {
-                this.setState({
-                  visible: false
-                })
-              }}
-              cancelText='取消'
-              okText='保存'
+          <Modal
+            title={this.getTitle(this.state.mode)}
+            visible={true}
+            destroyOnClose={true}
+            onOk={() => {
+              if (this.state.val === '') {
+                this.setState({verification: 'empty'})
+                return
+              }
+              this.setState({visible: false})
+            }}
+            onCancel={() => {
+              this.setState({visible: false, verification: 'normal'})
+            }}
+          >
+            <FormItem
+              required
+              label='部门名称'
+              labelCol={{span: 8}}
+              wrapperCol={{span: 10}}
+              {...this.getErrorInfo(verification)}
             >
-              <Form>
-                <Formitem
-                  label='部门名称'
-                  colon
-                  wrapperCol={{ span: 10 }}
-                  labelCol={{ span: 4 }}
-                >
-                  {/* // getFieldDecorator('name', validation.name)( */}
-                  <Input style={{width: '200px'}} placeholder='请输入部门'/>
-                  {/* // ) */}
-                </Formitem>
-              </Form>
-            </Modal>
-          </div>
+              <Input
+                defaultValue={this.state.val}
+                onChange={(e) => {
+                  this.setState({
+                    val: e.target.value
+                  })
+                }}
+              />
+            </FormItem>
+          </Modal>
         }
       </div>
     )

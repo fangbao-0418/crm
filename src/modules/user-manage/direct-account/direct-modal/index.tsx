@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Modal, Select, Tree, TreeSelect } from 'antd'
+import { Button, Checkbox, Form, Input, Modal, Select, Tree } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import React from 'react'
 
@@ -6,20 +6,6 @@ const styles = require('./index.styl')
 const Option = Select.Option
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
-const SHOW_PARENT = TreeSelect.SHOW_PARENT
-
-const treeData = [
-  {
-    title: '河北区',
-    value: '0-0',
-    key: '0-0'
-  },
-  {
-    title: '和平区',
-    value: '0-1',
-    key: '0-1'
-  }
-]
 
 interface Props extends FormComponentProps {
   mode: string // 模式
@@ -33,7 +19,6 @@ interface State {
   isSell: boolean // 是否是销售
   expandedKeys: string[]
   checkedKeys: string[]
-  value: string[]
 }
 
 class Main extends React.Component<Props, State> {
@@ -42,8 +27,7 @@ class Main extends React.Component<Props, State> {
     title: '',
     isSell: false,
     expandedKeys: [],
-    checkedKeys: [],
-    value: ['']
+    checkedKeys: []
   }
 
   public componentWillMount () {
@@ -163,24 +147,8 @@ class Main extends React.Component<Props, State> {
   //   this.setState({expandedKeys})
   // }
 
-  public onChange = (value: any) => {
-    console.log('onChange ', value)
-    this.setState({ value })
-  }
   public render () {
-    const { mode, info = {}, form: { getFieldDecorator } } = this.props
-    // 树形选择属性
-    const tProps = {
-      treeData,
-      value: this.state.value,
-      onChange: this.onChange,
-      treeCheckable: true,
-      showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder: '请选择负责区域',
-      style: {
-        width: 200
-      }
-    }
+    const {mode, info = {}, form:{getFieldDecorator}} = this.props
     // 过滤规则
     const validation = {
       firm: {
@@ -322,16 +290,6 @@ class Main extends React.Component<Props, State> {
                 </Select>
               )
             }
-            </FormItem>
-          }
-
-          {
-            this.state.isSell &&
-            <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
-              <TreeSelect
-                {...tProps}
-                size='small'
-              />
             </FormItem>
           }
 
