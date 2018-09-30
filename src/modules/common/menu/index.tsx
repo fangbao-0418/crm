@@ -1,6 +1,8 @@
 import React from 'react'
+import MenuIcon from './Icon'
 import { Layout, Menu, Icon } from 'antd'
 const SubMenu = Menu.SubMenu
+
 const { Sider } = Layout
 interface MenuItem {
   title: string
@@ -15,8 +17,8 @@ class Main extends React.Component {
   }
   public configs: MenuItem[] = [
     {
-      title: '商机管理',
-      icon: <Icon type='user' />,
+      title: '商机管理2',
+      icon: <MenuIcon type='bussiness'/>,
       path: '',
       children: [
         {
@@ -32,7 +34,7 @@ class Main extends React.Component {
     {
       title: '公海管理',
       path: '',
-      icon: <Icon type='user' />,
+      icon: <MenuIcon type='open'/>,
       children: [
         {
           title: '公海管理',
@@ -186,19 +188,19 @@ class Main extends React.Component {
       ]
     },
     {
-        title: '数据统计',
-        path: '',
-        icon: <Icon type='user' />,
-        children: [
-            {
-                title: '数据总览',
-                path: '/outsite/data-overview'
-            },
-            {
-                title: '数据明细',
-                path: '/outsite/data-detail'
-            }
-        ]
+      title: '数据统计',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '数据总览',
+          path: '/outsite/data-overview'
+        },
+        {
+          title: '数据明细',
+          path: '/outsite/data-detail'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {
@@ -211,7 +213,7 @@ class Main extends React.Component {
         Item = (
           <SubMenu
             key={key}
-            title={<span><Icon type='team' /><span>{item.title}</span></span>}
+            title={<span>{item.icon}<span>{item.title}</span></span>}
           >
             {this.getMenuNodes(item.children, key)}
           </SubMenu>
