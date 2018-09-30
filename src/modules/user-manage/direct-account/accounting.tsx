@@ -127,6 +127,7 @@ class Accounting extends React.Component<any, any> {
             }}
           />
         </div>
+        {this.state.dataSource.length === 0 || <Button type='primary' className={stylus.assignBtn}>批量分配</Button>}
         {this.state.dataSource.length === 0 || <Button type='primary' className={stylus.delBtn}>批量删除</Button>}
       </div>
     )

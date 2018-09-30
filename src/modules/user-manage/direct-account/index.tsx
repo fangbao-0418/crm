@@ -1,7 +1,7 @@
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
-import Accounting from '@/modules/user-manage/agent-account/accounting'
-import Custom from '@/modules/user-manage/agent-account/custom'
+import Accounting from '@/modules/user-manage/direct-account/accounting'
+import Custom from '@/modules/user-manage/direct-account/custom'
 import {
   Button , Divider, Input, Table, Tabs
 } from 'antd'
