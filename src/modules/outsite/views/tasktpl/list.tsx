@@ -5,37 +5,55 @@ import HCframe from '@/modules/common/components/HCframe'
 import {  OrderItem } from '@/modules/outsite/types/tploutside'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
 const styles = require('@/modules/outsite/styles/tpllist')
-const data: any = []
-for (let i = 0; i < 25; i++) {
-  data.push({
-    id: i,
-    workNo: `刻章 ${i}`,
-    customerName: `税务 ${i}`,
-    deadline:`${i}`,
-    createTime: `2018/09/18`,
-    orderNo: `启用 ${i}`,
-    managerName:`张三 ${i}`
-  })
-}
+const data: any = [
+  {
+    id: '3',
+    name: '网上申请',
+    priority: 'close',
+    status: 'normal', // 状态 forbidden 禁用 normal 启用
+    type: 'sub',
+    category: 'tax', // tax 税务，business 工商，others 其他，special 特殊
+
+    subList: null,
+    delFlag: 0
+  },
+  {
+    id: '4',
+    name: '下发执照',
+    priority: 'close',
+    status: 'forbidden',
+    type: 'sub',
+    category: 'business',
+    subList: null,
+    delFlag: 0
+  },
+  {
+    id: '5',
+    name: '刻章',
+    priority: 'close',
+    status: 'normal',
+    type: 'sub',
+    category: 'others',
+    subList: null,
+    delFlag: 0
+  }
+]
 class Main extends React.Component<any, any> {
   public columns = [{
     title: '子任务名称',
-    dataIndex: 'workNo'
+    dataIndex: 'name'
   }, {
     title: '任务分类',
-    dataIndex: 'customerName'
+    dataIndex: 'category'
   }, {
     title: '期限(天))',
-    dataIndex: 'deadline'
+    dataIndex: 'id'
   },  {
     title: '操作时间',
-    dataIndex: 'createTime'
+    dataIndex: 'id'
   }, {
     title: '状态',
-    dataIndex: 'orderNo'
-  }, {
-    title: '最后操作',
-    dataIndex: 'managerName'
+    dataIndex: 'status'
   }, {
     title: '操作',
     dataIndex: 'take',
@@ -43,7 +61,7 @@ class Main extends React.Component<any, any> {
       return (
         <span>
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
-          <span className={`likebtn`} onClick={() => { this.onBegin.bind(this)(item) }}>启用</span>
+          <span className={`likebtn`} onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'normal' ? '启用' : '禁用'}</span>
         </span>
       )
     }

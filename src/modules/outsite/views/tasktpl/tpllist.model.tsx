@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Select, Row, Col, Input} from 'antd'
+import { Button, Select, Row, Col, Input } from 'antd'
 const Option = Select.Option
 const styles = require('@/modules/outsite/styles/tpllist.model.styl')
 const data =
@@ -15,20 +15,21 @@ interface Props {
   data: any,
   identifying: any, // 新增 编辑 启禁用标识
 }
-
-// 消息详情
-class Main extends React.Component<Props, any> {
+// 其他任务详情
+class Main extends React.Component<any, any> {
   constructor (props: any) {
     super(props)
+    const { name, category, id} = props.data
     this.state = {
-      data
+      data,
+      searchText: name,
+      classify: category || '请选择任务分类', // 分类
+      deadline: id || '请选择任务期限' // 期限
     }
   }
-  public componentWillMount () {
+  public componentDidMount () {
   }
   public render () {
-    const {id, deadline} = this.props.data
-    const {identifying} = this.props
     return (
       <div >
        {this.show()}
@@ -36,29 +37,28 @@ class Main extends React.Component<Props, any> {
     )
   }
   public show () {
-    const {id, orderNo, workNo} = this.props.data
+    const {id, name, category, status} = this.props.data
     const {identifying} = this.props
-    if (identifying === '新增') {
+    const state = this.state
+    if (identifying === '新增' || identifying === '编辑') {
       return (
         <Row className={styles['page-show']}>
           <Col style={{margin: 15}}>
                 <span className={styles.div}>任务名称:</span>
                 <Input
                     type='text'
-                    // size={size}
-                    // value={state.text}
-                    placeholder='请输入子任务名称'
-                    // onChange={this.handleTextChange}
+                    value={state.searchText}
+                    placeholder='请输入任务名称'
+                    onChange={this.handleTextChange}
                     style={{ width: '30%',  marginLeft: '3%'}}
                 />
           </Col>
           <Col style={{margin: 15}}>
                 <span className={styles.div}>任务分类:</span>
                 <Select
-                    // value={state.currency}
-                    // size={size}
-                    style={{ width: '30%', marginLeft: '3%' }}
-                    // onChange={this.handleCurrencyChange}
+                    value={state.classify}
+                    style={{ width: '35%', marginLeft: '3%' }}
+                    onChange={this.workClassChange}
                 >
                     <Option value='税务'>税务</Option>
                     <Option value='工商'>工商</Option>
@@ -69,53 +69,77 @@ class Main extends React.Component<Props, any> {
           <Col style={{margin: 15}}>
                 <span className={styles.div}>任务限期:</span>
                 <Select
-                    // value={state.currency}
-                    // size={size}
-                    style={{ width: '30%', marginLeft: '3%' }}
-                    // onChange={this.handleCurrencyChange}
+                    value={state.deadline}
+                    style={{ width: '35%', marginLeft: '3%' }}
+                    onChange={this.workDeadlineChange}
                 >
-                    <Option value='税务'>1</Option>
-                    <Option value='工商'>3</Option>
-                    <Option value='其他'>5</Option>
-                    <Option value='特殊'>10</Option>
+                    <Option value='1'>1</Option>
+                    <Option value='3'>3</Option>
+                    <Option value='5'>5</Option>
+                    <Option value='10'>10</Option>
                 </Select>
-                <span className={styles.div}>天</span>
+                <span className={styles.div}> 天</span>
           </Col>
           <Col style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary'  onClick={this.sureBtn.bind(this)}>保存</Button>
-              <Button type='primary'  onClick={this.cancelBtn.bind(this)}>取消</Button>
+              <Button type='primary' style={{marginRight: 15}} onClick={this.sureBtn.bind(this)}>保存</Button>
+              <Button type='primary' ghost onClick={this.cancelBtn.bind(this)}>取消</Button>
             </span>
           </Col>
         </Row>
       )
-    } else if (identifying === '编辑') {
+    }  else {
       return (
-        <div className={styles['page-show']}>
-            <div className={styles.div}>任务名称:{identifying}</div>
-            <div className={styles.div}>任务分类:{this.state.data.department}</div>
-            <div className={styles.div}>任务限期:{this.state.data.leader}</div>
+        <Row className={styles['page-show']}>
+          <Col style={{margin: 15}}>
+            <div className={styles.div}>确定 {status === 'normal' ? '启用' : '禁用'} {name} 的子任务吗?</div>
+          </Col>
+          <Col style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary'  onClick={this.sureBtn.bind(this)}>保存</Button>
-              <Button type='primary'  onClick={this.cancelBtn.bind(this)}>取消</Button>
+              <Button type='primary' style={{marginRight: 15}} onClick={this.sureBtn.bind(this)}>保存</Button>
+              <Button type='primary' ghost onClick={this.cancelBtn.bind(this)}>取消</Button>
             </span>
-        </div>
-      )
-    } else {
-      return (
-        <div className={styles['page-show']}>
-             <div className={styles.div}>确定{orderNo}{workNo}的子任务吗?</div>
-             <span className={styles.acts}>
-              <Button type='primary'  onClick={this.sureBtn.bind(this)}>确认</Button>
-              <Button type='primary'  onClick={this.cancelBtn.bind(this)}>取消</Button>
-            </span>
-        </div>
+          </Col>
+        </Row>
+
       )
     }
   }
   public sureBtn () {
   }
   public cancelBtn () {
+  }
+  // 输入框
+  public handleTextChange = (e: any) => {
+    const searchText  = e.target.value
+    if (!('value' in this.props)) {
+      this.setState({ searchText })
+    }
+
+    this.triggerChange({ searchText })
+  }
+
+  public triggerChange = (changedValue: any) => {
+    // Should provide an event to pass value to Form.
+    const onChange = this.props.onChange
+    if (onChange) {
+      onChange(Object.assign({}, this.state, changedValue))
+    }
+  }
+  // 任务分类
+  public workClassChange = (classify: any) => {
+    if (!('value' in this.props)) {
+      this.setState({ classify })
+    }
+    this.triggerChange({ classify })
+    console.log('1__', classify)
+  }
+  // 任务期限
+  public workDeadlineChange = (deadline: any) => {
+    if (!('value' in this.props)) {
+      this.setState({ deadline })
+    }
+    this.triggerChange({ deadline })
   }
 }
 export default Main

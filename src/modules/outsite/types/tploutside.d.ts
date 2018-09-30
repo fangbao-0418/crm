@@ -1,12 +1,12 @@
 interface OrderItem {
     id?: string
-    workNo?: string
-    customerName?: string
-    createTime?: string
-    creatName?: string
     name?: string
+    priority?: string
     status?: string
-    managerName?:string
+    type?: string
+    category?: string
+    subList?: string
+    delFlag?:string
 }
 type OrderList = Array<OrderItem>
 
