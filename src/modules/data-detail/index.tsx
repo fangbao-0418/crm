@@ -1,10 +1,11 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
+
 class Main extends React.Component {
   public componentDidMount () {
     const el: any = this.refs.main
     const myChart = echarts.init(el)
-    // 指定图表的配置项和数据
+  // 指定图表的配置项和数据
     const option = {
       title: {
         text: 'ECharts 入门示例'
@@ -25,12 +26,14 @@ class Main extends React.Component {
     }
     myChart.setOption(option)
   }
+
   public render () {
     return (
-      <div>
-        <div ref='main' style={{width: '600px', height: '400px'}}></div>
-      </div>
+    <div>
+      <div ref='main' style={{width: '600px', height: '400px'}}></div>
+    </div>
     )
   }
 }
+
 export default Main
