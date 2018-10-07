@@ -186,19 +186,19 @@ class Main extends React.Component {
       ]
     },
     {
-        title: '数据统计',
-        path: '',
-        icon: <Icon type='user' />,
-        children: [
-            {
-                title: '数据总览',
-                path: '/outsite/data-overview'
-            },
-            {
-                title: '数据明细',
-                path: '/outsite/data-detail'
-            }
-        ]
+      title: '数据统计',
+      path: '',
+      icon: <Icon type='user' />,
+      children: [
+        {
+          title: '数据总览',
+          path: '/outsite/data-overview'
+        },
+        {
+          title: '数据明细',
+          path: '/outsite/data-detail'
+        }
+      ]
     }
   ]
   public getMenuNodes (configs = this.configs, key = '') {
