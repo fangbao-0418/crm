@@ -193,7 +193,7 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId}/></Provider>
+        <Provider><Detail customerId={customerId} isOpen={true}/></Provider>
       ),
       footer: null,
       header: null,

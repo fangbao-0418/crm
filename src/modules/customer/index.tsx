@@ -265,6 +265,10 @@ class Main extends React.Component {
     })
   }
   public toOrganizationAuto () {
+    if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
+      APP.error('请选择需要分配客户')
+      return
+    }
     const modal = new Modal({
       content: (
         <div>你确定要应用自动分配吗？</div>
