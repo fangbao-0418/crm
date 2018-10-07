@@ -4,6 +4,8 @@ import moment from 'moment'
 import SearchForm from '../components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import {  OrderItem } from '../types/workorder'
+import Service from '@/modules/workorder/api'
+
 const styles = require('../styles/list.styl')
 const showPath = '/workorder/show'
 const data: any = []
@@ -31,7 +33,7 @@ class Main extends React.Component<any, any> {
     title: '创建日期',
     dataIndex: 'createTime'
   }, {
-    title: '负责销售',
+    title: '提单人',
     dataIndex: 'managerName'
   }, {
     title: '对应订单',
@@ -57,10 +59,22 @@ class Main extends React.Component<any, any> {
     super(props)
     const value = props.value || {}
     this.state = {
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      dataSource:[],
+      pageConf: {
+        currentPage: 1,
+        total: 1
+      },
+      searchStr:'',  // 搜索条件
+      chooseSever:'', // 选择的服务内容
+      chooseState:'', // 选择的状态
+      chooseBeginDate:'', // 开始时间
+      chooseEndDate:''   // 结束时间
     }
   }
-
+  public componentWillMount () {
+    this.getList()
+  }
   public render () {
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -113,13 +127,18 @@ class Main extends React.Component<any, any> {
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary'  onClick={this.searchBtn.bind(this)}>搜索</Button>
               <Button  onClick={this.exportBtn.bind(this)}>导出</Button>
             </span>
           </Col>
         </Row>
         <Row>
-        <Table rowSelection={rowSelection} onChange={this.pageChange} columns={this.columns} dataSource={data} />
+        <Table
+          rowSelection={rowSelection}
+          onChange={this.pageChange}
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+          pagination={this.state.pageConf}
+        />
         </Row>
       </HCframe>
     </div>
@@ -128,6 +147,14 @@ class Main extends React.Component<any, any> {
   // 表单改变
   public onChange (formData: any) {
     console.log('表单改变', formData)
+    console.log(formData.text, formData.currency, formData.orderState, JSON.stringify(formData.dateArr[0]) , JSON.stringify(formData.dateArr[1].substring(0, 9)))
+    this.setState({
+      searchStr: formData.text,  // 搜索条件
+      chooseSever: formData.currency, // 选择的服务内容
+      chooseState: formData.orderState, // 选择的状态
+      chooseBeginDate: formData.dateArr[0].format('YYYY-MM-DD'), // 开始时间
+      chooseEndDate: formData.dateArr[1].format('YYYY-MM-DD')  // 结束时间
+    })
   }
 
   // 导出
@@ -135,14 +162,6 @@ class Main extends React.Component<any, any> {
     console.log('点击导出')
     // service.delList(selectedRowKeys)
   }
-
-  // 搜索
-  public searchBtn () {
-    const { selectedRowKeys } = this.state
-    console.log('set readed list::', selectedRowKeys)
-    // service.setReadedList(selectedRowKeys)
-  }
-
   // 查看
   public onShow (item: OrderItem) {
     APP.history.push(`${showPath}/${item.id}`)
@@ -155,6 +174,22 @@ class Main extends React.Component<any, any> {
   // 分页
   public pageChange = (selectedRowKeys: any) => {
     console.log('pageChange changed: ', selectedRowKeys)
+  }
+  // 获取列表数据
+  public getList () {
+    Service.getWorkOrderList().then((res: any) => {
+      const { pageSize, pageTotal, pageCurrent } = res
+      this.setState({
+        dataSource: res.records,
+        pageConf: {
+          pageSize,
+          pageTotal,
+          pageCurrent
+        }
+      })
+    }, () => {
+
+    })
   }
 }
 export default Main

@@ -10,7 +10,7 @@ class Main extends React.Component<any, any> {
     const value = props.value || {}
     this.state = {
       text: value.text ,
-      currency: value.currency || '全部内容',
+      currency: value.currency || '服务内容',
       orderState: value.orderState || '全部状态',
       dateArr:[]
     }

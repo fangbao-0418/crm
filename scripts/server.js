@@ -11,12 +11,12 @@ const options = {
     errors: true
   },
   proxy: {
-    '/api': {
-      target: 'http://192.168.1.227:9008',
+    '/work': {
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
-      secure: false
-      // pathRewrite: {
-      // }
+      secure: false,
+      pathRewrite: {
+      }
     }
   },
   // 启用gzip压缩一切服务:
