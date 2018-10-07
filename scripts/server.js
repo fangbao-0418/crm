@@ -18,6 +18,11 @@ const options = {
       pathRewrite: {
 
       }
+    },
+    '/api': {
+      target: 'http://192.168.1.106:9008',
+      changeOrigin: true,
+      secure: false
     }
   },
   // 启用gzip压缩一切服务:
