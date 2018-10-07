@@ -4,6 +4,7 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 interface Props {
+  isBussiness?: boolean
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
@@ -16,6 +17,7 @@ class Main extends React.Component<Props> {
       title: '1、导入设置',
       component: (
         <Step1
+          isBussiness={this.props.isBussiness}
           onOk={(value) => {
             this.setState({
               step: 2
@@ -43,6 +45,7 @@ class Main extends React.Component<Props> {
       title: '3、执行结果',
       component: (
         <Step3
+          isBussiness={this.props.isBussiness}
           onCancel={() => {
             if (this.props.onClose) {
               this.props.onClose()

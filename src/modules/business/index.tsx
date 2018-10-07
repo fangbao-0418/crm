@@ -420,10 +420,10 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import /></Provider>
+        <Provider><Import isBussiness={true}/></Provider>
       ),
       footer: null,
-      title: '导入',
+      title: '导入客资',
       mask: true,
       onCancel: () => {
         modal.hide()

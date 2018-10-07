@@ -18,6 +18,19 @@ const options = {
       pathRewrite: {
 
       }
+    },
+    '/api': {
+      target: 'http://192.168.1.106:9008',
+      changeOrigin: true,
+      secure: false
+    },
+    '/crm-manage': {
+      target: 'http://192.168.1.106:9008',
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        '^/crm-manage/v1/api': '/api'
+      }
     }
   },
   // 启用gzip压缩一切服务:

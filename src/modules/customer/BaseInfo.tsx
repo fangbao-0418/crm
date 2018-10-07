@@ -115,7 +115,7 @@ class Main extends React.Component<Props> {
         <Row gutter={8} className='mt10'>
           <Col span={12}>
             <Input
-              label={'联系人'}
+              label={'主联系人'}
               field='contactPersons[0].contactPerson'
               addonAfter={
                 (
@@ -133,7 +133,7 @@ class Main extends React.Component<Props> {
           </Col>
           <Col span={12}>
             <Input
-              label='联系电话'
+              label='主联系电话'
               field='contactPersons[0].contactPhone'
               onChange={this.handleChange.bind(this)}
               value={this.props.linkMan[0].contactPhone}
@@ -252,6 +252,7 @@ class Main extends React.Component<Props> {
           {
             this.props.isBussiness &&
             <Button
+              type='primary'
               onClick={() => {
                 this.props.flowNow()
               }}
