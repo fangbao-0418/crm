@@ -1,6 +1,6 @@
-import http, { AjaxConfigProps } from '@/utils/http'
+import http from '@/utils/http'
 export const fetchEnum = () => {
-  return http(`/api/code-text/list`).then((res) => {
+  return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
     const data: APP.EnumProps = {}
     for (const key in res.data) {
       if (res.data.hasOwnProperty(key)) {
@@ -20,7 +20,7 @@ export const fetchEnum = () => {
   })
 }
 export const fetchTags = () => {
-  return http(`/api/tags`)
+  return http(`/crm-manage/v1/api/tags`)
 }
 export const fetchRegion = (payload: {
   level: number,
@@ -30,5 +30,5 @@ export const fetchRegion = (payload: {
 } = {
   level: 1
 }) => {
-  return http(`/v1/api/region`, payload)
+  return http(`/crm-manage/v1/ap/v1/api/region`, payload)
 }

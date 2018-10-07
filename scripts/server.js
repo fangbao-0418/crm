@@ -11,12 +11,13 @@ const options = {
     errors: true
   },
   proxy: {
-    '/api': {
-      target: 'http://192.168.1.223:9008',
+    '/crm-manage': {
+      target: 'http://192.168.1.106:9008',
       changeOrigin: true,
-      secure: false
-      // pathRewrite: {
-      // }
+      secure: false,
+      pathRewrite: {
+        '^/crm-manage/v1/api': '/api'
+      }
     }
   },
   // 启用gzip压缩一切服务:
