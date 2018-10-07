@@ -140,6 +140,8 @@ class Main extends React.Component {
               if (this.state.val === '') {
                 this.setState({verification: 'empty'})
                 return
+              } else {
+                this.setState({verification: 'normal'})
               }
               this.setState({visible: false})
             }}

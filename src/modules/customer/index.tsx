@@ -12,7 +12,7 @@ import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
-import { fetchList, fetchCityCustomerList, fetchCityCount } from './api'
+import { fetchList, fetchCityCount } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
@@ -122,9 +122,6 @@ class Main extends React.Component {
   public componentWillMount () {
     this.fetchList()
     fetchCityCount().then((res) => {
-      console.log(res)
-    })
-    fetchCityCustomerList().then((res) => {
       console.log(res)
     })
   }

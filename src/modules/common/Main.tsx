@@ -7,7 +7,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom'
-import Menu from './Menu'
+import Menu from '@/modules/common/menu'
 import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {

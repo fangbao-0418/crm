@@ -1,13 +1,13 @@
 import React from 'react'
 import { Icon, Table, Input, Form, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { DatePicker, Radio } from 'antd'
+import { DatePicker, Radio, Row, Col } from 'antd'
 import { Moment } from 'moment'
 import TaskService from '@/modules/outsite/services'
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker
-
 const FormItem = Form.Item
+const styles = require('@/modules/outsite/styles/list')
 
 interface States {
   a?: any
@@ -23,7 +23,8 @@ function hasErrors (fieldsError: any) {
 
 // 搜索表单
 class Main extends React.Component<any, any> {
-  public state: States = {
+  public state: any = {
+    extshow: false
   }
 
   public componentWillMount () {
@@ -45,6 +46,18 @@ class Main extends React.Component<any, any> {
     })
   }
 
+  // 搜索项显藏
+  public setExtshow () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
+  public setExthide () {
+    this.setState({
+      extshow: false
+    })
+  }
+
   public render () {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
 
@@ -56,7 +69,7 @@ class Main extends React.Component<any, any> {
     <div className='t-search-form'>
       <Form
         layout='inline'
-        style={{width: '50%'}}
+        style={{width: '80%'}}
         onChange={this.props.onSearch}
         onSubmit={this.props.onSearch}
       >
@@ -71,7 +84,7 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`types`, {
+        {getFieldDecorator(`taskname`, {
           rules: [{
             required: false,
             message: ''
@@ -82,6 +95,38 @@ class Main extends React.Component<any, any> {
           </Select>
         )}
         </FormItem>
+
+        <div className={styles.extshow}>
+          <span onClick={this.setExtshow.bind(this)} className={styles.searchico}>
+            <Icon type={this.state.extshow ? 'up' : 'down'} />
+          </span>
+          <div className={`${styles.extcontent} ${this.state.extshow ? styles.show : styles.hide}`}>
+            <Row>
+              <Col span={12}>
+                <FormItem>
+                  <Input placeholder='请输入外勤人员' name='userName' />
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem>
+                  <Input placeholder='请选择服务状态' name='status' />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem>
+                  <Input placeholder='选择所属区县'  name='areaId' />
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem>
+                  <Input placeholder='请选择提交日期' name='startTime' />
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
+        </div>
       </Form>
     </div>
     )
