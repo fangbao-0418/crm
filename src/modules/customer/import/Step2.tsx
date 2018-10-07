@@ -1,5 +1,6 @@
 import React from 'react'
 import { Upload, Icon, message } from 'antd'
+import { importFile } from '../api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
@@ -19,6 +20,9 @@ class Main extends React.Component<Props> {
       multiple: true,
       showUploadList: false,
       action: '/crm-manage/v1/api/customer/import',
+      beforeUpload: (file: any) => {
+        return importFile(file)
+      },
       onChange: (info: any) => {
         console.log(info)
         if (this.props.onOk) {

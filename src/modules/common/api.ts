@@ -30,5 +30,5 @@ export const fetchRegion = (payload: {
 } = {
   level: 1
 }) => {
-  return http(`/crm-manage/v1/ap/v1/api/region`, payload)
+  return http(`/config/v1/ap/v1/api/region`, payload)
 }

@@ -74,6 +74,47 @@ class Main extends React.Component<Props> {
       }
     })
   }
+  public getSelectValue (field: string, arr: Array<{label: string, value: string}>) {
+    const detail: any = this.props.detail
+    const value = detail[field]
+    const res = arr.find((item) => {
+      if (String(item.value) === String(value)) {
+        return true
+      }
+    })
+    if (res) {
+      return res.label
+    } else {
+      return arr.length > 0 ? arr[0].label : ''
+    }
+  }
+  public save () {
+    return new Promise((resolve, reject) => {
+      this.props.form.validateFields((errs: any, values: any) => {
+        if (errs) {
+          return
+        }
+        const params = this.props.detail
+        params.customerNameType = '1' // 后端不需要改代码所以加上
+        params.isConfirmed = '1' // 是否天眼查
+        params.contactPersons = this.props.linkMan
+        // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
+        if (this.props.customerId) {
+          updateCustomer(this.props.customerId, params).then(() => {
+            resolve()
+          }, () => {
+            reject()
+          })
+        } else {
+          addCustomer(params).then(() => {
+            resolve()
+          }, () => {
+            reject()
+          })
+        }
+      })
+    })
+  }
   public render () {
     const { getFieldDecorator } = this.props.form
     console.log(this.props.detail, 'render')
@@ -108,15 +149,7 @@ class Main extends React.Component<Props> {
           <FormItem
             >
               {getFieldDecorator(
-                'customerSource',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      message: '客户来源不能为空'
-                    }
-                  ]
-                }
+                'customerSource'
               )(
                 <FormItemLayout
                   label='客户来源'
@@ -124,8 +157,11 @@ class Main extends React.Component<Props> {
                 >
                   <Select
                     style={{width: '100%'}}
-                    defaultValue={this.props.detail.customerSource}
+                    value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
+                      this.props.form.validateFields(() => {
+                        console.log('validataor')
+                      })
                       this.handleChange(null, {
                         key: 'customerSource',
                         value
@@ -289,37 +325,11 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        <div className='text-right mt10'>
+        {/* <div className='text-right mt10'>
           <Button
             className='mr5'
             type='primary'
-            onClick={() => {
-              this.props.form.validateFields((errs: any, values: any) => {
-                if (errs) {
-                  return
-                }
-                const params = this.props.detail
-                params.customerNameType = '1' // 后端不需要改代码所以加上
-                params.isConfirmed = '1' // 是否天眼查
-                params.contactPersons = this.props.linkMan
-                // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
-                console.log(params, 'params')
-                if (this.props.customerId) {
-                  updateCustomer(this.props.customerId, params).then((res) => {
-                    if (res.status === 200) {
-                      APP.success('修改成功')
-                    }
-                  })
-                } else {
-                  addCustomer(params).then((res) => {
-                    if (res.status === 200) {
-                      APP.success('新增成功')
-                      this.props.onClose()
-                    }
-                  })
-                }
-              })
-            }}
+            onClick={this.save.bind(this)}
           >
             保存
           </Button>
@@ -334,11 +344,13 @@ class Main extends React.Component<Props> {
               现在跟进
             </Button>
           }
-        </div>
+        </div> */}
       </Form>
     )
   }
 }
 export default connect((state: Reducer.State) => {
   return state.customer
-})(Form.create()(Main))
+}, null, null, {
+  withRef: true
+})(Form.create({ withRef: true })(Main))

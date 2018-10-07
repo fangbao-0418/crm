@@ -42,6 +42,14 @@ export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
 export const fetchCityCount = () => {
   return http(`/crm-manage/v1/api/customer/stats/by-city`)
 }
-export const importFile = () => {
-  return http(`/crm-manage/v1/api/customer/import`)
+export const importFile = (file: File) => {
+  const data = new FormData()
+  data.append('file', file)
+  return http(`/crm-manage/v1/api/customer/import`, 'POST', {
+    dataType: 'JSON',
+    contentType: false,
+    raw: true,
+    processData: false,
+    data
+  })
 }
