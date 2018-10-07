@@ -3,8 +3,8 @@ import { Table, Input, Form, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
-import { saveAutoAssign } from './api'
-import { changeAutoAssignAction } from './actions'
+import { saveAutoAssign } from '@/modules/customer-set/api'
+import { changeAutoAssignAction } from '@/modules/customer-set/actions'
 const FormItem = Form.Item
 type DetailProps = Customer.AutoAssignProps
 interface Props extends Customer.Props, FormComponentProps {}

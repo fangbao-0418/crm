@@ -24,13 +24,15 @@ export default class extends React.Component {
           <Top />
           <Content className={styles.content}>
             <Switch>
+              {/*crm*/}
               <Route path='/' component={modules.Index} exact/>
               <Route path='/customer' component={modules.Customer} />
               <Route path='/business' component={modules.Business} />
               <Route path='/appointment' component={modules.Appointment} />
               <Route path='/signed' component={modules.Signed} />
               <Route path='/open' component={modules.Open} />
-              <Route path='/set' component={modules.Set} />
+              <Route path='/customer-set/index' component={modules.CustomerSet} />
+              <Route path='/customer-set/assign' component={modules.CustomerSetAssign} />
 
               {/*权限管理*/}
               <Route path='/center-account' component={modules.CenterAccount}/>

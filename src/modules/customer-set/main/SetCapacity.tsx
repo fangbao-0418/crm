@@ -3,8 +3,8 @@ import { Table, Input, Form, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
-import { changeCapacityAction } from './actions'
-import { saveStorageCapacity } from './api'
+import { changeCapacityAction } from '@/modules/customer-set/actions'
+import { saveStorageCapacity } from '@/modules/customer-set/api'
 const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {

@@ -71,7 +71,11 @@ class Main extends React.Component {
       children: [
         {
           title: '客户设置',
-          path: '/set'
+          path: '/customer-set/index'
+        },
+        {
+          title: '分客设置',
+          path: '/customer-set/assign'
         }
       ]
     },
