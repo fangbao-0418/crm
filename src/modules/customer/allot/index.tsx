@@ -29,6 +29,9 @@ class Main extends React.Component<Props> {
               value.customerIds = this.props.selectedRowKeys
             }
             allotCustomer(value).then((res: any) => {
+              this.setState({
+                step: 2
+              })
               APP.dispatch({
                 type: 'change customer data',
                 payload: {
@@ -57,10 +60,8 @@ class Main extends React.Component<Props> {
               ids.push(item.id)
             })
             const payload = ids.join(',')
-            deleteCustomer(payload).then((res) => {
-              if (res.status) {
-                console.log('aa')
-              }
+            deleteCustomer(payload).then(() => {
+              APP.success('操作成功')
             })
           }}
         />

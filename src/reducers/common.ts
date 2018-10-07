@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions'
 export default handleActions<Common.Props>({
   'loading show': (state) => {
     let { ajaxCount } = state
-    ajaxCount = ajaxCount + 1
+    ajaxCount = ajaxCount + 1;
     return {
       ...state,
       ajaxCount

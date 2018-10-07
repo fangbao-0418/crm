@@ -6,5 +6,5 @@ import '@/stylus/app'
 import 'pilipa/dist/pilipa.min.css'
 render(
   <Router />,
-  document.getElementById('root')
+   document.getElementById('root')
 )

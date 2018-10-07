@@ -16,6 +16,7 @@ const options = {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
+
       }
     }
   },

@@ -7,14 +7,13 @@ const defaultVal: Customer.Props = {
     contactPhone: ''
   }],
   dataSource: [],
-  detail: {},
-  autoAssign: [{
-    bigAreaName: '22',
-    cityName: '222',
-    agencyName: '222',
-    autoDistributeWeight: '333',
-    autoDistributeMaxNum: '11'
-  }],
+  detail: {
+    contactPersons: [{
+      contactPerson: '',
+      contactPhone: ''
+    }]
+  },
+  autoAssign: [],
   assignResult: {
     allocatedNum: 0,
     exists: [],
@@ -24,8 +23,9 @@ const defaultVal: Customer.Props = {
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
     payload = Object.assign({}, state, _.cloneDeep(payload))
+    payload = _.merge(_.cloneDeep(defaultVal), payload)
+    payload.detail.contactPersons = payload.linkMan
     return {
       ...state,
       ...payload

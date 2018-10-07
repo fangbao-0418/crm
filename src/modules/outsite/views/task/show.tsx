@@ -1,12 +1,13 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Modal, Icon, Tabs, Table, Row, Col } from 'antd'
+import { Modal, Icon, Tabs, Table, Row, Col, Select, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import Service from '@/modules/outsite/services'
+import Workorder from '@/modules/outsite/views/task/workorder.component'
 
 const styles = require('../../styles/list.styl')
 
@@ -43,6 +44,44 @@ const data: TaskList = [
   }
 ]
 
+const trackdata: any = [
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  },
+  {
+    userName: '李小龙',
+    createTime: '2018-09-12',
+    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+  }
+]
+
 interface States {
   modalTitle: string,
   modalVisible: boolean,
@@ -58,9 +97,13 @@ interface ColProps extends TaskItem {
 
 // 列表
 class Main extends React.Component<any> {
-  public state: States = {
+  public state: any = {
     modalTitle: '',
     modalVisible: false,
+    modalAllotVisible: false, // 审批分配
+    modalCancelVisible: false, // 审批取消
+    modalVoucherVisible: false, // 查看凭证
+    modalChangeVisible: false, // 转交他人
     dataSource: [],
     selectedRowKeys: [],
     pageConf: {
@@ -130,9 +173,9 @@ class Main extends React.Component<any> {
     render: (k: any, item: TaskItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onAuditItem.bind(this)(item) }}>审批</span>
-          <span className={`likebtn`} onClick={() => { this.onChangeUser.bind(this)(item) }}>转接任务</span>
-          <span className={`likebtn`} onClick={() => { this.onShowVoucher.bind(this)(item) }}>查看凭证</span>
+          <span className={`likebtn`} onClick={() => { this.showCancelModal.bind(this)(item) }}>审批</span>
+          <span className={`likebtn ${item.status === '1' ? '' : 'likebtn-disabled'}`} onClick={() => { this.showChangeModal.bind(this)(item) }}>转接任务</span>
+          <span className={`likebtn`} onClick={() => { this.showVoucherModal.bind(this)(item) }}>查看凭证</span>
         </span>
       )
     }
@@ -232,6 +275,9 @@ class Main extends React.Component<any> {
 
   // 查看凭证
   public onShowVoucher (item: TaskItem) {
+    this.setState({
+      modalVoucherVisible: true
+    })
     console.log('show voucher::', item)
   }
 
@@ -239,6 +285,80 @@ class Main extends React.Component<any> {
   public onTabChange (key: string) {
     console.log('tab change::', arguments)
     // this.getList() // 不同状态参数
+  }
+
+  // Modals
+  // 审批弹层
+  public showAuditModal () {
+    console.log('audit modal::show')
+    this.setState({
+      modalAuditVisible: true
+    })
+  }
+  public hideAuditModal () {
+    this.setState({
+      modalAuditVisible: false
+    })
+  }
+
+  // 凭证弹层
+  public showVoucherModal () {
+    console.log('audit modal::show')
+    this.setState({
+      modalVoucherVisible: true
+    })
+  }
+  public hideVoucherModal () {
+    this.setState({
+      modalVoucherVisible: false
+    })
+  }
+
+  // 审批任务取消
+  public showCancelModal () {
+    console.log('cancel modal::show')
+    this.setState({
+      modalCancelVisible: true
+    })
+  }
+  public hideCancelModal () {
+    this.setState({
+      modalCancelVisible: false
+    })
+  }
+
+  // 批量分配
+  public showAllotModal () {
+    console.log('allot modal::show')
+    this.setState({
+      modalAllotVisible: true
+    })
+  }
+  public hideAllotModal () {
+    this.setState({
+      modalAllotVisible: false
+    })
+  }
+  // 切换人员
+  public onMultiChange () {
+    console.log('分配人员：', arguments)
+  }
+
+  // 转接任务
+  public showChangeModal () {
+    console.log('change modal show')
+    this.setState({
+      modalChangeVisible: true
+    })
+  }
+  public hideChangeModal () {
+    this.setState({
+      modalChangeVisible: false
+    })
+  }
+  // 切换人员
+  public onChangeChange () {
+    console.log('转接任务：', arguments)
   }
 
   public render () {
@@ -264,23 +384,84 @@ class Main extends React.Component<any> {
                   rowKey={'key'}
                 />
                 <div className={styles['bottom-btns']}>
-                  <Button type='primary' onClick={this.onAuditTask.bind(this)}>审批</Button>
-                  <Button type='primary' onClick={this.onMultiAllot.bind(this)}>批量分配</Button>
+                  <Button type='primary' onClick={this.showAllotModal.bind(this)}>批量分配</Button>
                 </div>
               </Tabs.TabPane>
               <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
-                <div>
-                  跟进列表
+                <div className={styles.trackbox}>
+                {
+                  trackdata.map((item: any, index: number) => {
+                    return (
+                    <div className={styles.trackitem} key={`trackitem-${index}`}>
+                      <div><em>{item.userName}</em><span>{item.createTime}</span></div>
+                      <p>{item.content}</p>
+                    </div>)
+                  })
+                }
                 </div>
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
                 <div>
-                  工单详情
+                  <Workorder data={{taskid: this.taskid}} />
                 </div>
               </Tabs.TabPane>
           </Tabs>
         </Row>
       </HCframe>
+
+      <Modal
+        title='批量分配'
+        visible={this.state.modalAllotVisible}
+        onOk={this.onMultiAllot.bind(this)}
+        onCancel={this.hideAllotModal.bind(this)}
+      >
+      <div className={styles.modalbox}>
+        <Select style={{width: '100%'}} placeholder='选择分配的外勤' onChange={this.onMultiChange.bind(this)}>
+          <Select.Option key='a'>冻豆腐</Select.Option>
+          <Select.Option key='b'>冻豆腐</Select.Option>
+          <Select.Option key='c'>冻豆腐</Select.Option>
+        </Select>
+      </div>
+      </Modal>
+
+      <Modal
+        title='审核取消'
+        visible={this.state.modalCancelVisible}
+        onOk={this.onAuditItem.bind(this)}
+        onCancel={this.hideCancelModal.bind(this)}
+      >
+      <div className={`${styles.modalbox} ${styles.cancelbox}`}>
+        <p>确定取消“当地的”在内及后继子任务？</p>
+        <div className={`${styles.cancelcont}`}>原因： 撤回</div>
+      </div>
+      </Modal>
+
+      <Modal
+        title='查看凭证'
+        visible={this.state.modalVoucherVisible}
+        onOk={this.onShowVoucher.bind(this)}
+        onCancel={this.hideVoucherModal.bind(this)}
+      >
+      <div className={`${styles.modalbox} ${styles.voucherbox}`}>
+        <img
+          src={`https://www.baidu.com/img/bd_logo1.png`}
+        />
+      </div>
+      </Modal>
+
+      <Modal
+        title='转接任务'
+        visible={this.state.modalChangeVisible}
+        onOk={this.onChangeUser.bind(this)}
+        onCancel={this.hideChangeModal.bind(this)}
+      >
+        <span>分配：</span>
+        <Select style={{width: '50%'}} onChange={this.onChangeChange.bind(this)}>
+          <Select.Option key='1'>李小龙</Select.Option>
+          <Select.Option key='2'>李连杰</Select.Option>
+          <Select.Option key='3'>成龙</Select.Option>
+        </Select>
+      </Modal>
     </div>
     )
   }

@@ -1,17 +1,22 @@
 import React from 'react'
-import { Row, Col, Icon, Button } from 'antd'
+import { Row, Col, Icon, Button, Select } from 'antd'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
+import FormItem from '@/components/form/Item1'
 import Modal from 'pilipa/libs/modal'
 import LinkMain from '@/modules/common/link-man'
 import AddButton from '@/modules/common/content/AddButton'
 import Provider from '@/components/Provider'
+import _ from 'lodash'
 import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
-import { addCustomer, viewCustomer, updateCustomer } from './api'
+import { addCustomer, updateCustomer } from './api'
+const Option = Select.Option
 interface Props extends Customer.Props {
   customerId?: string
+  isBussiness?: boolean
   onClose?: () => void
+  flowNow?: () => void
 }
 class Main extends React.Component<Props> {
   public componentWillMount () {
@@ -56,10 +61,9 @@ class Main extends React.Component<Props> {
       }
     })
   }
-  public handleChange (e: React.SyntheticEvent, value: any) {
+  public handleChange (e: React.SyntheticEvent, value: {key: string, value: any}) {
     const detail: any = this.props.detail
-    detail[value.key] = value.value
-    console.log(detail, 'detail')
+    _.set(detail, value.key, value.value)
     APP.dispatch({
       type: 'change customer data',
       payload: {
@@ -80,18 +84,39 @@ class Main extends React.Component<Props> {
             />
           </Col>
           <Col span={12}>
-            <Input
-              field='legalPerson'
-              label='法人'
-              onChange={this.handleChange.bind(this)}
-              value={this.props.detail.legalPerson}
-            />
+            <FormItem
+              label='客户来源'
+            >
+              <Select
+                style={{width: '150px'}}
+                defaultValue={this.props.detail.customerSource}
+                onChange={(value) => {
+                  this.handleChange(null, {
+                    key: 'customerSource',
+                    value
+                  })
+                }}
+              >
+                {
+                  APP.keys.EnumCustomerSource.map((item) => {
+                    return (
+                      <Option
+                        key={item.value}
+                      >
+                        {item.label}
+                      </Option>
+                    )
+                  })
+                }
+              </Select>
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
           <Col span={12}>
             <Input
               label={'联系人'}
+              field='contactPersons[0].contactPerson'
               addonAfter={
                 (
                   <Icon
@@ -102,12 +127,15 @@ class Main extends React.Component<Props> {
                   />
                 )
               }
-              value={this.props.linkMan[0].contactPerson}
+              onChange={this.handleChange.bind(this)}
+              value={this.props.detail.contactPersons[0].contactPerson}
             />
           </Col>
           <Col span={12}>
             <Input
               label='联系电话'
+              field='contactPersons[0].contactPhone'
+              onChange={this.handleChange.bind(this)}
               value={this.props.linkMan[0].contactPhone}
             />
           </Col>
@@ -115,36 +143,59 @@ class Main extends React.Component<Props> {
         <Row gutter={8} className='mt10'>
           <Col span={12}>
             <Input
-              field='customerSource'
-              label={'客户来源'}
+              field='legalPerson'
+              label='法人'
               onChange={this.handleChange.bind(this)}
-              value={this.props.detail.customerSource}
+              value={this.props.detail.legalPerson}
             />
           </Col>
           <Col span={12}>
-            <Input
-              field='payTaxesNature'
-              onChange={this.handleChange.bind(this)}
+            <FormItem
               label='纳税类别'
-              value={this.props.detail.payTaxesNature}
-            />
+            >
+              <Select
+                style={{width: '150px'}}
+                defaultValue={APP.keys.EnumPayTaxesNature[0].value}
+                onChange={(value) => {
+                  this.handleChange(null, {
+                    key: 'payTaxesNature',
+                    value
+                  })
+                }}
+              >
+                {
+                  APP.keys.EnumPayTaxesNature.map((item) => {
+                    return (
+                      <Option
+                        key={item.value}
+                      >
+                        {item.label}
+                      </Option>
+                    )
+                  })
+                }
+              </Select>
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
+          {
+            !this.props.isBussiness &&
+            <Col span={12}>
+              <Input
+                field='cityCode'
+                onChange={this.handleChange.bind(this)}
+                label={'城市'}
+                value={this.props.detail.cityCode}
+              />
+            </Col>
+          }
           <Col span={12}>
             <Input
-              field='cityName'
-              onChange={this.handleChange.bind(this)}
-              label={'城市'}
-              value={this.props.detail.cityName}
-            />
-          </Col>
-          <Col span={12}>
-            <Input
-              field='cityCode'
+              field='areaCode'
               onChange={this.handleChange.bind(this)}
               label='地区'
-              value={this.props.detail.cityCode}
+              value={this.props.detail.areaCode}
             />
           </Col>
         </Row>
@@ -170,13 +221,15 @@ class Main extends React.Component<Props> {
         </Row>
         <div className='text-right mt10'>
           <Button
+            className='mr5'
             type='primary'
             onClick={() => {
               console.log(this.props.detail, 'this.props.detail')
               const params = this.props.detail
-              params.customerNameType = '1'
-              // params.contactsList = this.props.linkMan
-              params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
+              params.customerNameType = '1' // 后端不需要改代码所以加上
+              params.isConfirmed = '1' // 是否天眼查
+              params.contactPersons = this.props.linkMan
+              // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
               console.log(params, 'params')
               if (this.props.customerId) {
                 updateCustomer(this.props.customerId, params).then((res) => {
@@ -196,6 +249,16 @@ class Main extends React.Component<Props> {
           >
             保存
           </Button>
+          {
+            this.props.isBussiness &&
+            <Button
+              onClick={() => {
+                this.props.flowNow()
+              }}
+            >
+              现在跟进
+            </Button>
+          }
         </div>
       </div>
     )
