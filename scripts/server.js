@@ -29,7 +29,7 @@ const options = {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/crm-manage/v1/api': '/api'
+        '^/crm-manage/v1': '/v1'
       }
     }
   },

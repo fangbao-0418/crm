@@ -8,6 +8,7 @@ import { Button } from 'antd'
 const styles = require('./style')
 interface Props {
   customerId: string
+  isOpen?: boolean
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -21,10 +22,13 @@ class Main extends React.Component<Props> {
           >
             <BaseInfo customerId={this.props.customerId}/>
           </Card>
-          <Card title='跟进记录'>
-            <Tags className='mb10'/>
-            <Tags />
-          </Card>
+          {
+            !this.props.isOpen &&
+            <Card title='跟进记录'>
+              <Tags className='mb10'/>
+              <Tags />
+            </Card>
+          }
         </div>
         <div className={styles.right}>
           <Record/>
