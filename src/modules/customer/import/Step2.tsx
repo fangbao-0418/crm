@@ -6,12 +6,19 @@ interface Props {
   onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
+  public downFile () {
+    const fileUrl = require('@/assets/files/客资导入模版.xlsx')
+    const el = document.createElement('a')
+    el.setAttribute('href', fileUrl)
+    el.setAttribute('download', '客资导入模版')
+    el.click()
+  }
   public render () {
     const props = {
       name: 'file',
       multiple: true,
       showUploadList: false,
-      action: '//jsonplaceholder.typicode.com/posts/',
+      action: '/crm-manage/v1/api/customer/import',
       onChange: (info: any) => {
         console.log(info)
         if (this.props.onOk) {
@@ -30,7 +37,15 @@ class Main extends React.Component<Props> {
     }
     return (
       <div className={styles.step2}>
-        <p className='text-center mt20'>导入说明：导入文件仅支持excel格式。<span className='href'>下载客户模版</span></p>
+        <p className='text-center mt20'>
+          导入说明：导入文件仅支持excel格式
+          <span
+            className='href'
+            onClick={this.downFile.bind(this)}
+          >
+            下载客户模版
+          </span>
+        </p>
         <Dragger {...props}>
           <p className='ant-upload-drag-icon'>
             <Icon type='inbox' />
