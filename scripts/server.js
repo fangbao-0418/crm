@@ -14,13 +14,10 @@ const options = {
     '/work': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
-      secure: false,
-      pathRewrite: {
-
-      }
+      secure: false
     },
-    '/api': {
-      target: 'http://192.168.1.106:9008',
+    '/user': {
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     },

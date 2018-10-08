@@ -10,9 +10,47 @@ class Main extends React.Component<any, any> {
     const value = props.value || {}
     this.state = {
       text: value.text ,
-      currency: value.currency || '服务内容',
+      currency: value.currency || '全部服务内容',
       orderState: value.orderState || '全部状态',
-      dateArr:[]
+      dateArr:[],
+      stateArr:[
+        {
+          key: '',
+          value: '全部状态'
+        },
+        {
+          key: 'OUTSIDE_DISTRIBUTED',
+          value: '已分配(外勤)'
+        },
+        {
+          key: 'OUTSIDE_REFUSED',
+          value: '外勤申请拒绝(外勤)'
+        },
+        {
+          key: 'OUTSIDE_DISTRIBUTING',
+          value: '待手动分配(外勤)'
+        }
+      ],
+      severArr:[
+        {
+          name:'全部服务内容'
+        },
+        {
+          name:'工商注册'
+        },
+        {
+          name:'核名'
+        },
+        {
+          name:'网上申请'
+        },
+        {
+          name:'下发执照'
+        },
+        {
+          name:'刻章'
+        }
+      ]
     }
   }
 
@@ -85,19 +123,28 @@ class Main extends React.Component<any, any> {
                     style={{ width: '15%', marginLeft: '3%' }}
                     onChange={this.handleCurrencyChange}
                 >
-                <Option value='代理记账'>代理记账</Option>
-                <Option value='工商注册'>工商注册</Option>
+                {
+                  this.state.severArr.map((item: any, index: any)=>{
+                    return(
+                      <Option value={item.name} key={index}>{item.name}</Option>
+                    )
+                  })
+                }
                 </Select>
                 <Select
                     value={state.orderState}
                     size={size}
                     style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
                     onChange={this.handleOrderStateChange}
-                >
-                <Option value='准备材料(外勤)'>准备材料(外勤)</Option>
-                <Option value='等待审核'>等待审核</Option>
+                >{
+                  this.state.stateArr.map((item: any, index: any) => {
+                    return (
+                      <Option value={item.key} key={index}>{item.value}</Option>
+                    )
+                  })
+                }
                 </Select>
-                 <RangePicker onChange={this.onDateChange}/>
+                 <RangePicker onChange={this.onDateChange} allowClear={true}/>
             </Form>
         </div>
     )
