@@ -1,7 +1,7 @@
 import React from 'react'
-import { Modal, Form, Input, Checkbox, Button, Select, Tree } from 'antd'
+import { Modal, Form, Input, Checkbox, Cascader, Select, Tree } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchRegionList } from '../api'
+import { fetchRegionList, fetchDepartmentList, fetchRoleList, fetchRoleOfPermission } from '../api'
 
 const styles = require('./index.styl')
 const Option = Select.Option
@@ -18,9 +18,12 @@ interface Props extends FormComponentProps {
 interface State {
   title: string // 弹窗标题
   isSell: boolean // 是否是销售
-  expandedKeys: string[]
-  checkedKeys: string[]
-  regionTree: any[]
+  expandedKeys: string[] // 展开节点key值
+  checkedKeys: string[] // 选中节点key值
+  regionTree: any[] // 区域树形结构数据
+  departmentTree: any[] // 部门树形结构数据
+  roleList: any[] // 角色列表
+  permissionList: any[] // 角色权限列表
 }
 
 class Main extends React.Component<Props, State> {
@@ -30,15 +33,22 @@ class Main extends React.Component<Props, State> {
     isSell: false,
     expandedKeys: [],
     checkedKeys: [],
-    regionTree: []
+    regionTree: [],
+    departmentTree: [],
+    roleList: [],
+    permissionList: []
   }
 
   public componentWillMount () {
-    const {mode} = this.props
+    const {mode, info} = this.props
+    console.log(this.props)
     this.setTitle()
     this.setRegionTree()
+    this.getDepartmentList()
+    this.getRoleList()
     if (mode === 'view' || mode === 'modify') {
-      this.setState({checkedKeys: this.getCheckedKeys(this.props.info.region)})
+      this.getRoleOfPermission(info.roleId)
+      this.setState({checkedKeys: this.getCheckedKeys(info.region)})
     }
   }
 
@@ -48,7 +58,6 @@ class Main extends React.Component<Props, State> {
       if (err) {return}
       // 只把最末级的公司id传给后端
       const childIds = this.getChildIds(this.state.regionTree)
-      console.log(444, childIds, this.state.checkedKeys)
       val.region = childIds.filter((item) => {
         return this.state.checkedKeys.some((i: string) => {
           item = item + ''
@@ -79,15 +88,32 @@ class Main extends React.Component<Props, State> {
     this.setState({title})
   }
 
+  // 获取部门列表
+  public getDepartmentList () {
+    fetchDepartmentList().then((res) => {
+      this.setState({departmentTree: res})
+    })
+  }
+
+  // 获取角色数据
+  public getRoleList () {
+    fetchRoleList().then((res) => {
+      this.setState({roleList: res})
+    })
+  }
+
+  // 获取角色的权限
+  public getRoleOfPermission (roleId: number) {
+    fetchRoleOfPermission(roleId).then((res) => {
+      this.setState({permissionList: res})
+    })
+  }
+
   // 获取区域数据
   public setRegionTree () {
-    if (this.props.mode === 'add') {
-      fetchRegionList().then((res) => {
-        this.setState({regionTree: res})
-      })
-    } else {
-      this.setState({regionTree: this.props.info.region})
-    }
+    fetchRegionList().then((res) => {
+      this.setState({regionTree: res})
+    })
   }
 
   // 获取所有区域最末级公司的id
@@ -111,6 +137,7 @@ class Main extends React.Component<Props, State> {
   // 获取已勾选区域id
   public getCheckedKeys (data: any) {
     const checkedIds: any[] = []
+    data = data || []
     function getId (arr: any) {
       arr.forEach((item: any) => {
         if (item.region) {
@@ -241,11 +268,15 @@ class Main extends React.Component<Props, State> {
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
             {
               getFieldDecorator('department', validation.department)(
-                <Select disabled={mode === 'view'} size='small' placeholder='请选择部门' notFoundContent='暂无数据'>
-                  <Option value='1'>11</Option>
-                  <Option value='2'>22</Option>
-                  <Option value='3'>33</Option>
-                </Select>
+                this.state.departmentTree.length
+                ? <Cascader
+                  size='small'
+                  disabled={mode === 'view'}
+                  options={this.state.departmentTree}
+                  placeholder='请选择部门'
+                  fieldNames={{ label: 'name', value: 'id', children: 'organizationList' }}
+                />
+                : <span></span>
               )
             }
           </FormItem>
@@ -258,15 +289,17 @@ class Main extends React.Component<Props, State> {
                   size='small'
                   placeholder='请选择角色'
                   notFoundContent='暂无数据'
-                  onSelect={
-                    (value, option) => {
-                      this.setState({isSell: value === '2'})
-                    }
-                  }
+                  onSelect={(value: any, option) => {
+                    console.log(value, option)
+                    this.setState({isSell: option.props.children === '销售'}) // 当角色为销售时有接受资源选项
+                    this.getRoleOfPermission(value)
+                  }}
                 >
-                  <Option key='1'>11</Option>
-                  <Option key='2'>22</Option>
-                  <Option key='3'>33</Option>
+                  {
+                    this.state.roleList.map((item) => {
+                      return <Option key={item.id}>{item.name}</Option>
+                    })
+                  }
                 </Select>
               )
             }
@@ -317,10 +350,11 @@ class Main extends React.Component<Props, State> {
 
         <div className={styles.permission}>
           <b>所属权限：</b>
-          <Checkbox disabled>渠道用户</Checkbox><br/>
-          <Checkbox disabled>直营用户</Checkbox><br/>
-          <Checkbox disabled>直营用户</Checkbox><br/>
-          <Checkbox disabled>直营用户</Checkbox><br/>
+          {
+            this.state.permissionList.map((item) => {
+              return <Checkbox disabled checked key={item.id}>{item.name}</Checkbox>
+            })
+          }
         </div>
 
       </Modal>

@@ -28,47 +28,16 @@ class Main extends React.Component {
   }
 
   public state: State = {
-    pageTotal: 100,
+    pageTotal: 0,
     selectedRowKeys: [],
     mode: 'add',
     visible: false,
     itemInfo: {},
-    dataSource: [
-      {
-        id:3,
-        phone: '11111111333',
-        name: '张三',
-        email:'1@qq.com',
-        roleId: 1,
-        organizationId: 2,
-        roleName:'财务',
-        organizationName:'财务部',
-        acceptType: 0,
-        businessAccountingId: 3,
-        region: [
-          {
-            id: 1,
-            name: '负责区域A',
-            parentId: 0,
-            enableFlag: true,
-            regionFlag: true,
-            region: [
-              {
-                id: 2,
-                name: '负责区域A1',
-                parentId: 0,
-                enableFlag: true,
-                regionFlag: false
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    dataSource: []
   }
 
   public componentWillMount () {
-    // this.getList()
+    this.getList()
   }
 
   // 获取数据列表
