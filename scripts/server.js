@@ -30,7 +30,7 @@ const options = {
     //   target: 'https://x-sys.i-counting.cn',
     //   changeOrigin: true,
     //   secure: false
-    // },
+    // }
     '/crm-manage': {
       target: 'http://192.168.1.229:9008/',
       changeOrigin: true,
