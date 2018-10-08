@@ -220,6 +220,8 @@ class Main extends React.Component {
               console.log(ins.refs.wrappedComponent)
               ins.refs.wrappedComponent.save().then(() => {
                 APP.success('保存成功')
+                modal.hide()
+                this.fetchList()
               }, () => {
                 APP.error('保存失败')
               })

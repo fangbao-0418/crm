@@ -49,6 +49,18 @@ declare namespace Customer {
     exists: Array<{name: string, id: string}>
     total: number
   }
+  export interface TrackRecord {
+    customerId?: string
+    salesperson?: string
+    tagIntention?: string
+    tagCustomerStatus?: string
+    tagFollowupStatus?: string
+    tagTelephoneStatus?: string
+    remark?: string
+    appointTime?: string
+    createTime?: string
+    trackRecordType?: string
+  }
   export interface Props {
     linkMan?: LinkManProps[]
     dataSource?: DetailProps[]

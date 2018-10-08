@@ -18,6 +18,11 @@ export const addCustomer = (payload: Customer.DetailProps) => {
     data: payload
   })
 }
+export const addBusinessCustomer = (payload: Customer.DetailProps) => {
+  return http(`/crm-manage/v1/api/business-opportunity/entry`, 'POST', {
+    data: payload
+  })
+}
 export const allotCustomer = (payload: {
   agencyId?: string
   customerIds?: string[]
@@ -52,4 +57,16 @@ export const importFile = (file: File) => {
     processData: false,
     data
   })
+}
+export const fetchTrackRecords = (payload: {
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return http(`/crm-manage/v1/api/track-record`, 'GET', payload)
+}
+export const fetchClueRecords = (payload: {
+  pageNum?: number
+  pageSize?: number 
+}) => {
+  return http(`/crm-manage/v1/api/clue-record`, 'GET', payload)
 }
