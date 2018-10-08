@@ -94,10 +94,10 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'intention'
+    dataIndex: 'tagIntention'
   }, {
     title: '电话状态',
-    dataIndex: 'telephoneStatus'
+    dataIndex: 'tagTelephoneStatus'
   }, {
     title: '空置天数',
     dataIndex: 'freeDays'
@@ -106,7 +106,7 @@ class Main extends React.Component {
     dataIndex: 'customerSource'
   }, {
     title: '创建时间',
-    dataIndex: 'createBeginDate'
+    dataIndex: 'createTime'
   }, {
     title: '释放销售',
     dataIndex: 'lastReleaseSalesperson'

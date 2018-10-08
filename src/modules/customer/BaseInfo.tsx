@@ -192,7 +192,8 @@ class Main extends React.Component<Props> {
                       required: true,
                       message: '公司名不能为空'
                     }
-                  ]
+                  ],
+                  initialValue: this.props.detail.customerName
                 }
               )(
                 <Input
@@ -320,7 +321,7 @@ class Main extends React.Component<Props> {
               label='纳税类别'
             >
               <Select
-                style={{width: '150px'}}
+                style={{width: '100%'}}
                 // defaultValue={}
                 onChange={(value) => {
                   this.handleChange(null, {
