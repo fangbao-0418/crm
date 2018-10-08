@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col, Icon, Button, Select, Form } from 'antd'
 import DropDown from 'pilipa/libs/dropdown'
+import AutoComplete from 'pilipa/libs/auto-complete'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
@@ -175,6 +176,41 @@ class Main extends React.Component<Props> {
           }
         }
       })
+    })
+  }
+  public handleCityChange (value: {key: string, title: string}) {
+    console.log(value)
+    if (value.key === undefined) {
+      return
+    }
+    this.handleChange(null, {
+      key: 'cityCode',
+      value: value.key
+    })
+    this.setState({
+      areaName: '',
+      cityName: value.title
+    })
+    fetchRegion({
+      parentId: value.key,
+      level: 3
+    }).then((res) => {
+      this.setState({
+        areaList: res
+      })
+    })
+  }
+  public handleAreaChange (value: {key: string, title: string}) {
+    console.log(value)
+    if (value.key === undefined) {
+      return
+    }
+    this.handleChange(null, {
+      key: 'areaCode',
+      value: value.key
+    })
+    this.setState({
+      areaName: value.title
     })
   }
   public render () {
@@ -354,27 +390,13 @@ class Main extends React.Component<Props> {
               <FormItemLayout
                 label='城市'
               >
-                <DropDown
+                <AutoComplete
+                  className={styles['auto-complete']}
                   data={this.state.cityList}
-                  title={this.state.cityName}
-                  onChange={(value) => {
-                    this.handleChange(null, {
-                      key: 'cityCode',
-                      value: value.key
-                    })
-                    this.setState({
-                      areaName: '',
-                      cityName: value.title
-                    })
-                    fetchRegion({
-                      parentId: value.key,
-                      level: 3
-                    }).then((res) => {
-                      this.setState({
-                        areaList: res
-                      })
-                    })
+                  defaultValue={{
+                    name: this.state.cityName
                   }}
+                  onChange={this.handleCityChange.bind(this)}
                   setFields={{
                     title: 'name',
                     key: 'code'
@@ -387,18 +409,13 @@ class Main extends React.Component<Props> {
               <FormItemLayout
                 label='地区'
               >
-                <DropDown
-                  title={this.state.areaName}
-                  data={this.state.areaList}
-                  onChange={(value) => {
-                    this.handleChange(null, {
-                      key: 'areaCode',
-                      value: value.key
-                    })
-                    this.setState({
-                      areaName: value.title
-                    })
+                <AutoComplete
+                  className={styles['auto-complete']}
+                  defaultValue={{
+                    name: this.state.areaName
                   }}
+                  data={this.state.areaList}
+                  onChange={this.handleAreaChange.bind(this)}
                   setFields={{
                     title: 'name',
                     key: 'code'
