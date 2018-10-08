@@ -152,10 +152,7 @@ class Main extends React.Component<any, any> {
 
   // 导出
   public exportBtn () {
-    console.log('点击导出')
-    // service.delList(selectedRowKeys)
-    const {searchStr, chooseSever, chooseState, chooseBeginDate, chooseEndDate} = this.state
-    console.log(searchStr, chooseSever, chooseState, chooseBeginDate, chooseEndDate)
+    this.getExportExcel()
   }
   // 查看
   public onShow (item: OrderItem) {
@@ -186,8 +183,14 @@ class Main extends React.Component<any, any> {
         pageCurrent: res.pageCurrent,
         pageTotal: res.pageTotal
       })
-    }, () => {
-
+    })
+  }
+  // 导出
+  public getExportExcel () {
+    console.log('daochu')
+    const {searchStr, chooseSever, chooseState, chooseBeginDate, chooseEndDate} = this.state
+    Service.getExportExcel(searchStr, chooseBeginDate, chooseEndDate, chooseSever, chooseState).then((res: any) => {
+      // 导出成功
     })
   }
 }

@@ -43,7 +43,25 @@ class Service {
   public getUserDetail (id: any = '') {
     return http(
     `user/v1/api/user/${id}`
-  )
+    )
+  }
+  /*
+    工单列表导出
+  */
+  public getExportExcel (
+    param: any = '',
+    startDate: any = '',
+    endDate: any = '',
+    name: any = '',
+    status: any = ''
+  ) {
+    return http(
+      `/work/v1/api/order/excel?param=${param}&` +
+      `startDate=${startDate}&` +
+      `endDate=${endDate}&` +
+      `name=${name}&` +
+      `status=${status}`
+   )
   }
 }
 
