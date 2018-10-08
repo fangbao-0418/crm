@@ -19,10 +19,29 @@ type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
-  pagination: PaginationConfig
+  pagination: {
+    total: number
+    current: number
+    pageSize: number
+  }
   selectAll: boolean,
   cityList: any[]
   data: ConditionOptionProps[]
+}
+interface ParamsProps {
+  cityCode?: string
+  pageSize?: number
+  pageCurrent?: number
+  storageBeginDate?: string
+  storageEndDate?: string
+  createBeginDate?: string
+  createEndDate?: string
+  customerName?: string
+  contactPerson?: string
+  contactPhone?: string
+  customerSource?: string
+  /** 纳税类型 */
+  payTaxesNature?: string
 }
 const data: ConditionOptionProps[] = [
   {
@@ -62,25 +81,21 @@ const data: ConditionOptionProps[] = [
     ]
   }
 ]
-class Main extends React.Component {
+class Main extends React.Component<null, States> {
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
     selectAll: false,
-    pagination: {
-      current: 1,
-      pageSize: 15,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
-    },
     cityList: [],
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    },
     data
   }
-  public params: any = {cityCode: '110000'}
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
+  public params: ParamsProps = {cityCode: '110000'}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -133,9 +148,9 @@ class Main extends React.Component {
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
     fetchList(this.params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+      pagination.total = res.pageTotal
       this.setState({
+        pagination,
         dataSource: res.data
       })
     })
@@ -335,11 +350,31 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  public handlePageChange (page: number) {
+    const { pagination } = this.state
+    pagination.current = page
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
+  public onShowSizeChange (current: number, size: number) {
+    const { pagination } = this.state
+    pagination.current = current
+    pagination.pageSize = size
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { pagination } = this.state
     return (
       <ContentBox
         title='我的客资'
@@ -395,7 +430,19 @@ class Main extends React.Component {
           rowSelection={rowSelection}
           bordered
           rowKey={'customerId'}
-          pagination={this.state.pagination}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
         />
         <div className='mt40'>
           <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button>
