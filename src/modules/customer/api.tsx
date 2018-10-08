@@ -11,10 +11,10 @@ export const fetchList = (payload: {
   pageSize?: number
   pageCurrent?: number
 }) => {
-  return http(`/api/customer/list`, 'GET', payload)
+  return http(`/crm-manage/v1/api/customer/list`, 'GET', payload)
 }
 export const addCustomer = (payload: Customer.DetailProps) => {
-  return http(`/api/customer/entry`, 'POST', {
+  return http(`/crm-manage/v1/api/customer/entry`, 'POST', {
     data: payload
   })
 }
@@ -26,19 +26,30 @@ export const allotCustomer = (payload: {
     name: string
   }>
 }) => {
-  return http(`/api/customer/allocate`, 'PUT', payload)
+  return http(`/crm-manage/v1/api/customer/allocate`, 'PUT', payload)
 }
 export const deleteCustomer = (payload: string) => {
-  return http(`/api/customer/by-ids?customerIds=${payload}`, 'DELETE')
+  return http(`/crm-manage/v1/api/customer/by-ids?customerIds=${payload}`, 'DELETE')
 }
 export const viewCustomer = (id: string) => {
-  return http(`/api/open-ocean/${id}`)
+  return http(`/crm-manage/v1/api/open-ocean/${id}`)
 }
 export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
-  return http(`/api/customer/${id}`, 'PUT', {
+  return http(`/crm-manage/v1/api/customer/${id}`, 'PUT', {
     data: payload
   })
 }
 export const fetchCityCount = () => {
-  return http(`/api/customer/stats/by-city`)
+  return http(`/crm-manage/v1/api/customer/stats/by-city`)
+}
+export const importFile = (file: File) => {
+  const data = new FormData()
+  data.append('file', file)
+  return http(`/crm-manage/v1/api/customer/import`, 'POST', {
+    dataType: 'JSON',
+    contentType: false,
+    raw: true,
+    processData: false,
+    data
+  })
 }

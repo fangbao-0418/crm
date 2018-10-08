@@ -10,7 +10,7 @@ interface Props extends TextAreaProps {
 }
 class Main extends React.Component<Props> {
   public render () {
-    const labelWidth = this.props.labelWidth || '72px'
+    const labelWidth = this.props.labelWidth || '80px'
     return (
       <span className='ant-input-group ant-input-group-compact'>
         <span className='ant-input-group-wrapper'>

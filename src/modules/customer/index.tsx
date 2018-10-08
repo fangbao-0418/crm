@@ -199,12 +199,32 @@ class Main extends React.Component {
     this.fetchList()
   }
   public add () {
+    let ins: any
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
+        <Provider>
+          <BaseInfo ref={(ref: any) => { ins = ref.getWrappedInstance() }} onClose={() => {modal.hide()}}/>
+        </Provider>
       ),
-      footer: null,
+      footer: (
+        <div className='text-right mt10'>
+          <Button
+            className='mr5'
+            type='primary'
+            onClick={() => {
+              console.log(ins.refs.wrappedComponent)
+              ins.refs.wrappedComponent.save().then(() => {
+                APP.success('保存成功')
+              }, () => {
+                APP.error('保存失败')
+              })
+            }}
+          >
+            保存
+          </Button>
+        </div>
+      ),
       title: '新增客资',
       mask: true,
       onCancel: () => {
@@ -265,6 +285,10 @@ class Main extends React.Component {
     })
   }
   public toOrganizationAuto () {
+    if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
+      APP.error('请选择需要分配客户')
+      return
+    }
     const modal = new Modal({
       content: (
         <div>你确定要应用自动分配吗？</div>

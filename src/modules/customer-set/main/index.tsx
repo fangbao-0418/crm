@@ -1,10 +1,9 @@
 import React from 'react'
 import { Tabs, Cascader } from 'antd'
-import { ColumnProps } from 'antd/lib/table'
 import { fetchRegion } from '@/modules/common/api'
 import ContentBox from '@/modules/common/content'
-import SetAuto from './SetAuto'
-import SetCapacity from './SetCapacity'
+import SetAuto from '@/modules/customer-set/main/SetAuto'
+import SetCapacity from '@/modules/customer-set/main/SetCapacity'
 class Main extends React.Component {
   public componentWillMount () {
     fetchRegion().then((res) => {

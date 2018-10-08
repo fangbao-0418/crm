@@ -148,9 +148,11 @@ class Main extends React.Component {
   }
   public fetchRecycleNum () {
     getRecycleNum(this.params).then((res) => {
-      this.setState({
-        recycleNum: res
-      })
+      if (res) {
+        this.setState({
+          recycleNum: '(有' + res + '个客户即将被收回！)'
+        })
+      }
     })
   }
   public handleSearch (values: any) {
@@ -420,10 +422,10 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import /></Provider>
+        <Provider><Import isBussiness={true}/></Provider>
       ),
       footer: null,
-      title: '导入',
+      title: '导入客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -466,12 +468,15 @@ class Main extends React.Component {
           </div>
         )}
       >
-        <div className={styles.note}>
-          <span className={styles['note-icon1']} />
-          <span className='mr10'>库容剩余不足{this.capacityNum}个，即将达到上限！</span>
-          <span className={styles['note-icon1']} />
-          <span>您的库容已达上限！</span>
-        </div>
+        {
+          this.capacityNum &&
+          <div className={styles.note}>
+            <span className={styles['note-icon1']} />
+            <span className='mr10'>库容剩余不足{this.capacityNum}个，即将达到上限！</span>
+            <span className={styles['note-icon1']} />
+            <span>您的库容已达上限！</span>
+          </div>
+        }
         <div className='mb12' style={{ overflow: 'hidden' }}>
           <div className='fl' style={{ width: 740 }}>
             <Condition
@@ -512,8 +517,7 @@ class Main extends React.Component {
             <Tabs.TabPane tab={<span>新客资({this.state.customerNum.newCustomerNums})</span>} key='3'>
               <Tab3 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
-            {/* <Tabs.TabPane tab='即将被收回(53)' key='4'> */}
-            <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>(有{this.state.recycleNum}个客户即将被收回！)</span></span>} key='4'>
+            <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>{this.state.recycleNum}</span></span>} key='4'>
               <Tab4 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
           </Tabs>

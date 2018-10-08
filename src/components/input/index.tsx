@@ -62,7 +62,7 @@ class Main extends React.Component<Props> {
     }
   }
   public render () {
-    const labelWidth = this.props.labelWidth || '72px'
+    const labelWidth = this.props.labelWidth || '80px'
     return (
       <InputGroup
         compact
@@ -76,6 +76,7 @@ class Main extends React.Component<Props> {
               className={styles['input-label']}
               style={{width: labelWidth}}
             >
+              {this.props.required && <span style={{color: 'red'}}>* </span>}
               {this.props.addonBefore || this.getLabel()}
             </div>
           }
