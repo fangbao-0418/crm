@@ -4,6 +4,8 @@
       color: #ffc53d
       cursor: pointer
 .region
+  &>label 
+    margin-right: 2px
   :global
     .ant-select-selection__rendered
       ul
@@ -11,3 +13,13 @@
           padding: 0
           border: none 
           background: none
+          input 
+            width: 0
+            height: 0
+            line-height: 0
+            &::input-placeholder
+              color: transparent
+  .tag-placeholder
+    width: 85px
+    display: inline-block
+    cursor pointer
