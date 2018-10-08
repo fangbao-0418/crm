@@ -32,10 +32,10 @@ class Main extends React.Component {
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='跟进记录' key='1'>
             <div style={{overflowY: 'auto', height: 500 }}>
-            { 
+            {
               this.state.trackRecords.length > 0 && this.state.trackRecords.map((item, index) => {
                 return (
-                  <div className={styles.record}>
+                  <div className={styles.record} key={index}>
                     <div className={styles['line-height']}>
                       <span>{item.salesperson}</span>
                       <span>{item.createTime}</span>
