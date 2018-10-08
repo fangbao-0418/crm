@@ -26,10 +26,18 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    // '/crm-manage': {
+    //   target: 'https://x-sys.i-counting.cn',
+    //   changeOrigin: true,
+    //   secure: false
+    // },
     '/crm-manage': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'http://192.168.1.229:9008/',
       changeOrigin: true,
-      secure: false
+      secure: false,
+      pathRewrite: {
+        '^/crm-manage/v1': '/v1'
+      }
     }
   },
   // 启用gzip压缩一切服务:

@@ -12,7 +12,7 @@ import Provider from '@/components/Provider'
 import _ from 'lodash'
 import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
-import { addCustomer, updateCustomer } from './api'
+import { addCustomer, addBusinessCustomer, updateCustomer } from './api'
 import { fetchRegion } from '@/modules/common/api'
 const styles = require('./style')
 const Option = Select.Option
@@ -148,8 +148,9 @@ class Main extends React.Component<Props> {
         const params = this.props.detail
         params.customerNameType = '1' // 后端不需要改代码所以加上
         params.isConfirmed = '1' // 是否天眼查
+        params.cityName = this.state.cityName
+        params.areaName = this.state.areaName
         params.contactPersons = this.props.linkMan
-        // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -157,11 +158,19 @@ class Main extends React.Component<Props> {
             reject()
           })
         } else {
-          addCustomer(params).then(() => {
-            resolve()
-          }, () => {
-            reject()
-          })
+          if (this.props.isBussiness) { // 商机新增接口
+            addCustomer(params).then(() => {
+              resolve()
+            }, () => {
+              reject()
+            })
+          } else {
+            addCustomer(params).then(() => { // 客资新增接口
+              resolve()
+            }, () => {
+              reject()
+            })
+          }
         }
       })
     })

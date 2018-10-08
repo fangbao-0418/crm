@@ -1,5 +1,5 @@
 import React from 'react'
-import { DatePicker, Select, Tabs } from 'antd'
+import { DatePicker, Select, Tabs, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { PaginationConfig } from 'antd/lib/pagination'
 import ContentBox from '@/modules/common/content'
@@ -404,12 +404,40 @@ class Main extends React.Component {
     modal.show()
   }
   public add () {
+    let ins: any
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><BaseInfo onClose={() => {modal.hide()}} isBussiness={true} flowNow={() => { modal.hide()}}/></Provider>
+        <Provider>
+          <BaseInfo
+            reset
+            ref={(ref: any) => { ins = ref.getWrappedInstance() }}
+            onClose={() => {modal.hide()}}
+            isBussiness={true}
+            flowNow={() => { modal.hide()}}
+          />
+        </Provider>
       ),
-      footer: null,
+      footer: (
+        <div className='text-right mt10'>
+          <Button
+            className='mr5'
+            type='primary'
+            onClick={() => {
+              console.log(ins.refs.wrappedComponent)
+              ins.refs.wrappedComponent.save().then(() => {
+                APP.success('保存成功')
+                modal.hide()
+                // this.fetchList()
+              }, () => {
+                APP.error('保存失败')
+              })
+            }}
+          >
+            保存
+          </Button>
+        </div>
+      ),
       title: '新增客资',
       mask: true,
       onCancel: () => {

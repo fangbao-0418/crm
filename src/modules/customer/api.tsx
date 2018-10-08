@@ -18,6 +18,11 @@ export const addCustomer = (payload: Customer.DetailProps) => {
     data: payload
   })
 }
+export const addBusinessCustomer = (payload: Customer.DetailProps) => {
+  return http(`/crm-manage/v1/api/business-opportunity/entry`, 'POST', {
+    data: payload
+  })
+}
 export const allotCustomer = (payload: {
   agencyId?: string
   customerIds?: string[]
