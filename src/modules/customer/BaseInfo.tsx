@@ -38,7 +38,9 @@ class Main extends React.Component<Props> {
     areaList: []
   }
   public componentWillMount () {
-    fetchRegion().then((res) => {
+    fetchRegion({
+      level: 2
+    }).then((res) => {
       this.setState({
         cityList: res
       })
@@ -365,7 +367,7 @@ class Main extends React.Component<Props> {
                     })
                     fetchRegion({
                       parentId: value.key,
-                      level: 2
+                      level: 3
                     }).then((res) => {
                       this.setState({
                         areaList: res
