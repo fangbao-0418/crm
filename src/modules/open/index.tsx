@@ -5,7 +5,6 @@ import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
-import { PaginationConfig } from 'antd/lib/pagination'
 import { fetchList, pickCustomer } from './api'
 import { deleteCustomer } from '@/modules/customer/api'
 import Provider from '@/components/Provider'
@@ -16,7 +15,11 @@ type DetailProps = Open.DetailProps
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
-  pagination: PaginationConfig
+  pagination: {
+    total: number
+    current: number
+    pageSize: number
+  }
 }
 const all = [{
   label: '全部',
@@ -27,16 +30,12 @@ class Main extends React.Component {
     dataSource: [],
     selectedRowKeys: [],
     pagination: {
+      total: 0,
       current: 1,
-      pageSize: 10,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['10', '20', '30', '40', '50'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
+      pageSize: 15
     }
   }
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Open.SearchProps = {}
   public paramsleft: Open.SearchProps = {}
   public paramsright: Open.SearchProps = {}
@@ -124,11 +123,30 @@ class Main extends React.Component {
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+      pagination.total = res.pageTotal
       this.setState({
+        pagination,
         dataSource: res.data
       })
+    })
+  }
+  public handlePageChange (page: number) {
+    const { pagination } = this.state
+    pagination.current = page
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
+  public onShowSizeChange (current: number, size: number) {
+    const { pagination } = this.state
+    pagination.current = current
+    pagination.pageSize = size
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
     })
   }
   public handleSearch (values: any) {
@@ -261,6 +279,7 @@ class Main extends React.Component {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { pagination } = this.state
     return (
       <ContentBox title='公海管理'>
         <div className='mb12' style={{ overflow: 'hidden' }}>
@@ -298,7 +317,19 @@ class Main extends React.Component {
           rowSelection={rowSelection}
           bordered
           rowKey={'id'}
-          pagination={this.state.pagination}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
         />
         <div>
           <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>

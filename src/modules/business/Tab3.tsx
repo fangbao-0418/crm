@@ -1,7 +1,6 @@
 import React from 'react'
 import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { PaginationConfig } from 'antd/lib/pagination'
 import { fetchList } from './api'
 import _ from 'lodash'
 type DetailProps = Business.DetailProps
@@ -13,23 +12,23 @@ interface Props {
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
-  pagination: PaginationConfig
+  pagination: {
+    total: number
+    current: number
+    pageSize: number
+  }
 }
 class Main extends React.Component<Props> {
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
     pagination: {
+      total: 0,
       current: 1,
-      pageSize: 15,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['10', '20', '30', '40', '50'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
+      pageSize: 15
     }
   }
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     this.fetchList()
   }
@@ -39,9 +38,9 @@ class Main extends React.Component<Props> {
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+      pagination.total = res.pageTotal
       this.setState({
+        pagination,
         dataSource: res.data
       })
     })
@@ -54,11 +53,31 @@ class Main extends React.Component<Props> {
       this.props.handleSelectAll(this.state.selectedRowKeys, key)
     }
   }
+  public handlePageChange (page: number) {
+    const { pagination } = this.state
+    pagination.current = page
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
+  public onShowSizeChange (current: number, size: number) {
+    const { pagination } = this.state
+    pagination.current = current
+    pagination.pageSize = size
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { pagination } = this.state
     return (
       <div>
         <Table
@@ -67,7 +86,19 @@ class Main extends React.Component<Props> {
           rowSelection={rowSelection}
           bordered
           rowKey={'id'}
-          pagination={this.state.pagination}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
         />
         <div>
           <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 1)}>批量预约</Button>
