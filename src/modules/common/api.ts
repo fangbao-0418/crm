@@ -1,4 +1,11 @@
 import http from '@/utils/http'
+export const userLogin = (payload: {
+  phoneNumber: string,
+  validCode?: string
+  phoneValidCode?: string
+}) => {
+  return http(`/user/v1/api/user/login`, 'POST', payload)
+}
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
     const data: APP.EnumProps = {}
@@ -23,12 +30,14 @@ export const fetchTags = () => {
   return http(`/crm-manage/v1/api/tags`)
 }
 export const fetchRegion = (payload: {
+  /** 级别 */
   level: number,
+  /** 父级id */
   parentId?: string,
   code?: string,
   id?: number
 } = {
   level: 1
 }) => {
-  return http(`/config/v1/ap/v1/api/region`, payload)
+  return http(`/config/v1/api/region`, payload)
 }

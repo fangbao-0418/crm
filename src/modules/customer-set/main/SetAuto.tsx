@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Input, Form, Button } from 'antd'
+import { Table, Input, Form, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
@@ -19,7 +19,14 @@ class Main extends React.Component<Props> {
     title: '机构名称',
     dataIndex: 'agencyName'
   }, {
-    title: '自动分配权值',
+    title: (
+      <span>
+        自动分配权值
+        <Tooltip placement='top' title='自动分配客户量会根据分配权值比例来分，权值为0，则不予分配，输入范围（0-10）'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'autoDistributeWeight',
     render: (text, record, index) => {
       return (
@@ -42,7 +49,14 @@ class Main extends React.Component<Props> {
       )
     }
   }, {
-    title: '自动分配日最大值',
+    title: (
+      <span>
+        自动分配日最大值
+        <Tooltip placement='top' title='自动分配客户量若达到日最大值上限，则系统不再自动分与该代理商，输入范围 （0-99999）'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'autoDistributeMaxNum',
     render: (text, record, index) => {
       return (

@@ -2,12 +2,13 @@
   border-radius: 8px 8px 0 0 / 8px 8px 0 0
   .top
     border-radius: 8px 8px 0 0 / 8px 8px 0 0
-    overflow: hidden
     height: 60px
     background-color: #F8FBFD
     line-height: 60px
-    overflow: hidden
     padding: 0 20px
+    &:after, &:before
+      content: ''
+      clean: both
     .title
       font-size: 14px
       font-weight: 500

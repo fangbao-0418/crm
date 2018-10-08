@@ -204,7 +204,11 @@ class Main extends React.Component {
       style: 'width: 800px',
       content: (
         <Provider>
-          <BaseInfo ref={(ref: any) => { ins = ref.getWrappedInstance() }} onClose={() => {modal.hide()}}/>
+          <BaseInfo
+            reset
+            ref={(ref: any) => { ins = ref.getWrappedInstance() }}
+            onClose={() => {modal.hide()}}
+          />
         </Provider>
       ),
       footer: (
@@ -225,7 +229,7 @@ class Main extends React.Component {
           </Button>
         </div>
       ),
-      title: '新增客资',
+      title: '录入客资',
       mask: true,
       onCancel: () => {
         modal.hide()

@@ -507,7 +507,7 @@ class Main extends React.Component {
           </div>
         </div>
         { this.state.visible &&
-          <Tabs defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
+          <Tabs animated={false} defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
             <Tabs.TabPane tab={<span>全部({this.state.customerNum.allNums})</span>} key='1'>
               <Tab1 columns={this.columns} params={this.params} handleSelectAll={this.handleSelectAll.bind(this)}/>
             </Tabs.TabPane>
