@@ -5,13 +5,17 @@ import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from '@/modules/customer-set/actions'
 import { saveStorageCapacity } from '@/modules/customer-set/api'
+import Item from 'antd/lib/list/Item';
 const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {
   selectedRowKeys: string[]
 }
-interface Props extends Customer.Props, FormComponentProps {}
+interface Props extends Customer.Props, FormComponentProps {
+  cityCodes?: {key: string, label: string}[]
+}
 class Main extends React.Component<Props> {
+  public cityCodeArr = ''
   public state: States = {
     selectedRowKeys: []
   }
@@ -117,6 +121,18 @@ class Main extends React.Component<Props> {
   }]
   public componentWillMount () {
     changeCapacityAction()
+  }
+  public componentWillReceiveProps (props: Props) {
+    const cityCodes = props.cityCodes
+    const codes: string[] = []
+    cityCodes.forEach((item) => {
+      codes.push(item.key)
+    })
+    const cityCodeArr = codes.join(',')
+    if (cityCodeArr !== this.cityCodeArr) {
+      this.cityCodeArr = cityCodeArr
+      changeCapacityAction(cityCodeArr)
+    }
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const dataSource: any = this.props.capacity

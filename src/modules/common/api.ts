@@ -4,7 +4,12 @@ export const userLogin = (payload: {
   validCode?: string
   phoneValidCode?: string
 }) => {
-  return http(`/user/v1/api/user/login`, 'POST', payload)
+  return http(`/user/v1/api/user/login`, 'POST', {
+    contentType: 'application/x-www-form-urlencoded',
+    processData: true,
+    raw: true,
+    data: payload
+  })
 }
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {

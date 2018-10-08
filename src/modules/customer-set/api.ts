@@ -1,9 +1,13 @@
 import http from '@/utils/http'
-export const fetchAutoAssign = () => {
-  return http(`/crm-manage/v1/api/auto_distribute/list`)
+export const fetchAutoAssign = (cityCodeArr?: string) => {
+  let url = '/crm-manage/v1/api/auto_distribute/list'
+  url = cityCodeArr ? url + `?cityCodeArr=${cityCodeArr}` : url
+  return http(url)
 }
-export const fetchStorageCapacity = () => {
-  return http(`/crm-manage/v1/api/storage_capacity/list`)
+export const fetchStorageCapacity = (cityCodeArr?: string) => {
+  let url = '/crm-manage/v1/api/storage_capacity/list'
+  url = cityCodeArr ? url + `?cityCodeArr=${cityCodeArr}` : url
+  return http(url)
 }
 export const fetchCity = () => {
   return http(`/crm-manage/v1/api/province-city`)

@@ -7,8 +7,11 @@ import { saveAutoAssign } from '@/modules/customer-set/api'
 import { changeAutoAssignAction } from '@/modules/customer-set/actions'
 const FormItem = Form.Item
 type DetailProps = Customer.AutoAssignProps
-interface Props extends Customer.Props, FormComponentProps {}
+interface Props extends Customer.Props, FormComponentProps {
+  cityCodes?: {key: string, label: string}[]
+}
 class Main extends React.Component<Props> {
+  public cityCodeArr = ''
   public columns: ColumnProps<DetailProps>[] = [{
     title: '大区',
     dataIndex: 'bigAreaName'
@@ -81,6 +84,19 @@ class Main extends React.Component<Props> {
   }]
   public componentWillMount () {
     changeAutoAssignAction()
+  }
+  public componentWillReceiveProps (props: Props) {
+    const cityCodes = props.cityCodes
+    const codes: string[] = []
+    cityCodes.forEach((item) => {
+      codes.push(item.key)
+    })
+    const cityCodeArr = codes.join(',')
+    console.log(cityCodeArr, this.cityCodeArr, 'will receive')
+    if (cityCodeArr !== this.cityCodeArr) {
+      this.cityCodeArr = cityCodeArr
+      changeAutoAssignAction(cityCodeArr)
+    }
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const value = String($(e.target).val())
