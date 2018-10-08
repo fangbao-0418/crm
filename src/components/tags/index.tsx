@@ -19,16 +19,19 @@ class Main extends React.Component<Props> {
     dataSource: [
       {
         title: '电话状态',
-        options: [
-          {
-            label: '无效电话',
-            value: '1'
-          },
-          {
-            label: '无人接听',
-            value: '2'
-          }
-        ]
+        options: APP.keys.EnumContactStatus
+      },
+      {
+        title: '需求状态',
+        options: APP.keys.EnumNeedStatus
+      },
+      {
+        title: '意向度',
+        options: APP.keys.EnumIntentionality
+      },
+      {
+        title: '跟进方式',
+        options: APP.keys.EnumFollowWay
       }
     ]
   }
