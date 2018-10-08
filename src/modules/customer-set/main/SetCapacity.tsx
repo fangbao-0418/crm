@@ -1,17 +1,21 @@
 import React from 'react'
-import { Table, Input, Form, Button } from 'antd'
+import { Table, Input, Form, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from '@/modules/customer-set/actions'
 import { saveStorageCapacity } from '@/modules/customer-set/api'
+import Item from 'antd/lib/list/Item';
 const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {
   selectedRowKeys: string[]
 }
-interface Props extends Customer.Props, FormComponentProps {}
+interface Props extends Customer.Props, FormComponentProps {
+  cityCodes?: {key: string, label: string}[]
+}
 class Main extends React.Component<Props> {
+  public cityCodeArr = ''
   public state: States = {
     selectedRowKeys: []
   }
@@ -25,7 +29,14 @@ class Main extends React.Component<Props> {
     title: '机构名称',
     dataIndex: 'agencyName'
   }, {
-    title: '销售库容',
+    title: (
+      <span>
+        销售库容
+        <Tooltip placement='top' title='销售库容设置对该机构全部销售有效，且每人上限值一样；销售主管和总经理不受此限制，输入值范围（0-999999）'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'storageCapacity',
     render: (text, record, index) => {
       return (
@@ -48,7 +59,14 @@ class Main extends React.Component<Props> {
       )
     }
   }, {
-    title: '最大跟进期',
+    title: (
+      <span>
+        最大跟进期
+        <Tooltip placement='top' title='若销售在规定天数内没有写跟进记录，则客户自动分予组内其他销售，输入值范围（0-9999）'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'maxTrackDays',
     render: (text, record, index) => {
       return (
@@ -71,7 +89,14 @@ class Main extends React.Component<Props> {
       )
     }
   }, {
-    title: '最大保护期',
+    title: (
+      <span>
+        最大保护期
+        <Tooltip placement='top' title='若销售在规定天数内没有完成签单，则客户自动分予组内其他销售 ，输入值范围（0-9999）'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'maxProtectDays',
     render: (text, record, index) => {
       return (
@@ -96,6 +121,18 @@ class Main extends React.Component<Props> {
   }]
   public componentWillMount () {
     changeCapacityAction()
+  }
+  public componentWillReceiveProps (props: Props) {
+    const cityCodes = props.cityCodes
+    const codes: string[] = []
+    cityCodes.forEach((item) => {
+      codes.push(item.key)
+    })
+    const cityCodeArr = codes.join(',')
+    if (cityCodeArr !== this.cityCodeArr) {
+      this.cityCodeArr = cityCodeArr
+      changeCapacityAction(cityCodeArr)
+    }
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const dataSource: any = this.props.capacity

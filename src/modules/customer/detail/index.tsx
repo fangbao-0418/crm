@@ -31,7 +31,6 @@ class Main extends React.Component<Props> {
             !this.props.isOpen &&
             <Card title='跟进记录'>
               <Tags className='mb10' />
-              <Tags />
               <Input.TextArea
                 className='mt10'
                 placeholder='请输入备注'

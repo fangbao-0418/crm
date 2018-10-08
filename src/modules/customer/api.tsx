@@ -18,6 +18,11 @@ export const addCustomer = (payload: Customer.DetailProps) => {
     data: payload
   })
 }
+export const addBusinessCustomer = (payload: Customer.DetailProps) => {
+  return http(`/crm-manage/v1/api/business-opportunity/entry`, 'POST', {
+    data: payload
+  })
+}
 export const allotCustomer = (payload: {
   agencyId?: string
   customerIds?: string[]
@@ -42,14 +47,31 @@ export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
 export const fetchCityCount = () => {
   return http(`/crm-manage/v1/api/customer/stats/by-city`)
 }
-export const importFile = (file: File) => {
+export const importFile = (file: File, query: {
+  cityCode: string,
+  cityName: string,
+  customerSource: number
+}) => {
   const data = new FormData()
+  const q = $.param(query)
   data.append('file', file)
-  return http(`/crm-manage/v1/api/customer/import`, 'POST', {
+  return http(`/crm-manage/v1/api/customer/upload?${q}`, 'POST', {
     dataType: 'JSON',
     contentType: false,
     raw: true,
     processData: false,
     data
   })
+}
+export const fetchTrackRecords = (payload: {
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return http(`/crm-manage/v1/api/track-record`, 'GET', payload)
+}
+export const fetchClueRecords = (payload: {
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return http(`/crm-manage/v1/api/clue-record`, 'GET', payload)
 }

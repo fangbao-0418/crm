@@ -20,8 +20,48 @@ interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
   pagination: PaginationConfig
-  selectAll: boolean
+  selectAll: boolean,
+  cityList: any[]
+  data: ConditionOptionProps[]
 }
+const data: ConditionOptionProps[] = [
+  {
+    field: 'date',
+    value: 'all',
+    label: ['入库时间', '创建时间'],
+    options: [
+      {
+        label: '全部',
+        value: 'all'
+      },
+      {
+        label: '今天',
+        value: '1'
+      },
+      {
+        label: '7天',
+        value: '7'
+      },
+      {
+        label: '30天',
+        value: '30'
+      }
+    ],
+    type: 'date'
+  },
+  {
+    label: ['所属城市'],
+    value: '110110',
+    field: 'cityCode',
+    type: 'select',
+    options: [
+      {
+        label: '北京(100)',
+        value: '110110'
+      }
+    ]
+  }
+]
 class Main extends React.Component {
   public state: States = {
     dataSource: [],
@@ -36,58 +76,10 @@ class Main extends React.Component {
       showTotal (total) {
         return `共计 ${total} 条`
       }
-    }
-  }
-  public data: ConditionOptionProps[] = [
-    {
-      field: 'date',
-      value: 'all',
-      label: ['入库时间', '创建时间'],
-      options: [
-        {
-          label: '全部',
-          value: 'all'
-        },
-        {
-          label: '今天',
-          value: '1'
-        },
-        {
-          label: '7天',
-          value: '7'
-        },
-        {
-          label: '30天',
-          value: '30'
-        }
-      ],
-      type: 'date'
     },
-    {
-      label: ['所属城市'],
-      value: '110110',
-      field: 'cityCode',
-      type: 'select',
-      options: [
-        {
-          label: '北京(100)',
-          value: '110110'
-        },
-        {
-          label: '上海(100)',
-          value: '120110'
-        },
-        {
-          label: '南京(100)',
-          value: '130110'
-        },
-        {
-          label: '天津(100)',
-          value: '140110'
-        }
-      ]
-    }
-  ]
+    cityList: [],
+    data
+  }
   public params: any = {cityCode: '110000'}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
@@ -122,7 +114,18 @@ class Main extends React.Component {
   public componentWillMount () {
     this.fetchList()
     fetchCityCount().then((res) => {
-      console.log(res)
+      const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
+      const options: Array<{label: string, value: string}> = []
+      cityList.forEach((item) => {
+        options.push({
+          label: `${item.cityName}(${item.rows})`,
+          value: item.cityCode
+        })
+      })
+      data[1].options = options
+      this.setState({
+        data
+      })
     })
   }
   public fetchList () {
@@ -204,7 +207,11 @@ class Main extends React.Component {
       style: 'width: 800px',
       content: (
         <Provider>
-          <BaseInfo ref={(ref: any) => { ins = ref.getWrappedInstance() }} onClose={() => {modal.hide()}}/>
+          <BaseInfo
+            reset
+            ref={(ref: any) => { ins = ref.getWrappedInstance() }}
+            onClose={() => {modal.hide()}}
+          />
         </Provider>
       ),
       footer: (
@@ -216,6 +223,8 @@ class Main extends React.Component {
               console.log(ins.refs.wrappedComponent)
               ins.refs.wrappedComponent.save().then(() => {
                 APP.success('保存成功')
+                modal.hide()
+                this.fetchList()
               }, () => {
                 APP.error('保存失败')
               })
@@ -225,7 +234,7 @@ class Main extends React.Component {
           </Button>
         </div>
       ),
-      title: '新增客资',
+      title: '录入客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -355,14 +364,20 @@ class Main extends React.Component {
         <div className='mb10 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
-              dataSource={this.data}
+              dataSource={this.state.data}
               onChange={this.handleSearch.bind(this)}
             />
           </div>
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={APP.keys.EnumCustomerSearchType}
+              options={[
+                { value: '0', label: '客户名称'},
+                { value: '1', label: '联系人'},
+                { value: '2', label: '联系电话'},
+                { value: '3', label: '客户来源'},
+                { value: '4', label: '纳税类别'}
+              ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
