@@ -17,7 +17,7 @@ class Main extends React.Component<Props> {
           </div>
           <p>
             {
-              this.props.detail.isConfirmed &&
+              this.props.detail.isConfirmed === '1' &&
               <span>
                 <span className={styles.verified} />
                 <span className='mr20 ml10'>认证</span>
@@ -32,7 +32,7 @@ class Main extends React.Component<Props> {
             <label>跟进人:</label><span>{this.props.detail.currentSalesperson}</span><span>({this.props.detail.agencyId})</span>
             <label style={{marginLeft: '10px'}}>意向度:</label><span>{this.props.detail.tagIntention}</span>
             <label style={{marginLeft: '10px'}}>{this.props.detail.customerSource}</label>
-            <label style={{marginLeft: '10px'}}></label><span>{this.props.detail.createtime}</span>
+            <label style={{marginLeft: '10px'}}></label><span>{this.props.detail.createTime}</span>
           </p>
           {
             this.props.isShowAgent &&

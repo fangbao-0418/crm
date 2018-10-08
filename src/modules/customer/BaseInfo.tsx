@@ -162,7 +162,7 @@ class Main extends React.Component<Props> {
           })
         } else {
           if (this.props.isBussiness) { // 商机新增接口
-            addCustomer(params).then(() => {
+            addBusinessCustomer(params).then(() => {
               resolve()
             }, () => {
               reject()
