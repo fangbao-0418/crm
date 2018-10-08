@@ -34,6 +34,8 @@ class Main extends React.Component<any, any> {
       return (
       <span>
           <span onClick={() => {this.onShow.bind(this)(item)}} style={{color: '#3B91F7'}}>编辑</span>
+          <span className='vsplit'></span>
+          <span onClick={() => {this.onUnbind.bind(this)(item)}} style={{color: '#3B91F7'}}>解除商品关系</span>
         </span>
       )
     }
@@ -72,6 +74,11 @@ class Main extends React.Component<any, any> {
 
   public onShow (item: OrderItem) {
     APP.history.push(`${showPath}/${item.id}`)
+  }
+
+  // 解除商品绑定关系
+  public onUnbind (item: OrderItem) {
+    console.log('取消关联')
   }
 
   public render () {
