@@ -73,5 +73,5 @@ export const fetchClueRecords = (payload: {
   pageNum?: number
   pageSize?: number
 }) => {
-  return http(`/crm-manage/v1/api/clue-record`, 'GET', payload)
+  return http(`/crm-manage/v1/api/clue-records`, 'GET', payload)
 }
