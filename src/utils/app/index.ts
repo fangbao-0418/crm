@@ -24,3 +24,4 @@ APP.keys = {
   EnumPayTaxesNature: [],
   EnumSignCustomerSearchType: []
 }
+APP.dictionary = {}

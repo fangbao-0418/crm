@@ -13,12 +13,13 @@ export const userLogin = (payload: {
 }
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
-    const data: APP.EnumProps = {}
+    const data: any = {}
     for (const key in res.data) {
       if (res.data.hasOwnProperty(key)) {
         data[key] = []
         for (const key2 in res.data[key]) {
           if (res.data[key].hasOwnProperty(key2)) {
+            APP.dictionary[`${key}-${key2}`] = res.data[key][key2]
             data[key].push({
               label: res.data[key][key2],
               value: key2
@@ -28,6 +29,7 @@ export const fetchEnum = () => {
       }
     }
     APP.keys = data
+    console.log(APP.dictionary)
     return data
   })
 }

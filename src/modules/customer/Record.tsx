@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tabs } from 'antd'
+import moment from 'moment'
 import { fetchTrackRecords, fetchClueRecords } from './api'
 const styles = require('./style')
 interface States {
@@ -33,7 +34,7 @@ class Main extends React.Component {
   public render () {
     return (
       <div style={{ borderLeft: '1px solid #e5e5e5', height: 400 }}>
-        <Tabs defaultActiveKey='1' onChange={this.callback}>
+        <Tabs animated={false} defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='跟进记录' key='1'>
             <div style={{overflowY: 'auto', height: 500 }}>
             {
@@ -46,11 +47,21 @@ class Main extends React.Component {
                     </div>
                     <div>{item.remark}</div>
                     <div>
-                      <span className={styles.tag}>{item.tagIntention}</span>
-                      <span className={styles.tag}>{item.tagCustomerStatus}</span>
-                      <span className={styles.tag}>{item.tagFollowupStatus}</span>
-                      <span className={styles.tag}>{item.tagTelephoneStatus}</span>
-                      <span className={styles.tag} style={{ width: 89 }}>{item.appointTime}</span>
+                      <span className={styles.tag}>
+                        {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+                      </span>
+                      <span className={styles.tag}>
+                        {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                      </span>
+                      <span className={styles.tag}>
+                        {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+                      </span>
+                      <span className={styles.tag}>
+                        {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                      </span>
+                      <span className={styles.tag}>
+                        {moment(item.appointTime).format('YYYY-MM-DD')}
+                      </span>
                     </div>
                   </div>
                 )
@@ -89,7 +100,7 @@ class Main extends React.Component {
               <div>客户出差，明天再打</div>
               <div>
                 <span className={styles.tag}>持续跟进</span>
-                <span className={styles.tag} style={{ width: 89 }}>2018-09-10</span>
+                <span className={styles.tag}>2018-09-10</span>
               </div>
             </div> */}
           </Tabs.TabPane>
