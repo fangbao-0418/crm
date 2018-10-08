@@ -187,11 +187,37 @@ class Main extends React.Component<any, any> {
   }
   // 导出
   public getExportExcel () {
-    console.log('daochu')
     const {searchStr, chooseSever, chooseState, chooseBeginDate, chooseEndDate} = this.state
-    Service.getExportExcel(searchStr, chooseBeginDate, chooseEndDate, chooseSever, chooseState).then((res: any) => {
-      // 导出成功
-    })
+    window.open(
+      `/work/v1/api/order/excel?param=${searchStr}&` +
+      `startDate=${chooseBeginDate}&` +
+      `endDate=${chooseEndDate}&` +
+      `name=${chooseSever}&` +
+      `status=${chooseState}`
+      )
   }
+  // 下载 导出
+  // public downFile (url: any, type = 'get') {
+  //   window.open(url)
+    // const xhr = new XMLHttpRequest()
+    // xhr.open(type, url, true)
+    // // xhr.setRequestHeader('Authorization', `Bearer ${APP.token}`)
+    // xhr.responseType = 'blob'
+    // xhr.onreadystatechange = () => {
+    //   if (xhr.readyState === 4) {
+    //     if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+    //       const name = xhr.getResponseHeader('Content-disposition')
+    //       const filename = decodeURI(name.match(/filename="(.*)\"$/)[1])
+    //       const blob = new Blob([xhr.response], {type: 'application/octet-binary'})
+    //       const fileUrl = URL.createObjectURL(blob)
+    //       const link = document.createElement('a')
+    //       link.href = fileUrl
+    //       link.download = filename
+    //       link.click()
+    //     }
+    //   }
+    // }
+    // xhr.send(null)
+  // }
 }
 export default Main

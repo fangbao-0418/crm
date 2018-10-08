@@ -30,6 +30,11 @@ const options = {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
+    },
+    '/outside': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
     }
   },
   // 启用gzip压缩一切服务:

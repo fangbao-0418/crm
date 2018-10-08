@@ -46,22 +46,28 @@ class Service {
     )
   }
   /*
-    工单列表导出
+    工单详情催单
   */
-  public getExportExcel (
-    param: any = '',
-    startDate: any = '',
-    endDate: any = '',
-    name: any = '',
-    status: any = ''
-  ) {
+  public getRemind (id: any = '', remind: any) {
     return http(
-      `/work/v1/api/order/excel?param=${param}&` +
-      `startDate=${startDate}&` +
-      `endDate=${endDate}&` +
-      `name=${name}&` +
-      `status=${status}`
-   )
+    `work/v1/api/order/remind/${id}/${remind}`
+    )
+  }
+  /*
+    工单列表选择状态
+  */
+  public getOrderStatus () {
+    return http(
+    `work/v1/api/order/status`
+    )
+  }
+  /*
+    工单列表选择服务
+  */
+  public getOrderSever (MAIN: any = '') {
+    return http(
+    `/outside/v1/api/outside/task/template/all?type=${MAIN}`
+    )
   }
 }
 
