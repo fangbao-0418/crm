@@ -64,7 +64,8 @@ class Show extends React.Component<any, any> {
         customerName:'北京爱康鼎科技有限公司',
         workNo:'XX10001',
         startTime:'2018-09-25',
-        nodeList:data
+        nodeList:data,
+        processLogList:[]
       },
       modalVisible: false,
       personID: '',
@@ -166,7 +167,7 @@ class Show extends React.Component<any, any> {
                             查看合同
                           </a>
                       </p>)}
-                      {item.showReminder && (<Button  type='primary' className={styles['btn-button']}>催办</Button>)}
+                      {item.showReminder && (<Button  type='primary' className={styles['btn-button']} onClick={() => { this.getRemind.bind(this)(item) }}>催办</Button>)}
                     </div>
                   </Col>
                   <Col  span={1} className={styles.arrow}>{}
@@ -185,12 +186,19 @@ class Show extends React.Component<any, any> {
         }</Row>
         <div className={styles.orderTitle}>工单状态</div>
         <div className={styles.orderState}>{
-          this.state.stateData.map((item: any, index: any) => {
+          this.state.dataSource.processLogList.length !== 0 ?
+          (this.state.dataSource.processLogList.map((item: any, index: any) => {
             return(
-              <div key={index}>{this.state.stateData[index]}</div>
+              <div key={index} className={styles.orderCell}>
+                <p className={styles.orderText}>{item.operationTime}</p>
+                <p className={styles.orderText}>{item.dataMode}</p>
+              </div>
             )
-          })
-
+          })) : (
+            <div  className={styles.orderCell}>
+              <p className={styles.orderText}>暂无</p>
+            </div>
+          )
         }
         </div>
       </ContentBox>
@@ -207,13 +215,22 @@ class Show extends React.Component<any, any> {
       </div>
     )
   }
-  // 获取列表数据
+  // 获取详情数据
   public getOrderDetail () {
     const params = this.props.match.params
     Service.getOrderDetail(params.id).then((res: any) => {
+      console.log(JSON.stringify(res))
       this.setState({
         dataSource: res
       })
+    }, () => {
+
+    })
+  }
+  // 催单
+  public getRemind (item: any) {
+    Service.getRemind(item.id, '1').then((res: any) => {
+      console.log('催单成功')
     }, () => {
 
     })

@@ -1,5 +1,6 @@
 import { Input, Select, Form, DatePicker, Button, Row } from 'antd'
 import React from 'react'
+import Service from '@/modules/workorder/api'
 
 const Option = Select.Option
 const { RangePicker } = DatePicker
@@ -13,45 +14,18 @@ class Main extends React.Component<any, any> {
       currency: value.currency || '全部服务内容',
       orderState: value.orderState || '全部状态',
       dateArr:[],
-      stateArr:[
-        {
-          key: '',
-          value: '全部状态'
-        },
-        {
-          key: 'OUTSIDE_DISTRIBUTED',
-          value: '已分配(外勤)'
-        },
-        {
-          key: 'OUTSIDE_REFUSED',
-          value: '外勤申请拒绝(外勤)'
-        },
-        {
-          key: 'OUTSIDE_DISTRIBUTING',
-          value: '待手动分配(外勤)'
-        }
-      ],
-      severArr:[
+      stateArr:[], // 选择状态数组
+      severArr:[],
+      tempSeverArr:[
         {
           name:'全部服务内容'
-        },
-        {
-          name:'工商注册'
-        },
-        {
-          name:'核名'
-        },
-        {
-          name:'网上申请'
-        },
-        {
-          name:'下发执照'
-        },
-        {
-          name:'刻章'
         }
-      ]
+      ] // 拼接全部服务内容,用于筛选
     }
+  }
+  public componentWillMount () {
+    this.getOrderStatus()
+    this.getOrderSever()
   }
 
   public componentWillReceiveProps (nextProps: any) {
@@ -123,8 +97,9 @@ class Main extends React.Component<any, any> {
                     style={{ width: '15%', marginLeft: '3%' }}
                     onChange={this.handleCurrencyChange}
                 >
+                <Option value=''>全部服务内容</Option>
                 {
-                  this.state.severArr.map((item: any, index: any)=>{
+                  this.state.severArr.map((item: any, index: any) => {
                     return(
                       <Option value={item.name} key={index}>{item.name}</Option>
                     )
@@ -136,7 +111,8 @@ class Main extends React.Component<any, any> {
                     size={size}
                     style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
                     onChange={this.handleOrderStateChange}
-                >{
+                >
+                {
                   this.state.stateArr.map((item: any, index: any) => {
                     return (
                       <Option value={item.key} key={index}>{item.value}</Option>
@@ -148,6 +124,24 @@ class Main extends React.Component<any, any> {
             </Form>
         </div>
     )
+  }
+  // 获取列表筛选状态
+  public getOrderStatus () {
+    Service.getOrderStatus().then((res: any) => {
+      // console.log('1212121', JSON.stringify(res))
+      this.setState({
+        stateArr: res
+      })
+    })
+  }
+  // 获取列表筛选服务
+  public getOrderSever () {
+    Service.getOrderSever('MAIN').then((res: any) => {
+      console.log('1212121', JSON.stringify(res))
+      this.setState({
+        severArr: res
+      })
+    })
   }
 }
 
