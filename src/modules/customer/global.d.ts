@@ -28,6 +28,10 @@ declare namespace Customer {
     areaName?: string
     isConfirmed?: string
     contactPersons?: LinkManProps[]
+    currentSalesperson?: string
+    agencyId?: string
+    tagIntention?: string
+    createtime?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string
