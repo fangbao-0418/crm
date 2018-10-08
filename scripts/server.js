@@ -18,6 +18,14 @@ const options = {
       pathRewrite: {
 
       }
+    },
+    '/user': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+
+      }
     }
   },
   // 启用gzip压缩一切服务:
