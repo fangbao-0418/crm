@@ -1,27 +1,41 @@
 import React from 'react'
+import { Icon } from 'antd'
 import { findDOMNode } from 'react-dom'
 class Main extends React.Component {
   public componentDidMount () {
-    const el: any = this.refs.perRate
+    const el: any = this.refs.perPerform
     const myChart = echarts.init(el)
   // 指定图表的配置项和数据
     const option = {
-      title: {
-        text: '任务完成率'
-      },
       tooltip: {},
       legend: {
-        data: ['销量']
+        x:'left',
+        data: ['客户总数', '已完成']
       },
       xAxis: {
-        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+        data: ['王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟']
       },
       yAxis: {},
-      series: [{
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-      }]
+      series: [
+        {
+          name: '客户总数',
+          type: 'bar',
+          stack:'two',
+          data: [5, 20, 36, 10, 10, 20, 40, 32, 54, 21, 23, 34],
+          itemStyle:{
+            color:'#b2e0ff'
+          }
+        },
+        {
+          name: '已完成',
+          type: 'bar',
+          stack:'two',
+          data: [1, 10, 16, 6, 9, 11, 40, 32, 45, 20, 23, 10],
+          itemStyle:{
+            color:'#d9f0ff'
+          }
+        }
+      ]
     }
     myChart.setOption(option)
   }
@@ -31,9 +45,9 @@ class Main extends React.Component {
     <div>
       <div>
         <span>已完成客户数：200家</span>
-        <span>绩效涨幅：12% 33</span>
+        <span style={{marginLeft:'20px'}}>绩效涨幅：12% <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
       </div>
-      <div ref='perRate' style={{width: '100%', height: '400px'}}></div>
+      <div ref='perPerform' style={{width: '100%', height: '400px'}}></div>
     </div>
     )
   }

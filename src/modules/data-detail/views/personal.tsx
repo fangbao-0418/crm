@@ -4,6 +4,7 @@ import moment from 'moment'
 import Rate from '@/modules/data-detail/views/personal.rate'
 import Perform from '@/modules/data-detail/views/personal.perform'
 import { findDOMNode } from 'react-dom'
+const styles = require('@/modules/data-detail/styles/personal.styl')
 const RadioGroup = Radio.Group
 const { MonthPicker, RangePicker } = DatePicker
 const dateFormat = 'YYYY/MM/DD'
@@ -36,7 +37,7 @@ class Main extends React.Component<any, any> {
       secondCity: cityData[value][0]
     })
   }
-  public  onSecondCityChange = (value: any) => {
+  public onSecondCityChange = (value: any) => {
     this.setState({
       secondCity: value
     })
@@ -49,36 +50,38 @@ class Main extends React.Component<any, any> {
     return (
     <div>
       <RadioGroup name='radiogroup' defaultValue={1}>
-        <span>日期：</span>
+        <span style={{lineHeight:'24px'}}>日期：</span>
         <Radio value={1}>日</Radio>
         <Radio value={2}>周</Radio>
         <Radio value={3}>月</Radio>
       </RadioGroup>
       <div>
-        <span>选择日期：</span>
-        <DatePicker defaultValue={moment('2015/01/01', dateFormat)} format={dateFormat} />
-        <span>省份: </span>
-        <Select
-          defaultValue={provinceData[0]}
-          style={{ width: 120 }}
-          onChange={this.handleProvinceChange}
-        >
-          {provinceData.map((province: any) => <Option key={province}>{province}</Option>)}
-        </Select>
-        <span>城市：</span>
-        <Select
-          style={{ width: 120 }}
-          value={this.state.secondCity}
-          onChange={this.onSecondCityChange}
-        >
-          {cities.map((city: any) => <Option key={city}>{city}</Option>)}
-        </Select>
-        <span>代理商：</span>
-        <Select defaultValue='河北' style={{ width: 120 }} onChange={this.handleChange}>
-          <Option value='河北'>河北</Option>
-          <Option value='安徽'>安徽</Option>
-          <Option value='河南'>河南</Option>
-        </Select>
+        <div className={styles.frameDate}>
+          <span>选择日期:</span>
+          <DatePicker defaultValue={moment('2015/01/01', dateFormat)} format={dateFormat} />
+          <span>省份: </span>
+          <Select
+            defaultValue={provinceData[0]}
+            style={{ width: 120 }}
+            onChange={this.handleProvinceChange}
+          >
+            {provinceData.map((province: any) => <Option key={province}>{province}</Option>)}
+          </Select>
+          <span>城市：</span>
+          <Select
+            style={{ width: 120 }}
+            value={this.state.secondCity}
+            onChange={this.onSecondCityChange}
+          >
+            {cities.map((city: any) => <Option key={city}>{city}</Option>)}
+          </Select>
+          <span>代理商：</span>
+          <Select defaultValue='河北' style={{ width: 120 }} onChange={this.handleChange}>
+            <Option value='河北'>河北</Option>
+            <Option value='安徽'>安徽</Option>
+            <Option value='河南'>河南</Option>
+          </Select>
+        </div>
         <Tabs onChange={this.callback} type='card'>
           <TabPane tab='任务完成率' key='1'>
             <Rate/>
