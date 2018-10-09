@@ -29,6 +29,7 @@ class Main extends React.Component<Props> {
         return (
           <FormItem>
             {getFieldDecorator(`contactPerson-${index}`, {
+              valuePropName: text,
               rules: [
                 {
                   required: true,
@@ -49,7 +50,25 @@ class Main extends React.Component<Props> {
       title: '联系电话',
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'contactPhone')} value={text}/>
+        const { getFieldDecorator } = this.props.form
+        return (
+          <FormItem>
+            {getFieldDecorator(`contactPhone-${index}`, {
+              valuePropName: text,
+              rules: [
+                {
+                  required: true,
+                  message: '电话不能为空'
+                }
+              ]
+            })(
+              <Input
+                onChange={this.onChange.bind(this, index, 'contactPhone')}
+                value={text}
+              />
+            )}
+          </FormItem>
+        )
       }
     },
     // {
@@ -112,7 +131,7 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props.linkMan)
     return (
-      <div style={{width: '100%'}}>
+      <div className={styles.container} style={{width: '100%'}}>
         <Form>
           <Table
             dataSource={this.props.linkMan}

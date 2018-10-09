@@ -2,7 +2,6 @@ import React from 'react'
 import { Table, Button } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
-import { PaginationConfig } from 'antd/lib/pagination'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
@@ -75,8 +74,8 @@ const data: ConditionOptionProps[] = [
     type: 'select',
     options: [
       {
-        label: '北京(100)',
-        value: '110110'
+        label: '',
+        value: ''
       }
     ]
   }
@@ -101,7 +100,7 @@ class Main extends React.Component<null, States> {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.show.bind(this, record.customerId)}>{val}</a>
+        <span className='href' onClick={this.show.bind(this, record.customerId)}>{val}</span>
       )
     }
   }, {

@@ -78,11 +78,16 @@ class Main extends React.Component<Props> {
           </b>
         </div>
       ),
+      content: <Provider><LinkMain /></Provider>,
       onOk: () => {
         console.log(this.props.linkMan, 'linkMan')
+        const contactPersons = this.props.detail.contactPersons
+        this.props.form.setFieldsValue({
+          'linkMan[0].contactPerson': contactPersons[0].contactPerson,
+          'linkMan[0].contactPhone': contactPersons[0].contactPhone
+        })
         modal.hide()
-      },
-      content: <Provider><LinkMain /></Provider>
+      }
     })
     modal.show()
   }
@@ -153,6 +158,8 @@ class Main extends React.Component<Props> {
         params.cityName = this.state.cityName
         params.areaName = this.state.areaName
         params.contactPersons = this.props.linkMan
+        // delete params.tagIntention
+        // delete params.tagTelephoneStatus
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -178,7 +185,6 @@ class Main extends React.Component<Props> {
     })
   }
   public handleCityChange (value: {key: string, title: string}) {
-    console.log(value)
     if (value.key === undefined) {
       return
     }
@@ -200,7 +206,6 @@ class Main extends React.Component<Props> {
     })
   }
   public handleAreaChange (value: {key: string, title: string}) {
-    console.log(value)
     if (value.key === undefined) {
       return
     }
@@ -288,6 +293,7 @@ class Main extends React.Component<Props> {
                 'linkMan[0].contactPerson',
                 {
                   valuePropName: this.props.linkMan[0].contactPerson,
+                  initialValue: this.props.linkMan[0].contactPerson,
                   rules: [
                     {
                       required: true,
@@ -322,6 +328,7 @@ class Main extends React.Component<Props> {
                 'linkMan[0].contactPhone',
                 {
                   valuePropName: this.props.linkMan[0].contactPhone,
+                  initialValue: this.props.linkMan[0].contactPhone,
                   rules: [
                     {
                       required: true,

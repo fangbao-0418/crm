@@ -32,6 +32,8 @@ declare namespace Customer {
     agencyId?: string
     tagIntention?: string
     createTime?: string
+    trackRecord?: TrackRecord
+    tagTelephoneStatus?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string
