@@ -42,9 +42,9 @@ class Main extends React.Component<Props> {
           cityCode: '110000',
           cityName: '北京',
           customerSource: 1
-        }).then(() => {
+        }).then((res) => {
           if (this.props.onOk) {
-            this.props.onOk(info)
+            this.props.onOk(res)
           }
         })
         console.log(info)

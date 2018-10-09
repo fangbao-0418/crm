@@ -39,7 +39,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['预约时间', '创建时间', '最后跟进'],
+      label: ['预约时间', '创建时间', '最后跟进时间'],
       options: [
         {
           label: '全部',

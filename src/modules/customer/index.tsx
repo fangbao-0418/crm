@@ -69,7 +69,7 @@ const data: ConditionOptionProps[] = [
   },
   {
     label: ['所属城市'],
-    value: '110110',
+    value: '110000',
     field: 'cityCode',
     type: 'select',
     options: [
@@ -335,7 +335,15 @@ class Main extends React.Component<null, States> {
     }
     const modal = new Modal({
       content: (
-        <Provider><Allot onClose={() => {modal.hide()}} selectedRowKeys={this.state.selectedRowKeys} params={this.params} selectAll={this.state.selectAll}/></Provider>
+        <Provider>
+          <Allot
+            onClose={() => {modal.hide()}}
+            selectedRowKeys={this.state.selectedRowKeys}
+            params={this.params}
+            selectAll={this.state.selectAll}
+            pagetotal={this.state.pagination.total}
+          />
+        </Provider>
       ),
       title: '分配客资',
       footer: null,

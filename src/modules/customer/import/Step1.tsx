@@ -49,15 +49,31 @@ class Main extends React.Component<Props> {
             }
           </Select>
         </div>
-        <div className='mt12'>
-          <span>选择城市：</span>
-          <Select
-            style={{width:'200px'}}
-          >
-            <Option key='1'>北京</Option>
-            <Option key='2'>天津</Option>
-          </Select>
-        </div>
+        {
+          !this.props.isBussiness &&
+          <div className='mt12'>
+            <span>选择城市：</span>
+            <Select
+              style={{width:'200px'}}
+            >
+              <Option key='1'>北京</Option>
+              <Option key='2'>天津</Option>
+            </Select>
+          </div>
+        }
+        {
+          this.props.isBussiness &&
+          <div className='mt12'>
+            <span>分配销售：</span>
+            <Select
+              style={{width:'200px'}}
+              mode='multiple'
+            >
+              <Option key='1'>销售1</Option>
+              <Option key='2'>销售2</Option>
+            </Select>
+          </div>
+        }
         {
           !this.props.isBussiness &&
           <div>

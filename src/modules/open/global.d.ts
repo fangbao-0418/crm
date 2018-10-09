@@ -8,6 +8,7 @@ declare namespace Open {
     freeDays?: string
     customerSource?: string
     createBeginDate?: string
+    releaseNums?: string
     lastReleaseSalesperson?: string
     lastReleaseTime?: string
     id?: string
