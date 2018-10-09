@@ -1,28 +1,31 @@
 .container
-  color: #000
-
-  .acts
-    display: inline-block
-    margin: 15px 0 0
-    button 
-      margin: 0 .5em
-
-  .icocui
+  .page-hc
+    border: 1px solid #eee
+    margin: 0 20px 20px 0
+    .hc-h
+      height: 40px
+      line-height: 40px
+      background: #f8fbfd
+      text-indent: 1em
+    .hc-c
+      padding: 15px
+  .actbtns
+    padding: 20px 0
+    text-align: right
+  .rowodd
+    background: #fdfdfd
+  .disabled
     i
-      display: inline-block 
-      border-radius: 50%
-      background: #e84845
-      width: 1.4em
-      height: 1.4em
-      padding:2px
-      color: #fff
-      font-size: 11px
-      line-height: 1
-      font-style: normal
-  .icohide
-    display: none
+      color: #888
   
 :global
+  .ant-table-thead
+    background: #f8fbfd
+  .ant-table-small>.ant-table-content>.ant-table-body>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-fixed-left>.ant-table-body-outer>.ant-table-body-inner>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-fixed-left>.ant-table-header>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-fixed-right>.ant-table-body-outer>.ant-table-body-inner>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-fixed-right>.ant-table-header>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-header>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-scroll>.ant-table-body>table>.ant-table-thead>tr>th, .ant-table-small>.ant-table-content>.ant-table-scroll>.ant-table-header>table>.ant-table-thead>tr>th
+    border-bottom: 0
+    background: #f8fbfd
+  .ant-table-small>.ant-table-content>.ant-table-body>table, .ant-table-small>.ant-table-content>.ant-table-fixed-left>.ant-table-body-outer>.ant-table-body-inner>table, .ant-table-small>.ant-table-content>.ant-table-fixed-left>.ant-table-header>table, .ant-table-small>.ant-table-content>.ant-table-fixed-right>.ant-table-body-outer>.ant-table-body-inner>table, .ant-table-small>.ant-table-content>.ant-table-fixed-right>.ant-table-header>table, .ant-table-small>.ant-table-content>.ant-table-header>table, .ant-table-small>.ant-table-content>.ant-table-scroll>.ant-table-body>table, .ant-table-small>.ant-table-content>.ant-table-scroll>.ant-table-header>table
+    padding: 0
   .ant-modal-header
     padding:10px
     font-size: 14px
