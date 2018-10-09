@@ -39,5 +39,6 @@ declare namespace APP {
   export const error: (msg: string) => void
   export let keys: EnumProps
   export let dictionary: DictProps
+  export const env: 'development' | 'production'
 }
 

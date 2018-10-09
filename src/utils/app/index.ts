@@ -1,6 +1,7 @@
 import notification from 'pilipa/libs/notification'
 import * as fn from './fn'
 Object.assign(APP, {
+  env: process.env.NODE_ENV,
   fn,
   success: (msg: string) => {
     notification.success({

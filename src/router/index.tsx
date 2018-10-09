@@ -6,7 +6,7 @@ import {
 import { Provider } from 'react-redux'
 import store from '@/store'
 import App from '@/modules/common/App'
-const isPro = process.env.NODE_ENV === 'production'
+const isPro = APP.env === 'production'
 const Router = isPro ? BrowserRouter : HashRouter
 const basename = '/'
 
