@@ -123,13 +123,22 @@ class Main extends React.Component {
     dataIndex: 'operatingAccouting'
   }, {
     title: '入库时间',
-    dataIndex: 'createTime'
+    dataIndex: 'createTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '开始账期',
-    dataIndex: 'startTime'
+    dataIndex: 'startTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '预计截至账期',
-    dataIndex: 'endTime'
+    dataIndex: 'EndTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '操作',
     render: (record) => {
