@@ -7,7 +7,10 @@ interface States {
   trackRecords: Customer.TrackRecord[]
   clueRecords: Customer.TrackRecord[]
 }
-class Main extends React.Component {
+interface Props {
+  customerId?: string 
+}
+class Main extends React.Component<Props> {
   public state: States = {
     trackRecords: [],
     clueRecords: []
@@ -17,12 +20,12 @@ class Main extends React.Component {
       pageNum: 1,
       pageSize: 999
     }
-    fetchTrackRecords(payload).then((res) => {
+    fetchTrackRecords(this.props.customerId, payload).then((res) => {
       this.setState({
         trackRecords: res.data
       })
     })
-    fetchClueRecords(payload).then((res) => {
+    fetchClueRecords(this.props.customerId, payload).then((res) => {
       this.setState({
         clueRecords: res.data
       })
@@ -47,21 +50,36 @@ class Main extends React.Component {
                     </div>
                     <div>{item.remark}</div>
                     <div>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {moment(item.appointTime).format('YYYY-MM-DD')}
-                      </span>
+                      {
+                        item.tagIntention > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+                        </span>
+                      }
+                      {
+                        item.tagCustomerStatus &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.tagFollowupStatus &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.tagTelephoneStatus &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.appointTime &&
+                        <span className={styles.tag}>
+                          {moment(item.appointTime).format('YYYY-MM-DD')}
+                        </span>
+                      }
                     </div>
                   </div>
                 )
