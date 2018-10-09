@@ -3,17 +3,18 @@ import ImportSteps from '@/modules/common/allot-steps'
 import Step1 from './Step1'
 import Step2 from './Step2'
 import _ from 'lodash'
-import { allotCustomer, deleteCustomer } from '../api'
-interface Props {
+import { connect } from 'react-redux'
+import { getSaleCapacity, allotCustomer, deleteCustomer } from '../api'
+interface Props extends Customer.Props {
   selectAll: boolean
   selectedRowKeys: string[]
   params: any
+  pagetotal?: number
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
   public state = {
-    step: 1,
-    resultData: {}
+    step: 1
   }
   public config = [
     {
@@ -22,22 +23,40 @@ class Main extends React.Component<Props> {
         <Step1
           onOk={(value) => {
             console.log(value, 'value')
+            const ids: string[] = []
+            value.salesPerson.forEach((item: {id: string, name: string}) => {
+              ids.push(item.id)
+            })
+            const saleCapacityParams = {
+              // agencyId: value.agencyId,
+              agencyId: '1001',
+              customerNum: this.props.selectedRowKeys.length,
+              salesPersons: ids.join(',')
+            }
             if (this.props.selectAll) {
               value.checkAllParam = this.props.params
               value.customerIds = []
+              saleCapacityParams.customerNum = this.props.pagetotal
             } else {
               value.customerIds = this.props.selectedRowKeys
             }
-            allotCustomer(value).then((res: any) => {
-              this.setState({
-                step: 2
-              })
-              APP.dispatch({
-                type: 'change customer data',
-                payload: {
-                  assignResult: res
-                }
-              })
+            console.log(saleCapacityParams, 'saleCapacityParams')
+            getSaleCapacity(saleCapacityParams).then((res1) => { // 查询销售库容是不是足够
+              if (res1.result === 1) {
+                allotCustomer(value).then((res: any) => {
+                  this.setState({
+                    step: 2
+                  })
+                  APP.dispatch({
+                    type: 'change customer data',
+                    payload: {
+                      assignResult: res
+                    }
+                  })
+                })
+              } else {
+                APP.error('销售库容不足')
+              }
             })
           }}
         />
@@ -53,8 +72,7 @@ class Main extends React.Component<Props> {
             }
           }}
           deleteCustomer={() => {
-            console.log(this.state.resultData, 'resultData')
-            const result = [{name: '111', id: '1000111118'}]
+            const result = this.props.assignResult.exists
             const ids: string[] = []
             result.map((item) => {
               ids.push(item.id)
@@ -62,6 +80,7 @@ class Main extends React.Component<Props> {
             const payload = ids.join(',')
             deleteCustomer(payload).then(() => {
               APP.success('操作成功')
+              this.props.onClose()
             })
           }}
         />
@@ -69,7 +88,6 @@ class Main extends React.Component<Props> {
     }
   ]
   public render () {
-    console.log(this.state.resultData, 'result')
     return (
       <div>
         <ImportSteps step={this.state.step} config={this.config} />
@@ -77,4 +95,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)
