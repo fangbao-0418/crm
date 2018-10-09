@@ -31,7 +31,7 @@ class Main extends React.Component<Props> {
               return false
             }
             return (
-              <div>{item}：已经存在！</div>
+              <div key={index}>{item}：已经存在！</div>
             )
           })
         }
