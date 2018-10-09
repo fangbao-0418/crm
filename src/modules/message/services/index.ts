@@ -4,31 +4,34 @@
 import Service from '@/modules/common/services/service'
 
 class MessageService extends Service {
-  // 有全局配置后，再用全局配置
-  public pageConf: any = {}
-  constructor () {
-    super()
-    this.pageConf.pageSize = 10
-  }
-
+  // 删除
   public delListByIds (ids: Array<any> = []) {
-    return Service.http(`api/remind`, 'DELETE', {ids})
+    return Service.http(`notification/v1/api/remind`, 'DELETE', {
+      data:ids
+    })
+  }
+  // 标记已读
+  public readListByIds (ids: Array<any> = []) {
+    return Service.http(`notification/v1/api/remind/read`, 'PUT', {
+      data: ids
+    })
   }
 
   public getCurrentByUserid (userid: any = '') {
-    return Service.http(`api/remind/unread/last/${userid}`)
+    return Service.http(`notification/v1/api/remind/unread/last/${userid}`)
   }
-
+  // 详细详情
   public getItemById (id: any = '') {
-    return Service.http(`api/remind/${id}`)
+    return Service.http(`notification/v1/api/remind/${id}`)
   }
-
-  public getListByUserid (userid: any = '', pageConf: any = {pageCurrent: 1}) {
+  // 消息列表
+  public getListByUserid (userid: any = '', createAt: any = '', pageCurrent: any = '', pageSize: any = '') {
     return Service.http(
-      `api/remind/page?
-      recipient=${userid}&
-      pageCurrent=${pageConf.pageCurrent}&
-      pageSize=${this.pageConf.pageSize}`
+      `notification/v1/api/remind/page?` +
+      `recipient=${userid}&` +
+      // `createAt=${createAt}&` +
+      `pageCurrent=${pageCurrent}&` +
+      `pageSize=${pageSize}`
     )
   }
 }

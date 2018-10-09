@@ -130,7 +130,6 @@ class Main extends React.Component<any, any> {
         onChange={this.pageChange}
         columns={this.columns}
         dataSource={this.state.dataSource}
-        pagination={this.state.pageConf}
       />
       </ContentBox>
     </div>
