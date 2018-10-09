@@ -51,7 +51,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['入库时间', '创建时间', '最后跟进'],
+      label: ['入库时间', '创建时间', '最后跟进时间'],
       options: [
         {
           label: '全部',
@@ -428,6 +428,13 @@ class Main extends React.Component {
               ins.refs.wrappedComponent.save().then(() => {
                 APP.success('保存成功')
                 modal.hide()
+                this.setState({
+                  visible: false
+                }, () => {
+                  this.setState({
+                    visible: true
+                  })
+                })
                 // this.fetchList()
               }, () => {
                 APP.error('保存失败')
@@ -435,6 +442,20 @@ class Main extends React.Component {
             }}
           >
             保存
+          </Button>
+          <Button
+            type='primary'
+            onClick={() => {
+              ins.refs.wrappedComponent.save().then((res: any) => {
+                APP.success('保存成功') // 保存成功后跳转到详情页
+                modal.hide()
+                this.show(res.data[0])
+              }, () => {
+                APP.error('保存失败')
+              })
+            }}
+          >
+            现在跟进
           </Button>
         </div>
       ),

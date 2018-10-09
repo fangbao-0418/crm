@@ -104,11 +104,14 @@ class Main extends React.Component {
     title: '客户来源',
     dataIndex: 'customerSource'
   }, {
-    title: '创建时间',
-    dataIndex: 'createTime'
+    title: '释放次数',
+    dataIndex: 'releaseNums'
   }, {
     title: '释放销售',
     dataIndex: 'lastReleaseSalesperson'
+  }, {
+    title: '创建时间',
+    dataIndex: 'createTime'
   }, {
     title: '释放时间',
     dataIndex: 'lastReleaseTime'
