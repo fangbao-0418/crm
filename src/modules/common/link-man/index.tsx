@@ -1,14 +1,16 @@
 import React from 'react'
-import { Table, Input } from 'antd'
+import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
 type LinkManProps = Customer.LinkManProps
-interface Props {
+interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
 }
 interface States {
   dataSource: LinkManProps[]
 }
+const FormItem = Form.Item
 const styles = require('./style')
 class Main extends React.Component<Props> {
   public dataSource = [{
@@ -23,7 +25,24 @@ class Main extends React.Component<Props> {
       title: '联系人',
       dataIndex: 'contactPerson',
       render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'contactPerson')} value={text}/>
+        const { getFieldDecorator } = this.props.form
+        return (
+          <FormItem>
+            {getFieldDecorator(`contactPerson-${index}`, {
+              rules: [
+                {
+                  required: true,
+                  message: '联系人不能为空'
+                }
+              ]
+            })(
+              <Input
+                onChange={this.onChange.bind(this, index, 'contactPerson')}
+                value={text}
+              />
+            )}
+          </FormItem>
+        )
       }
     },
     {
@@ -94,12 +113,14 @@ class Main extends React.Component<Props> {
     console.log(this.props.linkMan)
     return (
       <div style={{width: '100%'}}>
-        <Table
-          dataSource={this.props.linkMan}
-          columns={this.columns}
-          pagination={false}
-          bordered
-        />
+        <Form>
+          <Table
+            dataSource={this.props.linkMan}
+            columns={this.columns}
+            pagination={false}
+            bordered
+          />
+        </Form>
       </div>
     )
   }
@@ -108,4 +129,4 @@ export default connect((state: Reducer.State) => {
   return {
     ...state.customer
   }
-})(Main)
+})(Form.create()(Main))

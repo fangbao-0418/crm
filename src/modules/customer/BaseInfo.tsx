@@ -1,6 +1,5 @@
 import React from 'react'
 import { Row, Col, Icon, Button, Select, Form } from 'antd'
-import DropDown from 'pilipa/libs/dropdown'
 import AutoComplete from 'pilipa/libs/auto-complete'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import Input from '@/components/input'
@@ -139,7 +138,7 @@ class Main extends React.Component<Props> {
     if (res) {
       return res.label
     } else {
-      return arr.length > 0 ? arr[0].label : ''
+      return ''
     }
   }
   public save () {
@@ -258,9 +257,6 @@ class Main extends React.Component<Props> {
                     style={{width: '100%'}}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
-                      this.props.form.validateFields(() => {
-                        console.log('validataor')
-                      })
                       this.handleChange(null, {
                         key: 'customerSource',
                         value
