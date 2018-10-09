@@ -244,6 +244,7 @@ class Main extends React.Component<Props> {
                   field='customerName'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.detail.customerName}
+                  disabled={true}
                 />
               )}
             </FormItem>

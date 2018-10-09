@@ -8,7 +8,7 @@ interface States {
   clueRecords: Customer.TrackRecord[]
 }
 interface Props {
-  customerId?: string 
+  customerId?: string
 }
 class Main extends React.Component<Props> {
   public state: States = {
@@ -57,19 +57,19 @@ class Main extends React.Component<Props> {
                         </span>
                       }
                       {
-                        item.tagCustomerStatus &&
+                        item.tagCustomerStatus > -1 &&
                         <span className={styles.tag}>
                           {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
                         </span>
                       }
                       {
-                        item.tagFollowupStatus &&
+                        item.tagFollowupStatus > -1 &&
                         <span className={styles.tag}>
                           {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
                         </span>
                       }
                       {
-                        item.tagTelephoneStatus &&
+                        item.tagTelephoneStatus > -1 &&
                         <span className={styles.tag}>
                           {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
                         </span>
@@ -110,17 +110,6 @@ class Main extends React.Component<Props> {
                 })
               }
             </div>
-            {/* <div className={styles.record}>
-              <div className={styles['line-height']}>
-                <span>张磊</span>
-                <span>2018-09-01 12:00:11</span>
-              </div>
-              <div>客户出差，明天再打</div>
-              <div>
-                <span className={styles.tag}>持续跟进</span>
-                <span className={styles.tag}>2018-09-10</span>
-              </div>
-            </div> */}
           </Tabs.TabPane>
         </Tabs>
       </div>

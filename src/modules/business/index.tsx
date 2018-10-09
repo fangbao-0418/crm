@@ -111,13 +111,13 @@ class Main extends React.Component {
     title: '意向度',
     dataIndex: 'intention',
     render: (val) => {
-      return ( APP.dictionary[`EnumIntentionality-${val}`] )
+      return (APP.dictionary[`EnumIntentionality-${val}`])
     }
   }, {
     title: '电话状态',
     dataIndex: 'telephoneStatus',
     render: (val) => {
-      return ( APP.dictionary[`EnumContactStatus-${val}`] )
+      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: '空置天数',
@@ -129,7 +129,7 @@ class Main extends React.Component {
     title: '客户来源',
     dataIndex: 'source',
     render: (val) => {
-      return ( APP.dictionary[`EnumContactSource-${val}`] )
+      return (APP.dictionary[`EnumContactSource-${val}`])
     }
   }, {
     title: '创建时间',
