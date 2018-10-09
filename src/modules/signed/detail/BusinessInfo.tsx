@@ -1,17 +1,21 @@
 import React from 'react'
 import { Form, Row, Col, Input, Select, Button, Checkbox, DatePicker } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
+import { connect } from 'react-redux'
+import moment from 'moment'
 const styles = require('../style')
 const { TextArea } = Input
 const Option = Select.Option
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   editable?: boolean
+  detail: Customer.DetailProps
 }
 class Main extends React.Component<Props> {
   public render () {
     const { getFieldDecorator } = this.props.form
     const editable = this.props.editable
+    const detail = this.props.detail
     return (
       <div style={{width: '790px', marginLeft: '10px'}}>
         <Form
@@ -23,19 +27,26 @@ class Main extends React.Component<Props> {
                 style={{marginLeft: '-4px'}}
                 labelCol={{span: 3}}
                 wrapperCol={{span: 21}}
-                label='信息来源'
+                label='公司名称'
               >
-                {editable ? getFieldDecorator('a')(
+                {editable ? getFieldDecorator(
+                  'customerName',
+                  {
+                    initialValue: detail.customerName
+                  }
+                )(
                   <div>
                     <Input.Search
                       style={{width: '322px'}}
                       enterButton='查询'
                       onSearch={(value) => console.log(value)}
+                      value={detail.customerName}
                     />
                     <Button className='ml5 mr5' type='primary'>网址</Button>
                     <Button type='primary'>特殊公司</Button>
                   </div>
-                ) : 'xxx'}
+                ) : <span>{detail.customerName}</span>
+                }
               </FormItem>
             </Col>
             <Col span={6}>
@@ -44,9 +55,9 @@ class Main extends React.Component<Props> {
                 wrapperCol={{span: 16}}
                 label='法人姓名'
               >
-                {editable ? getFieldDecorator('b')(
+                {editable ? getFieldDecorator('legalPerson')(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.legalPerson}</span>}
               </FormItem>
             </Col>
           </Row>
@@ -60,7 +71,7 @@ class Main extends React.Component<Props> {
               >
                 {editable ? getFieldDecorator('c')(
                   <Input />
-                ) : <span>xxx</span>}
+                ) : <span>{detail.unifiedCreditCode}</span>}
               </FormItem>
             </Col>
             <Col span={8}>
@@ -72,7 +83,7 @@ class Main extends React.Component<Props> {
               >
                 {editable ? getFieldDecorator('d')(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
             </Col>
             <Col span={6}>
@@ -83,30 +94,48 @@ class Main extends React.Component<Props> {
               >
                 {editable ? getFieldDecorator('e')(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.registeredCapital}</span>}
               </FormItem>
             </Col>
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem
-                className='inline-block'
-                style={{width: '270px'}}
-                labelCol={{span: 6}}
-                wrapperCol={{span: 18}}
-                label='营业期限'
-              >
-                {editable ? getFieldDecorator('f')(
-                  <DatePicker />
-                ) : 'xxx'}
-              </FormItem>
-              <FormItem
-                className='inline-block ml5'
-              >
-                {editable && getFieldDecorator('g')(
-                  <Checkbox>无期限</Checkbox>
-                )}
-              </FormItem>
+              {editable ? (
+                <div>
+                  <FormItem
+                    className='inline-block'
+                    style={{width: editable ? '270px' : null}}
+                    labelCol={{span: 6}}
+                    wrapperCol={{span: 18}}
+                    label='营业期限'
+                  >
+                    {getFieldDecorator('f')(
+                      <DatePicker />
+                    )}
+                  </FormItem>
+                  <FormItem
+                    className='inline-block ml5'
+                  >
+                    {editable && getFieldDecorator('g')(
+                      <Checkbox>无期限</Checkbox>
+                    )}
+                  </FormItem>
+                </div>
+              ) : (
+                <FormItem
+                  className='inline-block'
+                  style={{width: '100%'}}
+                  labelCol={{span: 4}}
+                  wrapperCol={{span: 20}}
+                  label='营业期限'
+                >
+                  <span>
+                    {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
+                      -
+                    {moment(detail.businessHoursEnd).format('YYYY年MM月DD日')}
+                  </span>
+                </FormItem>
+              )}
             </Col>
             <Col span={12}>
               <FormItem
@@ -116,9 +145,9 @@ class Main extends React.Component<Props> {
                 wrapperCol={{span: 16}}
                 label='公司地址'
               >
-                {editable ? getFieldDecorator('h')(
+                {editable ? getFieldDecorator('address')(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.address}</span>}
               </FormItem>
             </Col>
           </Row>
@@ -132,7 +161,7 @@ class Main extends React.Component<Props> {
               >
                 {editable ? getFieldDecorator('i')(
                   <Input.TextArea />
-                ) : 'xxx'}
+                ) : <span>{detail.businessScope}</span>}
               </FormItem>
             </Col>
           </Row>
@@ -141,4 +170,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Form.create()(Main)
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Form.create()(Main))

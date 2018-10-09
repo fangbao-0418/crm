@@ -14,6 +14,18 @@ declare namespace Customer {
     type?: string
     legalPerson?: string
     payTaxesNature?: string
+    /** 社会统一信用代码 */
+    unifiedCreditCode?: string
+    /** 企业注册号 */
+    companyRegisterCode?: string
+    /** 注册资金 */
+    registeredCapital?: string
+    /** 营业期限起始 */
+    businessHoursBegin?: string
+    /** 营业期限结束 */
+    businessHoursEnd?: string
+    /** 经营范围 */
+    businessScope?: string
     address?: string
     vacantDays?: string
     cityName?: string
