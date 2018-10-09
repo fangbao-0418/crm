@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Table, Divider, Form, Input, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
-import { fetchOrganizationList, delOrganization, addOrganization, modifyOrganization } from './api'
+import { fetchOrganizationList, delOrganization, addOrganization, modifyOrganization, toggleForbidOrganization } from './api'
 
 const styles = require('./style')
 const FormItem = Form.Item
@@ -23,25 +23,7 @@ class Main extends React.Component {
     visible: false,
     verification: 'normal',
     currentInfo: {},
-    dataSource: [
-      {
-        id: 1,
-        parentId: 0,
-        name: '技术部',
-        organizationList: [
-          {
-            id: 2,
-            parentId: 1,
-            name: '前端'
-          },
-          {
-            id: 3,
-            parentId: 1,
-            name: '后端'
-          }
-        ]
-      }
-    ]
+    dataSource: []
   }
 
   public componentWillMount () {
@@ -107,9 +89,12 @@ class Main extends React.Component {
     this.setState({visible: true, mode, currentInfo, val})
   }
 
-  // 禁用部门
-  public forbidDepartment = () => {
-
+  // 启用、禁用部门
+  public toggleForbidDepartment = (id: number, status: 0 | 1) => {
+    const updateUser = 111 // todo 改为操作人ID
+    toggleForbidOrganization(id, updateUser, status).then((res) => {
+      this.getDepartmentList()
+    })
   }
 
   // 删除部门
@@ -175,7 +160,7 @@ class Main extends React.Component {
                   <Divider type='vertical'/>
                   <a onClick={() => {this.setDepartment('modify', info)}}>修改</a>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.forbidDepartment()}}>禁用</a>
+                  <a onClick={() => {this.toggleForbidDepartment(id, 1)}}>禁用</a>
                   <Divider type='vertical'/>
                   <a onClick={() => {this.delDepartment(id)}}>删除</a>
                 </div>
@@ -184,7 +169,7 @@ class Main extends React.Component {
                   <Divider type='vertical'/>
                   <span className={styles.disable}>修改</span>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.forbidDepartment()}}>已禁用</a>
+                  <a onClick={() => {this.toggleForbidDepartment(id, 0)}}>已禁用</a>
                   <Divider type='vertical'/>
                   <span className={styles.disable}>删除</span>
                 </div>

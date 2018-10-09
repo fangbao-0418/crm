@@ -36,3 +36,8 @@ export const addOrganization = (payload: AddOrganizationPayload) => {
 export const modifyOrganization = (payload: ModifyOrganizationPayload, id: number) => {
   return http(`/user/v1/api/organization/${id}`, 'PUT', payload)
 }
+
+// 启用禁用部门
+export const toggleForbidOrganization = (id: number, updateUser: number, status: 0 | 1) => {
+  return http(`/user/v1/api/organization/${id}/${updateUser}/${status}`, 'PUT')
+}
