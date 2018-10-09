@@ -17,17 +17,37 @@ class Main extends React.Component<Props> {
   public render () {
     const props = {
       name: 'file',
-      multiple: true,
+      multiple: false,
       showUploadList: false,
-      action: '/crm-manage/v1/api/customer/import',
-      beforeUpload: (file: any) => {
-        return importFile(file)
+      // action: '/crm-manage/v1/api/customer/upload',
+      // data: {
+      //   cityCode: '110000',
+      //   cityName: '北京',
+      //   customerSource: 1
+      // },
+      beforeUpload: () => {
+        return false
       },
+      // customRequest: (file: any) => {
+      //   console.log(file)
+      //   return importFile(file, {
+      //     cityCode: '110000',
+      //     cityName: '北京',
+      //     customerSource: 1
+      //   })
+      // },
       onChange: (info: any) => {
         console.log(info)
-        if (this.props.onOk) {
-          this.props.onOk(info)
-        }
+        return importFile(info.file, {
+          cityCode: '110000',
+          cityName: '北京',
+          customerSource: 1
+        }).then(() => {
+          if (this.props.onOk) {
+            this.props.onOk(info)
+          }
+        })
+        console.log(info)
         // const status = info.file.status;
         // if (status !== 'uploading') {
         //   console.log(info.file, info.fileList);

@@ -1,15 +1,16 @@
-interface OrderItem {
+interface TasktplItem {
     id?: string
     name?: string
-    priority?: string
+    priority?: string // 优先级
     status?: string
-    type?: string
+    type?: string // 主任务 main 子任务 sub
     category?: string
     subList?: string
     delFlag?:string
 }
-type OrderList = Array<OrderItem>
+type TasktplList = Array<TasktplItem>
 
 export {
-    OrderItem
+    TasktplItem,
+    TasktplList
 }

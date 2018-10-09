@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Table, Divider, Form, Input, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
+import { fetchOrganizationList, delOrganization, addOrganization, modifyOrganization } from './api'
 
 const styles = require('./style')
 const FormItem = Form.Item
@@ -43,6 +44,62 @@ class Main extends React.Component {
     ]
   }
 
+  public componentWillMount () {
+    this.getDepartmentList()
+  }
+
+  // 点击弹窗确认按钮
+  public onOk () {
+    const {mode} = this.state
+    const params = {
+      name: this.state.val,
+      parentId: 0,
+      companyId: 0,
+      createUser: 111 /// todo 改为操作人id
+    }
+    if (this.state.val === '') {
+      this.setState({verification: 'empty'})
+      return
+    } else {
+      this.setState({verification: 'normal'})
+    }
+    this.setState({visible: false})
+    if (mode === 'add') {
+      params.parentId = this.state.currentInfo.id
+      addOrganization(params)
+        .then((res) => {
+          this.getDepartmentList()
+        })
+        .catch((err) => {
+          APP.error('222')
+        })
+    } else if (mode === 'addRoot') {
+      params.parentId = 0
+      addOrganization(params).then((res) => {
+        this.getDepartmentList()
+      })
+    } else if (mode === 'modify') {
+      const data = {
+        name: this.state.val,
+        updateUser: 111 // todo 改为操作人id
+      }
+      modifyOrganization(data, this.state.currentInfo.id)
+        .then((res) => {
+          this.getDepartmentList()
+        })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
+    }
+  }
+
+  // 获取部门信息
+  public getDepartmentList () {
+    fetchOrganizationList().then((res) => {
+      this.setState({dataSource: res})
+    })
+  }
+
   // 修改、添加部门
   public setDepartment = (mode: 'add' | 'addRoot' | 'modify', currentInfo?: any) => {
     const val = mode === 'modify' ? currentInfo.name : ''
@@ -56,11 +113,20 @@ class Main extends React.Component {
   }
 
   // 删除部门
-  public delDepartment = () => {
+  public delDepartment = (id: number) => {
+    const updateUser = 123 // todo 改为操作人ID
     Modal.confirm({
       title: '删除部门',
       content: '确定要删除部门吗？',
-      onOk: () => {},
+      onOk: () => {
+        delOrganization(id, updateUser)
+          .then((res) => {
+            this.getDepartmentList()
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      },
       onCancel: () => {}
     })
   }
@@ -99,15 +165,30 @@ class Main extends React.Component {
     }, {
       title: '操作',
       render: (val: any, info: any) => {
+        const {id, name, status} = info
         return (
           <div>
-            <a onClick={() => {this.setDepartment('add', info)}}>添加子部门</a>
-            <Divider type='vertical'/>
-            <a onClick={() => {this.setDepartment('modify', info)}}>修改</a>
-            <Divider type='vertical'/>
-            <a onClick={() => {this.forbidDepartment()}}>禁用</a>
-            <Divider type='vertical'/>
-            <a onClick={() => {this.delDepartment()}}>删除</a>
+            {
+              status === 0
+              ? <div>
+                  <a onClick={() => {this.setDepartment('add', info)}}>添加子部门</a>
+                  <Divider type='vertical'/>
+                  <a onClick={() => {this.setDepartment('modify', info)}}>修改</a>
+                  <Divider type='vertical'/>
+                  <a onClick={() => {this.forbidDepartment()}}>禁用</a>
+                  <Divider type='vertical'/>
+                  <a onClick={() => {this.delDepartment(id)}}>删除</a>
+                </div>
+              : <div>
+                  <span className={styles.disable}>添加子部门</span>
+                  <Divider type='vertical'/>
+                  <span className={styles.disable}>修改</span>
+                  <Divider type='vertical'/>
+                  <a onClick={() => {this.forbidDepartment()}}>已禁用</a>
+                  <Divider type='vertical'/>
+                  <span className={styles.disable}>删除</span>
+                </div>
+            }
           </div>
         )
       }
@@ -137,13 +218,7 @@ class Main extends React.Component {
             visible={true}
             destroyOnClose={true}
             onOk={() => {
-              if (this.state.val === '') {
-                this.setState({verification: 'empty'})
-                return
-              } else {
-                this.setState({verification: 'normal'})
-              }
-              this.setState({visible: false})
+              this.onOk()
             }}
             onCancel={() => {
               this.setState({visible: false, verification: 'normal'})

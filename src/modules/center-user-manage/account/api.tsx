@@ -39,25 +39,40 @@ interface ModifyAccountPayload {
 
 // 查询、获取账号
 export const fetchAccountList = (payload?: FetchAccountListPayload) => {
-  return http(`/v1/api/user/list`, 'GET', payload)
+  return http(`/user/v1/api/user/list`, 'GET', payload)
 }
 
 // 删除账号
 export const delAccount = (payload: DelAccountPayload) => {
-  return http(`/v1/api/user`, 'DELETE', payload)
+  return http(`/user/v1/api/user`, 'DELETE', payload)
 }
 
 // 新增账号
 export const addAccount = (payload: AddAccountPayload) => {
-  return http(`/v1/api/user`, 'POST', payload)
+  return http(`/user/v1/api/user`, 'POST', payload)
 }
 
 // 修改账号
 export const modifyAccount = (payload: ModifyAccountPayload, id: number) => {
-  return http(`/v1/api/user/${id}`, 'PUT', payload)
+  return http(`/user/v1/api/user/${id}`, 'PUT', payload)
 }
 
 // 查询负责区域
 export const fetchRegionList = () => {
-  return http(`/v1/api/user/region/list`)
+  return http(`/user/v1/api/user/region/list`)
+}
+
+// 获取部门列表
+export const fetchDepartmentList = () => {
+  return http(`/user/v1/api/organization/list`)
+}
+
+// 获取角色列表
+export const fetchRoleList = () => {
+  return http(`/user/v1/api/role/list/system`)
+}
+
+// 根据角色查询权限
+export const fetchRoleOfPermission = (roleId: number) => {
+  return http(`/user/v1/api/authority/role/${roleId}`)
 }

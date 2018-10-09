@@ -17,14 +17,45 @@
     margin-right 5px
   .tag
     display inline-block
-    width 65px
-    height 26px
+    padding: 2px 5px
+    margin-bottom: 4px
     border 1px solid #D5D5D5
     border-radius 4px
     color #999
     text-align center
-    line-height 26px
+    cursor pointer
 .base-info
+  .auto-complete
+    z-index: 2
+    width: 100%
+    input 
+      font-family: Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
+      font-variant: tabular-nums;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: relative;
+      display: inline-block;
+      padding: 4px 11px;
+      width: 100%;
+      height: 32px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(0,0,0,.65);
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      transition: all .3s;
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+      &:hover
+        border-color: #40a9ff;
+        border-right-width: 1px!important;
+      &:focus
+        outline: 0
+        box-shadow: 0 0 0 2px rgba(24,144,255,.2)
   :global
     .ant-form-item
       margin-bottom: 0

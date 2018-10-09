@@ -6,7 +6,6 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
-import { PaginationConfig } from 'antd/lib/pagination'
 import { fetchListappoint } from '@/modules/business/api'
 import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
@@ -14,7 +13,11 @@ import _ from 'lodash'
 type DetailProps = Business.DetailProps
 interface States {
   dataSource: DetailProps[]
-  pagination: PaginationConfig
+  pagination: {
+    total: number
+    current: number
+    pageSize: number
+  }
 }
 const all = [{
   label: '全部',
@@ -24,14 +27,9 @@ class Main extends React.Component {
   public state: States = {
     dataSource: [],
     pagination: {
+      total: 0,
       current: 1,
-      pageSize: 10,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['10', '20', '30', '40', '50'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
+      pageSize: 15
     }
   }
   public params: Business.SearchProps = {}
@@ -111,6 +109,7 @@ class Main extends React.Component {
     title: '预约时间',
     dataIndex: 'appointmentTime'
   }]
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     this.fetchList()
   }
@@ -121,11 +120,30 @@ class Main extends React.Component {
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
     fetchListappoint(params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+      pagination.total = res.pageTotal
       this.setState({
+        pagination,
         dataSource: res.data
       })
+    })
+  }
+  public handlePageChange (page: number) {
+    const { pagination } = this.state
+    pagination.current = page
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
+  public onShowSizeChange (current: number, size: number) {
+    const { pagination } = this.state
+    pagination.current = current
+    pagination.pageSize = size
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
     })
   }
   public handleSearch (values: any) {
@@ -196,6 +214,7 @@ class Main extends React.Component {
     modal.show()
   }
   public render () {
+    const { pagination } = this.state
     return (
       <ContentBox title='我的预约'>
         <div className='mb12' style={{ overflow: 'hidden' }}>
@@ -231,7 +250,19 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           bordered
           rowKey={'id'}
-          pagination={this.state.pagination}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
         />
       </ContentBox>
     )

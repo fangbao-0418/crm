@@ -31,8 +31,10 @@ interface TaskItem {
 type TaskList = Array<TaskItem>
 
 type Func = (...args: Array<any>) => any
-
+type Map<T> = {[index: string]: T}
 export {
     TaskItem,
-    TaskList
+    TaskList,
+    Func,
+    Map
 }

@@ -1,36 +1,31 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
+import { Row, Col, Tabs } from 'antd'
+import ContentBox from '@/modules/common/content'
+import Personal from '@/modules/data-detail/views/personal'
+import Task from '@/modules/data-detail/views/task'
+const TabPane = Tabs.TabPane
+function callback (key: string) {
+  console.log(key)
+}
 
+const styles = require('./styles/index.styl')
 class Main extends React.Component {
-  public componentDidMount () {
-    const el: any = this.refs.main
-    const myChart = echarts.init(el)
-  // 指定图表的配置项和数据
-    const option = {
-      title: {
-        text: 'ECharts 入门示例'
-      },
-      tooltip: {},
-      legend: {
-        data: ['销量']
-      },
-      xAxis: {
-        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-      },
-      yAxis: {},
-      series: [{
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-      }]
-    }
-    myChart.setOption(option)
+  public constructor (props: any, state: any) {
+    super({})
   }
-
   public render () {
     return (
     <div>
-      <div ref='main' style={{width: '600px', height: '400px'}}></div>
+      <ContentBox title='数据明细'>
+        <Tabs defaultActiveKey='1' onChange={callback}>
+          <TabPane tab='外勤人员' key='1'>
+            <Personal/>
+          </TabPane>
+          <TabPane tab='外勤任务' key='2'>
+            <Task/>
+          </TabPane>
+        </Tabs>
+      </ContentBox>
     </div>
     )
   }

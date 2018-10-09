@@ -1,5 +1,6 @@
 import React from 'react'
 import { Row, Col, Icon, Button, Select, Form } from 'antd'
+import AutoComplete from 'pilipa/libs/auto-complete'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
@@ -11,7 +12,8 @@ import Provider from '@/components/Provider'
 import _ from 'lodash'
 import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
-import { addCustomer, updateCustomer } from './api'
+import { addCustomer, addBusinessCustomer, updateCustomer } from './api'
+import { fetchRegion } from '@/modules/common/api'
 const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
@@ -20,9 +22,46 @@ interface Props extends Customer.Props, FormComponentProps {
   isBussiness?: boolean
   onClose?: () => void
   flowNow?: () => void
+  reset?: boolean
+}
+interface State {
+  cityName: string
+  cityList: Common.RegionProps[]
+  areaName: string
+  areaList: Common.RegionProps[]
 }
 class Main extends React.Component<Props> {
+  public state: State = {
+    cityName: '',
+    areaName: '',
+    cityList: [],
+    areaList: []
+  }
   public componentWillMount () {
+    fetchRegion({
+      level: 2
+    }).then((res) => {
+      this.setState({
+        cityList: res
+      })
+    })
+    if (this.props.reset) {
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          detail: {
+            contactPersons: [{
+              contactPerson: '',
+              contactPhone: ''
+            }]
+          },
+          linkMan: [{
+            contactPerson: '',
+            contactPhone: ''
+          }]
+        }
+      })
+    }
     if (this.props.customerId) {
       changeCustomerDetailAction(this.props.customerId)
     }
@@ -65,14 +104,28 @@ class Main extends React.Component<Props> {
     })
   }
   public handleChange (e: React.SyntheticEvent, value: {key: string, value: any}) {
-    const detail: any = this.props.detail
-    _.set(detail, value.key, value.value)
-    APP.dispatch({
-      type: 'change customer data',
-      payload: {
-        detail
-      }
-    })
+    console.log(value)
+    if (/linkMan\[0\]/.test(value.key)) {
+      const linkMan: any = this.props.linkMan
+      const field = value.key.replace('linkMan[0].', '')
+      linkMan[0][field] = value.value
+      console.log(linkMan, 'linkMan')
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          linkMan
+        }
+      })
+    } else {
+      const detail: any = this.props.detail
+      _.set(detail, value.key, value.value)
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          detail
+        }
+      })
+    }
   }
   public getSelectValue (field: string, arr: Array<{label: string, value: string}>) {
     const detail: any = this.props.detail
@@ -85,7 +138,7 @@ class Main extends React.Component<Props> {
     if (res) {
       return res.label
     } else {
-      return arr.length > 0 ? arr[0].label : ''
+      return ''
     }
   }
   public save () {
@@ -97,8 +150,9 @@ class Main extends React.Component<Props> {
         const params = this.props.detail
         params.customerNameType = '1' // 后端不需要改代码所以加上
         params.isConfirmed = '1' // 是否天眼查
+        params.cityName = this.state.cityName
+        params.areaName = this.state.areaName
         params.contactPersons = this.props.linkMan
-        // params.contactPersons = [{ contactPerson: '11', contactPhone: '122', isMainContact: '1'}]
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -106,13 +160,56 @@ class Main extends React.Component<Props> {
             reject()
           })
         } else {
-          addCustomer(params).then(() => {
-            resolve()
-          }, () => {
-            reject()
-          })
+          if (this.props.isBussiness) { // 商机新增接口
+            addBusinessCustomer(params).then(() => {
+              resolve()
+            }, () => {
+              reject()
+            })
+          } else {
+            addCustomer(params).then(() => { // 客资新增接口
+              resolve()
+            }, () => {
+              reject()
+            })
+          }
         }
       })
+    })
+  }
+  public handleCityChange (value: {key: string, title: string}) {
+    console.log(value)
+    if (value.key === undefined) {
+      return
+    }
+    this.handleChange(null, {
+      key: 'cityCode',
+      value: value.key
+    })
+    this.setState({
+      areaName: '',
+      cityName: value.title
+    })
+    fetchRegion({
+      parentId: value.key,
+      level: 3
+    }).then((res) => {
+      this.setState({
+        areaList: res
+      })
+    })
+  }
+  public handleAreaChange (value: {key: string, title: string}) {
+    console.log(value)
+    if (value.key === undefined) {
+      return
+    }
+    this.handleChange(null, {
+      key: 'areaCode',
+      value: value.key
+    })
+    this.setState({
+      areaName: value.title
     })
   }
   public render () {
@@ -132,7 +229,8 @@ class Main extends React.Component<Props> {
                       required: true,
                       message: '公司名不能为空'
                     }
-                  ]
+                  ],
+                  initialValue: this.props.detail.customerName
                 }
               )(
                 <Input
@@ -159,9 +257,6 @@ class Main extends React.Component<Props> {
                     style={{width: '100%'}}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
-                      this.props.form.validateFields(() => {
-                        console.log('validataor')
-                      })
                       this.handleChange(null, {
                         key: 'customerSource',
                         value
@@ -190,9 +285,9 @@ class Main extends React.Component<Props> {
             <FormItem
             >
               {getFieldDecorator(
-                'detail.contactPersons[0].contactPerson',
+                'linkMan[0].contactPerson',
                 {
-                  valuePropName: this.props.detail.contactPersons[0].contactPerson,
+                  valuePropName: this.props.linkMan[0].contactPerson,
                   rules: [
                     {
                       required: true,
@@ -204,7 +299,7 @@ class Main extends React.Component<Props> {
                 <Input
                   required
                   label={'主联系人'}
-                  field='contactPersons[0].contactPerson'
+                  field='linkMan[0].contactPerson'
                   addonAfter={
                     (
                       <Icon
@@ -216,7 +311,7 @@ class Main extends React.Component<Props> {
                     )
                   }
                   onChange={this.handleChange.bind(this)}
-                  value={this.props.detail.contactPersons[0].contactPerson}
+                  value={this.props.linkMan[0].contactPerson}
                 />
               )}
             </FormItem>
@@ -224,9 +319,9 @@ class Main extends React.Component<Props> {
           <Col span={12} >
             <FormItem>
               {getFieldDecorator(
-                'contactPersons[0].contactPhone',
+                'linkMan[0].contactPhone',
                 {
-                  valuePropName: this.props.detail.contactPersons[0].contactPhone,
+                  valuePropName: this.props.linkMan[0].contactPhone,
                   rules: [
                     {
                       required: true,
@@ -240,7 +335,7 @@ class Main extends React.Component<Props> {
                   label='主联系电话'
                   field='contactPersons[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
-                  value={this.props.detail.contactPersons[0].contactPhone}
+                  value={this.props.linkMan[0].contactPhone}
                 />
               )}
             </FormItem>
@@ -260,7 +355,7 @@ class Main extends React.Component<Props> {
               label='纳税类别'
             >
               <Select
-                style={{width: '150px'}}
+                style={{width: '100%'}}
                 // defaultValue={}
                 onChange={(value) => {
                   this.handleChange(null, {
@@ -288,21 +383,41 @@ class Main extends React.Component<Props> {
           {
             !this.props.isBussiness &&
             <Col span={12}>
-              <Input
-                field='cityCode'
-                onChange={this.handleChange.bind(this)}
-                label={'城市'}
-                value={this.props.detail.cityCode}
-              />
+              <FormItemLayout
+                label='城市'
+              >
+                <AutoComplete
+                  className={styles['auto-complete']}
+                  data={this.state.cityList}
+                  defaultValue={{
+                    name: this.state.cityName
+                  }}
+                  onChange={this.handleCityChange.bind(this)}
+                  setFields={{
+                    title: 'name',
+                    key: 'code'
+                  }}
+                />
+              </FormItemLayout>
             </Col>
           }
           <Col span={12}>
-            <Input
-              field='areaCode'
-              onChange={this.handleChange.bind(this)}
-              label='地区'
-              value={this.props.detail.areaCode}
-            />
+              <FormItemLayout
+                label='地区'
+              >
+                <AutoComplete
+                  className={styles['auto-complete']}
+                  defaultValue={{
+                    name: this.state.areaName
+                  }}
+                  data={this.state.areaList}
+                  onChange={this.handleAreaChange.bind(this)}
+                  setFields={{
+                    title: 'name',
+                    key: 'code'
+                  }}
+                />
+              </FormItemLayout>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import GVerify from '@/utils/gVerify'
+import { userLogin } from '@/modules/common/api'
 const styles = require('./style')
 import classNames from 'classnames'
 interface State {
@@ -38,8 +39,15 @@ class Main extends React.Component {
       this.setState({
         error
       })
+      return
     }
-    this.verify.validate('2222')
+    userLogin({
+      phoneNumber: this.values.phone,
+      validCode: this.values['verify-code'],
+      phoneValidCode: this.values['sms-verify-code']
+    }).then(() => {
+      APP.history.push('/')
+    })
   }
   public handleChange (field: 'phone' | 'verify-code' | 'sms-verify-code', e: React.SyntheticEvent) {
     this.setState({

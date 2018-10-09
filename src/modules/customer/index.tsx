@@ -19,76 +19,83 @@ type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
   selectedRowKeys: string[]
-  pagination: PaginationConfig
-  selectAll: boolean
+  pagination: {
+    total: number
+    current: number
+    pageSize: number
+  }
+  selectAll: boolean,
+  cityList: any[]
+  data: ConditionOptionProps[]
 }
-class Main extends React.Component {
+interface ParamsProps {
+  cityCode?: string
+  pageSize?: number
+  pageCurrent?: number
+  storageBeginDate?: string
+  storageEndDate?: string
+  createBeginDate?: string
+  createEndDate?: string
+  customerName?: string
+  contactPerson?: string
+  contactPhone?: string
+  customerSource?: string
+  /** 纳税类型 */
+  payTaxesNature?: string
+}
+const data: ConditionOptionProps[] = [
+  {
+    field: 'date',
+    value: 'all',
+    label: ['入库时间', '创建时间'],
+    options: [
+      {
+        label: '全部',
+        value: 'all'
+      },
+      {
+        label: '今天',
+        value: '1'
+      },
+      {
+        label: '7天',
+        value: '7'
+      },
+      {
+        label: '30天',
+        value: '30'
+      }
+    ],
+    type: 'date'
+  },
+  {
+    label: ['所属城市'],
+    value: '110110',
+    field: 'cityCode',
+    type: 'select',
+    options: [
+      {
+        label: '北京(100)',
+        value: '110110'
+      }
+    ]
+  }
+]
+class Main extends React.Component<null, States> {
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
     selectAll: false,
+    cityList: [],
     pagination: {
+      total: 0,
       current: 1,
-      pageSize: 15,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
-      showTotal (total) {
-        return `共计 ${total} 条`
-      }
-    }
-  }
-  public data: ConditionOptionProps[] = [
-    {
-      field: 'date',
-      value: 'all',
-      label: ['入库时间', '创建时间'],
-      options: [
-        {
-          label: '全部',
-          value: 'all'
-        },
-        {
-          label: '今天',
-          value: '1'
-        },
-        {
-          label: '7天',
-          value: '7'
-        },
-        {
-          label: '30天',
-          value: '30'
-        }
-      ],
-      type: 'date'
+      pageSize: 15
     },
-    {
-      label: ['所属城市'],
-      value: '110110',
-      field: 'cityCode',
-      type: 'select',
-      options: [
-        {
-          label: '北京(100)',
-          value: '110110'
-        },
-        {
-          label: '上海(100)',
-          value: '120110'
-        },
-        {
-          label: '南京(100)',
-          value: '130110'
-        },
-        {
-          label: '天津(100)',
-          value: '140110'
-        }
-      ]
-    }
-  ]
-  public params: any = {cityCode: '110000'}
+    data
+  }
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
+  public params: ParamsProps = {cityCode: '110000'}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -122,7 +129,18 @@ class Main extends React.Component {
   public componentWillMount () {
     this.fetchList()
     fetchCityCount().then((res) => {
-      console.log(res)
+      const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
+      const options: Array<{label: string, value: string}> = []
+      cityList.forEach((item) => {
+        options.push({
+          label: `${item.cityName}(${item.rows})`,
+          value: item.cityCode
+        })
+      })
+      data[1].options = options
+      this.setState({
+        data
+      })
     })
   }
   public fetchList () {
@@ -130,9 +148,9 @@ class Main extends React.Component {
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
     fetchList(this.params).then((res) => {
-      const pagination2 = { ...this.state.pagination }
-      pagination2.total = res.pageTotal
+      pagination.total = res.pageTotal
       this.setState({
+        pagination,
         dataSource: res.data
       })
     })
@@ -204,7 +222,11 @@ class Main extends React.Component {
       style: 'width: 800px',
       content: (
         <Provider>
-          <BaseInfo ref={(ref: any) => { ins = ref.getWrappedInstance() }} onClose={() => {modal.hide()}}/>
+          <BaseInfo
+            reset
+            ref={(ref: any) => { ins = ref.getWrappedInstance() }}
+            onClose={() => {modal.hide()}}
+          />
         </Provider>
       ),
       footer: (
@@ -216,6 +238,8 @@ class Main extends React.Component {
               console.log(ins.refs.wrappedComponent)
               ins.refs.wrappedComponent.save().then(() => {
                 APP.success('保存成功')
+                modal.hide()
+                this.fetchList()
               }, () => {
                 APP.error('保存失败')
               })
@@ -225,7 +249,7 @@ class Main extends React.Component {
           </Button>
         </div>
       ),
-      title: '新增客资',
+      title: '录入客资',
       mask: true,
       onCancel: () => {
         modal.hide()
@@ -326,11 +350,31 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  public handlePageChange (page: number) {
+    const { pagination } = this.state
+    pagination.current = page
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
+  public onShowSizeChange (current: number, size: number) {
+    const { pagination } = this.state
+    pagination.current = current
+    pagination.pageSize = size
+    this.setState({
+      pagination
+    }, () => {
+      this.fetchList()
+    })
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { pagination } = this.state
     return (
       <ContentBox
         title='我的客资'
@@ -355,14 +399,20 @@ class Main extends React.Component {
         <div className='mb10 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
-              dataSource={this.data}
+              dataSource={this.state.data}
               onChange={this.handleSearch.bind(this)}
             />
           </div>
           <div className='fr' style={{ width: 290 }}>
             <SearchName
               style={{paddingTop: '5px'}}
-              options={APP.keys.EnumCustomerSearchType}
+              options={[
+                { value: '0', label: '客户名称'},
+                { value: '1', label: '联系人'},
+                { value: '2', label: '联系电话'},
+                { value: '3', label: '客户来源'},
+                { value: '4', label: '纳税类别'}
+              ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
@@ -380,7 +430,19 @@ class Main extends React.Component {
           rowSelection={rowSelection}
           bordered
           rowKey={'customerId'}
-          pagination={this.state.pagination}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
         />
         <div className='mt40'>
           <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button>

@@ -28,6 +28,10 @@ declare namespace Customer {
     areaName?: string
     isConfirmed?: string
     contactPersons?: LinkManProps[]
+    currentSalesperson?: string
+    agencyId?: string
+    tagIntention?: string
+    createTime?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string
@@ -48,6 +52,18 @@ declare namespace Customer {
     allocatedNum: number
     exists: Array<{name: string, id: string}>
     total: number
+  }
+  export interface TrackRecord {
+    customerId?: string
+    salesperson?: string
+    tagIntention?: string
+    tagCustomerStatus?: string
+    tagFollowupStatus?: string
+    tagTelephoneStatus?: string
+    remark?: string
+    appointTime?: string
+    createTime?: string
+    trackRecordType?: string
   }
   export interface Props {
     linkMan?: LinkManProps[]

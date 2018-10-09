@@ -1,7 +1,7 @@
 import http from '@/utils/http'
 type SearchProps = Signed.SearchProps
 export const fetchList = (payload: SearchProps) => {
-  return http(`/api/customer-sign`, 'GET', {
+  return http(`/crm-manage/v1/api/customer-sign`, 'GET', {
     data: payload
   })
 }
@@ -10,5 +10,5 @@ export const toOther = (payload: {
   principalsId: string
   principals: string
 }) => {
-  return http(`/api/batch-principals`, 'PUT', payload)
+  return http(`/crm-manage/v1/api/batch-principals`, 'PUT', payload)
 }

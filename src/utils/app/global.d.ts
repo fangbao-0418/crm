@@ -23,7 +23,11 @@ declare namespace APP {
     EnumIsValid?: Array<{label: string, value: string}>
     EnumPayTaxesNature?: Array<{label: string, value: string}>
     EnumSignCustomerSearchType?: Array<{label: string, value: string}>
-    [type: string]: Array<{label: string, value: string}>
+    EnumNeedStatus?: Array<{label: string, value: string}>
+    EnumFollowWay?: Array<{label: string, value: string}>
+  }
+  interface DictProps {
+    [key: string]: string
   }
   interface GlobalFnProps {
     getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
@@ -34,5 +38,7 @@ declare namespace APP {
   export const success: (msg: string) => void
   export const error: (msg: string) => void
   export let keys: EnumProps
+  export let dictionary: DictProps
+  export const env: 'development' | 'production'
 }
 

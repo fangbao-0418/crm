@@ -172,11 +172,11 @@ class Main extends React.Component {
       children: [
         {
           title: '其他任务配置',
-          path: '/outsite/tasktpl/list'
+          path: '/outsite/tasktpl/sublist'
         },
         {
           title: '通办任务配置',
-          path: '/outsite/tasktpl/sublist'
+          path: '/outsite/tasktpl/list'
         }
       ]
     },

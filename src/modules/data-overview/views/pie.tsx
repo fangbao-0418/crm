@@ -13,11 +13,11 @@ class Main extends React.Component {
       legend: {
         orient: 'vertical',
         x: 'left',
-        data:['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+        data:['已完成客户数', '待分配客户数', '已取消客户数']
       },
       series: [
         {
-          name:'访问来源',
+          name:'客户数',
           type:'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,
@@ -29,7 +29,7 @@ class Main extends React.Component {
             emphasis: {
               show: true,
               textStyle: {
-                fontSize: '30',
+                fontSize: '14',
                 fontWeight: 'bold'
               }
             }
@@ -40,11 +40,9 @@ class Main extends React.Component {
             }
           },
           data:[
-                  {value:335, name:'直接访问'},
-                  {value:310, name:'邮件营销'},
-                  {value:234, name:'联盟广告'},
-                  {value:135, name:'视频广告'},
-                  {value:1548, name:'搜索引擎'}
+                  {value:335, name:'已完成客户数', itemStyle: {color: '#fa250c'}},
+                  {value:310, name:'待分配客户数', itemStyle: {color: '#1790ff'}},
+                  {value:234, name:'已取消客户数', itemStyle: {color: '#ff7d00'}}
           ]
         }
       ]

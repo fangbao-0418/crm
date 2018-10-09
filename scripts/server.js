@@ -26,7 +26,20 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    // '/crm-manage': {
+    //   target: 'http://192.168.1.229:9008/',
+    //   changeOrigin: true,
+    //   secure: false,
+    //   pathRewrite: {
+    //     '^/crm-manage/v1': '/v1'
+    //   }
+    // },
     '/crm-manage': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
+    },
+    '/outside': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false

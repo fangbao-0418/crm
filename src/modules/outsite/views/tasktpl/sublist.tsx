@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Button, Row, Col, Modal } from 'antd'
 import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import {  OrderItem } from '@/modules/outsite/types/tploutside'
+import {  TasktplItem } from '@/modules/outsite/types/tploutside'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
 const styles = require('@/modules/outsite/styles/tpllist')
 const data: any = [
@@ -57,7 +57,7 @@ class Main extends React.Component<any, any> {
   }, {
     title: '操作',
     dataIndex: 'take',
-    render: (k: any, item: OrderItem) => {
+    render: (k: any, item: TasktplItem) => {
       return (
         <span>
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
@@ -170,13 +170,13 @@ class Main extends React.Component<any, any> {
   }
 
   // 编辑
-  public onShow (item: OrderItem) {
+  public onShow (item: TasktplItem) {
     console.log('点击编辑')
     this.setState({ showTitle: '编辑' })
     this.modalShow(item)
   }
   // 启用
-  public onBegin (item: OrderItem) {
+  public onBegin (item: TasktplItem) {
     console.log('点击启用禁用')
     this.setState({ showTitle: '确认信息' })
     this.modalShow(item)

@@ -1,37 +1,44 @@
 import React from 'react'
-import { Tabs, Cascader } from 'antd'
-import { fetchRegion } from '@/modules/common/api'
+import { Tabs } from 'antd'
 import ContentBox from '@/modules/common/content'
 import SetAuto from '@/modules/customer-set/main/SetAuto'
 import SetCapacity from '@/modules/customer-set/main/SetCapacity'
-class Main extends React.Component {
-  public componentWillMount () {
-    fetchRegion().then((res) => {
-      console.log(res)
+import Region from './Region'
+interface States {
+  cityCodes: {key: string, label: string}[]
+}
+const styles = require('./style')
+class Main extends React.Component<null, States> {
+  public state: States = {
+    cityCodes: []
+  }
+  public handleRegionChange (value: any) {
+    console.log(value)
+    this.setState({
+      cityCodes: value
     })
   }
-  public callback (key: string) {
-    console.log('key', key)
-  }
   public render () {
+    const cityCodes = this.state.cityCodes
+    console.log(cityCodes, 'index')
     return (
       <ContentBox
+        className={styles.container}
         title='客户设置'
         rightCotent={(
-          <Cascader
-            // options={this.state.options}
-            // loadData={this.loadData}
-            // onChange={this.onChange}
-            changeOnSelect
-          />
+          <Region onChange={this.handleRegionChange.bind(this)} />
         )}
       >
-        <Tabs defaultActiveKey='1' onChange={this.callback}>
+        <Tabs
+          animated={false}
+          defaultActiveKey='1'
+          // onChange={this.callback}
+        >
           <Tabs.TabPane tab='自动分配设置' key='1'>
-            <SetAuto />
+            <SetAuto cityCodes={cityCodes} />
           </Tabs.TabPane>
           <Tabs.TabPane tab='库容设置' key='2'>
-            <SetCapacity />
+            <SetCapacity cityCodes={cityCodes} />
           </Tabs.TabPane>
         </Tabs>
       </ContentBox>
