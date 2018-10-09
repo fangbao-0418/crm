@@ -26,8 +26,8 @@ class ModuleService extends Service {
   }
   // 优先级
   public taskPriorityDict: Map<string> = {
-    OPEN: '开',
-    CLOSE: '关'
+    OPEN: '是', // '开', // 后台配置 和 前台显示不一致，前台使用 是否
+    CLOSE: '否' // '关'
   }
 
   constructor () {

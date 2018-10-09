@@ -66,6 +66,7 @@ class Main extends React.Component<any, any> {
                     <Option value='特殊'>特殊</Option>
                 </Select>
           </Col>
+          {/*
           <Col style={{margin: 15}}>
                 <span className={styles.div}>任务限期:</span>
                 <Select
@@ -80,6 +81,7 @@ class Main extends React.Component<any, any> {
                 </Select>
                 <span className={styles.div}> 天</span>
           </Col>
+          */}
           <Col style={{textAlign: 'right'}}>
             <span className={styles.acts}>
               <Button type='primary' style={{marginRight: 15}} onClick={this.sureBtn.bind(this)}>保存</Button>

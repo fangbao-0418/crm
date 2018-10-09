@@ -45,9 +45,11 @@ class Main extends React.Component<any, any> {
   }, {
     title: '任务分类',
     dataIndex: 'category'
+    /*
   }, {
     title: '期限(天))',
     dataIndex: 'id'
+    */
   },  {
     title: '操作时间',
     dataIndex: 'id'

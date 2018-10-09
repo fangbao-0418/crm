@@ -30,6 +30,8 @@ class Main extends React.Component {
 
   /*新增自定义任务未修改，这里是方法*/
   public add () {
+    APP.history.push('/outsite/tasktpl/form')
+    /*
     const modal = new Modal({
       style: 'width: 800px',
       content: (
@@ -43,6 +45,7 @@ class Main extends React.Component {
       }
     })
     modal.show()
+    */
   }
 
   public callback (key: string) {

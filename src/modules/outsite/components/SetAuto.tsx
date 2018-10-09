@@ -29,8 +29,11 @@ class Main extends React.Component<any, any> {
     title: '子任务',
     dataIndex: 'age'
   }, {
-    title: '优先级',
-    dataIndex: 'address'
+    title: '是否优先',
+    dataIndex: 'priority',
+    render: (k: any, item: any) => {
+      return item.priority === 'OPEN' ? '是' : '否' // Service.taskPriorityDict[item.priority]
+    }
   }, {
     title: '操作',
     dataIndex: 'operation',
