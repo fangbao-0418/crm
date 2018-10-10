@@ -220,6 +220,7 @@ class Main extends React.Component<Props> {
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.type === 'open'
+    const detail = this.props.detail
     return (
       <Form className={styles['base-info']}>
         <Row gutter={8}>
@@ -369,7 +370,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                // defaultValue={}
+                value={detail.payTaxesNature}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',

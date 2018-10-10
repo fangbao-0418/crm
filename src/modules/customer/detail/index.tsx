@@ -11,7 +11,6 @@ const styles = require('./style')
 interface Props {
   customerId: string
   type?: 'business' | 'open' | 'customer'
-  isCustomer?: boolean
   detail?: Customer.DetailProps
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
@@ -64,7 +63,7 @@ class Main extends React.Component<Props> {
   public save () {
     const sourceBaseinfo: any = this.refs.baseinfo
     const baseinfo = sourceBaseinfo.getWrappedInstance()
-    baseinfo.refs.wrappedComponent.save()
+    return baseinfo.refs.wrappedComponent.save()
   }
   public handleChange (field: string, value: any) {
     const detail = this.props.detail

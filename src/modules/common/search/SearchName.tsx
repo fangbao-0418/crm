@@ -12,11 +12,11 @@ interface Props {
     label: string
     value: string
   }>
-  onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {value: string, key: string}) => void
-  onChange?: (value?: {value: string, key: string}) => void
+  onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {value?: string, key: string}) => void
+  onChange?: (value?: {value?: string, key: string}) => void
 }
 class Main extends React.Component<Props> {
-  public value: {key: string, value: string}
+  public value: {key: string, value?: string}
   public render () {
     const options = (this.props.options instanceof Array && this.props.options.length > 0) ? this.props.options : [{value: undefined, label: undefined}]
     const nodes: JSX.Element[] = []
@@ -29,8 +29,7 @@ class Main extends React.Component<Props> {
         )
       })
       this.value = {
-        key: options[0].value,
-        value: options[0].value
+        key: options[0].value
       }
     }
     return (
@@ -54,6 +53,7 @@ class Main extends React.Component<Props> {
           onKeyDown={(e) => {
             const target: any = e.target
             this.value.value = target.value
+            console.log(this.value)
             if (this.props.onKeyDown) {
               this.props.onKeyDown(e, _.cloneDeep(this.value))
             }

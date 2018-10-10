@@ -11,7 +11,7 @@ import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
-import { fetchList, fetchCityCount } from './api'
+import { fetchList, fetchCityCount, deleteCustomer } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
@@ -41,6 +41,7 @@ interface ParamsProps {
   customerSource?: string
   /** 纳税类型 */
   payTaxesNature?: string
+  [field: string]: any
 }
 const data: ConditionOptionProps[] = [
   {
@@ -194,25 +195,13 @@ class Main extends React.Component<null, States> {
     this.params.cityCode = values.cityCode.value
     this.fetchList()
   }
-  public handleSearchType (values: any) {
-    console.log(values, 'values')
-    switch (values.type) {
-    case '0':
-      this.params.customerName = values.word
-      break
-    case '1':
-      this.params.contactPerson = values.word
-      break
-    case '2':
-      this.params.contactPhone = values.word
-      break
-    case '3':
-      this.params.customerSource = values.word
-      break
-    case '4':
-      this.params.payTaxesNature = values.word
-      break
-    }
+  public handleSearchType (value: {value?: string, key: string}) {
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[value.key] = value.value
     this.fetchList()
   }
   public add () {
@@ -273,10 +262,46 @@ class Main extends React.Component<null, States> {
     modal.show()
   }
   public show (customerId: string) {
+    let instance: any
     const modal = new Modal({
-      style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId} isCustomer={true}/></Provider>
+        <Provider>
+          <Detail
+            getWrappedInstance={(ins) => {
+              instance = ins
+            }}
+            customerId={customerId}
+            footer={(
+              <div className='text-right mt10'>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    instance.save().then(() => {
+                      APP.success('保存成功')
+                      this.fetchList()
+                    }, () => {
+                      APP.error('保存失败')
+                    })
+                  }}
+                >
+                  保存
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    deleteCustomer(customerId).then(() => {
+                      modal.hide()
+                      this.fetchList()
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+              </div>
+            )}
+          />
+        </Provider>
       ),
       footer: null,
       header: null,
@@ -413,17 +438,16 @@ class Main extends React.Component<null, States> {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '联系电话'},
-                { value: '3', label: '客户来源'},
-                { value: '4', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
                 if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
                   this.handleSearchType(val)
                 }
               }}

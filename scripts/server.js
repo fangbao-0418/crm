@@ -52,7 +52,7 @@ const options = {
   },
   // 启用gzip压缩一切服务:
   compress: true,
-  host: '192.168.20.43',
+  host: '0.0.0.0',
   port: '3001'
 }
 WebpackDevServer.addDevServerEntrypoints(config, options)
