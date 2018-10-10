@@ -7,7 +7,7 @@ import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
-import Import from '@/modules/customer/import'
+import Import from '@/modules/business/import'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -324,7 +324,7 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import isBussiness={true}/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
       title: '导入客资',

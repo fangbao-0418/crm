@@ -6,7 +6,6 @@ interface Status {
   isChecked: boolean
 }
 interface Props {
-  isBussiness?: boolean
   onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
@@ -49,9 +48,7 @@ class Main extends React.Component<Props> {
             }
           </Select>
         </div>
-        {
-          !this.props.isBussiness &&
-          <div className='mt12'>
+        <div className='mt12'>
             <span>选择城市：</span>
             <Select
               style={{width:'200px'}}
@@ -60,9 +57,6 @@ class Main extends React.Component<Props> {
               <Option key='2'>天津</Option>
             </Select>
           </div>
-        }
-        {
-          this.props.isBussiness &&
           <div className='mt12'>
             <span>分配销售：</span>
             <Select
@@ -73,9 +67,6 @@ class Main extends React.Component<Props> {
               <Option key='2'>销售2</Option>
             </Select>
           </div>
-        }
-        {
-          !this.props.isBussiness &&
           <div>
             <div className='mt12' style={{ textAlign: 'left', marginLeft: 250 }}>
               <span>是否分配：</span>
@@ -106,7 +97,6 @@ class Main extends React.Component<Props> {
               </div>
             }
           </div>
-        }
         <div className='text-right mt10'>
           <Button
             type='primary'

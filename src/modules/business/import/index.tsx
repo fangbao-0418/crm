@@ -18,11 +18,10 @@ class Main extends React.Component<Props> {
       component: (
         <Step1
           onOk={(value) => {
-            console.log(value, 'value')
+            this.value.step1 = value
             this.setState({
               step: 2
             })
-            this.value.step1 = value
           }}
         />
       )
@@ -31,6 +30,7 @@ class Main extends React.Component<Props> {
       title: '2、上传文件',
       component: (
         <Step2
+          paramsValue={this.value}
           onOk={(value) => {
             this.value.step2 = value
             console.log(this.value, 'on ok')

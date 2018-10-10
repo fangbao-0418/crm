@@ -1,5 +1,5 @@
 import React from 'react'
-import Result from '../Result'
+import Result from '@/modules/customer/Result'
 interface Props {
   resuleData?: {
     step2: {
