@@ -33,13 +33,13 @@ class Main extends React.Component<Props> {
       component: (
         <Step2
           onOk={(value) => {
+            // this.resuleData = value
+            // console.log(value, '上传结果')
+            this.value.step2 = value
+            console.log(this.value, 'on ok')
             this.setState({
               step: 3
             })
-            this.resuleData = value
-            console.log(value, '上传结果')
-            this.value.step2 = value
-            console.log(this.value, 'on ok')
           }}
         />
       )
@@ -49,7 +49,7 @@ class Main extends React.Component<Props> {
       component: (
         <Step3
           isBussiness={this.props.isBussiness}
-          resuleData={this.resuleData}
+          resuleData={this.value}
           onCancel={() => {
             if (this.props.onClose) {
               this.props.onClose()
