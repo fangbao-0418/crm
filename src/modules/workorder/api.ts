@@ -66,7 +66,7 @@ class Service {
   */
   public getOrderSever (MAIN: any = '') {
     return http(
-    `/outside/v1/api/outside/task/template/all?type=${MAIN}`
+    `outside/v1/api/outside/task/template/all?type=${MAIN}`
     )
   }
 }

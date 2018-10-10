@@ -43,6 +43,11 @@ const options = {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
+    },
+    '/notification': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
     }
   },
   // 启用gzip压缩一切服务:
