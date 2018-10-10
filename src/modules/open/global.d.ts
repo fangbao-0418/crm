@@ -31,5 +31,6 @@ declare namespace Open {
     payTaxesNature?: string
     lastTrackTimeEnd?: string
     lastTrackTimeBegin?: string
+    [field: string]: any
   }
 }

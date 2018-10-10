@@ -127,7 +127,7 @@ class Main extends React.Component {
     this.fetchList()
   }
   public fetchList () {
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     const params = _.cloneDeep(this.params)
     const pagination = this.state.pagination
     params.pageSize = pagination.pageSize
@@ -188,27 +188,13 @@ class Main extends React.Component {
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    }
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.currentSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[values.key] = values.value || undefined
     this.fetchList()
   }
   public show (customerId: string) {
@@ -229,12 +215,12 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '所属销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'currentSalesperson', label: '所属销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {
