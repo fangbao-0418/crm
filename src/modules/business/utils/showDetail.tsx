@@ -10,6 +10,7 @@ export default function (customerId: string) {
     content: (
       <Provider>
         <Detail
+          type='business'
           getWrappedInstance={(ins) => {
             that.ins = ins
           }}

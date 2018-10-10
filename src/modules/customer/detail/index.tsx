@@ -125,11 +125,11 @@ class Main extends React.Component<Props> {
                   }}
                 />
               </div>
-              <div>
-                {this.props.footer || this.footer}
-              </div>
             </Card>
           }
+          <div>
+            {this.props.footer || this.footer}
+          </div>
         </div>
         <div className={styles.right}>
           <Record

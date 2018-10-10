@@ -1,15 +1,13 @@
 import React from 'react'
-import { Table, Button, Row, Col, DatePicker, Select } from 'antd'
+import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
-import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import { fetchListappoint } from '@/modules/business/api'
-import Provider from '@/components/Provider'
-import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
+import { showDetail } from '@/modules/business/utils'
 type DetailProps = Business.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -214,18 +212,7 @@ class Main extends React.Component {
     this.fetchList()
   }
   public show (customerId: string) {
-    const modal = new Modal({
-      content: (
-        <Provider><Detail customerId={customerId} type='business' /></Provider>
-      ),
-      footer: null,
-      header: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+    showDetail.call(this, customerId)
   }
   public render () {
     const { pagination } = this.state
