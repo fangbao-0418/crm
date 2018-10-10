@@ -69,7 +69,7 @@ const data: ConditionOptionProps[] = [
   },
   {
     label: ['所属城市'],
-    value: '110000',
+    value: '',
     field: 'cityCode',
     type: 'select',
     options: [
@@ -94,7 +94,7 @@ class Main extends React.Component<null, States> {
     data
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
-  public params: ParamsProps = {cityCode: '110000'}
+  public params: ParamsProps = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
