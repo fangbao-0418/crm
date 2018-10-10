@@ -277,7 +277,7 @@ class Main extends React.Component<null, States> {
     const modal = new Modal({
       style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId}/></Provider>
+        <Provider><Detail customerId={customerId} isCustomer={true}/></Provider>
       ),
       footer: null,
       header: null,

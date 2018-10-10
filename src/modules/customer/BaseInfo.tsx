@@ -20,6 +20,7 @@ const FormItem = Form.Item
 interface Props extends Customer.Props, FormComponentProps {
   customerId?: string
   isBussiness?: boolean
+  isOpen?: boolean
   onClose?: () => void
   flowNow?: () => void
   reset?: boolean
@@ -244,7 +245,7 @@ class Main extends React.Component<Props> {
                   field='customerName'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.detail.customerName}
-                  disabled={this.props.isBussiness}
+                  disabled={this.props.isOpen}
                 />
               )}
             </FormItem>
@@ -261,7 +262,7 @@ class Main extends React.Component<Props> {
                 >
                   <Select
                     style={{width: '100%'}}
-                    disabled={this.props.isBussiness}
+                    disabled={this.props.isOpen}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
                       this.handleChange(null, {
@@ -308,7 +309,7 @@ class Main extends React.Component<Props> {
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
-                  disabled={this.props.isBussiness}
+                  disabled={this.props.isOpen}
                   addonAfter={
                     (
                       <Icon
@@ -343,7 +344,7 @@ class Main extends React.Component<Props> {
                 <Input
                   required
                   label='主联系电话'
-                  disabled={this.props.isBussiness}
+                  disabled={this.props.isOpen}
                   field='contactPersons[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.linkMan[0].contactPhone}
@@ -359,7 +360,7 @@ class Main extends React.Component<Props> {
               label='法人'
               onChange={this.handleChange.bind(this)}
               value={this.props.detail.legalPerson}
-              disabled={this.props.isBussiness}
+              disabled={this.props.isOpen}
             />
           </Col>
           <Col span={12}>
@@ -368,7 +369,7 @@ class Main extends React.Component<Props> {
             >
               <Select
                 style={{width: '100%'}}
-                disabled={this.props.isBussiness}
+                disabled={this.props.isOpen}
                 // defaultValue={}
                 onChange={(value) => {
                   this.handleChange(null, {
@@ -394,7 +395,7 @@ class Main extends React.Component<Props> {
         </Row>
         <Row gutter={8} className='mt10'>
           {
-            !this.props.isBussiness &&
+            !this.props.isOpen &&
             <Col span={12}>
               <FormItemLayout
                 label='城市'
@@ -440,7 +441,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
               value={this.props.detail.address}
-              disabled={this.props.isBussiness}
+              disabled={this.props.isOpen}
             />
           </Col>
         </Row>
@@ -451,7 +452,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'备注'}
               value={this.props.detail.remark}
-              disabled={this.props.isBussiness}
+              disabled={this.props.isOpen}
             />
           </Col>
         </Row>
