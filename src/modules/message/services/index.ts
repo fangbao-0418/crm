@@ -22,7 +22,8 @@ class MessageService extends Service {
   }
   // 最新消息
   public getCurrentByUserid (userid: any = '') {
-    return Service.http(`notification/v1/api/remind/unread/last/${userid}`)
+    // return Service.http(`notification/v1/api/remind/unread/last/${userid}`) // @181010 变更接口
+    return Service.http(`notification/v1/api/remind/prompt/last/${userid}`)
   }
   // 详细详情
   public getItemById (id: any = '') {

@@ -153,11 +153,14 @@ class Msg implements MsgI {
         console.log('receive msg::', data)
       }).catch((e: any) => {
         // this.onData({title: '错误', content: '暂无提醒'})
+        console.error('message error:', e)
+        /* 消息默认去掉错误提醒
         this.uiError({
           // message: '数据有误',
           message: null,
           description: e.toString() // 'error'
         })
+        */
       })
 
       // 获取未读消息数
