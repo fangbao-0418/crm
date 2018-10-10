@@ -119,7 +119,7 @@ class Main extends React.Component<Props> {
                 预约下次拜访日期&nbsp;&nbsp;
                 <DatePicker
                   onChange={(moment) => {
-                    console.log(moment)
+                    this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
                   }}
                 />
               </div>

@@ -1,18 +1,20 @@
 import React from 'react'
 import BusinessInfo from './BusinessInfo'
 import BaseInfo from './BaseInfo'
-import LinkMan from './LinkMan'
+import LinkMan from '@/modules/common/link-man'
 import Card from '@/components/Card'
 import AddButton from '@/modules/common/content/AddButton'
 import { Form, Icon, Button } from 'antd'
 import { connect } from 'react-redux'
+import { updateCustomer } from '@/modules/customer/api'
 const styles = require('./style')
 interface Props {
   linkMan: Customer.LinkManProps[]
+  detail: Customer.DetailProps
 }
 class Main extends React.Component<Props> {
   public state = {
-    editable: false
+    disabled: true
   }
   public addLinkMan () {
     const linkMan = this.props.linkMan
@@ -27,6 +29,15 @@ class Main extends React.Component<Props> {
       }
     })
   }
+  public save () {
+    const id = this.props.detail.id
+    if (this.state.disabled) {
+      return
+    }
+    updateCustomer(id, this.props.detail).then(() => {
+      APP.success('保存成功')
+    })
+  }
   public render () {
     return (
       <div className={styles.container}>
@@ -35,22 +46,24 @@ class Main extends React.Component<Props> {
           rightContent={(
             <Icon
               className='href'
-              type={this.state.editable ? 'save' : 'edit'}
+              type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
                 this.setState({
-                  editable: !this.state.editable
+                  disabled: !this.state.disabled
+                }, () => {
+                  this.save()
                 })
               }}
             />
           )}
         >
-          <BusinessInfo editable={this.state.editable} />
+          <BusinessInfo disabled={this.state.disabled} />
         </Card>
         <Card
           title='基本信息'
         >
-          <BaseInfo editable={this.state.editable} />
+          <BaseInfo disabled={this.state.disabled} />
         </Card>
         <Card
           title='联系方式'
@@ -60,12 +73,12 @@ class Main extends React.Component<Props> {
             />
           )}
         >
-          <LinkMan />
+          <LinkMan disabled={this.state.disabled} />
         </Card>
-        <div className='text-right mt20'>
+        {/* <div className='text-right mt20'>
           <Button className='mr5'>取消</Button>
           <Button type='primary'>保存</Button>
-        </div>
+        </div> */}
       </div>
     )
   }

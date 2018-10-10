@@ -416,23 +416,23 @@ class Main extends React.Component<Props> {
             </Col>
           }
           <Col span={12}>
-              <FormItemLayout
-                label='地区'
-              >
-                <AutoComplete
-                  className={styles['auto-complete']}
-                  disabled={disabled}
-                  defaultValue={{
-                    name: this.state.areaName
-                  }}
-                  data={this.state.areaList}
-                  onChange={this.handleAreaChange.bind(this)}
-                  setFields={{
-                    title: 'name',
-                    key: 'code'
-                  }}
-                />
-              </FormItemLayout>
+            <FormItemLayout
+              label='地区'
+            >
+              <AutoComplete
+                className={styles['auto-complete']}
+                disabled={disabled}
+                defaultValue={{
+                  name: this.state.areaName
+                }}
+                data={this.state.areaList}
+                onChange={this.handleAreaChange.bind(this)}
+                setFields={{
+                  title: 'name',
+                  key: 'code'
+                }}
+              />
+            </FormItemLayout>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>

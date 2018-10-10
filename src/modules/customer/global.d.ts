@@ -9,10 +9,15 @@ declare namespace Customer {
   }
   export type ActionPayload = Props
   export interface DetailProps {
-    customerName?: string
+    /** 客户id */
+    id?: string
+    /** 客户id */
     customerId?: string
+    customerName?: string
     type?: string
     legalPerson?: string
+    /** 法人身份证 */
+    legalPersonCard?: string
     payTaxesNature?: string
     /** 社会统一信用代码 */
     unifiedCreditCode?: string
@@ -76,9 +81,10 @@ declare namespace Customer {
     tagFollowupStatus?: number
     tagTelephoneStatus?: number
     remark?: string
-    appointTime?: string
     createTime?: string
     trackRecordType?: string
+    /** 预约时间 */
+    appointTime?: string
   }
   export interface Props {
     linkMan?: LinkManProps[]

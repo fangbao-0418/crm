@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
+  disabled?: boolean
 }
 interface States {
   dataSource: LinkManProps[]
