@@ -83,7 +83,7 @@ class Main extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <Profile />
+          <Profile type={type}/>
           <Card
             title='基本信息'
             showFold
