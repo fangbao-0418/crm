@@ -7,7 +7,8 @@ import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
-import Import from '@/modules/customer/import'
+import Import from '@/modules/business/import'
+import { fetchRegion } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -33,6 +34,7 @@ interface States {
     newCustomerNums?: string
     ForthcomingNums?: string
   }
+  citys: Common.RegionProps[]
 }
 class Main extends React.Component {
   public state: States = {
@@ -43,7 +45,8 @@ class Main extends React.Component {
       allNums: '',
       trackContactNums: '',
       newCustomerNums: ''
-    }
+    },
+    citys: []
   }
   public data = conditionOptions
   public params: Business.SearchProps = {}
@@ -59,6 +62,7 @@ class Main extends React.Component {
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.fetchCapacityNum()
+    this.fetchCitys()
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
@@ -79,6 +83,13 @@ class Main extends React.Component {
           recycleNum: '(有' + res + '个客户即将被收回！)'
         })
       }
+    })
+  }
+  public fetchCitys () {
+    fetchRegion({level: 2}).then((res) => {
+      this.setState({
+        citys: res
+      })
     })
   }
   public handleSearch (values: any) {
@@ -119,32 +130,21 @@ class Main extends React.Component {
       })
     })
   }
-  public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    }
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+  public handleSearchType (values: {key: string, value?: string}) {
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.currentSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[values.key] = values.value || undefined
+    // this.fetchList()
+    // this.paramsright = {}
+    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
+    // this.params.tab = undefined
     this.setState({
       visible: false
     }, () => {
@@ -190,6 +190,13 @@ class Main extends React.Component {
         console.log(params, 'params')
         const time = this.appointmentTime
         appointment(params, time).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('预约成功')
         })
         modal.hide()
@@ -234,6 +241,13 @@ class Main extends React.Component {
         }
         const saleId = this.curSale.key
         toSales(saleparams, saleId).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -264,7 +278,14 @@ class Main extends React.Component {
           customerIdArr: selectedRowKeys,
           bus_sea_memo: this.reason.label
         }
-        toOpen(openparams).then((res) => {
+        toOpen(openparams).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -290,8 +311,13 @@ class Main extends React.Component {
               this.cityCode = current
             }}
           >
-            <Select.Option value='110000'>北京</Select.Option>
-            <Select.Option value='120000'>天津</Select.Option>
+            {
+              this.state.citys.map((item, index) => {
+                return (
+                  <Select.Option value={item.code} key={item.code}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),
@@ -307,6 +333,13 @@ class Main extends React.Component {
           cityCode: this.cityCode
         }
         toCity(cityparams).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -324,7 +357,7 @@ class Main extends React.Component {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import isBussiness={true}/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
       title: '导入客资',
@@ -390,18 +423,17 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '所属销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'currentSalesperson', label: '所属销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
                 if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
                   this.handleSearchType(val)
                 }
               }}

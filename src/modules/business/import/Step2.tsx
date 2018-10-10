@@ -1,18 +1,16 @@
 import React from 'react'
 import { Upload, Icon, message } from 'antd'
-import { importFile } from '../api'
+import { importFile } from '@/modules/customer/api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
-  paramsValue: {
+  onOk?: (value?: any) => void
+  paramsValue?: {
     step1?: {
-      agencyId?: string
       customerSource?: string,
-      salesPerson?: Array<{id: string, name: string}>,
-      city?: {cityCode: string, cityName: string}
+      salesPerson?: Array<{id: string, name: string}>
     }
   }
-  onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
   public downFile () {
@@ -56,9 +54,7 @@ class Main extends React.Component<Props> {
         const paramsFile = {
           customerSource: this.props.paramsValue.step1.customerSource,
           ids: ids.join(','),
-          salesNames: salesNames.join(','),
-          cityCode: this.props.paramsValue.step1.city.cityCode,
-          cityName: this.props.paramsValue.step1.city.cityName
+          salesNames: salesNames.join(',')
         }
         console.log(paramsFile, 'paramsFile')
         return importFile(info.file, {

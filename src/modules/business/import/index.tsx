@@ -18,7 +18,6 @@ class Main extends React.Component<Props> {
       component: (
         <Step1
           onOk={(value) => {
-            console.log(value, 'value')
             this.value.step1 = value
             this.setState({
               step: 2

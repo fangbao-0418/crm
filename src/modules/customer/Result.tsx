@@ -2,7 +2,6 @@ import React from 'react'
 import { Button } from 'antd'
 const styles = require('./style')
 interface Props {
-  isBussiness?: boolean
   resuleData?: {
     step2?: {
       customerIds: []
@@ -25,11 +24,6 @@ class Main extends React.Component<Props> {
         <div>
           应导入{resuleData.total}条，
           实际导入{resuleData.imported}条，
-          {/* 我的客资&&选择了分配 两个条件显示已分配数 */}
-          {
-            !this.props.isBussiness &&
-            <span>已分配80条，</span>
-          }
           {resuleData.repeated}条公司信息已经存在
         </div>
         {
@@ -44,14 +38,8 @@ class Main extends React.Component<Props> {
           })
         }
         {
-          !this.props.isBussiness &&
-          <div>
-            <div className={styles.info}>是否删除已重复客户?</div>
-            <div className='fr'>
-              <Button type='primary' className='mr10'>删除</Button>
-              <Button onClick={this.props.onCancel}>取消</Button>
-            </div>
-          </div>
+          resuleData.customerNames.length > 8 &&
+          <span>...</span>
         }
       </div>
     )

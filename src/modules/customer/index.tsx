@@ -248,7 +248,7 @@ class Main extends React.Component<null, States> {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import onClose={() => {modal.hide()}}/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
       title: '导入',

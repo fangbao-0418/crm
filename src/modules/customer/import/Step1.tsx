@@ -1,26 +1,37 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
-import FormItem from '@/components/form/Item1'
+import { fetchRegion } from '@/modules/common/api'
 const Option = Select.Option
 interface Status {
-  isChecked: boolean
+  isChecked: boolean,
+  citys: Common.RegionProps[]
 }
 interface Props {
-  isBussiness?: boolean
-  onOk?: (value?: any) => void
+  onOk?: (value: ValueProps) => void
+}
+interface ValueProps {
+  agencyId?: string
+  customerSource?: string,
+  salesPerson?: Array<{id: string, name: string}>,
+  city?: {cityCode: string, cityName: string}
 }
 class Main extends React.Component<Props> {
-  public value: any = {a: 1}
+  public values: ValueProps = {}
   public state: Status = {
-    isChecked: true
+    isChecked: true,
+    citys: []
+  }
+  public componentWillMount () {
+    fetchRegion({level: 2}).then((res) => {
+      this.setState({
+        citys: res
+      })
+    })
   }
   public onChange (checked: any) {
     this.setState({
       isChecked: checked
     })
-  }
-  public handleChange (e: React.SyntheticEvent, value: {key: string, value: any}) {
-    console.log(value, 'value')
   }
   public render () {
     return (
@@ -28,12 +39,9 @@ class Main extends React.Component<Props> {
         <div>
           <span>客户来源：</span>
           <Select
-            style={{width: '200px'}}
-            onChange={(value) => {
-              this.handleChange(null, {
-                key: 'customerSource',
-                value
-              })
+            style={{width:'200px'}}
+            onChange={(val: string) => {
+              this.values.customerSource = val
             }}
           >
             {
@@ -49,33 +57,29 @@ class Main extends React.Component<Props> {
             }
           </Select>
         </div>
-        {
-          !this.props.isBussiness &&
-          <div className='mt12'>
+        <div className='mt12'>
             <span>选择城市：</span>
             <Select
+              labelInValue
               style={{width:'200px'}}
+              onChange={(val: {key: string, label: string, cityCode: string, cityName: string}) => {
+                console.log(val, 'val')
+                const newVal = {
+                  cityCode: val.key,
+                  cityName: val.label
+                }
+                this.values.city = newVal
+              }}
             >
-              <Option key='1'>北京</Option>
-              <Option key='2'>天津</Option>
+              {
+                this.state.citys.map((item, index) => {
+                  return (
+                    <Option key={item.code}>{item.name}</Option>
+                  )
+                })
+              }
             </Select>
           </div>
-        }
-        {
-          this.props.isBussiness &&
-          <div className='mt12'>
-            <span>分配销售：</span>
-            <Select
-              style={{width:'200px'}}
-              mode='multiple'
-            >
-              <Option key='1'>销售1</Option>
-              <Option key='2'>销售2</Option>
-            </Select>
-          </div>
-        }
-        {
-          !this.props.isBussiness &&
           <div>
             <div className='mt12' style={{ textAlign: 'left', marginLeft: 250 }}>
               <span>是否分配：</span>
@@ -88,6 +92,9 @@ class Main extends React.Component<Props> {
                   <span>选择机构：</span>
                   <Select
                     style={{width:'200px'}}
+                    onChange={(val: string) => {
+                      this.values.agencyId = val
+                    }}
                   >
                     <Option key='1'>机构1</Option>
                     <Option key='2'>机构2</Option>
@@ -96,8 +103,18 @@ class Main extends React.Component<Props> {
                 <div className='mt12'>
                   <span>分配销售：</span>
                   <Select
+                    labelInValue
                     style={{width:'200px'}}
                     mode='multiple'
+                    onChange={(val: Array<{key: string, label: string, id: string, name: string}>) => {
+                      const newVal = val.map((item) => {
+                        return {
+                          id: item.key,
+                          name: item.label
+                        }
+                      })
+                      this.values.salesPerson = newVal
+                    }}
                   >
                     <Option key='1'>销售1</Option>
                     <Option key='2'>销售2</Option>
@@ -106,13 +123,27 @@ class Main extends React.Component<Props> {
               </div>
             }
           </div>
-        }
         <div className='text-right mt10'>
           <Button
             type='primary'
             onClick={() => {
-              if (this.props.onOk) {
-                this.props.onOk(this.value)
+              // console.log(this.values, 'values 导入')
+              if (this.values.city && this.values.customerSource) {
+                if (this.state.isChecked) {
+                  if (this.values.agencyId && this.values.salesPerson) {
+                    if (this.props.onOk) {
+                      this.props.onOk(this.values)
+                    }
+                  } else {
+                    APP.error('请选择机构和销售')
+                  }
+                } else {
+                  if (this.props.onOk) {
+                    this.props.onOk(this.values)
+                  }
+                }
+              } else {
+                APP.error('请选择客户来源和城市')
               }
             }}
           >
