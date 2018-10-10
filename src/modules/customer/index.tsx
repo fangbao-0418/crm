@@ -218,7 +218,6 @@ class Main extends React.Component<null, States> {
   public add () {
     let ins: any
     const modal = new Modal({
-      style: 'width: 800px',
       content: (
         <Provider>
           <BaseInfo

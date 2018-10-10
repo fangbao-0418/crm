@@ -43,7 +43,7 @@ class Main extends React.Component<Props> {
               {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
             </span>
             <label style={{marginLeft: '10px'}}>
-              {APP.dictionary[`EnumContactSource-${this.props.detail.customerSource}`]}
+              {APP.dictionary[`EnumCustomerSource-${this.props.detail.customerSource}`]}
             </label>
             <label style={{marginLeft: '10px'}}></label>
             <span>

@@ -10,10 +10,12 @@ import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
   customerId: string
-  isBussiness?: boolean
+  type?: 'business' | 'open' | 'customer'
   isOpen?: boolean
   isCustomer?: boolean
   detail?: Customer.DetailProps
+  footer?: React.ReactNode
+  getWrappedInstance?: (ins?: React.ReactInstance) => void
 }
 class Main extends React.Component<Props> {
   public defaultTrackRecord = [
@@ -38,11 +40,32 @@ class Main extends React.Component<Props> {
       options: APP.keys.EnumFollowWay
     }
   ]
+  public footer = (
+    <div className='text-right mt10'>
+      <Button
+        type='primary'
+        className='mr5'
+        onClick={this.save.bind(this)}
+      >
+        保存
+      </Button>
+      <Button type='ghost'>
+        删除
+      </Button>
+    </div>
+  )
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
-  public onSave () {
+  public componentDidMount () {
+    console.log('detail did mouiunt')
+    if (this.props.getWrappedInstance) {
+      console.log('detail did mouiunt')
+      this.props.getWrappedInstance(this)
+    }
+  }
+  public save () {
     const sourceBaseinfo: any = this.refs.baseinfo
     const baseinfo = sourceBaseinfo.getWrappedInstance()
-    console.log(baseinfo.refs.wrappedComponent.save(), 'SAVE')
+    baseinfo.refs.wrappedComponent.save()
   }
   public handleChange (field: string, value: any) {
     const detail = this.props.detail
@@ -58,7 +81,7 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
-    console.log(this.trackRecord, 'xxx')
+    const type = this.props.type || 'customer'
     return (
       <div className={styles.container}>
         <div className={styles.left}>
@@ -67,10 +90,14 @@ class Main extends React.Component<Props> {
             title='基本信息'
             showFold
           >
-            <BaseInfo ref='baseinfo' customerId={this.props.customerId} isOpen={this.props.isOpen} isBussiness={this.props.isBussiness}/>
+            <BaseInfo
+              ref='baseinfo'
+              customerId={this.props.customerId}
+              type={type}
+            />
           </Card>
           {
-            this.props.isBussiness &&
+            type === 'business' &&
             <Card title='跟进记录'>
               <Tags
                 className='mb10'
@@ -91,30 +118,23 @@ class Main extends React.Component<Props> {
                 }}
               />
               <div className='mt10' >
-                预约下次拜访日期
+                预约下次拜访日期&nbsp;&nbsp;
                 <DatePicker
                   onChange={(moment) => {
                     console.log(moment)
                   }}
                 />
               </div>
-              <div className='text-right mt10'>
-                <Button
-                  type='primary'
-                  className='mr5'
-                  onClick={this.onSave.bind(this)}
-                >
-                  保存
-                </Button>
-                <Button type='ghost'>
-                  删除
-                </Button>
+              <div>
+                {this.props.footer || this.footer}
               </div>
             </Card>
           }
         </div>
         <div className={styles.right}>
-          <Record customerId={this.props.customerId}/>
+          <Record
+            customerId={this.props.customerId}
+          />
         </div>
       </div>
     )
