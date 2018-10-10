@@ -244,7 +244,7 @@ class Main extends React.Component<Props> {
                   field='customerName'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.detail.customerName}
-                  disabled={true}
+                  disabled={this.props.isBussiness}
                 />
               )}
             </FormItem>
@@ -261,6 +261,7 @@ class Main extends React.Component<Props> {
                 >
                   <Select
                     style={{width: '100%'}}
+                    disabled={this.props.isBussiness}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
                       this.handleChange(null, {
@@ -307,6 +308,7 @@ class Main extends React.Component<Props> {
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
+                  disabled={this.props.isBussiness}
                   addonAfter={
                     (
                       <Icon
@@ -341,6 +343,7 @@ class Main extends React.Component<Props> {
                 <Input
                   required
                   label='主联系电话'
+                  disabled={this.props.isBussiness}
                   field='contactPersons[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.linkMan[0].contactPhone}
@@ -356,6 +359,7 @@ class Main extends React.Component<Props> {
               label='法人'
               onChange={this.handleChange.bind(this)}
               value={this.props.detail.legalPerson}
+              disabled={this.props.isBussiness}
             />
           </Col>
           <Col span={12}>
@@ -364,6 +368,7 @@ class Main extends React.Component<Props> {
             >
               <Select
                 style={{width: '100%'}}
+                disabled={this.props.isBussiness}
                 // defaultValue={}
                 onChange={(value) => {
                   this.handleChange(null, {
@@ -435,6 +440,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
               value={this.props.detail.address}
+              disabled={this.props.isBussiness}
             />
           </Col>
         </Row>
@@ -445,6 +451,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'备注'}
               value={this.props.detail.remark}
+              disabled={this.props.isBussiness}
             />
           </Col>
         </Row>
