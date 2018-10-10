@@ -3,7 +3,7 @@ import { Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import RoleModal from './role-modal'
-import { fetchRoleList, getRoleInfo, toggleForbidRole, delRole, setRole } from './api'
+import { fetchRoleList, toggleForbidRole, delRole, setRole } from './api'
 
 const styles = require('./style')
 
@@ -15,6 +15,7 @@ interface State {
   pageCurrent: number
   pageSize: number
   pageTotal: number
+  currentRoleId: number
   dataSource: any[]
 }
 
@@ -27,14 +28,12 @@ class Main extends React.Component {
     pageCurrent: 1,
     pageSize: 10,
     pageTotal: 0,
+    currentRoleId: 0,
     dataSource: []
   }
 
   public componentWillMount () {
     this.getRoleList()
-    getRoleInfo('System', 4).then((res) => {
-      console.log(res)
-    })
   }
 
   // 切换tab
@@ -102,10 +101,11 @@ class Main extends React.Component {
   }
 
   // 修改、添加、查看角色
-  public setRole = (mode: 'view' | 'modify' | 'add') => {
+  public setRole = (mode: 'view' | 'modify' | 'add', id?: number) => {
     this.setState({
       visible: true,
-      mode
+      mode,
+      currentRoleId: id || 0
     })
   }
 
@@ -125,9 +125,9 @@ class Main extends React.Component {
               {
                 status === 0
                   ? <div>
-                      <a onClick={() => {this.setRole('view')}}>查看</a>
+                      <a onClick={() => {this.setRole('view', id)}}>查看</a>
                       <Divider type='vertical'/>
-                      <a onClick={() => {this.setRole('modify')}}>修改</a>
+                      <a onClick={() => {this.setRole('modify', id)}}>修改</a>
                       <Divider type='vertical'/>
                       <a onClick={() => {this.forbidConfirm(id)}}>禁用</a>
                       <Divider type='vertical'/>
@@ -205,6 +205,8 @@ class Main extends React.Component {
               this.state.visible &&
               <RoleModal
                 mode={this.state.mode}
+                tab={this.state.tab}
+                currentRoleId={this.state.currentRoleId}
                 onOk={() => {}}
                 onCancel={() => {
                   this.setState({visible: false})
