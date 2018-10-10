@@ -86,5 +86,6 @@ declare namespace Customer {
     autoAssign?: AutoAssignProps[]
     capacity?: CapacityProps[],
     assignResult?: AssignResultProps
+    spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
   }
 }
