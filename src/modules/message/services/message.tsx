@@ -8,6 +8,7 @@
 import { ReactNode, ReactElement } from 'react'
 import { notification, message } from 'antd'
 import { ArgsProps } from 'antd/lib/notification'
+import { Button } from 'antd'
 import _ from 'lodash'
 
 import MsgService from '@/modules/message/services'
@@ -77,8 +78,8 @@ class Msg implements MsgI {
   }
 
   // 默认使用拉形式
-  public connect (conf: any) {
-    return this.pullConnect(conf)
+  public connect (conf: any = {}) {
+    return this.pullConnect(this.conf)
   }
 
   public onData (data: any) {
@@ -122,25 +123,50 @@ class Msg implements MsgI {
     notification.info(conf)
     return this
   }
+  public uiClose () {
+    notification.destroy()
+  }
   public uiError (conf: ArgsProps) {
     notification.error(conf)
     return this
   }
 
+  // ui method
+  public uiLogicLinkToList () {
+    APP.history.push('/message/list')
+  }
+
   // 拉模式的连接、中断、基础数据返回操作方法
   private pullConnect (conf: any) {
-    this.looptimer = setInterval(() => {
-      MsgService.getCurrentByUserid(123).then((data: any) => {
+    const fetchMsg = () => {
+      // 获取单条消息提醒
+      MsgService.getCurrentByUserid(5).then((data: any) => {
+        // 手动关闭弹层,同一时刻，只保留一个
+        this.uiClose()
+
+        // 发布获取数据消息
         this.evTrigger('data', data)
+        this.evTrigger('service:get unreaded item data', data)
+
+        // 通用数据交互
         this.onData(data)
+        console.log('receive msg::', data)
       }).catch((e: any) => {
+        // this.onData({title: '错误', content: '暂无提醒'})
         this.uiError({
           // message: '数据有误',
           message: null,
-          description: 'error'
+          description: e.toString() // 'error'
         })
       })
-    }, this.conf.pullConf.duration || 5000)
+
+      // 获取未读消息数
+      MsgService.countUnreadedByUserid(5).then((data: any) => {
+        this.evTrigger('service:get unreaded count data', data)
+      })
+    }
+    fetchMsg()
+    this.looptimer = setInterval(fetchMsg, this.conf.pullConf.duration || 5000)
     return this
   }
   private pullClose () {
@@ -149,12 +175,45 @@ class Msg implements MsgI {
     this.evTrigger('close')
     return this
   }
+  // 消息驱动模式比较固定，但是ui和交互不确定，暂时放到一个方法里
   private pullOnData (data: any) {
-    this.uiShow({
-      message: '测试',
-      description: <div>内容可以自定义</div>,
+    if (!data && !data.title) {return}
+
+    // 标记消息为已读
+    const setReaded = (id: any = data.id) => {
+      return MsgService.readListByIds([id])
+    }
+    // 关闭
+    const onClose = () => {
+      console.log('message closed.....')
+      setReaded()
+    }
+
+    this.uiOpen({
+      message: '消息提醒',
+      description: (
+        <div>
+          <h5 style={{fontSize: '14px', borderTop: '1px solid #ddd', padding: '15px 0 0'}}>{data.title}</h5>
+          <p>{data.content}</p>
+          <div style={{textAlign: 'right'}}>
+            <Button
+              type='primary'
+              onClick={() => {
+                // 关闭弹层
+                this.uiClose()
+                // 设为已读
+                setReaded()
+                console.log('???????????//', data.id)
+                this.uiLogicLinkToList()
+              }}
+            >查看详情
+            </Button>
+          </div>
+        </div>
+      ),
+      onClose,
       placement: 'bottomRight',
-      duration: 100000
+      duration: null // 不自动关闭
     })
     return this
   }
