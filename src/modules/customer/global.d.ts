@@ -40,6 +40,7 @@ declare namespace Customer {
     areaName?: string
     isConfirmed?: string
     contactPersons?: LinkManProps[]
+    /** 销售 */
     currentSalesperson?: string
     agencyId?: string
     tagIntention?: string

@@ -47,6 +47,7 @@ export const viewCustomer = (id: string) => {
   return http(`/crm-manage/v1/api/open-ocean/${id}`)
 }
 export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
+  payload.currentSalesperson = ''
   return http(`/crm-manage/v1/api/customer/${id}`, 'PUT', {
     data: payload
   })
