@@ -70,10 +70,10 @@ declare namespace Customer {
   export interface TrackRecord {
     customerId?: string
     salesperson?: string
-    tagIntention?: string
-    tagCustomerStatus?: string
-    tagFollowupStatus?: string
-    tagTelephoneStatus?: string
+    tagIntention?: number
+    tagCustomerStatus?: number
+    tagFollowupStatus?: number
+    tagTelephoneStatus?: number
     remark?: string
     appointTime?: string
     createTime?: string

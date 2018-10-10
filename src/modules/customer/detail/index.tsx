@@ -112,7 +112,7 @@ class Main extends React.Component<Props> {
           }
         </div>
         <div className={styles.right}>
-          <Record/>
+          <Record customerId={this.props.customerId}/>
         </div>
       </div>
     )

@@ -89,10 +89,16 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'intention'
+    dataIndex: 'intention',
+    render: (val) => {
+      return (APP.dictionary[`EnumIntentionality-${val}`])
+    }
   }, {
     title: '电话状态',
-    dataIndex: 'telephoneStatus'
+    dataIndex: 'telephoneStatus',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactStatus-${val}`])
+    }
   }, {
     title: '空置天数',
     dataIndex: 'freeDays'
@@ -101,13 +107,22 @@ class Main extends React.Component {
     dataIndex: 'current_salesperson'
   }, {
     title: '客户来源',
-    dataIndex: 'source'
+    dataIndex: 'source',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactSource-${val}`])
+    }
   }, {
     title: '创建时间',
-    dataIndex: 'createTime'
+    dataIndex: 'createTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '预约时间',
-    dataIndex: 'appointmentTime'
+    dataIndex: 'appointmentTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }]
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {

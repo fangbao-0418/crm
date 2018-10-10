@@ -93,16 +93,25 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'tagIntention'
+    dataIndex: 'tagIntention',
+    render: (val) => {
+      return (APP.dictionary[`EnumIntentionality-${val}`])
+    }
   }, {
     title: '电话状态',
-    dataIndex: 'tagTelephoneStatus'
+    dataIndex: 'tagTelephoneStatus',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactStatus-${val}`])
+    }
   }, {
     title: '空置天数',
     dataIndex: 'freeDays'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'customerSource',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactSource-${val}`])
+    }
   }, {
     title: '释放次数',
     dataIndex: 'releaseNums'
@@ -111,10 +120,16 @@ class Main extends React.Component {
     dataIndex: 'lastReleaseSalesperson'
   }, {
     title: '创建时间',
-    dataIndex: 'createTime'
+    dataIndex: 'createTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '释放时间',
-    dataIndex: 'lastReleaseTime'
+    dataIndex: 'lastReleaseTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }]
   public componentWillMount () {
     this.fetchList()

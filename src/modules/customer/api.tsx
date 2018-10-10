@@ -70,15 +70,15 @@ export const importFile = (file: File, query: {
     data
   })
 }
-export const fetchTrackRecords = (payload: {
+export const fetchTrackRecords = (id: string, payload: {
   pageNum?: number
   pageSize?: number
 }) => {
-  return http(`/crm-manage/v1/api/track-record`, 'GET', payload)
+  return http(`/crm-manage/v1/api/track-record/${id}`, 'GET', payload)
 }
-export const fetchClueRecords = (payload: {
+export const fetchClueRecords = (id: string, payload: {
   pageNum?: number
   pageSize?: number
 }) => {
-  return http(`/crm-manage/v1/api/clue-records`, 'GET', payload)
+  return http(`/crm-manage/v1/api/clue-records/${id}`, 'GET', payload)
 }

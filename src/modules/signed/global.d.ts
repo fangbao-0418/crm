@@ -7,7 +7,7 @@ declare namespace Signed {
     currentSalesperson?: string
     operatingAccouting?: string
     createTime?: string
-    endTime?: string
+    EndTime?: string
     startTime?: string
   }
   export interface SearchProps {
