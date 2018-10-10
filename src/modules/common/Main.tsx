@@ -7,7 +7,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom'
-import Menu from '@/modules/common/menu'
+import Left from '@/modules/common/left'
 import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
@@ -19,7 +19,7 @@ export default class extends React.Component {
   public render () {
     return (
       <Layout className={styles.container}>
-        <Menu />
+        <Left />
         <Layout>
           <Top />
           <Content className={styles.content}>

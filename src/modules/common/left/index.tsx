@@ -11,7 +11,7 @@ interface MenuItem {
   icon?: JSX.Element
   children?: Array<MenuItem>
 }
-const styles = require('@/stylus/main')
+const styles = require('./style')
 type Props = RouteComponentProps
 interface State {
   collapsed: boolean
@@ -279,24 +279,25 @@ class Main extends React.Component<Props, State> {
     return nodes
   }
   public render () {
-    console.log(this.state.selectedKeys)
     return (
       <Sider
-        className={styles.menu}
+        className={styles.container}
         trigger={null}
         collapsible
         collapsed={this.state.collapsed}
       >
         <div className={styles.logo} />
-        <Menu
-          theme='dark'
-          mode='inline'
-          selectedKeys={this.state.selectedKeys}
-          openKeys={this.state.openKeys}
-          // defaultSelectedKeys={['m-0-0']}
-        >
-          {this.getMenuNodes()}
-        </Menu>
+        <div className={styles.menu}>
+          <Menu
+            theme='dark'
+            mode='inline'
+            selectedKeys={this.state.selectedKeys}
+            openKeys={this.state.openKeys}
+            // defaultSelectedKeys={['m-0-0']}
+          >
+            {this.getMenuNodes()}
+          </Menu>
+        </div>
       </Sider>
     )
   }
