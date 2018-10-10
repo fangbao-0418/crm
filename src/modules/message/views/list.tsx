@@ -128,18 +128,18 @@ class Main extends React.Component {
   }
 
   public componentDidMount () {
+    /*
     const msg = Msg({})
     msg.evAdd('data', (cd: any) => {
       msg.uiOpen({
         message: '您有新的消息',
-        description: <MessageShowModal data={this.state.showData} />,
+        description: <MessageShowModal data={cd} />,
         placement: 'bottomRight'
       })
     })
     // 消息启动
-    msg.connect({
-      duration: 10000
-    })
+    msg.connect({})
+    */
   }
 
   // 全选反选
@@ -151,7 +151,7 @@ class Main extends React.Component {
   // 获取列表数据
   public getList () {
     const {pageConf, chooseDate} = this.state
-    MsgService.getListByUserid('4', chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
+    MsgService.getListByUserid('5', chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
       this.setState({
         dataSource: d.records,
         pageConf: {
