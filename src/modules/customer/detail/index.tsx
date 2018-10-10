@@ -11,7 +11,6 @@ const styles = require('./style')
 interface Props {
   customerId: string
   type?: 'business' | 'open' | 'customer'
-  isOpen?: boolean
   isCustomer?: boolean
   detail?: Customer.DetailProps
   footer?: React.ReactNode

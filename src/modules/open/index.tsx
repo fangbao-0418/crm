@@ -227,9 +227,45 @@ class Main extends React.Component {
   }
   public show (customerId: string) {
     const modal = new Modal({
-      style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId} isOpen={true}/></Provider>
+        <Provider>
+          <Detail
+            customerId={customerId}
+            type='open'
+            footer={(
+              <div className='text-right mt10'>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    pickCustomer({
+                      customerIdArr: [customerId]
+                    }).then(() => {
+                      APP.success('操作成功')
+                      this.fetchList()
+                      modal.hide()
+                    })
+                  }}
+                >
+                  抢客户
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    const payload = customerId
+                    deleteCustomer(payload).then(() => {
+                      APP.success('操作成功')
+                      this.fetchList()
+                      modal.hide()
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+              </div>
+            )}
+          />
+        </Provider>
       ),
       footer: null,
       header: null,
@@ -249,7 +285,7 @@ class Main extends React.Component {
       content: (
         <div>你确定要删除这些客户吗？</div>
       ),
-      title: '删除',
+      title: '删除客户',
       mask: true,
       onOk: () => {
         const payload = this.state.selectedRowKeys.join(',')

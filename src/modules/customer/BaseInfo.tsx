@@ -219,7 +219,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { getFieldDecorator } = this.props.form
-    console.log(this.props.detail, 'render')
+    const disabled = this.props.type === 'open'
     return (
       <Form className={styles['base-info']}>
         <Row gutter={8}>
@@ -244,7 +244,7 @@ class Main extends React.Component<Props> {
                   field='customerName'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.detail.customerName}
-                  disabled={this.props.type === 'open'}
+                  disabled={disabled}
                 />
               )}
             </FormItem>
@@ -261,7 +261,7 @@ class Main extends React.Component<Props> {
                 >
                   <Select
                     style={{width: '100%'}}
-                    disabled={this.props.type === 'open'}
+                    disabled={disabled}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
                       this.handleChange(null, {
@@ -308,7 +308,7 @@ class Main extends React.Component<Props> {
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
-                  disabled={this.props.type === 'open'}
+                  disabled={disabled}
                   addonAfter={
                     (
                       <Icon
@@ -343,7 +343,7 @@ class Main extends React.Component<Props> {
                 <Input
                   required
                   label='主联系电话'
-                  disabled={this.props.type === 'open'}
+                  disabled={disabled}
                   field='contactPersons[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.linkMan[0].contactPhone}
@@ -359,7 +359,7 @@ class Main extends React.Component<Props> {
               label='法人'
               onChange={this.handleChange.bind(this)}
               value={this.props.detail.legalPerson}
-              disabled={this.props.type === 'open'}
+              disabled={disabled}
             />
           </Col>
           <Col span={12}>
@@ -368,7 +368,7 @@ class Main extends React.Component<Props> {
             >
               <Select
                 style={{width: '100%'}}
-                disabled={this.props.type === 'open'}
+                disabled={disabled}
                 // defaultValue={}
                 onChange={(value) => {
                   this.handleChange(null, {
@@ -420,6 +420,7 @@ class Main extends React.Component<Props> {
               >
                 <AutoComplete
                   className={styles['auto-complete']}
+                  disabled={disabled}
                   defaultValue={{
                     name: this.state.areaName
                   }}
@@ -440,7 +441,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
               value={this.props.detail.address}
-              disabled={this.props.type === 'open'}
+              disabled={disabled}
             />
           </Col>
         </Row>
@@ -451,7 +452,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'备注'}
               value={this.props.detail.remark}
-              disabled={this.props.type === 'open'}
+              disabled={disabled}
             />
           </Col>
         </Row>
