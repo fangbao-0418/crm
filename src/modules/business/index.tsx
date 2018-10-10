@@ -8,6 +8,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
+import { fetchRegion } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -33,6 +34,7 @@ interface States {
     newCustomerNums?: string
     ForthcomingNums?: string
   }
+  citys: Common.RegionProps[]
 }
 class Main extends React.Component {
   public state: States = {
@@ -43,7 +45,8 @@ class Main extends React.Component {
       allNums: '',
       trackContactNums: '',
       newCustomerNums: ''
-    }
+    },
+    citys: []
   }
   public data = conditionOptions
   public params: Business.SearchProps = {}
@@ -59,6 +62,7 @@ class Main extends React.Component {
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.fetchCapacityNum()
+    this.fetchCitys()
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
@@ -79,6 +83,13 @@ class Main extends React.Component {
           recycleNum: '(有' + res + '个客户即将被收回！)'
         })
       }
+    })
+  }
+  public fetchCitys () {
+    fetchRegion({level: 2}).then((res) => {
+      this.setState({
+        citys: res
+      })
     })
   }
   public handleSearch (values: any) {
@@ -190,6 +201,13 @@ class Main extends React.Component {
         console.log(params, 'params')
         const time = this.appointmentTime
         appointment(params, time).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('预约成功')
         })
         modal.hide()
@@ -234,6 +252,13 @@ class Main extends React.Component {
         }
         const saleId = this.curSale.key
         toSales(saleparams, saleId).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -264,7 +289,14 @@ class Main extends React.Component {
           customerIdArr: selectedRowKeys,
           bus_sea_memo: this.reason.label
         }
-        toOpen(openparams).then((res) => {
+        toOpen(openparams).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -290,8 +322,13 @@ class Main extends React.Component {
               this.cityCode = current
             }}
           >
-            <Select.Option value='110000'>北京</Select.Option>
-            <Select.Option value='120000'>天津</Select.Option>
+            {
+              this.state.citys.map((item, index) => {
+                return (
+                  <Select.Option value={item.code} key={item.code}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),
@@ -307,6 +344,13 @@ class Main extends React.Component {
           cityCode: this.cityCode
         }
         toCity(cityparams).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
