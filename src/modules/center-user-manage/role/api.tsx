@@ -33,9 +33,13 @@ export const fetchRoleList = (pageCurrent: number, pageSize: number, roleType: '
 }
 
 // 获取角色新增、修改弹窗数据
-export const getRoleInfo = (roleType: 'System' | 'Proxy', roleId?: any) => {
-  roleId = roleId || ''
+export const fetchRoleInfo = (roleType: 'System' | 'Proxy', roleId: any) => {
   return http(`/user/v1/api/role/roleId/${roleId}/roleType/${roleType}`)
+}
+
+// 获取新增角色准备数据
+export const fetchNewRoleInfo = (roleType: 'System' | 'Proxy') => {
+  return http(`/user/v1/api/role/roleType/${roleType}`)
 }
 
 // 启用禁用角色
