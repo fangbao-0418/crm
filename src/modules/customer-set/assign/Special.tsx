@@ -1,6 +1,9 @@
 import React from 'react'
 import { Table } from 'antd'
-class Main extends React.Component {
+interface Props {
+  disabled?: boolean
+}
+class Main extends React.Component<Props> {
   public columns = [
     {
       title: '特殊资源'
