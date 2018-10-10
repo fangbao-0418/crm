@@ -196,30 +196,14 @@ class Main extends React.Component {
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.lastReleaseSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    case '6':
-      this.paramsright.busSeaMemo = values.value
-      break
-    }
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.lastReleaseSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params.busSeaMemo = undefined
+    this.params[values.key] = values.value || undefined
     this.fetchList()
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
@@ -347,13 +331,13 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '释放销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'},
-                { value: '6', label: '释放原因'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'lastReleaseSalesperson', label: '释放销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'},
+                { value: 'busSeaMemo', label: '释放原因'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {

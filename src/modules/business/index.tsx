@@ -56,7 +56,7 @@ class Main extends React.Component {
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public cityCode: string = ''
   public reason: {value: string, label: string} = { value: '', label: ''}
-  public capacityNum: string = ''
+  public capacityNum: number = 0
   public columns = getColumns.call(this)
   public componentWillMount () {
     this.fetchRecycleNum()
@@ -404,7 +404,7 @@ class Main extends React.Component {
         )}
       >
         {
-          this.capacityNum &&
+          this.capacityNum > 0 &&
           <div className={styles.note}>
             <span className={styles['note-icon1']} />
             <span className='mr10'>库容剩余不足{this.capacityNum}个，即将达到上限！</span>
