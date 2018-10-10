@@ -1,12 +1,22 @@
 import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
 import { Tabs } from 'antd'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
 import CompanyList from './CompanyList'
 import OperateList from './OperateList'
 import Detail from './detail'
-class Main extends React.Component {
+interface Props {
+  customerId?: string
+}
+class Main extends React.Component<Props> {
+  public componentWillMount () {
+    this.fetchData()
+  }
+  public fetchData () {
+    changeCustomerDetailAction(this.props.customerId)
+  }
   public callback () {
     console.log('11')
   }

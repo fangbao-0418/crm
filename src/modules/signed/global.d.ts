@@ -1,5 +1,6 @@
 declare namespace Signed {
   export interface DetailProps {
+    id?: string
     customerName?: string
     contactPerson?: string
     area?: string

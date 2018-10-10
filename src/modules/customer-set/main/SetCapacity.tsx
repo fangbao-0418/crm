@@ -5,7 +5,6 @@ import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from '@/modules/customer-set/actions'
 import { saveStorageCapacity } from '@/modules/customer-set/api'
-import Item from 'antd/lib/list/Item';
 const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {

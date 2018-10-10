@@ -56,6 +56,9 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
     contentType: config.contentType !== undefined ? config.contentType : 'application/json; charset=utf-8',
     data,
     timeout: 10000
+    // xhrFields: {
+    //   withCredentials: true
+    // }
   }
   if (extension) {
     ajaxConfig = $.extend(true, ajaxConfig, extension)

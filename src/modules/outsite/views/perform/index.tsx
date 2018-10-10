@@ -123,7 +123,7 @@ class Main extends React.Component {
       >
         <div>
           <Search
-            placeholder='输入任务名称'
+            placeholder='输入客户和联系人名称'
             onSearch={(value) => console.log(value)}
             style={{width: 200, marginBottom: '25px'}}
           />

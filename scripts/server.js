@@ -27,7 +27,7 @@ const options = {
       secure: false
     },
     // '/crm-manage': {
-    //   target: 'http://192.168.1.229:9008/',
+    //   target: 'http://192.168.1.231:9008/',
     //   changeOrigin: true,
     //   secure: false,
     //   pathRewrite: {

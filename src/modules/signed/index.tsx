@@ -5,8 +5,6 @@ import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
-import AddButton from '@/modules/common/content/AddButton'
-import Profile from '@/modules/common/company-detail/Profile'
 import Provider from '@/components/Provider'
 import View from './View'
 import { fetchList, toOther } from './api'
@@ -103,7 +101,12 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.detail.bind(this)}>{val}</a>
+        <span
+          className='href'
+          onClick={this.detail.bind(this, record)}
+        >
+          {val}
+        </span>
       )
     }
   }, {
@@ -288,10 +291,10 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public detail () {
+  public detail (record: Signed.DetailProps) {
     const modal = new Modal({
       content: (
-        <Provider><View /></Provider>
+        <Provider><View customerId={record.id} /></Provider>
       ),
       header: null,
       footer: null,

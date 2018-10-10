@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 const styles = require('./style')
 interface Props extends Customer.Props {
   isShowAgent?: boolean
@@ -29,10 +30,24 @@ class Main extends React.Component<Props> {
             <span className='mr20 ml10'>天眼查</span>
           </p>
           <p>
-            <label>跟进人:</label><span>{this.props.detail.currentSalesperson}</span><span>({this.props.detail.agencyId})</span>
-            <label style={{marginLeft: '10px'}}>意向度:</label><span>{this.props.detail.tagIntention}</span>
-            <label style={{marginLeft: '10px'}}>{this.props.detail.customerSource}</label>
-            <label style={{marginLeft: '10px'}}></label><span>{this.props.detail.createTime}</span>
+            <label>跟进人:</label>
+            <span>
+              {this.props.detail.currentSalesperson}
+            </span>
+            <span>
+              ({this.props.detail.agencyId})
+            </span>
+            <label style={{marginLeft: '10px'}}>意向度:</label>
+            <span>
+              {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
+            </span>
+            <label style={{marginLeft: '10px'}}>
+              {APP.dictionary[`EnumContactSource-${this.props.detail.customerSource}`]}
+            </label>
+            <label style={{marginLeft: '10px'}}></label>
+            <span>
+              {moment(this.props.detail.createTime).format('YYYY-MM-DD')}
+            </span>
           </p>
           {
             this.props.isShowAgent &&

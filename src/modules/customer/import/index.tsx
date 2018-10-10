@@ -9,6 +9,7 @@ interface Props {
 }
 class Main extends React.Component<Props> {
   public value: any = {}
+  public resuleData: any = {}
   public state = {
     step: 1
   }
@@ -35,6 +36,8 @@ class Main extends React.Component<Props> {
             this.setState({
               step: 3
             })
+            this.resuleData = value
+            console.log(value, '上传结果')
             this.value.step2 = value
             console.log(this.value, 'on ok')
           }}
@@ -46,6 +49,7 @@ class Main extends React.Component<Props> {
       component: (
         <Step3
           isBussiness={this.props.isBussiness}
+          resuleData={this.resuleData}
           onCancel={() => {
             if (this.props.onClose) {
               this.props.onClose()
