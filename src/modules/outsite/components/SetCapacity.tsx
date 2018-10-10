@@ -3,6 +3,7 @@ import { Table, Modal, Divider } from 'antd'
 import { connect } from 'react-redux'
 import '@/modules/common/styles/base.styl'
 import { TaskItem } from '@/modules/outsite/types/outsite'
+import Service from '@/modules/outsite/services'
 
 const showPath = '/outsite/tasktpl/form'
 

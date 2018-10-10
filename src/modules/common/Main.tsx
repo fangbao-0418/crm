@@ -53,11 +53,11 @@ export default class extends React.Component {
               {/* 外勤 */}
               <Route path='/outsite/task/list' component={modules.TaskList}/>
               <Route path='/outsite/task/show/:id' component={modules.TaskShow}/>
-              <Route path='/outsite/task/form/:id' component={modules.TaskForm}/>
+              <Route path='/outsite/task/form/:id?' component={modules.TaskForm}/>
               <Route path='/outsite/tasktpl/list' component={modules.TasktplList}/>
-              <Route path='/outsite/tasktpl/form/:id' component={modules.TasktplForm}/>
+              <Route path='/outsite/tasktpl/form/:id?' component={modules.TasktplForm}/>
               <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
-              <Route path='/outsite/tasktpl/subform/:id' component={modules.TasktplSubform}/>
+              <Route path='/outsite/tasktpl/subform/:id?' component={modules.TasktplSubform}/>
               <Route path='/outsite/perform/list' component={modules.PerformList}/>
               <Route path='/outsite/data-overview' component={modules.TaskDataOverview}/>
               <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>
