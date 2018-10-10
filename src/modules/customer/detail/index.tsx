@@ -10,7 +10,9 @@ import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
   customerId: string
+  isBussiness?: boolean
   isOpen?: boolean
+  isCustomer?: boolean
   detail?: Customer.DetailProps
 }
 class Main extends React.Component<Props> {
@@ -65,10 +67,10 @@ class Main extends React.Component<Props> {
             title='基本信息'
             showFold
           >
-            <BaseInfo ref='baseinfo' customerId={this.props.customerId}/>
+            <BaseInfo ref='baseinfo' customerId={this.props.customerId} isOpen={this.props.isOpen} isBussiness={this.props.isBussiness}/>
           </Card>
           {
-            !this.props.isOpen &&
+            this.props.isBussiness &&
             <Card title='跟进记录'>
               <Tags
                 className='mb10'
