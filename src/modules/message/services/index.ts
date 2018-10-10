@@ -29,7 +29,7 @@ class MessageService extends Service {
     return Service.http(
       `notification/v1/api/remind/page?` +
       `recipient=${userid}&` +
-      // `createAt=${createAt}&` +
+      `createAt=${createAt}&` +
       `pageCurrent=${pageCurrent}&` +
       `pageSize=${pageSize}`
     )
