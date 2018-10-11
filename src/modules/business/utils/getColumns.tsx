@@ -1,13 +1,21 @@
 import React from 'react'
 import { ColumnProps } from 'antd/lib/table'
 import moment from 'moment'
+const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
   return [{
     title: '客户名称',
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
+        <div>
+          {
+            record.redPoint === 1 &&
+            <span className={styles['red-point']}></span>
+          }
+          <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
+        </div>
+        
       )
     }
   }, {
