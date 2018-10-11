@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
@@ -111,7 +111,14 @@ class Main extends React.Component<null, States> {
     title: '联系电话',
     dataIndex: 'contactPhone'
   }, {
-    title: '空置天数',
+    title: (
+      <span>
+        空置天数
+        <Tooltip placement='top' title='客户未被跟进的天数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'vacantDays'
   }, {
     title: '城市',
@@ -123,7 +130,14 @@ class Main extends React.Component<null, States> {
     title: '创建时间',
     dataIndex: 'enterStorageTime'
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='客户进入客资池的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
