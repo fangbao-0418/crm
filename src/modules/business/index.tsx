@@ -50,8 +50,6 @@ class Main extends React.Component {
   }
   public data = conditionOptions
   public params: Business.SearchProps = {tab: '1'}
-  public paramsleft: Business.SearchProps = {}
-  public paramsright: Business.SearchProps = {}
   public appointmentTime: string = ''
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public cityCode: string = ''
@@ -93,32 +91,32 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    this.paramsleft = {}
     let beginTime
     let endTime
     if (!values.date.value) {
-      beginTime = ''
-      endTime = ''
+      beginTime = undefined
+      endTime = undefined
     } else if (values.date.value.indexOf('至') > -1) {
       beginTime = values.date.value.split('至')[0]
       endTime = values.date.value.split('至')[1]
     } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+      beginTime = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
+      endTime = moment().format('YYYY-MM-DD')
     }
     if (values.date.label === '入库时间') {
-      this.paramsleft.storageBeginDate = beginTime
-      this.paramsleft.storageEndDate = endTime
+      this.params.storageBeginDate = beginTime
+      this.params.storageEndDate = endTime
     } else if (values.date.label === '创建时间') {
-      this.paramsleft.createBeginDate = beginTime
-      this.paramsleft.createEndDate = endTime
+      this.params.createBeginDate = beginTime
+      this.params.createEndDate = endTime
     } else if (values.date.label === '最后跟进') {
-      this.paramsleft.lastTrackBeginTime = beginTime
-      this.paramsleft.lastTrackEndTime = endTime
+      this.params.lastTrackBeginTime = beginTime
+      this.params.lastTrackEndTime = endTime
     }
-    this.paramsleft.intention = values.intention.value
-    this.paramsleft.telephoneStatus = values.telephoneStatus.value
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params.intention = values.intention.value || undefined
+    this.params.telephoneStatus = values.telephoneStatus.value || undefined
+    this.params.customerSource = values.customerSource.value || undefined
+    this.params.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
@@ -135,16 +133,10 @@ class Main extends React.Component {
     this.params.contactPerson = undefined
     this.params.contactPhone = undefined
     this.params.currentSalesperson = undefined
-    this.params.customerSource = undefined
-    this.params.payTaxesNature = undefined
     this.params[values.key] = values.value || undefined
-    // this.fetchList()
-    // this.paramsright = {}
-    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
-    // this.params.tab = undefined
     this.setState({
       visible: false
     }, () => {
@@ -412,7 +404,7 @@ class Main extends React.Component {
             <span>您的库容已达上限！</span>
           </div>
         }
-        <div className='mb12' style={{ overflow: 'hidden' }}>
+        <div className='mb12 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
@@ -426,9 +418,9 @@ class Main extends React.Component {
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
-                { value: 'currentSalesperson', label: '所属销售'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'payTaxesNature', label: '纳税类别'}
+                { value: 'currentSalesperson', label: '所属销售'}
+                // { value: 'customerSource', label: '客户来源'}
+                // { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
