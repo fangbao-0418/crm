@@ -494,7 +494,7 @@ class Main extends React.Component<null, States> {
             }
           }}
         />
-        <div className='mt40'>
+        <div className='btn-position'>
           {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
           <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
           <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>

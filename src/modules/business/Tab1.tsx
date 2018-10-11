@@ -100,7 +100,7 @@ class Main extends React.Component<Props> {
             }
           }}
         />
-        <div>
+        <div className='btn-position'>
           {/* <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button> */}
           <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 1)}>批量预约</Button>
           <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 2)}>转销售</Button>
