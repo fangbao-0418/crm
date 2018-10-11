@@ -56,9 +56,12 @@ export const fetchCityCount = () => {
   return http(`/crm-manage/v1/api/customer/stats/by-city`)
 }
 export const importFile = (file: File, query: {
-  cityCode: string,
-  cityName: string,
-  customerSource: number
+  cityCode?: string,
+  cityName?: string,
+  agencyId?: string,
+  salesPersonIds: string,
+  salesPersonNames: string,
+  customerSource: string
 }) => {
   const data = new FormData()
   const q = $.param(query)

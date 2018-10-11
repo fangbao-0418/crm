@@ -49,23 +49,22 @@ class Main extends React.Component<Props> {
         console.log(this.props.paramsValue, 'paramsValue')
         const ids: string[] = []
         const salesNames: string[] = []
-        this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
-          ids.push(item.id)
-          salesNames.push(item.name)
-        })
+        if (this.props.paramsValue.step1.salesPerson) {
+          this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
+            ids.push(item.id)
+            salesNames.push(item.name)
+          })
+        }
         const paramsFile = {
-          customerSource: this.props.paramsValue.step1.customerSource,
-          ids: ids.join(','),
-          salesNames: salesNames.join(','),
-          cityCode: this.props.paramsValue.step1.city.cityCode,
-          cityName: this.props.paramsValue.step1.city.cityName
+          agencyId: this.props.paramsValue.step1.agencyId || undefined,
+          customerSource: this.props.paramsValue.step1.customerSource || undefined,
+          salesPersonIds: ids.join(',') || undefined,
+          salesPersonNames: salesNames.join(',') || undefined,
+          cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
+          cityName: this.props.paramsValue.step1.city.cityName || undefined
         }
         console.log(paramsFile, 'paramsFile')
-        return importFile(info.file, {
-          cityCode: '110000',
-          cityName: '北京',
-          customerSource: 1
-        }).then((res) => {
+        return importFile(info.file, paramsFile).then((res) => {
           if (this.props.onOk) {
             this.props.onOk(res)
           }
