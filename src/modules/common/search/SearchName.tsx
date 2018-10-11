@@ -28,9 +28,6 @@ class Main extends React.Component<Props> {
           </Option>
         )
       })
-      this.value = {
-        key: options[0].value
-      }
     }
     return (
       <InputGroup compact style={this.props.style} className={this.props.className}>
@@ -45,15 +42,30 @@ class Main extends React.Component<Props> {
         </Select>
         <Input
           onChange={(e) => {
+            if (options.length === 0) {
+              return
+            }
+            if (this.value === undefined) {
+              this.value = {
+                key: options[0].value
+              }
+            }
             this.value.value = e.target.value
             if (this.props.onChange) {
               this.props.onChange(_.cloneDeep(this.value))
             }
           }}
           onKeyDown={(e) => {
+            if (options.length === 0) {
+              return
+            }
+            if (this.value === undefined) {
+              this.value = {
+                key: options[0].value
+              }
+            }
             const target: any = e.target
             this.value.value = target.value
-            console.log(this.value)
             if (this.props.onKeyDown) {
               this.props.onKeyDown(e, _.cloneDeep(this.value))
             }
