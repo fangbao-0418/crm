@@ -25,7 +25,6 @@ export default function (): ColumnProps<Business.DetailProps>[] {
             {val}
           </span>
         </div>
-        
       )
     }
   }, {

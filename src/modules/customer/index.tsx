@@ -170,7 +170,7 @@ class Main extends React.Component<null, States> {
     })
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
-    console.log(selectedRowKeys)
+    // console.log(selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
   public handleSearch (values: any) {
@@ -340,11 +340,17 @@ class Main extends React.Component<null, States> {
     })
     modal.show()
   }
-  public SelectAll () {
-    this.setState({
-      selectAll: true
-    })
-  }
+  // public SelectAll () {
+  //   const ids: string[] = []
+  //   this.state.dataSource.forEach((item) => {
+  //     ids.push(item.customerId)
+  //   })
+  //   // console.log(ids, 'ids')
+  //   this.setState({
+  //     selectedRowKeys: ids,
+  //     selectAll: true
+  //   })
+  // }
   public toOrganizationAuto () {
     if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
       APP.error('请选择需要分配客户')
@@ -488,8 +494,8 @@ class Main extends React.Component<null, States> {
             }
           }}
         />
-        <div className='mt40'>
-          <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button>
+        <div className='btn-position'>
+          {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
           <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
           <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>

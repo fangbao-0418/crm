@@ -49,7 +49,7 @@ class Main extends React.Component {
     citys: []
   }
   public data = conditionOptions
-  public params: Business.SearchProps = {}
+  public params: Business.SearchProps = {tab: '1'}
   public paramsleft: Business.SearchProps = {}
   public paramsright: Business.SearchProps = {}
   public appointmentTime: string = ''
