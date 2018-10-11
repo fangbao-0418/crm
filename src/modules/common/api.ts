@@ -48,3 +48,9 @@ export const fetchRegion = (payload: {
 }) => {
   return http(`/config/v1/api/region`, payload)
 }
+export const fetchTianYanCompanyList = (name: string) => {
+  return http(`/crm-manage/v1/api/tianyan/list?name=${name}`)
+}
+export const fetchTianYanDetail = (id: string) => {
+  return http(`/crm-manage/v1/api/tianyan/${id}`)
+}

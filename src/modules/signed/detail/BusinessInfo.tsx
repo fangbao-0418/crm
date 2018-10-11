@@ -1,13 +1,15 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Checkbox, DatePicker } from 'antd'
+import { Form, Row, Col, Input, Button, Checkbox, DatePicker, Dropdown, Menu } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import CompanySearch from './CompanySearch'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
   detail: Customer.DetailProps
 }
+
 class Main extends React.Component<Props> {
   public render () {
     const { getFieldDecorator } = this.props.form
@@ -33,10 +35,9 @@ class Main extends React.Component<Props> {
                   }
                 )(
                   <div>
-                    <Input.Search
-                      style={{width: '322px'}}
+                    <CompanySearch
                       enterButton='查询'
-                      onSearch={(value) => console.log(value)}
+                      style={{width: '322px'}}
                       value={detail.customerName}
                     />
                     <Button className='ml5 mr5' type='primary'>网址</Button>
