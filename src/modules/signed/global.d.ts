@@ -31,5 +31,6 @@ declare namespace Signed {
     payTaxesNature?: string
     serviceExpireBeginMonth?: string
     serviceExpireEndMonth?: string
+    [field: string]: any
   }
 }

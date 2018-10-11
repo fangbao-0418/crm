@@ -184,7 +184,6 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    console.log(values, 'values')
     this.paramsleft = {}
     let beginTime
     let endTime
@@ -223,41 +222,20 @@ class Main extends React.Component {
       this.paramsleft.serviceExpireBeginMonth = startmonth
       this.paramsleft.serviceExpireEndMonth = endmonth
     }
-    console.log(startmonth, endmonth)
     this.paramsleft.payTaxesNature = values.payTaxesNature.value
     this.fetchList()
   }
-  public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.signSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.operatingAccouting = values.value
-      break
-    case '6':
-      this.paramsright.areaName = values.value
-      break
-    case '7':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '8':
-      this.paramsright.contractCode = values.value
-      break
-    }
+  public handleSearchType (value: {key: string, value?: string}) {
+    this.paramsright.customerName = undefined
+    this.paramsright.contactPerson = undefined
+    this.paramsright.customerSource = undefined
+    this.paramsright.signSalesperson = undefined
+    this.paramsright.contactPhone = undefined
+    this.paramsright.operatingAccouting = undefined
+    this.paramsright.areaName = undefined
+    this.paramsright.currentSalesperson = undefined
+    this.paramsright.contractCode = undefined
+    this.paramsright[value.key] = value.value || undefined
     this.fetchList()
   }
   public toSale (id?: string) {
@@ -338,15 +316,15 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '签单销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '运营会计'},
-                { value: '6', label: '地区'},
-                { value: '7', label: '跟进人'},
-                { value: '8', label: '合同号'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'signSalesperson', label: '签单销售'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'operatingAccouting', label: '运营会计'},
+                { value: 'areaName', label: '地区'},
+                { value: 'currentSalesperson', label: '跟进人'},
+                { value: 'contractCode', label: '合同号'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {

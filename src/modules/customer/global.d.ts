@@ -29,6 +29,8 @@ declare namespace Customer {
     businessHoursBegin?: string
     /** 营业期限结束 */
     businessHoursEnd?: string
+    /** 是否有固定营业期限 */
+    isFixedPeriod?: 0 | 1
     /** 经营范围 */
     businessScope?: string
     address?: string

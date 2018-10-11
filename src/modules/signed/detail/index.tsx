@@ -67,7 +67,7 @@ class Main extends React.Component<Props> {
         </Card>
         <Card
           title='联系方式'
-          rightContent={(
+          rightContent={!this.state.disabled && (
             <AddButton
               onClick={this.addLinkMan.bind(this)}
             />

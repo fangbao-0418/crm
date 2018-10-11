@@ -106,6 +106,7 @@ class Main extends React.Component<Props> {
       render: (text, record, index) => {
         return (
           <span
+            hidden={this.props.disabled}
             onClick={() => {
               const data = this.props.linkMan
               data.splice(index, 1)
