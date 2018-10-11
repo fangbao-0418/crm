@@ -33,6 +33,14 @@ class Main extends React.Component<Props> {
       <InputGroup compact style={this.props.style} className={this.props.className}>
         <Select
           onChange={(value: string) => {
+            if (options.length === 0) {
+              return
+            }
+            if (this.value === undefined) {
+              this.value = {
+                key: options[0].value
+              }
+            }
             this.value.key = value
           }}
           style={{ width: '35%' }}
