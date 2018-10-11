@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -113,10 +113,24 @@ class Main extends React.Component {
       return (APP.dictionary[`EnumContactSource-${val}`])
     }
   }, {
-    title: '释放次数',
+    title: (
+      <span>
+        释放次数
+        <Tooltip placement='top' title='客户被释放到公海的总次数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'releaseNums'
   }, {
-    title: '释放销售',
+    title: (
+      <span>
+        释放销售
+        <Tooltip placement='top' title='客户最后一次被释放到公海时的销售'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'lastReleaseSalesperson'
   }, {
     title: '创建时间',
