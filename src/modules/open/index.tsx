@@ -149,7 +149,7 @@ class Main extends React.Component {
     this.fetchList()
   }
   public fetchList () {
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     const params = _.cloneDeep(this.params)
     const pagination = this.state.pagination
     params.pageSize = pagination.pageSize
