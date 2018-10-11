@@ -166,11 +166,15 @@ class Main extends React.Component<null, States> {
       this.setState({
         pagination,
         dataSource: res.data
+      }, () => {
+        if (this.state.selectAll) {
+          this.SelectAll()
+        }
       })
     })
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
-    console.log(selectedRowKeys)
+    // console.log(selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
   public handleSearch (values: any) {
@@ -341,7 +345,13 @@ class Main extends React.Component<null, States> {
     modal.show()
   }
   public SelectAll () {
+    const ids: string[] = []
+    this.state.dataSource.forEach((item) => {
+      ids.push(item.customerId)
+    })
+    // console.log(ids, 'ids')
     this.setState({
+      selectedRowKeys: ids,
       selectAll: true
     })
   }
