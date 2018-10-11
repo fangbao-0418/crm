@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Select } from 'antd'
+import { Table, Button, Select, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
@@ -122,19 +122,40 @@ class Main extends React.Component {
     title: '运营会计',
     dataIndex: 'operatingAccouting'
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='成为签约客户的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'createTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
-    title: '开始账期',
+    title: (
+      <span>
+        开始账期
+        <Tooltip placement='top' title='客户开始记账服务的账期'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'startTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
-    title: '预计截至账期',
+    title: (
+      <span>
+        预计截至账期
+        <Tooltip placement='top' title='合同到期截至服务的账期'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'EndTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
