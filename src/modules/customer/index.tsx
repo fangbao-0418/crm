@@ -43,6 +43,10 @@ interface ParamsProps {
   payTaxesNature?: string
   [field: string]: any
 }
+const all = [{
+  label: '全部',
+  value: ''
+}]
 const data: ConditionOptionProps[] = [
   {
     field: 'date',
@@ -79,6 +83,20 @@ const data: ConditionOptionProps[] = [
         value: ''
       }
     ]
+  },
+  {
+    label: ['纳税类别'],
+    value: '',
+    field: 'payTaxesNature',
+    type: 'select',
+    options: all.concat(APP.keys.EnumPayTaxesNature)
+  },
+  {
+    label: ['客户来源'],
+    value: '',
+    field: 'customerSource',
+    type: 'select',
+    options: all.concat(APP.keys.EnumCustomerSource)
   }
 ]
 class Main extends React.Component<null, States> {
@@ -175,38 +193,40 @@ class Main extends React.Component<null, States> {
   }
   public handleSearch (values: any) {
     console.log(values, 'values')
-    if (values.date.lable === '入库时间') {
+    if (values.date.label === '入库时间') {
       let storageBeginDate
       let storageEndDate
       if (values.date.value === 'all') {
-        storageBeginDate = ''
-        storageEndDate = ''
+        storageBeginDate = undefined
+        storageEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
         storageBeginDate = values.date.split('至')[0]
         storageEndDate = values.date.split('至')[1]
       } else {
-        storageBeginDate = moment().format('YYYY-MM-DD')
-        storageEndDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+        storageBeginDate = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
+        storageEndDate = moment().format('YYYY-MM-DD')
       }
       this.params.storageBeginDate = storageBeginDate
       this.params.storageEndDate = storageEndDate
-    } else if (values.date.lable === '创建时间') {
+    } else if (values.date.label === '创建时间') {
       let createBeginDate
       let createEndDate
       if (values.date.value === 'all') {
-        createBeginDate = ''
-        createEndDate = ''
+        createBeginDate = undefined
+        createEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
         createBeginDate = values.date.split('至')[0]
         createEndDate = values.date.split('至')[1]
       } else {
-        createBeginDate = moment().format('YYYY-MM-DD')
-        createEndDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+        createBeginDate = moment().startOf('day').subtract(values.date - 1, 'day').format('YYYY-MM-DD')
+        createEndDate = moment().format('YYYY-MM-DD')
       }
       this.params.createBeginDate = createBeginDate
       this.params.createEndDate = createEndDate
     }
-    this.params.cityCode = values.cityCode.value
+    this.params.cityCode = values.cityCode.value || undefined
+    this.params.payTaxesNature = values.payTaxesNature.value || undefined
+    this.params.customerSource = values.customerSource.value || undefined
     this.fetchList()
   }
   public handleSearchType (value: {value?: string, key: string}) {
@@ -460,9 +480,9 @@ class Main extends React.Component<null, States> {
               options={[
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'payTaxesNature', label: '纳税类别'}
+                { value: 'contactPhone', label: '联系电话'}
+                // { value: 'customerSource', label: '客户来源'},
+                // { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
