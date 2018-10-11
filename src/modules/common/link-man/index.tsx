@@ -1,14 +1,17 @@
 import React from 'react'
-import { Table, Input } from 'antd'
+import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
 type LinkManProps = Customer.LinkManProps
-interface Props {
+interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
+  disabled?: boolean
 }
 interface States {
   dataSource: LinkManProps[]
 }
+const FormItem = Form.Item
 const styles = require('./style')
 class Main extends React.Component<Props> {
   public dataSource = [{
@@ -23,14 +26,56 @@ class Main extends React.Component<Props> {
       title: '联系人',
       dataIndex: 'contactPerson',
       render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'contactPerson')} value={text}/>
+        const { getFieldDecorator } = this.props.form
+        return (
+          <FormItem>
+            {getFieldDecorator(`contactPerson-${index}`, {
+              valuePropName: text,
+              rules: [
+                {
+                  required: true,
+                  message: '联系人不能为空'
+                }
+              ]
+            })(
+              this.props.disabled ?
+                <span>text</span>
+              :
+                <Input
+                  onChange={this.onChange.bind(this, index, 'contactPerson')}
+                  value={text}
+                />
+            )}
+          </FormItem>
+        )
       }
     },
     {
       title: '联系电话',
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
-        return <Input onChange={this.onChange.bind(this, index, 'contactPhone')} value={text}/>
+        const { getFieldDecorator } = this.props.form
+        return (
+          <FormItem>
+            {getFieldDecorator(`contactPhone-${index}`, {
+              valuePropName: text,
+              rules: [
+                {
+                  required: true,
+                  message: '电话不能为空'
+                }
+              ]
+            })(
+              this.props.disabled ?
+                <span>{text}</span>
+              :
+                <Input
+                  onChange={this.onChange.bind(this, index, 'contactPhone')}
+                  value={text}
+                />
+            )}
+          </FormItem>
+        )
       }
     },
     // {
@@ -61,6 +106,7 @@ class Main extends React.Component<Props> {
       render: (text, record, index) => {
         return (
           <span
+            hidden={this.props.disabled}
             onClick={() => {
               const data = this.props.linkMan
               data.splice(index, 1)
@@ -93,13 +139,15 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props.linkMan)
     return (
-      <div style={{width: '100%'}}>
-        <Table
-          dataSource={this.props.linkMan}
-          columns={this.columns}
-          pagination={false}
-          bordered
-        />
+      <div className={styles.container} style={{width: '100%'}}>
+        <Form>
+          <Table
+            dataSource={this.props.linkMan}
+            columns={this.columns}
+            pagination={false}
+            bordered
+          />
+        </Form>
       </div>
     )
   }
@@ -108,4 +156,4 @@ export default connect((state: Reducer.State) => {
   return {
     ...state.customer
   }
-})(Main)
+})(Form.create()(Main))

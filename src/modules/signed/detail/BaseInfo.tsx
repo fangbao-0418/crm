@@ -2,15 +2,18 @@ import React from 'react'
 import { Form, Row, Col, Input, Select } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Uploader from './Uploader'
-const styles = require('../style')
+import { connect } from 'react-redux'
 const Option = Select.Option
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
-  editable?: boolean
+  disabled?: boolean
+  detail: Customer.DetailProps
 }
 class Main extends React.Component<Props> {
   public render () {
-    const editabled = this.props.editable
+    const { getFieldDecorator } = this.props.form
+    const disabled = this.props.disabled
+    const detail = this.props.detail
     return (
       <Form>
         <Row>
@@ -21,14 +24,14 @@ class Main extends React.Component<Props> {
               wrapperCol={{span: 16}}
               label='区域'
             >
-              {editabled ? (
+              {!disabled ? (
                 <Select
                   style={{width:'100px'}}
                 >
                   <Option key='1'>朝阳区</Option>
                   <Option key='2'>丰台区</Option>
                 </Select>
-              ) : <span>xxx</span>}
+              ) : <span>{detail.areaName}</span>}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -37,24 +40,43 @@ class Main extends React.Component<Props> {
               wrapperCol={{span: 14}}
               label='纳税人类别'
             >
-              {editabled ? (
+              {!disabled ? getFieldDecorator(
+                'payTaxesNature',
+                {
+                  initialValue: detail.payTaxesNature
+                }
+              )(
                 <Select
-                  style={{width:'100px'}}
+                  style={{width: '100px'}}
                 >
-                  <Option key='1'>小规模</Option>
-                  <Option key='2'>一般纳税人</Option>
+                  {
+                    APP.keys.EnumPayTaxesNature.map((item) => {
+                      return (
+                        <Option key={item.value}>{item.label}</Option>
+                      )
+                    })
+                  }
                 </Select>
-              ) : <span>xxx</span>}
+              ) : (
+                <span>{APP.dictionary[`EnumPayTaxesNature-${detail.payTaxesNature}`]}</span>
+              )}
             </FormItem>
           </Col>
           <Col span={9}>
-            <FormItem
-              labelCol={{span: 8}}
-              wrapperCol={{span: 16}}
-              label='法人身份证号'
-            >
+          <FormItem
+            labelCol={{span: 8}}
+            wrapperCol={{span: 16}}
+            label='法人身份证号'
+          >
+            {!disabled ? getFieldDecorator(
+              'legalPersonCard',
+              {
+                initialValue: detail.legalPersonCard
+              }
+            )(
               <Input />
-            </FormItem>
+            ) : <span>{detail.legalPersonCard}</span>}
+          </FormItem>
           </Col>
         </Row>
         <Row >
@@ -83,4 +105,18 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Form.create()(Main)
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Form.create({
+  onValuesChange: (props: Customer.Props, changeValue, allValues) => {
+    console.log('change')
+    const detail = Object.assign({}, props.detail, allValues)
+    console.log(allValues)
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        detail
+      }
+    })
+  }
+})(Main))

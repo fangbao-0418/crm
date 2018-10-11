@@ -9,11 +9,30 @@ declare namespace Customer {
   }
   export type ActionPayload = Props
   export interface DetailProps {
-    customerName?: string
+    /** 客户id */
+    id?: string
+    /** 客户id */
     customerId?: string
+    customerName?: string
     type?: string
     legalPerson?: string
+    /** 法人身份证 */
+    legalPersonCard?: string
     payTaxesNature?: string
+    /** 社会统一信用代码 */
+    unifiedCreditCode?: string
+    /** 企业注册号 */
+    companyRegisterCode?: string
+    /** 注册资金 */
+    registeredCapital?: string
+    /** 营业期限起始 */
+    businessHoursBegin?: string
+    /** 营业期限结束 */
+    businessHoursEnd?: string
+    /** 是否有固定营业期限 */
+    isFixedPeriod?: 0 | 1
+    /** 经营范围 */
+    businessScope?: string
     address?: string
     vacantDays?: string
     cityName?: string
@@ -28,10 +47,13 @@ declare namespace Customer {
     areaName?: string
     isConfirmed?: string
     contactPersons?: LinkManProps[]
+    /** 销售 */
     currentSalesperson?: string
     agencyId?: string
     tagIntention?: string
     createTime?: string
+    trackRecord?: TrackRecord
+    tagTelephoneStatus?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string
@@ -56,14 +78,15 @@ declare namespace Customer {
   export interface TrackRecord {
     customerId?: string
     salesperson?: string
-    tagIntention?: string
-    tagCustomerStatus?: string
-    tagFollowupStatus?: string
-    tagTelephoneStatus?: string
+    tagIntention?: number
+    tagCustomerStatus?: number
+    tagFollowupStatus?: number
+    tagTelephoneStatus?: number
     remark?: string
-    appointTime?: string
     createTime?: string
     trackRecordType?: string
+    /** 预约时间 */
+    appointTime?: string
   }
   export interface Props {
     linkMan?: LinkManProps[]
@@ -72,5 +95,6 @@ declare namespace Customer {
     autoAssign?: AutoAssignProps[]
     capacity?: CapacityProps[],
     assignResult?: AssignResultProps
+    spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
   }
 }

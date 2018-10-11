@@ -1,17 +1,18 @@
 import React from 'react'
-import { Form, Row, Col, Input, Select, Button, Checkbox, DatePicker } from 'antd'
+import { Form, Row, Col, Input, Button, Checkbox, DatePicker } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-const styles = require('../style')
-const { TextArea } = Input
-const Option = Select.Option
+import { connect } from 'react-redux'
+import moment from 'moment'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
-  editable?: boolean
+  disabled?: boolean
+  detail: Customer.DetailProps
 }
 class Main extends React.Component<Props> {
   public render () {
     const { getFieldDecorator } = this.props.form
-    const editable = this.props.editable
+    const disabled = this.props.disabled
+    const detail = this.props.detail
     return (
       <div style={{width: '790px', marginLeft: '10px'}}>
         <Form
@@ -23,19 +24,26 @@ class Main extends React.Component<Props> {
                 style={{marginLeft: '-4px'}}
                 labelCol={{span: 3}}
                 wrapperCol={{span: 21}}
-                label='信息来源'
+                label='公司名称'
               >
-                {editable ? getFieldDecorator('a')(
+                {!disabled ? getFieldDecorator(
+                  'customerName',
+                  {
+                    initialValue: detail.customerName
+                  }
+                )(
                   <div>
                     <Input.Search
                       style={{width: '322px'}}
                       enterButton='查询'
                       onSearch={(value) => console.log(value)}
+                      value={detail.customerName}
                     />
                     <Button className='ml5 mr5' type='primary'>网址</Button>
                     <Button type='primary'>特殊公司</Button>
                   </div>
-                ) : 'xxx'}
+                ) : <span>{detail.customerName}</span>
+                }
               </FormItem>
             </Col>
             <Col span={6}>
@@ -44,23 +52,33 @@ class Main extends React.Component<Props> {
                 wrapperCol={{span: 16}}
                 label='法人姓名'
               >
-                {editable ? getFieldDecorator('b')(
+                {!disabled ? getFieldDecorator(
+                  'legalPerson',
+                  {
+                    initialValue: detail.legalPerson
+                  }
+                )(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.legalPerson}</span>}
               </FormItem>
             </Col>
           </Row>
           <Row >
             <Col span={10}>
               <FormItem
-                style={{marginLeft: '-22px'}}
+                style={{marginLeft: '-18px'}}
                 labelCol={{span: 10}}
                 wrapperCol={{span: 14}}
                 label='统一社会信用代码'
               >
-                {editable ? getFieldDecorator('c')(
+                {!disabled ? getFieldDecorator(
+                  'unifiedCreditCode',
+                  {
+                    initialValue: detail.unifiedCreditCode
+                  }
+                )(
                   <Input />
-                ) : <span>xxx</span>}
+                ) : <span>{detail.unifiedCreditCode}</span>}
               </FormItem>
             </Col>
             <Col span={8}>
@@ -70,9 +88,14 @@ class Main extends React.Component<Props> {
                 wrapperCol={{span: 14}}
                 label='注册号'
               >
-                {editable ? getFieldDecorator('d')(
+                {!disabled ? getFieldDecorator(
+                  'companyRegisterCode',
+                  {
+                    initialValue: detail.companyRegisterCode
+                  }
+                )(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
             </Col>
             <Col span={6}>
@@ -81,44 +104,106 @@ class Main extends React.Component<Props> {
                 wrapperCol={{span: 16}}
                 label='注册资金'
               >
-                {editable ? getFieldDecorator('e')(
+                {!disabled ? getFieldDecorator(
+                  'registeredCapital',
+                  {
+                    initialValue: detail.registeredCapital
+                  }
+                )(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.registeredCapital}</span>}
               </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              {!disabled ? (
+                <div>
+                  <FormItem
+                    className='inline-block'
+                    labelCol={{span: 7}}
+                    wrapperCol={{span: 17}}
+                    label='营业期限'
+                  >
+                    {getFieldDecorator(
+                      'businessHoursBegin',
+                      {
+                        initialValue: moment(detail.businessHoursBegin)
+                      }
+                    )(
+                      <DatePicker />
+                    )}
+                  </FormItem>
+                  <span
+                    style={{
+                      lineHeight: '40px',
+                      margin: '0 10px'
+                    }}
+                  >
+                    -
+                  </span>
+                  <FormItem
+                    className='inline-block'
+                  >
+                    {getFieldDecorator(
+                      'businessHoursEnd',
+                      {
+                        initialValue: moment(detail.businessHoursEnd)
+                      }
+                    )(
+                      <DatePicker
+                        disabled={detail.isFixedPeriod === 1}
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem
+                    className='inline-block ml5'
+                  >
+                    {!disabled && getFieldDecorator(
+                      'isFixedPeriod'
+                    )(
+                      <Checkbox checked={detail.isFixedPeriod === 1}>无期限</Checkbox>
+                    )}
+                  </FormItem>
+                </div>
+              ) : (
+                <FormItem
+                  className='inline-block'
+                  style={{width: '100%'}}
+                  labelCol={{span: 2}}
+                  wrapperCol={{span: 22}}
+                  label='营业期限'
+                >
+                  <span>
+                    {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
+                      -
+                    {detail.isFixedPeriod === 1 ?
+                      '无期限'
+                    :
+                      moment(detail.businessHoursEnd).format('YYYY年MM月DD日')
+                    }
+                  </span>
+                </FormItem>
+              )}
             </Col>
           </Row>
           <Row>
             <Col span={12}>
               <FormItem
-                className='inline-block'
-                style={{width: '270px'}}
-                labelCol={{span: 6}}
-                wrapperCol={{span: 18}}
-                label='营业期限'
-              >
-                {editable ? getFieldDecorator('f')(
-                  <DatePicker />
-                ) : 'xxx'}
-              </FormItem>
-              <FormItem
-                className='inline-block ml5'
-              >
-                {editable && getFieldDecorator('g')(
-                  <Checkbox>无期限</Checkbox>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
                 style={{width: '100%'}}
                 // className='inline-block'
-                labelCol={{span: 8}}
-                wrapperCol={{span: 16}}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 20}}
                 label='公司地址'
               >
-                {editable ? getFieldDecorator('h')(
+                {!disabled ? getFieldDecorator(
+                  'address',
+                  {
+                    initialValue: detail.address
+                  }
+                )(
                   <Input />
-                ) : 'xxx'}
+                ) : <span>{detail.address}</span>}
               </FormItem>
             </Col>
           </Row>
@@ -130,9 +215,14 @@ class Main extends React.Component<Props> {
                 style={{width: '100%'}}
                 label='经营范围'
               >
-                {editable ? getFieldDecorator('i')(
+                {!disabled ? getFieldDecorator(
+                  'businessScope',
+                  {
+                    initialValue: detail.businessScope
+                  }
+                )(
                   <Input.TextArea />
-                ) : 'xxx'}
+                ) : <span>{detail.businessScope}</span>}
               </FormItem>
             </Col>
           </Row>
@@ -141,4 +231,17 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Form.create()(Main)
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Form.create({
+  onValuesChange: (props: Customer.Props, changeValue, allValues) => {
+    const detail = Object.assign({}, props.detail, allValues)
+    detail.isFixedPeriod = detail.isFixedPeriod ? 1 : 0
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        detail
+      }
+    })
+  }
+})(Main))

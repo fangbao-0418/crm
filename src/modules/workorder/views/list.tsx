@@ -130,7 +130,6 @@ class Main extends React.Component<any, any> {
         onChange={this.pageChange}
         columns={this.columns}
         dataSource={this.state.dataSource}
-        pagination={this.state.pageConf}
       />
       </ContentBox>
     </div>
@@ -140,6 +139,7 @@ class Main extends React.Component<any, any> {
   public onChange (formData: any) {
     console.log(formData)
     this.setState({
+      pageCurrent: 1, // 表单改变时,当前分页为1
       searchStr: formData.text,  // 搜索条件
       chooseSever: formData.currency === '全部服务内容' ? '' : formData.currency, // 选择的服务内容
       chooseState: formData.orderState === '全部状态' ? '' : formData.orderState, // 选择的状态

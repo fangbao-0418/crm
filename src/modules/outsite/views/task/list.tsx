@@ -158,8 +158,8 @@ class Main extends React.Component {
       )
     }
   }, {
-    title: '接受任务时间',
-    dataIndex: 'status',
+    title: '第一个子任务点击开始时间',
+    dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
         <span>{item.startTime}</span>

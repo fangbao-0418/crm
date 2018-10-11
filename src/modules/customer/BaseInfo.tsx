@@ -1,6 +1,5 @@
 import React from 'react'
 import { Row, Col, Icon, Button, Select, Form } from 'antd'
-import DropDown from 'pilipa/libs/dropdown'
 import AutoComplete from 'pilipa/libs/auto-complete'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import Input from '@/components/input'
@@ -20,10 +19,10 @@ const Option = Select.Option
 const FormItem = Form.Item
 interface Props extends Customer.Props, FormComponentProps {
   customerId?: string
-  isBussiness?: boolean
   onClose?: () => void
   flowNow?: () => void
   reset?: boolean
+  type?: 'business' | 'open' | 'customer'
 }
 interface State {
   cityName: string
@@ -79,11 +78,16 @@ class Main extends React.Component<Props> {
           </b>
         </div>
       ),
+      content: <Provider><LinkMain /></Provider>,
       onOk: () => {
         console.log(this.props.linkMan, 'linkMan')
+        const contactPersons = this.props.detail.contactPersons
+        this.props.form.setFieldsValue({
+          'linkMan[0].contactPerson': contactPersons[0].contactPerson,
+          'linkMan[0].contactPhone': contactPersons[0].contactPhone
+        })
         modal.hide()
-      },
-      content: <Provider><LinkMain /></Provider>
+      }
     })
     modal.show()
   }
@@ -139,7 +143,7 @@ class Main extends React.Component<Props> {
     if (res) {
       return res.label
     } else {
-      return arr.length > 0 ? arr[0].label : ''
+      return ''
     }
   }
   public save () {
@@ -154,6 +158,8 @@ class Main extends React.Component<Props> {
         params.cityName = this.state.cityName
         params.areaName = this.state.areaName
         params.contactPersons = this.props.linkMan
+        // delete params.tagIntention
+        // delete params.tagTelephoneStatus
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -161,9 +167,9 @@ class Main extends React.Component<Props> {
             reject()
           })
         } else {
-          if (this.props.isBussiness) { // 商机新增接口
-            addBusinessCustomer(params).then(() => {
-              resolve()
+          if (this.props.type === 'business') { // 商机新增接口
+            addBusinessCustomer(params).then((res) => {
+              resolve(res)
             }, () => {
               reject()
             })
@@ -179,7 +185,6 @@ class Main extends React.Component<Props> {
     })
   }
   public handleCityChange (value: {key: string, title: string}) {
-    console.log(value)
     if (value.key === undefined) {
       return
     }
@@ -201,7 +206,6 @@ class Main extends React.Component<Props> {
     })
   }
   public handleAreaChange (value: {key: string, title: string}) {
-    console.log(value)
     if (value.key === undefined) {
       return
     }
@@ -215,7 +219,8 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { getFieldDecorator } = this.props.form
-    console.log(this.props.detail, 'render')
+    const disabled = this.props.type === 'open'
+    const detail = this.props.detail
     return (
       <Form className={styles['base-info']}>
         <Row gutter={8}>
@@ -240,6 +245,7 @@ class Main extends React.Component<Props> {
                   field='customerName'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.detail.customerName}
+                  disabled={disabled}
                 />
               )}
             </FormItem>
@@ -256,11 +262,9 @@ class Main extends React.Component<Props> {
                 >
                   <Select
                     style={{width: '100%'}}
+                    disabled={disabled}
                     value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
                     onChange={(value) => {
-                      this.props.form.validateFields(() => {
-                        console.log('validataor')
-                      })
                       this.handleChange(null, {
                         key: 'customerSource',
                         value
@@ -292,6 +296,7 @@ class Main extends React.Component<Props> {
                 'linkMan[0].contactPerson',
                 {
                   valuePropName: this.props.linkMan[0].contactPerson,
+                  initialValue: this.props.linkMan[0].contactPerson,
                   rules: [
                     {
                       required: true,
@@ -304,6 +309,7 @@ class Main extends React.Component<Props> {
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
+                  disabled={disabled}
                   addonAfter={
                     (
                       <Icon
@@ -326,6 +332,7 @@ class Main extends React.Component<Props> {
                 'linkMan[0].contactPhone',
                 {
                   valuePropName: this.props.linkMan[0].contactPhone,
+                  initialValue: this.props.linkMan[0].contactPhone,
                   rules: [
                     {
                       required: true,
@@ -337,6 +344,7 @@ class Main extends React.Component<Props> {
                 <Input
                   required
                   label='主联系电话'
+                  disabled={disabled}
                   field='contactPersons[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.linkMan[0].contactPhone}
@@ -352,6 +360,7 @@ class Main extends React.Component<Props> {
               label='法人'
               onChange={this.handleChange.bind(this)}
               value={this.props.detail.legalPerson}
+              disabled={disabled}
             />
           </Col>
           <Col span={12}>
@@ -360,7 +369,8 @@ class Main extends React.Component<Props> {
             >
               <Select
                 style={{width: '100%'}}
-                // defaultValue={}
+                disabled={disabled}
+                value={detail.payTaxesNature}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',
@@ -385,7 +395,7 @@ class Main extends React.Component<Props> {
         </Row>
         <Row gutter={8} className='mt10'>
           {
-            !this.props.isBussiness &&
+            this.props.type === 'customer' &&
             <Col span={12}>
               <FormItemLayout
                 label='城市'
@@ -406,22 +416,23 @@ class Main extends React.Component<Props> {
             </Col>
           }
           <Col span={12}>
-              <FormItemLayout
-                label='地区'
-              >
-                <AutoComplete
-                  className={styles['auto-complete']}
-                  defaultValue={{
-                    name: this.state.areaName
-                  }}
-                  data={this.state.areaList}
-                  onChange={this.handleAreaChange.bind(this)}
-                  setFields={{
-                    title: 'name',
-                    key: 'code'
-                  }}
-                />
-              </FormItemLayout>
+            <FormItemLayout
+              label='地区'
+            >
+              <AutoComplete
+                className={styles['auto-complete']}
+                disabled={disabled}
+                defaultValue={{
+                  name: this.state.areaName
+                }}
+                data={this.state.areaList}
+                onChange={this.handleAreaChange.bind(this)}
+                setFields={{
+                  title: 'name',
+                  key: 'code'
+                }}
+              />
+            </FormItemLayout>
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
@@ -431,6 +442,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
               value={this.props.detail.address}
+              disabled={disabled}
             />
           </Col>
         </Row>
@@ -441,6 +453,7 @@ class Main extends React.Component<Props> {
               onChange={this.handleChange.bind(this)}
               label={'备注'}
               value={this.props.detail.remark}
+              disabled={disabled}
             />
           </Col>
         </Row>

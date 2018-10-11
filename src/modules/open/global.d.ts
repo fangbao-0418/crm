@@ -8,6 +8,7 @@ declare namespace Open {
     freeDays?: string
     customerSource?: string
     createBeginDate?: string
+    releaseNums?: string
     lastReleaseSalesperson?: string
     lastReleaseTime?: string
     id?: string
@@ -30,5 +31,6 @@ declare namespace Open {
     payTaxesNature?: string
     lastTrackTimeEnd?: string
     lastTrackTimeBegin?: string
+    [field: string]: any
   }
 }

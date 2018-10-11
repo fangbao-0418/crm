@@ -12,6 +12,7 @@ declare namespace Business {
     leadingPerson?: string
     appointmentTime?: string
     id?: string
+    redPoint?: number
     current_salesperson?: string
   }
   export interface SearchProps {

@@ -7,7 +7,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom'
-import Menu from '@/modules/common/menu'
+import Left from '@/modules/common/left'
 import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
@@ -19,7 +19,7 @@ export default class extends React.Component {
   public render () {
     return (
       <Layout className={styles.container}>
-        <Menu />
+        <Left />
         <Layout>
           <Top />
           <Content className={styles.content}>
@@ -55,9 +55,9 @@ export default class extends React.Component {
               <Route path='/outsite/task/show/:id' component={modules.TaskShow}/>
               <Route path='/outsite/task/form' component={modules.TaskForm}/>
               <Route path='/outsite/tasktpl/list' component={modules.TasktplList}/>
-              <Route path='/outsite/tasktpl/form/:id' component={modules.TasktplForm}/>
+              <Route path='/outsite/tasktpl/form/:id?' component={modules.TasktplForm}/>
               <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
-              <Route path='/outsite/tasktpl/subform/:id' component={modules.TasktplSubForm}/>
+              <Route path='/outsite/tasktpl/subform/:id?' component={modules.TasktplSubform}/>
               <Route path='/outsite/perform/list' component={modules.PerformList}/>
               <Route path='/outsite/data-overview' component={modules.TaskDataOverview}/>
               <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>

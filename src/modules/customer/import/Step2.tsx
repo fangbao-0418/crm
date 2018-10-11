@@ -4,6 +4,14 @@ import { importFile } from '../api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
+  paramsValue: {
+    step1?: {
+      agencyId?: string
+      customerSource?: string,
+      salesPerson?: Array<{id: string, name: string}>,
+      city?: {cityCode: string, cityName: string}
+    }
+  }
   onOk?: (value?: any) => void
 }
 class Main extends React.Component<Props> {
@@ -38,13 +46,28 @@ class Main extends React.Component<Props> {
       // },
       onChange: (info: any) => {
         console.log(info)
+        console.log(this.props.paramsValue, 'paramsValue')
+        const ids: string[] = []
+        const salesNames: string[] = []
+        this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
+          ids.push(item.id)
+          salesNames.push(item.name)
+        })
+        const paramsFile = {
+          customerSource: this.props.paramsValue.step1.customerSource,
+          ids: ids.join(','),
+          salesNames: salesNames.join(','),
+          cityCode: this.props.paramsValue.step1.city.cityCode,
+          cityName: this.props.paramsValue.step1.city.cityName
+        }
+        console.log(paramsFile, 'paramsFile')
         return importFile(info.file, {
           cityCode: '110000',
           cityName: '北京',
           customerSource: 1
-        }).then(() => {
+        }).then((res) => {
           if (this.props.onOk) {
-            this.props.onOk(info)
+            this.props.onOk(res)
           }
         })
         console.log(info)

@@ -1,6 +1,7 @@
 import React from 'react'
+import { Layout, Menu } from 'antd'
+import { withRouter, RouteComponentProps } from 'react-router'
 import MenuIcon from './Icon'
-import { Layout, Menu, Icon } from 'antd'
 const SubMenu = Menu.SubMenu
 
 const { Sider } = Layout
@@ -10,11 +11,20 @@ interface MenuItem {
   icon?: JSX.Element
   children?: Array<MenuItem>
 }
-const styles = require('@/stylus/main')
-class Main extends React.Component {
-  public state = {
-    collapsed: false
+const styles = require('./style')
+type Props = RouteComponentProps
+interface State {
+  collapsed: boolean
+  selectedKeys: string[]
+  openKeys: string[]
+}
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    collapsed: false,
+    selectedKeys: [],
+    openKeys: []
   }
+  public pathInfo: {[key: string]: string} = {}
   public configs: MenuItem[] = [
     {
       title: '商机管理',
@@ -172,11 +182,11 @@ class Main extends React.Component {
       children: [
         {
           title: '其他任务配置',
-          path: '/outsite/tasktpl/list'
+          path: '/outsite/tasktpl/sublist'
         },
         {
           title: '通办任务配置',
-          path: '/outsite/tasktpl/sublist'
+          path: '/outsite/tasktpl/list'
         }
       ]
     },
@@ -207,17 +217,36 @@ class Main extends React.Component {
       ]
     }
   ]
-  public getMenuNodes (configs = this.configs, key = '') {
+  public componentDidMount () {
+    const pathname = this.props.location.pathname
+    let selectedKey = ''
+    for (const key in this.pathInfo) {
+      if (this.pathInfo[key] === pathname) {
+        selectedKey = key
+      }
+    }
+    this.setState({
+      openKeys: [selectedKey.substr(0, selectedKey.length - 2)],
+      selectedKeys: [selectedKey]
+    })
+  }
+  public getMenuNodes (configs = this.configs, prefKey = 'm') {
     const nodes: JSX.Element[] = []
     configs.forEach((item, index) => {
-      key = [key, index].join('-')
+      const key = [prefKey, index].join('-')
       const path = item.path
+      this.pathInfo[key] = path
       let Item
       if (item.children) {
         Item = (
           <SubMenu
             key={key}
             title={<span>{item.icon}<span>{item.title}</span></span>}
+            onTitleClick={() => {
+              this.setState({
+                openKeys: [key]
+              })
+            }}
           >
             {this.getMenuNodes(item.children, key)}
           </SubMenu>
@@ -226,8 +255,13 @@ class Main extends React.Component {
         Item = (
           <Menu.Item
             key={key}
-            onClick={() => {
+            onClick={(menuitem: {key: string}) => {
+              console.log(menuitem)
               if (path) {
+                this.setState({
+                  openKeys: [prefKey],
+                  selectedKeys: [menuitem.key]
+                })
                 APP.history.push(path)
               }
             }}
@@ -247,21 +281,25 @@ class Main extends React.Component {
   public render () {
     return (
       <Sider
-        className={styles.menu}
+        className={styles.container}
         trigger={null}
         collapsible
         collapsed={this.state.collapsed}
       >
         <div className={styles.logo} />
-        <Menu
-          theme='dark'
-          mode='inline'
-          defaultSelectedKeys={['1']}
-        >
-          {this.getMenuNodes()}
-        </Menu>
+        <div className={styles.menu}>
+          <Menu
+            theme='dark'
+            mode='inline'
+            selectedKeys={this.state.selectedKeys}
+            openKeys={this.state.openKeys}
+            // defaultSelectedKeys={['m-0-0']}
+          >
+            {this.getMenuNodes()}
+          </Menu>
+        </div>
       </Sider>
     )
   }
 }
-export default Main
+export default withRouter(Main)

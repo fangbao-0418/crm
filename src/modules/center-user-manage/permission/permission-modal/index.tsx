@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input, Modal, Checkbox, Tag } from 'antd'
+import { FormComponentProps } from 'antd/lib/form'
 
 const styles = require('./style')
 const FormItem = Form.Item
@@ -7,19 +8,20 @@ const CheckboxGroup = Checkbox.Group
 
 interface State {
   title: string // 弹窗标题
-  nameCheck: 'empty' | 'same' | 'normal' // 验证权限名字  权限为空 | 权限重复 | 正常
-  codeCheck: 'empty' | 'same' | 'normal' // 验证code  code为空 | code重复 | 正常
   nameVal: string // 权限名称
   codeVal: string // code值
   optionVal: string[] // 权限选中项
+}
+
+interface Props extends FormComponentProps {
+  onOk?: (val: any) => void // 确认回调
+  onCancel?: () => void // 取消回调
 }
 
 class Main extends React.Component<any, State> {
 
   public state: State = {
     title: '',
-    nameCheck: 'normal',
-    codeCheck: 'normal',
     nameVal: '',
     codeVal: '',
     optionVal: []
@@ -40,37 +42,34 @@ class Main extends React.Component<any, State> {
 
   // 点击确认
   public onOk = () => {
-    const {nameVal, codeVal, optionVal} = this.state
-    if (nameVal === '') {
-      this.setState({nameCheck: 'empty'})
-      return
-    } else {
-      this.setState({nameCheck: 'normal'})
-    }
-    if (codeVal === '') {
-      this.setState({codeCheck: 'empty'})
-      return
-    } else {
-      this.setState({codeCheck: 'normal'})
-    }
-    this.props.onOk({nameVal, codeVal, optionVal})
-  }
-
-  // 设置错误信息
-  public getErrorInfo: any = (verification: 'empty' | 'same' | 'normal', name: '权限名称' | 'code') => {
-    let errorInfo
-    if (verification === 'empty') {
-      errorInfo = {help: `${name}不能为空`, validateStatus: 'error'}
-    } else if (verification === 'same') {
-      errorInfo = {help: `${name}重复`, validateStatus: 'error'}
-    } else if (verification === 'normal') {
-      errorInfo = {help: ''}
-    }
-    return errorInfo
+    this.props.onOk()
   }
 
   public render () {
-    const {mode} = this.props
+    const {mode, form:{getFieldDecorator}} = this.props
+    // 过滤规则
+    const validation = {
+      name: {
+        // initialValue: info.name,
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入权限名称！'}
+        ]
+      },
+      url: {
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入URL！'}
+        ]
+      },
+      code: {
+        validateTrigger: 'onBlur',
+        rules:[
+          {required: true, message: '请输入code！'}
+        ]
+      },
+      button: {}
+    }
     return (
       <Modal
         className={styles.wrap}
@@ -84,36 +83,41 @@ class Main extends React.Component<any, State> {
 
           <FormItem
             className={styles.option}
-            required
             label='页面权限名称'
             labelCol={{span: 4}}
             wrapperCol={{span: 10}}
-            {...this.getErrorInfo(this.state.nameCheck, '权限名称')}
           >
-            <Input
-              size='small'
-              placeholder='请输入权限名称'
-              onChange={(e) => {
-                this.setState({nameVal: e.target.value})
-              }}
-            />
+            {
+              getFieldDecorator('name', validation.name)(
+                <Input size='small' placeholder='请输入权限名称'/>
+              )
+            }
           </FormItem>
 
           <FormItem
             className={styles.option}
-            required
+            label='URL'
+            labelCol={{span: 4}}
+            wrapperCol={{span: 10}}
+          >
+            {
+              getFieldDecorator('url', validation.url)(
+                <Input size='small' placeholder='请输入URL'/>
+              )
+            }
+          </FormItem>
+
+          <FormItem
+            className={styles.option}
             label='页面权限code'
             labelCol={{span: 4}}
             wrapperCol={{span: 10}}
-            {...this.getErrorInfo(this.state.codeCheck, 'code')}
           >
-            <Input
-              size='small'
-              placeholder='请输入code'
-              onChange={(e) => {
-                this.setState({codeVal: e.target.value})
-              }}
-            />
+            {
+              getFieldDecorator('code', validation.code)(
+                <Input size='small' placeholder='请输入code'/>
+              )
+            }
           </FormItem>
 
           <FormItem
@@ -122,12 +126,11 @@ class Main extends React.Component<any, State> {
             labelCol={{span: 4}}
             wrapperCol={{span: 20}}
           >
-            <CheckboxGroup
-              options={[{label: 'a', value: 'a'}, {label: 'b', value: 'b'}]}
-              onChange={(val: string[]) => {
-                this.setState({optionVal: val})
-              }}
-            />
+            {
+              getFieldDecorator('button', validation.button)(
+                <CheckboxGroup options={[{label: 'a', value: 'a'}, {label: 'b', value: 'b'}]}/>
+              )
+            }
           </FormItem>
 
         </Form>
@@ -136,4 +139,4 @@ class Main extends React.Component<any, State> {
   }
 }
 
-export default Main
+export default Form.create()(Main)

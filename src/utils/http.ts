@@ -27,7 +27,7 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
 const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: AjaxConfigProps = {}) => {
-  url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
+  // url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
   let data: any
   if (config instanceof Array) {
     data = config
@@ -56,6 +56,9 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
     contentType: config.contentType !== undefined ? config.contentType : 'application/json; charset=utf-8',
     data,
     timeout: 10000
+    // xhrFields: {
+    //   withCredentials: true
+    // }
   }
   if (extension) {
     ajaxConfig = $.extend(true, ajaxConfig, extension)

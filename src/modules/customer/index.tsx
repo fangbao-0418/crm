@@ -1,8 +1,7 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
-import { PaginationConfig } from 'antd/lib/pagination'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import ContentBox from '@/modules/common/content'
@@ -12,7 +11,7 @@ import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
-import { fetchList, fetchCityCount } from './api'
+import { fetchList, fetchCityCount, deleteCustomer } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
@@ -42,6 +41,7 @@ interface ParamsProps {
   customerSource?: string
   /** 纳税类型 */
   payTaxesNature?: string
+  [field: string]: any
 }
 const data: ConditionOptionProps[] = [
   {
@@ -70,13 +70,13 @@ const data: ConditionOptionProps[] = [
   },
   {
     label: ['所属城市'],
-    value: '110110',
+    value: '',
     field: 'cityCode',
     type: 'select',
     options: [
       {
-        label: '北京(100)',
-        value: '110110'
+        label: '',
+        value: ''
       }
     ]
   }
@@ -95,13 +95,13 @@ class Main extends React.Component<null, States> {
     data
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
-  public params: ParamsProps = {cityCode: '110000'}
+  public params: ParamsProps = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.show.bind(this, record.customerId)}>{val}</a>
+        <span className='href' onClick={this.show.bind(this, record.customerId)}>{val}</span>
       )
     }
   }, {
@@ -111,7 +111,14 @@ class Main extends React.Component<null, States> {
     title: '联系电话',
     dataIndex: 'contactPhone'
   }, {
-    title: '空置天数',
+    title: (
+      <span>
+        空置天数
+        <Tooltip placement='top' title='客户未被跟进的天数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'vacantDays'
   }, {
     title: '城市',
@@ -123,7 +130,14 @@ class Main extends React.Component<null, States> {
     title: '创建时间',
     dataIndex: 'enterStorageTime'
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='客户进入客资池的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
@@ -195,31 +209,18 @@ class Main extends React.Component<null, States> {
     this.params.cityCode = values.cityCode.value
     this.fetchList()
   }
-  public handleSearchType (values: any) {
-    console.log(values, 'values')
-    switch (values.type) {
-    case '0':
-      this.params.customerName = values.word
-      break
-    case '1':
-      this.params.contactPerson = values.word
-      break
-    case '2':
-      this.params.contactPhone = values.word
-      break
-    case '3':
-      this.params.customerSource = values.word
-      break
-    case '4':
-      this.params.payTaxesNature = values.word
-      break
-    }
+  public handleSearchType (value: {value?: string, key: string}) {
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[value.key] = value.value
     this.fetchList()
   }
   public add () {
     let ins: any
     const modal = new Modal({
-      style: 'width: 800px',
       content: (
         <Provider>
           <BaseInfo
@@ -261,7 +262,7 @@ class Main extends React.Component<null, States> {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import onClose={() => {modal.hide()}}/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
       title: '导入',
@@ -275,10 +276,46 @@ class Main extends React.Component<null, States> {
     modal.show()
   }
   public show (customerId: string) {
+    let instance: any
     const modal = new Modal({
-      style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId}/></Provider>
+        <Provider>
+          <Detail
+            getWrappedInstance={(ins) => {
+              instance = ins
+            }}
+            customerId={customerId}
+            footer={(
+              <div className='text-right mt10'>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    instance.save().then(() => {
+                      APP.success('保存成功')
+                      this.fetchList()
+                    }, () => {
+                      APP.error('保存失败')
+                    })
+                  }}
+                >
+                  保存
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    deleteCustomer(customerId).then(() => {
+                      modal.hide()
+                      this.fetchList()
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+              </div>
+            )}
+          />
+        </Provider>
       ),
       footer: null,
       header: null,
@@ -336,7 +373,15 @@ class Main extends React.Component<null, States> {
     }
     const modal = new Modal({
       content: (
-        <Provider><Allot onClose={() => {modal.hide()}} selectedRowKeys={this.state.selectedRowKeys} params={this.params} selectAll={this.state.selectAll}/></Provider>
+        <Provider>
+          <Allot
+            onClose={() => {modal.hide()}}
+            selectedRowKeys={this.state.selectedRowKeys}
+            params={this.params}
+            selectAll={this.state.selectAll}
+            pagetotal={this.state.pagination.total}
+          />
+        </Provider>
       ),
       title: '分配客资',
       footer: null,
@@ -407,17 +452,16 @@ class Main extends React.Component<null, States> {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '联系电话'},
-                { value: '3', label: '客户来源'},
-                { value: '4', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
                 if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
                   this.handleSearchType(val)
                 }
               }}

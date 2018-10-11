@@ -1,7 +1,5 @@
 import React from 'react'
 import { DatePicker, Select, Tabs, Button } from 'antd'
-import { ColumnProps } from 'antd/lib/table'
-import { PaginationConfig } from 'antd/lib/pagination'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -9,18 +7,23 @@ import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
-import BaseInfo from '@/modules/customer/BaseInfo'
-import Import from '@/modules/customer/import'
+import Import from '@/modules/business/import'
+import { fetchRegion } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
 import Tab3 from './Tab3'
 import Tab4 from './Tab4'
-import Detail from '@/modules/customer/detail'
+import {
+  addCustomer,
+  getColumns,
+  showDetail,
+  conditionOptions
+} from './utils'
 import _ from 'lodash'
 import { appointment, toSales, toOpen, toCity, getRecycleNum, getCustomerNum, getcapacityNum } from './api'
+
 const styles = require('./style')
-type DetailProps = Business.DetailProps
 interface States {
   visible: boolean
   defaultActiveKey: string
@@ -31,11 +34,8 @@ interface States {
     newCustomerNums?: string
     ForthcomingNums?: string
   }
+  citys: Common.RegionProps[]
 }
-const all = [{
-  label: '全部',
-  value: ''
-}]
 class Main extends React.Component {
   public state: States = {
     visible: true,
@@ -45,46 +45,10 @@ class Main extends React.Component {
       allNums: '',
       trackContactNums: '',
       newCustomerNums: ''
-    }
+    },
+    citys: []
   }
-  public data: ConditionOptionProps[] = [
-    {
-      field: 'date',
-      value: '',
-      label: ['入库时间', '创建时间', '最后跟进'],
-      options: [
-        {
-          label: '全部',
-          value: ''
-        },
-        {
-          label: '今天',
-          value: '1'
-        },
-        {
-          label: '7天',
-          value: '7'
-        },
-        {
-          label: '30天',
-          value: '30'
-        }
-      ],
-      type: 'date'
-    },
-    {
-      label: ['意向度'],
-      value: '',
-      field: 'intention',
-      options: all.concat(APP.keys.EnumIntentionality)
-    },
-    {
-      field: 'telephoneStatus',
-      value: '',
-      label: ['电话状态'],
-      options: all.concat(APP.keys.EnumContactStatus)
-    }
-  ]
+  public data = conditionOptions
   public params: Business.SearchProps = {}
   public paramsleft: Business.SearchProps = {}
   public paramsright: Business.SearchProps = {}
@@ -92,47 +56,13 @@ class Main extends React.Component {
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public cityCode: string = ''
   public reason: {value: string, label: string} = { value: '', label: ''}
-  public capacityNum: string = ''
-  public columns: ColumnProps<DetailProps>[] = [{
-    title: '客户名称',
-    dataIndex: 'customerName',
-    render: (val, record) => {
-      return (
-        <a onClick={this.show.bind(this, record.id)}>{val}</a>
-      )
-    }
-  }, {
-    title: '联系人',
-    dataIndex: 'contactPerson'
-  }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
-    title: '意向度',
-    dataIndex: 'intention'
-  }, {
-    title: '电话状态',
-    dataIndex: 'telephoneStatus'
-  }, {
-    title: '空置天数',
-    dataIndex: 'freeDays'
-  }, {
-    title: '当前销售',
-    dataIndex: 'leadingPerson'
-  }, {
-    title: '客户来源',
-    dataIndex: 'source'
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime'
-  }, {
-    title: '入库时间',
-    dataIndex: 'enterDays'
-  }]
+  public capacityNum: number = 0
+  public columns = getColumns.call(this)
   public componentWillMount () {
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.fetchCapacityNum()
+    this.fetchCitys()
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
@@ -153,6 +83,13 @@ class Main extends React.Component {
           recycleNum: '(有' + res + '个客户即将被收回！)'
         })
       }
+    })
+  }
+  public fetchCitys () {
+    fetchRegion({level: 2}).then((res) => {
+      this.setState({
+        citys: res
+      })
     })
   }
   public handleSearch (values: any) {
@@ -193,32 +130,21 @@ class Main extends React.Component {
       })
     })
   }
-  public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    }
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+  public handleSearchType (values: {key: string, value?: string}) {
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.currentSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[values.key] = values.value || undefined
+    // this.fetchList()
+    // this.paramsright = {}
+    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
+    // this.params.tab = undefined
     this.setState({
       visible: false
     }, () => {
@@ -234,19 +160,7 @@ class Main extends React.Component {
     })
   }
   public show (customerId: string) {
-    const modal = new Modal({
-      style: 'width: 840px',
-      content: (
-        <Provider><Detail customerId={customerId}/></Provider>
-      ),
-      footer: null,
-      header: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+    showDetail.call(this, customerId)
   }
   public appointmentAll (selectedRowKeys: string[]) {
     if (!selectedRowKeys.length) {
@@ -276,6 +190,13 @@ class Main extends React.Component {
         console.log(params, 'params')
         const time = this.appointmentTime
         appointment(params, time).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('预约成功')
         })
         modal.hide()
@@ -320,6 +241,13 @@ class Main extends React.Component {
         }
         const saleId = this.curSale.key
         toSales(saleparams, saleId).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -350,7 +278,14 @@ class Main extends React.Component {
           customerIdArr: selectedRowKeys,
           bus_sea_memo: this.reason.label
         }
-        toOpen(openparams).then((res) => {
+        toOpen(openparams).then(() => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -376,8 +311,13 @@ class Main extends React.Component {
               this.cityCode = current
             }}
           >
-            <Select.Option value='110000'>北京</Select.Option>
-            <Select.Option value='120000'>天津</Select.Option>
+            {
+              this.state.citys.map((item, index) => {
+                return (
+                  <Select.Option value={item.code} key={item.code}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),
@@ -393,6 +333,13 @@ class Main extends React.Component {
           cityCode: this.cityCode
         }
         toCity(cityparams).then((res) => {
+          this.setState({
+            visible: false
+          }, () => {
+            this.setState({
+              visible: true
+            })
+          })
           APP.success('操作成功')
         })
         modal.hide()
@@ -404,53 +351,13 @@ class Main extends React.Component {
     modal.show()
   }
   public add () {
-    let ins: any
-    const modal = new Modal({
-      style: 'width: 800px',
-      content: (
-        <Provider>
-          <BaseInfo
-            reset
-            ref={(ref: any) => { ins = ref.getWrappedInstance() }}
-            onClose={() => {modal.hide()}}
-            isBussiness={true}
-            flowNow={() => { modal.hide()}}
-          />
-        </Provider>
-      ),
-      footer: (
-        <div className='text-right mt10'>
-          <Button
-            className='mr5'
-            type='primary'
-            onClick={() => {
-              console.log(ins.refs.wrappedComponent)
-              ins.refs.wrappedComponent.save().then(() => {
-                APP.success('保存成功')
-                modal.hide()
-                // this.fetchList()
-              }, () => {
-                APP.error('保存失败')
-              })
-            }}
-          >
-            保存
-          </Button>
-        </div>
-      ),
-      title: '新增客资',
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+    addCustomer.call(this)
   }
   public import () {
     const modal = new Modal({
       style: 'width: 800px',
       content: (
-        <Provider><Import isBussiness={true}/></Provider>
+        <Provider><Import /></Provider>
       ),
       footer: null,
       title: '导入客资',
@@ -497,7 +404,7 @@ class Main extends React.Component {
         )}
       >
         {
-          this.capacityNum &&
+          this.capacityNum > 0 &&
           <div className={styles.note}>
             <span className={styles['note-icon1']} />
             <span className='mr10'>库容剩余不足{this.capacityNum}个，即将达到上限！</span>
@@ -516,28 +423,29 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '所属销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'currentSalesperson', label: '所属销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
                 if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
                   this.handleSearchType(val)
                 }
               }}
             />
           </div>
         </div>
-        { this.state.visible &&
+        {
           <Tabs animated={false} defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
             <Tabs.TabPane tab={<span>全部({this.state.customerNum.allNums})</span>} key='1'>
+            {this.state.visible &&
               <Tab1 columns={this.columns} params={this.params} handleSelectAll={this.handleSelectAll.bind(this)}/>
+            }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>已有沟通({this.state.customerNum.trackContactNums})</span>} key='2'>
               <Tab2 columns={this.columns} params={this.params}/>
@@ -548,8 +456,7 @@ class Main extends React.Component {
             <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>{this.state.recycleNum}</span></span>} key='4'>
               <Tab4 columns={this.columns} params={this.params}/>
             </Tabs.TabPane>
-          </Tabs>
-        }
+          </Tabs>}
       </ContentBox>
     )
   }

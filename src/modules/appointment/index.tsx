@@ -1,15 +1,13 @@
 import React from 'react'
-import { Table, Button, Row, Col, DatePicker, Select } from 'antd'
+import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
-import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import { fetchListappoint } from '@/modules/business/api'
-import Provider from '@/components/Provider'
-import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
+import { showDetail } from '@/modules/business/utils'
 type DetailProps = Business.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -39,7 +37,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['预约时间', '创建时间', '最后跟进'],
+      label: ['预约时间', '创建时间', '最后跟进时间'],
       options: [
         {
           label: '全部',
@@ -89,10 +87,16 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'intention'
+    dataIndex: 'intention',
+    render: (val) => {
+      return (APP.dictionary[`EnumIntentionality-${val}`])
+    }
   }, {
     title: '电话状态',
-    dataIndex: 'telephoneStatus'
+    dataIndex: 'telephoneStatus',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactStatus-${val}`])
+    }
   }, {
     title: '空置天数',
     dataIndex: 'freeDays'
@@ -101,20 +105,29 @@ class Main extends React.Component {
     dataIndex: 'current_salesperson'
   }, {
     title: '客户来源',
-    dataIndex: 'source'
+    dataIndex: 'source',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactSource-${val}`])
+    }
   }, {
     title: '创建时间',
-    dataIndex: 'createTime'
+    dataIndex: 'createTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '预约时间',
-    dataIndex: 'appointmentTime'
+    dataIndex: 'appointmentTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }]
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     this.fetchList()
   }
   public fetchList () {
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
+    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
     const params = _.cloneDeep(this.params)
     const pagination = this.state.pagination
     params.pageSize = pagination.pageSize
@@ -175,43 +188,17 @@ class Main extends React.Component {
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    }
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.currentSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params[values.key] = values.value || undefined
     this.fetchList()
   }
   public show (customerId: string) {
-    const modal = new Modal({
-      style: 'width: 840px',
-      content: (
-        <Provider><Detail customerId={customerId}/></Provider>
-      ),
-      footer: null,
-      header: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+    showDetail.call(this, customerId)
   }
   public render () {
     const { pagination } = this.state
@@ -228,12 +215,12 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '所属销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'currentSalesperson', label: '所属销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {

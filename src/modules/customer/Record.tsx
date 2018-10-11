@@ -7,7 +7,10 @@ interface States {
   trackRecords: Customer.TrackRecord[]
   clueRecords: Customer.TrackRecord[]
 }
-class Main extends React.Component {
+interface Props {
+  customerId?: string
+}
+class Main extends React.Component<Props> {
   public state: States = {
     trackRecords: [],
     clueRecords: []
@@ -17,12 +20,12 @@ class Main extends React.Component {
       pageNum: 1,
       pageSize: 999
     }
-    fetchTrackRecords(payload).then((res) => {
+    fetchTrackRecords(this.props.customerId, payload).then((res) => {
       this.setState({
         trackRecords: res.data
       })
     })
-    fetchClueRecords(payload).then((res) => {
+    fetchClueRecords(this.props.customerId, payload).then((res) => {
       this.setState({
         clueRecords: res.data
       })
@@ -47,21 +50,36 @@ class Main extends React.Component {
                     </div>
                     <div>{item.remark}</div>
                     <div>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
-                      </span>
-                      <span className={styles.tag}>
-                        {moment(item.appointTime).format('YYYY-MM-DD')}
-                      </span>
+                      {
+                        item.tagIntention > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+                        </span>
+                      }
+                      {
+                        item.tagCustomerStatus > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.tagFollowupStatus > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.tagTelephoneStatus > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                        </span>
+                      }
+                      {
+                        item.appointTime &&
+                        <span className={styles.tag}>
+                          {moment(item.appointTime).format('YYYY-MM-DD')}
+                        </span>
+                      }
                     </div>
                   </div>
                 )
@@ -81,28 +99,42 @@ class Main extends React.Component {
                       </div>
                       <div>{item.remark}</div>
                       <div>
-                        <span className={styles.tag}>{item.tagIntention}</span>
-                        <span className={styles.tag}>{item.tagCustomerStatus}</span>
-                        <span className={styles.tag}>{item.tagFollowupStatus}</span>
-                        <span className={styles.tag}>{item.tagTelephoneStatus}</span>
-                        <span className={styles.tag} style={{ width: 89 }}>{item.appointTime}</span>
+                        {
+                          item.tagIntention > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+                          </span>
+                        }
+                        {
+                          item.tagCustomerStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.tagFollowupStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.tagTelephoneStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.appointTime &&
+                          <span className={styles.tag}>
+                            {moment(item.appointTime).format('YYYY-MM-DD')}
+                          </span>
+                        }
                       </div>
                     </div>
                   )
                 })
               }
             </div>
-            {/* <div className={styles.record}>
-              <div className={styles['line-height']}>
-                <span>张磊</span>
-                <span>2018-09-01 12:00:11</span>
-              </div>
-              <div>客户出差，明天再打</div>
-              <div>
-                <span className={styles.tag}>持续跟进</span>
-                <span className={styles.tag}>2018-09-10</span>
-              </div>
-            </div> */}
           </Tabs.TabPane>
         </Tabs>
       </div>

@@ -19,7 +19,9 @@ const defaultVal: Customer.Props = {
     exists: [],
     total: 0
   },
-  capacity:[]
+  capacity:[],
+  /** 特殊资源列表 */
+  spicalAssetsList: []
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {

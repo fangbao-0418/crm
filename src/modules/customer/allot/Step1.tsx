@@ -12,9 +12,6 @@ interface ValueProps {
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {}
-  public onChange () {
-    console.log(this.values)
-  }
   public render () {
     return (
       <div className='text-center mt10'>
@@ -61,7 +58,6 @@ class Main extends React.Component<Props> {
                   }
                 } else {
                   APP.error('请选择机构和销售')
-                  return false
                 }
               }}
             >

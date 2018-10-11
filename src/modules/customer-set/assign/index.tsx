@@ -5,7 +5,12 @@ import Content from '@/modules/common/content'
 import Card from '@/components/Card'
 import General from './General'
 import Special from './Special'
-class Main extends React.Component {
+import { connect } from 'react-redux'
+
+class Main extends React.Component<Customer.Props> {
+  public state = {
+    diabled: true
+  }
   public render () {
     return (
       <Content title='分客设置'>
@@ -13,10 +18,19 @@ class Main extends React.Component {
           title='一般资源分客策略'
           showFold
           rightContent={(
-            <Button type='primary' >编辑</Button>
+            <Button
+              type='primary'
+              onClick={() => {
+                this.setState({
+                  diabled: !this.state.diabled
+                })
+              }}
+            >
+              {this.state.diabled ? '编辑' : '保存'}
+            </Button>
           )}
         >
-          <General />
+          <General disabled={this.state.diabled} />
         </Card>
         <Card
           title='特殊资源分客策略'
@@ -24,13 +38,27 @@ class Main extends React.Component {
           rightContent={(
             <AddButton
               title='新增'
+              onClick={() => {
+                const spicalAssetsList = this.props.spicalAssetsList
+                spicalAssetsList.push({
+                  salesPersons: []
+                })
+                APP.dispatch({
+                  type: 'change customer data',
+                  payload: {
+                    spicalAssetsList
+                  }
+                })
+              }}
             />
           )}
         >
-          <Special />
+          <Special disabled={this.state.diabled} />
         </Card>
       </Content>
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)

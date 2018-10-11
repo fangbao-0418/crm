@@ -31,7 +31,7 @@ class Main extends React.Component<any, any> {
   }
 
   public createTaskNameOptions () {
-    const dict = TaskService.taskNameDict
+    const dict = TaskService.taskCateDict
     const options: Array<any> = []
     for (const i in dict) {
       if (i) {

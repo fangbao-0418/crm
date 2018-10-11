@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -43,7 +43,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['释放时间', '创建时间', '最后跟进'],
+      label: ['释放时间', '创建时间', '最后跟进时间'],
       options: [
         {
           label: '全部',
@@ -93,25 +93,57 @@ class Main extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '意向度',
-    dataIndex: 'tagIntention'
+    dataIndex: 'tagIntention',
+    render: (val) => {
+      return (APP.dictionary[`EnumIntentionality-${val}`])
+    }
   }, {
     title: '电话状态',
-    dataIndex: 'tagTelephoneStatus'
+    dataIndex: 'tagTelephoneStatus',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactStatus-${val}`])
+    }
   }, {
     title: '空置天数',
     dataIndex: 'freeDays'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'customerSource',
+    render: (val) => {
+      return (APP.dictionary[`EnumContactSource-${val}`])
+    }
   }, {
-    title: '创建时间',
-    dataIndex: 'createTime'
+    title: (
+      <span>
+        释放次数
+        <Tooltip placement='top' title='客户被释放到公海的总次数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
+    dataIndex: 'releaseNums'
   }, {
-    title: '释放销售',
+    title: (
+      <span>
+        释放销售
+        <Tooltip placement='top' title='客户最后一次被释放到公海时的销售'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'lastReleaseSalesperson'
   }, {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
+  }, {
     title: '释放时间',
-    dataIndex: 'lastReleaseTime'
+    dataIndex: 'lastReleaseTime',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }]
   public componentWillMount () {
     this.fetchList()
@@ -178,30 +210,14 @@ class Main extends React.Component {
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.lastReleaseSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.payTaxesNature = values.value
-      break
-    case '6':
-      this.paramsright.busSeaMemo = values.value
-      break
-    }
+    this.params.customerName = undefined
+    this.params.contactPerson = undefined
+    this.params.contactPhone = undefined
+    this.params.lastReleaseSalesperson = undefined
+    this.params.customerSource = undefined
+    this.params.payTaxesNature = undefined
+    this.params.busSeaMemo = undefined
+    this.params[values.key] = values.value || undefined
     this.fetchList()
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
@@ -209,9 +225,45 @@ class Main extends React.Component {
   }
   public show (customerId: string) {
     const modal = new Modal({
-      style: 'width: 840px',
       content: (
-        <Provider><Detail customerId={customerId} isOpen={true}/></Provider>
+        <Provider>
+          <Detail
+            customerId={customerId}
+            type='open'
+            footer={(
+              <div className='text-right mt10'>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    pickCustomer({
+                      customerIdArr: [customerId]
+                    }).then(() => {
+                      APP.success('操作成功')
+                      this.fetchList()
+                      modal.hide()
+                    })
+                  }}
+                >
+                  抢客户
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    const payload = customerId
+                    deleteCustomer(payload).then(() => {
+                      APP.success('操作成功')
+                      this.fetchList()
+                      modal.hide()
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+              </div>
+            )}
+          />
+        </Provider>
       ),
       footer: null,
       header: null,
@@ -231,7 +283,7 @@ class Main extends React.Component {
       content: (
         <div>你确定要删除这些客户吗？</div>
       ),
-      title: '删除',
+      title: '删除客户',
       mask: true,
       onOk: () => {
         const payload = this.state.selectedRowKeys.join(',')
@@ -293,13 +345,13 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '释放销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '纳税类别'},
-                { value: '6', label: '释放原因'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'lastReleaseSalesperson', label: '释放销售'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'payTaxesNature', label: '纳税类别'},
+                { value: 'busSeaMemo', label: '释放原因'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {

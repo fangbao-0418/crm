@@ -45,11 +45,11 @@ const data = [
     content
   }
 ]
-
 interface States {
   modalTitle: string,
   modalVisible: boolean,
-  dataSource: MessageList
+  dataSource: MessageList,
+  chooseDate: string,
   selectedRowKeys: string[],
   showData?: any // 弹出层的数据
   pageConf?: any
@@ -66,11 +66,13 @@ class Main extends React.Component {
     modalVisible: false,
     dataSource: [],
     selectedRowKeys: [],
+    chooseDate:'',
     pageConf: {
       currentPage: 1,
       total: 1
     }
   }
+  public delArr: any = []
   public columns: any = [{
     title: '消息日期',
     dataIndex: 'sendtime',
@@ -83,7 +85,7 @@ class Main extends React.Component {
     render: (k: any, item: MessageItem) => {
       return (
       <>
-        <span className={item.readed ? styles.icohide : styles.icocui}><i>催</i></span>
+        <span className={item.read ? styles.icohide : styles.icocui}><i>催</i></span>
         <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.title}</span>
       </>)
     }
@@ -100,7 +102,7 @@ class Main extends React.Component {
     dataIndex: 'status',
     render: (k: any, item: MessageItem) => {
       return (
-        <span>{item.readed ? '已读' : '未读'}</span>
+        <span>{item.read ? '已读' : '未读'}</span>
       )
     }
   }, {
@@ -110,7 +112,7 @@ class Main extends React.Component {
       return (
         <span>
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
-          <span className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>|
+          {item.read ? <span className={`likebtn`} style={{color:'#999'}} >已读</span> : <span className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>}
           <span className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
         </span>
       )
@@ -126,18 +128,18 @@ class Main extends React.Component {
   }
 
   public componentDidMount () {
+    /*
     const msg = Msg({})
     msg.evAdd('data', (cd: any) => {
       msg.uiOpen({
         message: '您有新的消息',
-        description: <MessageShowModal data={this.state.showData} />,
+        description: <MessageShowModal data={cd} />,
         placement: 'bottomRight'
       })
     })
     // 消息启动
-    msg.connect({
-      duration: 10000
-    })
+    msg.connect({})
+    */
   }
 
   // 全选反选
@@ -148,17 +150,15 @@ class Main extends React.Component {
 
   // 获取列表数据
   public getList () {
-    MsgService.getListByUserid(2).then((d: any) => {
-      const { pageSize, total, currentPage } = d
+    const {pageConf, chooseDate} = this.state
+    MsgService.getListByUserid('5', chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
       this.setState({
         dataSource: d.records,
         pageConf: {
-          pageSize,
-          total,
-          currentPage
+          pageSize: d.pageSize,
+          total: d.pageTotal,
+          currentPage: d.pageCurrent
         }
-      }, () => {
-        console.log('........', this.state)
       })
     })
   }
@@ -172,11 +172,20 @@ class Main extends React.Component {
   // 标记已读
   public onRead (item: MessageItem) {
     console.log('read::', item)
+    const tempArr = []
+    tempArr.push(item.id)
+    MsgService.readListByIds(tempArr).then((d: any) => {
+      this.getList()
+    })
   }
 
   // 删除
   public onDel (item: MessageItem) {
-    console.log('del::', item)
+    const tempArr = []
+    tempArr.push(item.id)
+    MsgService.delListByIds(tempArr).then((d: any) => {
+      this.getList()
+    })
   }
 
   // 搜索
@@ -186,24 +195,64 @@ class Main extends React.Component {
 
   // 搜索 日期切换
   public onDateChange (date: Moment, dateString: string) {
-    console.log('date change::', date)
+    console.log('date change::', date.format('YYYY-MM-DD'))
+    this.setState({
+      chooseDate:date.format('YYYY-MM-DD')
+    }, () => {
+      this.getList()
+    })
   }
 
   // 批量删除
   public delList () {
-    const { selectedRowKeys } = this.state
+    const { selectedRowKeys, dataSource} = this.state
     if (!selectedRowKeys.length) {
       return
     }
-    console.log('del list::', selectedRowKeys)
-    // service.delList(selectedRowKeys)
+    const tempArr: any = []
+    selectedRowKeys.map((item: any, index: any) => {
+      tempArr.push(dataSource[item].id)
+    })
+    console.log('del list::', tempArr)
+    MsgService.delListByIds(tempArr).then((d: any) => {
+      this.setState({
+        selectedRowKeys:[]
+      }, () => {
+        this.getList()
+      })
+    })
   }
 
   // 批量标记为已读
   public setReadedList () {
-    const { selectedRowKeys } = this.state
-    console.log('set readed list::', selectedRowKeys)
-    // service.setReadedList(selectedRowKeys)
+    const { selectedRowKeys, dataSource} = this.state
+    if (!selectedRowKeys.length) {
+      return
+    }
+    const tempArr: any = []
+    selectedRowKeys.map((item: any, index: any) => {
+      tempArr.push(dataSource[item].id)
+    })
+    console.log('read list::', tempArr)
+    MsgService.readListByIds(tempArr).then((d: any) => {
+      this.setState({
+        selectedRowKeys:[]
+      }, () => {
+        this.getList()
+      })
+    })
+  }
+  // 分页
+  public pageChange = (pageIndex: any) => {
+    console.log('pageIndex : ', pageIndex.current)
+    this.setState({
+      selectedRowKeys:[],
+      pageConf: {
+        currentPage: pageIndex.current
+      }
+    }, () => {
+      this.getList()
+    })
   }
 
   public modalShow (title: string = '', showData: any = {}) {
@@ -245,8 +294,8 @@ class Main extends React.Component {
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary' size={'small'} onClick={this.setReadedList.bind(this)}>标记为已读</Button>
-              <Button size={'small'} onClick={this.delList.bind(this)}>删除</Button>
+              <Button type='primary' onClick={this.setReadedList.bind(this)}>标记为已读</Button>
+              <Button onClick={this.delList.bind(this)}>删除</Button>
             </span>
           </Col>
         </Row>
@@ -258,6 +307,7 @@ class Main extends React.Component {
             bordered
             pagination={this.state.pageConf}
             rowKey={'key'}
+            onChange={this.pageChange}
           />
         </Row>
       </HCframe>

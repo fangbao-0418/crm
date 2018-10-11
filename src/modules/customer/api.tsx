@@ -33,6 +33,13 @@ export const allotCustomer = (payload: {
 }) => {
   return http(`/crm-manage/v1/api/customer/allocate`, 'PUT', payload)
 }
+export const getSaleCapacity = (payload: {
+  agencyId?: string
+  customerNum?: number
+  salesPersons?: string
+}) => {
+  return http(`/crm-manage/v1/api/storage_capacity/residue`, 'GET', payload)
+}
 export const deleteCustomer = (payload: string) => {
   return http(`/crm-manage/v1/api/customer/by-ids?customerIds=${payload}`, 'DELETE')
 }
@@ -40,6 +47,7 @@ export const viewCustomer = (id: string) => {
   return http(`/crm-manage/v1/api/open-ocean/${id}`)
 }
 export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
+  payload.currentSalesperson = ''
   return http(`/crm-manage/v1/api/customer/${id}`, 'PUT', {
     data: payload
   })
@@ -63,15 +71,15 @@ export const importFile = (file: File, query: {
     data
   })
 }
-export const fetchTrackRecords = (payload: {
+export const fetchTrackRecords = (id: string, payload: {
   pageNum?: number
   pageSize?: number
 }) => {
-  return http(`/crm-manage/v1/api/track-record`, 'GET', payload)
+  return http(`/crm-manage/v1/api/track-record/${id}`, 'GET', payload)
 }
-export const fetchClueRecords = (payload: {
+export const fetchClueRecords = (id: string, payload: {
   pageNum?: number
   pageSize?: number
 }) => {
-  return http(`/crm-manage/v1/api/clue-records`, 'GET', payload)
+  return http(`/crm-manage/v1/api/clue-records/${id}`, 'GET', payload)
 }

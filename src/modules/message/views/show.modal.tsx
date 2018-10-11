@@ -43,12 +43,12 @@ class Main extends React.Component<Props, any> {
   }
 
   public render () {
-    const {title, createAt, sender, content} = this.props.data
+    const {title, createdAt, sender, content} = this.props.data
     return (
       <div className={styles['page-show']}>
-        <h5>{title}</h5>
+        <h5>{title ? title : ''}</h5>
         <div>发送人：{sender.username}</div>
-        <div>时间：{createAt}</div>
+        <div>时间：{createdAt}</div>
         <div className={styles.content}>{content}</div>
       </div>
     )

@@ -1,12 +1,13 @@
 declare namespace Signed {
   export interface DetailProps {
+    id?: string
     customerName?: string
     contactPerson?: string
     area?: string
     currentSalesperson?: string
     operatingAccouting?: string
     createTime?: string
-    endTime?: string
+    EndTime?: string
     startTime?: string
   }
   export interface SearchProps {
@@ -30,5 +31,6 @@ declare namespace Signed {
     payTaxesNature?: string
     serviceExpireBeginMonth?: string
     serviceExpireEndMonth?: string
+    [field: string]: any
   }
 }

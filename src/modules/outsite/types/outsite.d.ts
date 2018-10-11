@@ -17,6 +17,7 @@ interface TaskItem {
     userId?: number // 用户id 
     userName?: string // 用户 
     areaId?: number // 区域id 
+    priority?: string // 是否优先
     areaName?: string // 区域名称   
     status?: string // 状态   
     startTime?: string // 开始时间  
@@ -31,8 +32,10 @@ interface TaskItem {
 type TaskList = Array<TaskItem>
 
 type Func = (...args: Array<any>) => any
-
+type Map<T> = {[index: string]: T}
 export {
     TaskItem,
-    TaskList
+    TaskList,
+    Func,
+    Map
 }

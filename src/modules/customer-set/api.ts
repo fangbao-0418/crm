@@ -18,3 +18,6 @@ export const saveAutoAssign = (payload: Customer.AutoAssignProps[]) => {
 export const saveStorageCapacity = (payload: Customer.CapacityProps[]) => {
   return http(`/crm-manage/v1/api/storage_capacity/entry`, 'POST', payload)
 }
+export const fetchSpicalList = () => {
+  return http(`/crm-manage/v1/api/diversion_customer/listSpecial`)
+}
