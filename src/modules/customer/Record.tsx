@@ -99,11 +99,36 @@ class Main extends React.Component<Props> {
                       </div>
                       <div>{item.remark}</div>
                       <div>
-                        <span className={styles.tag}>{item.tagIntention}</span>
-                        <span className={styles.tag}>{item.tagCustomerStatus}</span>
-                        <span className={styles.tag}>{item.tagFollowupStatus}</span>
-                        <span className={styles.tag}>{item.tagTelephoneStatus}</span>
-                        <span className={styles.tag} style={{ width: 89 }}>{item.appointTime}</span>
+                        {
+                          item.tagIntention > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+                          </span>
+                        }
+                        {
+                          item.tagCustomerStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.tagFollowupStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.tagTelephoneStatus > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.appointTime &&
+                          <span className={styles.tag}>
+                            {moment(item.appointTime).format('YYYY-MM-DD')}
+                          </span>
+                        }
                       </div>
                     </div>
                   )
