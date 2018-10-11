@@ -1,5 +1,6 @@
 // common
 export { default as loadLogin } from 'bundle-loader?lazy&name=[name]!@/modules/login'
+export { default as loadLogout } from 'bundle-loader?lazy&name=[name]!@/modules/logout'
 
 // crm
 export { default as loadIndex } from 'bundle-loader?lazy&name=[name]!@/modules'

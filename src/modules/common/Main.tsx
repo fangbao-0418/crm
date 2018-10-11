@@ -12,6 +12,9 @@ import modules from '@/router/modules'
 const styles = require('@/stylus/main')
 export default class extends React.Component {
   public componentWillMount () {
+    if (!APP.token) {
+      APP.history.push('/login')
+    }
     fetchEnum().then(() => {
       this.forceUpdate()
     })

@@ -1,10 +1,10 @@
 import http from '@/utils/http'
 export const userLogin = (payload: {
-  phoneNumber: string,
+  phone: string,
   validCode?: string
   phoneValidCode?: string
 }) => {
-  return http(`/user/v1/api/user/login`, 'POST', {
+  return http(`/user/v1/api/login`, 'POST', {
     contentType: 'application/x-www-form-urlencoded',
     processData: true,
     raw: true,

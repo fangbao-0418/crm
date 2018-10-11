@@ -26,6 +26,13 @@ declare namespace APP {
     EnumNeedStatus?: Array<{label: string, value: string}>
     EnumFollowWay?: Array<{label: string, value: string}>
   }
+  type GlobalSessionName = 'token'
+  interface StorageProps {
+    getItem<P> (key: GlobalSessionName): P
+    setItem<P> (key: GlobalSessionName, value: P | string): void
+    removeItem (key: GlobalSessionName): void
+    clear (): void
+  }
   interface DictProps {
     [key: string]: string
   }
@@ -40,5 +47,6 @@ declare namespace APP {
   export let keys: EnumProps
   export let dictionary: DictProps
   export const env: 'development' | 'production'
+  export let token: string
 }
 
