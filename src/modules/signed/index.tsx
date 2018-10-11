@@ -12,9 +12,9 @@ import _ from 'lodash'
 import moment from 'moment'
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
-const all = [{
+const all: any = [{
   label: '全部',
-  value: ''
+  value: undefined
 }]
 interface States {
   dataSource: DetailProps[]
@@ -43,36 +43,34 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      value: '',
       label: ['入库时间', '创建时间'],
       options: [
         {
           label: '全部',
-          value: ''
+          value: undefined
         },
         {
           label: '今天',
-          value: '1'
+          value: '0'
         },
         {
           label: '7天',
-          value: '7'
+          value: '6'
         },
         {
           label: '30天',
-          value: '30'
+          value: '29'
         }
       ],
       type: 'date'
     },
     {
       field: 'serviceExpire',
-      value: '',
       label: ['即将到期'],
       options: [
         {
           label: '全部',
-          value: ''
+          value: undefined
         },
         {
           label: '一个月',
@@ -91,7 +89,6 @@ class Main extends React.Component {
     },
     {
       label: ['纳税类别'],
-      value: '',
       field: 'payTaxesNature',
       options: all.concat(APP.keys.EnumPayTaxesNature)
     }
@@ -205,45 +202,43 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
+    console.log(values, 'values')
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (!values.date.value) {
-      beginTime = ''
-      endTime = ''
-    } else if (values.date.value.indexOf('至') > -1) {
-      beginTime = values.date.value.split('至')[0]
-      endTime = values.date.value.split('至')[1]
-    } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+    if (values.date.value) {
+      if (values.date.value.indexOf('至') > -1) {
+        beginTime = values.date.value.split('至')[0]
+        endTime = values.date.value.split('至')[1]
+      } else {
+        endTime = moment().format('YYYY-MM-DD')
+        beginTime = moment().startOf('day').subtract(values.date.value, 'day').format('YYYY-MM-DD')
+      }
     }
     if (values.date.label === '入库时间') {
-      this.paramsleft.storageBeginDate = beginTime
-      this.paramsleft.storageEndDate = endTime
+      this.paramsleft.storageBeginDate = beginTime || undefined
+      this.paramsleft.storageEndDate = endTime || undefined
     } else if (values.date.label === '创建时间') {
-      this.paramsleft.createBeginDate = beginTime
-      this.paramsleft.createEndDate = endTime
+      this.paramsleft.createBeginDate = beginTime || undefined
+      this.paramsleft.createEndDate = endTime || undefined
     }
     let startmonth
     let endmonth
-    if (!values.serviceExpire.value) {
-      startmonth = ''
-      endmonth = ''
-    } else if (values.serviceExpire.value.indexOf('至') > -1) {
-      startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
-      endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
-    } else {
-      const val = values.serviceExpire.value.slice(0, 1)
-      console.log(val)
-      startmonth = moment().startOf('month').format('YYYY-MM-DD')
-      endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+    if (values.serviceExpire.value) {
+      if (values.serviceExpire.value.indexOf('至') > -1) {
+        startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
+        endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
+      } else {
+        const val = String(values.serviceExpire.value).slice(0, 1)
+        startmonth = moment().startOf('month').format('YYYY-MM-DD')
+        endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+      }
     }
     if (values.serviceExpire.label === '即将到期') {
-      this.paramsleft.serviceExpireBeginMonth = startmonth
-      this.paramsleft.serviceExpireEndMonth = endmonth
+      this.paramsleft.serviceExpireBeginMonth = startmonth || undefined
+      this.paramsleft.serviceExpireEndMonth = endmonth || undefined
     }
-    this.paramsleft.payTaxesNature = values.payTaxesNature.value
+    this.paramsleft.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchList()
   }
   public handleSearchType (value: {key: string, value?: string}) {
