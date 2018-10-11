@@ -175,14 +175,14 @@ class Main extends React.Component<any, any> {
         <span style={{margin:'0 10px 0 16px'}}>选择月份：</span>
         <MonthPicker defaultValue={moment('2018/01', monthFormat)} format={monthFormat} />
       </Row>
-      {/* <div>
+      <div>
         <Tabs onChange={callback} type='card'>
           <TabPane tab='Tab 1' key='1'>Content of Tab Pane 1</TabPane>
           <TabPane tab='Tab 2' key='2'>Content of Tab Pane 2</TabPane>
           <TabPane tab='Tab 3' key='3'>Content of Tab Pane 3</TabPane>
         </Tabs>
-      </div> */}
-      <Row className={styles.listLeft}>
+      </div>
+      {/* <Row className={styles.listLeft}>
         <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
           <p className={styles.clientLeft}>2018年09月客户总览</p>
           <p className={styles.clientRight}>客户总数：1000</p>
@@ -231,7 +231,7 @@ class Main extends React.Component<any, any> {
             </li>
           </ul>
         </Col>
-      </Row>
+      </Row> */}
       <Row>
         <Col span={23} style={{borderRadius: '5px', border: '1px solid #dcdcdc'}}>
           <Line />
