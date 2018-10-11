@@ -31,7 +31,7 @@ class Main extends React.Component<Props> {
   }
   public save () {
     const id = this.props.detail.id
-    if (this.state.disabled) {
+    if (this.state.disabled === false) {
       return
     }
     updateCustomer(id, this.props.detail).then(() => {

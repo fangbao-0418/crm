@@ -38,10 +38,13 @@ class Main extends React.Component<Props> {
                 }
               ]
             })(
-              <Input
-                onChange={this.onChange.bind(this, index, 'contactPerson')}
-                value={text}
-              />
+              this.props.disabled ?
+                <span>text</span>
+              :
+                <Input
+                  onChange={this.onChange.bind(this, index, 'contactPerson')}
+                  value={text}
+                />
             )}
           </FormItem>
         )
@@ -63,10 +66,13 @@ class Main extends React.Component<Props> {
                 }
               ]
             })(
-              <Input
-                onChange={this.onChange.bind(this, index, 'contactPhone')}
-                value={text}
-              />
+              this.props.disabled ?
+                <span>{text}</span>
+              :
+                <Input
+                  onChange={this.onChange.bind(this, index, 'contactPhone')}
+                  value={text}
+                />
             )}
           </FormItem>
         )
