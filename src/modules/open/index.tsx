@@ -210,6 +210,7 @@ class Main extends React.Component {
     this.fetchList()
   }
   public handleSearchType (values: any) {
+    console.log(values, 'values')
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     this.params.contactPhone = undefined
