@@ -372,7 +372,7 @@ class Main extends React.Component {
             }
           }}
         />
-        <div style={{ position: 'relative', bottom: '48px'}}>
+        <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
           <Button type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>
       </ContentBox>

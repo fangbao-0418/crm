@@ -398,7 +398,7 @@ class Main extends React.Component {
             }
           }}
         />
-        <div style={{ position: 'relative', bottom: '48px'}}>
+        <div style={{ position: 'relative', bottom: '48px', width: '50%' }}>
           <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
           <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>
