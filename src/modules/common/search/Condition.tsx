@@ -119,6 +119,7 @@ class Main extends React.Component<Props> {
             this.setState({
               labels
             })
+            this.props.onChange()
           }}
           key={`condition-label-menu-${key}`}
         >
