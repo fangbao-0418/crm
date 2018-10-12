@@ -46,7 +46,7 @@ class Main extends React.Component<Props> {
                   <div className={styles.record} key={index}>
                     <div className={styles['line-height']}>
                       <span>{item.salesperson}</span>
-                      <span>{item.createTime}</span>
+                      <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
                     <div>{item.remark}</div>
                     <div>
@@ -77,7 +77,7 @@ class Main extends React.Component<Props> {
                       {
                         item.appointTime &&
                         <span className={styles.tag}>
-                          {moment(item.appointTime).format('YYYY-MM-DD')}
+                          {moment(item.appointTime).format('YYYY-MM-DD HH:mm:ss')}
                         </span>
                       }
                     </div>
@@ -95,7 +95,7 @@ class Main extends React.Component<Props> {
                     <div className={styles.record} key={index}>
                       <div className={styles['line-height']}>
                         <span>{item.salesperson}</span>
-                        <span>{item.createTime}</span>
+                        <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
                       </div>
                       <div>{item.remark}</div>
                       <div>
