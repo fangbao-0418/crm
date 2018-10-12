@@ -1,14 +1,35 @@
 /**
- * 消息服务
+ * 外勤数据服务
  */
 import Service from '@/modules/common/services/service'
 import { Map } from '@/modules/outsite/types/outsite'
+import _ from 'lodash'
 
 class ModuleService extends Service {
+  // 模块名称
+  public moduleName: string = 'outside'
+
   // 有全局配置后，再用全局配置
   public pageConf: any = {}
-  // 任务分类
-  public taskCateDict: Map<string> = {
+
+  // 任务服务状态
+  public taskStatusDict: Map<string> = {
+    UNDISTRIBUTED: '未分配', // 驳回
+    DISTRIBUTED: '已分配', // 初始
+    APPROVED: '已完成', // （外勤主管审核通过）', // 审批通过
+    REFUSED: '已驳回', // （外勤/会计主管驳回）审批不通过
+    RUNNING: '进行中', // 接受
+    FINISHED: '已交付', // 子任务完成
+    CANCELLED: '已取消' // 取消
+  }
+
+  // 子任务服务状态
+  public subStatusDict: Map<string> = {
+
+  }
+
+  // 任务模板分类
+  public taskTplCateDict: Map<string> = {
     TAX:      '税务',
     BUSINESS: '工商',
     OTHERS:   '其他',
@@ -20,12 +41,12 @@ class ModuleService extends Service {
     SUB:  '子任务'
   }
   // 状态是否启用
-  public taskStatusDict: Map<string> = {
+  public taskTplStatusDict: Map<string> = {
     NORMAL:     '正常',
     FORBIDDEN:  '禁用'
   }
   // 优先级
-  public taskPriorityDict: Map<string> = {
+  public taskTplPriorityDict: Map<string> = {
     OPEN: '是', // '开', // 后台配置 和 前台显示不一致，前台使用 是否
     CLOSE: '否' // '关'
   }
@@ -35,26 +56,126 @@ class ModuleService extends Service {
     this.pageConf.pageSize = 10
   }
 
+  // 批量删除
   public delListByIds (ids: Array<any> = []) {
     return Service.http(`api/remind`, 'DELETE', {ids})
   }
 
-  public getCurrentByUserid (userid: any = '') {
-    return Service.http(`api/remind/unread/last/${userid}`)
+  // 获取单个任务
+  public getItemByTaskid (taskid: any = '') {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
   }
 
-  public getItemById (id: any = '') {
-    return Service.http(`api/remind/${id}`)
+  // 外勤任务跟进日志
+  public getLogByTaskid (taskid: any) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
   }
 
-  public getListByUserid (userid: any = '', pageConf: any = {pageCurrent: 1}) {
+  // 外勤工单信息
+  public getWorkorderByTaskid (taskid: any) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
+  }
+
+  // 获取外勤任务列表
+  public getListByCond (conf: Map<string> = {}) {
+    const cond = {
+      pageSize: 10,
+      pageCurrent: 1,
+      name: '',
+      status: '',
+      priority: '',
+      origId: ''
+    }
+    conf = _.extend(cond, conf)
     return Service.http(
-      `api/remind/page?
-      recipient=${userid}&
-      pageCurrent=${pageConf.pageCurrent}&
-      pageSize=${this.pageConf.pageSize}`
+      this.createUrl(`/${this.moduleName}/v1/api/outside/subtask/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
     )
   }
+
+  // 获取全部任务列表
+  public getTplList () {
+    return Service.http(`/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=1`)
+  }
+
+  // 获取任务模板列表
+  public getTplListByCond (conf: Map<string> = {}) {
+    const cond = {
+      pageSize: 10,
+      pageCurrent: 1,
+      name: '',
+      status: '',
+      priority: '',
+      origId: ''
+    }
+    conf = _.extend(cond, conf)
+    return Service.http(
+      this.createUrl(`/${this.moduleName}/v1/api/outside/task/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+    )
+  }
+
+  // 获取全部子任务列表
+  public getTplSublist (conf: Map<string>) {
+    const cond = {
+      name: '',
+      status: 'NORMAL',
+      priority: ''
+    }
+    conf = _.extend(cond, conf)
+    return Service.http(
+      this.createUrl(`/${this.moduleName}/v1/api/outside/subtask/template/all`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+    ).then((data: any) => {
+      data.map((item: any, i: number) => {
+        data[i].sort = 0
+      })
+      return data
+    })
+  }
+
+  // 按分类分组子任务
+  public getTplSublistGroupByCate (data: any) {
+    const rst: Map<Array<any>> = {}
+    _.forEach(this.taskTplCateDict, (item: any, k: string) => {
+      rst[k] = []
+    })
+    data.map((item: any, i: number) => {
+      rst[item.category].push(item)
+    })
+    console.log('group::', data, rst)
+    return rst
+  }
+
+  // 获取子任务列表
+  public getTplSublistByCond (conf: Map<string> = {}) {
+    const cond = {
+      pageSize: 10,
+      pageCurrent: 1,
+      name: '',
+      status: '',
+      priority: '',
+      origId: ''
+    }
+    conf = _.extend(cond, conf)
+
+    return Service.http(
+      this.createUrl(`/${this.moduleName}/v1/api/outside/subtask/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+    )
+  }
+
+  // 获取子任务
+  public getTplSubItemById (id: any) {
+    // /v1/api/outside/subtask/template/get/{id}
+    return Service.http(`/${this.moduleName}/v1/api/outside/subtask/template/get/${id}`) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+  }
+
+  // 添加子任务
+  public addTplSublistItem (data: any) {
+    return Service.http(
+      `/${this.moduleName}/v1/api/outside/subtask/template/add`,
+      'POST',
+      data
+    )
+  }
+
 }
 
 export default new ModuleService()

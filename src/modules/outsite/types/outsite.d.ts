@@ -6,6 +6,8 @@ interface TaskItem {
     id?: number // id   
     code?: string // 编号 
     name?: string // 名称 
+    productId?: string, // 绑定商品id
+    productName?: string, // 绑定的商品名称
     category?: string // 分类 同通办任务分类
     customerId?: number // 客户id 
     customerName?: string // 客户名称   

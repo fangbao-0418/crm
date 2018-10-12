@@ -71,8 +71,9 @@ class Main extends React.Component<any, any> {
   public suballList: Array<any> = []
   constructor (props: any) {
     super(props)
-    this.suballList = vlist // this.initDecoratorData(vlist)
-    this.suballMap = this.arr2map(this.suballList, 'id')
+    // 从接口获取
+    // this.suballList = vlist // this.initDecoratorData(vlist)
+    // this.suballMap = this.arr2map(this.suballList, 'id')
 
     this.state = {
       dataSource:{
@@ -83,6 +84,9 @@ class Main extends React.Component<any, any> {
       },
       modalVisible: false,
       personID: '',
+      subList: [], // 全部子任务列表
+      subMap: {}, // 子任务id: item map
+      subGroup: {}, // 按分类分组子任务列表
       formdata:{
         name: '',
         priority: '',
@@ -92,6 +96,7 @@ class Main extends React.Component<any, any> {
       },
       checkedIdMap: {} // this.arr2map(vlist, 'id') // 默认配置选中项
     }
+    this.getSublist()
   }
 
   public componentWillMount () {
@@ -106,6 +111,19 @@ class Main extends React.Component<any, any> {
         ...item,
         sort: item.sort === null ? 1 : item.sort
       }
+    })
+  }
+
+  // 获取子任务列表
+  public getSublist () {
+    return Service.getTplSublist({}).then((data: any) => {
+      this.setState({
+        subList: data,
+        subMap: this.arr2map(data),
+        subGroup: Service.getTplSublistGroupByCate(data)
+      }, () => {
+        console.log('get list::', this.state)
+      })
     })
   }
 
@@ -177,11 +195,11 @@ class Main extends React.Component<any, any> {
     const { checkedIdMap } = this.state
     if (e.target.checked) {
       // 缓存已经选中的子任务
-      checkedIdMap[e.target.value] = this.suballMap[e.target.value]
+      checkedIdMap[e.target.value] = this.state.subMap[e.target.value]
     } else {
       delete checkedIdMap[e.target.value]
     }
-    console.log('........', this.state.checkedIdMap)
+    console.log('........', e.target.value, this.state.checkedIdMap, e.target)
     this.setState({
       checkedIdMap
     }, () => {
@@ -293,14 +311,14 @@ class Main extends React.Component<any, any> {
                   <Col span={5}>
                     <FormItem label='是否优先级' {...formItemLayout}>
                       <Select placeholder={`是否优先级`}>
-                        {this.dict2options(Service.taskPriorityDict)}
+                        {this.dict2options(Service.taskTplPriorityDict)}
                       </Select>
                     </FormItem>
                   </Col>
                   <Col span={5}>
                     <FormItem label='关联商品' {...formItemLayout}>
                       <Select placeholder={`关联商品`}>
-                        {this.dict2options(Service.taskCateDict)}
+                        {this.dict2options(Service.taskTplCateDict)}
                       </Select>
                     </FormItem>
                   </Col>
@@ -310,7 +328,7 @@ class Main extends React.Component<any, any> {
                     <Col span={14}>
                       {
                         // 遍历分类
-                        this.dict2list(Service.taskCateDict).map((item: any, index: number) => {
+                        this.dict2list(Service.taskTplCateDict).map((item: any, index: number) => {
                           return (
                             <div key={`cate-${index}`} className={styles['page-hc']}>
                               <div className={styles['hc-h']}>
@@ -318,7 +336,7 @@ class Main extends React.Component<any, any> {
                               </div>
                               <div className={styles['hc-c']}>
                               {
-                                this.suballList.map((checkitem: any, i: number) => {
+                                this.state.subGroup[item.key] && this.state.subGroup[item.key].map((checkitem: any, i: number) => {
                                   return (
                                     <Checkbox
                                       key={`checkbox-${index}-${i}`}
@@ -327,7 +345,7 @@ class Main extends React.Component<any, any> {
                                       onChange={this.onCheckItem.bind(this)}
                                       checked={this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
                                     >
-                                      {checkitem.name}
+                                      {checkitem.name}-{checkitem.id}
                                     </Checkbox>
                                   )
                                 })
