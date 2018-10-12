@@ -66,7 +66,7 @@ class Main extends React.Component<Props> {
         console.log(paramsFile, 'paramsFile')
         return importFile(info.file, paramsFile).then((res) => {
           if (this.props.onOk) {
-            this.props.onOk(res)
+            this.props.onOk(res.data)
           }
         })
         console.log(info)

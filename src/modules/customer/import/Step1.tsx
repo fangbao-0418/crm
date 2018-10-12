@@ -96,8 +96,8 @@ class Main extends React.Component<Props> {
                       this.values.agencyId = val
                     }}
                   >
-                    <Option key='1'>机构1</Option>
-                    <Option key='2'>机构2</Option>
+                    <Option key='1001'>机构1</Option>
+                    <Option key='1002'>机构2</Option>
                   </Select>
                 </div>
                 <div className='mt12'>

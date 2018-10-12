@@ -193,6 +193,12 @@ class Main extends React.Component {
   }
   public handleSearch (values: any) {
     console.log(values, 'values')
+    this.params.lastReleaseTimeBegin = undefined
+    this.params.lastReleaseTimeEnd = undefined
+    this.params.createBeginDate = undefined
+    this.params.createEndDate = undefined
+    this.params.lastTrackTimeBegin = undefined
+    this.params.lastTrackTimeEnd = undefined
     let beginTime
     let endTime
     if (!values.date.value) {
@@ -211,7 +217,7 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进') {
+    } else if (values.date.label === '最后跟进时间') {
       this.params.lastTrackTimeBegin = beginTime
       this.params.lastTrackTimeEnd = endTime
     }
@@ -360,8 +366,6 @@ class Main extends React.Component {
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
                 { value: 'lastReleaseSalesperson', label: '释放销售'},
-                // { value: 'customerSource', label: '客户来源'},
-                // { value: 'payTaxesNature', label: '纳税类别'},
                 { value: 'busSeaMemo', label: '释放原因'}
               ]}
               placeholder={''}
@@ -394,7 +398,7 @@ class Main extends React.Component {
             }
           }}
         />
-        <div style={{ position: 'relative', bottom: '48px'}}>
+        <div style={{ position: 'relative', bottom: '48px', width: '50%' }}>
           <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
           <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>

@@ -52,7 +52,7 @@ class Main extends React.Component<Props> {
           salesNames.push(item.name)
         })
         const paramsFile = {
-          agencyId: '1', // 需要从登陆信息读取
+          agencyId: '1001', // 需要从登陆信息读取
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
           salesPersonNames: salesNames.join(','),
@@ -62,7 +62,7 @@ class Main extends React.Component<Props> {
         console.log(paramsFile, 'paramsFile')
         return importFile(info.file, paramsFile).then((res) => {
           if (this.props.onOk) {
-            this.props.onOk(res)
+            this.props.onOk(res.data)
           }
         })
         console.log(info)

@@ -91,6 +91,12 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
+    this.params.storageBeginDate = undefined
+    this.params.storageEndDate = undefined
+    this.params.createBeginDate = undefined
+    this.params.createEndDate = undefined
+    this.params.lastTrackBeginTime = undefined
+    this.params.lastTrackEndTime = undefined
     let beginTime
     let endTime
     if (!values.date.value) {
@@ -109,7 +115,7 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进') {
+    } else if (values.date.label === '最后跟进时间') {
       this.params.lastTrackBeginTime = beginTime
       this.params.lastTrackEndTime = endTime
     }
