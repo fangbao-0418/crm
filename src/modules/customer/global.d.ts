@@ -6,6 +6,7 @@ declare namespace Customer {
     mark?: string
     worker?: string
     isMainContact?: string
+    source?: number
   }
   export type ActionPayload = Props
   export interface DetailProps {
@@ -29,6 +30,8 @@ declare namespace Customer {
     businessHoursBegin?: string
     /** 营业期限结束 */
     businessHoursEnd?: string
+    /** 是否有固定营业期限 */
+    isFixedPeriod?: 0 | 1
     /** 经营范围 */
     businessScope?: string
     address?: string
@@ -85,6 +88,11 @@ declare namespace Customer {
     trackRecordType?: string
     /** 预约时间 */
     appointTime?: string
+  }
+  export interface TianYanDataProps {
+    apiName: string
+    id: string
+    name: string
   }
   export interface Props {
     linkMan?: LinkManProps[]

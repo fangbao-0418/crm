@@ -1,13 +1,31 @@
 import React from 'react'
 import { ColumnProps } from 'antd/lib/table'
+import { Tooltip } from 'antd'
 import moment from 'moment'
+const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
+  console.log(this, 'this')
   return [{
-    title: '客户名称',
+    title: (
+      <span>
+        客户名称
+        <Tooltip placement='top' title='客户未被跟进的天数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
+        <div>
+          {
+            record.redPoint === 1 &&
+            <span className={styles['red-point']}></span>
+          }
+          <span className='href' onClick={this.show.bind(this, record.id)}>
+            {val}
+          </span>
+        </div>
       )
     }
   }, {
@@ -47,7 +65,14 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='客户掉入销售库的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'enterDays',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))

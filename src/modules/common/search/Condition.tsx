@@ -8,7 +8,7 @@ const styles = require('./style')
 export interface ConditionOptionProps {
   label: string[]
   options: Array<{label: string, value: string}>
-  field?: string
+  field: string
   value?: string
   type?: 'date' | 'select' | 'month'
 }
@@ -23,7 +23,7 @@ interface Props {
 }
 interface States {
   dataSource: ConditionOptionProps[]
-  labels: string[]
+  labels: {[field: string]: string}
   values: ValueProps
 }
 class Main extends React.Component<Props> {
@@ -47,11 +47,12 @@ class Main extends React.Component<Props> {
     })
     return values
   }
-  public getLabels (dataSource = this.props.dataSource): string[] {
-    const labels: string[] = []
+  public getLabels (dataSource = this.props.dataSource): {[field: string]: string} {
+    const labels: {[field: string]: string} = this.state ? this.state.labels || {} : {}
     dataSource.forEach((item) => {
-      labels.push(item.label[0])
+      labels[item.field] = labels[item.field] || item.label[0]
     })
+    console.log(labels, 'labels')
     return labels
   }
   public handleChange (index: number, value: string) {
@@ -64,7 +65,7 @@ class Main extends React.Component<Props> {
     dataSource.forEach((item, index2) => {
       values[item.field] = {
         value: item.value,
-        label: labels[index2]
+        label: labels[item.field]
       }
     })
     if (this.props.onChange) {
@@ -114,7 +115,7 @@ class Main extends React.Component<Props> {
       nodes.push(
         <Menu.Item
           onClick={() => {
-            labels[index] = item
+            labels[dataSource[index].field] = item
             this.setState({
               labels
             })
@@ -184,7 +185,7 @@ class Main extends React.Component<Props> {
         break
       }
       const menu = this.getMenuNodes(index)
-      const label = labels[index]
+      const label = labels[item.field]
       nodes.push(
         <li>
           <label
@@ -210,6 +211,7 @@ class Main extends React.Component<Props> {
     return nodes
   }
   public render () {
+    console.log(this.state.labels, 'labels')
     return (
       <div
         style={this.props.style}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Select } from 'antd'
+import { Table, Button, Select, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
@@ -12,9 +12,9 @@ import _ from 'lodash'
 import moment from 'moment'
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
-const all = [{
+const all: any = [{
   label: '全部',
-  value: ''
+  value: undefined
 }]
 interface States {
   dataSource: DetailProps[]
@@ -43,36 +43,34 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      value: '',
       label: ['入库时间', '创建时间'],
       options: [
         {
           label: '全部',
-          value: ''
+          value: undefined
         },
         {
           label: '今天',
-          value: '1'
+          value: '0'
         },
         {
           label: '7天',
-          value: '7'
+          value: '6'
         },
         {
           label: '30天',
-          value: '30'
+          value: '29'
         }
       ],
       type: 'date'
     },
     {
       field: 'serviceExpire',
-      value: '',
       label: ['即将到期'],
       options: [
         {
           label: '全部',
-          value: ''
+          value: undefined
         },
         {
           label: '一个月',
@@ -91,7 +89,6 @@ class Main extends React.Component {
     },
     {
       label: ['纳税类别'],
-      value: '',
       field: 'payTaxesNature',
       options: all.concat(APP.keys.EnumPayTaxesNature)
     }
@@ -122,19 +119,40 @@ class Main extends React.Component {
     title: '运营会计',
     dataIndex: 'operatingAccouting'
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='成为签约客户的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'createTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
-    title: '开始账期',
+    title: (
+      <span>
+        开始账期
+        <Tooltip placement='top' title='客户开始记账服务的账期'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'startTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
-    title: '预计截至账期',
+    title: (
+      <span>
+        预计截至账期
+        <Tooltip placement='top' title='合同到期截至服务的账期'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'EndTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
@@ -188,76 +206,52 @@ class Main extends React.Component {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (!values.date.value) {
-      beginTime = ''
-      endTime = ''
-    } else if (values.date.value.indexOf('至') > -1) {
-      beginTime = values.date.value.split('至')[0]
-      endTime = values.date.value.split('至')[1]
-    } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+    if (values.date.value) {
+      if (values.date.value.indexOf('至') > -1) {
+        beginTime = values.date.value.split('至')[0]
+        endTime = values.date.value.split('至')[1]
+      } else {
+        endTime = moment().format('YYYY-MM-DD')
+        beginTime = moment().startOf('day').subtract(values.date.value, 'day').format('YYYY-MM-DD')
+      }
     }
     if (values.date.label === '入库时间') {
-      this.paramsleft.storageBeginDate = beginTime
-      this.paramsleft.storageEndDate = endTime
+      this.paramsleft.storageBeginDate = beginTime || undefined
+      this.paramsleft.storageEndDate = endTime || undefined
     } else if (values.date.label === '创建时间') {
-      this.paramsleft.createBeginDate = beginTime
-      this.paramsleft.createEndDate = endTime
+      this.paramsleft.createBeginDate = beginTime || undefined
+      this.paramsleft.createEndDate = endTime || undefined
     }
     let startmonth
     let endmonth
-    if (!values.serviceExpire.value) {
-      startmonth = ''
-      endmonth = ''
-    } else if (values.serviceExpire.value.indexOf('至') > -1) {
-      startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
-      endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
-    } else {
-      const val = values.serviceExpire.value.slice(0, 1)
-      console.log(val)
-      startmonth = moment().startOf('month').format('YYYY-MM-DD')
-      endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+    if (values.serviceExpire.value) {
+      if (values.serviceExpire.value.indexOf('至') > -1) {
+        startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
+        endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
+      } else {
+        const val = String(values.serviceExpire.value).slice(0, 1)
+        startmonth = moment().startOf('month').format('YYYY-MM-DD')
+        endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+      }
     }
     if (values.serviceExpire.label === '即将到期') {
-      this.paramsleft.serviceExpireBeginMonth = startmonth
-      this.paramsleft.serviceExpireEndMonth = endmonth
+      this.paramsleft.serviceExpireBeginMonth = startmonth || undefined
+      this.paramsleft.serviceExpireEndMonth = endmonth || undefined
     }
-    console.log(startmonth, endmonth)
-    this.paramsleft.payTaxesNature = values.payTaxesNature.value
+    this.paramsleft.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchList()
   }
-  public handleSearchType (values: any) {
-    this.paramsright = {}
-    switch (values.key) {
-    case '0':
-      this.paramsright.customerName = values.value
-      break
-    case '1':
-      this.paramsright.contactPerson = values.value
-      break
-    case '2':
-      this.paramsright.customerSource = values.value
-      break
-    case '3':
-      this.paramsright.signSalesperson = values.value
-      break
-    case '4':
-      this.paramsright.contactPhone = values.value
-      break
-    case '5':
-      this.paramsright.operatingAccouting = values.value
-      break
-    case '6':
-      this.paramsright.areaName = values.value
-      break
-    case '7':
-      this.paramsright.currentSalesperson = values.value
-      break
-    case '8':
-      this.paramsright.contractCode = values.value
-      break
-    }
+  public handleSearchType (value: {key: string, value?: string}) {
+    this.paramsright.customerName = undefined
+    this.paramsright.contactPerson = undefined
+    this.paramsright.customerSource = undefined
+    this.paramsright.signSalesperson = undefined
+    this.paramsright.contactPhone = undefined
+    this.paramsright.operatingAccouting = undefined
+    this.paramsright.areaName = undefined
+    this.paramsright.currentSalesperson = undefined
+    this.paramsright.contractCode = undefined
+    this.paramsright[value.key] = value.value || undefined
     this.fetchList()
   }
   public toSale (id?: string) {
@@ -338,15 +332,15 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: '0', label: '客户名称'},
-                { value: '1', label: '联系人'},
-                { value: '2', label: '客户来源'},
-                { value: '3', label: '签单销售'},
-                { value: '4', label: '联系电话'},
-                { value: '5', label: '运营会计'},
-                { value: '6', label: '地区'},
-                { value: '7', label: '跟进人'},
-                { value: '8', label: '合同号'}
+                { value: 'customerName', label: '客户名称'},
+                { value: 'contactPerson', label: '联系人'},
+                { value: 'customerSource', label: '客户来源'},
+                { value: 'signSalesperson', label: '签单销售'},
+                { value: 'contactPhone', label: '联系电话'},
+                { value: 'operatingAccouting', label: '运营会计'},
+                { value: 'areaName', label: '地区'},
+                { value: 'currentSalesperson', label: '跟进人'},
+                { value: 'contractCode', label: '合同号'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {
@@ -378,7 +372,7 @@ class Main extends React.Component {
             }
           }}
         />
-        <div>
+        <div style={{ position: 'relative', bottom: '48px'}}>
           <Button type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>
       </ContentBox>

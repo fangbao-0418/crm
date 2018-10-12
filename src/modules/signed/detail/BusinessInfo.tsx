@@ -1,14 +1,47 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Checkbox, DatePicker } from 'antd'
+import { Form, Row, Col, Input, Button, Checkbox, DatePicker, Dropdown, Menu } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
+import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
+import CompanySearch from './CompanySearch'
+import { fetchGovInfo } from '@/modules/common/api'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
   detail: Customer.DetailProps
 }
+
 class Main extends React.Component<Props> {
+  public searchUrl () {
+    let url: string
+    const modal = new Modal({
+      title: '网址查询',
+      content: (
+        <div>
+          <div>
+            <Input
+              onChange={(e) => {
+                url = e.target.value
+              }}
+            />
+          </div>
+          <a
+            href='http://www.gsxt.gov.cn/index.html'
+            target='_blank'
+          >
+            http://www.gsxt.gov.cn/index.html
+          </a>
+        </div>
+      ),
+      onOk: () => {
+        fetchGovInfo(url).then((res) => {
+          modal.hide()
+        })
+      }
+    })
+    modal.show()
+  }
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
@@ -33,13 +66,18 @@ class Main extends React.Component<Props> {
                   }
                 )(
                   <div>
-                    <Input.Search
-                      style={{width: '322px'}}
+                    <CompanySearch
                       enterButton='查询'
-                      onSearch={(value) => console.log(value)}
+                      style={{width: '322px'}}
                       value={detail.customerName}
                     />
-                    <Button className='ml5 mr5' type='primary'>网址</Button>
+                    <Button
+                      className='ml5 mr5'
+                      type='primary'
+                      onClick={this.searchUrl.bind(this)}
+                    >
+                      网址
+                    </Button>
                     <Button type='primary'>特殊公司</Button>
                   </div>
                 ) : <span>{detail.customerName}</span>
@@ -66,7 +104,7 @@ class Main extends React.Component<Props> {
           <Row >
             <Col span={10}>
               <FormItem
-                style={{marginLeft: '-22px'}}
+                style={{marginLeft: '-18px'}}
                 labelCol={{span: 10}}
                 wrapperCol={{span: 14}}
                 label='统一社会信用代码'
@@ -116,25 +154,53 @@ class Main extends React.Component<Props> {
             </Col>
           </Row>
           <Row>
-            <Col span={12}>
+            <Col span={24}>
               {!disabled ? (
                 <div>
                   <FormItem
                     className='inline-block'
-                    style={{width: disabled ? '270px' : null}}
-                    labelCol={{span: 6}}
-                    wrapperCol={{span: 18}}
+                    labelCol={{span: 7}}
+                    wrapperCol={{span: 17}}
                     label='营业期限'
                   >
-                    {getFieldDecorator('f')(
+                    {getFieldDecorator(
+                      'businessHoursBegin',
+                      {
+                        initialValue: moment(detail.businessHoursBegin)
+                      }
+                    )(
                       <DatePicker />
+                    )}
+                  </FormItem>
+                  <span
+                    style={{
+                      lineHeight: '40px',
+                      margin: '0 10px'
+                    }}
+                  >
+                    -
+                  </span>
+                  <FormItem
+                    className='inline-block'
+                  >
+                    {getFieldDecorator(
+                      'businessHoursEnd',
+                      {
+                        initialValue: moment(detail.businessHoursEnd)
+                      }
+                    )(
+                      <DatePicker
+                        disabled={detail.isFixedPeriod === 1}
+                      />
                     )}
                   </FormItem>
                   <FormItem
                     className='inline-block ml5'
                   >
-                    {!disabled && getFieldDecorator('g')(
-                      <Checkbox>无期限</Checkbox>
+                    {!disabled && getFieldDecorator(
+                      'isFixedPeriod'
+                    )(
+                      <Checkbox checked={detail.isFixedPeriod === 1}>无期限</Checkbox>
                     )}
                   </FormItem>
                 </div>
@@ -142,24 +208,30 @@ class Main extends React.Component<Props> {
                 <FormItem
                   className='inline-block'
                   style={{width: '100%'}}
-                  labelCol={{span: 4}}
-                  wrapperCol={{span: 20}}
+                  labelCol={{span: 2}}
+                  wrapperCol={{span: 22}}
                   label='营业期限'
                 >
                   <span>
                     {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
                       -
-                    {moment(detail.businessHoursEnd).format('YYYY年MM月DD日')}
+                    {detail.isFixedPeriod === 1 ?
+                      '无期限'
+                    :
+                      moment(detail.businessHoursEnd).format('YYYY年MM月DD日')
+                    }
                   </span>
                 </FormItem>
               )}
             </Col>
+          </Row>
+          <Row>
             <Col span={12}>
               <FormItem
                 style={{width: '100%'}}
                 // className='inline-block'
-                labelCol={{span: 8}}
-                wrapperCol={{span: 16}}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 20}}
                 label='公司地址'
               >
                 {!disabled ? getFieldDecorator(
@@ -201,9 +273,8 @@ export default connect((state: Reducer.State) => {
   return state.customer
 })(Form.create({
   onValuesChange: (props: Customer.Props, changeValue, allValues) => {
-    console.log('change')
     const detail = Object.assign({}, props.detail, allValues)
-    console.log(allValues)
+    detail.isFixedPeriod = detail.isFixedPeriod ? 1 : 0
     APP.dispatch({
       type: 'change customer data',
       payload: {

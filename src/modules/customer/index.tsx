@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
@@ -43,6 +43,10 @@ interface ParamsProps {
   payTaxesNature?: string
   [field: string]: any
 }
+const all = [{
+  label: '全部',
+  value: ''
+}]
 const data: ConditionOptionProps[] = [
   {
     field: 'date',
@@ -79,6 +83,20 @@ const data: ConditionOptionProps[] = [
         value: ''
       }
     ]
+  },
+  {
+    label: ['纳税类别'],
+    value: '',
+    field: 'payTaxesNature',
+    type: 'select',
+    options: all.concat(APP.keys.EnumPayTaxesNature)
+  },
+  {
+    label: ['客户来源'],
+    value: '',
+    field: 'customerSource',
+    type: 'select',
+    options: all.concat(APP.keys.EnumCustomerSource)
   }
 ]
 class Main extends React.Component<null, States> {
@@ -111,7 +129,14 @@ class Main extends React.Component<null, States> {
     title: '联系电话',
     dataIndex: 'contactPhone'
   }, {
-    title: '空置天数',
+    title: (
+      <span>
+        空置天数
+        <Tooltip placement='top' title='客户未被跟进的天数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'vacantDays'
   }, {
     title: '城市',
@@ -123,7 +148,14 @@ class Main extends React.Component<null, States> {
     title: '创建时间',
     dataIndex: 'enterStorageTime'
   }, {
-    title: '入库时间',
+    title: (
+      <span>
+        入库时间
+        <Tooltip placement='top' title='客户进入客资池的时间'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
@@ -156,43 +188,45 @@ class Main extends React.Component<null, States> {
     })
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
-    console.log(selectedRowKeys)
+    // console.log(selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
   public handleSearch (values: any) {
     console.log(values, 'values')
-    if (values.date.lable === '入库时间') {
+    if (values.date.label === '入库时间') {
       let storageBeginDate
       let storageEndDate
       if (values.date.value === 'all') {
-        storageBeginDate = ''
-        storageEndDate = ''
+        storageBeginDate = undefined
+        storageEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
         storageBeginDate = values.date.split('至')[0]
         storageEndDate = values.date.split('至')[1]
       } else {
-        storageBeginDate = moment().format('YYYY-MM-DD')
-        storageEndDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+        storageBeginDate = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
+        storageEndDate = moment().format('YYYY-MM-DD')
       }
       this.params.storageBeginDate = storageBeginDate
       this.params.storageEndDate = storageEndDate
-    } else if (values.date.lable === '创建时间') {
+    } else if (values.date.label === '创建时间') {
       let createBeginDate
       let createEndDate
       if (values.date.value === 'all') {
-        createBeginDate = ''
-        createEndDate = ''
+        createBeginDate = undefined
+        createEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
         createBeginDate = values.date.split('至')[0]
         createEndDate = values.date.split('至')[1]
       } else {
-        createBeginDate = moment().format('YYYY-MM-DD')
-        createEndDate = moment().startOf('day').add(values.date, 'day').format('YYYY-MM-DD')
+        createBeginDate = moment().startOf('day').subtract(values.date - 1, 'day').format('YYYY-MM-DD')
+        createEndDate = moment().format('YYYY-MM-DD')
       }
       this.params.createBeginDate = createBeginDate
       this.params.createEndDate = createEndDate
     }
-    this.params.cityCode = values.cityCode.value
+    this.params.cityCode = values.cityCode.value || undefined
+    this.params.payTaxesNature = values.payTaxesNature.value || undefined
+    this.params.customerSource = values.customerSource.value || undefined
     this.fetchList()
   }
   public handleSearchType (value: {value?: string, key: string}) {
@@ -326,11 +360,17 @@ class Main extends React.Component<null, States> {
     })
     modal.show()
   }
-  public SelectAll () {
-    this.setState({
-      selectAll: true
-    })
-  }
+  // public SelectAll () {
+  //   const ids: string[] = []
+  //   this.state.dataSource.forEach((item) => {
+  //     ids.push(item.customerId)
+  //   })
+  //   // console.log(ids, 'ids')
+  //   this.setState({
+  //     selectedRowKeys: ids,
+  //     selectAll: true
+  //   })
+  // }
   public toOrganizationAuto () {
     if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
       APP.error('请选择需要分配客户')
@@ -440,9 +480,9 @@ class Main extends React.Component<null, States> {
               options={[
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'payTaxesNature', label: '纳税类别'}
+                { value: 'contactPhone', label: '联系电话'}
+                // { value: 'customerSource', label: '客户来源'},
+                // { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               // onChange={this.handleSearchType.bind(this)}
@@ -474,8 +514,8 @@ class Main extends React.Component<null, States> {
             }
           }}
         />
-        <div className='mt40'>
-          <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button>
+        <div className='btn-position'>
+          {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
           <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
           <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>

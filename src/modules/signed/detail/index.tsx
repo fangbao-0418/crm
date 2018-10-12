@@ -1,10 +1,10 @@
 import React from 'react'
 import BusinessInfo from './BusinessInfo'
 import BaseInfo from './BaseInfo'
-import LinkMan from '@/modules/common/link-man'
+import LinkMan from './LinkMan'
 import Card from '@/components/Card'
 import AddButton from '@/modules/common/content/AddButton'
-import { Form, Icon, Button } from 'antd'
+import { Icon } from 'antd'
 import { connect } from 'react-redux'
 import { updateCustomer } from '@/modules/customer/api'
 const styles = require('./style')
@@ -20,7 +20,8 @@ class Main extends React.Component<Props> {
     const linkMan = this.props.linkMan
     linkMan.push({
       contactPerson: '',
-      contactPhone: ''
+      contactPhone: '',
+      source: 1
     })
     APP.dispatch({
       type: 'change customer data',
@@ -31,7 +32,7 @@ class Main extends React.Component<Props> {
   }
   public save () {
     const id = this.props.detail.id
-    if (this.state.disabled) {
+    if (this.state.disabled === false) {
       return
     }
     updateCustomer(id, this.props.detail).then(() => {
@@ -67,7 +68,7 @@ class Main extends React.Component<Props> {
         </Card>
         <Card
           title='联系方式'
-          rightContent={(
+          rightContent={!this.state.disabled && (
             <AddButton
               onClick={this.addLinkMan.bind(this)}
             />
@@ -75,10 +76,6 @@ class Main extends React.Component<Props> {
         >
           <LinkMan disabled={this.state.disabled} />
         </Card>
-        {/* <div className='text-right mt20'>
-          <Button className='mr5'>取消</Button>
-          <Button type='primary'>保存</Button>
-        </div> */}
       </div>
     )
   }

@@ -17,3 +17,24 @@
     border: 1px solid #d9d9d9
     line-height: 14px
     color: rgba(0, 0, 0, 0.65)
+.company-search
+  display: inline-block
+  position relative
+  ul
+    list-style none
+    position: absolute
+    z-index: 2;
+    background: #FFFFFF;
+    max-height: 200px;
+    overflow: scroll;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background-clip: padding-box;
+    li
+      width: 100%
+      cursor pointer
+      transition: all .3s;
+      line-height: 22px;
+      padding: 5px 12px;
+      margin: 0
+      &:hover
+        background-color: #e6f7ff;

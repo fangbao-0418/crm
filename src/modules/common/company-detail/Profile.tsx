@@ -4,6 +4,7 @@ import moment from 'moment'
 const styles = require('./style')
 interface Props extends Customer.Props {
   isShowAgent?: boolean
+  type?: 'business' | 'open' | 'customer'
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -30,7 +31,14 @@ class Main extends React.Component<Props> {
             <span className='mr20 ml10'>天眼查</span>
           </p>
           <p>
-            <label>跟进人:</label>
+            {
+              this.props.type === 'open' &&
+              <label>最后跟进人:</label>
+            }
+            {
+               this.props.type !== 'open' &&
+               <label>跟进人:</label>
+            }
             <span>
               {this.props.detail.currentSalesperson}
             </span>

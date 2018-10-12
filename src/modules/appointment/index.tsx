@@ -69,6 +69,20 @@ class Main extends React.Component {
       value: '',
       label: ['电话状态'],
       options: all.concat(APP.keys.EnumContactStatus)
+    },
+    {
+      label: ['纳税类别'],
+      value: '',
+      field: 'payTaxesNature',
+      type: 'select',
+      options: all.concat(APP.keys.EnumPayTaxesNature)
+    },
+    {
+      label: ['客户来源'],
+      value: '',
+      field: 'customerSource',
+      type: 'select',
+      options: all.concat(APP.keys.EnumCustomerSource)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
@@ -127,12 +141,10 @@ class Main extends React.Component {
     this.fetchList()
   }
   public fetchList () {
-    this.params = $.extend(true, this.paramsleft, this.paramsright, this.params)
-    const params = _.cloneDeep(this.params)
     const pagination = this.state.pagination
-    params.pageSize = pagination.pageSize
-    params.pageCurrent = pagination.current
-    fetchListappoint(params).then((res) => {
+    this.params.pageSize = pagination.pageSize
+    this.params.pageCurrent = pagination.current
+    fetchListappoint(this.params).then((res) => {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
@@ -160,31 +172,32 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    this.paramsleft = {}
     let beginTime
     let endTime
     if (!values.date.value) {
-      beginTime = ''
-      endTime = ''
+      beginTime = undefined
+      endTime = undefined
     } else if (values.date.value.indexOf('至') > -1) {
       beginTime = values.date.value.split('至')[0]
       endTime = values.date.value.split('至')[1]
     } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+      beginTime = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
+      endTime = moment().format('YYYY-MM-DD')
     }
     if (values.date.label === '预约时间') {
-      this.paramsleft.appointStartTime = beginTime
-      this.paramsleft.appointEndDate = endTime
+      this.params.appointStartTime = beginTime
+      this.params.appointEndDate = endTime
     } else if (values.date.label === '创建时间') {
-      this.paramsleft.createBeginDate = beginTime
-      this.paramsleft.createEndDate = endTime
+      this.params.createBeginDate = beginTime
+      this.params.createEndDate = endTime
     } else if (values.date.label === '最后跟进') {
-      this.paramsleft.lastTrackBeginTime = beginTime
-      this.paramsleft.lastTrackEndTime = endTime
+      this.params.lastTrackBeginTime = beginTime
+      this.params.lastTrackEndTime = endTime
     }
-    this.paramsleft.intention = values.intention.value
-    this.paramsleft.telephoneStatus = values.telephoneStatus.value
+    this.params.intention = values.intention.value || undefined
+    this.params.telephoneStatus = values.telephoneStatus.value || undefined
+    this.params.payTaxesNature = values.payTaxesNature.value || undefined
+    this.params.customerSource = values.customerSource.value || undefined
     this.fetchList()
   }
   public handleSearchType (values: any) {
@@ -204,7 +217,7 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='我的预约'>
-        <div className='mb12' style={{ overflow: 'hidden' }}>
+        <div className='mb12 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
@@ -218,9 +231,9 @@ class Main extends React.Component {
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
-                { value: 'currentSalesperson', label: '所属销售'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'payTaxesNature', label: '纳税类别'}
+                { value: 'currentSalesperson', label: '所属销售'}
+                // { value: 'customerSource', label: '客户来源'},
+                // { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
               onKeyDown={(e, val) => {

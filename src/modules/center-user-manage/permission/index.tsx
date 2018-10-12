@@ -3,7 +3,7 @@ import { Button, Table, Divider, Modal, Form, Input, Tag } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import PermissionModal from './permission-modal'
-import { fetchPermissionList, toggleForbidPermission, delPermission } from './api'
+import { fetchPermissionList, toggleForbidPermission, delPermission, addPermission, modifyPermission } from './api'
 
 const styles = require('./style')
 
@@ -11,7 +11,15 @@ interface State {
   tab: number, // tab切换
   mode: 'view' | 'modify' | 'add' // 弹窗模式
   visible: boolean // 弹窗是否显示
+  currentId: number // 当前选中权限id
   permissionList: any[] // 权限列表
+}
+
+interface Info {
+  name: string,
+  url: string,
+  code: string,
+  button: any[]
 }
 
 class Main extends React.Component {
@@ -19,6 +27,7 @@ class Main extends React.Component {
     tab: 0,
     mode: 'add',
     visible: false,
+    currentId: 0,
     permissionList: []
   }
 
@@ -40,8 +49,8 @@ class Main extends React.Component {
   }
 
   // 修改、添加权限
-  public setPermission = (mode: 'view' | 'modify' | 'add') => {
-    this.setState({visible: true, mode})
+  public setPermission = (mode: 'view' | 'modify' | 'add', currentId: number) => {
+    this.setState({visible: true, mode, currentId})
   }
 
   // 禁用、启用权限
@@ -87,7 +96,46 @@ class Main extends React.Component {
     })
   }
 
+  // 新增权限
+  public addPermission (val: Info) {
+    const {name, code, url, button} = val
+    const {currentId, permissionList, tab} = this.state
+    const createUser = 111 // todo 改为登陆ID
+    const payload = {
+      name,
+      code,
+      url,
+      buttonList: button,
+      parentId: currentId,
+      systemCode: permissionList[tab].systemCode,
+      createUser
+    }
+    addPermission(payload).then((res) => {
+      this.setState({visible: false})
+      this.getPermissionList()
+    })
+  }
+
+  // 修改权限
+  public modifyPermission (val: Info) {
+    const {currentId} = this.state
+    const {name, code, url, button} = val
+    const updateUser = 111 // todo 改为登陆ID
+    const payload = {
+      name,
+      code,
+      url,
+      buttonList: button,
+      updateUser
+    }
+    modifyPermission(currentId, payload).then((res) => {
+      this.setState({visible: false})
+      this.getPermissionList()
+    })
+  }
+
   public render () {
+    const {permissionList, tab, currentId, mode, visible} = this.state
     const columns = [
       {
         title: '权限名称',
@@ -102,9 +150,9 @@ class Main extends React.Component {
               {
                 status === 0
                 ? <div>
-                    <a onClick={() => {this.setPermission('modify')}}>修改</a>
+                    <a onClick={() => {this.setPermission('modify', id)}}>修改</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.setPermission('add')}}>添加子页面权限</a>
+                    <a onClick={() => {this.setPermission('add', id)}}>添加子页面权限</a>
                     <Divider type='vertical'/>
                     <a onClick={() => {this.forbidPermission(id, 1)}}>禁用</a>
                     <Divider type='vertical'/>
@@ -131,7 +179,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加页面权限'
-            onClick={() => {this.setPermission('add')}}
+            onClick={() => {this.setPermission('add', 0)}} // 添加根级权限时id传0
           />
         )}
       >
@@ -145,23 +193,27 @@ class Main extends React.Component {
             <Table
               pagination={false}
               childrenColumnName='authorityList'
-              dataSource={this.state.permissionList.length ? this.state.permissionList[this.state.tab].authorityResponseList : []}
+              dataSource={permissionList.length ? permissionList[tab].authorityResponseList : []}
               columns={columns}
+              rowKey='id'
             />
           </div>
 
         </div>
 
         {
-          this.state.visible &&
+          visible &&
           <PermissionModal
-            mode={this.state.mode}
-            info={{
-              name: '3344',
-              code: 333,
-              option: [{label: '22', value: '333'}]
+            mode={mode}
+            id={currentId}
+            systemCode={permissionList[tab].systemCode}
+            onOk={(val) => {
+              if (mode === 'add') {
+                this.addPermission(val)
+              } else {
+                this.modifyPermission(val)
+              }
             }}
-            onOk={() => {}}
             onCancel={() => {this.setState({visible: false})}}
           />
         }

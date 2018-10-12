@@ -12,7 +12,6 @@ interface States {
   dataSource: LinkManProps[]
 }
 const FormItem = Form.Item
-const styles = require('./style')
 class Main extends React.Component<Props> {
   public dataSource = [{
     contactPerson: '22',
@@ -78,27 +77,58 @@ class Main extends React.Component<Props> {
         )
       }
     },
-    // {
-    //   title: '来源',
-    //   dataIndex: 'customerSource',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'customerSource')} value={text}/>
-    //   }
-    // },
-    // {
-    //   title: '备注',
-    //   dataIndex: 'mark',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'mark')} value={text}/>
-    //   }
-    // },
-    // {
-    //   title: '职务',
-    //   dataIndex: 'worker',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'worker')} value={text}/>
-    //   }
-    // },
+    {
+      title: '来源',
+      dataIndex: 'source',
+      width: '100px',
+      align: 'center',
+      render: (text, record, index) => {
+        console.log(APP.dictionary[`EnumContactSource-${text}`], text)
+        return APP.dictionary[`EnumContactSource-${text}`]
+      }
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      render: (text, record, index) => {
+        return (
+          <FormItem>
+            {this.props.form.getFieldDecorator(`remark-${index}`, {
+              valuePropName: text
+            })(
+              this.props.disabled ?
+                <span>{text}</span>
+              :
+                <Input
+                  value={text}
+                  onChange={this.onChange.bind(this, index, 'remark')}
+                />
+            )}
+          </FormItem>
+        )
+      }
+    },
+    {
+      title: '职务',
+      dataIndex: 'worker',
+      render: (text, record, index) => {
+        return (
+          <FormItem>
+            {this.props.form.getFieldDecorator(`worker-${index}`, {
+              valuePropName: text
+            })(
+              this.props.disabled ?
+                <span>{text}</span>
+              :
+                <Input
+                  value={text}
+                  onChange={this.onChange.bind(this, index, 'worker')}
+                />
+            )}
+          </FormItem>
+        )
+      }
+    },
     {
       title: '操作',
       width: '80px',
@@ -110,6 +140,7 @@ class Main extends React.Component<Props> {
             onClick={() => {
               const data = this.props.linkMan
               data.splice(index, 1)
+              console.log(data, 'data')
               APP.dispatch({
                 type: 'change customer data',
                 payload: {
@@ -139,7 +170,9 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props.linkMan)
     return (
-      <div className={styles.container} style={{width: '100%'}}>
+      <div
+        style={{width: '100%'}}
+      >
         <Form>
           <Table
             dataSource={this.props.linkMan}

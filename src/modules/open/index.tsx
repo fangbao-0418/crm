@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -37,8 +37,6 @@ class Main extends React.Component {
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Open.SearchProps = {}
-  public paramsleft: Open.SearchProps = {}
-  public paramsright: Open.SearchProps = {}
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -75,6 +73,20 @@ class Main extends React.Component {
       value: '',
       label: ['电话状态'],
       options: all.concat(APP.keys.EnumContactStatus)
+    },
+    {
+      label: ['纳税类别'],
+      value: '',
+      field: 'payTaxesNature',
+      type: 'select',
+      options: all.concat(APP.keys.EnumPayTaxesNature)
+    },
+    {
+      label: ['客户来源'],
+      value: '',
+      field: 'customerSource',
+      type: 'select',
+      options: all.concat(APP.keys.EnumCustomerSource)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
@@ -113,10 +125,24 @@ class Main extends React.Component {
       return (APP.dictionary[`EnumContactSource-${val}`])
     }
   }, {
-    title: '释放次数',
+    title: (
+      <span>
+        释放次数
+        <Tooltip placement='top' title='客户被释放到公海的总次数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'releaseNums'
   }, {
-    title: '释放销售',
+    title: (
+      <span>
+        释放销售
+        <Tooltip placement='top' title='客户最后一次被释放到公海时的销售'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'lastReleaseSalesperson'
   }, {
     title: '创建时间',
@@ -135,12 +161,10 @@ class Main extends React.Component {
     this.fetchList()
   }
   public fetchList () {
-    this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
-    const params = _.cloneDeep(this.params)
     const pagination = this.state.pagination
-    params.pageSize = pagination.pageSize
-    params.pageCurrent = pagination.current
-    fetchList(params).then((res) => {
+    this.params.pageSize = pagination.pageSize
+    this.params.pageCurrent = pagination.current
+    fetchList(this.params).then((res) => {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
@@ -168,40 +192,41 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    this.paramsleft = {}
+    console.log(values, 'values')
     let beginTime
     let endTime
     if (!values.date.value) {
-      beginTime = ''
-      endTime = ''
+      beginTime = undefined
+      endTime = undefined
     } else if (values.date.value.indexOf('至') > -1) {
       beginTime = values.date.value.split('至')[0]
       endTime = values.date.value.split('至')[1]
     } else {
-      beginTime = moment().format('YYYY-MM-DD')
-      endTime = moment().startOf('day').add(values.date.value, 'day').format('YYYY-MM-DD')
+      beginTime = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
+      endTime = moment().format('YYYY-MM-DD')
     }
     if (values.date.label === '释放时间') {
-      this.paramsleft.lastReleaseTimeBegin = beginTime
-      this.paramsleft.lastReleaseTimeEnd = endTime
+      this.params.lastReleaseTimeBegin = beginTime
+      this.params.lastReleaseTimeEnd = endTime
     } else if (values.date.label === '创建时间') {
-      this.paramsleft.createBeginDate = beginTime
-      this.paramsleft.createEndDate = endTime
+      this.params.createBeginDate = beginTime
+      this.params.createEndDate = endTime
     } else if (values.date.label === '最后跟进') {
-      this.paramsleft.lastTrackTimeBegin = beginTime
-      this.paramsleft.lastTrackTimeEnd = endTime
+      this.params.lastTrackTimeBegin = beginTime
+      this.params.lastTrackTimeEnd = endTime
     }
-    this.paramsleft.intention = values.intention.value
-    this.paramsleft.telephoneStatus = values.telephoneStatus.value
+    this.params.payTaxesNature = values.payTaxesNature.value || undefined
+    this.params.customerSource = values.customerSource.value || undefined
+    this.params.intention = values.intention.value || undefined
+    this.params.telephoneStatus = values.telephoneStatus.value || undefined
     this.fetchList()
   }
   public handleSearchType (values: any) {
+    console.log(values, 'values')
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     this.params.contactPhone = undefined
     this.params.lastReleaseSalesperson = undefined
-    this.params.customerSource = undefined
-    this.params.payTaxesNature = undefined
     this.params.busSeaMemo = undefined
     this.params[values.key] = values.value || undefined
     this.fetchList()
@@ -320,7 +345,7 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='公海管理'>
-        <div className='mb12' style={{ overflow: 'hidden' }}>
+        <div className='mb12 clear'>
           <div className='fl' style={{ width: 740 }}>
             <Condition
               dataSource={this.data}
@@ -335,8 +360,8 @@ class Main extends React.Component {
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
                 { value: 'lastReleaseSalesperson', label: '释放销售'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'payTaxesNature', label: '纳税类别'},
+                // { value: 'customerSource', label: '客户来源'},
+                // { value: 'payTaxesNature', label: '纳税类别'},
                 { value: 'busSeaMemo', label: '释放原因'}
               ]}
               placeholder={''}
@@ -369,7 +394,7 @@ class Main extends React.Component {
             }
           }}
         />
-        <div>
+        <div style={{ position: 'relative', bottom: '48px'}}>
           <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
           <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>

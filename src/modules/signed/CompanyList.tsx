@@ -35,9 +35,6 @@ export default class extends React.Component {
   }, {
     title: '开始账期',
     dataIndex: 'startdate'
-  }, {
-    title: '结束账期',
-    dataIndex: 'enddate'
   }]
   public render () {
     return (

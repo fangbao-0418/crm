@@ -18,10 +18,14 @@ class Main extends React.Component {
   public values: any = {}
   public verify: any
   public num = 0
+  public componentWillMount () {
+    if (APP.token) {
+      APP.history.push('/')
+    }
+  }
   public componentDidMount () {
     this.verify = new GVerify('verify')
     $(this.refs.sms).find('ul li').click((e) => {
-      console.log(e)
       $(e.currentTarget).siblings().removeClass(styles.active)
       $(e.currentTarget).addClass(styles.active)
     })
@@ -33,20 +37,33 @@ class Main extends React.Component {
   }
   public toLogin () {
     const { error } = this.state
+    if (!this.values.phone) {
+      error.phone = '手机号不能为空'
+    }
     if (!this.verify.validate(this.values['verify-code'] || '')) {
       error['verify-code'] = '图片验证码不匹配'
-      console.log(error, 'error')
-      this.setState({
-        error
-      })
+    }
+    if (!this.values['sms-verify-code']) {
+      error['sms-verify-code'] = '短信验证码不能为空'
+    }
+    this.setState({
+      error
+    })
+    if (error.phone || error['verify-code'] || error['sms-verify-code']) {
       return
     }
     userLogin({
-      phoneNumber: this.values.phone,
+      phone: this.values.phone,
       validCode: this.values['verify-code'],
       phoneValidCode: this.values['sms-verify-code']
-    }).then(() => {
+    }).then((res) => {
+      APP.token = res.token
       APP.history.push('/')
+    }, () => {
+      error['sms-verify-code'] = '用户不存在'
+      this.setState({
+        error
+      })
     })
   }
   public handleChange (field: 'phone' | 'verify-code' | 'sms-verify-code', e: React.SyntheticEvent) {
@@ -96,12 +113,15 @@ class Main extends React.Component {
           </div>
           <div className={styles.sms} ref='sms'>
             <ul>
-              <li>
+              <li className={classNames({[styles['has-error']]: !!error.phone})}>
                 <div className={styles.phone}>
                   <input maxLength={11} placeholder='请输入手机号' onChange={this.handleChange.bind(this, 'phone')}/>
                 </div>
+                <span className={styles.error}>
+                  {error.phone}
+                </span>
               </li>
-              <li  className={classNames({[styles['has-error']]: !!error['verify-code']})}>
+              <li className={classNames({[styles['has-error']]: !!error['verify-code']})}>
                 <div className={styles['verify-text']}>
                   <input maxLength={4} onChange={this.handleChange.bind(this, 'verify-code')}/>
                 </div>
@@ -110,7 +130,7 @@ class Main extends React.Component {
                   {error['verify-code']}
                 </span>
               </li>
-              <li>
+              <li className={classNames({[styles['has-error']]: !!error['sms-verify-code']})}>
                 <div className={styles['sms-verify-text']}>
                   <input maxLength={4} onChange={this.handleChange.bind(this, 'sms-verify-code')}/>
                   <span
@@ -119,6 +139,9 @@ class Main extends React.Component {
                   >{message}
                   </span>
                 </div>
+                <span className={styles.error}>
+                  {error['sms-verify-code']}
+                </span>
               </li>
             </ul>
             <Button

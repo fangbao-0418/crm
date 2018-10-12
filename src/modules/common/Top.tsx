@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout } from 'antd'
+import { Layout, Dropdown, Menu } from 'antd'
 // 消息提醒
 import Msg from '@/modules/message/services/message.tsx'
 
@@ -34,6 +34,19 @@ class Main extends React.Component {
     })
   }
   public render () {
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <span
+            onClick={() => {
+              APP.history.push('/logout')
+            }}
+          >
+            注销
+          </span>
+        </Menu.Item>
+      </Menu>
+    )
     return (
       <Header className={styles.container}>
         {/* <Icon
@@ -68,14 +81,18 @@ class Main extends React.Component {
           >
             西蒙船长
           </span>
-          <span
-            className='icon'
-            style={{
-              backgroundImage: `url(${require('@/assets/images/user-menu.png')})`,
-              width: '18px',
-              height: '18px'
-            }}
-          />
+          <Dropdown
+            overlay={menu}
+          >
+            <span
+              className='icon'
+              style={{
+                backgroundImage: `url(${require('@/assets/images/user-menu.png')})`,
+                width: '18px',
+                height: '18px'
+              }}
+            />
+          </Dropdown>
         </div>
       </Header>
     )

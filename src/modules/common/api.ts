@@ -1,15 +1,18 @@
 import http from '@/utils/http'
 export const userLogin = (payload: {
-  phoneNumber: string,
+  phone: string,
   validCode?: string
   phoneValidCode?: string
 }) => {
-  return http(`/user/v1/api/user/login`, 'POST', {
+  return http(`/user/v1/api/login`, 'POST', {
     contentType: 'application/x-www-form-urlencoded',
     processData: true,
     raw: true,
     data: payload
   })
+}
+export const fetchUserInfo = () => {
+  return http(`/user/v1/api/user/info`)
 }
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
@@ -47,4 +50,13 @@ export const fetchRegion = (payload: {
   level: 1
 }) => {
   return http(`/config/v1/api/region`, payload)
+}
+export const fetchTianYanCompanyList = (name: string) => {
+  return http(`/crm-manage/v1/api/tianyan/list?name=${name}`)
+}
+export const fetchTianYanDetail = (id: string) => {
+  return http(`/crm-manage/v1/api/tianyan/${id}`)
+}
+export const fetchGovInfo = (url: string) => {
+  return http(`/crm-manage/v1/api/gov?url=${url}`)
 }

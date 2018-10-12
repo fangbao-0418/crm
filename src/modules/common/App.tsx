@@ -17,6 +17,7 @@ class App extends React.Component<Props> {
       <LocaleProvider locale={zhCN}>
         <Switch>
           <Route path='/login' component={modules.Login} />
+          <Route path='/logout' component={modules.Logout} />
           <Main></Main>
         </Switch>
       </LocaleProvider>

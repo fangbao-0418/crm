@@ -5,10 +5,9 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
-export default function (customerId: string) {
+export default function (customerId: string, cb?: () => void) {
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
-  console.log(this, 'assssss')
   const modal = new Modal({
     content: (
       <Provider>
@@ -48,6 +47,9 @@ export default function (customerId: string) {
                           })
                         })
                         APP.success('操作成功')
+                        if (cb) {
+                          cb()
+                        }
                       })
                       modal1.hide()
                     },
