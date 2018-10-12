@@ -3,7 +3,10 @@ import { Icon, Table, Input, Form, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { DatePicker, Radio, Row, Col } from 'antd'
 import { Moment } from 'moment'
-import TaskService from '@/modules/outsite/services'
+import Service from '@/modules/outsite/services'
+import { Map } from '@/modules/outsite/types/outsite'
+import { TasktplItem, TasktplList } from '@/modules/outsite/types/tploutside'
+import _ from 'lodash'
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker
 const FormItem = Form.Item
@@ -24,14 +27,48 @@ function hasErrors (fieldsError: any) {
 // 搜索表单
 class Main extends React.Component<any, any> {
   public state: any = {
-    extshow: false
+    extshow: false,
+    tplTaskList: [], // 任务模板列表
+    tplTaskMap: {}, // 任务id:name map
+    tplSubData: {}, // 子任务按照任务id分组数据
+    searchData: {
+      names: '', // 客户或联系人名称
+      tplTaskid: '',
+      tplSubid: '',
+      userName: '', // 外勤人员
+      status: '',
+      areaId: '',
+      startTime: ''
+    }
   }
 
   public componentWillMount () {
   }
 
-  public createTaskNameOptions () {
-    const dict = TaskService.taskCateDict
+  // 获取全部任务
+  public getTplTaskList () {
+    Service.getTplList().then((data: any) => {
+      if (!data) {
+        return
+      }
+      const tplTaskMap: Map<string> = {}
+      const tplSubData: Map<Array<TasktplItem>> = {}
+      data.map((item: TasktplItem, index: number) => {
+        tplTaskMap[item.id] = item.name
+        tplSubData[item.id] = item.subList
+      })
+      this.setState({
+        tplTaskList: data,
+        tplTaskMap,
+        tplSubData
+      })
+    })
+  }
+
+  // 生成下拉
+  public createTaskNameOptions (options: Array<any>) {
+    /*
+    const dict = Service.getTplList().then()
     const options: Array<any> = []
     for (const i in dict) {
       if (i) {
@@ -41,9 +78,15 @@ class Main extends React.Component<any, any> {
         })
       }
     }
+    */
     return options.map((item: any) => {
-      return <Select.Option key={`option-${item.field}`} value={item.field}>{item.label}</Select.Option>
+      return <Select.Option key={`option-${item.id}`} value={item.id}>{item.name}</Select.Option>
     })
+  }
+
+  // 搜索提交
+  public onChange (a: any) {
+    console.log('search form changed::', a, arguments)
   }
 
   // 搜索项显藏
@@ -52,6 +95,7 @@ class Main extends React.Component<any, any> {
       extshow: !this.state.extshow
     })
   }
+
   public setExthide () {
     this.setState({
       extshow: false
@@ -70,8 +114,8 @@ class Main extends React.Component<any, any> {
       <Form
         layout='inline'
         style={{width: '80%'}}
-        onChange={this.props.onSearch}
-        onSubmit={this.props.onSearch}
+        onChange={this.onChange.bind(this)}
+        // onSubmit={this.props.onSearch}
       >
         <FormItem>
         {getFieldDecorator(`names`, {
@@ -84,14 +128,26 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`taskname`, {
+        {getFieldDecorator(`tplTaskid`, {
           rules: [{
             required: false,
             message: ''
           }]
         })(
-          <Select style={{width: '120px'}} value='税务'>
-            {this.createTaskNameOptions()}
+          <Select style={{width: '120px'}}>
+            {this.createTaskNameOptions(this.state.tplTaskList)}
+          </Select>
+        )}
+        </FormItem>
+        <FormItem>
+        {getFieldDecorator(`tplSubid`, {
+          rules: [{
+            required: false,
+            message: ''
+          }]
+        })(
+          <Select style={{width: '120px'}}>
+            {this.createTaskNameOptions(this.state.tplTaskList)}
           </Select>
         )}
         </FormItem>
@@ -104,13 +160,31 @@ class Main extends React.Component<any, any> {
             <Row>
               <Col span={12}>
                 <FormItem>
-                  <Input placeholder='请输入外勤人员' name='userName' />
+                  {getFieldDecorator(`userName`, {
+                    rules: [{
+                      required: false,
+                      message: ''
+                    }]
+                  })(
+                    <Input placeholder='请输入外勤人员' />
+                  )}
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem>
-                  <Input placeholder='请选择服务状态' name='status' />
-                </FormItem>
+                {getFieldDecorator(`status`, {
+                  rules: [{
+                    required: false,
+                    message: ''
+                  }]
+                })(
+                  <Select style={{width: '120px'}}>
+                    {
+                      _.map(Service.taskStatusDict, (val: string, key: string) => {
+                        return <Select.Option key={`option-${key}`} value={key}>{val}</Select.Option>
+                      })
+                    }
+                  </Select>
+                )}
               </Col>
             </Row>
             <Row>
