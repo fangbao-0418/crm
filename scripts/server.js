@@ -39,6 +39,14 @@ const options = {
     //   changeOrigin: true,
     //   secure: false
     // },
+    '/oss': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        '^/crm-manage/v1': '/v1'
+      }
+    },
     '/outside': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,

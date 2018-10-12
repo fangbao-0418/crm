@@ -77,3 +77,12 @@ export const fetchTianYanDetail = (id: string) => {
 export const fetchGovInfo = (url: string) => {
   return http(`/crm-manage/v1/api/gov?url=${url}`)
 }
+export const fetchOssToken = () => {
+  const payload = {
+    prefix: 'pilipa',
+    bucket: 'pilipa_ml',
+    durationSeconds: 60 * 60
+  }
+  const query = $.param(payload)
+  return http(`/oss/api/v1/oss/write-token?${query}`)
+}

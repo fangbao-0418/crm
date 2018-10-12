@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import { fetchOssToken } from '@/modules/common/api'
 const styles = require('./style')
 const defaultVal = require('@/assets/images/noimage.png')
 interface Props {
@@ -7,6 +8,11 @@ interface Props {
   style?: React.CSSProperties
 }
 class Main extends React.Component<Props> {
+  public componentWillMount () {
+    fetchOssToken().then((res) => {
+      console.log(res)
+    })
+  }
   public handleClick () {
     const el = document.createElement('input')
     el.setAttribute('type', 'file')
