@@ -143,7 +143,10 @@ class Main extends React.Component<null, States> {
     dataIndex: 'cityName'
   }, {
     title: '客户来源',
-    dataIndex: 'customerSource'
+    dataIndex: 'customerSource',
+    render: (val) => {
+      return (APP.dictionary[`EnumCustomerSource-${val}`])
+    }
   }, {
     title: '创建时间',
     dataIndex: 'enterStorageTime'

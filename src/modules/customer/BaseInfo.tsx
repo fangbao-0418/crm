@@ -155,8 +155,6 @@ class Main extends React.Component<Props> {
         const params = this.props.detail
         params.customerNameType = '1' // 后端不需要改代码所以加上
         params.isConfirmed = '1' // 是否天眼查
-        params.cityName = this.state.cityName
-        params.areaName = this.state.areaName
         params.contactPersons = this.props.linkMan
         // delete params.tagIntention
         // delete params.tagTelephoneStatus
@@ -192,9 +190,14 @@ class Main extends React.Component<Props> {
       key: 'cityCode',
       value: value.key
     })
-    this.setState({
-      areaName: '',
-      cityName: value.title
+    const detail = this.props.detail
+    detail.areaName = ''
+    detail.cityName = value.title
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        detail
+      }
     })
     fetchRegion({
       parentId: value.key,
@@ -213,8 +216,13 @@ class Main extends React.Component<Props> {
       key: 'areaCode',
       value: value.key
     })
-    this.setState({
-      areaName: value.title
+    const detail = this.props.detail
+    detail.areaName = value.title
+    APP.dispatch({
+      type: 'change customer data',
+      payload: {
+        detail
+      }
     })
   }
   public render () {
@@ -370,7 +378,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                value={detail.payTaxesNature}
+                value={detail.payTaxesNature + ''}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',
@@ -404,7 +412,7 @@ class Main extends React.Component<Props> {
                   className={styles['auto-complete']}
                   data={this.state.cityList}
                   defaultValue={{
-                    name: this.state.cityName
+                    name: detail.cityName
                   }}
                   onChange={this.handleCityChange.bind(this)}
                   setFields={{
@@ -423,7 +431,7 @@ class Main extends React.Component<Props> {
                 className={styles['auto-complete']}
                 disabled={disabled}
                 defaultValue={{
-                  name: this.state.areaName
+                  name: detail.areaName
                 }}
                 data={this.state.areaList}
                 onChange={this.handleAreaChange.bind(this)}
@@ -454,6 +462,16 @@ class Main extends React.Component<Props> {
               label={'备注'}
               value={this.props.detail.remark}
               disabled={disabled}
+            />
+          </Col>
+        </Row>
+        <Row gutter={8} className='mt10'>
+          <Col span={24}>
+            <TextArea
+              field='relatedCompany'
+              label={'相关公司'}
+              value={this.props.detail.relatedCompany}
+              disabled={true}
             />
           </Col>
         </Row>
