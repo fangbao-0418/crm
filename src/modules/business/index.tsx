@@ -152,7 +152,9 @@ class Main extends React.Component {
     })
   }
   public show (customerId: string) {
-    showDetail.call(this, customerId)
+    showDetail.call(this, customerId, () => {
+      // this.props.
+    })
   }
   public appointmentAll (selectedRowKeys: string[]) {
     if (!selectedRowKeys.length) {

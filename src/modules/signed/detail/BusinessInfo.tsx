@@ -2,8 +2,10 @@ import React from 'react'
 import { Form, Row, Col, Input, Button, Checkbox, DatePicker, Dropdown, Menu } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
+import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import CompanySearch from './CompanySearch'
+import { fetchGovInfo } from '@/modules/common/api'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
@@ -11,6 +13,35 @@ interface Props extends FormComponentProps {
 }
 
 class Main extends React.Component<Props> {
+  public searchUrl () {
+    let url: string
+    const modal = new Modal({
+      title: '网址查询',
+      content: (
+        <div>
+          <div>
+            <Input
+              onChange={(e) => {
+                url = e.target.value
+              }}
+            />
+          </div>
+          <a
+            href='http://www.gsxt.gov.cn/index.html'
+            target='_blank'
+          >
+            http://www.gsxt.gov.cn/index.html
+          </a>
+        </div>
+      ),
+      onOk: () => {
+        fetchGovInfo(url).then((res) => {
+          modal.hide()
+        })
+      }
+    })
+    modal.show()
+  }
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
@@ -40,7 +71,13 @@ class Main extends React.Component<Props> {
                       style={{width: '322px'}}
                       value={detail.customerName}
                     />
-                    <Button className='ml5 mr5' type='primary'>网址</Button>
+                    <Button
+                      className='ml5 mr5'
+                      type='primary'
+                      onClick={this.searchUrl.bind(this)}
+                    >
+                      网址
+                    </Button>
                     <Button type='primary'>特殊公司</Button>
                   </div>
                 ) : <span>{detail.customerName}</span>

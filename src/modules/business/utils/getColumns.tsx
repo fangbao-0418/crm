@@ -4,6 +4,7 @@ import { Tooltip } from 'antd'
 import moment from 'moment'
 const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
+  console.log(this, 'this')
   return [{
     title: (
       <span>

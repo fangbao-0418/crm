@@ -37,4 +37,7 @@ declare namespace Business {
     tab?: string
     [field: string]: any
   }
+  export interface Props {
+    dataSource: DetailProps[][],
+  }
 }

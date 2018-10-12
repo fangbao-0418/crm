@@ -11,6 +11,9 @@ export const userLogin = (payload: {
     data: payload
   })
 }
+export const fetchUserInfo = () => {
+  return http(`/user/v1/api/user/info`)
+}
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
     const data: any = {}
@@ -53,4 +56,7 @@ export const fetchTianYanCompanyList = (name: string) => {
 }
 export const fetchTianYanDetail = (id: string) => {
   return http(`/crm-manage/v1/api/tianyan/${id}`)
+}
+export const fetchGovInfo = (url: string) => {
+  return http(`/crm-manage/v1/api/gov?url=${url}`)
 }
