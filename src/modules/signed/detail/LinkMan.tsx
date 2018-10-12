@@ -110,11 +110,11 @@ class Main extends React.Component<Props> {
     },
     {
       title: '职务',
-      dataIndex: 'worker',
+      dataIndex: 'duty',
       render: (text, record, index) => {
         return (
           <FormItem>
-            {this.props.form.getFieldDecorator(`worker-${index}`, {
+            {this.props.form.getFieldDecorator(`duty-${index}`, {
               valuePropName: text
             })(
               this.props.disabled ?
@@ -122,7 +122,7 @@ class Main extends React.Component<Props> {
               :
                 <Input
                   value={text}
-                  onChange={this.onChange.bind(this, index, 'worker')}
+                  onChange={this.onChange.bind(this, index, 'duty')}
                 />
             )}
           </FormItem>
