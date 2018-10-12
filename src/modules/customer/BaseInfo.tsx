@@ -457,6 +457,16 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
+        <Row gutter={8} className='mt10'>
+          <Col span={24}>
+            <TextArea
+              field='relatedCompany'
+              label={'相关公司'}
+              value={this.props.detail.remark}
+              disabled={true}
+            />
+          </Col>
+        </Row>
         {/* <div className='text-right mt10'>
           <Button
             className='mr5'
