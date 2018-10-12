@@ -47,8 +47,8 @@ class Main extends React.Component {
   public render () {
     return (
     <div>
-      <p style={{float: 'left', margin:'10px 0 10px 14px'}}>2018年09月客户分布</p>
-      <p style={{float: 'right', margin:'10px 14px 10px 0'}}>客户总数：12987 <span>已完成：120</span> <span>完成率：91%</span></p>
+      <p style={{float: 'left', margin:'10px 0 10px 14px'}}>2018年09月任务分布</p>
+      <p style={{float: 'right', margin:'10px 14px 10px 0'}}>任务总数：12987 <span>已完成：120</span> <span>完成率：91%</span></p>
       <div ref='line' style={{height: '300px'}}></div>
     </div>
     )

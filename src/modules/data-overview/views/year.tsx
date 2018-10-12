@@ -1,44 +1,54 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
-
+import { Row, Col, Select, Icon, DatePicker } from 'antd'
+import PieList from '@/modules/data-overview/views/pie'
+import Line from '@/modules/data-overview/views/line'
+const styles = require('@/modules/data-overview/styles/index.styl')
 class Main extends React.Component {
   public componentDidMount () {
-    const dom: any = this.refs.line
+    const dom: any = this.refs.container
     const myChart = echarts.init(dom)
     const option = {
-      xAxis: {
-        type: 'category',
-        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
       },
-      yAxis: {
-        type: 'value'
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data:['已完成任务数', '待分配任务数', '已取消任务数']
       },
-      series: [{
-        data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-        lineStyle:{
-          color:'#009aff',
-          type:'solid'
-        },
-        itemStyle:{
-          color:'#009aff'
-        },
-        areaStyle:{
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [{
-              offset: 0, color: '#b7e2ff' // 0% 处的颜色
-            }, {
-              offset: 1, color: 'rgba(255, 255, 255, 0.5)' // 100% 处的颜色
-            }],
-            globalCoord: false // 缺省为 false
-          }
+      series: [
+        {
+          name:'任务数',
+          type:'pie',
+          radius: ['50%', '70%'],
+          avoidLabelOverlap: false,
+          label: {
+            normal: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                fontSize: '14',
+                fontWeight: 'bold'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          data:[
+                  {value:335, name:'已完成任务数', itemStyle: {color: '#fa250c'}},
+                  {value:310, name:'待分配任务数', itemStyle: {color: '#1790ff'}},
+                  {value:234, name:'已取消任务数', itemStyle: {color: '#ff7d00'}}
+          ]
         }
-      }]
+      ]
     }
     if (option && typeof option === 'object') {
       myChart.setOption(option, true)
@@ -47,9 +57,56 @@ class Main extends React.Component {
   public render () {
     return (
     <div>
-      <p style={{float: 'left', margin:'10px 0 10px 14px'}}>2018年09月客户分布</p>
-      <p style={{float: 'right', margin:'10px 14px 10px 0'}}>客户总数：12987 <span>已完成：120</span> <span>完成率：91%</span></p>
-      <div ref='line' style={{height: '300px'}}></div>
+      <Row className={styles.listLeft}>
+        <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
+          <p className={styles.clientLeft}>2018年09月任务总览</p>
+          <p className={styles.clientRight}>任务总数：1000</p>
+          <div className={styles.pic}>
+            <PieList />
+          </div>
+        </Col>
+        <Col span={11} className={styles.allPic}>
+          <p className={styles.clientLeft}>2018年09月绩效总览</p>
+          <p className={styles.clientRight}>绩效总额：￥231.09</p>
+          <ul className={styles.listPerform}>
+            <li style={{borderRight:'1px solid #dcdcdc'}}>
+              <dd>注册公司：￥2.00</dd>
+              <dd>注册公司：￥2.00</dd>
+              <dd>注册公司：￥2.00</dd>
+              <dd>注册公司：￥2.00</dd>
+            </li>
+            <li style={{borderRight:'1px solid #dcdcdc'}}>
+              <dd>银行开户：￥2.00</dd>
+              <dd>银行开户：￥2.00</dd>
+              <dd>银行开户：￥2.00</dd>
+              <dd>银行开户：￥2.00</dd>
+            </li>
+            <li>
+              <dd>国地税报道：￥2.00</dd>
+              <dd>国地税报道：￥2.00</dd>
+              <dd>国地税报道：￥2.00</dd>
+              <dd>国地税报道：￥2.00</dd>
+            </li>
+          </ul>
+          <ul className={styles.region}>
+            <li>
+              <dd>朝阳区：￥2.00</dd>
+              <dd>朝阳区：￥2.00</dd>
+              <dd>朝阳区：￥2.00</dd>
+            </li>
+            <li>
+              <dd>东城区：￥2.00</dd>
+              <dd>东城区：￥2.00</dd>
+              <dd>东城区：￥2.00</dd>
+            </li>
+            <li>
+              <dd>海淀区：￥2.00</dd>
+              <dd>海淀区：￥2.00</dd>
+              <dd>海淀区：￥2.00</dd>
+            </li>
+          </ul>
+        </Col>
+      </Row>
     </div>
     )
   }
