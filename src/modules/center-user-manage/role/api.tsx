@@ -52,8 +52,12 @@ export const delRole = (payload: {ids: any[], updateUser: string | number}) => {
   return http(`/user/v1/api/role`, 'DELETE', payload)
 }
 
-// 新增、修改角色
-export const setRole = (roleInfo: RoleInfoPayload, id?: string | number) => {
-  id = id || ''
+// 修改角色
+export const modifyRole = (roleInfo: RoleInfoPayload, id: string | number) => {
   return http(`/user/v1/api/role/${id}`, 'PUT', roleInfo)
+}
+
+// 新增角色
+export const addRole = (roleInfo: RoleInfoPayload) => {
+  return http(`/user/v1/api/role`, 'POST', roleInfo)
 }
