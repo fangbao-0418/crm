@@ -360,8 +360,6 @@ class Main extends React.Component {
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
                 { value: 'lastReleaseSalesperson', label: '释放销售'},
-                // { value: 'customerSource', label: '客户来源'},
-                // { value: 'payTaxesNature', label: '纳税类别'},
                 { value: 'busSeaMemo', label: '释放原因'}
               ]}
               placeholder={''}
