@@ -126,6 +126,14 @@ class Main extends React.Component {
     this.fetchRecycleNum()
     this.fetchCustomerNum()
     this.params.tab = this.state.defaultActiveKey
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        [`tab${this.state.defaultActiveKey}`]: {
+          searchPayload: this.params
+        }
+      }
+    })
     this.setState({
       visible: false
     }, () => {
@@ -441,20 +449,42 @@ class Main extends React.Component {
           </div>
         </div>
         {
-          <Tabs animated={false} defaultActiveKey={this.state.defaultActiveKey} onChange={this.callback.bind(this)}>
+          <Tabs
+            animated={false}
+            defaultActiveKey={this.state.defaultActiveKey}
+            onChange={this.callback.bind(this)}
+          >
             <Tabs.TabPane tab={<span>全部({this.state.customerNum.allNums})</span>} key='1'>
-            {this.state.visible &&
-              <Tab1 columns={this.columns} params={this.params} handleSelectAll={this.handleSelectAll.bind(this)}/>
-            }
+              {
+                (this.state.defaultActiveKey === '1' && this.state.visible) && (
+                  <Tab1
+                    columns={this.columns}
+                    params={this.params}
+                    handleSelectAll={this.handleSelectAll.bind(this)}
+                  />
+                )
+              }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>已有沟通({this.state.customerNum.trackContactNums})</span>} key='2'>
-              <Tab2 columns={this.columns} params={this.params}/>
+              {
+                (this.state.defaultActiveKey === '2' && this.state.visible) && (
+                  <Tab2 columns={this.columns} params={this.params}/>
+                )
+              }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>新客资({this.state.customerNum.newCustomerNums})</span>} key='3'>
-              <Tab3 columns={this.columns} params={this.params}/>
+              {
+                (this.state.defaultActiveKey === '3' && this.state.visible) && (
+                  <Tab3 columns={this.columns} params={this.params}/>
+                )
+              }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>{this.state.recycleNum}</span></span>} key='4'>
-              <Tab4 columns={this.columns} params={this.params}/>
+              {
+                (this.state.defaultActiveKey === '4' && this.state.visible) && (
+                  <Tab4 columns={this.columns} params={this.params}/>
+                )
+              }
             </Tabs.TabPane>
           </Tabs>}
       </ContentBox>

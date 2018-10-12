@@ -37,7 +37,20 @@ declare namespace Business {
     tab?: string
     [field: string]: any
   }
+  export interface PaginationProps {
+    total: number
+    current: number
+    pageSize: number
+  }
+  export interface TabDataProps {
+    dataSource?: DetailProps[],
+    pagination?: PaginationProps,
+    searchPayload?: SearchProps
+  }
   export interface Props {
-    dataSource: DetailProps[][],
+    tab1?: TabDataProps,
+    tab2?: TabDataProps,
+    tab3?: TabDataProps,
+    tab4?: TabDataProps
   }
 }

@@ -6,10 +6,10 @@ declare namespace APP {
     goForward (): void
   }
   export type ActionType =
-    'change customer data' | 'change user info'
-  interface DispatchAction {
+   'change user info' | 'change customer data' | 'change business data'
+  interface DispatchAction<T = any> {
     type: ActionType
-    payload?: Customer.ActionPayload | Common.ActionPayload
+    payload?: T
   }
   export interface EnumProps {
     EnumIntentionality?: Array<{label: string, value: string}>
@@ -41,7 +41,7 @@ declare namespace APP {
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory
-  export let dispatch: (action: DispatchAction) => DispatchAction
+  export let dispatch: <T>(action: DispatchAction<T>) => DispatchAction<T>
   export const success: (msg: string) => void
   export const error: (msg: string) => void
   export let keys: EnumProps

@@ -3,8 +3,9 @@ import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchList } from './api'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 type DetailProps = Business.DetailProps
-interface Props {
+interface Props extends Business.Props {
   columns: ColumnProps<DetailProps>[]
   params: Business.SearchProps
   handleSelectAll?: (selectedRowKeys: string[], type: number) => void
@@ -39,9 +40,14 @@ class Main extends React.Component<Props> {
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
       pagination.total = res.pageTotal
-      this.setState({
-        pagination,
-        dataSource: res.data
+      APP.dispatch<Business.Props>({
+        type: 'change business data',
+        payload: {
+          tab2: {
+            pagination,
+            dataSource: res.data
+          }
+        }
       })
     })
   }
@@ -77,12 +83,12 @@ class Main extends React.Component<Props> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
-    const { pagination } = this.state
+    const { dataSource, pagination } = this.props.tab2
     return (
       <div>
         <Table
           columns={this.props.columns}
-          dataSource={this.state.dataSource}
+          dataSource={dataSource}
           rowSelection={rowSelection}
           bordered
           rowKey={'id'}
@@ -110,4 +116,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.business
+})(Main)

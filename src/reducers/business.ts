@@ -2,7 +2,42 @@
 import _ from 'lodash'
 import { handleActions } from 'redux-actions'
 const defaultVal: Business.Props = {
-  dataSource: [[], [], [], []]
+  tab1: {
+    dataSource: [],
+    searchPayload: {},
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  },
+  tab2: {
+    dataSource: [],
+    searchPayload: {},
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  },
+  tab3: {
+    dataSource: [],
+    searchPayload: {},
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  },
+  tab4: {
+    dataSource: [],
+    searchPayload: {},
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  }
 }
 export default handleActions<Business.Props>({
   'change business data': (state, { payload }) => {
