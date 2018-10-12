@@ -10,7 +10,7 @@ class Main extends React.Component {
       tooltip: {},
       legend: {
         x:'left',
-        data: ['客户总数', '已完成']
+        data: ['任务总数', '已完成']
       },
       xAxis: {
         data: ['王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟']
@@ -18,7 +18,7 @@ class Main extends React.Component {
       yAxis: {},
       series: [
         {
-          name: '客户总数',
+          name: '任务总数',
           type: 'bar',
           stack:'two',
           data: [5, 20, 36, 10, 10, 20, 40, 32, 54, 21, 23, 34],
@@ -44,7 +44,7 @@ class Main extends React.Component {
     return (
     <div>
       <div>
-        <span>绩效总额：￥1256.00</span>
+        <span>已完成任务数：200</span>
         <span style={{marginLeft:'20px'}}>绩效涨幅：12% <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
       </div>
       <div ref='perPerform' style={{width: '100%', height: '400px'}}></div>

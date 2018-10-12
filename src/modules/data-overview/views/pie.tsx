@@ -13,11 +13,11 @@ class Main extends React.Component {
       legend: {
         orient: 'vertical',
         x: 'left',
-        data:['已完成客户数', '待分配客户数', '已取消客户数']
+        data:['已完成任务数', '待分配任务数', '已取消任务数']
       },
       series: [
         {
-          name:'客户数',
+          name:'任务数',
           type:'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,
@@ -40,9 +40,9 @@ class Main extends React.Component {
             }
           },
           data:[
-                  {value:335, name:'已完成客户数', itemStyle: {color: '#fa250c'}},
-                  {value:310, name:'待分配客户数', itemStyle: {color: '#1790ff'}},
-                  {value:234, name:'已取消客户数', itemStyle: {color: '#ff7d00'}}
+                  {value:335, name:'已完成任务数', itemStyle: {color: '#fa250c'}},
+                  {value:310, name:'待分配任务数', itemStyle: {color: '#1790ff'}},
+                  {value:234, name:'已取消任务数', itemStyle: {color: '#ff7d00'}}
           ]
         }
       ]

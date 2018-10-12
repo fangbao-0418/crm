@@ -1,13 +1,11 @@
 import React from 'react'
-import { Row, Col, Select, Icon, DatePicker, Tabs } from 'antd'
+import { Row, Col, Select, Icon, DatePicker } from 'antd'
+import { NavLink, withRouter, Route } from 'react-router-dom'
 import moment from 'moment'
-import { Link, withRouter } from 'react-router-dom'
-import {HashRouter as Router, Route, Switch } from 'react-router-dom'
 import ContentBox from '@/modules/common/content'
 import PieList from '@/modules/data-overview/views/pie'
 import Line from '@/modules/data-overview/views/line'
 const styles = require('./styles/index.styl')
-const TabPane = Tabs.TabPane
 const Option = Select.Option
 const { MonthPicker } = DatePicker
 const monthFormat = 'YYYY/MM'
@@ -64,10 +62,8 @@ const option = {
     }
   ]
 }
-function callback (key: any) {
-  console.log(key)
-}
 
+// 列表
 class Main extends React.Component<any, any> {
   public constructor (props: any, state: any) {
     super(props)
@@ -89,9 +85,6 @@ class Main extends React.Component<any, any> {
     this.setState({
       secondCity: value
     })
-  }
-  public changeTabPosition = (tabPosition: any) => {
-    this.setState({ tabPosition })
   }
   public render () {
     const { cities } = this.state
@@ -136,11 +129,11 @@ class Main extends React.Component<any, any> {
         <div className={styles.customer} style={{borderRight: '1px solid #dcdcdc'}}>
           <Col span={8}>
           <p><b>86</b> 家</p>
-          <h4>客户总数</h4>
+          <h4>任务总数</h4>
           </Col>
           <Col span={8}>
           <p><b>86</b> 家</p>
-          <h4>日客户总数</h4>
+          <h4>日任务总数</h4>
           </Col>
           <Col span={8} className={styles.scale}>
           <h4>周同比<span style={{color: 'red', marginLeft:'14px'}}>12%<Icon type='caret-up' theme='filled' /></span></h4>
@@ -169,23 +162,20 @@ class Main extends React.Component<any, any> {
       <ContentBox title='数据概览'>
       <Row style={styles.query}>
         <Select defaultValue='按月查询' style={{width: 120}} onChange={this.handleChange}>
-          <Option value='按月查询'>按月查询</Option>
-          <Option value='按年查询'>按年查询</Option>
+        <Option value='按月查询'>
+          按月查询
+        </Option>
+        <Option value='按年查询'>
+          按年查询
+          </Option>
         </Select>
         <span style={{margin:'0 10px 0 16px'}}>选择月份：</span>
         <MonthPicker defaultValue={moment('2018/01', monthFormat)} format={monthFormat} />
       </Row>
-      <div>
-        <Tabs onChange={callback} type='card'>
-          <TabPane tab='Tab 1' key='1'>Content of Tab Pane 1</TabPane>
-          <TabPane tab='Tab 2' key='2'>Content of Tab Pane 2</TabPane>
-          <TabPane tab='Tab 3' key='3'>Content of Tab Pane 3</TabPane>
-        </Tabs>
-      </div>
-      {/* <Row className={styles.listLeft}>
+      <Row className={styles.listLeft}>
         <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
-          <p className={styles.clientLeft}>2018年09月客户总览</p>
-          <p className={styles.clientRight}>客户总数：1000</p>
+          <p className={styles.clientLeft}>2018年09月任务总览</p>
+          <p className={styles.clientRight}>任务总数：1000</p>
           <div className={styles.pic}>
             <PieList />
           </div>
@@ -231,7 +221,7 @@ class Main extends React.Component<any, any> {
             </li>
           </ul>
         </Col>
-      </Row> */}
+      </Row>
       <Row>
         <Col span={23} style={{borderRadius: '5px', border: '1px solid #dcdcdc'}}>
           <Line />

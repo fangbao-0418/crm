@@ -5,31 +5,61 @@ import ContentBox from '@/modules/common/content'
 import Modal from 'pilipa/libs/modal'
 import Provider from '@/components/Provider'
 import BaseInfo from '@/modules/customer/BaseInfo'
-import { OrderItem } from '@/modules/workorder/types/workorder'
-
+import { PerformList, PerfromItem } from '@/modules/outsite/types/perform'
+import PerService from '@/modules/outsite/services/perform'
 const TabPane = Tabs.TabPane
 const showPath = '@/subform'
 const Search = Input.Search
-
+interface States {
+  modalTitle: string,
+  modalVisible: boolean,
+  chooseDate: string,
+  dataSource: PerformList,
+  selectedRowKeys: string[],
+  pageConf?: any
+}
+interface ColProps extends PerfromItem {
+  dataIndex: string
+  title: string
+}
 function callback (key: string) {
   console.log(key)
 }
 
 class Main extends React.Component {
-
+  public state: States = {
+    modalTitle: '',
+    modalVisible: false,
+    selectedRowKeys: [],
+    dataSource: [],
+    chooseDate:'',
+    pageConf: {
+      current: 1,
+      total: 11
+    }
+  }
   public columns = [{
     title: '任务名称',
-    dataIndex: 'name'
+    dataIndex: 'name',
+    render: (k: any, item: PerfromItem) => {
+      return <span>{item.productName}</span>
+    }
   }, {
     title: '任务价格',
-    dataIndex: 'price'
+    dataIndex: 'price',
+    render: (k: any, item: PerfromItem) => {
+      return <span>{item.productPrice}</span>
+    }
   }, {
     title: '绩效额度',
-    dataIndex: 'address'
+    dataIndex: 'address',
+    render: (k: any, item: PerfromItem) => {
+      return <span>{item.reward}</span>
+    }
   }, {
     title: '操作',
     dataIndex: 'operation',
-    render: (k: any, item: OrderItem) => {
+    render: (k: any, item: PerfromItem) => {
       return (
         <span>
           <span style={{color: '#3B91F7'}}>编辑</span>
@@ -37,63 +67,22 @@ class Main extends React.Component {
       )
     }
   }]
-  public data = [{
-    key: '1',
-    name: '注册公司',
-    price: 2000.00,
-    address: 180
-  }, {
-    key: '2',
-    name: '变更',
-    price: 1000.00,
-    address: 180
-  }, {
-    key: '3',
-    name: '三方协议',
-    price: 2000.00,
-    address: 180,
-    operation: '编辑'
-  }, {
-    key: '4',
-    name: '国地税报道',
-    price: 1000.00,
-    address: 180
-  }, {
-    key: '5',
-    name: '注册公司',
-    price: 2000.00,
-    address: 180
-  }, {
-    key: '6',
-    name: '变更',
-    price: 1000.00,
-    address: 180
-  }, {
-    key: '7',
-    name: '三方协议',
-    price: 2000.00,
-    address: 180
-  }, {
-    key: '8',
-    name: '国地税报道',
-    price: 1000.00,
-    address: 180
-  }, {
-    key: '9',
-    name: '注册公司',
-    price: 2000.00,
-    address: 180
-  }, {
-    key: '10',
-    name: '变更',
-    price: 1000.00,
-    address: 180
-  }
-  ]
-  public componentWillMount () {
-    fetchRegion().then((res) => {
-      console.log(res)
+  // 获取列表数据
+  public getList () {
+    const {pageConf} = this.state
+    PerService.getPerformListByUserid (pageConf.current, pageConf.size).then((d: any) => {
+      this.setState({
+        dataSource: d.records,
+        pageConf: {
+          pageSize: d.pageSize,
+          total: d.pageTotal,
+          currentPage: d.pageCurrent
+        }
+      })
     })
+  }
+  public componentWillMount () {
+    this.getList()
   }
 
   public add () {
@@ -127,7 +116,7 @@ class Main extends React.Component {
             onSearch={(value) => console.log(value)}
             style={{width: 200, marginBottom: '25px'}}
           />
-          <Table columns={this.columns} dataSource={this.data} size='middle'/>
+          <Table columns={this.columns} dataSource={this.state.dataSource} size='middle'/>
         </div>
       </ContentBox>
     )
