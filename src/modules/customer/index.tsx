@@ -193,6 +193,10 @@ class Main extends React.Component<null, States> {
   }
   public handleSearch (values: any) {
     console.log(values, 'values')
+    this.params.storageBeginDate = undefined
+    this.params.storageEndDate = undefined
+    this.params.createBeginDate = undefined
+    this.params.createEndDate = undefined
     if (values.date.label === '入库时间') {
       let storageBeginDate
       let storageEndDate
@@ -200,8 +204,8 @@ class Main extends React.Component<null, States> {
         storageBeginDate = undefined
         storageEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
-        storageBeginDate = values.date.split('至')[0]
-        storageEndDate = values.date.split('至')[1]
+        storageBeginDate = values.date.value.split('至')[0]
+        storageEndDate = values.date.value.split('至')[1]
       } else {
         storageBeginDate = moment().startOf('day').subtract(values.date.value - 1, 'day').format('YYYY-MM-DD')
         storageEndDate = moment().format('YYYY-MM-DD')
