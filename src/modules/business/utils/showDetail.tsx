@@ -65,7 +65,9 @@ export default function (customerId: string, cb?: () => void) {
               <Button
                 type='ghost'
                 onClick={() => {
-                  that.ins.save()
+                  that.ins.save().then(() => {
+                    APP.success('保存成功')
+                  })
                 }}
               >
                 保存
