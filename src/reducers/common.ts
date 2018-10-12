@@ -15,7 +15,15 @@ export default handleActions<Common.Props>({
       ...state,
       ajaxCount
     }
+  },
+  'change user info': (state, { payload }) => {
+    console.log(payload.user, 'reducer')
+    return {
+      ...state,
+      user: payload.user
+    }
   }
 }, {
-  ajaxCount: 0
+  ajaxCount: 0,
+  user: undefined
 })

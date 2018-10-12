@@ -48,7 +48,10 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
   const extension = config.extension || {}
   delete config.extension
   data = config.data || config || {}
-  const headers = config.headers || undefined
+  const headers = Object.assign({}, config.headers, {
+    // Authorization: `${APP.token}`
+  })
+  console.log(headers, 'headers')
   let ajaxConfig: JQuery.AjaxSettings = {
     url,
     method: type,

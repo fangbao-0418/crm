@@ -12,7 +12,25 @@ export const userLogin = (payload: {
   })
 }
 export const fetchUserInfo = () => {
-  return http(`/user/v1/api/user/info`)
+  return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
+    fetchPermissionCode().then((res2) => {
+      console.log(res2)
+    })
+    APP.user = res
+    APP.dispatch({
+      type: 'change user info',
+      payload: {
+        user: res
+      }
+    })
+    return res
+  }, () => {
+    APP.token = ''
+    APP.history.push('/login')
+  })
+}
+export const fetchPermissionCode = () => {
+  return http(`/user/v1/api/authority/code?token=${APP.token}`)
 }
 export const fetchEnum = () => {
   return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
@@ -32,7 +50,6 @@ export const fetchEnum = () => {
       }
     }
     APP.keys = data
-    console.log(APP.dictionary)
     return data
   })
 }

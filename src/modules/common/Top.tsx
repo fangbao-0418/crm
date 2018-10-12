@@ -79,7 +79,7 @@ class Main extends React.Component {
               marginRight: '15px'
             }}
           >
-            西蒙船长
+            {APP.user.username}
           </span>
           <Dropdown
             overlay={menu}

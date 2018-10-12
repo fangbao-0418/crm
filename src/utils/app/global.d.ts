@@ -6,10 +6,10 @@ declare namespace APP {
     goForward (): void
   }
   export type ActionType =
-    'change customer data'
+    'change customer data' | 'change user info'
   interface DispatchAction {
     type: ActionType
-    payload?: Customer.ActionPayload
+    payload?: Customer.ActionPayload | Common.ActionPayload
   }
   export interface EnumProps {
     EnumIntentionality?: Array<{label: string, value: string}>
@@ -48,5 +48,6 @@ declare namespace APP {
   export let dictionary: DictProps
   export const env: 'development' | 'production'
   export let token: string
+  export let user: Common.UserProps
 }
 

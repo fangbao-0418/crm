@@ -2,6 +2,7 @@ import React from 'react'
 import { Layout } from 'antd'
 import { fetchEnum } from './api'
 const { Content } = Layout
+import { connect } from 'react-redux'
 import Top from './Top'
 import {
   Route,
@@ -9,17 +10,20 @@ import {
 } from 'react-router-dom'
 import Left from '@/modules/common/left'
 import modules from '@/router/modules'
+import { fetchUserInfo } from './api'
 const styles = require('@/stylus/main')
-export default class extends React.Component {
+class Main extends React.Component {
   public componentWillMount () {
-    if (!APP.token) {
-      APP.history.push('/login')
-    }
+    fetchUserInfo()
     fetchEnum().then(() => {
       this.forceUpdate()
     })
   }
   public render () {
+    console.log(APP.user, 'user')
+    if (APP.user === undefined) {
+      return null
+    }
     return (
       <Layout className={styles.container}>
         <Left />
@@ -71,3 +75,6 @@ export default class extends React.Component {
     )
   }
 }
+export default connect((state: Reducer.State) => {
+  return state.common
+})(Main)
