@@ -3,7 +3,7 @@ import { Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import RoleModal from './role-modal'
-import { fetchRoleList, toggleForbidRole, delRole, setRole } from './api'
+import { fetchRoleList, toggleForbidRole, delRole, modifyRole, addRole } from './api'
 
 const styles = require('./style')
 
@@ -109,6 +109,26 @@ class Main extends React.Component {
     })
   }
 
+  // 点击确认
+  public onOk (info: any) {
+    const {mode, currentRoleId} = this.state
+    const updateUser = 111 // todo 改为登陆id
+    info.updateUser = updateUser
+    if (mode === 'add') {
+      addRole(info)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getRoleList()
+        })
+    } else {
+      modifyRole(info, currentRoleId)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getRoleList()
+        })
+    }
+  }
+
   public render () {
     const { selectedRowKeys} = this.state
     const columns = [
@@ -207,7 +227,7 @@ class Main extends React.Component {
                 mode={this.state.mode}
                 tab={this.state.tab}
                 currentRoleId={this.state.currentRoleId}
-                onOk={() => {}}
+                onOk={(info: any) => {this.onOk(info)}}
                 onCancel={() => {
                   this.setState({visible: false})
                 }}
