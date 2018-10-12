@@ -52,16 +52,15 @@ class Main extends React.Component<Props> {
           salesNames.push(item.name)
         })
         const paramsFile = {
+          agencyId: '1', // 需要从登陆信息读取
           customerSource: this.props.paramsValue.step1.customerSource,
-          ids: ids.join(','),
-          salesNames: salesNames.join(',')
+          salesPersonIds: ids.join(','),
+          salesPersonNames: salesNames.join(','),
+          cityCode: '110000' || undefined, // 需要从登陆信息读取
+          cityName: '北京' || undefined // 需要从登陆信息读取
         }
         console.log(paramsFile, 'paramsFile')
-        return importFile(info.file, {
-          cityCode: '110000',
-          cityName: '北京',
-          customerSource: 1
-        }).then((res) => {
+        return importFile(info.file, paramsFile).then((res) => {
           if (this.props.onOk) {
             this.props.onOk(res)
           }
