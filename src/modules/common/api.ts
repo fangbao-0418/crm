@@ -80,7 +80,7 @@ export const fetchGovInfo = (url: string) => {
 export const fetchOssToken = () => {
   const payload = {
     prefix: 'pilipa',
-    bucket: 'pilipa_ml',
+    bucket: 'pilipa-ml',
     durationSeconds: 60 * 60
   }
   const query = $.param(payload)

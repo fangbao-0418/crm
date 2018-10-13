@@ -38,6 +38,7 @@ declare namespace APP {
   }
   interface GlobalFnProps {
     getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
+    ossUpload: (file: File) => any
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory

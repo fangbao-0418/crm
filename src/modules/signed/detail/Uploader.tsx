@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import { fetchOssToken } from '@/modules/common/api'
 const styles = require('./style')
 const defaultVal = require('@/assets/images/noimage.png')
 interface Props {
@@ -9,9 +8,6 @@ interface Props {
 }
 class Main extends React.Component<Props> {
   public componentWillMount () {
-    fetchOssToken().then((res) => {
-      console.log(res)
-    })
   }
   public handleClick () {
     const el = document.createElement('input')
@@ -21,7 +17,9 @@ class Main extends React.Component<Props> {
       console.log(target.files)
       if (/image/.test(target.files[0].type) === false) {
         APP.error('格式不匹配')
+        return
       }
+      APP.fn.ossUpload(target.files[0])
     })
     $(el).trigger('click')
   }
