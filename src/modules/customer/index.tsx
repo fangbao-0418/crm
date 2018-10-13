@@ -11,7 +11,7 @@ import Provider from '@/components/Provider'
 import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
-import { fetchList, fetchCityCount, deleteCustomer } from './api'
+import { fetchList, fetchCityCount, deleteCustomer, allocateAuto } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 type DetailProps = Customer.DetailProps
@@ -390,8 +390,13 @@ class Main extends React.Component<null, States> {
       title: '自动分配客资',
       mask: true,
       onOk: () => {
-        this.showResult()
-        modal.hide()
+        console.log(this.state.selectedRowKeys, 'this.state.selectedRowKeys')
+        // const payload = []
+        // allocateAuto(payload).then(() => {
+        //   APP.success('自动分配成功')
+        //   this.showResult()
+        //   modal.hide()
+        // })
       },
       onCancel: () => {
         modal.hide()

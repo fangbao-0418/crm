@@ -86,3 +86,8 @@ export const fetchClueRecords = (id: string, payload: {
 }) => {
   return http(`/crm-manage/v1/api/clue-records/${id}`, 'GET', payload)
 }
+export const allocateAuto = ( payload: {
+  customers: Array<{id: string, customerName: string, cityCode: string, customerSource: number}>
+}) => {
+  return http(`/crm-manage/v1/api/customer/allocate-auto`, 'PUT', payload)
+}
