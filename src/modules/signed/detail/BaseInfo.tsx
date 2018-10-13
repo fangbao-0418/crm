@@ -43,21 +43,7 @@ class Main extends React.Component<Props, State> {
             >
               {!disabled ? getFieldDecorator(
                 'area'
-                // {
-                //   initialValue: detail.areaCode
-                // }
                 )(
-                // <Select
-                //   style={{width:'100px'}}
-                // >
-                //   {
-                //     this.state.areaList.map((item) => {
-                //       return (
-                //         <Option key={item.code}>{item.name}</Option>
-                //       )
-                //     })
-                //   }
-                // </Select>
                 <Dropdown
                   style={{
                     width: '100px',

@@ -5,7 +5,7 @@ $(document).ajaxSend((event, response, options) => {
   store.dispatch({type: 'loading show'})
   const { ajaxCount } = store.getState().common
   if (ajaxCount > 0 && $('.pilipa-loading').length === 0) {
-    // loading.show()
+    loading.show()
   }
 })
 
@@ -27,7 +27,7 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
 const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: AjaxConfigProps = {}) => {
-  // url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
+  url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
   let data: any
   if (config instanceof Array) {
     data = config

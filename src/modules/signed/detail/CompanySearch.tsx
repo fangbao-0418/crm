@@ -6,6 +6,7 @@ const styles = require('./style')
 interface Props extends SearchProps {
   style?: React.CSSProperties
   value?: string
+  onSelectCompany?: () => void
 }
 interface State {
   tianyanDataSource: Customer.TianYanDataProps[]
@@ -26,11 +27,19 @@ class Main extends React.Component<Props, State> {
   }
   public handleItemClick (item: Customer.TianYanDataProps) {
     fetchTianYanDetail(item.id).then((res) => {
-      console.log(res)
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          detail: res
+        }
+      })
     })
     this.setState({
       visible: false
     })
+    if (this.props.onSelectCompany) {
+      this.props.onSelectCompany()
+    }
   }
   public render () {
     const { tianyanDataSource } = this.state
