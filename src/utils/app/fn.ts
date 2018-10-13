@@ -39,16 +39,20 @@ export const generateFileName = (file: File, dir: string = '/') => {
 }
 
 // oss upload
-export const ossUpload = (file: File) => {
-  const name = generateFileName(file, '/pilipa-crm')
-  fetchOssToken().then((res) => {
-    const store = OSS({
-      region: 'oss-cn-beijing',
-      accessKeyId: res.credentials.accessKeyId,
-      accessKeySecret: res.credentials.accessKeySecret,
-      stsToken: res.credentials.securityToken,
-      bucket: res.bucket
+export const ossUpload = (file: File): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const name = generateFileName(file, '/pilipa-crm')
+    fetchOssToken().then((res) => {
+      const store = OSS({
+        region: 'oss-cn-beijing',
+        accessKeyId: res.credentials.accessKeyId,
+        accessKeySecret: res.credentials.accessKeySecret,
+        stsToken: res.credentials.securityToken,
+        bucket: res.bucket
+      })
+      store.multipartUpload<any, any>(name, file).then((res2: any) => {
+        resolve(res2)
+      })
     })
-    store.multipartUpload<any, any>(name, file)
   })
 }

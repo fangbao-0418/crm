@@ -12,3 +12,6 @@ export const toOther = (payload: {
 }) => {
   return http(`/crm-manage/v1/api/batch-principals`, 'PUT', payload)
 }
+// export const uploadCredentials = () => {
+//   return http(``)
+// }
