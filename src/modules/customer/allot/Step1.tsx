@@ -1,8 +1,13 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
+import { getCompanyByCitycode, getSalesByCompany } from '../api'
 const Option = Select.Option
 interface Props {
   onOk?: (value: ValueProps) => void
+}
+interface State {
+  sales: Array<{id: number, name: string}>
+  companys: Array<{id: string, companyname: string}>
 }
 interface ValueProps {
   agencyId?: string,
@@ -12,6 +17,27 @@ interface ValueProps {
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {}
+  public state: State = {
+    sales: [],
+    companys: []
+  }
+  public componentWillMount () {
+    this.getCompany('300171') // 从登陆信息获取城市code得到机构
+  }
+  public getCompany (citycode: string) {
+    getCompanyByCitycode(citycode).then((res) => {
+      this.setState({
+        companys: res
+      })
+    })
+  }
+  public getSales (companyId: string) {
+    getSalesByCompany(companyId).then((res) => {
+      this.setState({
+        sales: res
+      })
+    })
+  }
   public render () {
     return (
       <div className='text-center mt10'>
@@ -22,10 +48,15 @@ class Main extends React.Component<Props> {
               style={{width:'200px'}}
               onChange={(val: string) => {
                 this.values.agencyId = val
+                this.getSales(val)
               }}
             >
-              <Option key='1'>机构1</Option>
-              <Option key='2'>机构2</Option>
+              {
+                this.state.companys.length > 0 &&
+                this.state.companys.map((item, index) => {
+                  <Option key={item.id}>{item.companyname}</Option>
+                })  
+              }
             </Select>
           </div>
           <div className='mt12'>
@@ -44,8 +75,13 @@ class Main extends React.Component<Props> {
                 this.values.salesPerson = newVal
               }}
             >
-              <Option value='1'>销售1</Option>
-              <Option value='2'>销售2</Option>
+              {
+                this.state.sales.length > 0 && this.state.sales.map((item, index) => {
+                  return (
+                    <Option key={item.id}>{item.name}</Option>
+                  )
+                })
+              }
             </Select>
           </div>
           <div className='text-right mt10'>

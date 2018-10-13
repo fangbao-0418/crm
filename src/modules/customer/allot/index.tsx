@@ -40,7 +40,7 @@ class Main extends React.Component<Props> {
             } else {
               value.customerIds = this.props.selectedRowKeys
             }
-            console.log(saleCapacityParams, 'saleCapacityParams')
+            // console.log(saleCapacityParams, 'saleCapacityParams')
             getSaleCapacity(saleCapacityParams).then((res1) => { // 查询销售库容是不是足够
               if (res1.result === 1) {
                 allotCustomer(value).then((res: any) => {
