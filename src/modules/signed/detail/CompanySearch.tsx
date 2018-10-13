@@ -1,12 +1,13 @@
 import React from 'react'
 import { Input } from 'antd'
-import { fetchTianYanCompanyList, fetchTianYanDetail } from '@/modules/common/api'
+import { fetchTianYanCompanyList } from '@/modules/common/api'
 import { SearchProps } from 'antd/lib/input/Search'
+import classNames from 'classnames'
 const styles = require('./style')
 interface Props extends SearchProps {
   style?: React.CSSProperties
   value?: string
-  onSelectCompany?: () => void
+  onSelectCompany?: (item?: Customer.TianYanDataProps) => void
 }
 interface State {
   tianyanDataSource: Customer.TianYanDataProps[]
@@ -26,25 +27,19 @@ class Main extends React.Component<Props, State> {
     })
   }
   public handleItemClick (item: Customer.TianYanDataProps) {
-    fetchTianYanDetail(item.id).then((res) => {
-      APP.dispatch({
-        type: 'change customer data',
-        payload: {
-          detail: res
-        }
-      })
-    })
     this.setState({
       visible: false
     })
     if (this.props.onSelectCompany) {
-      this.props.onSelectCompany()
+      this.props.onSelectCompany(item)
     }
   }
   public render () {
     const { tianyanDataSource } = this.state
     return (
-      <div className={styles['company-search']}>
+      <div
+        className={classNames(styles['company-search'], this.props.className)}
+      >
         <Input.Search
           style={this.props.style}
           onSearch={this.onCompanySearch.bind(this)}

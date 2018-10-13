@@ -79,7 +79,7 @@ export const fetchGovInfo = (url: string) => {
 }
 export const fetchOssToken = () => {
   const payload = {
-    prefix: 'pilipa',
+    prefix: 'pilipa-crm',
     bucket: 'pilipa-ml',
     durationSeconds: 60 * 60
   }

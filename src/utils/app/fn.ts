@@ -40,7 +40,7 @@ export const generateFileName = (file: File, dir: string = '/') => {
 
 // oss upload
 export const ossUpload = (file: File) => {
-  const name = generateFileName(file, '/b-x')
+  const name = generateFileName(file, '/pilipa-crm')
   fetchOssToken().then((res) => {
     const store = OSS({
       region: 'oss-cn-beijing',

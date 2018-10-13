@@ -2,6 +2,21 @@ import loading from 'pilipa/libs/loading'
 import store from '@/store'
 
 $(document).ajaxSend((event, response, options) => {
+  const disableUrls = [
+    '/notification/v1/api/remind/prompt/last/(\\w)+',
+    '/notification/v1/api/remind/unread/(\\w)+'
+  ]
+  const { url } = options
+  const index = disableUrls.findIndex((test) => {
+    const pattern = new RegExp(test)
+    if (pattern.test(url)) {
+      return true
+    }
+  })
+  if (index > -1) {
+    return
+  }
+  console.log(index, 'url')
   store.dispatch({type: 'loading show'})
   const { ajaxCount } = store.getState().common
   if (ajaxCount > 0 && $('.pilipa-loading').length === 0) {
@@ -27,7 +42,7 @@ export interface AjaxConfigProps extends JQuery.AjaxSettings {
 }
 type RequestTypeProps = 'GET' | 'POST' | 'DELETE' | 'PUT'
 const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: AjaxConfigProps = {}) => {
-  url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
+  // url = APP.env === 'production' ? 'https://x-sys.i-counting.cn' + url : url
   let data: any
   if (config instanceof Array) {
     data = config

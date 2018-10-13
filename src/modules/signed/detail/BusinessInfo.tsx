@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import CompanySearch from './CompanySearch'
-import { fetchGovInfo } from '@/modules/common/api'
+import { fetchGovInfo, fetchTianYanDetail } from '@/modules/common/api'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
@@ -72,10 +72,19 @@ class Main extends React.Component<Props, State> {
                 )(
                   <div>
                     <CompanySearch
+                      className='inline-block'
                       enterButton='查询'
                       style={{width: '322px'}}
                       value={detail.customerName}
-                      onSelectCompany={() => {
+                      onSelectCompany={(item) => {
+                        fetchTianYanDetail(item.id).then((res) => {
+                          APP.dispatch({
+                            type: 'change customer data',
+                            payload: {
+                              detail: res
+                            }
+                          })
+                        })
                         this.setState({
                           disabled: true
                         })
