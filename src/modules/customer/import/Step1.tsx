@@ -7,7 +7,7 @@ interface State {
   isChecked: boolean,
   citys: Common.RegionProps[]
   sales: Array<{id: number, name: string}>
-  companys: Array<{id: string, companyname: string}>
+  companys: Array<{id: string, name: string}>
 }
 interface Props {
   onOk?: (value: ValueProps) => void
@@ -54,6 +54,7 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
+    console.log(this.state.companys, 'this.state.companys')
     return (
       <div className='text-center mt10'>
         <div>
@@ -121,8 +122,10 @@ class Main extends React.Component<Props> {
                     {
                       this.state.companys.length > 0 &&
                       this.state.companys.map((item, index) => {
-                        <Option key={item.id}>{item.companyname}</Option>
-                      })  
+                        return (
+                          <Option key={item.id}>{item.name}</Option>
+                        )
+                      })
                     }
                   </Select>
                 </div>

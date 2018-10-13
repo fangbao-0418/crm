@@ -2,13 +2,13 @@ import React from 'react'
 import AllotResult from '../AllotResult'
 interface Props {
   onCancel?: () => void
-  deleteCustomer?: () => void
+  deleteCus?: () => void
 }
 class Main extends React.Component<Props> {
   public render () {
     return (
       <div className='mt40'>
-        <AllotResult onCancel={this.props.onCancel} deleteCustomer={this.props.deleteCustomer}/>
+        <AllotResult onCancel={this.props.onCancel} deleteCus={this.props.deleteCus}/>
       </div>
     )
   }
