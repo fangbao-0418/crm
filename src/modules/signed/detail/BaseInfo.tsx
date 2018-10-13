@@ -3,13 +3,30 @@ import { Form, Row, Col, Input, Select } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Uploader from './Uploader'
 import { connect } from 'react-redux'
+import { fetchRegion } from '@/modules/common/api'
+import Dropdown from 'pilipa/libs/dropdown'
 const Option = Select.Option
 const FormItem = Form.Item
+interface State {
+  areaList: Common.RegionProps[]
+}
 interface Props extends FormComponentProps {
   disabled?: boolean
   detail: Customer.DetailProps
 }
-class Main extends React.Component<Props> {
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    areaList: []
+  }
+  public componentWillMount () {
+    fetchRegion({
+      level: 3
+    }).then((res) => {
+      this.setState({
+        areaList: res
+      })
+    })
+  }
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
@@ -24,13 +41,38 @@ class Main extends React.Component<Props> {
               wrapperCol={{span: 16}}
               label='区域'
             >
-              {!disabled ? (
-                <Select
-                  style={{width:'100px'}}
-                >
-                  <Option key='1'>朝阳区</Option>
-                  <Option key='2'>丰台区</Option>
-                </Select>
+              {!disabled ? getFieldDecorator(
+                'area'
+                // {
+                //   initialValue: detail.areaCode
+                // }
+                )(
+                // <Select
+                //   style={{width:'100px'}}
+                // >
+                //   {
+                //     this.state.areaList.map((item) => {
+                //       return (
+                //         <Option key={item.code}>{item.name}</Option>
+                //       )
+                //     })
+                //   }
+                // </Select>
+                <Dropdown
+                  style={{
+                    width: '100px',
+                    display: 'inline-block',
+                    verticalAlign: 'middle'
+                  }}
+                  defaultValue={{
+                    name: detail.areaName
+                  }}
+                  data={this.state.areaList}
+                  setFields={{
+                    title: 'name',
+                    key: 'code'
+                  }}
+                />
               ) : <span>{detail.areaName}</span>}
             </FormItem>
           </Col>
@@ -109,9 +151,11 @@ export default connect((state: Reducer.State) => {
   return state.customer
 })(Form.create({
   onValuesChange: (props: Customer.Props, changeValue, allValues) => {
-    console.log('change')
     const detail = Object.assign({}, props.detail, allValues)
-    console.log(allValues)
+    const area = detail.area || {}
+    delete detail.area
+    detail.areaCode = area.key
+    detail.areaName = area.title
     APP.dispatch({
       type: 'change customer data',
       payload: {
