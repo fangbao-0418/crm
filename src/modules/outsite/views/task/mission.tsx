@@ -2,7 +2,9 @@ import React from 'react'
 import { Table, Radio, Input } from 'antd'
 const RadioGroup = Radio.Group
 interface States {
-  value: number
+  value: number,
+  color: string,
+  data: string
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -11,11 +13,10 @@ function onShowSizeChange (current: any, pageSize: any) {
 
 class Main extends React.Component<any, any> {
   public state: States = {
-    value:1
+    value:1,
+    color: '',
+    data: '注册公司：核名 网上申请 下发执照 刻章'
   }
-  public data: any [
-    '注册公司：核名 网上申请 下发执照 刻章'
-  ]
   public onChange = (e: any) => {
     console.log('radio checked', e.target.value)
     this.setState({
@@ -29,11 +30,11 @@ class Main extends React.Component<any, any> {
     }
     return (
       <div>
-        <RadioGroup onChange={this.onChange} value={this.state.value}>
-          <Radio style={radioStyle} value={1}>注册公司：核名 网上申请 下发执照 刻章</Radio>
-          <Radio style={radioStyle} value={2}>注册公司：核名 网上申请 下发执照 刻章 核名 网上申请 下发执照 刻章</Radio>
-          <Radio style={radioStyle} value={3}>注册公司：核名 网上申请 下发执照 刻章</Radio>
-          <Radio style={radioStyle} value={4}>注册公司：核名 网上申请 下发执照 刻章 核名 网上申请 下发执照 刻章 核名 网上申请 下发执照 刻章</Radio>
+        <RadioGroup onChange={this.onChange} value={this.state.value} className={this.state.color}>
+          <Radio style={radioStyle} value={1}>{this.state.data}</Radio>
+          <Radio style={radioStyle} value={2}>{this.state.data}</Radio>
+          <Radio style={radioStyle} value={3}>{this.state.data}</Radio>
+          <Radio style={radioStyle} value={4}>{this.state.data}</Radio>
         </RadioGroup>
       </div>
     )

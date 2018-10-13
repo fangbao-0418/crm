@@ -16,6 +16,10 @@ interface PerfromItem {
     records?:any                 //数据集合
     status?: any
 }
+interface PerfromItemId {
+    id: number // 主键id
+    reward?: number    // 绩效
+  }
 type PerformList = Array<PerfromItem>
 
 type Func = (...args: Array<any>) => any

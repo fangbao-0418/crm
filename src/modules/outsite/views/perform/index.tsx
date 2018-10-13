@@ -16,7 +16,7 @@ interface States {
   chooseDate: string,
   dataSource: PerformList,
   spanText: string,
-  currentId: number // 当前选中权限id
+  currentId: number // 当前选中绩效id
   selectedRowKeys: string[],
   pageConf?: any
 }
@@ -65,7 +65,7 @@ class Main extends React.Component {
     title: '绩效额度',
     dataIndex: 'address',
     render: (k: any, item: PerfromItem) => {
-      return <span><InputNumber  defaultValue={item.reward} precision={2} onChange={this.onChange} /></span>
+      return <span><InputNumber  defaultValue={item.reward} precision={2} onChange={this.onChange} />{item.reward}</span>
     }
   }, {
     title: '操作',
@@ -73,7 +73,7 @@ class Main extends React.Component {
     render: (k: any, item: PerfromItem) => {
       return (
         <span>
-          <a style={{color: '#3B91F7'}} onClick={() => { this.onShow.bind(this)(item) }}>{item.status === '200' ? '编辑' : '保存'}</a>
+          <span style={{color: '#3B91F7'}} onClick={() => { this.onShow.bind(this)(item) }}></span>
         </span>
       )
     }
@@ -88,6 +88,9 @@ class Main extends React.Component {
       modalVisible: false,
       showData
     })
+  }
+  public componentWillMount () {
+    this.getList()
   }
   // 获取列表数据
   public getList () {
@@ -104,28 +107,34 @@ class Main extends React.Component {
     })
   }
   // 修改绩效
-  public modifyPerform (val: Info) {
+  public revisePerform (val: Info) {
     const {currentId} = this.state
     const {reward} = val
-    const updateUser = 111 // todo 改为登陆ID
-    PerService.RevisePerformance(currentId, reward).then((res) => {
+    const payload = {
+      id: currentId,
+      reward
+    }
+    PerService.RevisePerformance (payload).then((res) => {
+      console.log(res)
       this.setState({modalVisible: false})
       this.getList()
     })
   }
-  public componentWillMount () {
-    this.getList()
-  }
   // 新增绩效
-  // public addPerform (val: Info) {
-  //   const {reward} = val
-  //   const {currentId} = this.state
-  //   const createUser = 111 // todo 改为登陆ID
-  //   PerService.newPerformance(payload).then((res) => {
-  //     this.setState({modalVisible: false})
-  //     this.getList()
-  //   })
-  // }
+  public addPerform (val: Info) {
+    const {companyId, productName, productPrice} = val
+    const productId = 1111 // todo
+    const payload = {
+      companyId,
+      productId,
+      productName,
+      productPrice
+    }
+    PerService.newPerformance(payload).then((res) => {
+      this.setState({modalVisible: false})
+      this.getList()
+    })
+  }
 
   public add () {
     const modal = new Modal({
