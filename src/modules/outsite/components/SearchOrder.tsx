@@ -105,7 +105,7 @@ class Main extends React.Component<any, any> {
           <FormItem {...formItemLayout} label='备注'>
             {getFieldDecorator('备注', {
             })(
-              <TextArea rows={8}  />
+              <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} />
             )}
           </FormItem>
         </Row>
