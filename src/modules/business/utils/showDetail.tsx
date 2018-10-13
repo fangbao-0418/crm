@@ -17,6 +17,7 @@ export default function (customerId: string, index: number, cb?: () => void) {
           getWrappedInstance={(ins) => {
             that.ins = ins
           }}
+          onClose={() => modal.hide()}
           customerId={customerId}
           footer={(
             <div className='text-right mt10'>

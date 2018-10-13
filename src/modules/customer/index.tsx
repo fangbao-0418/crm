@@ -303,13 +303,14 @@ class Main extends React.Component<Customer.Props, States> {
   }
   public show (customerId: string) {
     let instance: any
-    const modal = new Modal({
+    const modal: any = new Modal({
       content: (
         <Provider>
           <Detail
             getWrappedInstance={(ins) => {
               instance = ins
             }}
+            onClose={() => modal.hide()}
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
