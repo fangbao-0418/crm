@@ -139,17 +139,12 @@ class Main extends React.Component<Props> {
             </div>
           </div>
           <div className={styles.right}>
-            <Record
-              customerId={this.props.customerId}
-            />
+            {this.props.detailVisibleState && (
+              <Record
+                customerId={this.props.customerId}
+              />
+            )}
           </div>
-        </div>
-        <div className={styles.right}>
-          {this.props.detailVisibleState && (
-            <Record
-              customerId={this.props.customerId}
-            />
-          )}
         </div>
       </div>
     )
