@@ -65,7 +65,7 @@ class Main extends React.Component<Props> {
         this.props.onOk()
       }
     }, () => {
-      error['sms-verify-code'] = '用户不存在'
+      error.phone = '手机号尚未注册'
       this.setState({
         error
       })
