@@ -12,17 +12,17 @@ const options = {
   },
   proxy: {
     '/work': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/user': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/config': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
@@ -35,12 +35,12 @@ const options = {
       }
     },
     // '/crm-manage': {
-    //   target: 'https://x-b.i-counting.cn',
+    //   target: 'https://x-sys.i-counting.cn',
     //   changeOrigin: true,
     //   secure: false
     // },
     '/oss': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false,
       pathRewrite: {
@@ -48,12 +48,12 @@ const options = {
       }
     },
     '/outside': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/notification': {
-      target: 'https://x-b.i-counting.cn',
+      target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false
     }
