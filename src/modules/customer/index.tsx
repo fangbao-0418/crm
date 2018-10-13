@@ -390,7 +390,7 @@ class Main extends React.Component<null, States> {
       title: '自动分配客资',
       mask: true,
       onOk: () => {
-        console.log(this.state.selectedRowKeys, 'this.state.selectedRowKeys')
+        // console.log(this.state.selectedRowKeys, 'this.state.selectedRowKeys')
         const customers: Array<{
           id: string
           cityCode: string
@@ -409,18 +409,17 @@ class Main extends React.Component<null, States> {
             }
           })
         })
-        console.log(customers, 'customers')
-        allocateAuto(customers).then(() => {
-          modal.hide()
+        // console.log(customers, 'customers')
+        allocateAuto(customers).then((res) => {
+          APP.dispatch({
+            type: 'change customer data',
+            payload: {
+              assignResult: res
+            }
+          })
           APP.success('自动分客成功')
           this.fetchList()
         })
-        // const payload = []
-        // allocateAuto(payload).then(() => {
-        //   APP.success('自动分配成功')
-        //   this.showResult()
-        //   modal.hide()
-        // })
       },
       onCancel: () => {
         modal.hide()
