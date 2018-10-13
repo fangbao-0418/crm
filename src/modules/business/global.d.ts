@@ -51,6 +51,7 @@ declare namespace Business {
     tab1?: TabDataProps,
     tab2?: TabDataProps,
     tab3?: TabDataProps,
-    tab4?: TabDataProps
+    tab4?: TabDataProps,
+    selectedTab?: 'tab1' | 'tab2' | 'tab3' | 'tab4'
   }
 }

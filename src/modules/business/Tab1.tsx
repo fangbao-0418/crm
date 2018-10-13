@@ -26,20 +26,13 @@ class Main extends React.Component<Props> {
     const pagination = this.props.tab1.pagination
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
-    APP.dispatch<Business.Props>({
-      type: 'change business data',
-      payload: {
-        tab1: {
-          searchPayload: params
-        }
-      }
-    })
     fetchList(params).then((res) => {
       pagination.total = res.pageTotal
       APP.dispatch<Business.Props>({
         type: 'change business data',
         payload: {
           tab1: {
+            searchPayload: params,
             dataSource: res.data,
             pagination
           }
