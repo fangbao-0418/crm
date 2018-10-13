@@ -15,6 +15,7 @@ interface Props {
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
   onClose?: () => void
+  detailVisibleState?: boolean
 }
 class Main extends React.Component<Props> {
   public defaultTrackRecord = [
@@ -142,6 +143,13 @@ class Main extends React.Component<Props> {
               customerId={this.props.customerId}
             />
           </div>
+        </div>
+        <div className={styles.right}>
+          {this.props.detailVisibleState && (
+            <Record
+              customerId={this.props.customerId}
+            />
+          )}
         </div>
       </div>
     )

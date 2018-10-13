@@ -16,6 +16,9 @@ class Main extends React.Component<Props> {
     clueRecords: []
   }
   public componentWillMount () {
+    this.fetchList()
+  }
+  public fetchList () {
     const payload = {
       pageNum: 1,
       pageSize: 999

@@ -1,7 +1,7 @@
 import React from 'react'
 import { DatePicker, Select, Tabs, Button } from 'antd'
 import ContentBox from '@/modules/common/content'
-import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'

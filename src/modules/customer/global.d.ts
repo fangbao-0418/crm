@@ -104,5 +104,6 @@ declare namespace Customer {
     capacity?: CapacityProps[],
     assignResult?: AssignResultProps
     spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
+    detailVisibleState?: boolean
   }
 }

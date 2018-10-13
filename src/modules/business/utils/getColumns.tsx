@@ -3,6 +3,9 @@ import { ColumnProps } from 'antd/lib/table'
 import { Tooltip } from 'antd'
 import moment from 'moment'
 import showDetail from './showDetail'
+import { fetchList } from '../api'
+import store from '@/store'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
   console.log(this, 'this')
@@ -26,8 +29,41 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           <span
             className='href'
             onClick={() => {
-              showDetail.call(this, record.id, index, () => {
-                // this.props.
+              const modal = showDetail.call(this, record.id, index, () => {
+                const business: any = store.getState().business
+                const tab = business.selectedTab
+                const { searchPayload, pagination } = business[tab]
+                fetchList(searchPayload).then((res) => {
+                  pagination.total = res.pageTotal
+                  APP.dispatch<Business.Props>({
+                    type: 'change business data',
+                    payload: {
+                      [tab]: {
+                        dataSource: res.data,
+                        pagination
+                      }
+                    }
+                  })
+                  APP.dispatch<Customer.Props>({
+                    type: 'change customer data',
+                    payload: {
+                      detailVisibleState: false
+                    }
+                  })
+                  if (res.data[index]) {
+                    const customerId = res.data[index].id
+                    changeCustomerDetailAction(customerId)
+                    APP.dispatch<Customer.Props>({
+                      type: 'change customer data',
+                      payload: {
+                        detailVisibleState: true
+                      }
+                    })
+                  } else {
+                    modal.hide()
+                  }
+                })
+                return
               })
             }}
           >
