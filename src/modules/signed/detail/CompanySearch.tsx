@@ -19,6 +19,9 @@ class Main extends React.Component<Props, State> {
     visible: false
   }
   public onCompanySearch (value: string) {
+    if (this.props.disabled) {
+      return
+    }
     fetchTianYanCompanyList(value).then((res) => {
       this.setState({
         tianyanDataSource: res.body,

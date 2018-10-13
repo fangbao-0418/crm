@@ -249,10 +249,11 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <FormItemLayout
-                  label='客户来源'
+                  label='公司名称'
                   required
                 >
                   <CompanySearch
+                    disabled={disabled}
                     value={detail.customerName}
                     onSelectCompany={(item) => {
                       this.handleChange(null, {
