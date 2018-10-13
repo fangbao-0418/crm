@@ -12,35 +12,35 @@ const options = {
   },
   proxy: {
     '/work': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/user': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/config': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
+    },
+    '/crm-manage': {
+      target: 'http://192.168.170.14:9008/',
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        '^/crm-manage/v1': '/v1'
+      }
     },
     // '/crm-manage': {
-    //   target: 'http://192.168.170.14:9008/',
+    //   target: 'https://x-b.i-counting.cn',
     //   changeOrigin: true,
-    //   secure: false,
-    //   pathRewrite: {
-    //     '^/crm-manage/v1': '/v1'
-    //   }
+    //   secure: false
     // },
-    '/crm-manage': {
-      target: 'https://x-sys.i-counting.cn',
-      changeOrigin: true,
-      secure: false
-    },
     '/oss': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false,
       pathRewrite: {
@@ -48,12 +48,12 @@ const options = {
       }
     },
     '/outside': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
     '/notification': {
-      target: 'https://x-sys.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     }
