@@ -14,6 +14,7 @@ interface PerfromItem {
     current?: number              // 当前页数，从1开始
     pages?: number               //总页数
     records?:any                 //数据集合
+    status?: any
 }
 type PerformList = Array<PerfromItem>
 
