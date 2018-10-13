@@ -51,12 +51,3 @@ export const toCity = (payload: {
 export const getcapacityNum = () => {
   return http(`/crm-manage/v1/api/storage-capacity`)
 }
-// 除去我的客资其他销售列表都是根据当前用户获取
-export const getSalesList = (userId: number) => {
-  return http(`/user/v1/api/user/list/sale/${userId}`)
-}
-// 我的客资 根据机构获取销售列表
-export const getSalesByCompany = (companyid: number) => {
-  return http(`/user/v1/api/user/list/sale/company/${companyid}`)
-}
-// 根据城市获取所属机构

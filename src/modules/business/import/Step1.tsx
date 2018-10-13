@@ -1,7 +1,7 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
 import FormItem from '@/components/form/Item1'
-import { getSalesList } from '../api'
+import { getSalesList } from '@/modules/common/api'
 const Option = Select.Option
 interface Props {
   onOk?: (value: ValueProps) => void
@@ -21,7 +21,7 @@ class Main extends React.Component<Props> {
   public componentWillMount () {
     getSalesList(1).then((res) => {
       this.setState({
-        sales: res.data
+        sales: res
       })
     })
   }

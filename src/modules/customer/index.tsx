@@ -391,6 +391,30 @@ class Main extends React.Component<null, States> {
       mask: true,
       onOk: () => {
         console.log(this.state.selectedRowKeys, 'this.state.selectedRowKeys')
+        const customers: Array<{
+          id: string
+          cityCode: string
+          customerName: string
+          customerSource: string
+        }> = []
+        this.state.selectedRowKeys.map((item) => {
+          this.state.dataSource.map((item1) => {
+            if (item === item1.customerId) {
+              customers.push({
+                id: item1.customerId,
+                cityCode: item1.cityCode,
+                customerName: item1.customerName,
+                customerSource: item1.customerSource
+              })
+            }
+          })
+        })
+        console.log(customers, 'customers')
+        allocateAuto(customers).then(() => {
+          modal.hide()
+          APP.success('自动分客成功')
+          this.fetchList()
+        })
         // const payload = []
         // allocateAuto(payload).then(() => {
         //   APP.success('自动分配成功')

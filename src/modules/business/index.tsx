@@ -8,7 +8,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
-import { fetchRegion } from '@/modules/common/api'
+import { fetchRegion, getSalesList } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -34,7 +34,8 @@ interface States {
     newCustomerNums?: string
     ForthcomingNums?: string
   }
-  citys: Common.RegionProps[]
+  citys: Common.RegionProps[],
+  sales: Array<{id: number, name: string}>
 }
 class Main extends React.Component {
   public state: States = {
@@ -46,7 +47,8 @@ class Main extends React.Component {
       trackContactNums: '',
       newCustomerNums: ''
     },
-    citys: []
+    citys: [],
+    sales: []
   }
   public data = conditionOptions
   public params: Business.SearchProps = {tab: '1'}
@@ -61,6 +63,7 @@ class Main extends React.Component {
     this.fetchCustomerNum()
     this.fetchCapacityNum()
     this.fetchCitys()
+    this.fetchSales()
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
@@ -87,6 +90,13 @@ class Main extends React.Component {
     fetchRegion({level: 2}).then((res) => {
       this.setState({
         citys: res
+      })
+    })
+  }
+  public fetchSales () {
+    getSalesList(1).then((res) => {
+      this.setState({
+        sales: res
       })
     })
   }
@@ -231,8 +241,13 @@ class Main extends React.Component {
               this.curSale = val
             }}
           >
-            <Select.Option value='1'>销售1</Select.Option>
-            <Select.Option value='2'>销售2</Select.Option>
+            {
+              this.state.sales.map((item, index) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),

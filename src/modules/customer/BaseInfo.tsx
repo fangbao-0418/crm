@@ -378,7 +378,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                value={detail.payTaxesNature + ''}
+                value={detail.payTaxesNature}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',
@@ -465,16 +465,19 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        <Row gutter={8} className='mt10'>
-          <Col span={24}>
-            <TextArea
-              field='relatedCompany'
-              label={'相关公司'}
-              value={this.props.detail.relatedCompany}
-              disabled={true}
-            />
-          </Col>
-        </Row>
+        {
+          this.props.customerId &&
+          <Row gutter={8} className='mt10'>
+            <Col span={24}>
+              <TextArea
+                field='relatedCompany'
+                label={'相关公司'}
+                value={this.props.detail.relatedCompany}
+                disabled={true}
+              />
+            </Col>
+          </Row>
+        }
         {/* <div className='text-right mt10'>
           <Button
             className='mr5'
