@@ -16,7 +16,7 @@ const defaultVal: Customer.Props = {
   autoAssign: [],
   assignResult: {
     allocatedNum: 0,
-    exists: [],
+    repeatCustomers: [],
     total: 0
   },
   capacity:[],

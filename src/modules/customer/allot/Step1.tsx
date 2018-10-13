@@ -7,7 +7,7 @@ interface Props {
 }
 interface State {
   sales: Array<{id: number, name: string}>
-  companys: Array<{id: string, companyname: string}>
+  companys: Array<{id: string, name: string}>
 }
 interface ValueProps {
   agencyId?: string,
@@ -22,9 +22,7 @@ class Main extends React.Component<Props> {
     companys: []
   }
   public componentWillMount () {
-    this.getCompany('300171') // 从登陆信息获取城市code得到机构
-  }
-  public getCompany (citycode: string) {
+    const citycode = '300171' // 从登陆信息获取城市code得到机构
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
@@ -39,6 +37,7 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
+    console.log(this.state.companys, 'this.state.companys')
     return (
       <div className='text-center mt10'>
         <div>
@@ -54,8 +53,10 @@ class Main extends React.Component<Props> {
               {
                 this.state.companys.length > 0 &&
                 this.state.companys.map((item, index) => {
-                  <Option key={item.id}>{item.companyname}</Option>
-                })  
+                  return (
+                    <Option key={item.id}>{item.name}</Option>
+                  )
+                })
               }
             </Select>
           </div>

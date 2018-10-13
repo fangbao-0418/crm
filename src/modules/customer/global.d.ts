@@ -73,7 +73,7 @@ declare namespace Customer {
   }
   export interface AssignResultProps {
     allocatedNum: number
-    exists: Array<{name: string, id: string}>
+    repeatCustomers: Array<{name?: string, id?: string}>
     total: number
   }
   export interface TrackRecord {

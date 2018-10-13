@@ -86,7 +86,7 @@ export const fetchClueRecords = (id: string, payload: {
 }) => {
   return http(`/crm-manage/v1/api/clue-records/${id}`, 'GET', payload)
 }
-export const allocateAuto = ( payload: Array<{id: string, customerName: string, cityCode: string, customerSource: string}>
+export const allocateAuto = (payload: Array<{id: string, customerName: string, cityCode: string, customerSource: string}>
 ) => {
   return http(`/crm-manage/v1/api/customer/allocate-auto`, 'PUT', payload)
 }
@@ -96,5 +96,5 @@ export const getCompanyByCitycode = (citycode: string) => {
 }
 // 根据机构获取销售列表
 export const getSalesByCompany = (companyid: string) => {
-  return http(`/user/v1/api/user/list/sale/company/${companyid}`)
+  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
 }
