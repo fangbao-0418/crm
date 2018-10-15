@@ -294,43 +294,6 @@ class Main extends React.Component<Props> {
                 )}
               </FormItem>
             </Col>
-            {/* <Col span={12}>
-            <FormItem
-              >
-                {getFieldDecorator(
-                  'customerSource'
-                )(
-                  <FormItemLayout
-                    label='客户来源'
-                    required
-                  >
-                    <Select
-                      style={{width: '100%'}}
-                      disabled={disabled}
-                      value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
-                      onChange={(value) => {
-                        this.handleChange(null, {
-                          key: 'customerSource',
-                          value
-                        })
-                      }}
-                    >
-                      {
-                        APP.keys.EnumCustomerSource.map((item) => {
-                          return (
-                            <Option
-                              key={item.value}
-                            >
-                              {item.label}
-                            </Option>
-                          )
-                        })
-                      }
-                    </Select>
-                  </FormItemLayout>
-                )}
-              </FormItem>
-            </Col> */}
           </Row>
         }
         {
@@ -505,7 +468,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                value={detail.payTaxesNature}
+                value={detail.payTaxesNature? detail.payTaxesNature + '' : ''}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',
