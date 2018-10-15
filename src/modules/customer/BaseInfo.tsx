@@ -244,92 +244,185 @@ class Main extends React.Component<Props> {
     const detail = this.props.detail
     return (
       <Form className={styles['base-info']}>
-        <Row gutter={8}>
-          <Col span={12}>
-            <FormItem
-            >
-              {getFieldDecorator(
-                'customerName',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      message: '公司名不能为空'
-                    }
-                  ],
-                  initialValue: this.props.detail.customerName
-                }
-              )(
-                <FormItemLayout
-                  label='公司名称'
-                  required
-                >
-                  <CompanySearch
-                    disabled={disabled}
-                    value={detail.customerName}
-                    onSelectCompany={(item) => {
-                      this.handleChange(null, {
-                        key: 'customerName',
-                        value: item.name
-                      })
-                    }}
-                    onChange={(e) => {
-                      this.handleChange(null, {
-                        key: 'customerName',
-                        value: e.target.value
-                      })
-                    }}
-                  />
-                </FormItemLayout>
-                // <Input
-                //   required
-                //   label={'公司名'}
-                //   field='customerName'
-                //   onChange={this.handleChange.bind(this)}
-                //   value={this.props.detail.customerName}
-                //   disabled={disabled}
-                // />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={12}>
-          <FormItem
-            >
-              {getFieldDecorator(
-                'customerSource'
-              )(
-                <FormItemLayout
-                  label='客户来源'
-                  required
-                >
-                  <Select
-                    style={{width: '100%'}}
-                    disabled={disabled}
-                    value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
-                    onChange={(value) => {
-                      this.handleChange(null, {
-                        key: 'customerSource',
-                        value
-                      })
-                    }}
+        {
+          this.props.customerId &&
+          <Row gutter={8}>
+            <Col span={24}>
+              <FormItem
+              >
+                {getFieldDecorator(
+                  'customerName',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '公司名不能为空'
+                      }
+                    ],
+                    initialValue: this.props.detail.customerName
+                  }
+                )(
+                  <FormItemLayout
+                    label='公司名称'
+                    required
                   >
-                    {
-                      APP.keys.EnumCustomerSource.map((item) => {
-                        return (
-                          <Option
-                            key={item.value}
-                          >
-                            {item.label}
-                          </Option>
-                        )
-                      })
-                    }
-                  </Select>
-                </FormItemLayout>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
+                    <CompanySearch
+                      disabled={disabled}
+                      value={detail.customerName}
+                      onSelectCompany={(item) => {
+                        this.handleChange(null, {
+                          key: 'customerName',
+                          value: item.name
+                        })
+                      }}
+                      onChange={(e) => {
+                        this.handleChange(null, {
+                          key: 'customerName',
+                          value: e.target.value
+                        })
+                      }}
+                    />
+                  </FormItemLayout>
+                  // <Input
+                  //   required
+                  //   label={'公司名'}
+                  //   field='customerName'
+                  //   onChange={this.handleChange.bind(this)}
+                  //   value={this.props.detail.customerName}
+                  //   disabled={disabled}
+                  // />
+                )}
+              </FormItem>
+            </Col>
+            {/* <Col span={12}>
+            <FormItem
+              >
+                {getFieldDecorator(
+                  'customerSource'
+                )(
+                  <FormItemLayout
+                    label='客户来源'
+                    required
+                  >
+                    <Select
+                      style={{width: '100%'}}
+                      disabled={disabled}
+                      value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
+                      onChange={(value) => {
+                        this.handleChange(null, {
+                          key: 'customerSource',
+                          value
+                        })
+                      }}
+                    >
+                      {
+                        APP.keys.EnumCustomerSource.map((item) => {
+                          return (
+                            <Option
+                              key={item.value}
+                            >
+                              {item.label}
+                            </Option>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormItemLayout>
+                )}
+              </FormItem>
+            </Col> */}
+          </Row>
+        }
+        {
+          !this.props.customerId &&
+          <Row gutter={8}>
+            <Col span={12}>
+              <FormItem
+              >
+                {getFieldDecorator(
+                  'customerName',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '公司名不能为空'
+                      }
+                    ],
+                    initialValue: this.props.detail.customerName
+                  }
+                )(
+                  <FormItemLayout
+                    label='公司名称'
+                    required
+                  >
+                    <CompanySearch
+                      disabled={disabled}
+                      value={detail.customerName}
+                      onSelectCompany={(item) => {
+                        this.handleChange(null, {
+                          key: 'customerName',
+                          value: item.name
+                        })
+                      }}
+                      onChange={(e) => {
+                        this.handleChange(null, {
+                          key: 'customerName',
+                          value: e.target.value
+                        })
+                      }}
+                    />
+                  </FormItemLayout>
+                  // <Input
+                  //   required
+                  //   label={'公司名'}
+                  //   field='customerName'
+                  //   onChange={this.handleChange.bind(this)}
+                  //   value={this.props.detail.customerName}
+                  //   disabled={disabled}
+                  // />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+            <FormItem
+              >
+                {getFieldDecorator(
+                  'customerSource'
+                )(
+                  <FormItemLayout
+                    label='客户来源'
+                    required
+                  >
+                    <Select
+                      style={{width: '100%'}}
+                      disabled={disabled}
+                      value={this.getSelectValue('customerSource', APP.keys.EnumCustomerSource)}
+                      onChange={(value) => {
+                        this.handleChange(null, {
+                          key: 'customerSource',
+                          value
+                        })
+                      }}
+                    >
+                      {
+                        APP.keys.EnumCustomerSource.map((item) => {
+                          return (
+                            <Option
+                              key={item.value}
+                            >
+                              {item.label}
+                            </Option>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormItemLayout>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        }
+        
         <Row gutter={8} className='mt10' >
           <Col span={12}>
             <FormItem
