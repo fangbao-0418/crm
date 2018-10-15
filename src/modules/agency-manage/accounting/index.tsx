@@ -29,7 +29,7 @@ class Main extends React.Component {
         <div className='mb10'>
           <Search
             className='inline-block middle mr5'
-            placeholder='请输入代理商名称'
+            placeholder='请输入机构名称'
             onSearch={(value) => {
               console.log(value)
             }}
