@@ -69,8 +69,9 @@ class Main extends React.Component<Props> {
       changeCustomerDetailAction(this.props.customerId)
     }
     if (this.props.type !== 'customer') {
+      const cityCode = APP.user.cityCode || '110100'
       fetchRegion({
-        parentId: '110100', // 登陆的客户城市对应的地区
+        parentId: cityCode , // 登陆的客户城市对应的地区
         level: 3
       }).then((res) => {
         this.setState({
