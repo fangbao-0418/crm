@@ -4,6 +4,9 @@ declare namespace Common {
     email: string
     phone: string
     username: string
+    companyId: string
+    cityCode: string
+    city: string
   }
   export type ActionPayload = Props
   export interface RegionProps {

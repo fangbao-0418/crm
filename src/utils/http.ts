@@ -64,7 +64,7 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
   delete config.extension
   data = config.data || config || {}
   const headers = Object.assign({}, config.headers, {
-    Token: `${APP.token}`
+    token: `${APP.token}`
   })
   console.log(headers, 'headers')
   let ajaxConfig: JQuery.AjaxSettings = {

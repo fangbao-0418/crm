@@ -15,3 +15,6 @@ export const toOther = (payload: {
 // export const uploadCredentials = () => {
 //   return http(``)
 // }
+export const fetchRelatedCompanyListy = (curCompanyId: string) => {
+  return http(`/crm-manage/v1/api/related_company/${curCompanyId}`)
+}
