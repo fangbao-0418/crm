@@ -68,6 +68,9 @@ class Main extends React.Component {
               <Route path='/outsite/perform/list' component={modules.PerformList}/>
               <Route path='/outsite/data-overview' component={modules.TaskDataOverview}/>
               <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>
+
+              {/* 配置中心 */}
+              <Route path='/configure' component={modules.Configure}/>
             </Switch>
           </Content>
         </Layout>

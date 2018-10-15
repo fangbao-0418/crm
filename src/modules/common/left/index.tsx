@@ -215,6 +215,11 @@ class Main extends React.Component<Props, State> {
           path: '/outsite/data-detail'
         }
       ]
+    },
+    {
+      title: '配置中心',
+      path: '/configure',
+      icon: <MenuIcon type='data' />
     }
   ]
   public componentDidMount () {
