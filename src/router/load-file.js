@@ -40,7 +40,7 @@ export { default as loadTasktplSublist } from 'bundle-loader?lazy&name=[name]!@/
 export { default as loadTasktplSubform } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/subform' // 其他任务配置展示
 export { default as loadTasktplList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/list' // 通办任务配置
 export { default as loadTasktplForm } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/tasktpl/form' // 新增通办任务配置
-export { default as loadPerformList } from 'bundle-loader?lazy&name=[name]!@/modules/outsite/views/perform' // 绩效配置
+export { default as loadPerformList } from 'bundle-loader?lazy&name=[name]!@/modules/perform' // 绩效配置
 export { default as loadTaskDataOverview } from 'bundle-loader?lazy&name=[name]!@/modules/data-overview' // 数据总览
 export { default as loadTaskDataDetail } from 'bundle-loader?lazy&name=[name]!@/modules/data-detail' // 数据明细
 
