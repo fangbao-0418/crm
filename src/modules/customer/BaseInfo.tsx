@@ -385,7 +385,6 @@ class Main extends React.Component<Props> {
             </Col>
           </Row>
         }
-        
         <Row gutter={8} className='mt10' >
           <Col span={12}>
             <FormItem
@@ -468,7 +467,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                value={detail.payTaxesNature? detail.payTaxesNature + '' : ''}
+                value={detail.payTaxesNature ? detail.payTaxesNature + '' : ''}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',

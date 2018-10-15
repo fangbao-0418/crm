@@ -19,14 +19,6 @@ export default class extends React.Component {
   public state: States = {
     data: []
   }
-  public componentWillMount () {
-    const curCompanyId = ''
-    fetchRelatedCompanyListy(curCompanyId).then((res) => {
-      this.setState({
-        data: res.data
-      })
-    })
-  }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '公司名称',
     dataIndex: 'customerName'
@@ -49,6 +41,14 @@ export default class extends React.Component {
     title: '结束账期',
     dataIndex: 'serveTimeEnd'
   }]
+  public componentWillMount () {
+    const curCompanyId = ''
+    fetchRelatedCompanyListy(curCompanyId).then((res) => {
+      this.setState({
+        data: res.data
+      })
+    })
+  }
   public render () {
     return (
       <Table
