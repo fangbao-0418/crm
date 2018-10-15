@@ -52,7 +52,7 @@ class Main extends React.Component<Props> {
     dataSource.forEach((item) => {
       labels[item.field] = labels[item.field] || item.label[0]
     })
-    console.log(labels, 'labels')
+    // console.log(labels, 'labels')
     return labels
   }
   public handleChange (index: number, value: string) {
@@ -76,14 +76,14 @@ class Main extends React.Component<Props> {
     const { dataSource } = this.state
     const item = dataSource[index]
     let node: JSX.Element = null
-    console.log(item.type, 'getAgerNodes')
+    // console.log(item.type, 'getAgerNodes')
     if (item.type === 'date') {
       node = (
         <div className={styles.after}>
           <RangePicker
             format={'YYYY-MM-DD'}
             onChange={(current) => {
-              console.log(current)
+              // console.log(current)
               item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
               this.handleChange(index, item.value)
             }}
@@ -119,7 +119,7 @@ class Main extends React.Component<Props> {
             this.setState({
               labels
             })
-            this.props.onChange()
+            // this.props.onChange() 修改时间选择时候请求接口
           }}
           key={`condition-label-menu-${key}`}
         >
@@ -212,7 +212,7 @@ class Main extends React.Component<Props> {
     return nodes
   }
   public render () {
-    console.log(this.state.labels, 'labels')
+    // console.log(this.state.labels, 'labels')
     return (
       <div
         style={this.props.style}

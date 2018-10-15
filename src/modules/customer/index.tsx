@@ -253,6 +253,7 @@ class Main extends React.Component<Customer.Props, States> {
             reset
             ref={(ref: any) => { ins = ref.getWrappedInstance() }}
             onClose={() => {modal.hide()}}
+            type='customer'
           />
         </Provider>
       ),

@@ -86,7 +86,7 @@ export const fetchOssToken = () => {
   const query = $.param(payload)
   return http(`/oss/api/v1/oss/write-token?${query}`)
 }
-// 除去我的客资其他销售列表都是根据当前用户获取
+// 除去我的客资其他销售列表都是根据当前用户获取-->改成不需要传参数接口
 export const getSalesList = (userId: number) => {
   return http(`/user/v1/api/user/list/sale/${userId}`)
 }
