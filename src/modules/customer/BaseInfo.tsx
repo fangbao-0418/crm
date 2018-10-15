@@ -39,13 +39,15 @@ class Main extends React.Component<Props> {
     areaList: []
   }
   public componentWillMount () {
-    fetchRegion({
-      level: 2
-    }).then((res) => {
-      this.setState({
-        cityList: res
+    if (this.props.type === 'customer') {
+      fetchRegion({
+        level: 2
+      }).then((res) => {
+        this.setState({
+          cityList: res
+        })
       })
-    })
+    }
     if (this.props.reset) {
       APP.dispatch({
         type: 'change customer data',
@@ -65,6 +67,16 @@ class Main extends React.Component<Props> {
     }
     if (this.props.customerId) {
       changeCustomerDetailAction(this.props.customerId)
+    }
+    if (this.props.type !== 'customer') {
+      fetchRegion({
+        parentId: '110100', // 登陆的客户城市对应的地区
+        level: 3
+      }).then((res) => {
+        this.setState({
+          areaList: res
+        })
+      })
     }
   }
   public editLinkMan () {
