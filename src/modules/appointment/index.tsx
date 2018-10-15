@@ -90,7 +90,7 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.show.bind(this, record.id)}>{val}</a>
+        <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
       )
     }
   }, {

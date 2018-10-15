@@ -14,6 +14,7 @@ import Detail from './detail'
 import { fetchList, fetchCityCount, deleteCustomer, allocateAuto } from './api'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
+import { connect } from 'react-redux'
 type DetailProps = Customer.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -23,7 +24,6 @@ interface States {
     current: number
     pageSize: number
   }
-  selectAll: boolean,
   cityList: any[]
   data: ConditionOptionProps[]
 }
@@ -99,11 +99,10 @@ const data: ConditionOptionProps[] = [
     options: all.concat(APP.keys.EnumCustomerSource)
   }
 ]
-class Main extends React.Component<null, States> {
+class Main extends React.Component<Customer.Props, States> {
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
-    selectAll: false,
     cityList: [],
     pagination: {
       total: 0,
@@ -304,13 +303,14 @@ class Main extends React.Component<null, States> {
   }
   public show (customerId: string) {
     let instance: any
-    const modal = new Modal({
+    const modal: any = new Modal({
       content: (
         <Provider>
           <Detail
             getWrappedInstance={(ins) => {
               instance = ins
             }}
+            onClose={() => modal.hide()}
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
@@ -356,7 +356,23 @@ class Main extends React.Component<null, States> {
   public showResult () {
     const modal = new Modal({
       content: (
-        <AllotResult onCancel={() => {modal.hide()}}/>
+        <Provider>
+          <AllotResult
+            onCancel={() => {modal.hide()}}
+            deleteCus={() => {
+              const result = this.props.assignResult.repeatCustomers
+              const ids: string[] = []
+              result.map((item) => {
+                ids.push(item.id)
+              })
+              const payload = ids.join(',')
+              deleteCustomer(payload).then(() => {
+                APP.success('操作成功')
+                modal.hide()
+              })
+            }}
+          />
+        </Provider>
       ),
       footer: null,
       title: '执行结果',
@@ -378,8 +394,11 @@ class Main extends React.Component<null, States> {
   //     selectAll: true
   //   })
   // }
+  public deleteCustomer () {
+
+  }
   public toOrganizationAuto () {
-    if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
+    if (!this.state.selectedRowKeys.length) {
       APP.error('请选择需要分配客户')
       return
     }
@@ -414,11 +433,11 @@ class Main extends React.Component<null, States> {
           APP.dispatch({
             type: 'change customer data',
             payload: {
-              assignResult: res
+              assignResult: res.data
             }
           })
-          APP.success('自动分客成功')
-          this.fetchList()
+          this.showResult()
+          modal.hide()
         })
       },
       onCancel: () => {
@@ -428,7 +447,7 @@ class Main extends React.Component<null, States> {
     modal.show()
   }
   public toOrganizationByHand () {
-    if (!this.state.selectedRowKeys.length && !this.state.selectAll) {
+    if (!this.state.selectedRowKeys.length) {
       APP.error('请选择需要分配客户')
       return
     }
@@ -436,10 +455,12 @@ class Main extends React.Component<null, States> {
       content: (
         <Provider>
           <Allot
-            onClose={() => {modal.hide()}}
+            onClose={() => {
+              this.fetchList()
+              modal.hide()
+            }}
             selectedRowKeys={this.state.selectedRowKeys}
             params={this.params}
-            selectAll={this.state.selectAll}
             pagetotal={this.state.pagination.total}
           />
         </Provider>
@@ -558,4 +579,6 @@ class Main extends React.Component<null, States> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)

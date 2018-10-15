@@ -55,6 +55,8 @@ declare namespace Customer {
     createTime?: string
     trackRecord?: TrackRecord
     tagTelephoneStatus?: string
+    businessLicenseUrl?: string
+    legalPersonCardUrl?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string
@@ -73,7 +75,7 @@ declare namespace Customer {
   }
   export interface AssignResultProps {
     allocatedNum: number
-    exists: Array<{name: string, id: string}>
+    repeatCustomers: Array<{name?: string, id?: string}>
     total: number
   }
   export interface TrackRecord {
@@ -102,5 +104,6 @@ declare namespace Customer {
     capacity?: CapacityProps[],
     assignResult?: AssignResultProps
     spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
+    detailVisibleState?: boolean
   }
 }

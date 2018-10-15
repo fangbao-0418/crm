@@ -3,30 +3,19 @@ import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchList } from './api'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 type DetailProps = Business.DetailProps
-interface Props {
+interface Props extends Business.Props {
   columns: ColumnProps<DetailProps>[]
   params: Business.SearchProps
   handleSelectAll?: (selectedRowKeys: string[], type: number) => void
 }
 interface States {
-  dataSource: DetailProps[]
   selectedRowKeys: string[]
-  pagination: {
-    total: number
-    current: number
-    pageSize: number
-  }
 }
-class Main extends React.Component<Props> {
+class Main extends React.Component<Props, States> {
   public state: States = {
-    dataSource: [],
-    selectedRowKeys: [],
-    pagination: {
-      total: 0,
-      current: 1,
-      pageSize: 15
-    }
+    selectedRowKeys: []
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
@@ -34,14 +23,20 @@ class Main extends React.Component<Props> {
   }
   public fetchList () {
     const params = _.cloneDeep(this.props.params)
-    const pagination = this.state.pagination
+    const pagination = this.props.tab3.pagination
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
       pagination.total = res.pageTotal
-      this.setState({
-        pagination,
-        dataSource: res.data
+      APP.dispatch<Business.Props>({
+        type: 'change business data',
+        payload: {
+          tab3: {
+            searchPayload: params,
+            pagination,
+            dataSource: res.data
+          }
+        }
       })
     })
   }
@@ -54,35 +49,43 @@ class Main extends React.Component<Props> {
     }
   }
   public handlePageChange (page: number) {
-    const { pagination } = this.state
+    const { pagination } = this.props.tab3
     pagination.current = page
-    this.setState({
-      pagination
-    }, () => {
-      this.fetchList()
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        tab3: {
+          pagination
+        }
+      }
     })
+    this.fetchList()
   }
   public onShowSizeChange (current: number, size: number) {
-    const { pagination } = this.state
+    const { pagination } = this.props.tab3
     pagination.current = current
     pagination.pageSize = size
-    this.setState({
-      pagination
-    }, () => {
-      this.fetchList()
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        tab3: {
+          pagination
+        }
+      }
     })
+    this.fetchList()
   }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
-    const { pagination } = this.state
+    const { pagination, dataSource } = this.props.tab3
     return (
       <div>
         <Table
           columns={this.props.columns}
-          dataSource={this.state.dataSource}
+          dataSource={dataSource}
           rowSelection={rowSelection}
           bordered
           rowKey={'id'}
@@ -110,4 +113,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.business
+})(Main)

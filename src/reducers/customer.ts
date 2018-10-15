@@ -16,12 +16,13 @@ const defaultVal: Customer.Props = {
   autoAssign: [],
   assignResult: {
     allocatedNum: 0,
-    exists: [],
+    repeatCustomers: [],
     total: 0
   },
   capacity:[],
   /** 特殊资源列表 */
-  spicalAssetsList: []
+  spicalAssetsList: [],
+  detailVisibleState: true
 }
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {

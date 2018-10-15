@@ -247,6 +247,7 @@ class Main extends React.Component {
           <Detail
             customerId={customerId}
             type='open'
+            onClose={() => modal.hide()}
             footer={(
               <div className='text-right mt10'>
                 <Button

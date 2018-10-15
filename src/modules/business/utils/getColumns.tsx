@@ -2,6 +2,10 @@ import React from 'react'
 import { ColumnProps } from 'antd/lib/table'
 import { Tooltip } from 'antd'
 import moment from 'moment'
+import showDetail from './showDetail'
+import { fetchList } from '../api'
+import store from '@/store'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
   console.log(this, 'this')
@@ -15,14 +19,54 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       </span>
     ),
     dataIndex: 'customerName',
-    render: (val, record) => {
+    render: (val, record, index) => {
       return (
         <div>
           {
             record.redPoint === 1 &&
             <span className={styles['red-point']}></span>
           }
-          <span className='href' onClick={this.show.bind(this, record.id)}>
+          <span
+            className='href'
+            onClick={() => {
+              const modal = showDetail.call(this, record.id, index, () => {
+                const business: any = store.getState().business
+                const tab = business.selectedTab
+                const { searchPayload, pagination } = business[tab]
+                fetchList(searchPayload).then((res) => {
+                  pagination.total = res.pageTotal
+                  APP.dispatch<Business.Props>({
+                    type: 'change business data',
+                    payload: {
+                      [tab]: {
+                        dataSource: res.data,
+                        pagination
+                      }
+                    }
+                  })
+                  APP.dispatch<Customer.Props>({
+                    type: 'change customer data',
+                    payload: {
+                      detailVisibleState: false
+                    }
+                  })
+                  if (res.data[index]) {
+                    const customerId = res.data[index].id
+                    changeCustomerDetailAction(customerId)
+                    APP.dispatch<Customer.Props>({
+                      type: 'change customer data',
+                      payload: {
+                        detailVisibleState: true
+                      }
+                    })
+                  } else {
+                    modal.hide()
+                  }
+                })
+                return
+              })
+            }}
+          >
             {val}
           </span>
         </div>

@@ -6,7 +6,6 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { getSaleCapacity, allotCustomer, deleteCustomer } from '../api'
 interface Props extends Customer.Props {
-  selectAll: boolean
   selectedRowKeys: string[]
   params: any
   pagetotal?: number
@@ -33,16 +32,17 @@ class Main extends React.Component<Props> {
               customerNum: this.props.selectedRowKeys.length,
               salesPersons: ids.join(',')
             }
-            if (this.props.selectAll) {
-              value.checkAllParam = this.props.params
-              value.customerIds = []
-              saleCapacityParams.customerNum = this.props.pagetotal
-            } else {
-              value.customerIds = this.props.selectedRowKeys
-            }
+            // if (this.props.selectAll) {
+            //   value.checkAllParam = this.props.params
+            //   value.customerIds = []
+            //   saleCapacityParams.customerNum = this.props.pagetotal
+            // } else {
+            //   value.customerIds = this.props.selectedRowKeys
+            // }
+            value.customerIds = this.props.selectedRowKeys
             // console.log(saleCapacityParams, 'saleCapacityParams')
             getSaleCapacity(saleCapacityParams).then((res1) => { // 查询销售库容是不是足够
-              if (res1.result === 1) {
+              if (res1.data.result === 1) {
                 allotCustomer(value).then((res: any) => {
                   this.setState({
                     step: 2
@@ -50,7 +50,7 @@ class Main extends React.Component<Props> {
                   APP.dispatch({
                     type: 'change customer data',
                     payload: {
-                      assignResult: res
+                      assignResult: res.data
                     }
                   })
                 })
@@ -71,8 +71,8 @@ class Main extends React.Component<Props> {
               this.props.onClose()
             }
           }}
-          deleteCustomer={() => {
-            const result = this.props.assignResult.exists
+          deleteCus={() => {
+            const result = this.props.assignResult.repeatCustomers
             const ids: string[] = []
             result.map((item) => {
               ids.push(item.id)

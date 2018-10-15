@@ -5,7 +5,7 @@ import Record from '@/modules/customer/Record'
 import Card from '@/components/Card'
 import Tags from '@/components/tags'
 import _ from 'lodash'
-import { Button, Input, DatePicker } from 'antd'
+import { Button, Input, DatePicker, Icon } from 'antd'
 import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
@@ -14,6 +14,8 @@ interface Props {
   detail?: Customer.DetailProps
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
+  onClose?: () => void
+  detailVisibleState?: boolean
 }
 class Main extends React.Component<Props> {
   public defaultTrackRecord = [
@@ -81,58 +83,68 @@ class Main extends React.Component<Props> {
   public render () {
     const type = this.props.type || 'customer'
     return (
-      <div className={styles.container}>
-        <div className={styles.left}>
-          <Profile type={type}/>
-          <Card
-            title='基本信息'
-            showFold
-          >
-            <BaseInfo
-              ref='baseinfo'
-              customerId={this.props.customerId}
-              type={type}
-            />
-          </Card>
-          {
-            type === 'business' &&
-            <Card title='跟进记录'>
-              <Tags
-                className='mb10'
-                dataSource={this.trackRecord}
-                parser={(value) => {
-                  return value[0] ? Number(value[0].value) : undefined
-                }}
-                onChange={(value) => {
-                  this.handleChange('trackRecord', value)
-                }}
+      <div>
+        <span
+          className={styles['colse-icon']}
+          onClick={() => this.props.onClose()}
+        >
+          <Icon type='close' theme='outlined' />
+        </span>
+        <div className={styles.container}>
+          <div className={styles.left}>
+            <Profile type={type}/>
+            <Card
+              title='基本信息'
+              showFold
+            >
+              <BaseInfo
+                ref='baseinfo'
+                customerId={this.props.customerId}
+                type={type}
               />
-              <Input.TextArea
-                className='mt10'
-                placeholder='请输入备注'
-                onChange={(e) => {
-                  console.log(e.target.value, 'textarea change')
-                  this.handleChange('trackRecord.remark', e.target.value)
-                }}
-              />
-              <div className='mt10' >
-                预约下次拜访日期&nbsp;&nbsp;
-                <DatePicker
-                  onChange={(moment) => {
-                    this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
+            </Card>
+            {
+              type === 'business' &&
+              <Card title='跟进记录'>
+                <Tags
+                  className='mb10'
+                  dataSource={this.trackRecord}
+                  parser={(value) => {
+                    return value[0] ? Number(value[0].value) : undefined
+                  }}
+                  onChange={(value) => {
+                    this.handleChange('trackRecord', value)
                   }}
                 />
-              </div>
-            </Card>
-          }
-          <div>
-            {this.props.footer || this.footer}
+                <Input.TextArea
+                  className='mt10'
+                  placeholder='请输入备注'
+                  onChange={(e) => {
+                    console.log(e.target.value, 'textarea change')
+                    this.handleChange('trackRecord.remark', e.target.value)
+                  }}
+                />
+                <div className='mt10' >
+                  预约下次拜访日期&nbsp;&nbsp;
+                  <DatePicker
+                    onChange={(moment) => {
+                      this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
+                    }}
+                  />
+                </div>
+              </Card>
+            }
+            <div>
+              {this.props.footer || this.footer}
+            </div>
           </div>
-        </div>
-        <div className={styles.right}>
-          <Record
-            customerId={this.props.customerId}
-          />
+          <div className={styles.right}>
+            {this.props.detailVisibleState && (
+              <Record
+                customerId={this.props.customerId}
+              />
+            )}
+          </div>
         </div>
       </div>
     )

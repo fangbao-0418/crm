@@ -5,7 +5,7 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
-export default function (customerId: string, cb?: () => void) {
+export default function (customerId: string, index: number, cb?: () => void) {
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
@@ -16,6 +16,7 @@ export default function (customerId: string, cb?: () => void) {
           getWrappedInstance={(ins) => {
             that.ins = ins
           }}
+          onClose={() => modal.hide()}
           customerId={customerId}
           footer={(
             <div className='text-right mt10'>
@@ -85,4 +86,5 @@ export default function (customerId: string, cb?: () => void) {
     }
   })
   modal.show()
+  return modal
 }
