@@ -4,6 +4,9 @@ import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import {  TasktplItem } from '@/modules/outsite/types/tploutside'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
+import Service from '@/modules/outsite/services'
+import _ from 'lodash'
+
 const styles = require('@/modules/outsite/styles/tpllist')
 const data: any = [
   {
@@ -44,7 +47,10 @@ class Main extends React.Component<any, any> {
     dataIndex: 'name'
   }, {
     title: '任务分类',
-    dataIndex: 'category'
+    dataIndex: 'category',
+    render: (k: any, item: TasktplItem) => {
+      return Service.taskTplCateDict[item.category]
+    }
     /*
   }, {
     title: '期限(天))',
@@ -52,10 +58,13 @@ class Main extends React.Component<any, any> {
     */
   },  {
     title: '操作时间',
-    dataIndex: 'id'
+    dataIndex: 'updateTime'
   }, {
     title: '状态',
-    dataIndex: 'status'
+    dataIndex: 'status',
+    render: (k: any, item: TasktplItem) => {
+      return item.status === 'NORMAL' ? '启用' : '禁用' // Service.task[item.category]
+    }
   }, {
     title: '操作',
     dataIndex: 'take',
@@ -74,10 +83,26 @@ class Main extends React.Component<any, any> {
     this.state = {
       selectedRowKeys: [],
       modalVisible: false,
-      showData:{},
+      searchData:{
+        name: '',
+        status: '',
+        category: '',
+        pageSize: 10,
+        pageCurrent: 1
+      },
+      subItem: {
+        name: '',
+        category: ''
+      },
+      dataSource: [],
       showTitle:''// 弹窗的标题
     }
   }
+
+  public componentWillMount () {
+    this.getList()
+  }
+
   public render () {
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -123,20 +148,26 @@ class Main extends React.Component<any, any> {
     }
     return (
       <div className={styles.container}>
-      <HCframe title='其他任务配置'>
+      <HCframe
+        title='其他任务配置'
+        act={<div>
+          <a onClick={this.addtBtn.bind(this)} className='btn'><i>+</i> 新增</a>
+        </div>}
+      >
         <Row>
           <Col span={20}>
             <SearchForm onChange={this.onChange.bind(this)} />
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
-              <Button type='primary'  onClick={this.searchBtn.bind(this)}>搜索</Button>
-              <Button type='primary'  onClick={this.addtBtn.bind(this)}>新增</Button>
             </span>
           </Col>
         </Row>
         <Row>
-        <Table  columns={this.columns} dataSource={data} />
+        <Table
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+        />
         </Row>
       </HCframe>
       <Modal
@@ -144,22 +175,62 @@ class Main extends React.Component<any, any> {
         visible={this.state.modalVisible}
         onOk={this.modalHandleOk.bind(this)}
         onCancel={this.modalHandleCancel.bind(this)}
-        footer={null}
+        // footer={null}
       >
-        <MessageShowModal data={this.state.showData} identifying={this.state.showTitle}/>
+        <MessageShowModal data={this.state.subItem} identifying={this.state.showTitle} onChange={this.onSubFormChange.bind(this)}/>
       </Modal>
     </div>
     )
   }
-  // 表单改变
+
+  public getList () {
+    Service.getTplSublistByCond(this.state.searchData).then((res: any) => {
+      if (!res || !res.records) {
+        return
+      }
+      const { searchData } = this.state
+      searchData.pageSize = res.size
+      searchData.pageCurrent = res.current
+      this.setState({
+        dataSource: res.records,
+        searchData
+      })
+    })
+  }
+
+  // 搜索表单改变
   public onChange (formData: any) {
     console.log('表单改变', formData)
+    const { searchData } = this.state
+    _.extend(searchData, formData)
+    this.setState({
+      searchData
+    }, () => {
+      this.getList()
+    })
+  }
+
+  // 搜索表单改变
+  public onSubFormChange (formData: any) {
+    console.log('子任务表单：', formData)
+    const { subItem } = this.state
+    _.extend(subItem, formData)
+    this.setState({
+      subItem
+    })
   }
 
   // 新增
   public addtBtn () {
     console.log('点击新增')
-    this.setState({ showTitle: '新增' })
+    this.setState({
+      showTitle: '新增',
+      // 置空item
+      subItem: {
+        name: '',
+        category: ''
+      }
+    })
     // service.delList(selectedRowKeys)
     this.modalShow()
   }
@@ -172,40 +243,56 @@ class Main extends React.Component<any, any> {
   }
 
   // 编辑
-  public onShow (item: TasktplItem) {
+  public onShow (subItem: TasktplItem) {
     console.log('点击编辑')
-    this.setState({ showTitle: '编辑' })
-    this.modalShow(item)
+    this.setState({
+      showTitle: '编辑',
+      subItem
+    })
+    this.modalShow(subItem)
   }
+
   // 启用
   public onBegin (item: TasktplItem) {
     console.log('点击启用禁用')
     this.setState({ showTitle: '确认信息' })
     this.modalShow(item)
   }
+
   // 选择的数组
   public onSelectChange = (selectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
+
   // 分页
   public pageChange = (selectedRowKeys: any) => {
     console.log('pageChange changed: ', selectedRowKeys)
   }
+
   public modalShow (showData: any = {}) {
     this.setState({
       modalVisible: true,
       showData
     })
   }
+
   public modalHide () {
     this.setState({
       modalVisible: false
     })
   }
 
+  // 添加子任务
   public modalHandleOk () {
-    this.modalHide()
+    const { subItem } = this.state
+    if (!subItem.name || !subItem.category) {
+      return
+    }
+    Service.addTplSublistItem(subItem).then(() => {
+      this.getList()
+      // this.modalHide()
+    })
   }
 
   public modalHandleCancel () {

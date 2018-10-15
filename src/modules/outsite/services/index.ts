@@ -25,7 +25,13 @@ class ModuleService extends Service {
 
   // 子任务服务状态
   public subStatusDict: Map<string> = {
-
+    WAITING: '待处理', // 第二个任务初始
+    DISTRIBUTED: '已分配', // 第一个任务初始
+    RUNNING: '进行中', // 接受
+    FINISHED: '已完成', // 完成
+    UNAPPROVED: '待审批', // 取消
+    REFUSED: '已拒绝', // 取消审批拒绝
+    CANCELLED: '已取消' // 取消审批通过
   }
 
   // 任务模板分类
