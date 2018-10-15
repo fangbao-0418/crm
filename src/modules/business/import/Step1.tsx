@@ -1,9 +1,13 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
 import FormItem from '@/components/form/Item1'
+import { getSalesList } from '@/modules/common/api'
 const Option = Select.Option
 interface Props {
   onOk?: (value: ValueProps) => void
+}
+interface State {
+  sales: Array<{id: number, name: string}>
 }
 interface ValueProps {
   customerSource?: string,
@@ -11,6 +15,16 @@ interface ValueProps {
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {}
+  public state: State = {
+    sales: []
+  }
+  public componentWillMount () {
+    getSalesList(1).then((res) => {
+      this.setState({
+        sales: res
+      })
+    })
+  }
   public render () {
     return (
       <div className='text-center mt10'>
@@ -51,8 +65,13 @@ class Main extends React.Component<Props> {
               this.values.salesPerson = newVal
             }}
           >
-            <Option value='1'>销售1</Option>
-            <Option value='2'>销售2</Option>
+            {
+              this.state.sales.map((item, index) => {
+                return (
+                  <Option key={item.id}>{item.name}</Option>
+                )
+              })
+            }
           </Select>
         </div>
         <div className='text-right mt10'>

@@ -14,6 +14,7 @@ import { changeCustomerDetailAction } from './action'
 import { connect } from 'react-redux'
 import { addCustomer, addBusinessCustomer, updateCustomer } from './api'
 import { fetchRegion } from '@/modules/common/api'
+import CompanySearch from '@/modules/signed/detail/CompanySearch'
 const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
@@ -247,14 +248,35 @@ class Main extends React.Component<Props> {
                   initialValue: this.props.detail.customerName
                 }
               )(
-                <Input
+                <FormItemLayout
+                  label='公司名称'
                   required
-                  label={'公司名'}
-                  field='customerName'
-                  onChange={this.handleChange.bind(this)}
-                  value={this.props.detail.customerName}
-                  disabled={disabled}
-                />
+                >
+                  <CompanySearch
+                    disabled={disabled}
+                    value={detail.customerName}
+                    onSelectCompany={(item) => {
+                      this.handleChange(null, {
+                        key: 'customerName',
+                        value: item.name
+                      })
+                    }}
+                    onChange={(e) => {
+                      this.handleChange(null, {
+                        key: 'customerName',
+                        value: e.target.value
+                      })
+                    }}
+                  />
+                </FormItemLayout>
+                // <Input
+                //   required
+                //   label={'公司名'}
+                //   field='customerName'
+                //   onChange={this.handleChange.bind(this)}
+                //   value={this.props.detail.customerName}
+                //   disabled={disabled}
+                // />
               )}
             </FormItem>
           </Col>
@@ -378,7 +400,7 @@ class Main extends React.Component<Props> {
               <Select
                 style={{width: '100%'}}
                 disabled={disabled}
-                value={detail.payTaxesNature + ''}
+                value={detail.payTaxesNature}
                 onChange={(value) => {
                   this.handleChange(null, {
                     key: 'payTaxesNature',
@@ -465,16 +487,19 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        <Row gutter={8} className='mt10'>
-          <Col span={24}>
-            <TextArea
-              field='relatedCompany'
-              label={'相关公司'}
-              value={this.props.detail.relatedCompany}
-              disabled={true}
-            />
-          </Col>
-        </Row>
+        {
+          this.props.customerId &&
+          <Row gutter={8} className='mt10'>
+            <Col span={24}>
+              <TextArea
+                field='relatedCompany'
+                label={'相关公司'}
+                value={this.props.detail.relatedCompany}
+                disabled={true}
+              />
+            </Col>
+          </Row>
+        }
         {/* <div className='text-right mt10'>
           <Button
             className='mr5'

@@ -37,7 +37,8 @@ const defaultVal: Business.Props = {
       current: 1,
       pageSize: 15
     }
-  }
+  },
+  selectedTab: 'tab1'
 }
 export default handleActions<Business.Props>({
   'change business data': (state, { payload }) => {

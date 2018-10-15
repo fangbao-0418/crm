@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { md5 } from 'pilipa'
-import { OSS } from 'pilipa'
+import { Wrapper as OSS } from 'ali-oss'
 import { fetchOssToken } from '@/modules/common/api'
 // 获取时间区间
 export const getDateSection = (str: string, refer: Date = new Date(), format: string = 'YYYY-MM-DD') => {
@@ -39,15 +39,20 @@ export const generateFileName = (file: File, dir: string = '/') => {
 }
 
 // oss upload
-export const ossUpload = (file: File) => {
-  const name = generateFileName(file, '/')
-  fetchOssToken().then((res) => {
-    console.log(res)
-  })
-  const client = OSS({
-    region: '<oss region>',
-    accessKeyId: '<Your accessKeyId>',
-    accessKeySecret: '<Your accessKeySecret>',
-    bucket: '<Your bucket name>'
+export const ossUpload = (file: File): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const name = generateFileName(file, '/pilipa-crm')
+    fetchOssToken().then((res) => {
+      const store = OSS({
+        region: 'oss-cn-beijing',
+        accessKeyId: res.credentials.accessKeyId,
+        accessKeySecret: res.credentials.accessKeySecret,
+        stsToken: res.credentials.securityToken,
+        bucket: res.bucket
+      })
+      store.multipartUpload<any, any>(name, file).then((res2: any) => {
+        resolve(res2)
+      })
+    })
   })
 }

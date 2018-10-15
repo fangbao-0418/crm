@@ -5,14 +5,19 @@ import { connect } from 'react-redux'
 import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import CompanySearch from './CompanySearch'
-import { fetchGovInfo } from '@/modules/common/api'
+import { fetchGovInfo, fetchTianYanDetail } from '@/modules/common/api'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
   detail: Customer.DetailProps
 }
-
-class Main extends React.Component<Props> {
+interface State {
+  disabled?: boolean
+}
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    disabled: false
+  }
   public searchUrl () {
     let url: string
     const modal = new Modal({
@@ -67,9 +72,23 @@ class Main extends React.Component<Props> {
                 )(
                   <div>
                     <CompanySearch
+                      className='inline-block'
                       enterButton='查询'
                       style={{width: '322px'}}
                       value={detail.customerName}
+                      onSelectCompany={(item) => {
+                        fetchTianYanDetail(item.id).then((res) => {
+                          APP.dispatch({
+                            type: 'change customer data',
+                            payload: {
+                              detail: res
+                            }
+                          })
+                        })
+                        this.setState({
+                          disabled: true
+                        })
+                      }}
                     />
                     <Button
                       className='ml5 mr5'
@@ -78,7 +97,16 @@ class Main extends React.Component<Props> {
                     >
                       网址
                     </Button>
-                    <Button type='primary'>特殊公司</Button>
+                    <Button
+                      type='primary'
+                      onClick={() => {
+                        this.setState({
+                          disabled: false
+                        })
+                      }}
+                    >
+                      特殊公司
+                    </Button>
                   </div>
                 ) : <span>{detail.customerName}</span>
                 }
@@ -96,7 +124,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.legalPerson
                   }
                 )(
-                  <Input />
+                  <Input disabled={this.state.disabled} />
                 ) : <span>{detail.legalPerson}</span>}
               </FormItem>
             </Col>
@@ -115,7 +143,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.unifiedCreditCode
                   }
                 )(
-                  <Input />
+                  <Input disabled={this.state.disabled} />
                 ) : <span>{detail.unifiedCreditCode}</span>}
               </FormItem>
             </Col>
@@ -132,7 +160,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.companyRegisterCode
                   }
                 )(
-                  <Input />
+                  <Input disabled={this.state.disabled} />
                 ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
             </Col>
@@ -148,7 +176,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.registeredCapital
                   }
                 )(
-                  <Input />
+                  <Input disabled={this.state.disabled}  />
                 ) : <span>{detail.registeredCapital}</span>}
               </FormItem>
             </Col>
@@ -166,10 +194,10 @@ class Main extends React.Component<Props> {
                     {getFieldDecorator(
                       'businessHoursBegin',
                       {
-                        initialValue: moment(detail.businessHoursBegin)
+                        initialValue: detail.businessHoursBegin ? moment(detail.businessHoursBegin) : undefined
                       }
                     )(
-                      <DatePicker />
+                      <DatePicker disabled={this.state.disabled}  />
                     )}
                   </FormItem>
                   <span
@@ -186,11 +214,11 @@ class Main extends React.Component<Props> {
                     {getFieldDecorator(
                       'businessHoursEnd',
                       {
-                        initialValue: moment(detail.businessHoursEnd)
+                        initialValue: detail.businessHoursEnd ? moment(detail.businessHoursEnd) : undefined
                       }
                     )(
                       <DatePicker
-                        disabled={detail.isFixedPeriod === 1}
+                        disabled={this.state.disabled || detail.isFixedPeriod === 1}
                       />
                     )}
                   </FormItem>
@@ -240,7 +268,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.address
                   }
                 )(
-                  <Input />
+                  <Input disabled={this.state.disabled} />
                 ) : <span>{detail.address}</span>}
               </FormItem>
             </Col>
@@ -259,7 +287,7 @@ class Main extends React.Component<Props> {
                     initialValue: detail.businessScope
                   }
                 )(
-                  <Input.TextArea />
+                  <Input.TextArea disabled={this.state.disabled} />
                 ) : <span>{detail.businessScope}</span>}
               </FormItem>
             </Col>

@@ -1,14 +1,14 @@
 import React from 'react'
 import { DatePicker, Select, Tabs, Button } from 'antd'
 import ContentBox from '@/modules/common/content'
-import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
-import { fetchRegion } from '@/modules/common/api'
+import { fetchRegion, getSalesList } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -17,7 +17,6 @@ import Tab4 from './Tab4'
 import {
   addCustomer,
   getColumns,
-  showDetail,
   conditionOptions
 } from './utils'
 import _ from 'lodash'
@@ -34,7 +33,8 @@ interface States {
     newCustomerNums?: string
     ForthcomingNums?: string
   }
-  citys: Common.RegionProps[]
+  citys: Common.RegionProps[],
+  sales: Array<{id: number, name: string}>
 }
 class Main extends React.Component {
   public state: States = {
@@ -46,7 +46,8 @@ class Main extends React.Component {
       trackContactNums: '',
       newCustomerNums: ''
     },
-    citys: []
+    citys: [],
+    sales: []
   }
   public data = conditionOptions
   public params: Business.SearchProps = {tab: '1'}
@@ -61,6 +62,7 @@ class Main extends React.Component {
     this.fetchCustomerNum()
     this.fetchCapacityNum()
     this.fetchCitys()
+    this.fetchSales()
   }
   public fetchCapacityNum () {
     getcapacityNum().then((res) => {
@@ -87,6 +89,13 @@ class Main extends React.Component {
     fetchRegion({level: 2}).then((res) => {
       this.setState({
         citys: res
+      })
+    })
+  }
+  public fetchSales () {
+    getSalesList(1).then((res) => {
+      this.setState({
+        sales: res
       })
     })
   }
@@ -164,10 +173,12 @@ class Main extends React.Component {
     this.setState({
       defaultActiveKey: value
     })
-  }
-  public show (customerId: string) {
-    showDetail.call(this, customerId, () => {
-      // this.props.
+    const tab: any = `tab-${value}`
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        selectedTab: tab
+      }
     })
   }
   public appointmentAll (selectedRowKeys: string[]) {
@@ -231,8 +242,13 @@ class Main extends React.Component {
               this.curSale = val
             }}
           >
-            <Select.Option value='1'>销售1</Select.Option>
-            <Select.Option value='2'>销售2</Select.Option>
+            {
+              this.state.sales.map((item, index) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),
@@ -390,6 +406,7 @@ class Main extends React.Component {
     }
   }
   public render () {
+    const { defaultActiveKey } = this.state
     return (
       <ContentBox
         title='我的商机'
@@ -456,7 +473,7 @@ class Main extends React.Component {
           >
             <Tabs.TabPane tab={<span>全部({this.state.customerNum.allNums})</span>} key='1'>
               {
-                (this.state.defaultActiveKey === '1' && this.state.visible) && (
+                (defaultActiveKey === '1' && this.state.visible) && (
                   <Tab1
                     columns={this.columns}
                     params={this.params}
@@ -467,21 +484,21 @@ class Main extends React.Component {
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>已有沟通({this.state.customerNum.trackContactNums})</span>} key='2'>
               {
-                (this.state.defaultActiveKey === '2' && this.state.visible) && (
+                (defaultActiveKey === '2' && this.state.visible) && (
                   <Tab2 columns={this.columns} params={this.params}/>
                 )
               }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>新客资({this.state.customerNum.newCustomerNums})</span>} key='3'>
               {
-                (this.state.defaultActiveKey === '3' && this.state.visible) && (
+                (defaultActiveKey === '3' && this.state.visible) && (
                   <Tab3 columns={this.columns} params={this.params}/>
                 )
               }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>{this.state.recycleNum}</span></span>} key='4'>
               {
-                (this.state.defaultActiveKey === '4' && this.state.visible) && (
+                (defaultActiveKey === '4' && this.state.visible) && (
                   <Tab4 columns={this.columns} params={this.params}/>
                 )
               }

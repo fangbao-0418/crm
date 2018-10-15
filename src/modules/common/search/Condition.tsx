@@ -148,7 +148,7 @@ class Main extends React.Component<Props> {
                 title: 'label'
               }}
               defaultValue={{
-                label: this.state.values[item.field].label
+                label: this.state.values[item.field] ? this.state.values[item.field].label : ''
               }}
               data={options}
               onChange={(value) => {

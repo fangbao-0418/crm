@@ -43,21 +43,7 @@ class Main extends React.Component<Props, State> {
             >
               {!disabled ? getFieldDecorator(
                 'area'
-                // {
-                //   initialValue: detail.areaCode
-                // }
                 )(
-                // <Select
-                //   style={{width:'100px'}}
-                // >
-                //   {
-                //     this.state.areaList.map((item) => {
-                //       return (
-                //         <Option key={item.code}>{item.name}</Option>
-                //       )
-                //     })
-                //   }
-                // </Select>
                 <Dropdown
                   style={{
                     width: '100px',
@@ -128,9 +114,42 @@ class Main extends React.Component<Props, State> {
               wrapperCol={{span: 16}}
               label='证件照片'
             >
-              <Uploader className='mr5'/>
-              <Uploader />
+              {getFieldDecorator(
+                'idUrl1',
+                {
+                  initialValue: String(detail.legalPersonCardUrl).split(',')[0]
+                }
+              )(
+                <Uploader
+                  className='mr5'
+                  disabled={disabled}
+                  value={String(detail.legalPersonCardUrl).split(',')[0]}
+                  onUploaded={(url) => {
+                    this.props.form.setFieldsValue({
+                      idUrl1: url
+                    })
+                  }}
+                />
+              )}
+              {getFieldDecorator(
+                'idUrl2',
+                {
+                  initialValue: String(detail.legalPersonCardUrl).split(',')[1]
+                }
+              )(
+                <Uploader
+                  disabled={disabled}
+                  value={String(detail.legalPersonCardUrl).split(',')[1]}
+                  onUploaded={(url) => {
+                    this.props.form.setFieldsValue({
+                      idUrl2: url
+                    })
+                  }}
+                />
+              )}
             </FormItem>
+            {/* <FormItem>
+            </FormItem> */}
           </Col>
           <Col span={8}>
             <FormItem
@@ -138,8 +157,23 @@ class Main extends React.Component<Props, State> {
               wrapperCol={{span: 14}}
               label='营业执照'
             >
-              <Uploader className='mr5'/>
-              <Uploader />
+            {getFieldDecorator(
+              'businessLicenseUrl',
+              {
+                initialValue: detail.businessLicenseUrl
+              }
+            )(
+              <Uploader
+                className='mr5'
+                disabled={disabled}
+                onUploaded={(url) => {
+                  console.log(url, '营业执照')
+                  this.props.form.setFieldsValue({
+                    businessLicenseUrl: url
+                  })
+                }}
+              />
+            )}
             </FormItem>
           </Col>
         </Row>
@@ -151,11 +185,15 @@ export default connect((state: Reducer.State) => {
   return state.customer
 })(Form.create({
   onValuesChange: (props: Customer.Props, changeValue, allValues) => {
+    console.log(allValues, 'allValues')
     const detail = Object.assign({}, props.detail, allValues)
     const area = detail.area || {}
     delete detail.area
     detail.areaCode = area.key
     detail.areaName = area.title
+    detail.legalPersonCardUrl = [detail.idUrl1, detail.idUrl2].join(',')
+    delete detail.idUrl1
+    delete detail.idUrl2
     APP.dispatch({
       type: 'change customer data',
       payload: {
