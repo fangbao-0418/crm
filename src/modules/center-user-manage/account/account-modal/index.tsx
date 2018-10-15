@@ -1,12 +1,13 @@
 import React from 'react'
-import { Modal, Form, Input, Checkbox, Cascader, Select, Tree } from 'antd'
+import { Modal, Form, Input, Checkbox, Cascader, Select, Tree, TreeSelect } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchRegionList, fetchDepartmentList, fetchRoleList, fetchRoleOfPermission } from '../api'
+import { fetchRegionList, fetchDepartmentList, fetchRoleList, fetchRoleOfPermission, fetchAccountInfo, fetchIdentityList } from '../api'
 
 const styles = require('./index.styl')
 const Option = Select.Option
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
+const TreeSelectNode = TreeSelect.TreeNode
 
 interface Props extends FormComponentProps {
   mode: string // 模式
@@ -17,38 +18,45 @@ interface Props extends FormComponentProps {
 
 interface State {
   title: string // 弹窗标题
-  isSell: boolean // 是否是销售
+  identityType: 'showArea' | 'none' // 显示区域选项 | 都不显示
   expandedKeys: string[] // 展开节点key值
   checkedKeys: string[] // 选中节点key值
   regionTree: any[] // 区域树形结构数据
   departmentTree: any[] // 部门树形结构数据
   roleList: any[] // 角色列表
   permissionList: any[] // 角色权限列表
+  accountList: any[] // 核算中心列表
+  identityList: any[] // 身份列表
 }
 
 class Main extends React.Component<Props, State> {
 
+  public selectAreaInfoList: any[] = [] // 选中区域信息列表
+
   public state: State = {
     title: '',
-    isSell: false,
+    identityType: 'none',
     expandedKeys: [],
     checkedKeys: [],
     regionTree: [],
     departmentTree: [],
     roleList: [],
-    permissionList: []
+    permissionList: [],
+    accountList: [],
+    identityList: []
   }
 
   public componentWillMount () {
     const {mode, info} = this.props
-    console.log(this.props)
     this.setTitle()
     this.setRegionTree()
     this.getDepartmentList()
     this.getRoleList()
+    this.getAccountList()
+    this.getIdentityList()
+    this.showOption(info.identity)
     if (mode === 'view' || mode === 'modify') {
       this.getRoleOfPermission(info.roleId)
-      this.setState({checkedKeys: this.getCheckedKeys(info.region)})
     }
   }
 
@@ -56,14 +64,7 @@ class Main extends React.Component<Props, State> {
   public confirm = () => {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
-      // 只把最末级的公司id传给后端
-      const childIds = this.getChildIds(this.state.regionTree)
-      val.region = childIds.filter((item) => {
-        return this.state.checkedKeys.some((i: string) => {
-          item = item + ''
-          return i === item
-        })
-      })
+      val.region = this.selectAreaInfoList
       console.log('val:', val)
       this.props.onOk(val)
     })
@@ -88,31 +89,71 @@ class Main extends React.Component<Props, State> {
     this.setState({title})
   }
 
-  // 获取部门列表
+  // 获取身份列表
+  public getIdentityList () {
+    fetchIdentityList('System').then((res) => {
+      this.setState({identityList: res})
+    })
+  }
+
+  // 获取核算中心列表
+  public getAccountList () {
+    fetchAccountInfo().then((res) => {
+      this.setState({accountList: res})
+    })
+  }
+
+  // 获取部门信息
   public getDepartmentList () {
     fetchDepartmentList().then((res) => {
       this.setState({departmentTree: res})
     })
   }
 
-  // 获取角色数据
+  // 渲染部门节点
+  public renderDepartmentNode (data: any) {
+    if (!data.length) {return}
+    return data.map((item: any) => {
+      if (item.organizationList) {
+        return (
+          <TreeSelectNode title={item.name} key={item.id} value={item.id} dataRef={item}>
+            {this.renderDepartmentNode(item.organizationList)}
+          </TreeSelectNode>
+        )
+      }
+      return <TreeSelectNode key={item.id} title={item.name} value={item.id} {...item} />
+    })
+  }
+
+  // 获取角色信息
   public getRoleList () {
     fetchRoleList().then((res) => {
       this.setState({roleList: res})
     })
   }
 
-  // 获取角色的权限
+  // 是否显示接受资源和负责地区选项
+  public showOption (val: string) {
+    const arr = ['district_manager', 'channel_accounting', 'channel_manager', 'channel_director']
+    let identityType: 'showArea' | 'none' = 'none'
+    if (arr.includes(val)) {
+      identityType = 'showArea'
+    }
+    this.setState({identityType})
+  }
+
+  // 获取角色权限信息
   public getRoleOfPermission (roleId: number) {
     fetchRoleOfPermission(roleId).then((res) => {
       this.setState({permissionList: res})
     })
   }
 
-  // 获取区域数据
+  // 获取区域信息
   public setRegionTree () {
-    fetchRegionList().then((res) => {
-      this.setState({regionTree: res})
+    const id = this.props.info.id || ''
+    fetchRegionList(id).then((res) => {
+      this.setState({regionTree: res, checkedKeys: this.getCheckedKeys(res)})
     })
   }
 
@@ -121,8 +162,8 @@ class Main extends React.Component<Props, State> {
     const endIds: string[] = []
     function getId (arr: any) {
       arr.forEach((item: any) => {
-        if (item.region) {
-          getId(item.region)
+        if (item.regionList) {
+          getId(item.regionList)
         } else {
           if (!item.regionFlag) {
             endIds.push(item.id)
@@ -134,17 +175,17 @@ class Main extends React.Component<Props, State> {
     return endIds
   }
 
-  // 获取已勾选区域id
+  // 获取已勾选区域code
   public getCheckedKeys (data: any) {
     const checkedIds: any[] = []
     data = data || []
     function getId (arr: any) {
       arr.forEach((item: any) => {
-        if (item.region) {
-          getId(item.region)
+        if (item.regionList) {
+          getId(item.regionList)
         } else {
           if (item.enableFlag) {
-            checkedIds.push(item.id)
+            checkedIds.push(item.code)
           }
         }
       })
@@ -157,20 +198,44 @@ class Main extends React.Component<Props, State> {
   public renderTreeNodes = (data: any) => {
     if (!data.length) {return}
     return data.map((item: any) => {
-      if (item.region) {
+      if (item.regionList) {
         return (
-          <TreeNode title={item.name} key={item.id} dataRef={item}>
-            {this.renderTreeNodes(item.region)}
+          <TreeNode title={item.name} key={item.code} dataRef={item}>
+            {this.renderTreeNodes(item.regionList)}
           </TreeNode>
         )
       }
-      return <TreeNode key={item.id} title={item.name} {...item} />
+      return <TreeNode key={item.code} title={item.name} {...item} />
     })
   }
 
   // 区域勾选时触发
-  public onCheck = (checkedKeys: string[]) => {
+  public onCheck = (checkedKeys: string[], e: any) => {
     this.setState({ checkedKeys })
+    const regionTree = this.state.regionTree
+    const Positions = e.checkedNodesPositions
+    console.log(776655, Positions)
+    Positions.forEach((item: any) => {
+      const indexList = item.pos.split('-')
+      const areaInfo: any = {}
+      console.log(indexList)
+      if (indexList.length !== 6) {return} // 不为6代表没有选中最末级公司
+      const area1 = regionTree[indexList[1]]
+      const area2 = area1.regionList[indexList[2]]
+      const area3 = area2.regionList[indexList[3]]
+      const area4 = area3.regionList[indexList[4]]
+      const area5 = area4.regionList[indexList[5]]
+      areaInfo.regionRootArea = area1.code
+      areaInfo.regionRootAreaName = area1.name
+      areaInfo.regionProvince = area2.code
+      areaInfo.regionProvinceName = area2.name
+      areaInfo.regionCity = area3.code
+      areaInfo.regionCityName = area3.name
+      areaInfo.regionArea = area4.code
+      areaInfo.regionAreaName = area4.name
+      areaInfo.companyId = area5.id
+      this.selectAreaInfoList.push(areaInfo)
+    })
   }
 
   // 区域展开时触发
@@ -206,24 +271,31 @@ class Main extends React.Component<Props, State> {
         ]
       },
       department: {
-        initialValue: info.organizationName,
+        initialValue: info.organizationId,
         rules:[
           {required: true, message: '请选择部门！'}
         ]
       },
+      identity: {
+        initialValue: info.identity,
+        rules:[
+          {required: true, message: '请选择身份！'}
+        ]
+      },
       role: {
-        initialValue: info.roleName,
+        initialValue: info.roleId,
         rules:[
           {required: true, message: '请选择角色！'}
         ]
       },
       resource: {
+        initialValue: info.acceptType,
         rules:[
           {required: true, message: '请选择是否接收资源！'}
         ]
       },
       center: {
-        rules: [{}]
+        initialValue: info.adjustAccountId
       },
       region: {
         rules: [{}]
@@ -269,14 +341,35 @@ class Main extends React.Component<Props, State> {
             {
               getFieldDecorator('department', validation.department)(
                 this.state.departmentTree.length
-                ? <Cascader
-                  size='small'
+                  ? <TreeSelect
+                    size='small'
+                    disabled={mode === 'view'}
+                    placeholder='请选择部门'
+                    treeDefaultExpandedKeys={[info.organizationId]}
+                  >
+                    {this.renderDepartmentNode(this.state.departmentTree)}
+                  </TreeSelect>
+                  : <span></span>
+              )
+            }
+          </FormItem>
+
+          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='身份'>
+            {
+              getFieldDecorator('identity', validation.identity)(
+                <Select
                   disabled={mode === 'view'}
-                  options={this.state.departmentTree}
-                  placeholder='请选择部门'
-                  fieldNames={{ label: 'name', value: 'id', children: 'organizationList' }}
-                />
-                : <span></span>
+                  size='small'
+                  placeholder='请选择身份'
+                  notFoundContent='暂无数据'
+                  onSelect={(value: any, option) => {
+                    this.showOption(value)
+                  }}
+                >
+                  {this.state.identityList.map((item: any) => {
+                    return <Option key={item.code} value={item.code}>{item.name}</Option>
+                  })}
+                </Select>
               )
             }
           </FormItem>
@@ -290,14 +383,12 @@ class Main extends React.Component<Props, State> {
                   placeholder='请选择角色'
                   notFoundContent='暂无数据'
                   onSelect={(value: any, option) => {
-                    console.log(value, option)
-                    this.setState({isSell: option.props.children === '销售'}) // 当角色为销售时有接受资源选项
                     this.getRoleOfPermission(value)
                   }}
                 >
                   {
                     this.state.roleList.map((item) => {
-                      return <Option key={item.id}>{item.name}</Option>
+                      return <Option key={item.id} value={item.id}>{item.name}</Option>
                     })
                   }
                 </Select>
@@ -305,29 +396,32 @@ class Main extends React.Component<Props, State> {
             }
           </FormItem>
 
-          {this.state.isSell && <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='接受资源'>
+          {/*{this.state.identityType === 'showResource'
+          && <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='接受资源'>
             {
               getFieldDecorator('resource', validation.resource)(
                 <Select disabled={mode === 'view'} size='small' placeholder='请选择是否接受资源' notFoundContent='暂无数据'>
-                  <Option key='1'>是</Option>
-                  <Option key='0'>否</Option>
+                  <Option value={0}>是</Option>
+                  <Option value={1}>否</Option>
                 </Select>
               )
             }
-          </FormItem>}
+          </FormItem>}*/}
 
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
             {
               getFieldDecorator('center', validation.center)(
                 <Select disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
-                  <Option key='1'>是</Option>
-                  <Option key='0'>否</Option>
+                  {this.state.accountList.map((item: any) => {
+                    return <Option key={item.id} value={item.id}>{item.name}</Option>
+                  })}
                 </Select>
               )
             }
           </FormItem>
 
-          <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
+          {this.state.identityType === 'showArea'
+          && <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
             <div className={styles.treeWrap}>
               {
                 getFieldDecorator('region', validation.region)(
@@ -344,7 +438,7 @@ class Main extends React.Component<Props, State> {
                 )
               }
             </div>
-          </FormItem>
+          </FormItem>}
 
         </Form>
 

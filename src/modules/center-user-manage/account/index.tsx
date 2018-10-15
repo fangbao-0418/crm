@@ -40,6 +40,35 @@ class Main extends React.Component {
     this.getList()
   }
 
+  // 点击确认按钮
+  public onOk (val: any) {
+    console.log(111, val)
+    const {mode, itemInfo} = this.state
+    const {center, department, email, identity, name, phone, region, resource, role} = val
+    const payload = {
+      name,
+      phone,
+      email,
+      organizationId: department,
+      roleId: role,
+      adjustAccountId: center,
+      acceptType: resource,
+      identity,
+      regionList: region
+    }
+    if (mode === 'add') {
+      addAccount(payload).then((res) => {
+        this.setState({visible: false})
+        this.getList()
+      })
+    } else {
+      modifyAccount(payload, itemInfo.id).then((res) => {
+        this.setState({visible: false})
+        this.getList()
+      })
+    }
+  }
+
   // 获取数据列表
   public getList () {
     fetchAccountList(this.searchVal).then((res) => {
@@ -58,6 +87,7 @@ class Main extends React.Component {
 
   // 查看、修改、添加账户
   public showAccountModal = (mode: 'view' | 'modify' | 'add', itemInfo?: any) => {
+    itemInfo = itemInfo || {}
     this.setState({mode, itemInfo, visible: true})
   }
 
@@ -194,9 +224,7 @@ class Main extends React.Component {
           <AccountModal
             info={itemInfo}
             mode={mode}
-            onOk={(val: any) => {
-              console.log(445, val)
-            }}
+            onOk={(val: any) => {this.onOk(val)}}
             onCancel={() => {
               this.setState({visible: false})
             }}
