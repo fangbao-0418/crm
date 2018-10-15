@@ -42,7 +42,7 @@ class Service {
   */
   public getUserDetail (id: any = '') {
     return http(
-    `user/v1/api/user/${id}`
+    `/user/v1/api/user/${id}`
     )
   }
   /*
@@ -50,7 +50,7 @@ class Service {
   */
   public getRemind (id: any = '', remind: any) {
     return http(
-    `work/v1/api/order/remind/${id}/${remind}`
+    `/work/v1/api/order/remind/${id}/${remind}`
     )
   }
   /*
@@ -58,7 +58,7 @@ class Service {
   */
   public getOrderStatus () {
     return http(
-    `work/v1/api/order/status`
+    `/work/v1/api/order/status`
     )
   }
   /*
@@ -66,7 +66,7 @@ class Service {
   */
   public getOrderSever (MAIN: any = '') {
     return http(
-    `outside/v1/api/outside/task/template/all?type=${MAIN}`
+    `/outside/v1/api/outside/task/template/all?type=${MAIN}`
     )
   }
 }
