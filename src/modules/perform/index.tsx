@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import { fetchListAction } from './action'
 import { connect } from 'react-redux'
+import { add, update } from './api'
 type PerfromItem = Perform.ItemProps
 
 class Main extends React.Component<Perform.Props> {
@@ -60,6 +61,10 @@ class Main extends React.Component<Perform.Props> {
               this.changeData(dataSource)
               if (!disabled) {
                 // api
+                update({
+                  id: record.id,
+                  reward: record.reward
+                })
               }
             }}
           >

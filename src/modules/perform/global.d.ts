@@ -4,11 +4,8 @@ declare namespace Perform {
     size?: number
     productName?: string
   }
-  export interface RervisePayload {
-    id?: number
-    reward:string
-  }
   interface ItemProps {
+    id: string
     reward: string
     companyId: number
     productId: number

@@ -4,10 +4,13 @@ export const fetchList = (payload: Perform.SearchPayload) => {
   return http(`outside/v1/api/outside/task/reward/list`, 'GET', payload)
 }
 // 修改绩效
-export const revisePerform = (payload: Perform.RervisePayload) => {
+export const update = (payload: {
+  id: string
+  reward: string
+}) => {
   return http(`outside/v1/api/outside/task/reward/update`, 'PUT', payload)
 }
 // 新增绩效
-export const newPerformance = (payload: Perform.ItemProps) => {
+export const add = (payload: Perform.ItemProps) => {
   return http(`outside/v1/api/outside/task/reward/product/data`, 'POST', payload)
 }
