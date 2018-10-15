@@ -20,16 +20,16 @@ class Main extends React.Component {
       >
         <Tabs
           animated={false}
-          defaultActiveKey='1'
+          defaultActiveKey='agent'
           onChange={this.callback.bind(this)}
         >
-          <TabPane tab='直营' key='1'>
+          <TabPane tab='直营' key='direct'>
             <Direct />
           </TabPane>
-          <TabPane tab='代理商' key='2'>
+          <TabPane tab='代理商' key='agent'>
             <Agent />
           </TabPane>
-          <TabPane tab='核算中心' key='3'>
+          <TabPane tab='核算中心' key='accounting'>
             <Accounting />
           </TabPane>
         </Tabs>
