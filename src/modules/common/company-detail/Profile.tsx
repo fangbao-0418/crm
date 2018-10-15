@@ -44,7 +44,7 @@ class Main extends React.Component<Props> {
             </span>
             <span>
               {/* 所属机构过滤 */}
-              ({this.props.detail.agencyId})
+              ({APP.user.companyName})
             </span>
             <label style={{marginLeft: '10px'}}>意向度:</label>
             <span>

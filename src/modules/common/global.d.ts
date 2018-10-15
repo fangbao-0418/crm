@@ -5,8 +5,6 @@ declare namespace Common {
     phone: string
     username: string
     companyId: string
-    organizationId: string
-    organizationName: string
     cityCode: string
     city: string
   }
