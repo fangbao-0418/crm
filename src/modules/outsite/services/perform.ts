@@ -3,8 +3,8 @@
  */
 import Service from '@/modules/common/services/service'
 interface AddPerformPayload {
-  companyId?: any // 公司ID
-  productId?: any // 商品ID
+  companyId: number // 公司ID
+  productId: number // 商品ID
   productName: string // 商品名称
   productPrice?: any // 商品价格
 }

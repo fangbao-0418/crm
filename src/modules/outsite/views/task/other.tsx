@@ -1,32 +1,10 @@
 import React from 'react'
-import { Radio, Row, Col, Checkbox } from 'antd'
+import { Radio, Row, Col } from 'antd'
 const styles = require('@/modules/outsite/styles/other.styl')
 interface States {
   value: number
 }
-const options = [
-  { label: '注销税务', value:1 },
-  { label: '注销税务', value:2 },
-  { label: '注销税务', value:3 },
-  { label: '注销税务', value:4 },
-  { label: '注销税务', value:5 },
-  { label: '注销税务', value:6 }
-]
-const optionsA = [
-  { label: '核名', value:1 },
-  { label: '核名', value:2 },
-  { label: '核名', value:3 }
-]
-const optionsB = [
-  { label: '公积金开户', value:1 },
-  { label: '公积金开户', value:2 },
-  { label: '公积金开户', value:3 }
-]
-const optionsC = [
-  { label: '补税报表', value:1 },
-  { label: '补税报表', value:2 },
-  { label: '补税报表', value:3 }
-]
+const RadioGroup = Radio.Group
 class Main extends React.Component<any, any> {
   public state: States = {
     value:1
@@ -35,28 +13,63 @@ class Main extends React.Component<any, any> {
     console.log('checked = ', checkedValues)
   }
   public render () {
+    const radioStyle = {
+      height: '40px'
+    }
     return (
       <div>
         <div>
-          <span>税务任务：</span>
-          <Checkbox.Group options={options} onChange={this.onChange}/>
+          {/* <span>税务任务：</span> */}
+          <RadioGroup name='radiogroup' defaultValue={1}>
+             <div>
+               <span>税务任务：</span>
+               <Radio value={1} style={radioStyle}>注销税务</Radio>
+               <Radio value={2} style={radioStyle}>注销税务</Radio>
+               <Radio value={3} style={radioStyle}>注销税务</Radio>
+               <Radio value={4} style={radioStyle}>注销税务</Radio>
+               <Radio value={5} style={radioStyle}>注销税务</Radio>
+               <Radio value={6} style={radioStyle}>注销税务</Radio>
+               <Radio value={7} style={radioStyle}>注销税务</Radio>
+             </div>
+             <div>
+               <span>工商服务：</span>
+               <Radio value={8} style={radioStyle}>核名</Radio>
+               <Radio value={9} style={radioStyle}>核名</Radio>
+               <Radio value={10} style={radioStyle}>核名</Radio>
+               <Radio value={11} style={radioStyle}>核名</Radio>
+               <Radio value={12} style={radioStyle}>核名</Radio>
+               <Radio value={13} style={radioStyle}>核名</Radio>
+             </div>
+             <div>
+               <span>其他任务：</span>
+               <Radio value={14} style={radioStyle}>公积金开户</Radio>
+               <Radio value={15} style={radioStyle}>公积金开户</Radio>
+               <Radio value={16} style={radioStyle}>公积金开户</Radio>
+             </div>
+             <div>
+               <span>特殊任务：</span>
+               <Radio value={17} style={radioStyle}>补税报表</Radio>
+               <Radio value={18} style={radioStyle}>补税报表</Radio>
+               <Radio value={19} style={radioStyle}>补税报表</Radio>
+             </div>
+          </RadioGroup>
         </div>
-        <br/>
+        {/* <br/>
         <div>
           <span>工商服务：</span>
-          <Checkbox.Group  options={optionsA} onChange={this.onChange}/>
+          <Radio.Group  options={options} onChange={this.onChange}/>
         </div>
         <br/>
         <div>
           <span>其他任务：</span>
-          <Checkbox.Group  options={optionsB} onChange={this.onChange}/>
+          <Radio.Group  options={options} onChange={this.onChange}/>
         </div>
         <br/>
         <div>
           <span>特殊任务：</span>
-          <Checkbox.Group  options={optionsC} onChange={this.onChange}/>
+          <Radio.Group  options={options} onChange={this.onChange}/>
         </div>
-        <br/>
+        <br/> */}
       </div>
     )
   }
