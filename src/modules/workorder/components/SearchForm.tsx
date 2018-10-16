@@ -112,6 +112,7 @@ class Main extends React.Component<any, any> {
                     style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
                     onChange={this.handleOrderStateChange}
                 >
+                <Option value=''>全部状态</Option>
                 {
                   this.state.stateArr.map((item: any, index: any) => {
                     return (

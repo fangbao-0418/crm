@@ -56,8 +56,9 @@ class Main extends React.Component<Props> {
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
           salesPersonNames: salesNames.join(','),
+          // salesPersonNames: 'aaa',
           cityCode: '110000' || undefined, // 需要从登陆信息读取
-          cityName: '北京' || undefined // 需要从登陆信息读取
+          cityName: '北京' || undefined // 需要从登陆信息读取APP.user.city
         }
         console.log(paramsFile, 'paramsFile')
         return importFile(info.file, paramsFile).then((res) => {

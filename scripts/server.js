@@ -27,12 +27,12 @@ const options = {
       secure: false
     },
     // '/crm-manage': {
-    //   target: 'http://192.168.170.14:9008/',
+    //   target: 'http://192.168.120.24:9016/',
     //   changeOrigin: true,
-    //   secure: false,
-    //   pathRewrite: {
-    //     '^/crm-manage/v1': '/v1'
-    //   }
+    //   secure: false
+    //   // pathRewrite: {
+    //   //   '^/crm-manage/v1': '/v1'
+    //   // }
     // },
     '/crm-manage': {
       target: 'https://x-sys.i-counting.cn',

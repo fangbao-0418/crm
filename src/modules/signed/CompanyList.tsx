@@ -1,14 +1,16 @@
 import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { fetchRelatedCompanyListy } from './api'
 export interface DetailProps {
-  name: string
-  contactPerson: string
+  id: string
+  customerName: string
   contactPhone: string
-  orgainzation: string
-  isSignOrder: string
-  ststartdateatus: string
-  enddate: string
+  contactPerson: string
+  AgencyName: string
+  Status: string
+  serveTimeBegin: string
+  serveTimeEnd: string
 }
 interface States {
   data: DetailProps[]
@@ -19,7 +21,7 @@ export default class extends React.Component {
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '公司名称',
-    dataIndex: 'name'
+    dataIndex: 'customerName'
   }, {
     title: '联系人',
     dataIndex: 'contactPerson'
@@ -28,14 +30,25 @@ export default class extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '所属机构',
-    dataIndex: 'orgainzation'
+    dataIndex: 'AgencyName'
   }, {
     title: '是否签单',
-    dataIndex: 'isSignOrder'
+    dataIndex: 'Status'
   }, {
     title: '开始账期',
-    dataIndex: 'startdate'
+    dataIndex: 'serveTimeBegin'
+  }, {
+    title: '结束账期',
+    dataIndex: 'serveTimeEnd'
   }]
+  public componentWillMount () {
+    const curCompanyId = ''
+    fetchRelatedCompanyListy(curCompanyId).then((res) => {
+      this.setState({
+        data: res.data
+      })
+    })
+  }
   public render () {
     return (
       <Table

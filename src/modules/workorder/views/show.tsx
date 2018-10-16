@@ -134,7 +134,7 @@ class Show extends React.Component<any, any> {
       >
         <Row  className={styles['order-list']}>
         <div className={styles.topTitle}>
-        <Col span={4}>工单号:{this.state.dataSource.id}</Col>
+        <Col span={4}>工单号:{this.state.dataSource.workNo}</Col>
         </div>
         <div className={styles.topTitle}>
         <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>

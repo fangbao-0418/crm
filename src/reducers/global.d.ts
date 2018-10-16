@@ -3,5 +3,7 @@ declare namespace Reducer {
     common: Common.Props
     customer: Customer.Props
     business: Business.Props
+    perform: Perform.Props
+    organ: Organ.Props
   }
 }
