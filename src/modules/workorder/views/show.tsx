@@ -229,7 +229,7 @@ class Show extends React.Component<any, any> {
   }
   // 催单
   public getRemind (item: any) {
-    Service.getRemind(item.id, '1').then((res: any) => {
+    Service.getRemind(item.id).then((res: any) => {
       console.log('催单成功')
     }, () => {
 

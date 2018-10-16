@@ -48,9 +48,9 @@ class Service {
   /*
     工单详情催单
   */
-  public getRemind (id: any = '', remind: any) {
+  public getRemind (id: any = '') {
     return http(
-    `/work/v1/api/order/remind/${id}/${remind}`
+    `/work/v1/api/order/remind/${id}`
     )
   }
   /*
