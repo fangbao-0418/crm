@@ -140,7 +140,7 @@ class Show extends React.Component<any, any> {
         <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>
         </div>
         <div className={styles.topTitle}>
-        <Col span={4}>开始日期:{this.state.dataSource.startTime}</Col>
+        <Col span={4}>创建日期:{this.state.dataSource.createTime}</Col>
         </div>
         </Row>
         <Row >{

@@ -64,9 +64,9 @@ class Service {
   /*
     工单列表选择服务
   */
-  public getOrderSever (MAIN: any = '') {
+  public getOrderSever (NORMAL: any = '') {
     return http(
-    `/outside/v1/api/outside/task/template/all?type=${MAIN}`
+    `/outside/v1/api/outside/task/template/nosub/all?status=${NORMAL}`
     )
   }
 }
