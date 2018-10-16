@@ -7,8 +7,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
 import { fetchDepartmentAction } from '../action'
 const styles = require('./style.styl')
-const FormItem = Form.Item
-import Detail from './Detail'
+import Detail from './detail'
 import { addDepartment, updateDepartment, changeDepartmentStatus, deleteDepartment } from '../api'
 
 class Main extends React.Component<UserManage.Props> {
@@ -60,7 +59,6 @@ class Main extends React.Component<UserManage.Props> {
       content: (
         <Detail
           onOk={(value) => {
-            console.log(value)
             addDepartment(
               {
                 name: value.name,

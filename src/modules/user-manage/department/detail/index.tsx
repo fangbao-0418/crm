@@ -49,7 +49,6 @@ class Main extends React.Component<Props> {
               onClick={() => {
                 this.props.form.validateFields((errs, values) => {
                   if (errs === null) {
-                    console.log(values)
                     if (this.props.onOk) {
                       this.props.onOk(values)
                     }
