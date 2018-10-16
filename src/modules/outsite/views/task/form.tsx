@@ -1,6 +1,7 @@
 import React from 'react'
+import { withRouter, RouteProps } from 'react-router'
 import monent, { Moment } from 'moment'
-import { Tabs } from 'antd'
+import { Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
 import HCframe from '@/modules/common/components/HCframe'
 import SearchOrder from '@/modules/outsite/components/SearchOrder'
 import Mission from '@/modules/outsite/views/task/mission'
@@ -9,33 +10,152 @@ const TabPane = Tabs.TabPane
 function callback (key: string) {
   console.log(key)
 }
-
 const styles = require('@/modules/outsite/styles/form.styl')
 
+const FormItem = Form.Item
+const { TextArea } = Input
+const formItemLayout = {
+  labelCol: { span:2 },
+  wrapperCol: { span:8 }
+}
+const Option = Select.Option
+const { MonthPicker, RangePicker } = DatePicker
+
+const dateFormat = 'YYYY/MM/DD'
+const monthFormat = 'YYYY/MM'
+
 // 列表
-class Main extends React.Component {
+class Main extends React.Component<any, any> {
   public constructor (props: any, state: any) {
-    super({})
+    super(props)
+  }
+
+  // 下拉变更
+  public handleChange (value: any) {
+    console.log(`selected ${value}`)
+  }
+  // 表单提交
+  public handleSubmit = (e: any) => {
+    e.preventDefault()
+    this.props.form.validateFields((err: any, values: any) => {
+      console.log('Received values of form: ', values)
+    })
+  }
+  public handleReset = () => {
+    this.props.form.resetFields()
+  }
+
+  // 任务选择值
+  public onTaskidChange () {
+
   }
 
   public render () {
+    const { getFieldDecorator } = this.props.form
+
+    const taskCprops = {
+      onChange: this.onTaskidChange.bind(this),
+      taskid: 1
+    }
+
     return (
     <div>
       <HCframe title='新增外勤任务'>
         <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
             <TabPane tab='通办任务' key='1'>
-              <Mission/>
+              <Mission />
             </TabPane>
             <TabPane tab='其他任务' key='2'>
               <Other/>
             </TabPane>
           </Tabs>
           <div>
-              <SearchOrder/>
-          </div>
-      </HCframe>
+              <div>
+                <Form
+                  onSubmit={this.handleSubmit.bind(this)}
+                >
+                <Row>
+                  <Col>
+                    <FormItem {...formItemLayout} label='关联订单'>
+                      {getFieldDecorator('关联订单', {
+                        rules: [{
+                          required: true,
+                          message: '请输入订单编号'
+                        }]
+                      })(
+                        <Input placeholder='请输入订单编号' />
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label='公司名称'>
+                    {getFieldDecorator('公司名称', {
+                    })(
+                      <Input disabled />
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label='区域'>
+                    {getFieldDecorator('区域', {
+                    })(
+                      <Input disabled />
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label='选择外勤'>
+                    {getFieldDecorator('选择外勤', {
+                      rules: [{
+                        required: true,
+                        message: '请选择外勤'
+                      }]
+                    })(
+                      <Select onChange={this.handleChange} placeholder='请选择外勤人员'>
+                        <Option value='王小伟'>王小伟</Option>
+                        <Option value='王小伟'>王小伟</Option>
+                        <Option value='王小伟'>王小伟</Option>
+                        <Option value='王小伟'>王小伟</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label='开始时间'>
+                    {getFieldDecorator('开始时间', {
+                      rules: [{
+                        required: true,
+                        message: '请选择开始时间'
+                      }]
+                    })(
+                      <DatePicker style={{width:'100%'}} format={dateFormat} />
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label='备注'>
+                    {getFieldDecorator('备注', {
+                    })(
+                      <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} />
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <Col span={24} style={{ textAlign: 'left', margin:'0 0 60px 80px' }}>
+                    <Button type='primary' htmlType='submit'>提交</Button>
+                    <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                      重置
+                    </Button>
+                  </Col>
+                </Row>
+                </Form>
+              </div>
+
+            </div>
+        </HCframe>
     </div>
     )
   }
 }
-export default Main
+export default Form.create()(Main)

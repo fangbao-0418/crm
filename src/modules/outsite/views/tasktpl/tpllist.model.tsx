@@ -103,7 +103,7 @@ class Main extends React.Component<any, any> {
       return (
         <Row className={styles['page-show']}>
           <Col style={{margin: 15}}>
-            <div className={styles.div}>确定 {status === 'normal' ? '启用' : '禁用'} {name} 的子任务吗?</div>
+            <div className={styles.div}>确定 {status === 'NORMAL' ? '禁用' : '启用'} {name} 的子任务吗?</div>
           </Col>
         </Row>
       )
