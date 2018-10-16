@@ -2,16 +2,14 @@ import React from 'react'
 import { Table, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
+import { fetchSpecialList, saveSpecialCapacity, deleteSpecialCapacity } from '../api'
 const Option = Select.Option
 interface Props extends Customer.Props {
   disabled?: boolean
+  sales: Array<{salespersonId?: string, salespersonName?: string}>
 }
 interface State {
   sourceList: {label: string, value: string}[]
-}
-const children: React.ReactNode[] = []
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>)
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
@@ -21,14 +19,23 @@ class Main extends React.Component<Props, State> {
     {
       title: '特殊资源',
       width: 200,
-      render: (text, record) => {
+      dataIndex: 'sourceId',
+      render: (text, record, index) => {
         const disabled = record.disabled !== undefined ? record.disabled : true
         const sourceList = this.state.sourceList
+        const spicalAssetsList = this.props.spicalAssetsList
+        const newText = this.handleSourceData(record.sourceId, record.sourceName)
         return (
           <div>
             <Select
               disabled={disabled}
+              labelInValue
               style={{width: '100px'}}
+              defaultValue={newText}
+              onChange={(val: {key: string, label: string}) => {
+                spicalAssetsList[index].sourceId = val.key
+                spicalAssetsList[index].sourceName = val.label
+              }}
             >
               {
                 sourceList.map((item) => {
@@ -44,18 +51,36 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '自定义分配销售',
-      render: (text, record) => {
+      dataIndex: 'salesPerson',
+      render: (text, record, index) => {
         const disabled = record.disabled !== undefined ? record.disabled : true
+        const spicalAssetsList = this.props.spicalAssetsList
+        const newText = this.handleData(text)
         return (
           <div>
             <Select
+              labelInValue
               disabled={disabled}
               mode='multiple'
-              defaultValue={['a10', 'c12']}
-              // onChange={handleChange}
+              defaultValue={newText}
+              onChange={(val: Array<{key: string, label: string, salespersonId: string, salespersonName: string}>) => {
+                const newVal = val.map((item) => {
+                  return {
+                    salespersonId: item.key,
+                    salespersonName: item.label
+                  }
+                })
+                spicalAssetsList[index].salesPerson = newVal
+              }}
               style={{ width: '100%' }}
             >
-              {children}
+              {
+                this.props.sales.map((item) => {
+                  return (
+                    <Option key={item.salespersonId}>{item.salespersonName}</Option>
+                  )
+                })
+              }
             </Select>
           </div>
         )
@@ -80,6 +105,9 @@ class Main extends React.Component<Props, State> {
                     spicalAssetsList
                   }
                 })
+                if (!disabled) {
+                  this.onSave(index)
+                }
               }}
             >
               {disabled ? '编辑' : '保存'}
@@ -87,6 +115,8 @@ class Main extends React.Component<Props, State> {
             <span
               className='href'
               onClick={() => {
+                console.log(record, 'record')
+                deleteSpecialCapacity(record.sourceId)
                 spicalAssetsList.splice(index, 1)
                 APP.dispatch({
                   type: 'change customer data',
@@ -94,6 +124,7 @@ class Main extends React.Component<Props, State> {
                     spicalAssetsList
                   }
                 })
+                console.log(spicalAssetsList, 'spicalAssetsList2222')
               }}
             >
               删除
@@ -103,6 +134,45 @@ class Main extends React.Component<Props, State> {
       }
     }
   ]
+  public componentWillMount () {
+    fetchSpecialList().then((res) => {
+      const spicalAssetsList = res
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          spicalAssetsList
+        }
+      })
+    })
+    // const spicalAssetsList = [{sourceId: '0', sourceName: '自主开发', salesPerson: [{salespersonId: '1', salespersonName: '销售1'}]}]
+    // APP.dispatch({
+    //   type: 'change customer data',
+    //   payload: {
+    //     spicalAssetsList
+    //   }
+    // })
+  }
+  public handleData (value: {salespersonId: string, salespersonName: string}[]): {
+    label: React.ReactNode, key: string
+  }[] {
+    return value.map((item) => {
+      return {
+        label: item.salespersonName,
+        key: item.salespersonId
+      }
+    })
+  }
+  // [{key: '1', label: '自主开发'}]
+  public handleSourceData (sourceId: string, handleSourceData: string) {
+    return [{key: sourceId, label: handleSourceData}]
+  }
+  public onSave (index: number) {
+    const params = this.props.spicalAssetsList[index]
+    delete params.disabled
+    saveSpecialCapacity(params).then(() => {
+      APP.success('操作成功')
+    })
+  }
   public render () {
     return (
       <Table

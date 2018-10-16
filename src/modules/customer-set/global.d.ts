@@ -1,8 +1,8 @@
 declare namespace CustomerSet {
   export interface SpecialAssetsProps {
-    sourceId?: number
+    sourceId?: string
     sourceName?: string
-    salesPersons: {salesPersonId: string, salesPersonName: string}[]
+    salesPerson: {salespersonId: string, salespersonName: string}[]
     disabled?: boolean
   }
 }
