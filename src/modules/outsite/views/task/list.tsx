@@ -55,8 +55,9 @@ interface States {
   modalVisible: boolean,
   dataSource: TaskList,
   selectedRowKeys: string[],
-  showData?: any // 弹出层的数据
-  pageConf?: any
+  showData?: any, // 弹出层的数据
+  pageConf?: any,
+  searchData?: any
 }
 interface ColProps extends TaskItem {
   dataIndex: string
@@ -74,12 +75,22 @@ class Main extends React.Component {
       currentPage: 1,
       total: 1,
       pageSize: 10
+    },
+    searchData: {
+      pageSize: 10,
+      currentPage: 1,
+      customerName: '',
+      name: '',
+      userId: '',
+      status: 'UNDISTRIBUTED', // 待分配
+      startTime: '',
+      orgId: ''
     }
   }
   public tabList: any = [
-    {key: '1', name: '待分配'},
-    {key: '2', name: '已分配'},
-    {key: '3', name: '已完成'}
+    {key: 'UNDISTRIBUTED', name: '待分配'},
+    {key: 'DISTRIBUTED', name: '已分配'},
+    {key: 'APPROVED', name: '已完成'}
   ]
   public columns: any = [{
     title: '订单号',
@@ -205,25 +216,31 @@ class Main extends React.Component {
 
   // 获取列表数据
   public getList () {
+    /*
     this.virData()
     this.setState({
       dataSource: data
     })
-    /*
-    Service.getListByUserid(2).then((d: any) => {
-      const { pageSize, total, currentPage } = d
+    */
+    const { searchData } = this.state
+    Service.getListByCond(this.state.searchData).then((d: any) => {
+      const { pageSize, total, pageCurrent } = d
       this.setState({
         dataSource: d.records,
         pageConf: {
           pageSize,
           total,
-          currentPage
+          pageCurrent
+        },
+        searchData: {
+          ...searchData,
+          pageSize,
+          pageCurrent
         }
       }, () => {
         console.log('........', this.state)
       })
     })
-    */
   }
 
   // 查看
@@ -244,7 +261,7 @@ class Main extends React.Component {
 
   // 搜索
   public onSearch (values: any) {
-    console.log('search::', arguments, values)
+    console.log('search::', values)
   }
 
   // 搜索 日期切换
@@ -271,7 +288,14 @@ class Main extends React.Component {
 
   // tab切换
   public onTabChange (key: string) {
-    console.log('tab change::', arguments)
+    console.log('tab change::', key)
+    const { searchData } = this.state
+    searchData.status = key
+    this.setState({
+      searchData
+    }, () => {
+      this.getList()
+    })
     // this.getList() // 不同状态参数
   }
 
@@ -288,7 +312,7 @@ class Main extends React.Component {
       <HCframe title='外勤任务'>
         <Row>
           <Col span={20}>
-            <SearchForm onSearch={this.onSearch.bind(this)} />
+            <SearchForm initData={this.state.searchData} onSearch={this.onSearch.bind(this)} />
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
@@ -297,7 +321,7 @@ class Main extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Tabs defaultActiveKey='1' onChange={this.onTabChange}>
+          <Tabs defaultActiveKey='UNDISTRIBUTED' onChange={this.onTabChange.bind(this)}>
             {this.tabList.map((item: any) => {
               return (<Tabs.TabPane key={item.key} tab={item.name}>
                 <Table
@@ -305,7 +329,7 @@ class Main extends React.Component {
                   dataSource={this.state.dataSource}
                   rowSelection={rowSelection}
                   bordered
-                  pagination={this.state.pageConf}
+                  pagination={this.state.searchData}
                   rowKey={'key'}
                 />
               </Tabs.TabPane>)

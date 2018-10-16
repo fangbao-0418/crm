@@ -72,7 +72,7 @@ class Main extends React.Component<any, any> {
       return (
         <span>
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
-          <span className={`likebtn`} onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'normal' ? '启用' : '禁用'}</span>
+          <span className={`likebtn ${item.status === 'NORMAL' ? '' : 'likebtn-disabled'}`} onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
         </span>
       )
     }
@@ -83,12 +83,18 @@ class Main extends React.Component<any, any> {
     this.state = {
       selectedRowKeys: [],
       modalVisible: false,
+      pageConf: {
+        total: 0,
+        size: 10,
+        current: 1
+      },
       searchData:{
         name: '',
         status: '',
         category: '',
         pageSize: 10,
-        pageCurrent: 1
+        pageCurrent: 1,
+        pageTotal: 0
       },
       subItem: {
         name: '',
@@ -167,6 +173,7 @@ class Main extends React.Component<any, any> {
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
+          pagination={this.state.pageConf}
         />
         </Row>
       </HCframe>
@@ -188,9 +195,10 @@ class Main extends React.Component<any, any> {
       if (!res || !res.records) {
         return
       }
-      const { searchData } = this.state
-      searchData.pageSize = res.size
-      searchData.pageCurrent = res.current
+      const { pageConf, searchData } = this.state
+      searchData.pageSize = pageConf.size = res.pageSize
+      searchData.pageCurrent = pageConf.current = res.pageCurrent
+      pageConf.total = res.pageTotal
       this.setState({
         dataSource: res.records,
         searchData
@@ -292,7 +300,7 @@ class Main extends React.Component<any, any> {
     const { showTitle, subItem } = this.state
     // 禁用的弹出 // TODO: 禁用和表单弹层不应该写到一个文件，后面分离
     if (showTitle !== '编辑' && showTitle !== '新增') {
-      subItem.status = 'FORBIDEEN'
+      subItem.status = subItem.status === 'FORBIDDEN' ? 'NORMAL' : 'FORBIDDEN'
       Service.addTplSubItem(subItem).then(() => {
         this.getList()
         this.modalHide()
