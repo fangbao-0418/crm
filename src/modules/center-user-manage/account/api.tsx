@@ -6,11 +6,11 @@ interface FetchAccountListPayload {
   name?: string // 姓名
   phone?: string // 手机号
   organizationName?: string // 部门名称
+  userType: string
 }
 
 interface DelAccountPayload {
   ids: number[] // 账号id列表
-  updateUser: number // 操作人id
 }
 
 interface AddAccountPayload {
@@ -22,6 +22,7 @@ interface AddAccountPayload {
   adjustAccountId?: number // 核算中心id
   acceptType?: number // 是否接收资源（角色中包含“销售”二字的会提交该字段）接收传0，不接收传1
   regionList?: {regionCode: string, regionName: string}[] // 负责区域集合
+  userType: string
 }
 
 interface ModifyAccountPayload {
@@ -66,7 +67,7 @@ export const fetchRegionList = (userId?: any) => {
 
 // 获取部门列表
 export const fetchDepartmentList = () => {
-  return http(`/user/v1/api/organization/list`)
+  return http(`/user/v1/api/organization/list/System/0`)
 }
 
 // 获取角色列表
