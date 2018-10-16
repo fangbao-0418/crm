@@ -15,7 +15,7 @@ const { RangePicker } = DatePicker
 const data = [
   {
     name:'销售提单', // 节点名称
-    showContract: true, // 是否显示合同
+    showContract: false, // 是否显示合同
     showReminder: false, // 是否显示催办
     labelOwner: '签单销售', // 负责人标签文字
     ownerId: 111111, // 负责人标识
@@ -27,7 +27,7 @@ const data = [
   }, {
     name: '外勤任务',
     showContract: false,
-    showReminder: true,
+    showReminder: false,
     labelOwner: '签单销售',
     ownerId: 2222,
     labelSupervisor:'外勤主管',

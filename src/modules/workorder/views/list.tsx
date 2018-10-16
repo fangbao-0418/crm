@@ -31,7 +31,10 @@ class Main extends React.Component<any, any> {
     dataIndex: 'customerName'
   }, {
     title: '创建日期',
-    dataIndex: 'createTime'
+    dataIndex: 'createTime',
+    sorter: (a: any, b: any) => {
+      return moment(a.createTime).unix() - moment(b.createTime).unix()
+    }
   }, {
     title: '对应订单',
     dataIndex: 'orderNo'
