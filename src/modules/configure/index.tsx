@@ -2,17 +2,23 @@ import React from 'react'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import { Input, Select, Table, Divider } from 'antd'
+import { ColumnProps } from 'antd/lib/table'
 import { Modal } from 'pilipa'
 import Detail from './Detail'
+import { fetchList } from './api'
 const Search = Input.Search
 const Option = Select.Option
-const dataSource = [{
-  key: 1
-}]
-class Main extends React.Component {
-  public columns = [
+interface States {
+  dataSource: Configure.ItemProps[]
+}
+class Main extends React.Component<null, States> {
+  public state: States = {
+    dataSource: []
+  }
+  public columns: ColumnProps<Configure.ItemProps>[] = [
     {
-      title: 'Key值'
+      title: 'Key值',
+      dataIndex: ''
     },
     {
       title: '键值'
@@ -41,6 +47,16 @@ class Main extends React.Component {
       }
     }
   ]
+  public componentWillMount () {
+    this.fetchList()
+  }
+  public fetchList () {
+    fetchList().then((res) => {
+      this.setState({
+        dataSource: res.records
+      })
+    })
+  }
   public showDetail () {
     const modal = new Modal({
       title: '查看',
@@ -49,6 +65,7 @@ class Main extends React.Component {
     modal.show()
   }
   public render () {
+    const dataSource = this.state.dataSource
     return (
       <ContentBox
         title='配置中心'

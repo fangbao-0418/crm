@@ -1,12 +1,12 @@
 declare namespace Common {
   export interface UserProps {
-    companyName: string
-    email: string
-    phone: string
-    username: string
-    companyId: string
-    cityCode: string
-    city: string
+    companyName?: string
+    // email: string
+    // phone: string
+    username?: string
+    companyId?: string
+    cityCode?: string
+    city?: string
   }
   export type ActionPayload = Props
   export interface RegionProps {
