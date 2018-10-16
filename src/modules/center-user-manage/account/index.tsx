@@ -24,7 +24,8 @@ class Main extends React.Component {
     pageSize: 10,
     name: '',
     phone: '',
-    organizationName: ''
+    organizationName: '',
+    userType: 'System'
   }
 
   public state: State = {
@@ -54,7 +55,8 @@ class Main extends React.Component {
       adjustAccountId: center,
       acceptType: resource,
       identity,
-      regionList: region
+      regionList: region,
+      userType: 'System'
     }
     if (mode === 'add') {
       addAccount(payload).then((res) => {
@@ -99,8 +101,7 @@ class Main extends React.Component {
       onOk: () => {
         let ids
         type === 'batch' ? ids = this.state.selectedRowKeys : ids = [id]
-        // todo updateUser要从全局获取
-        delAccount({ids, updateUser: 111111}).then(() => {
+        delAccount({ids}).then(() => {
           this.getList()
         })
       }
