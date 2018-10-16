@@ -3,6 +3,7 @@ import { Button } from 'antd'
 import AddButton from '@/modules/common/content/AddButton'
 import Content from '@/modules/common/content'
 import Card from '@/components/Card'
+import _ from 'lodash'
 import General from './General'
 import Special from './Special'
 import { connect } from 'react-redux'
@@ -85,8 +86,11 @@ class Main extends React.Component<Customer.Props, State> {
               title='新增'
               onClick={() => {
                 const spicalAssetsList = this.props.spicalAssetsList
+                let key = _.last(spicalAssetsList) !== undefined ? _.last(spicalAssetsList).key : -1
+                key += 1
                 spicalAssetsList.push({
-                  salesPerson: []
+                  key,
+                  salesperson: []
                 })
                 APP.dispatch({
                   type: 'change customer data',

@@ -28,7 +28,6 @@ class Main extends React.Component<Props, State> {
   public getSelectSaleList () {
     const select: Array<{key: string, label: string}> = []
     fetchGeneralList().then((res) => { // 默认选重中
-      console.log(res, 'res')
       if (res.length) { // 证明选择的是自定义
         this.setState({
           value: 2
@@ -36,7 +35,7 @@ class Main extends React.Component<Props, State> {
       }
       res.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
         select.push({
-          key: item.salespersonId,
+          key: item.salespersonName ? String(item.salespersonId) : '',
           label: item.salespersonName
         })
       })
@@ -82,18 +81,17 @@ class Main extends React.Component<Props, State> {
                 disabled={this.state.value === 1 || disabled}
                 mode='multiple'
                 style={{ width: '100%' }}
-                // placeholder='Please select'
-                defaultValue={this.state.selectSales} // 为啥直接绑定值不对？？
+                value={this.state.selectSales}
                 onChange={(val: Array<{key: string, label: string, salespersonId: string, salespersonName: string}>) => {
-                  console.log(val, 'val')
                   const newVal = val.map((item) => {
-                    console.log(item, 'item')
                     return {
                       salespersonId: item.key,
                       salespersonName: item.label
                     }
                   })
-                  console.log(newVal, 'newVal')
+                  this.setState({
+                    selectSales: val
+                  })
                   this.values.salesPerson = newVal
                   this.props.onChange(this.values)
                 }}

@@ -81,6 +81,9 @@ class Main extends React.Component<Props> {
     }
   }
   public editLinkMan () {
+    if (this.props.type === 'open') {
+      return false
+    }
     const modal = new Modal({
       header: (
         <div>
@@ -351,7 +354,15 @@ class Main extends React.Component<Props> {
             <FormItem
               >
                 {getFieldDecorator(
-                  'customerSource'
+                  'customerSource',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '客户来源不能为空'
+                      }
+                    ],
+                  }
                 )(
                   <FormItemLayout
                     label='客户来源'
