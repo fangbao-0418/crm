@@ -31,8 +31,18 @@ class Main extends React.Component<any, any> {
     }
   }
   public componentDidMount () {
+    console.log('sub form::', this.props)
+  }
+  public componentWillReceiveProps (props: any) {
+    const { name, category, id} = props.data
+    this.setState({
+      name,
+      category
+    })
   }
   public render () {
+    console.log('sub form render...............')
+    const { name, category, id} = this.props.data
     return (
       <div >
        {this.show()}
@@ -43,6 +53,7 @@ class Main extends React.Component<any, any> {
     const {id, name, category, status} = this.props.data
     const {identifying} = this.props
     const state = this.state
+    console.log('show::', this.state)
     if (identifying === '新增' || identifying === '编辑') {
       return (
         <Row className={styles['page-show']}>

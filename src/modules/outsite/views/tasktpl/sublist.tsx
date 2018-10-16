@@ -210,7 +210,7 @@ class Main extends React.Component<any, any> {
     })
   }
 
-  // 搜索表单改变
+  // 添加表单改变
   public onSubFormChange (formData: any) {
     console.log('子任务表单：', formData)
     const { subItem } = this.state
@@ -244,19 +244,23 @@ class Main extends React.Component<any, any> {
 
   // 编辑
   public onShow (subItem: TasktplItem) {
-    console.log('点击编辑')
+    console.log('点击编辑', subItem)
     this.setState({
       showTitle: '编辑',
       subItem
+    }, () => {
+      this.modalShow()
     })
-    this.modalShow(subItem)
   }
 
   // 启用
-  public onBegin (item: TasktplItem) {
+  public onBegin (subItem: TasktplItem) {
     console.log('点击启用禁用')
-    this.setState({ showTitle: '确认信息' })
-    this.modalShow(item)
+    this.setState({
+      showTitle: '确认信息',
+      subItem
+    })
+    this.modalShow()
   }
 
   // 选择的数组
@@ -270,10 +274,10 @@ class Main extends React.Component<any, any> {
     console.log('pageChange changed: ', selectedRowKeys)
   }
 
-  public modalShow (showData: any = {}) {
+  public modalShow () {
+    console.log('current state::', this.state)
     this.setState({
-      modalVisible: true,
-      showData
+      modalVisible: true
     })
   }
 
@@ -285,14 +289,23 @@ class Main extends React.Component<any, any> {
 
   // 添加子任务
   public modalHandleOk () {
-    const { subItem } = this.state
-    if (!subItem.name || !subItem.category) {
-      return
+    const { showTitle, subItem } = this.state
+    // 禁用的弹出 // TODO: 禁用和表单弹层不应该写到一个文件，后面分离
+    if (showTitle !== '编辑' && showTitle !== '新增') {
+      subItem.status = 'FORBIDEEN'
+      Service.addTplSubItem(subItem).then(() => {
+        this.getList()
+        this.modalHide()
+      })
+    } else {
+      if (!subItem.name || !subItem.category) {
+        return
+      }
+      Service.addTplSubItem(subItem).then(() => {
+        this.getList()
+        this.modalHide()
+      })
     }
-    Service.addTplSublistItem(subItem).then(() => {
-      this.getList()
-      // this.modalHide()
-    })
   }
 
   public modalHandleCancel () {

@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Modal, Divider } from 'antd'
 import { connect } from 'react-redux'
 import '@/modules/common/styles/base.styl'
-import { TaskItem } from '@/modules/outsite/types/outsite'
+import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import Service from '@/modules/outsite/services'
 
 const showPath = '/outsite/tasktpl/form'
@@ -11,6 +11,9 @@ const showPath = '/outsite/tasktpl/form'
 interface States {
   selectedRowKeys: string[]
   modalVisible: boolean
+  searchData: any,
+  dataSource: TaskList,
+  item: TaskItem
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -21,6 +24,11 @@ class Main extends React.Component<any, any> {
   public item: any
   public state: States = {
     selectedRowKeys: [],
+    searchData: {
+      systmeFlag: '0'
+    },
+    item: {},
+    dataSource: [],
     modalVisible: false
   }
 
@@ -75,6 +83,19 @@ class Main extends React.Component<any, any> {
     operation: '编辑'
   }]
 
+  public componentWillMount () {
+    this.getList()
+  }
+
+  // 获取列表数据
+  public getList () {
+    Service.getTplListByCond(this.state.searchData).then((res: any) => {
+      this.setState({
+        dataSource: res.records
+      })
+    })
+  }
+
   public onShow (item: TaskItem) {
     APP.history.push(`${showPath}/${item.id}`)
   }
@@ -95,8 +116,10 @@ class Main extends React.Component<any, any> {
 
   // 禁用
   public onDisable () {
-    console.log('disable item::', this.item)
-    this.hideDisableModal()
+    this.item.status = 'FORBIDDEN'
+    Service.addTplItem(this.item).then(() => {
+      this.hideDisableModal()
+    })
   }
 
   public render () {
@@ -104,7 +127,7 @@ class Main extends React.Component<any, any> {
     <div>
       <Table
         columns={this.columns}
-        dataSource={this.data}
+        dataSource={this.state.dataSource}
         size='small'
       />
       <Modal
