@@ -25,7 +25,13 @@ class ModuleService extends Service {
 
   // 子任务服务状态
   public subStatusDict: Map<string> = {
-
+    WAITING: '待处理', // 第二个任务初始
+    DISTRIBUTED: '已分配', // 第一个任务初始
+    RUNNING: '进行中', // 接受
+    FINISHED: '已完成', // 完成
+    UNAPPROVED: '待审批', // 取消
+    REFUSED: '已拒绝', // 取消审批拒绝
+    CANCELLED: '已取消' // 取消审批通过
   }
 
   // 任务模板分类
@@ -105,12 +111,37 @@ class ModuleService extends Service {
       name: '',
       status: '',
       priority: '',
-      origId: ''
+      origId: '',
+      systemFlag: '' // 空，全部；0 自定义任务； 1 系统任务
     }
     conf = _.extend(cond, conf)
     return Service.http(
       this.createUrl(`/${this.moduleName}/v1/api/outside/task/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
     )
+  }
+
+  // 获取任务
+  public getTplItemById (id: any) {
+    return Service.http(
+      `/${this.moduleName}/v1/api/outside/task/template/get/${id}`
+    )
+  }
+
+  // 添加、修改任务模板
+  public addTplItem (data: any) {
+    if (data.id) {
+      return Service.http(
+        `/${this.moduleName}/v1/api/outside/task/template/update`,
+        'PUT',
+        data
+      )
+    } else {
+      return Service.http(
+        `/${this.moduleName}/v1/api/outside/task/template/add`,
+        'POST',
+        data
+      )
+    }
   }
 
   // 获取全部子任务列表
@@ -168,12 +199,20 @@ class ModuleService extends Service {
   }
 
   // 添加子任务
-  public addTplSublistItem (data: any) {
-    return Service.http(
-      `/${this.moduleName}/v1/api/outside/subtask/template/add`,
-      'POST',
-      data
-    )
+  public addTplSubItem (data: any) {
+    if (data.id) {
+      return Service.http(
+        `/${this.moduleName}/v1/api/outside/subtask/template/update`,
+        'PUT',
+        data
+      )
+    } else {
+      return Service.http(
+        `/${this.moduleName}/v1/api/outside/subtask/template/add`,
+        'POST',
+        data
+      )
+    }
   }
 
 }
