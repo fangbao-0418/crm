@@ -100,7 +100,3 @@ export const allocateAuto = (payload: Array<{id: string, customerName: string, c
 export const getCompanyByCitycode = (citycode: string) => {
   return http(`/user/v1/api/company/list/region/${citycode}`)
 }
-// 根据机构获取销售列表
-export const getSalesByCompany = (companyid: string) => {
-  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
-}

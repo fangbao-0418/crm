@@ -2,20 +2,24 @@ import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchRelatedCompanyListy } from './api'
+import moment from 'moment'
 export interface DetailProps {
   id: string
   customerName: string
   contactPhone: string
   contactPerson: string
-  AgencyName: string
-  Status: string
+  agencyName: string
+  status: string
   serveTimeBegin: string
   serveTimeEnd: string
+}
+interface Props {
+  customerId: string
 }
 interface States {
   data: DetailProps[]
 }
-export default class extends React.Component {
+export default class extends React.Component<Props> {
   public state: States = {
     data: []
   }
@@ -30,20 +34,33 @@ export default class extends React.Component {
     dataIndex: 'contactPhone'
   }, {
     title: '所属机构',
-    dataIndex: 'AgencyName'
+    dataIndex: 'agencyName'
   }, {
     title: '是否签单',
-    dataIndex: 'Status'
+    dataIndex: 'status',
+    render: (val) => {
+      if (val === 4) {
+        return <span>是</span>
+      } else {
+        return <span>否</span>
+      }
+    }
   }, {
     title: '开始账期',
-    dataIndex: 'serveTimeBegin'
+    dataIndex: 'serveTimeBegin',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }, {
     title: '结束账期',
-    dataIndex: 'serveTimeEnd'
+    dataIndex: 'serveTimeEnd',
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
   }]
   public componentWillMount () {
-    const curCompanyId = ''
-    fetchRelatedCompanyListy(curCompanyId).then((res) => {
+    const customerId = this.props.customerId
+    fetchRelatedCompanyListy(customerId).then((res) => {
       this.setState({
         data: res.data
       })

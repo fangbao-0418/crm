@@ -21,3 +21,18 @@ export const saveStorageCapacity = (payload: Customer.CapacityProps[]) => {
 export const fetchSpicalList = () => {
   return http(`/crm-manage/v1/api/diversion_customer/listSpecial`)
 }
+export const fetchGeneralList = () => {
+  return http(`/crm-manage/v1/api/diversion_customer/listGeneral`)
+}
+export const saveGeneralCapacity = (payload: Array<{salespersonId: string, salespersonName: string}>) => {
+  return http(`/crm-manage/v1/api/diversion_customer/entryGeneral`, 'POST', payload)
+}
+export const saveSpecialCapacity = (payload: CustomerSet.SpecialAssetsProps) => {
+  return http(`/crm-manage/v1/api/diversion_customer/entrySpecial`, 'POST', payload)
+}
+export const deleteSpecialCapacity = (sourceId: string) => {
+  return http(`/crm-manage/v1/api/diversion_customer/deleteSpecial?sourceId=${sourceId}`)
+}
+export const fetchSpecialList = () => {
+  return http(`/crm-manage/v1/api/diversion_customer/listSpecial`)
+}

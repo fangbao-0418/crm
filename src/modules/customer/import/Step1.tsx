@@ -1,7 +1,8 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
 import { fetchRegion } from '@/modules/common/api'
-import { getCompanyByCitycode, getSalesByCompany } from '../api'
+import { getCompanyByCitycode } from '../api'
+import { getSalesByCompany } from '@/modules/common/api'
 const Option = Select.Option
 interface State {
   isChecked: boolean,

@@ -1,4 +1,4 @@
-import { fetchStorageCapacity, fetchAutoAssign } from './api'
+import { fetchStorageCapacity, fetchAutoAssign, fetchSpecialList } from './api'
 export const changeCapacityAction = (cityCodeArr?: string) => {
   fetchStorageCapacity(cityCodeArr).then((res) => {
     APP.dispatch({
@@ -15,6 +15,25 @@ export const changeAutoAssignAction = (cityCodeArr?: string) => {
       type: 'change customer data',
       payload: {
         autoAssign: res
+      }
+    })
+  })
+}
+
+export const fetchSpecialListAction = (cb?: (res: CustomerSet.SpecialAssetsProps[]) => void) => {
+  fetchSpecialList().then((res: any[]) => {
+    res.map((item, index) => {
+      item.key = index
+    })
+    const spicalAssetsList = res
+    if (cb) {
+      console.log(spicalAssetsList, 'caocaocao')
+      cb(spicalAssetsList)
+    }
+    APP.dispatch<CustomerSet.Props>({
+      type: 'change customer data',
+      payload: {
+        spicalAssetsList
       }
     })
   })
