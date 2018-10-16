@@ -37,7 +37,7 @@ class Main extends React.Component {
       name: this.state.val,
       parentId: 0,
       companyId: 0,
-      createUser: 111 /// todo 改为操作人id
+      organizationType: 'System'
     }
     if (this.state.val === '') {
       this.setState({verification: 'empty'})
@@ -52,9 +52,6 @@ class Main extends React.Component {
         .then((res) => {
           this.getDepartmentList()
         })
-        .catch((err) => {
-          APP.error('222')
-        })
     } else if (mode === 'addRoot') {
       params.parentId = 0
       addOrganization(params).then((res) => {
@@ -62,8 +59,7 @@ class Main extends React.Component {
       })
     } else if (mode === 'modify') {
       const data = {
-        name: this.state.val,
-        updateUser: 111 // todo 改为操作人id
+        name: this.state.val
       }
       modifyOrganization(data, this.state.currentInfo.id)
         .then((res) => {
@@ -91,20 +87,18 @@ class Main extends React.Component {
 
   // 启用、禁用部门
   public toggleForbidDepartment = (id: number, status: 0 | 1) => {
-    const updateUser = 111 // todo 改为操作人ID
-    toggleForbidOrganization(id, updateUser, status).then((res) => {
+    toggleForbidOrganization(id, status).then((res) => {
       this.getDepartmentList()
     })
   }
 
   // 删除部门
   public delDepartment = (id: number) => {
-    const updateUser = 123 // todo 改为操作人ID
     Modal.confirm({
       title: '删除部门',
       content: '确定要删除部门吗？',
       onOk: () => {
-        delOrganization(id, updateUser)
+        delOrganization(id)
           .then((res) => {
             this.getDepartmentList()
           })

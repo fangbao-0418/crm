@@ -1,5 +1,7 @@
 import { Input, Select, Form, DatePicker, Button, Row } from 'antd'
 import React from 'react'
+import Service from '@/modules/outsite/services'
+import _ from 'lodash'
 
 const Option = Select.Option
 const { RangePicker } = DatePicker
@@ -9,10 +11,9 @@ class Main extends React.Component<any, any> {
     super(props)
     const value = props.value || {}
     this.state = {
-      text: value.text ,
-      currency: value.currency || '分类',
-      orderState: value.orderState || '状态',
-      dateArr:[]
+      name: value.name ,
+      category: value.category || '',
+      status: value.status || ''
     }
   }
 
@@ -25,11 +26,11 @@ class Main extends React.Component<any, any> {
   }
  // 输入框
   public handleTextChange = (e: any) => {
-    const text = e.target.value
+    const name = e.target.value
     if (!('value' in this.props)) {
-      this.setState({ text })
+      this.setState({ name })
     }
-    this.triggerChange({ text })
+    this.triggerChange({ name })
   }
 
   public triggerChange = (changedValue: any) => {
@@ -40,18 +41,18 @@ class Main extends React.Component<any, any> {
     }
   }
   // 服务内容
-  public handleCurrencyChange = (currency: any) => {
+  public handleCurrencyChange = (category: any) => {
     if (!('value' in this.props)) {
-      this.setState({ currency })
+      this.setState({ category })
     }
-    this.triggerChange({ currency })
+    this.triggerChange({ category })
   }
   // 工单状态
-  public handleOrderStateChange = (orderState: any) => {
+  public handleOrderStateChange = (status: any) => {
     if (!('value' in this.props)) {
-      this.setState({ orderState })
+      this.setState({ status })
     }
-    this.triggerChange({ orderState })
+    this.triggerChange({ status })
   }
   // 筛选日期
   public onDateChange = (dateArr: any) => {
@@ -75,32 +76,36 @@ class Main extends React.Component<any, any> {
                 <Input
                     type='text'
                     size={size}
-                    value={state.text}
+                    value={state.name}
                     placeholder='请输入子任务名称'
                     onChange={this.handleTextChange}
                     style={{ width: '20%',  marginLeft: '3%'}}
                 />
                 <span style={{ marginLeft: '3%'}}>任务分类:</span>
                 <Select
-                    value={state.currency}
+                    value={state.category}
                     size={size}
                     style={{ width: '15%', marginLeft: '3%' }}
                     onChange={this.handleCurrencyChange}
                 >
-                <Option value='税务'>税务</Option>
-                <Option value='工商'>工商</Option>
-                <Option value='其他'>其他</Option>
-                <Option value='特殊'>特殊</Option>
+                {
+                  _.map(Service.taskTplCateDict, (val: any, key: any) => {
+                    return <Option value={key}>{val}</Option>
+                  })
+                }
                 </Select>
                 <span style={{ marginLeft: '3%'}}>状态:</span>
                 <Select
-                    value={state.orderState}
+                    value={state.status}
                     size={size}
                     style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
                     onChange={this.handleOrderStateChange}
                 >
-                <Option value='启用'>启用</Option>
-                <Option value='停用'>停用</Option>
+                {
+                  _.map(Service.taskTplStatusDict, (val: any, key: any) => {
+                    return <Option value={key}>{val}</Option>
+                  })
+                }
                 </Select>
             </Form>
         </div>

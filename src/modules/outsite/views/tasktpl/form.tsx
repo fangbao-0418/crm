@@ -6,6 +6,7 @@ import Service from '@/modules/outsite/services'
 import { Map } from '@/modules/outsite/types/outsite'
 import { isArray } from 'util'
 import _ from 'lodash'
+import { TaskItem } from '@/modules/outsite/types/outsite'
 
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 const FormItem = Form.Item
@@ -90,9 +91,9 @@ class Main extends React.Component<any, any> {
       formdata:{
         name: '',
         priority: '',
-        goodsId: '',
-        goodsName: '',
-        sublist: [] // vlist
+        productId: '',
+        productName: '',
+        subList: [] // vlist
       },
       checkedIdMap: {} // this.arr2map(vlist, 'id') // 默认配置选中项
     }
@@ -101,7 +102,7 @@ class Main extends React.Component<any, any> {
 
   public componentWillMount () {
     this.params = this.props.match.params
-    console.log('params::', this.params)
+    console.log('params::', this.params, APP.user)
   }
 
   // 初始化数据
@@ -114,9 +115,24 @@ class Main extends React.Component<any, any> {
     })
   }
 
+  // 获取当前任务
+  public getItem () {
+    if (!this.params.id) {
+      return
+    }
+    Service.getTplItemById(this.params.id).then((item: TaskItem) => {
+      this.setState({
+        formdata: item
+      })
+    })
+  }
+
   // 获取子任务列表
   public getSublist () {
     return Service.getTplSublist({}).then((data: any) => {
+      data.map((item: any, i: number) => {
+        data[i].subId = item.id
+      })
       this.setState({
         subList: data,
         subMap: this.arr2map(data),
@@ -165,33 +181,61 @@ class Main extends React.Component<any, any> {
 
   public sortData () {
     let { formdata } = this.state
-    const { sublist } = formdata.sublist
-
-    const newlist: Array<any> = []
-    let i: number = 0
-    _.forEach(this.state.checkedIdMap, (item: any) => {
-      i++
-      item.sort = item.sort ? item.sort : i
-      console.log(i, item.id, item)
-      newlist.push(item)
+    const subList = _.sortBy(formdata.subList, (item: TaskItem) => {
+      return item.sort
     })
-
-    // 排序
-    // _
-
     formdata = {
       ...formdata,
-      sublist: newlist
+      subList
     }
-
     this.setState({
       formdata
     })
-    return sublist
   }
 
   // 选择子任务
   public onCheckItem (e: any) {
+    let { formdata } = this.state
+    const { checkedIdMap } = this.state
+    let { subList } = formdata
+    const val = e.target.value
+    if (e.target.checked) {
+      if (checkedIdMap && !checkedIdMap[val]) {
+        // 缓存已经选中的子任务
+        checkedIdMap[val] = this.state.subMap[e.target.value]
+        const nitem = checkedIdMap[val]
+        console.log('new item::', val, nitem)
+        nitem.sort = subList.length + 1
+        subList.push(nitem)
+        formdata = {
+          ...formdata,
+          checkedIdMap,
+          subList
+        }
+        this.setState({
+          formdata
+        })
+      }
+    } else {
+      delete checkedIdMap[val]
+      subList = _.filter(subList, (item: TaskItem) => {
+        console.log(val, item.id, item.subId, item)
+        return item.subId !== val
+      })
+      subList.map((item: TaskItem, i: number) => {
+        subList[i].sort = i + 1
+        checkedIdMap[item.subId] = item
+      })
+      formdata = {
+        ...formdata,
+        subList
+      }
+      this.setState({
+        formdata,
+        checkedIdMap
+      })
+    }
+    /*
     const { checkedIdMap } = this.state
     if (e.target.checked) {
       // 缓存已经选中的子任务
@@ -207,6 +251,7 @@ class Main extends React.Component<any, any> {
       this.sortData()
     })
     console.log('checked::', e, this.state.checkedIdMap)
+    */
   }
 
   // 切换排序
@@ -215,7 +260,7 @@ class Main extends React.Component<any, any> {
     const {checkedIdMap} = this.state
     if (action === 'up') {
       if (item.sort !== 1) {
-        const nitem = this.state.formdata.sublist[item.sort - 2]
+        const nitem = this.state.formdata.subList[item.sort - 2]
         nitem.sort = nitem.sort + 1
         item.sort = item.sort - 1
         checkedIdMap[item.id] = item
@@ -223,8 +268,8 @@ class Main extends React.Component<any, any> {
       }
     }
     if (action === 'down') {
-      if (item.sort !== this.state.formdata.sublist.length) {
-        const nitem = this.state.formdata.sublist[item.sort]
+      if (item.sort !== this.state.formdata.subList.length) {
+        const nitem = this.state.formdata.subList[item.sort]
         nitem.sort = nitem.sort - 1
         item.sort = item.sort + 1
         checkedIdMap[item.id] = item
@@ -238,9 +283,30 @@ class Main extends React.Component<any, any> {
     })
   }
 
+  public syncFormdata (k: string, v: any) {
+    console.log('sync::', k, v)
+    const { formdata } = this.state
+    formdata[k] = v
+    this.setState({
+      formdata
+    })
+  }
+
   // 保存
   public onSave () {
-    console.log('save::', this.state.formdata)
+    // console.log('save::', this.state.formdata)
+    const {formdata} = this.state
+    formdata.subList.map((subitem: TaskItem, i: number) => {
+      formdata.subList[i] = {
+        subId: subitem.subId ? subitem.subId : subitem.id,
+        sort: subitem.sort
+      }
+    })
+    console.log('save::', formdata)
+    Service.addTplItem(formdata).then(() => {
+      APP.success('保存成功')
+      // APP.history.push('/outsite/tasktpl/list')
+    })
   }
 
   public render () {
@@ -272,9 +338,9 @@ class Main extends React.Component<any, any> {
               <Icon type='caret-up' />
             </span>
             <span
-              className={`likebtn ${item.sort === this.state.formdata.sublist.length ? styles.disabled : ''}`}
+              className={`likebtn ${item.sort === this.state.formdata.subList.length ? styles.disabled : ''}`}
               onClick={() => {
-                if (item.sort === this.state.formdata.sublist.length) {
+                if (item.sort === this.state.formdata.subList.length) {
                   return
                 }
                 this.sortItem.bind(this)(item, 'down')
@@ -305,20 +371,41 @@ class Main extends React.Component<any, any> {
                 <Row>
                   <Col span={5}>
                     <FormItem label='任务名称' {...formItemLayout}>
-                      <Input name='name' placeholder={`任务名称`}/>
+                      <Input
+                        name='name'
+                        placeholder={`任务名称`}
+                        onChange={(ev: any) => {
+                          this.syncFormdata('name', ev.target.value)
+                        }}
+                      />
                     </FormItem>
                   </Col>
                   <Col span={5}>
                     <FormItem label='是否优先级' {...formItemLayout}>
-                      <Select placeholder={`是否优先级`}>
+                      <Select
+                        placeholder={`是否优先级`}
+                        onChange={(val: any) => {
+                          this.syncFormdata('priority', val)
+                        }
+                        }
+                      >
                         {this.dict2options(Service.taskTplPriorityDict)}
                       </Select>
                     </FormItem>
                   </Col>
                   <Col span={5}>
                     <FormItem label='关联商品' {...formItemLayout}>
-                      <Select placeholder={`关联商品`}>
-                        {this.dict2options(Service.taskTplCateDict)}
+                      <Select
+                        placeholder={`关联商品`}
+                        onChange={(val: any) => {
+                          this.syncFormdata('productId', val)
+                        }
+                        }
+                      >
+                        {this.dict2options({
+                          1: '商品1',
+                          2: '商品2'
+                        })}
                       </Select>
                     </FormItem>
                   </Col>
@@ -345,7 +432,7 @@ class Main extends React.Component<any, any> {
                                       onChange={this.onCheckItem.bind(this)}
                                       checked={this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
                                     >
-                                      {checkitem.name}-{checkitem.id}
+                                      {checkitem.name}
                                     </Checkbox>
                                   )
                                 })
@@ -364,7 +451,7 @@ class Main extends React.Component<any, any> {
                           return index % 2 === 0 ? styles.roweven : styles.rowodd
                         }}
                         columns={cols}
-                        dataSource={this.state.formdata.sublist}
+                        dataSource={this.state.formdata.subList}
                         pagination={false}
                       />
                       <div className={styles.actbtns}>

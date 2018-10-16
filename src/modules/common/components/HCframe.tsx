@@ -21,6 +21,7 @@ class Main extends React.Component<any, any> {
       <div className='t-hc t-hc-1'>
         <div className='hc-h'>
           <h2>{this.props.title}</h2>
+          {this.props.act && <span className={'act'}>{this.props.act}</span>}
         </div>
         <div className='hc-c'>
           {this.props.children}

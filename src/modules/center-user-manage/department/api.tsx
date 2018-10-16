@@ -9,22 +9,21 @@ interface AddOrganizationPayload {
   name: string // 部门名称
   parentId: any // 父节点id（根节点传0）
   companyId: number // 公司id
-  createUser: number // 操作人id
+  organizationType: string // 机构类型，固定传“System”
 }
 
 interface ModifyOrganizationPayload {
   name: string // 	部门名称
-  updateUser: number // 操作人id
 }
 
 // 获取部门列表
 export const fetchOrganizationList = () => {
-  return http(`/user/v1/api/organization/list`)
+  return http(`/user/v1/api/organization/list/System/0`)
 }
 
 // 删除部门
-export const delOrganization = (id: number, updateUser: number) => {
-  return http(`/user/v1/api/organization/${id}/${updateUser}`, 'DELETE')
+export const delOrganization = (id: number) => {
+  return http(`/user/v1/api/organization/${id}`, 'DELETE')
 }
 
 // 添加部门
@@ -38,6 +37,6 @@ export const modifyOrganization = (payload: ModifyOrganizationPayload, id: numbe
 }
 
 // 启用禁用部门
-export const toggleForbidOrganization = (id: number, updateUser: number, status: 0 | 1) => {
-  return http(`/user/v1/api/organization/${id}/${updateUser}/${status}`, 'PUT')
+export const toggleForbidOrganization = (id: number, status: 0 | 1) => {
+  return http(`/user/v1/api/organization/${id}/${status}`, 'PUT')
 }
