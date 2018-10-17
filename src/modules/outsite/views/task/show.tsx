@@ -7,6 +7,8 @@ import { Button } from 'antd'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import HCframe from '@/modules/common/components/HCframe'
 import Service from '@/modules/outsite/services'
+import WokerService from '@/modules/workorder/api'
+
 import Workorder from '@/modules/outsite/views/task/workorder.component'
 
 const styles = require('../../styles/list.styl')
@@ -110,9 +112,14 @@ class Main extends React.Component<any> {
       currentPage: 1,
       total: 1,
       pageSize: 10
-    }
+    },
+    taskid: '',  // 工单id
+    auditTaskName: '', // 审批任务的名称
+    auditTaskReason: '', // 审批任务的原因
+    imageUrl:''  // 凭证的图片
   }
   public taskid: any
+  public childTaskid: any
   public tabList: any = [
     {key: '1', name: '待分配'},
     {key: '2', name: '已分配'},
@@ -120,9 +127,9 @@ class Main extends React.Component<any> {
   ]
   public columns: any = [{
     title: '序列号ID',
-    dataIndex: 'code',
+    dataIndex: 'id',
     render: (key: any, item: TaskItem) => {
-      return <span>{item.orderNo}</span>
+      return <span>{item.id}</span>
     }
   }, {
     title: '子任务名称',
@@ -144,7 +151,7 @@ class Main extends React.Component<any> {
     }
   }, {
     title: '所属区域',
-    dataIndex: 'areaName',
+    dataIndex: 'orgName',
     render: (k: any, item: TaskItem) => {
       return (
       <>
@@ -173,7 +180,7 @@ class Main extends React.Component<any> {
     render: (k: any, item: TaskItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.showCancelModal.bind(this)(item) }}>审批</span>
+          <span className={`likebtn`} onClick={() => { this.onAuditTask.bind(this)(item) }}>审批</span>
           <span className={`likebtn ${item.status === '1' ? '' : 'likebtn-disabled'}`} onClick={() => { this.showChangeModal.bind(this)(item) }}>转接任务</span>
           <span className={`likebtn`} onClick={() => { this.showVoucherModal.bind(this)(item) }}>查看凭证</span>
         </span>
@@ -188,6 +195,9 @@ class Main extends React.Component<any> {
   public componentWillMount () {
     this.taskid = this.props.match.params.id
     this.getList()
+    Service.getLogByTaskid('1').then((res: any) => {
+      console.log('跟进日志', res)
+    })
   }
 
   public componentDidMount () {
@@ -210,25 +220,28 @@ class Main extends React.Component<any> {
 
   // 获取列表数据
   public getList () {
-    this.virData()
-    this.setState({
-      dataSource: data
-    })
-    /*
-    Service.getListByUserid(2).then((d: any) => {
-      const { pageSize, total, currentPage } = d
+    // this.virData()
+    // this.setState({
+    //   dataSource: data
+    // })
+
+    Service.getItemByTaskid(1).then((d: any) => {
+      console.log('list', d)
+      console.log('list', d.subList)
+      // const { pageSize, total, currentPage } = d
       this.setState({
-        dataSource: d.records,
-        pageConf: {
-          pageSize,
-          total,
-          currentPage
-        }
+        dataSource: d.subList,
+        orderId: d.orderId
+        // pageConf: {
+        //   pageSize,
+        //   total,
+        //   currentPage
+        // }
       }, () => {
         console.log('........', this.state)
       })
     })
-    */
+
   }
 
   // 查看
@@ -256,16 +269,29 @@ class Main extends React.Component<any> {
     // service.delList(selectedRowKeys)
   }
 
-  // 审批任务
-  public onAuditTask () {
+  // 审批任务的弹层
+  public onAuditTask (record: any) {
     const { selectedRowKeys } = this.state
-    console.log('audit task::', this.taskid)
+    console.log('审批任务record：：：：：：：：：', record)
     // service.setReadedList(selectedRowKeys)
+    this.childTaskid = record.id
+    this.setState({
+      modalCancelVisible: true,
+      auditTaskName: record.name,
+      auditTaskReason: record.cancelReason
+    })
   }
 
-  // 审批子任务
+  // 审批子任务的确定
   public onAuditItem (item: TaskItem) {
     console.log('audit item::', item)
+    const params: any = {
+      id: this.childTaskid ,
+      status:'CANCELAPPROVE'
+    }
+    Service.AuditTaskSure(params).then((res: any) => {
+      console.log('审批任务确定', res)
+    })
   }
 
   // 转接任务
@@ -273,12 +299,11 @@ class Main extends React.Component<any> {
     console.log('change user item::', item)
   }
 
-  // 查看凭证
+  // 查看凭证确定
   public onShowVoucher (item: TaskItem) {
     this.setState({
-      modalVoucherVisible: true
+      modalVoucherVisible: false
     })
-    console.log('show voucher::', item)
   }
 
   // tab切换
@@ -301,11 +326,12 @@ class Main extends React.Component<any> {
     })
   }
 
-  // 凭证弹层
-  public showVoucherModal () {
-    console.log('audit modal::show')
+  // 查看凭证弹层
+  public showVoucherModal (record: any) {
+    console.log('查看凭证的弹层：：：：：：', record)
     this.setState({
-      modalVoucherVisible: true
+      modalVoucherVisible: true,
+      imageUrl: record.imageUrl || 'https://www.baidu.com/img/bd_logo1.png'
     })
   }
   public hideVoucherModal () {
@@ -380,8 +406,8 @@ class Main extends React.Component<any> {
                   dataSource={this.state.dataSource}
                   rowSelection={rowSelection}
                   bordered
-                  pagination={this.state.pageConf}
-                  rowKey={'key'}
+                  pagination={false}
+                  rowKey={'id'}
                 />
                 <div className={styles['bottom-btns']}>
                   <Button type='primary' onClick={this.showAllotModal.bind(this)}>批量分配</Button>
@@ -402,7 +428,7 @@ class Main extends React.Component<any> {
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
                 <div>
-                  <Workorder data={{taskid: this.taskid}} />
+                  <Workorder data={{taskid: this.state.orderId}} />
                 </div>
               </Tabs.TabPane>
           </Tabs>
@@ -431,8 +457,8 @@ class Main extends React.Component<any> {
         onCancel={this.hideCancelModal.bind(this)}
       >
       <div className={`${styles.modalbox} ${styles.cancelbox}`}>
-        <p>确定取消“当地的”在内及后继子任务？</p>
-        <div className={`${styles.cancelcont}`}>原因： 撤回</div>
+            <p>{`确定取消“${this.state.auditTaskName}”在内及后继子任务？`}</p>
+        <div className={`${styles.cancelcont}`}>{`原因： ${this.state.auditTaskReason}`}</div>
       </div>
       </Modal>
 
@@ -444,7 +470,7 @@ class Main extends React.Component<any> {
       >
       <div className={`${styles.modalbox} ${styles.voucherbox}`}>
         <img
-          src={`https://www.baidu.com/img/bd_logo1.png`}
+          src={`${this.state.imageUrl}`}
         />
       </div>
       </Modal>

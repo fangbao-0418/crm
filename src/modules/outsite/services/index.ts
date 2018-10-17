@@ -69,17 +69,22 @@ class ModuleService extends Service {
 
   // 获取单个任务
   public getItemByTaskid (taskid: any = '') {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/get/${taskid}`)
   }
 
   // 外勤任务跟进日志
   public getLogByTaskid (taskid: any) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/${taskid}`)
   }
 
-  // 外勤工单信息
+  // 外勤工单信息详情
   public getWorkorderByTaskid (taskid: any) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/get/${taskid}`)
+    return Service.http(`/${this.moduleName}/v1/api/order/${taskid}`)
+  }
+
+  // 外勤工单信息详情
+  public AuditTaskSure (params: any) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', params)
   }
 
   // 获取外勤任务列表
