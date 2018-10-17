@@ -5,7 +5,7 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
-export default function (customerId: string, index: number, cb?: () => void) {
+export default function (customerId: string, index?: number, cb?: () => void) {
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({

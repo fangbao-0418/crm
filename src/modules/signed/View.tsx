@@ -35,7 +35,7 @@ class Main extends React.Component<Props> {
             <WorkList/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='相关公司' key='4'>
-            <CompanyList/>
+            <CompanyList customerId={this.props.customerId}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='操作记录' key='5'>
             <OperateList/>

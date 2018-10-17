@@ -5,5 +5,6 @@ declare namespace Reducer {
     business: Business.Props
     perform: Perform.Props
     organ: Organ.Props
+    userManage: UserManage.Props
   }
 }

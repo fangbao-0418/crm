@@ -81,6 +81,9 @@ class Main extends React.Component<Props> {
     }
   }
   public editLinkMan () {
+    if (this.props.type === 'open') {
+      return false
+    }
     const modal = new Modal({
       header: (
         <div>

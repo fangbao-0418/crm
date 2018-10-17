@@ -1,8 +1,8 @@
 import React from 'react'
 import { Icon, Table, Input, Form, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { DatePicker, Radio, Row, Col } from 'antd'
-import { Moment } from 'moment'
+import { Cascader, DatePicker, Radio, Row, Col } from 'antd'
+import moment, { Moment } from 'moment'
 import Service from '@/modules/outsite/services'
 import { Map } from '@/modules/outsite/types/outsite'
 import { TasktplItem, TasktplList } from '@/modules/outsite/types/tploutside'
@@ -39,7 +39,34 @@ class Main extends React.Component<any, any> {
       status: '',
       areaId: '',
       startTime: ''
-    }
+    },
+    areaData: [{
+      value: 'zhejiang',
+      label: 'Zhejiang',
+      children: [{
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        children: [{
+          value: 'xihu',
+          label: 'West Lake'
+        }, {
+          value: 'xiasha',
+          label: 'Xia Sha',
+          disabled: true
+        }]
+      }]
+    }, {
+      value: 'jiangsu',
+      label: 'Jiangsu',
+      children: [{
+        value: 'nanjing',
+        label: 'Nanjing',
+        children: [{
+          value: 'zhonghuamen',
+          label: 'Zhong Hua men'
+        }]
+      }]
+    }]
   }
 
   public componentWillMount () {
@@ -84,9 +111,35 @@ class Main extends React.Component<any, any> {
     })
   }
 
+  // 同步搜索表单数据
+  public syncSearchData (data: any = {}) {
+    const { searchData } = this.state
+    this.setState({
+      searchData: Object.assign({}, searchData, data)
+    }, () => {
+      this.hookCallback()
+    })
+  }
+
   // 搜索提交
-  public onChange (a: any) {
-    console.log('search form changed::', a, arguments)
+  public onChange (e: Event) {
+    // console.log('search form changed::', a, arguments)
+    e.preventDefault()
+    this.props.form.validateFields((err: any, values: any) => {
+      // console.log('Received values of form: ', values)
+      // this.props.onSearch(Object.assign({}, this.state.searchData, values))
+      const searchData = Object.assign({}, this.state.searchData, values)
+      this.setState({
+        searchData
+      }, () => {
+        this.hookCallback()
+      })
+    })
+  }
+
+  // 挂父组件回调
+  public hookCallback () {
+    this.props.onSearch(this.state.searchData)
   }
 
   // 搜索项显藏
@@ -104,10 +157,6 @@ class Main extends React.Component<any, any> {
 
   public render () {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
-
-    // Only show error after a field is touched.
-    const userNameError = isFieldTouched('userName') && getFieldError('userName')
-    const passwordError = isFieldTouched('password') && getFieldError('password')
 
     return (
     <div className='t-search-form'>
@@ -132,7 +181,8 @@ class Main extends React.Component<any, any> {
           rules: [{
             required: false,
             message: ''
-          }]
+          }],
+          placeholder: '选择子任务'
         })(
           <Select style={{width: '120px'}}>
             {this.createTaskNameOptions(this.state.tplTaskList)}
@@ -144,7 +194,8 @@ class Main extends React.Component<any, any> {
           rules: [{
             required: false,
             message: ''
-          }]
+          }],
+          placeholder: '选择子任务'
         })(
           <Select style={{width: '120px'}}>
             {this.createTaskNameOptions(this.state.tplTaskList)}
@@ -171,13 +222,21 @@ class Main extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
+                <FormItem>
                 {getFieldDecorator(`status`, {
                   rules: [{
                     required: false,
                     message: ''
                   }]
                 })(
-                  <Select style={{width: '120px'}}>
+                  <Select
+                    style={{width: '120px'}}
+                    onChange={(status: any) => {
+                      this.syncSearchData({
+                        status
+                      })
+                    }}
+                  >
                     {
                       _.map(Service.taskStatusDict, (val: string, key: string) => {
                         return <Select.Option key={`option-${key}`} value={key}>{val}</Select.Option>
@@ -185,17 +244,43 @@ class Main extends React.Component<any, any> {
                     }
                   </Select>
                 )}
+                </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
                 <FormItem>
-                  <Input placeholder='选择所属区县'  name='areaId' />
+                  {getFieldDecorator(`orgId`, {})(
+                    <Cascader
+                      options={this.state.areaData}
+                      onChange={(d: any) => {
+                        console.log('orgid::', d)
+                        this.syncSearchData({
+                          orgId: d
+                        })
+                      }}
+                      placeholder='选择所属区县'
+                    />
+                  )}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem>
-                  <Input placeholder='请选择提交日期' name='startTime' />
+                  {getFieldDecorator(`startTime`, {
+                    placeholder: '请输入日期',
+                    format: `YY-MM-DD`
+                  })(
+                    <DatePicker
+                      style={{width:'100%'}}
+                      onChange={(d: any) => {
+                        const v = moment(d).format('YYYY-MM-DD')
+                        console.log('date change::', d, v)
+                        this.syncSearchData({
+                          startTime: v
+                        })
+                      }}
+                    />
+                  )}
                 </FormItem>
               </Col>
             </Row>
