@@ -1,10 +1,11 @@
 import React from 'react'
-import { Modal, Input, Form, Select, Checkbox } from 'antd'
+import { Modal, Input, Form, Select, Checkbox, Tree } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { fetchRoleInfo, fetchNewRoleInfo } from '../api'
 
 const FormItem = Form.Item
 const Option = Select.Option
+const TreeNode = Tree.TreeNode
 const styles = require('./style')
 const CheckboxGroup = Checkbox.Group
 
@@ -18,15 +19,18 @@ interface Props extends FormComponentProps {
 
 interface State {
   title: string,
-  info: any
+  info: any,
+  expandedKeys: string[] // 展开节点key值
+  checkedKeys: any[] // 选中节点key值
 }
 
 class Main extends React.Component<Props, State> {
-  public showInfo: any = null
-
+  public endIds: string[] = [] // 最末级id集合
   public state: State = {
     title: '',
-    info: null
+    info: {},
+    expandedKeys: [],
+    checkedKeys: []
   }
 
   public componentWillMount () {
@@ -39,13 +43,13 @@ class Main extends React.Component<Props, State> {
     const {mode, tab, currentRoleId} = this.props
     if (mode === 'add') {
       fetchNewRoleInfo(tab).then((res) => {
-        this.showInfo = res
-        this.setState({info: this.checkSelectAll(this.showInfo)})
+        this.endIds = this.getChildIds(res)
+        this.setState({info: {roleSystemAuthorityList: res}})
       })
     } else {
       fetchRoleInfo(tab, currentRoleId).then((res) => {
-        this.showInfo = res
-        this.setState({info: this.checkSelectAll(this.showInfo)})
+        this.endIds = this.getChildIds(res.roleSystemAuthorityList)
+        this.setState({info: res})
       })
     }
   }
@@ -55,11 +59,11 @@ class Main extends React.Component<Props, State> {
     const {mode} = this.props
     let title
     if (mode === 'view') {
-      title = '查看权限'
+      title = '查看角色'
     } else if (mode === 'add') {
-      title = '添加权限'
+      title = '添加角色'
     } else if (mode === 'modify') {
-      title = '修改权限'
+      title = '修改角色'
     }
     this.setState({title})
   }
@@ -68,9 +72,14 @@ class Main extends React.Component<Props, State> {
   public onOk = () => {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
-      this.showInfo.roleName = val.name
-      this.showInfo.shareFlag = val.share
-      this.props.onOk(this.showInfo)
+      const {checkedKeys} = this.state
+      const checkIds = checkedKeys.filter((item: any) => this.endIds.includes(item))
+      const payload: any = {}
+      payload.roleName = val.name
+      payload.shareFlag = val.share
+      payload.roleSystemAuthorityList = checkIds
+      payload.roleType = 'System'
+      this.props.onOk(payload)
     })
   }
 
@@ -79,108 +88,46 @@ class Main extends React.Component<Props, State> {
     this.props.onCancel()
   }
 
-  // 检测全选按钮是否勾选
-  public checkSelectAll (data: any) {
-    if (data) {
-      data.roleSystemAuthorityResponseList.forEach((systemItem: any) => {
-        systemItem.roleSystemAuthorityItemDTOList.forEach((pageItem: any) => {
-          pageItem.enableFlag = pageItem.roleSystemAuthorityButtonList.every((buttonItem: any) => buttonItem.enableFlag)
-        })
-      })
-      this.showInfo.roleSystemAuthorityResponseList.forEach((systemItem: any) => {
-        systemItem.enableFlag = systemItem.roleSystemAuthorityItemDTOList.every((pageItem: any) => pageItem.enableFlag)
+  // 获取所有权限最末级id
+  public getChildIds (data: any) {
+    const endIds: string[] = []
+    function getId (arr: any) {
+      arr.forEach((item: any) => {
+        if (item.authorityResponseList.length) {
+          getId(item.authorityResponseList)
+        } else {
+          endIds.push(item.id + '')
+        }
       })
     }
-    return data
+    getId(data)
+    return endIds
   }
 
-  // 点击系统全选
-  public systemChecked (status: boolean, systemIndex: number) {
-    const currentSystem = this.showInfo.roleSystemAuthorityResponseList[systemIndex]
-    currentSystem.enableFlag = status
-    currentSystem.roleSystemAuthorityItemDTOList.forEach((item: any) => {
-      item.enableFlag = status
-      item.roleSystemAuthorityButtonList.forEach((buttonItem: any) => buttonItem.enableFlag = status)
-    })
-    this.setState({info: this.showInfo})
-  }
-
-  // 点击页面全选
-  public pageChecked (status: boolean, systemIndex: number, pageIndex: number) {
-    const currentPage = this.showInfo.roleSystemAuthorityResponseList[systemIndex].roleSystemAuthorityItemDTOList[pageIndex]
-    currentPage.enableFlag = status
-    currentPage.roleSystemAuthorityButtonList.forEach((item: any) => {
-      item.enableFlag = status
-    })
-    this.setState({info: this.checkSelectAll(this.showInfo)})
-  }
-
-  // 点击按钮选择
-  public buttonChecked (status: boolean, systemIndex: number, pageIndex: number, buttonIndex: number) {
-    const currentPage = this.showInfo.roleSystemAuthorityResponseList[systemIndex].roleSystemAuthorityItemDTOList[pageIndex]
-    const currentButton = currentPage.roleSystemAuthorityButtonList[buttonIndex]
-    currentButton.enableFlag = status
-    this.setState({info: this.checkSelectAll(this.showInfo)})
-  }
-
-  // 渲染系统节点
-  public renderSystemNode (data: any) {
-    return data.map((item: any, index: number) => {
-      return (
-        <div className={styles.contentWrap} key={item.systemCode}>
-          <div className={styles.title}>{item.systemName}：</div>
-          <div className={styles.contentBox}>
-            <div className={styles.selectAll}>
-              <Checkbox
-                disabled={this.props.mode === 'view'}
-                checked={item.enableFlag}
-                onChange={(e) => {this.systemChecked(e.target.checked, index)}}
-              >
-                全选
-              </Checkbox>
-            </div>
-            {this.renderPageNode(item.roleSystemAuthorityItemDTOList, index)}
-          </div>
-        </div>
-      )
+  // 渲染权限树形结构
+  public renderTreeNodes = (data: any[]) => {
+    data = Array.isArray(data) ? data : []
+    return data.map((item) => {
+      if (item.authorityResponseList) {
+        return (
+          <TreeNode title={item.name} key={item.id}>
+            {this.renderTreeNodes(item.authorityResponseList)}
+          </TreeNode>
+        )
+      }
+      return <TreeNode title={item.name} key={item.id} />
     })
   }
 
-  // 渲染页面节点
-  public renderPageNode (data: any, systemIndex: number) {
-    return data.map((item: any, index: number) => {
-      return (
-        <div className={styles.item} key={item.authorityId}>
-          <Checkbox
-            disabled={this.props.mode === 'view'}
-            className={styles.itemTitle}
-            checked={item.enableFlag}
-            onChange={(e) => {this.pageChecked(e.target.checked, systemIndex, index)}}
-          >
-            {item.authorityName}
-          </Checkbox>
-          <div>
-            {this.renderButtonNode(item.roleSystemAuthorityButtonList, systemIndex, index)}
-          </div>
-        </div>
-      )
-    })
+  // 区域勾选时触发
+  public onCheck = (checkedKeys: string[], e: any) => {
+    console.log(checkedKeys)
+    this.setState({ checkedKeys })
   }
 
-  // 渲染按钮节点
-  public renderButtonNode (data: any, systemIndex: number, pageIndex: number) {
-    return data.map((item: any, index: number) => {
-      return (
-        <Checkbox
-          disabled={this.props.mode === 'view'}
-          checked={item.enableFlag}
-          key={item.authorityButtonId}
-          onChange={(e) => {this.buttonChecked(e.target.checked, systemIndex, pageIndex, index)}}
-        >
-          {item.buttonName}
-        </Checkbox>
-      )
-    })
+  // 区域展开时触发
+  public onExpand = (expandedKeys: string[]) => {
+    this.setState({expandedKeys})
   }
 
   public render () {
@@ -208,12 +155,11 @@ class Main extends React.Component<Props, State> {
         title={this.state.title}
         visible={true}
         className={styles.wrap}
-        width={1200}
         onOk={this.onOk}
         onCancel={this.onCancel}
       >
         {
-          info
+          info.roleId
             ? <div>
                 <Form layout='inline'>
                   <FormItem className={styles.input} label='角色名称' required>
@@ -235,7 +181,19 @@ class Main extends React.Component<Props, State> {
                   </FormItem>
                 </Form>
                 <div className={styles.content}>
-                  {this.renderSystemNode(info.roleSystemAuthorityResponseList)}
+                  {
+                    <Tree
+                      disabled={mode === 'view'}
+                      checkable
+                      onExpand={this.onExpand}
+                      expandedKeys={this.state.expandedKeys}
+                      onCheck={this.onCheck}
+                      checkedKeys={this.state.checkedKeys}
+                      defaultCheckedKeys={['1']}
+                    >
+                      {this.renderTreeNodes(this.state.info.roleSystemAuthorityList)}
+                    </Tree>
+                  }
                 </div>
               </div>
             : <span></span>
