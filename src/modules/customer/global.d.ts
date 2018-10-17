@@ -46,7 +46,7 @@ declare namespace Customer {
     customerNameType?: string
     areaCode?: string
     areaName?: string
-    isConfirmed?: string
+    isConfirmed?: number
     contactPersons?: LinkManProps[]
     /** 销售 */
     currentSalesperson?: string

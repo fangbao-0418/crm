@@ -7,6 +7,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
 import { updateCustomer } from '@/modules/customer/api'
+import moment from 'moment'
 const styles = require('./style')
 interface Props {
   linkMan: Customer.LinkManProps[]

@@ -127,6 +127,7 @@ class Main extends React.Component<Props> {
                 <div className='mt10' >
                   预约下次拜访日期&nbsp;&nbsp;
                   <DatePicker
+                    placeholder=''
                     onChange={(moment) => {
                       this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
                     }}
@@ -142,6 +143,7 @@ class Main extends React.Component<Props> {
             {this.props.detailVisibleState && (
               <Record
                 customerId={this.props.customerId}
+                height={this.props.type === 'business' ? 710 : 395}
               />
             )}
           </div>

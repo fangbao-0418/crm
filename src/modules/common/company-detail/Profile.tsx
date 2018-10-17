@@ -19,7 +19,7 @@ class Main extends React.Component<Props> {
           </div>
           <p>
             {
-              this.props.detail.isConfirmed === '1' &&
+              String(this.props.detail.isConfirmed) === '1' &&
               <span>
                 <span className={styles.verified} />
                 <span className='mr20 ml10'>认证</span>

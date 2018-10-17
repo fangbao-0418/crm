@@ -122,7 +122,7 @@ class Main extends React.Component {
     title: '客户来源',
     dataIndex: 'customerSource',
     render: (val) => {
-      return (APP.dictionary[`EnumContactSource-${val}`])
+      return (APP.dictionary[`EnumCustomerSource-${val}`])
     }
   }, {
     title: (

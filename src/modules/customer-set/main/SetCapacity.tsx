@@ -20,7 +20,7 @@ class Main extends React.Component<Props> {
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '大区',
-    dataIndex: 'bigAreaName'
+    dataIndex: 'regionName'
   }, {
     title: '省市',
     dataIndex: 'cityName'

@@ -285,6 +285,7 @@ class Main extends React.Component {
         }
         toOther(params).then(() => {
           APP.success('操作成功')
+          this.fetchList()
           modal.hide()
         })
       },
@@ -297,7 +298,15 @@ class Main extends React.Component {
   public detail (record: Signed.DetailProps) {
     const modal = new Modal({
       content: (
-        <Provider><View customerId={record.id} /></Provider>
+        <Provider>
+          <View
+            customerId={record.id}
+            onClose={() => {
+              this.fetchList()
+              modal.hide()
+            }}
+          />
+        </Provider>
       ),
       header: null,
       footer: null,

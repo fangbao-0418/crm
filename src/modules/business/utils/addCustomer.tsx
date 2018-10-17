@@ -29,13 +29,6 @@ export default function () {
             ins.refs.wrappedComponent.save().then(() => {
               APP.success('保存成功')
               modal.hide()
-              this.setState({
-                visible: false
-              }, () => {
-                this.setState({
-                  visible: true
-                })
-              })
               // this.fetchList()
             }, () => {
               APP.error('保存失败')

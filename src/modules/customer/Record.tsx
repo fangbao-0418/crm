@@ -9,6 +9,7 @@ interface States {
 }
 interface Props {
   customerId?: string
+  height?: number
 }
 class Main extends React.Component<Props> {
   public state: States = {
@@ -39,10 +40,10 @@ class Main extends React.Component<Props> {
   }
   public render () {
     return (
-      <div style={{ borderLeft: '1px solid #e5e5e5', height: 400 }}>
+      <div style={{ borderLeft: '1px solid #e5e5e5' }}>
         <Tabs animated={false} defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='跟进记录' key='1'>
-            <div style={{overflowY: 'auto', height: 500 }}>
+            <div style={{overflowY: 'auto', height: this.props.height }}>
             {
               this.state.trackRecords.length > 0 && this.state.trackRecords.map((item, index) => {
                 return (
@@ -62,7 +63,7 @@ class Main extends React.Component<Props> {
                       {
                         item.tagCustomerStatus > -1 &&
                         <span className={styles.tag}>
-                          {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                          {APP.dictionary[`EnumNeedStatus-${item.tagCustomerStatus}`]}
                         </span>
                       }
                       {
@@ -91,7 +92,7 @@ class Main extends React.Component<Props> {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab='线索记录' key='2'>
-            <div style={{overflowY: 'auto', height: 500 }}>
+            <div style={{overflowY: 'auto', height: this.props.height }}>
               {
                 this.state.clueRecords.length > 0 && this.state.clueRecords.map((item, index) => {
                   return (
@@ -111,7 +112,7 @@ class Main extends React.Component<Props> {
                         {
                           item.tagCustomerStatus > -1 &&
                           <span className={styles.tag}>
-                            {APP.dictionary[`EnumCustomerStatus-${item.tagCustomerStatus}`]}
+                            {APP.dictionary[`EnumNeedStatus-${item.tagCustomerStatus}`]}
                           </span>
                         }
                         {
