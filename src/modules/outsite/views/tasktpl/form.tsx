@@ -97,11 +97,11 @@ class Main extends React.Component<any, any> {
       },
       checkedIdMap: {} // this.arr2map(vlist, 'id') // 默认配置选中项
     }
-    this.getSublist()
   }
 
   public componentWillMount () {
     this.params = this.props.match.params
+    this.getSublist()
     console.log('params::', this.params, APP.user)
   }
 

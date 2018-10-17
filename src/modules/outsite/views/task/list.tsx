@@ -57,7 +57,8 @@ interface States {
   selectedRowKeys: string[],
   showData?: any, // 弹出层的数据
   pageConf?: any,
-  searchData?: any
+  searchData?: any,
+  tab?: string // 当前tab标签
 }
 interface ColProps extends TaskItem {
   dataIndex: string
@@ -81,11 +82,14 @@ class Main extends React.Component {
       currentPage: 1,
       customerName: '',
       name: '',
+      templeteId: '',
+      subId: '',
       userId: '',
       status: 'UNDISTRIBUTED', // 待分配
       startTime: '',
       orgId: ''
-    }
+    },
+    tab: 'UNDISTRIBUTED' // 当前tab, 用于过滤搜索框的状态列表
   }
   public tabList: any = [
     {key: 'UNDISTRIBUTED', name: '待分配'},
@@ -223,7 +227,7 @@ class Main extends React.Component {
     })
     */
     const { searchData } = this.state
-    Service.getListByCond(this.state.searchData).then((d: any) => {
+    Service.getListByCond(searchData).then((d: any) => {
       const { pageSize, total, pageCurrent } = d
       this.setState({
         dataSource: d.records,
@@ -260,8 +264,16 @@ class Main extends React.Component {
   }
 
   // 搜索
-  public onSearch (values: any) {
-    console.log('search::', values)
+  public onSearch (searchData: any) {
+    if (!searchData.status) {
+      searchData.status = this.state.tab
+    }
+    console.log('search::', searchData)
+    this.setState({
+      searchData
+    }, () => {
+      this.getList()
+    })
   }
 
   // 搜索 日期切换
@@ -292,6 +304,7 @@ class Main extends React.Component {
     const { searchData } = this.state
     searchData.status = key
     this.setState({
+      tab: key,
       searchData
     }, () => {
       this.getList()
@@ -312,7 +325,7 @@ class Main extends React.Component {
       <HCframe title='外勤任务'>
         <Row>
           <Col span={20}>
-            <SearchForm initData={this.state.searchData} onSearch={this.onSearch.bind(this)} />
+            <SearchForm parData={this.state} onSearch={this.onSearch.bind(this)} />
           </Col>
           <Col span={4} style={{textAlign: 'right'}}>
             <span className={styles.acts}>
