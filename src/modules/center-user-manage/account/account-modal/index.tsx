@@ -27,6 +27,7 @@ interface State {
   permissionList: any[] // 角色权限列表
   accountList: any[] // 核算中心列表
   identityList: any[] // 身份列表
+  expandedPermissionKeys: string[] // 权限展开节点
 }
 
 class Main extends React.Component<Props, State> {
@@ -43,7 +44,8 @@ class Main extends React.Component<Props, State> {
     roleList: [],
     permissionList: [],
     accountList: [],
-    identityList: []
+    identityList: [],
+    expandedPermissionKeys: []
   }
 
   public componentWillMount () {
@@ -80,11 +82,11 @@ class Main extends React.Component<Props, State> {
     const {mode} = this.props
     let title
     if (mode === 'view') {
-      title = '查看权限'
+      title = '查看账号'
     } else if (mode === 'add') {
-      title = '添加权限'
+      title = '添加账号'
     } else if (mode === 'modify') {
-      title = '修改权限'
+      title = '修改账号'
     }
     this.setState({title})
   }
@@ -206,6 +208,23 @@ class Main extends React.Component<Props, State> {
         )
       }
       return <TreeNode key={item.code} title={item.name} {...item} />
+    })
+  }
+
+  // 渲染权限树
+  public renderPermissionTreeNodes = (data: any) => {
+    data = Array.isArray(data) ? data : []
+    return data.map((item: any) => {
+      if (item) {
+        if (item.authorityResponseList) {
+          return (
+            <TreeNode title={item.name} key={item.id}>
+              {this.renderPermissionTreeNodes(item.authorityResponseList)}
+            </TreeNode>
+          )
+        }
+        return <TreeNode title={item.name} key={item.id} />
+      }
     })
   }
 
@@ -445,9 +464,15 @@ class Main extends React.Component<Props, State> {
         <div className={styles.permission}>
           <b>所属权限：</b>
           {
-            this.state.permissionList.map((item) => {
-              return <Checkbox disabled checked key={item.id}>{item.name}</Checkbox>
-            })
+            <Tree
+              disabled={mode === 'view'}
+              onExpand={(keys) => {
+                this.setState({expandedPermissionKeys: keys})
+              }}
+              expandedKeys={this.state.expandedPermissionKeys}
+            >
+              {this.renderPermissionTreeNodes(this.state.permissionList)}
+            </Tree>
           }
         </div>
 
