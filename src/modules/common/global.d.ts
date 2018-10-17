@@ -19,4 +19,9 @@ declare namespace Common {
     ajaxCount?: number
     user?: UserProps
   }
+  export interface PaginationProps {
+    total: number
+    current: number
+    pageSize: number
+  }
 }
