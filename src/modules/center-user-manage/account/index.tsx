@@ -43,7 +43,6 @@ class Main extends React.Component {
 
   // 点击确认按钮
   public onOk (val: any) {
-    console.log(111, val)
     const {mode, itemInfo} = this.state
     const {center, department, email, identity, name, phone, region, resource, role} = val
     const payload = {
@@ -59,15 +58,24 @@ class Main extends React.Component {
       userType: 'System'
     }
     if (mode === 'add') {
-      addAccount(payload).then((res) => {
-        this.setState({visible: false})
-        this.getList()
-      })
+      addAccount(payload)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getList()
+        })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
     } else {
-      modifyAccount(payload, itemInfo.id).then((res) => {
-        this.setState({visible: false})
-        this.getList()
-      })
+      modifyAccount(payload, itemInfo.id)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getList()
+        })
+        .catch((err: any) => {
+          console.log(738758, err)
+          APP.error(err.responseJSON.errors[0].message)
+        })
     }
   }
 

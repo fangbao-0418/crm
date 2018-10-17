@@ -67,7 +67,6 @@ class Main extends React.Component<Props, State> {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
       val.region = this.selectAreaInfoList
-      console.log('val:', val)
       this.props.onOk(val)
     })
   }
@@ -159,31 +158,13 @@ class Main extends React.Component<Props, State> {
     })
   }
 
-  // 获取所有区域最末级公司的id
-  public getChildIds (data: any) {
-    const endIds: string[] = []
-    function getId (arr: any) {
-      arr.forEach((item: any) => {
-        if (item.regionList) {
-          getId(item.regionList)
-        } else {
-          if (!item.regionFlag) {
-            endIds.push(item.id)
-          }
-        }
-      })
-    }
-    getId(data)
-    return endIds
-  }
-
   // 获取已勾选区域code
   public getCheckedKeys (data: any) {
     const checkedIds: any[] = []
     data = data || []
     function getId (arr: any) {
       arr.forEach((item: any) => {
-        if (item.regionList) {
+        if (item.regionList && item.regionList.length !== 0) {
           getId(item.regionList)
         } else {
           if (item.enableFlag) {
@@ -231,13 +212,12 @@ class Main extends React.Component<Props, State> {
   // 区域勾选时触发
   public onCheck = (checkedKeys: string[], e: any) => {
     this.setState({ checkedKeys })
+    this.selectAreaInfoList = []
     const regionTree = this.state.regionTree
     const Positions = e.checkedNodesPositions
-    console.log(776655, Positions)
     Positions.forEach((item: any) => {
       const indexList = item.pos.split('-')
       const areaInfo: any = {}
-      console.log(indexList)
       if (indexList.length !== 6) {return} // 不为6代表没有选中最末级公司
       const area1 = regionTree[indexList[1]]
       const area2 = area1.regionList[indexList[2]]
@@ -414,18 +394,6 @@ class Main extends React.Component<Props, State> {
               )
             }
           </FormItem>
-
-          {/*{this.state.identityType === 'showResource'
-          && <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='接受资源'>
-            {
-              getFieldDecorator('resource', validation.resource)(
-                <Select disabled={mode === 'view'} size='small' placeholder='请选择是否接受资源' notFoundContent='暂无数据'>
-                  <Option value={0}>是</Option>
-                  <Option value={1}>否</Option>
-                </Select>
-              )
-            }
-          </FormItem>}*/}
 
           <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
             {

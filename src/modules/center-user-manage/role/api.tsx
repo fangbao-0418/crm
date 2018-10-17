@@ -8,17 +8,17 @@ interface RoleInfoPayload {
 }
 
 // 获取角色列表
-export const fetchRoleList = (pageCurrent: number, pageSize: number, roleType: 'System' | 'Proxy') => {
+export const fetchRoleList = (pageCurrent: number, pageSize: number, roleType: 'System' | 'Agent' | 'DirectCompany') => {
   return http(`/user/v1/api/role/list?pageCurrent=${pageCurrent}&pageSize=${pageSize}&roleType=${roleType}`)
 }
 
 // 获取角色新增、修改弹窗数据
-export const fetchRoleInfo = (roleType: 'System' | 'Proxy', roleId: any) => {
+export const fetchRoleInfo = (roleType: 'System' | 'Agent' | 'DirectCompany', roleId: any) => {
   return http(`/user/v1/api/role/roleId/${roleId}/roleType/${roleType}`)
 }
 
 // 获取新增角色准备数据
-export const fetchNewRoleInfo = (roleType: 'System' | 'Proxy') => {
+export const fetchNewRoleInfo = (roleType: 'System' | 'Agent' | 'DirectCompany') => {
   return http(`/user/v1/api/role/roleType/${roleType}`)
 }
 
@@ -28,7 +28,7 @@ export const toggleForbidRole = (id: any, status: 0 | 1) => {
 }
 
 // 删除角色
-export const delRole = (payload: {ids: any[]}) => {
+export const delRole = (payload: {ids: any}) => {
   return http(`/user/v1/api/role`, 'DELETE', payload)
 }
 
