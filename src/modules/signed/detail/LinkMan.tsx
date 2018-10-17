@@ -38,7 +38,7 @@ class Main extends React.Component<Props> {
               ]
             })(
               this.props.disabled ?
-                <span>text</span>
+                <span>{text}</span>
               :
                 <Input
                   onChange={this.onChange.bind(this, index, 'contactPerson')}

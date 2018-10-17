@@ -16,7 +16,7 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    disabled: false
+    disabled: true
   }
   public searchUrl () {
     let url: string
@@ -51,6 +51,7 @@ class Main extends React.Component<Props, State> {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
     const detail = this.props.detail
+    console.log(detail, 'detail')
     return (
       <div style={{width: '790px', marginLeft: '10px'}}>
         <Form
@@ -78,10 +79,11 @@ class Main extends React.Component<Props, State> {
                       value={detail.customerName}
                       onSelectCompany={(item) => {
                         fetchTianYanDetail(item.id).then((res) => {
+                          res.isConfirmed = 1
                           APP.dispatch({
                             type: 'change customer data',
                             payload: {
-                              detail: res
+                              detail: Object.assign({}, detail, res)
                             }
                           })
                         })
@@ -100,6 +102,7 @@ class Main extends React.Component<Props, State> {
                     <Button
                       type='primary'
                       onClick={() => {
+                        detail.isConfirmed = 0
                         this.setState({
                           disabled: false
                         })
@@ -197,7 +200,7 @@ class Main extends React.Component<Props, State> {
                         initialValue: detail.businessHoursBegin ? moment(detail.businessHoursBegin) : undefined
                       }
                     )(
-                      <DatePicker disabled={this.state.disabled}  />
+                      <DatePicker disabled={this.state.disabled} placeholder=''/>
                     )}
                   </FormItem>
                   <span
@@ -218,6 +221,7 @@ class Main extends React.Component<Props, State> {
                       }
                     )(
                       <DatePicker
+                        placeholder=''
                         disabled={this.state.disabled || detail.isFixedPeriod === 1}
                       />
                     )}
@@ -228,7 +232,7 @@ class Main extends React.Component<Props, State> {
                     {!disabled && getFieldDecorator(
                       'isFixedPeriod'
                     )(
-                      <Checkbox checked={detail.isFixedPeriod === 1}>无期限</Checkbox>
+                      <Checkbox checked={detail.isFixedPeriod === 1} disabled={this.state.disabled}>无期限</Checkbox>
                     )}
                   </FormItem>
                 </div>

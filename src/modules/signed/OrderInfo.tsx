@@ -22,7 +22,7 @@ class Main extends React.Component {
               <span>D00120180102001 </span>
             </div>
             <div className={styles.col}>
-              <label>签单销售</label>
+              <label>签单销售：</label>
               <span>2018-05-16</span>
             </div>
             <div className={styles.col}>

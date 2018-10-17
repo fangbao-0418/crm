@@ -1,14 +1,16 @@
 import React from 'react'
 import Profile from '@/modules/common/company-detail/Profile'
-import { Tabs } from 'antd'
+import { Tabs, Icon } from 'antd'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
 import CompanyList from './CompanyList'
 import OperateList from './OperateList'
 import Detail from './detail'
+const styles = require('./style')
 interface Props {
   customerId?: string
+  onClose?: () => void
 }
 class Main extends React.Component<Props> {
   public componentWillMount () {
@@ -23,6 +25,12 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div style={{ width: '800px'}}>
+        <span
+          className={styles['colse-icon']}
+          onClick={() => this.props.onClose()}
+        >
+          <Icon type='close' theme='outlined' />
+        </span>
         <Profile isShowAgent={true}/>
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
