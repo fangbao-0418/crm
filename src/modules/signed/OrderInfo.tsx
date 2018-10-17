@@ -40,7 +40,7 @@ class Main extends React.Component {
           </div>
           <div className={styles.marg}>
             <div className={styles.left}>
-              <Icon type="left" theme="outlined" />
+              <Icon type='left' theme='outlined' />
             </div>
             <div className={styles['order-con']}>
               <div className={styles.con}>
@@ -73,7 +73,7 @@ class Main extends React.Component {
               </div>
             </div>
             <div className={styles.right}>
-              <Icon type="right" theme="outlined" />
+              <Icon type='right' theme='outlined' />
             </div>
           </div>
           <div className={styles['order-bottom']}>

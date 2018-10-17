@@ -71,7 +71,7 @@ class Main extends React.Component<Props> {
     if (this.props.type !== 'customer') {
       const cityCode = APP.user.cityCode || '110100'
       fetchRegion({
-        parentId: cityCode , // 登陆的客户城市对应的地区
+        parentId: cityCode, // 登陆的客户城市对应的地区
         level: 3
       }).then((res) => {
         this.setState({
@@ -171,7 +171,8 @@ class Main extends React.Component<Props> {
         }
         const params = this.props.detail
         params.customerNameType = '1' // 后端不需要改代码所以加上
-        params.isConfirmed = '1' // 是否天眼查
+        // params.isConfirmed = this.state.isConfirmed // 是否天眼查
+        console.log(params.isConfirmed, 'params.isConfirmed')
         params.contactPersons = this.props.linkMan
         // delete params.tagIntention
         // delete params.tagTelephoneStatus
@@ -278,8 +279,16 @@ class Main extends React.Component<Props> {
                           key: 'customerName',
                           value: item.name
                         })
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 1
+                        })
                       }}
                       onChange={(e) => {
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 0
+                        })
                         this.handleChange(null, {
                           key: 'customerName',
                           value: e.target.value
@@ -330,8 +339,16 @@ class Main extends React.Component<Props> {
                           key: 'customerName',
                           value: item.name
                         })
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 1
+                        })
                       }}
                       onChange={(e) => {
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 0
+                        })
                         this.handleChange(null, {
                           key: 'customerName',
                           value: e.target.value

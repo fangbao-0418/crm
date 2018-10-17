@@ -1,11 +1,15 @@
 import React from 'react'
+import { LocaleProvider } from 'antd'
+import zhCN from 'antd/lib/locale-provider/zh_CN'
 const styles = require('./index.styl')
 export default class extends React.Component {
   render () {
     return (
-      <div>
-        <div className={styles.container}>Index</div>
-      </div>
+      <LocaleProvider locale={zhCN}>
+        <div>
+          <div className={styles.container}>Index</div>
+        </div>
+      </LocaleProvider>
     )
   }
 }

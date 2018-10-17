@@ -10,14 +10,7 @@ const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
   console.log(this, 'this')
   return [{
-    title: (
-      <span>
-        客户名称
-        <Tooltip placement='top' title='客户未被跟进的天数'>
-          <i className='fa fa-exclamation-circle ml5'></i>
-        </Tooltip>
-      </span>
-    ),
+    title: '客户名称',
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (
@@ -91,7 +84,14 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
-    title: '空置天数',
+    title: (
+      <span>
+        空置天数
+        <Tooltip placement='top' title='客户未被跟进的天数'>
+          <i className='fa fa-exclamation-circle ml5'></i>
+        </Tooltip>
+      </span>
+    ),
     dataIndex: 'freeDays'
   }, {
     title: '当前销售',

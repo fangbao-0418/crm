@@ -37,7 +37,7 @@ class Main extends React.Component<Business.Props> {
   public params: Business.SearchProps = {tab: '1'}
   public appointmentTime: string = ''
   public curSale: {key: string, label: string} = { key: '', label: ''}
-  public cityCode: string = ''
+  public city: {key: string, label: string }
   public reason: {value: string, label: string} = { value: '', label: ''}
   public columns = getColumns.call(this)
   public componentWillMount () {
@@ -163,6 +163,7 @@ class Main extends React.Component<Business.Props> {
         <div>
           <span>请选择预约时间：</span>
           <DatePicker
+            placeholder=''
             format={'YYYY-MM-DD'}
             onChange={(current) => {
               this.appointmentTime = current.format('YYYY-MM-DD')
@@ -302,15 +303,16 @@ class Main extends React.Component<Business.Props> {
         <div>
           <span>请选择客资池：</span>
           <Select
+            labelInValue
             style={{width:'200px'}}
-            onChange={(current: string) => {
-              this.cityCode = current
+            onChange={(val: {key: string, label: string, code?: string, name?: string}) => {
+              this.city = val
             }}
           >
             {
               this.state.citys.map((item, index) => {
                 return (
-                  <Select.Option value={item.code} key={item.code}>{item.name}</Select.Option>
+                  <Select.Option key={item.code}>{item.name}</Select.Option>
                 )
               })
             }
@@ -320,13 +322,14 @@ class Main extends React.Component<Business.Props> {
       title: '转客资池',
       mask: true,
       onOk: () => {
-        if (!this.cityCode) {
+        if (!this.city) {
           APP.error('请选择客资池！')
           return false
         }
         const cityparams = {
           customerIdArr: selectedRowKeys,
-          cityCode: this.cityCode
+          cityCode: this.city.key,
+          cityName: this.city.label
         }
         toCity(cityparams).then((res) => {
           this.setState({

@@ -164,7 +164,7 @@ class Main extends React.Component<Props, State> {
                 ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
             </Col> */}
-            <Col span={6}>
+            <Col span={8}>
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
