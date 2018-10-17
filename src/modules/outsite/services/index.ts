@@ -16,6 +16,7 @@ class ModuleService extends Service {
   public taskStatusDict: Map<string> = {
     UNDISTRIBUTED: '未分配', // 驳回
     DISTRIBUTED: '已分配', // 初始
+    WAITING: '待处理', // 已接收
     APPROVED: '已完成', // （外勤主管审核通过）', // 审批通过
     REFUSED: '已驳回', // （外勤/会计主管驳回）审批不通过
     RUNNING: '进行中', // 接受
@@ -62,6 +63,11 @@ class ModuleService extends Service {
     this.pageConf.pageSize = 10
   }
 
+  // 添加外勤任务
+  public addTaskItem (data: any = {}) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/add`, 'POST', data)
+  }
+
   // 批量删除
   public delListByIds (ids: Array<any> = []) {
     return Service.http(`api/remind`, 'DELETE', {ids})
@@ -104,8 +110,8 @@ class ModuleService extends Service {
   }
 
   // 获取全部任务列表
-  public getTplList () {
-    return Service.http(`/v1/api/outside/task/all?status=NORMAL&priority=&sytemFlag=`)
+  public getTplList (systemFlag: string = '') {
+    return Service.http(`${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=${systemFlag}`)
   }
 
   // 获取任务模板列表

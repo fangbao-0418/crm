@@ -29,15 +29,33 @@ class Main extends React.Component<any, any> {
   public state: any = {
     extshow: false,
     tplTaskList: [], // 任务模板列表
+    tplSubList: [], // 子任务列表
     tplTaskMap: {}, // 任务id:name map
     tplSubData: {}, // 子任务按照任务id分组数据
+    statusGroup: {
+      UNDISTRIBUTED: {
+        UNDISTRIBUTED: '未分配' // 驳回
+      },
+      DISTRIBUTED: {
+        DISTRIBUTED: '已分配', // 初始
+        WAITING: '待处理', // 已接收
+        REFUSED: '已驳回', // （外勤/会计主管驳回）审批不通过
+        RUNNING: '进行中' // 接受
+      },
+      APPROVED: {
+        APPROVED: '已完成', // （外勤主管审核通过）', // 审批通过
+        FINISHED: '已交付', // 子任务完成
+        CANCELLED: '已取消' // 取消
+      }
+    },
+    statusDict: {}, // @181017 产品确认：待分配、已分配、已完成三个状态的可筛选属性不同
     searchData: {
       names: '', // 客户或联系人名称
-      tplTaskid: '',
-      tplSubid: '',
+      templeteId: '',
+      subId: '',
       userName: '', // 外勤人员
       status: '',
-      areaId: '',
+      orgId: '',
       startTime: ''
     },
     areaData: [{
@@ -70,6 +88,22 @@ class Main extends React.Component<any, any> {
   }
 
   public componentWillMount () {
+    this.getTplTaskList()
+    this.setCurrentStatusDict()
+  }
+
+  public componentWillReceiveProps (props: any) {
+    this.setCurrentStatusDict(props.parData.tab)
+  }
+
+  // 设置当前的状态字典
+  public setCurrentStatusDict (tab: any = '') {
+    const { statusGroup } = this.state
+    tab = tab ? tab : this.props.parData.tab
+    console.log('?????????', this.props.parData.tab, statusGroup[tab])
+    this.setState({
+      statusDict: statusGroup[tab]
+    })
   }
 
   // 获取全部任务
@@ -128,7 +162,14 @@ class Main extends React.Component<any, any> {
     this.props.form.validateFields((err: any, values: any) => {
       // console.log('Received values of form: ', values)
       // this.props.onSearch(Object.assign({}, this.state.searchData, values))
-      const searchData = Object.assign({}, this.state.searchData, values)
+      const vals: Map<any> = {}
+      _.map(values, (val: any, key: any) => {
+        if (val) {
+          vals[key] = val
+        }
+      })
+      const searchData = Object.assign({}, this.state.searchData, vals)
+      console.log('search form change::', searchData, vals)
       this.setState({
         searchData
       }, () => {
@@ -177,14 +218,26 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`tplTaskid`, {
+        {getFieldDecorator(`templeteId`, {
           rules: [{
             required: false,
             message: ''
-          }],
-          placeholder: '选择子任务'
+          }]
         })(
-          <Select style={{width: '120px'}}>
+          <Select
+            style={{width: '120px'}}
+            onChange={(e: any) => {
+              this.syncSearchData({
+                templeteId: e
+              })
+              const sublist = this.state.tplSubData[e]
+              console.log('.......', e, sublist, this.state.tplSubData)
+              this.setState({
+                tplSubList: sublist ? sublist : []
+              })
+            }}
+            placeholder='全部任务名称'
+          >
             {this.createTaskNameOptions(this.state.tplTaskList)}
           </Select>
         )}
@@ -194,11 +247,24 @@ class Main extends React.Component<any, any> {
           rules: [{
             required: false,
             message: ''
-          }],
-          placeholder: '选择子任务'
+          }]
         })(
-          <Select style={{width: '120px'}}>
-            {this.createTaskNameOptions(this.state.tplTaskList)}
+          <Select
+            style={{width: '120px'}}
+            onChange={(e: any) => {
+              /*
+              this.syncSearchData({
+                tplTaskid: d
+              })
+              */
+              console.log('.......', e)
+              this.syncSearchData({
+                subId: e
+              })
+            }}
+            placeholder='全部当前子任务'
+          >
+            {this.createTaskNameOptions(this.state.tplSubList)}
           </Select>
         )}
         </FormItem>
@@ -236,9 +302,12 @@ class Main extends React.Component<any, any> {
                         status
                       })
                     }}
+                    placeholder='请选择服务状态'
                   >
                     {
-                      _.map(Service.taskStatusDict, (val: string, key: string) => {
+                      // _.map(Service.taskStatusDict, (val: string, key: string) => {
+                      // 待分配、已分配、已完成三个页面，可筛选状态不同
+                      _.map(this.state.statusDict, (val: string, key: string) => {
                         return <Select.Option key={`option-${key}`} value={key}>{val}</Select.Option>
                       })
                     }
