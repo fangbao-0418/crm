@@ -15,7 +15,7 @@ const { RangePicker } = DatePicker
 const data = [
   {
     name:'销售提单', // 节点名称
-    showContract: true, // 是否显示合同
+    showContract: false, // 是否显示合同
     showReminder: false, // 是否显示催办
     labelOwner: '签单销售', // 负责人标签文字
     ownerId: 111111, // 负责人标识
@@ -27,7 +27,7 @@ const data = [
   }, {
     name: '外勤任务',
     showContract: false,
-    showReminder: true,
+    showReminder: false,
     labelOwner: '签单销售',
     ownerId: 2222,
     labelSupervisor:'外勤主管',
@@ -140,7 +140,7 @@ class Show extends React.Component<any, any> {
         <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>
         </div>
         <div className={styles.topTitle}>
-        <Col span={4}>开始日期:{this.state.dataSource.startTime}</Col>
+        <Col span={4}>创建日期:{this.state.dataSource.createTime}</Col>
         </div>
         </Row>
         <Row >{
@@ -229,7 +229,7 @@ class Show extends React.Component<any, any> {
   }
   // 催单
   public getRemind (item: any) {
-    Service.getRemind(item.id, '1').then((res: any) => {
+    Service.getRemind(item.id).then((res: any) => {
       console.log('催单成功')
     }, () => {
 

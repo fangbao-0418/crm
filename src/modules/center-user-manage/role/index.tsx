@@ -68,8 +68,7 @@ class Main extends React.Component {
       onOk: () => {
         let ids
         type === 'batch' ? ids = this.state.selectedRowKeys : ids = [id]
-        // todo updateUser要从全局获取
-        delRole({ids, updateUser: 111111}).then(() => {
+        delRole({ids}).then(() => {
           this.getRoleList()
         })
       },
@@ -83,8 +82,7 @@ class Main extends React.Component {
       title: '禁用角色',
       content: '确定禁用角色吗？',
       onOk: () => {
-        const updateUser = 111 // todo 改为全局id
-        toggleForbidRole(id, updateUser, 1).then((res) => {
+        toggleForbidRole(id, 1).then((res) => {
           this.getRoleList()
         })
       },
@@ -94,8 +92,7 @@ class Main extends React.Component {
 
   // 启用
   public unforbidRole = (id: number) => {
-    const updateUser = 111 // todo 改为全局id
-    toggleForbidRole(id, updateUser, 0).then((res) => {
+    toggleForbidRole(id, 0).then((res) => {
       this.getRoleList()
     })
   }
@@ -112,8 +109,6 @@ class Main extends React.Component {
   // 点击确认
   public onOk (info: any) {
     const {mode, currentRoleId} = this.state
-    const updateUser = 111 // todo 改为登陆id
-    info.updateUser = updateUser
     if (mode === 'add') {
       addRole(info)
         .then((res) => {

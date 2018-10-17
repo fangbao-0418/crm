@@ -17,7 +17,6 @@ export default handleActions<Common.Props>({
     }
   },
   'change user info': (state, { payload }) => {
-    console.log(payload.user, 'reducer')
     return {
       ...state,
       user: payload.user

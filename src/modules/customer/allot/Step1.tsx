@@ -1,6 +1,7 @@
 import React from 'react'
 import { Select, Switch, Button } from 'antd'
-import { getCompanyByCitycode, getSalesByCompany } from '../api'
+import { getCompanyByCitycode } from '../api'
+import { getSalesByCompany } from '@/modules/common/api'
 const Option = Select.Option
 interface Props {
   onOk?: (value: ValueProps) => void

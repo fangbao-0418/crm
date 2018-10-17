@@ -74,8 +74,25 @@ class Main extends React.Component {
   // 获取部门信息
   public getDepartmentList () {
     fetchOrganizationList().then((res) => {
+      this.filterNoData(res)
       this.setState({dataSource: res})
     })
+  }
+
+  // 过滤空的部门信息，防止没有子部门还会有展开的加号
+  public filterNoData (data: any) {
+    function del (list: any[]) {
+      list.forEach((item: any) => {
+        if (item.organizationList) {
+          if (item.organizationList.length === 0) {
+            delete item.organizationList
+          } else {
+            del(item.organizationList)
+          }
+        }
+      })
+    }
+    del(data)
   }
 
   // 修改、添加部门

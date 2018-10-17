@@ -18,10 +18,21 @@ export default class extends React.Component {
     data: []
   }
   public columns: ColumnProps<DetailProps>[] = [{
-    title: '订单号',
-    dataIndex: 'orderId'
+    title: '工单号',
+    dataIndex: 'orderId',
+    render: (val) => {
+      return (
+        <a
+          onClick={() => {
+            window.open('http://www.baidu.com')
+          }}
+        >
+          {val}
+        </a>
+      )
+    }
   }, {
-    title: '对应工单',
+    title: '对应订单',
     dataIndex: 'workList'
   }, {
     title: '创建日期',

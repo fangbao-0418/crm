@@ -3,6 +3,7 @@ import Modal from 'pilipa/libs/modal'
 import { Button } from 'antd'
 import Provider from '@/components/Provider'
 import BaseInfo from '@/modules/customer/BaseInfo'
+import showDetail from './showDetail'
 export default function () {
   let ins: any
   const modal = new Modal({
@@ -49,7 +50,7 @@ export default function () {
             ins.refs.wrappedComponent.save().then((res: any) => {
               APP.success('保存成功') // 保存成功后跳转到详情页
               modal.hide()
-              this.show(res.data[0])
+              showDetail.call(this, res.data)
             }, () => {
               APP.error('保存失败')
             })

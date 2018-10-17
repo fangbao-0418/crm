@@ -209,10 +209,10 @@ class Main extends React.Component<any, any> {
         subList.push(nitem)
         formdata = {
           ...formdata,
-          checkedIdMap,
           subList
         }
         this.setState({
+          checkedIdMap,
           formdata
         })
       }

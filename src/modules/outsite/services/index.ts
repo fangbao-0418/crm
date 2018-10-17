@@ -99,13 +99,13 @@ class ModuleService extends Service {
     }
     conf = _.extend(cond, conf)
     return Service.http(
-      this.createUrl(`/${this.moduleName}/v1/api/outside/subtask/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+      this.createUrl(`/${this.moduleName}/v1/api/outside/task/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
     )
   }
 
   // 获取全部任务列表
   public getTplList () {
-    return Service.http(`/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=1`)
+    return Service.http(`/v1/api/outside/task/all?status=NORMAL&priority=&sytemFlag=`)
   }
 
   // 获取任务模板列表
