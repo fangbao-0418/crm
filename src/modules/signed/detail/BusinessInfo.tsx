@@ -147,7 +147,7 @@ class Main extends React.Component<Props, State> {
                 ) : <span>{detail.unifiedCreditCode}</span>}
               </FormItem>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
               <FormItem
                 // className='inline-block'
                 labelCol={{span: 8}}
@@ -163,7 +163,7 @@ class Main extends React.Component<Props, State> {
                   <Input disabled={this.state.disabled} />
                 ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
-            </Col>
+            </Col> */}
             <Col span={6}>
               <FormItem
                 labelCol={{span: 8}}
