@@ -11,7 +11,7 @@ const CheckboxGroup = Checkbox.Group
 
 interface Props extends FormComponentProps {
   mode: 'view' | 'add' | 'modify'
-  tab: 'System' | 'Proxy'
+  tab: 'System' | 'Agent' | 'DirectCompany'
   currentRoleId: number
   onOk: (info: any) => void
   onCancel: () => any
@@ -44,12 +44,12 @@ class Main extends React.Component<Props, State> {
     if (mode === 'add') {
       fetchNewRoleInfo(tab).then((res) => {
         this.endIds = this.getChildIds(res)
-        this.setState({info: {roleSystemAuthorityList: res}})
+        this.setState({info: {roleSystemAuthorityList: res}, checkedKeys: this.getCheckedIds(res)})
       })
     } else {
       fetchRoleInfo(tab, currentRoleId).then((res) => {
         this.endIds = this.getChildIds(res.roleSystemAuthorityList)
-        this.setState({info: res})
+        this.setState({info: res, checkedKeys: this.getCheckedIds(res.roleSystemAuthorityList)})
       })
     }
   }
@@ -73,12 +73,14 @@ class Main extends React.Component<Props, State> {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
       const {checkedKeys} = this.state
-      const checkIds = checkedKeys.filter((item: any) => this.endIds.includes(item))
+      const checkIds = checkedKeys.filter((item: any) => {
+        return this.endIds.some((i) => (item + '' === i))
+      })
       const payload: any = {}
       payload.roleName = val.name
       payload.shareFlag = val.share
-      payload.roleSystemAuthorityList = checkIds
-      payload.roleType = 'System'
+      payload.authorityIdList = checkIds
+      payload.roleType = this.props.tab
       this.props.onOk(payload)
     })
   }
@@ -102,6 +104,25 @@ class Main extends React.Component<Props, State> {
     }
     getId(data)
     return endIds
+  }
+
+  // 获取已勾选id
+  public getCheckedIds (data: any) {
+    const checkedIds: any[] = []
+    data = data || []
+    function getId (arr: any) {
+      arr.forEach((item: any) => {
+        if (item.authorityResponseList && item.authorityResponseList.length !== 0) {
+          getId(item.authorityResponseList)
+        } else {
+          if (item.enableFlag) {
+            checkedIds.push(item.id)
+          }
+        }
+      })
+    }
+    getId(data)
+    return checkedIds
   }
 
   // 渲染权限树形结构
@@ -155,11 +176,13 @@ class Main extends React.Component<Props, State> {
         title={this.state.title}
         visible={true}
         className={styles.wrap}
+        okButtonProps={{disabled: mode === 'view'}}
+        cancelButtonProps={{disabled: mode === 'view'}}
         onOk={this.onOk}
         onCancel={this.onCancel}
       >
         {
-          info.roleId
+          info
             ? <div>
                 <Form layout='inline'>
                   <FormItem className={styles.input} label='角色名称' required>

@@ -52,11 +52,18 @@ class Main extends React.Component {
         .then((res) => {
           this.getDepartmentList()
         })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
     } else if (mode === 'addRoot') {
       params.parentId = 0
-      addOrganization(params).then((res) => {
-        this.getDepartmentList()
-      })
+      addOrganization(params)
+        .then((res) => {
+          this.getDepartmentList()
+        })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
     } else if (mode === 'modify') {
       const data = {
         name: this.state.val

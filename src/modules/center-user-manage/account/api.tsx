@@ -61,7 +61,7 @@ export const fetchRegionList = (userId?: any) => {
   if (userId) {
     return http(`/user/v1/api/user/region/list/${userId}/Agent`)
   } else {
-    return http(`/user/v1/api/user/region/list`)
+    return http(`/user/v1/api/user/region/list/Agent`)
   }
 }
 
