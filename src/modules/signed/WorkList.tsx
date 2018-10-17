@@ -22,7 +22,13 @@ export default class extends React.Component {
     dataIndex: 'orderId',
     render: (val) => {
       return (
-        <a>{val}</a>
+        <a
+          onClick={() => {
+            window.open('http://www.baidu.com')
+          }}
+        >
+          {val}
+        </a>
       )
     }
   }, {
