@@ -14,3 +14,6 @@ export const update = (payload: Configure.ItemProps) => {
 export const deleteDict = (id: number) => {
   return http(`/config/v1/api/dict/${id}`, 'DELETE')
 }
+export const fetchDirecTypeList = () => {
+  return http(`/config/v1/api/dict/type`)
+}

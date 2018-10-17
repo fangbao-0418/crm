@@ -4,15 +4,8 @@ import { FormComponentProps } from 'antd/lib/form'
 import { fetchRegion } from '@/modules/common/api'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
-  detail?: {
-    channelname?: string
-    person?: string
-    pcode?: string
-    address?: string
-    mobile?: string
-    email?: string
-  }
-  readOnly?: boolean
+  item?: Organ.DirectItemProps
+  disabled?: boolean
 }
 class Main extends React.Component<Props> {
   public componentWillMount () {
@@ -31,6 +24,7 @@ class Main extends React.Component<Props> {
         sm: { span: 14 }
       }
     }
+    const { item, disabled } = this.props
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <Row>
@@ -43,9 +37,9 @@ class Main extends React.Component<Props> {
                 rules: [{
                   required: true, message: '请输入代理商!'
                 }],
-                initialValue: this.props.detail.channelname
+                initialValue: item.name
               })(
-                <Input placeholder='请输入' disabled={this.props.readOnly}/>
+                <Input placeholder='请输入' disabled={disabled}/>
               )}
             </FormItem>
           </Col>
@@ -58,9 +52,9 @@ class Main extends React.Component<Props> {
                 rules: [{
                   required: true, message: '请输入负责人!'
                 }],
-                initialValue: this.props.detail.person
+                initialValue: item.name
               })(
-                <Input placeholder='请输入' disabled={this.props.readOnly}/>
+                <Input placeholder='请输入' disabled={disabled}/>
               )}
             </FormItem>
           </Col>
@@ -73,56 +67,9 @@ class Main extends React.Component<Props> {
                 rules: [{
                   required: true, message: '请选择省份城市!'
                 }],
-                initialValue: this.props.detail.pcode
+                initialValue: item.name
               })(
                 <Input/>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label='地址：'
-            >
-              {getFieldDecorator('address', {
-                rules: [{
-                  required: true, message: '请输入地址!'
-                }],
-                initialValue: this.props.detail.address
-              })(
-                <Input placeholder='请输入' disabled={this.props.readOnly}/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label='手机：'
-            >
-              {getFieldDecorator('mobile', {
-                rules: [{
-                  required: true, message: '请输入手机号!'
-                }],
-                initialValue: this.props.detail.mobile
-              })(
-                <Input placeholder='请输入' disabled={this.props.readOnly}/>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label='邮箱：'
-            >
-              {getFieldDecorator('email', {
-                rules: [{
-                  required: true, message: '请输入邮箱!'
-                }],
-                initialValue: this.props.detail.email
-              })(
-                <Input placeholder='请输入' disabled={this.props.readOnly}/>
               )}
             </FormItem>
           </Col>

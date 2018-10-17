@@ -26,6 +26,14 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    // '/config': {
+    //   target: 'http://192.168.160.45:9001/',
+    //   changeOrigin: true,
+    //   secure: false,
+    //   pathRewrite: {
+    //     '^/config/v1': '/v1'
+    //   }
+    // },
     // '/crm-manage': {
     //   target: 'http://192.168.120.24:9016/',
     //   changeOrigin: true,

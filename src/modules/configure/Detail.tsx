@@ -1,11 +1,15 @@
 import React from 'react'
 import { Form, Input, Select, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
+import { fetchDirecTypeList } from './api'
 const Option = Select.Option
 interface Props extends FormComponentProps {
   item?: Configure.ItemProps
   onOk?: (value?: Configure.ItemProps) => void
   onCancel?: () => void
+}
+interface State {
+  typeList: Configure.TypeProps[]
 }
 const FormItem = Form.Item
 const formItemLayout = {
@@ -16,10 +20,21 @@ const formItemLayout = {
     span: 20
   }
 }
-class Main extends React.Component<Props> {
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    typeList: []
+  }
+  public componentWillMount () {
+    fetchDirecTypeList().then((res) => {
+      this.setState({
+        typeList: res
+      })
+    })
+  }
   public render () {
     const { getFieldDecorator } = this.props.form
     const item = this.props.item || {}
+    const { typeList } = this.state
     return (
       <div>
         <Form
@@ -48,9 +63,7 @@ class Main extends React.Component<Props> {
                 required: true, message: '类型不能为空'
               }]
             })(
-              <Select>
-                <Option key={'1'}>1</Option>
-              </Select>
+              <Input />
             )}
           </FormItem>
           <FormItem

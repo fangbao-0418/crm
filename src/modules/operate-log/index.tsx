@@ -49,8 +49,8 @@ class Main extends React.Component<null, State> {
             >
               查看
             </span>
-            <Divider type='vertical'/>
-            <span className='href'>删除</span>
+            {/* <Divider type='vertical'/> */}
+            {/* <span className='href'>删除</span> */}
           </div>
         )
       }

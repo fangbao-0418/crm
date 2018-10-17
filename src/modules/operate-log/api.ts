@@ -4,3 +4,6 @@ export const fetchList = (payload: OperateLog.SearchPayload = {}) => {
   payload.pageSize = payload.pageSize || 10
   return http(`/log/v1/api/operatingLog/findLogPage`, 'POST', payload)
 }
+export const fetchDetail = (id: string) => {
+  return http(`/log/v1/api/operatingLog/get/${id}`)
+}
