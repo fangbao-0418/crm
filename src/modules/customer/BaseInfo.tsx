@@ -354,15 +354,7 @@ class Main extends React.Component<Props> {
             <FormItem
               >
                 {getFieldDecorator(
-                  'customerSource',
-                  {
-                    rules: [
-                      {
-                        required: true,
-                        message: '客户来源不能为空'
-                      }
-                    ],
-                  }
+                  'customerSource'
                 )(
                   <FormItemLayout
                     label='客户来源'

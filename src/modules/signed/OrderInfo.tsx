@@ -1,96 +1,90 @@
 import React from 'react'
-import { Row, Col } from 'antd'
-import ContractInfo from './ContractInfo'
+import { Row, Col, Tooltip, Icon } from 'antd'
 import Modal from 'pilipa/libs/modal'
-import OrderTable from './OrderTable'
-import PayTable from './PayTable'
+import classNames from 'classnames'
 const styles = require('./style')
 class Main extends React.Component {
-  public viewContract () {
-    const modal = new Modal({
-      content: (
-        <OrderTable />
-      ),
-      title: '相关合同',
-      footer: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-  }
-  public viewPayInfo () {
-    const modal = new Modal({
-      content: (
-        <PayTable />
-      ),
-      title: '支付信息',
-      footer: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+  public state = {
+    remark: '订单备注备注备注'
   }
   public render () {
     return (
       <div>
-        <div className={styles.gray}>
-          <Row gutter={12}>
-            <Col span={8}>
+        <div className={classNames(styles.order, 'clear')}>
+          <div className={classNames(styles['order-info'])}>
+            <div className={classNames(styles.col, styles.note)}>
+              注
+              <Tooltip placement='top' title={this.state.remark}>
+              </Tooltip>
+            </div>
+            <div className={styles.col}>
               <label>订单号：</label>
               <span>D00120180102001 </span>
-            </Col>
-            <Col span={8}>
-              <label></label>
+            </div>
+            <div className={styles.col}>
+              <label>签单销售</label>
               <span>2018-05-16</span>
-            </Col>
-            <Col span={8}>
-              <label>销售：</label>
+            </div>
+            <div className={styles.col}>
+              <label>签单人：</label>
               <span>张磊</span>
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={8}>
-              <label>来源：</label>
-              <span>天眼查</span>
-            </Col>
-            <Col span={8}>
+            </div>
+            <div className={styles.col}>
               <label>状态：</label>
               <span>正常</span>
-            </Col>
-            <Col span={8}>
+            </div>
+            <div className={styles.col}>
               <label>服务账期：</label>
               <span>2018.01-2019.01</span>
-            </Col>
-          </Row>
-        </div>
-        <div className={styles.marg}>
-          <ContractInfo />
-          <ContractInfo />
-        </div>
-        <div>
-          <Row>
-            <Col span={3}>
+            </div>
+          </div>
+          <div className={styles.marg}>
+            <div className={styles.left}>
+              <Icon type="left" theme="outlined" />
+            </div>
+            <div className={styles['order-con']}>
+              <div className={styles.con}>
+                <div>小规模记账*12</div>
+                <div>
+                  <span className={classNames(styles.small, styles.black)}>¥</span>
+                  <span className={classNames(styles.big, styles.black)}>3600.00</span>
+                </div>
+              </div>
+              <div className={styles.con}>
+                <div>小规模记账*12</div>
+                <div>
+                  <span className={classNames(styles.small, styles.black)}>¥</span>
+                  <span className={classNames(styles.big, styles.black)}>3600.00</span>
+                </div>
+              </div>
+              <div className={styles.con}>
+                <div>小规模记账*12</div>
+                <div>
+                  <span className={classNames(styles.small, styles.black)}>¥</span>
+                  <span className={classNames(styles.big, styles.black)}>3600.00</span>
+                </div>
+              </div>
+              <div className={styles.con}>
+                <div>小规模记账*12</div>
+                <div>
+                  <span className={classNames(styles.small, styles.black)}>¥</span>
+                  <span className={classNames(styles.big, styles.black)}>3600.00</span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.right}>
+              <Icon type="right" theme="outlined" />
+            </div>
+          </div>
+          <div className={styles['order-bottom']}>
+            <div className={styles.col}>
               <span>共4个服务</span>
-            </Col>
-            <Col span={6}>
+            </div>
+            <div className={styles.col}>
               <label>订单金额：</label>
               <span>14000.00</span>
-            </Col>
-            <Col span={6}>
-              <label>实收：</label>
-              <span>3000.00</span>
-            </Col>
-            <Col span={9}>
-              <span className='fr'>
-                <a className='mr40' onClick={this.viewContract.bind(this)}>合同查看</a>
-                <a onClick={this.viewPayInfo.bind(this)}>支付查看</a>
-              </span>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       </div>
     )

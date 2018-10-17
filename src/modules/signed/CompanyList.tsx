@@ -27,33 +27,17 @@ export default class extends React.Component<Props> {
     title: '公司名称',
     dataIndex: 'customerName'
   }, {
-    title: '联系人',
-    dataIndex: 'contactPerson'
-  }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '所属机构',
     dataIndex: 'agencyName'
   }, {
-    title: '是否签单',
+    title: '签单状态',
     dataIndex: 'status',
     render: (val) => {
-      if (val === 4) {
-        return <span>是</span>
-      } else {
-        return <span>否</span>
-      }
+      return (APP.dictionary[`EnumCustomerStatus-${val}`])
     }
   }, {
     title: '开始账期',
     dataIndex: 'serveTimeBegin',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
-  }, {
-    title: '结束账期',
-    dataIndex: 'serveTimeEnd',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }

@@ -1,8 +1,12 @@
 import React from 'react'
-import { Form, Input, Select } from 'antd'
+import { Form, Input, Select, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 const Option = Select.Option
-type Props = FormComponentProps
+interface Props extends FormComponentProps {
+  item?: Configure.ItemProps
+  onOk?: (value?: Configure.ItemProps) => void
+  onCancel?: () => void
+}
 const FormItem = Form.Item
 const formItemLayout = {
   labelCol: {
@@ -15,6 +19,7 @@ const formItemLayout = {
 class Main extends React.Component<Props> {
   public render () {
     const { getFieldDecorator } = this.props.form
+    const item = this.props.item || {}
     return (
       <div>
         <Form
@@ -24,10 +29,11 @@ class Main extends React.Component<Props> {
             {...formItemLayout}
             label='Key值'
           >
-            {getFieldDecorator('email', {
+            {getFieldDecorator('value', {
               rules: [{
-                required: true, message: ''
-              }]
+                required: true, message: 'key值不能为空'
+              }],
+              initialValue: item.value
             })(
               <Input />
             )}
@@ -36,9 +42,25 @@ class Main extends React.Component<Props> {
             {...formItemLayout}
             label='类型'
           >
-            {getFieldDecorator('email', {
+            {getFieldDecorator('typeCode', {
+              initialValue: item.typeCode,
               rules: [{
-                required: true, message: ''
+                required: true, message: '类型不能为空'
+              }]
+            })(
+              <Select>
+                <Option key={'1'}>1</Option>
+              </Select>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label='所属系统'
+          >
+            {getFieldDecorator('sysCode', {
+              initialValue: item.sysCode,
+              rules: [{
+                required: true, message: '所属系统不能为空'
               }]
             })(
               <Select>
@@ -50,9 +72,10 @@ class Main extends React.Component<Props> {
             {...formItemLayout}
             label='键值'
           >
-            {getFieldDecorator('email', {
+            {getFieldDecorator('name', {
+              initialValue: item.name,
               rules: [{
-                required: true, message: ''
+                required: true, message: '键值不能为空'
               }]
             })(
               <Input />
@@ -62,14 +85,39 @@ class Main extends React.Component<Props> {
             {...formItemLayout}
             label='描述'
           >
-            {getFieldDecorator('email', {
-              rules: [{
-                required: true, message: ''
-              }]
+            {getFieldDecorator('typeName', {
+              initialValue: item.typeName
             })(
               <Input.TextArea />
             )}
           </FormItem>
+          <div className='text-right mt10'>
+            <Button
+              type='primary'
+              className='mr5'
+              onClick={() => {
+                if (this.props.onOk) {
+                  this.props.form.validateFields((errs, values) => {
+                    if (errs === null) {
+                      this.props.onOk(Object.assign({}, item, values))
+                    }
+                  })
+                }
+              }}
+            >
+              保存
+            </Button>
+            <Button
+              type='primary'
+              onClick={() => {
+                if (this.props.onCancel) {
+                  this.props.onCancel()
+                }
+              }}
+            >
+              取消
+            </Button>
+          </div>
         </Form>
       </div>
     )

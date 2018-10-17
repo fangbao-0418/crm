@@ -6,7 +6,7 @@ declare namespace Configure {
     sysCode?: string
   }
   export interface ItemProps {
-    id?: string
+    id?: number
     typeCode?: string
     typeName?: string
     value?: string
