@@ -19,7 +19,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div className='mt40'>
-       <Result onCancel={this.props.onCancel}  resuleData={this.props.resuleData}/>
+       <Result onCancel={this.props.onCancel} resuleData={this.props.resuleData}/>
       </div>
     )
   }

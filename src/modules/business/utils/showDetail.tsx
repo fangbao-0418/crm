@@ -70,6 +70,18 @@ export default function (customerId: string, customerName: string, index?: numbe
                 onClick={() => {
                   that.ins.save().then(() => {
                     APP.success('保存成功')
+                    APP.dispatch<Customer.Props>({
+                      type: 'change customer data',
+                      payload: {
+                        detailVisibleState: false
+                      }
+                    })
+                    APP.dispatch<Customer.Props>({
+                      type: 'change customer data',
+                      payload: {
+                        detailVisibleState: true
+                      }
+                    })
                   })
                 }}
               >

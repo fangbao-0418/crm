@@ -365,6 +365,8 @@ class Main extends React.Component<Business.Props> {
       mask: true,
       onCancel: () => {
         modal.hide()
+        this.fetchList()
+        this.fetchCount()
       }
     })
     modal.show()
