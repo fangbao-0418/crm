@@ -41,7 +41,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['释放时间', '创建时间', '最后跟进时间'],
+      label: ['释放时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
@@ -217,7 +217,7 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进时间') {
+    } else if (values.date.label === '最后跟进') {
       this.params.lastTrackTimeBegin = beginTime
       this.params.lastTrackTimeEnd = endTime
     }
