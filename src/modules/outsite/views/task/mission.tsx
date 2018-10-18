@@ -4,7 +4,7 @@ import Service from '@/modules/outsite/services'
 
 const RadioGroup = Radio.Group
 interface States {
-  value: number,
+  value: any,
   color: string,
   text: string,
   data: Array<any>
@@ -16,8 +16,8 @@ function onShowSizeChange (current: any, pageSize: any) {
 
 class Main extends React.Component<any, any> {
   public state: States = {
-    value:1,
-    color:'blue',
+    value: '',
+    color: 'blue',
     text : '注册公司：核名 网上申请 下发执照 刻章',
     data: []
   }

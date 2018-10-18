@@ -7,6 +7,7 @@ import SearchOrder from '@/modules/outsite/components/SearchOrder'
 import Mission from '@/modules/outsite/views/task/mission'
 import Other from '@/modules/outsite/views/task/other'
 import Service from '@/modules/outsite/services'
+import { TaskItem } from '@/modules/outsite/types/outsite'
 
 const TabPane = Tabs.TabPane
 function callback (key: string) {
@@ -23,17 +24,45 @@ const formItemLayout = {
 const Option = Select.Option
 const { MonthPicker, RangePicker } = DatePicker
 
-const dateFormat = 'YYYY/MM/DD'
-const monthFormat = 'YYYY/MM'
+const dateFormat = 'YYYY-MM-DD'
 
 // 列表
 class Main extends React.Component<any, any> {
   public constructor (props: any, state: any) {
     super(props)
     this.state = {
-      formdata: {}
+      formdata: {},
+      workerList: [],
+      item: {}
     }
     console.log('----------> props::', this.props)
+  }
+
+  public componentWillMount () {
+    this.getWorker()
+    this.getItem()
+  }
+
+  // 获取外勤人员
+  public getWorker () {
+    Service.getWorkerList().then((workerList: any) => {
+      this.setState({
+        workerList
+      })
+    })
+  }
+
+  // 获取当前外勤信息
+  public getItem () {
+    const params = this.props.match.params
+    if (!params.id) {
+      return
+    }
+    Service.getItemByTaskid(params.id).then((item: TaskItem) => {
+      this.setState({
+        item
+      })
+    })
   }
 
   // 下拉变更
@@ -48,7 +77,8 @@ class Main extends React.Component<any, any> {
       const data = Object.assign({}, this.state.formdata, values)
       console.log('Received values of form: ', data)
       Service.addTaskItem(data).then(() => {
-        // APP.history.push(`${Service.moduleName}/task/list`)
+        APP.success('操作成功')
+        APP.history.push(`/${Service.moduleName}/task/list`)
       })
     })
   }
@@ -81,7 +111,8 @@ class Main extends React.Component<any, any> {
     return (
     <div>
       <HCframe title='新增外勤任务'>
-        <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
+          <div style={{paddingBottom: '20px'}}>
+          <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
             <TabPane tab='通办任务' key='1'>
               <Mission onChange={this.onTaskidChange.bind(this)} />
             </TabPane>
@@ -89,6 +120,7 @@ class Main extends React.Component<any, any> {
               <Other onChange={this.onTaskidChange.bind(this)} />
             </TabPane>
           </Tabs>
+          </div>
           <div>
               <div>
                 <Form
@@ -103,7 +135,7 @@ class Main extends React.Component<any, any> {
                           message: '请输入订单编号'
                         }]
                       })(
-                        <Input placeholder='请输入订单编号' />
+                        <Input placeholder='请输入订单编号' value={this.state.item.orderNo} />
                       )}
                     </FormItem>
                   </Col>
@@ -112,7 +144,7 @@ class Main extends React.Component<any, any> {
                   <FormItem {...formItemLayout} label='公司名称'>
                     {getFieldDecorator('customerId', {
                     })(
-                      <Input disabled />
+                      <Input disabled value={this.state.item.customerName} />
                     )}
                   </FormItem>
                 </Row>
@@ -120,7 +152,7 @@ class Main extends React.Component<any, any> {
                   <FormItem {...formItemLayout} label='区域'>
                     {getFieldDecorator('areaId', {
                     })(
-                      <Input disabled />
+                      <Input disabled  value={this.state.item.areaName} />
                     )}
                   </FormItem>
                 </Row>
@@ -132,11 +164,12 @@ class Main extends React.Component<any, any> {
                         message: '请选择外勤'
                       }]
                     })(
-                      <Select onChange={this.handleChange} placeholder='请选择外勤人员'>
-                        <Option value='王小伟'>王小伟</Option>
-                        <Option value='王小伟'>王小伟</Option>
-                        <Option value='王小伟'>王小伟</Option>
-                        <Option value='王小伟'>王小伟</Option>
+                      <Select onChange={this.handleChange} placeholder='请选择外勤人员' value={this.state.item.userId}>
+                      {
+                        this.state.workerList.map((worker: any, i: number) => {
+                          return <Option key={`worker-${i}`} value={worker.id}>{worker.name}</Option>
+                        })
+                      }
                       </Select>
                     )}
                   </FormItem>
@@ -149,15 +182,15 @@ class Main extends React.Component<any, any> {
                         message: '请选择开始时间'
                       }]
                     })(
-                      <DatePicker style={{width:'100%'}} format={dateFormat} />
+                      <DatePicker style={{width:'100%'}} format={dateFormat} value={this.state.item.startTime} />
                     )}
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label='备注'>
-                    {getFieldDecorator('备注', {
+                    {getFieldDecorator('summary', {
                     })(
-                      <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} />
+                      <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} value={this.state.item.summary} />
                     )}
                   </FormItem>
                 </Row>

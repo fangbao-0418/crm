@@ -63,6 +63,11 @@ class ModuleService extends Service {
     this.pageConf.pageSize = 10
   }
 
+  // 获取外勤人员
+  public getWorkerList () {
+    return Service.http(`/user/v1/api/user/list/outWorker`)
+  }
+
   // 添加外勤任务
   public addTaskItem (data: any = {}) {
     return Service.http(`/${this.moduleName}/v1/api/outside/task/add`, 'POST', data)

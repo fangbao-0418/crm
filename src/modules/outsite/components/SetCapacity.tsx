@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, Modal, Divider } from 'antd'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 import '@/modules/common/styles/base.styl'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import Service from '@/modules/outsite/services'
@@ -13,7 +14,8 @@ interface States {
   modalVisible: boolean
   searchData: any,
   dataSource: TaskList,
-  item: TaskItem
+  item: TaskItem,
+  pageConf: any
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -24,8 +26,15 @@ class Main extends React.Component<any, any> {
   public item: any
   public state: States = {
     selectedRowKeys: [],
+    pageConf: {
+      total: 0,
+      size: 10,
+      current: 1
+    },
     searchData: {
-      systmeFlag: '0'
+      systemFlag: '0',
+      pageCurrent: 1,
+      pageSize: 10
     },
     item: {},
     dataSource: [],
@@ -37,7 +46,16 @@ class Main extends React.Component<any, any> {
     dataIndex: 'name'
   }, {
     title: '子任务',
-    dataIndex: 'age'
+    dataIndex: 'age',
+    render: (k: any, item: TaskItem) => {
+      if (!item || !item.subList) {
+        return
+      }
+      const data = _.map(item.subList, (subitem: any) => {
+        return subitem.name
+      })
+      return data.join(',')
+    }
   }, {
     title: '操作',
     dataIndex: 'operation',
@@ -46,7 +64,12 @@ class Main extends React.Component<any, any> {
       <span>
                     <span onClick={() => {this.onShow.bind(this)(item)}} style={{color: '#1890ff'}} className='likebtn'>编辑</span>
                     <Divider type='vertical' style={{color: '#979797'}}/>
-                    <span onClick={() => {this.showDisableModal.bind(this)(item)}} style={{color: '#1890ff'}} className='likebtn'>禁用</span>
+                    <span
+                      onClick={() => {this.showDisableModal.bind(this)(item)}}
+                      className={`likebtn ${item.status === 'NORMAL' ? 'a' : 'likebtn-disabled'}`}
+                    >
+                      {item.status === 'NORMAL' ? '禁用' : '启用'}
+                    </span>
         </span>
       )
     }
@@ -90,8 +113,16 @@ class Main extends React.Component<any, any> {
   // 获取列表数据
   public getList () {
     Service.getTplListByCond(this.state.searchData).then((res: any) => {
+      if (!res || !res.records) {
+        return
+      }
+      const { pageConf, searchData } = this.state
+      searchData.pageSize = pageConf.size = res.pageSize
+      searchData.pageCurrent = pageConf.current = res.pageCurrent
+      pageConf.total = res.pageTotal
       this.setState({
-        dataSource: res.records
+        dataSource: res.records,
+        searchData
       })
     })
   }
@@ -103,9 +134,8 @@ class Main extends React.Component<any, any> {
   // 显示禁用提醒框
   public showDisableModal (item: any) {
     this.setState({
-      modalVisible: true
-    }, () => {
-      this.item = item
+      modalVisible: true,
+      item
     })
   }
   public hideDisableModal () {
@@ -116,8 +146,10 @@ class Main extends React.Component<any, any> {
 
   // 禁用
   public onDisable () {
-    this.item.status = 'FORBIDDEN'
-    Service.addTplItem(this.item).then(() => {
+    const { item } = this.state
+    item.status = item.status === 'FORBIDDEN' ? 'NORMAL' : 'FORBIDDEN'
+    Service.addTplItem(item).then(() => {
+      this.getList()
       this.hideDisableModal()
     })
   }
@@ -129,6 +161,20 @@ class Main extends React.Component<any, any> {
         columns={this.columns}
         dataSource={this.state.dataSource}
         size='small'
+        pagination={{
+          ...this.state.pageConf,
+          onChange: (page: any) => {
+            const { pageConf, searchData } = this.state
+            pageConf.current = page
+            searchData.pageCurrent = page
+            this.setState({
+              pageConf,
+              searchData
+            }, () => {
+              this.getList()
+            })
+          }
+        }}
       />
       <Modal
         title='确认信息'
@@ -138,7 +184,7 @@ class Main extends React.Component<any, any> {
         okText='确认'
         cancelText='取消'
       >
-        确定删除商品关系？
+        确定{this.state.item.status === 'NORMAL' ? '禁用' : '启用'} {this.state.item.name} 任务吗？
       </Modal>
     </div>
     )

@@ -11,9 +11,15 @@ export const add = (payload: Configure.ItemProps) => {
 export const update = (payload: Configure.ItemProps) => {
   return http(`/config/v1/api/dict`, 'PUT', payload)
 }
-export const deleteDict = (id: number) => {
+export const deleteDict = (id: string) => {
   return http(`/config/v1/api/dict/${id}`, 'DELETE')
+}
+export const batchDeleteDict = (ids: string[]) => {
+  return http(`/config/v1/api/dict`, 'DELETE', ids)
 }
 export const fetchDirecTypeList = () => {
   return http(`/config/v1/api/dict/type`)
+}
+export const fetchSystemList = () => {
+  return http(`/config/v1/api/dict?typeCode=system_name`)
 }

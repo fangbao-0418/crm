@@ -180,6 +180,7 @@ class Main extends React.Component<any, any> {
 
   // 挂父组件回调
   public hookCallback () {
+    console.log('search form callback::', this.state.searchData)
     this.props.onSearch(this.state.searchData)
   }
 
