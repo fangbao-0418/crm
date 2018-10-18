@@ -46,43 +46,43 @@ const data: TaskList = [
   }
 ]
 
-const trackdata: any = [
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  },
-  {
-    userName: '李小龙',
-    createTime: '2018-09-12',
-    content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
-  }
-]
+// const trackdata: any = [
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   },
+//   {
+//     userName: '李小龙',
+//     createTime: '2018-09-12',
+//     content: '拉丝机的反馈垃圾收代理费卡世纪东方去玩儿群翁日期我二群翁日期我二了静安寺两地分居阿里山的叫法是两地分居我去问破日去外婆俄日缷'
+//   }
+// ]
 
 interface States {
   modalTitle: string,
@@ -108,6 +108,7 @@ class Main extends React.Component<any> {
     modalChangeVisible: false, // 转交他人
     dataSource: [],
     selectedRowKeys: [],
+    trackdata: [], // 跟进小计
     pageConf: {
       currentPage: 1,
       total: 1,
@@ -196,7 +197,12 @@ class Main extends React.Component<any> {
     this.taskid = this.props.match.params.id
     this.getList()
     Service.getLogByTaskid('1').then((res: any) => {
-      console.log('跟进日志', res)
+      console.log('跟进日志的数据：：：：：：', res)
+      if (res) {
+        this.setState({
+          trackdata:res
+        })
+      }
     })
   }
 
@@ -205,7 +211,7 @@ class Main extends React.Component<any> {
 
   // 全选反选
   public onSelectAllChange (selectedRowKeys: any) {
-    console.log('select')
+    console.log('select', selectedRowKeys)
     this.setState({selectedRowKeys})
   }
 
@@ -265,7 +271,7 @@ class Main extends React.Component<any> {
     if (!selectedRowKeys.length) {
       return
     }
-    console.log('list::', selectedRowKeys)
+    console.log('批量分配list::', selectedRowKeys)
     // service.delList(selectedRowKeys)
   }
 
@@ -291,6 +297,11 @@ class Main extends React.Component<any> {
     }
     Service.AuditTaskSure(params).then((res: any) => {
       console.log('审批任务确定', res)
+      if (res) {
+        this.setState({
+          modalCancelVisible: false
+        })
+      }
     })
   }
 
@@ -359,6 +370,7 @@ class Main extends React.Component<any> {
     this.setState({
       modalAllotVisible: true
     })
+    console.log('批量的ids', this.state.selectedRowKeys)
   }
   public hideAllotModal () {
     this.setState({
@@ -395,6 +407,7 @@ class Main extends React.Component<any> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { trackdata } = this.state
     return (
     <div className={styles.container}>
       <HCframe title='客户的名称在这里显示'>
@@ -416,10 +429,10 @@ class Main extends React.Component<any> {
               <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
                 <div className={styles.trackbox}>
                 {
-                  trackdata.map((item: any, index: number) => {
+                  trackdata.length > 0 && trackdata.map((item: any, index: number) => {
                     return (
                     <div className={styles.trackitem} key={`trackitem-${index}`}>
-                      <div><em>{item.userName}</em><span>{item.createTime}</span></div>
+                      <div><em>{item.userName}</em><span>{item.updateTime}</span></div>
                       <p>{item.content}</p>
                     </div>)
                   })
