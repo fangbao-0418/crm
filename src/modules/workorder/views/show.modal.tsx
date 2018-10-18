@@ -1,5 +1,6 @@
 import React from 'react'
 import Service from '@/modules/workorder/api'
+import {  Row, Col } from 'antd'
 
 const styles = require('../styles/show.modal.styl')
 const data =
@@ -27,12 +28,30 @@ class Main extends React.Component<Props, any, any> {
   public render () {
     return (
       <div className={styles['page-show']}>
-        <div className={styles.div}>姓名:{this.props.data.name}</div>
-        <div className={styles.div}>代理商:{this.props.data.name}</div>
-        <div className={styles.div}>部门名称:{this.props.data.name}</div>
-        <div className={styles.div}>汇报上级:{this.props.data.parentId}</div>
-        <div className={styles.div}>联系电话:{this.props.data.phone}</div>
-        <div className={styles.div}>邮箱:{this.props.data.email}</div>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>姓名:</Col>
+          <Col span={20}>{this.props.data.name}</Col>
+        </Row>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>代理商:</Col>
+          <Col span={20}>{this.props.data.name}</Col>
+        </Row>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>部门名称:</Col>
+          <Col span={20}>{this.props.data.name}</Col>
+        </Row>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>汇报上级:</Col>
+          <Col span={20}>{this.props.data.parentId}</Col>
+        </Row>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>联系电话:</Col>
+          <Col span={20}>{this.props.data.phone}</Col>
+        </Row>
+        <Row className={styles.div}>
+          <Col className={styles.title} span={4}>邮箱:</Col>
+          <Col span={20}>{this.props.data.email}</Col>
+        </Row>
       </div>
     )
   }
