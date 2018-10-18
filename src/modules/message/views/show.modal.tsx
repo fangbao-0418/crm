@@ -47,8 +47,8 @@ class Main extends React.Component<Props, any> {
     return (
       <div className={styles['page-show']}>
         <h5>{title ? title : ''}</h5>
-        <div>发送人：{sender.username}</div>
-        <div>时间：{createdAt}</div>
+        <div>提出人：{sender.username}</div>
+        <div>时&nbsp;&nbsp;&nbsp;&nbsp;间：{createdAt}</div>
         <div className={styles.content}>{content}</div>
       </div>
     )

@@ -104,7 +104,7 @@ class Main extends React.Component<Business.Props> {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进时间') {
+    } else if (values.date.label === '最后跟进') {
       this.params.lastTrackBeginTime = beginTime
       this.params.lastTrackEndTime = endTime
     }

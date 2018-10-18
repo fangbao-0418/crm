@@ -50,7 +50,7 @@ export const ossUpload = (file: File): Promise<any> => {
         stsToken: res.credentials.securityToken,
         bucket: res.bucket
       })
-      store.multipartUpload<any, any>(name, file).then((res2: any) => {
+      store.put<any, any>(name, file).then((res2: any) => {
         resolve(res2)
       })
     })

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Input, Select, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchDirecTypeList } from './api'
+import { fetchDirecTypeList, fetchSystemList } from './api'
 const Option = Select.Option
 interface Props extends FormComponentProps {
   item?: Configure.ItemProps
@@ -10,19 +10,21 @@ interface Props extends FormComponentProps {
 }
 interface State {
   typeList: Configure.TypeProps[]
+  systemList: Configure.SystemProps[]
 }
 const FormItem = Form.Item
 const formItemLayout = {
   labelCol: {
-    span: 4
+    span: 5
   },
   wrapperCol: {
-    span: 20
+    span: 19
   }
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    typeList: []
+    typeList: [],
+    systemList: []
   }
   public componentWillMount () {
     fetchDirecTypeList().then((res) => {
@@ -30,11 +32,16 @@ class Main extends React.Component<Props, State> {
         typeList: res
       })
     })
+    fetchSystemList().then((res) => {
+      this.setState({
+        systemList: res
+      })
+    })
   }
   public render () {
     const { getFieldDecorator } = this.props.form
     const item = this.props.item || {}
-    const { typeList } = this.state
+    const { systemList } = this.state
     return (
       <div>
         <Form
@@ -70,14 +77,22 @@ class Main extends React.Component<Props, State> {
             {...formItemLayout}
             label='所属系统'
           >
-            {getFieldDecorator('sysCode', {
-              initialValue: item.sysCode,
+            {getFieldDecorator('system', {
+              initialValue: item.sysCode ? { key: item.sysCode } : undefined,
               rules: [{
                 required: true, message: '所属系统不能为空'
               }]
             })(
-              <Select>
-                <Option key={'1'}>1</Option>
+              <Select
+                labelInValue
+              >
+                {
+                  systemList.map((val) => {
+                    return (
+                      <Option key={val.value}>{val.name}</Option>
+                    )
+                  })
+                }
               </Select>
             )}
           </FormItem>
@@ -112,6 +127,9 @@ class Main extends React.Component<Props, State> {
                 if (this.props.onOk) {
                   this.props.form.validateFields((errs, values) => {
                     if (errs === null) {
+                      values.sysCode = values.system.key
+                      values.sysName = values.system.label
+                      delete values.system
                       this.props.onOk(Object.assign({}, item, values))
                     }
                   })
