@@ -69,6 +69,7 @@ class Main extends React.Component<Props> {
                 <span>{text}</span>
               :
                 <Input
+                  max='11'
                   onChange={this.onChange.bind(this, index, 'contactPhone')}
                   value={text}
                 />

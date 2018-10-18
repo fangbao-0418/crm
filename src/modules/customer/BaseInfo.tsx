@@ -478,6 +478,7 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <Input
+                  maxlength='11'
                   required
                   label='主联系电话'
                   disabled={disabled}

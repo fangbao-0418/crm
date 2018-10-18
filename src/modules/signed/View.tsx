@@ -10,6 +10,7 @@ import Detail from './detail'
 const styles = require('./style')
 interface Props {
   customerId?: string
+  customerName?: string
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
@@ -31,16 +32,16 @@ class Main extends React.Component<Props> {
         >
           <Icon type='close' theme='outlined' />
         </span>
-        <Profile isShowAgent={true}/>
+        <Profile isShowAgent={true} customerName={this.props.customerName}/>
         <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
-            <Detail />
+            <Detail/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='订单信息' key='2'>
             <OrderInfo />
           </Tabs.TabPane>
           <Tabs.TabPane tab='工单信息' key='3'>
-            <WorkList/>
+            <WorkList customerId={this.props.customerId}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='相关公司' key='4'>
             <CompanyList customerId={this.props.customerId}/>

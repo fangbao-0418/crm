@@ -22,7 +22,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           <span
             className='href'
             onClick={() => {
-              const modal = showDetail.call(this, record.id, index, () => {
+              const modal = showDetail.call(this, record.id, record.customerName, index, () => {
                 const business: any = store.getState().business
                 const tab = business.selectedTab
                 const { searchPayload, pagination } = business[tab]

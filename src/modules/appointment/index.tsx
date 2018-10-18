@@ -90,7 +90,7 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
+        <span className='href' onClick={this.show.bind(this, record.id, record.customerName)}>{val}</span>
       )
     }
   }, {
@@ -210,8 +210,8 @@ class Main extends React.Component {
     this.params[values.key] = values.value || undefined
     this.fetchList()
   }
-  public show (customerId: string) {
-    showDetail.call(this, customerId)
+  public show (customerId: string, customerName: string) {
+    showDetail.call(this, customerId, customerName)
   }
   public render () {
     const { pagination } = this.state
