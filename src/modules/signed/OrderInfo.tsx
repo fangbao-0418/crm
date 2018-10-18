@@ -13,13 +13,13 @@ interface States {
     createTime: string
     salerName: string
     status: number
-    serviceStart: string
-    serviceEnd: string
+    startDate: string
+    endDate: string
     amount: number
     remark: string
     products?: Array<{
       productName: string
-      productNum: number
+      quantity: number
       productSalePrice: string
     }>
   }>
@@ -31,13 +31,13 @@ class Main extends React.Component<Props> {
       createTime: '2018-10-11',
       salerName: '张三三',
       status: 1,
-      serviceStart: '2018-09-10',
-      serviceEnd: '2018-11-12',
+      startDate: '2018-09-10',
+      endDate: '2018-11-12',
       amount: 2000,
       remark: '11111',
       products: [{
         productName: '小规模记账',
-        productNum: 12,
+        quantity: 12,
         productSalePrice: '4800.00'
       }]
     }]
@@ -80,7 +80,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>服务账期：</label>
-                    <span>{item.serviceStart}-{item.serviceEnd}</span>
+                    <span>{item.startDate}-{item.endDate}</span>
                   </div>
                 </div>
                 <div className={styles.marg}>
@@ -92,7 +92,7 @@ class Main extends React.Component<Props> {
                       item.products.map((children, index1) => {
                         return (
                           <div className={styles.con} key={index1}>
-                            <div>{children.productName}*{children.productNum}</div>
+                            <div>{children.productName}*{children.quantity}</div>
                             <div>
                               <span className={classNames(styles.small, styles.black)}>¥</span>
                               <span className={classNames(styles.big, styles.black)}>{children.productSalePrice}</span>
