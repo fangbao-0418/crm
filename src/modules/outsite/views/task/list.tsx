@@ -136,16 +136,16 @@ class Main extends React.Component {
     render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span>{item.status}</span>
+        <span>{Service.taskStatusDict[item.status]}</span>
       </>)
     }
   }, {
     title: '任务名称',
-    dataIndex: 'category',
+    dataIndex: 'name',
     render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span>{item.category}</span>
+        <span>{item.name}</span>
       </>)
     }
   }, {
@@ -161,7 +161,7 @@ class Main extends React.Component {
     dataIndex: 'subtaskStatus',
     render: (k: any, item: TaskItem) => {
       return (
-        <span>{item.subList.length && item.subList[0].status}</span>
+        <span>{item.subList.length && Service.subStatusDict[item.subList[0].status]}</span>
       )
     }
   }, {
@@ -314,6 +314,11 @@ class Main extends React.Component {
     // this.getList() // 不同状态参数
   }
 
+  // 导出
+  public export () {
+
+  }
+
   public render () {
     const searchPorps = {
       onSearch: this.onSearch.bind(this)
@@ -324,15 +329,15 @@ class Main extends React.Component {
     }
     return (
     <div className={styles.container}>
-      <HCframe title='外勤任务'>
+      <HCframe
+        title='外勤任务'
+        act={<div>
+          <a onClick={this.export.bind(this)} className='btn'><i></i> 导出</a>
+        </div>}
+      >
         <Row>
           <Col span={20}>
             <SearchForm parData={this.state} onSearch={this.onSearch.bind(this)} />
-          </Col>
-          <Col span={4} style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button size={'small'} onClick={this.delList.bind(this)}>导出</Button>
-            </span>
           </Col>
         </Row>
         <Row>
