@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Divider } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchDirectList } from '../api'
+import { fetchDirectList, changeCompanyInfo } from '../api'
 import { Modal } from 'pilipa'
 import Detail from './detail'
 interface State {
@@ -41,6 +41,8 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '操作',
+      width: 160,
+      align: 'center',
       render: (text, record) => {
         return (
           <div>
@@ -77,7 +79,14 @@ class Main extends React.Component<{}, State> {
   }
   public fetchList () {
     fetchDirectList(this.payload).then((res) => {
-      console.log(res)
+      this.setState({
+        dataSource: res.records,
+        pagination: {
+          total: res.pageTotal,
+          current: res.pageCurrent,
+          pageSize: res.pageSize
+        }
+      })
     })
   }
   public show (type: 'view' | 'update', record: Organ.DirectItemProps) {
@@ -85,6 +94,17 @@ class Main extends React.Component<{}, State> {
       title: '新增',
       content: (
         <Detail
+          disabled={type === 'view'}
+          item={record}
+          onOk={(values) => {
+            console.log(values)
+            changeCompanyInfo(values).then((res) => {
+              this.fetchList()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
         />
       ),
       footer: null
@@ -97,6 +117,7 @@ class Main extends React.Component<{}, State> {
       <div>
         <div>
           <Table
+            bordered
             columns={this.columns}
             dataSource={dataSource}
           />

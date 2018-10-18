@@ -9,8 +9,12 @@ declare namespace Configure {
     typeCode: string
     typeName: string
   }
+  export interface SystemProps {
+    name: string
+    value: string
+  }
   export interface ItemProps {
-    id?: number
+    id?: string
     typeCode?: string
     typeName?: string
     value?: string

@@ -5,7 +5,7 @@ import { Input, Select, Table, Divider, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { Modal } from 'pilipa'
 import Detail from './Detail'
-import { fetchList, add, update, deleteDict, fetchDirecTypeList } from './api'
+import { fetchList, add, update, deleteDict, batchDeleteDict, fetchDirecTypeList } from './api'
 const Search = Input.Search
 const Option = Select.Option
 const styles = require('./style')
@@ -130,6 +130,9 @@ class Main extends React.Component<null, States> {
   public batchDelete () {
     const { selectedRowKeys } = this.state
     console.log(selectedRowKeys, 'selectedRowKeys')
+    batchDeleteDict(selectedRowKeys).then(() => {
+      this.fetchList()
+    })
   }
   public render () {
     const { dataSource, pagination, typeList } = this.state
@@ -184,6 +187,7 @@ class Main extends React.Component<null, States> {
         <div className={styles.table}>
           <Table
             rowSelection={rowSelection}
+            rowKey='id'
             columns={this.columns}
             dataSource={dataSource}
             pagination={{
