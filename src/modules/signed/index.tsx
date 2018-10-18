@@ -7,7 +7,7 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import SearchName from '@/modules/common/search/SearchName'
 import Provider from '@/components/Provider'
 import View from './View'
-import { fetchList, toOther } from './api'
+import { fetchList, toOther, fetchWorkers } from './api'
 import _ from 'lodash'
 import moment from 'moment'
 type DetailProps = Signed.DetailProps
@@ -23,7 +23,8 @@ interface States {
     total: number
     current: number
     pageSize: number
-  }
+  },
+  worders: Array<{id: string, name: string}>
 }
 class Main extends React.Component {
   public state: States = {
@@ -33,7 +34,8 @@ class Main extends React.Component {
       total: 0,
       current: 1,
       pageSize: 15
-    }
+    },
+    worders: []
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
@@ -167,6 +169,7 @@ class Main extends React.Component {
   }]
   public componentWillMount () {
     this.fetchList()
+    this.fetchAllWorker()
   }
   public fetchList () {
     this.params = $.extend(true, {}, this.paramsleft, this.paramsright)
@@ -179,6 +182,13 @@ class Main extends React.Component {
       this.setState({
         pagination,
         dataSource: res.data
+      })
+    })
+  }
+  public fetchAllWorker () {
+    fetchWorkers(APP.user.companyId).then((res) => {
+      this.setState({
+        worders: res
       })
     })
   }
@@ -270,8 +280,13 @@ class Main extends React.Component {
               this.curSale = val
             }}
           >
-            <Option key='1'>销售1</Option>
-            <Option key='2'>销售2</Option>
+            {
+              this.state.worders.map((item, index) => {
+                return (
+                  <Option key={item.id}>{item.name}</Option>
+                )
+              })
+            }
           </Select>
         </div>
       ),

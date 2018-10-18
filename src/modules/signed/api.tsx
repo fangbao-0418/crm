@@ -21,3 +21,9 @@ export const fetchRelatedCompanyListy = (customerId: string) => {
 export const fetchWorks = (customerId: string) => {
   return http(`/crm-manage/v1/api/order/list/${customerId}`)
 }
+export const fetchWorkers = (companyId: string) => {
+  return http(`/user/v1/api/user/list/company/${companyId}`)
+}
+export const fetchOrders = (customerId: string) => { // 服务调什么
+  return http(`/crm-manage/v1/api/shop/order/orders/c-org-id?customerOrgId=${customerId}`)
+}
