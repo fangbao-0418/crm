@@ -18,3 +18,6 @@ export const toOther = (payload: {
 export const fetchRelatedCompanyListy = (customerId: string) => {
   return http(`/crm-manage/v1/api/related_company/${customerId}`)
 }
+export const fetchWorks = (customerId: string) => {
+  return http(`/crm-manage/v1/api/order/list/${customerId}`)
+}

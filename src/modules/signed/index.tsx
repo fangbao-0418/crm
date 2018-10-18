@@ -301,6 +301,7 @@ class Main extends React.Component {
         <Provider>
           <View
             customerId={record.id}
+            customerName={record.customerName}
             onClose={() => {
               this.fetchList()
               modal.hide()

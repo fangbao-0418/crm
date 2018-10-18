@@ -21,6 +21,7 @@ interface Props extends InputProps {
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   field?: string
+  maxlength?: string
 }
 class Main extends React.Component<Props> {
   public type: any

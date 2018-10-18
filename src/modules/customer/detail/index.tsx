@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
   customerId: string
+  customerName?: string
   type?: 'business' | 'open' | 'customer'
   detail?: Customer.DetailProps
   footer?: React.ReactNode
@@ -92,7 +93,7 @@ class Main extends React.Component<Props> {
         </span>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Profile type={type}/>
+            <Profile type={type} customerName={this.props.customerName}/>
             <Card
               title='基本信息'
               showFold

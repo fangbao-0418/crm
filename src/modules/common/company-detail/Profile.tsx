@@ -4,7 +4,8 @@ import moment from 'moment'
 const styles = require('./style')
 interface Props extends Customer.Props {
   isShowAgent?: boolean
-  type?: 'business' | 'open' | 'customer'
+  type?: 'business' | 'open' | 'customer',
+  customerName?: string
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -27,7 +28,7 @@ class Main extends React.Component<Props> {
             }
             {/* <span className={styles.telphone} />
             <span className='mr20 ml10'>电话</span> */}
-            <span className={styles.tyc} onClick={() => {window.open('https://www.tianyancha.com/login?from=https%3A%2F%2Fwww.tianyancha.com%2Fsearch%3Fkey%3D%25E5%258C%2597%25E4%25BA%25AC%25E7%2588%25B1%25E5%25BA%25B7%25E9%25BC%258E%25E7%25A7%2591%25E6%258A%2580%25E6%259C%2589%25E9%2599%2590%25E5%2585%25AC%25E5%258F%25B8')}}/>
+            <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.customerName}`)}}/>
             <span className='mr20 ml10'>天眼查</span>
           </p>
           <p>
