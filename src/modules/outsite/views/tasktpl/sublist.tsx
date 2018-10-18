@@ -173,7 +173,21 @@ class Main extends React.Component<any, any> {
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
-          pagination={this.state.pageConf}
+          pagination={{
+            ...this.state.pageConf,
+            onChange: (page: any) => {
+              const { pageConf, searchData } = this.state
+              pageConf.current = page
+              searchData.pageCurrent = page
+              this.setState({
+                pageConf,
+                searchData
+              }, () => {
+                this.getList()
+              })
+            }
+
+          }}
         />
         </Row>
       </HCframe>

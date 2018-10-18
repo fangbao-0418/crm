@@ -14,7 +14,8 @@ interface States {
   modalVisible: boolean
   searchData: any,
   dataSource: TaskList,
-  item: TaskItem
+  item: TaskItem,
+  pageConf: any
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -25,8 +26,15 @@ class Main extends React.Component<any, any> {
   public item: any
   public state: States = {
     selectedRowKeys: [],
+    pageConf: {
+      total: 0,
+      size: 10,
+      current: 1
+    },
     searchData: {
-      systmeFlag: '0'
+      systemFlag: '0',
+      pageCurrent: 1,
+      pageSize: 10
     },
     item: {},
     dataSource: [],
@@ -105,8 +113,16 @@ class Main extends React.Component<any, any> {
   // 获取列表数据
   public getList () {
     Service.getTplListByCond(this.state.searchData).then((res: any) => {
+      if (!res || !res.records) {
+        return
+      }
+      const { pageConf, searchData } = this.state
+      searchData.pageSize = pageConf.size = res.pageSize
+      searchData.pageCurrent = pageConf.current = res.pageCurrent
+      pageConf.total = res.pageTotal
       this.setState({
-        dataSource: res.records
+        dataSource: res.records,
+        searchData
       })
     })
   }
@@ -133,6 +149,7 @@ class Main extends React.Component<any, any> {
     const { item } = this.state
     item.status = item.status === 'FORBIDDEN' ? 'NORMAL' : 'FORBIDDEN'
     Service.addTplItem(item).then(() => {
+      this.getList()
       this.hideDisableModal()
     })
   }
@@ -144,6 +161,20 @@ class Main extends React.Component<any, any> {
         columns={this.columns}
         dataSource={this.state.dataSource}
         size='small'
+        pagination={{
+          ...this.state.pageConf,
+          onChange: (page: any) => {
+            const { pageConf, searchData } = this.state
+            pageConf.current = page
+            searchData.pageCurrent = page
+            this.setState({
+              pageConf,
+              searchData
+            }, () => {
+              this.getList()
+            })
+          }
+        }}
       />
       <Modal
         title='确认信息'

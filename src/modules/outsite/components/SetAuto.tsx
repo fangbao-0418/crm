@@ -13,7 +13,8 @@ interface States {
   modalVisible: boolean,
   searchData: any,
   item: TaskItem,
-  dataSource: TaskList
+  dataSource: TaskList,
+  pageConf: any
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -26,8 +27,15 @@ class Main extends React.Component<any, any> {
     selectedRowKeys: [],
     modalVisible: false,
     item: {},
+    pageConf: {
+      total: 0,
+      size: 10,
+      current: 1
+    },
     searchData: {
-      systemFlag: 1
+      systemFlag: 1,
+      pageCurrent: 1,
+      pageSize: 10
     },
     dataSource: []
   }
@@ -110,8 +118,16 @@ class Main extends React.Component<any, any> {
   // 获取列表数据
   public getList () {
     Service.getTplListByCond(this.state.searchData).then((res: any) => {
+      if (!res || !res.records) {
+        return
+      }
+      const { pageConf, searchData } = this.state
+      searchData.pageSize = pageConf.size = res.pageSize
+      searchData.pageCurrent = pageConf.current = res.pageCurrent
+      pageConf.total = res.pageTotal
       this.setState({
-        dataSource: res.records
+        dataSource: res.records,
+        searchData
       })
     })
   }
@@ -127,6 +143,7 @@ class Main extends React.Component<any, any> {
     this.item.productName = ''
     Service.addTplItem(this.item).then(() => {
       this.hideModal()
+      this.getList()
     })
   }
 
@@ -154,6 +171,20 @@ class Main extends React.Component<any, any> {
         columns={this.columns}
         dataSource={this.state.dataSource}
         size='small'
+        pagination={{
+          ...this.state.pageConf,
+          onChange: (page: any) => {
+            const { pageConf, searchData } = this.state
+            pageConf.current = page
+            searchData.pageCurrent = page
+            this.setState({
+              pageConf,
+              searchData
+            }, () => {
+              this.getList()
+            })
+          }
+        }}
       />
       <Modal
         title='确认信息'
