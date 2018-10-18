@@ -21,13 +21,6 @@ export default class extends React.Component<Props> {
   public state: States = {
     data: []
   }
-  componentWillMount () {
-    fetchWorks(this.props.customerId).then((res) => {
-      this.setState({
-        data: res
-      })
-    })
-  }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '工单号',
     dataIndex: 'workNo',
@@ -58,6 +51,13 @@ export default class extends React.Component<Props> {
     title: '当前状态',
     dataIndex: 'status'
   }]
+  public componentWillMount () {
+    fetchWorks(this.props.customerId).then((res) => {
+      this.setState({
+        data: res
+      })
+    })
+  }
   public render () {
     return (
       <Table
