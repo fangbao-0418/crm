@@ -91,6 +91,7 @@ class Main extends React.Component<any, any> {
       formdata:{
         name: '',
         priority: '',
+        status: 'NORMAL',
         productId: '',
         productName: '',
         subList: [] // vlist
@@ -102,6 +103,7 @@ class Main extends React.Component<any, any> {
   public componentWillMount () {
     this.params = this.props.match.params
     this.getSublist()
+    this.getItem()
     console.log('params::', this.params, APP.user)
   }
 
@@ -120,9 +122,15 @@ class Main extends React.Component<any, any> {
     if (!this.params.id) {
       return
     }
+    let checkedIdMap: Map<any> = {}
     Service.getTplItemById(this.params.id).then((item: TaskItem) => {
+      item.subList.map((subitem: any, i: number) => {
+        subitem.sort = i + 1
+      })
+      checkedIdMap = this.arr2map(item.subList, 'subId')
       this.setState({
-        formdata: item
+        formdata: item,
+        checkedIdMap
       })
     })
   }
@@ -303,6 +311,8 @@ class Main extends React.Component<any, any> {
       }
     })
     console.log('save::', formdata)
+    // @181018 接口方要求status 必传 NORMAL, :(
+    formdata.status = 'NORMAL'
     Service.addTplItem(formdata).then(() => {
       APP.success('保存成功')
       // APP.history.push('/outsite/tasktpl/list')
@@ -373,6 +383,7 @@ class Main extends React.Component<any, any> {
                     <FormItem label='任务名称' {...formItemLayout}>
                       <Input
                         name='name'
+                        value={this.state.formdata.name}
                         placeholder={`任务名称`}
                         onChange={(ev: any) => {
                           this.syncFormdata('name', ev.target.value)
@@ -384,6 +395,7 @@ class Main extends React.Component<any, any> {
                     <FormItem label='是否优先级' {...formItemLayout}>
                       <Select
                         placeholder={`是否优先级`}
+                        value={this.state.formdata.priority}
                         onChange={(val: any) => {
                           this.syncFormdata('priority', val)
                         }
@@ -397,6 +409,7 @@ class Main extends React.Component<any, any> {
                     <FormItem label='关联商品' {...formItemLayout}>
                       <Select
                         placeholder={`关联商品`}
+                        value={this.state.formdata.productId}
                         onChange={(val: any) => {
                           this.syncFormdata('productId', val)
                         }

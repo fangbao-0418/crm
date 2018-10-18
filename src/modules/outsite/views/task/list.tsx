@@ -173,7 +173,8 @@ class Main extends React.Component {
       )
     }
   }, {
-    title: '第一个子任务点击开始时间',
+    // title: '第一个子任务点击开始时间', // @181018 产品修改为 接受任务时间
+    title: '接受任务时间',
     dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
@@ -265,10 +266,11 @@ class Main extends React.Component {
 
   // 搜索
   public onSearch (searchData: any) {
+    console.log('-------::', searchData)
     if (!searchData.status) {
       searchData.status = this.state.tab
     }
-    console.log('search::', searchData)
+    console.log('search::', this.state.tab, searchData)
     this.setState({
       searchData
     }, () => {
