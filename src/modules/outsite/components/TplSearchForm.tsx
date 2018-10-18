@@ -89,10 +89,9 @@ class Main extends React.Component<any, any> {
                     onChange={this.handleCurrencyChange}
                 >
                 {
-                  _.map(Service.taskTplCateDict, (val: any, key: any) => {
+                  _.map({'': '全部', ...Service.taskTplCateDict}, (val: any, key: any) => {
                     return <Option value={key}>{val}</Option>
-                  })
-                }
+                  })}
                 </Select>
                 <span style={{ marginLeft: '3%'}}>状态:</span>
                 <Select
@@ -102,10 +101,9 @@ class Main extends React.Component<any, any> {
                     onChange={this.handleOrderStateChange}
                 >
                 {
-                  _.map(Service.taskTplStatusDict, (val: any, key: any) => {
+                  _.map({'': '全部', ...Service.taskTplStatusDict}, (val: any, key: any) => {
                     return <Option value={key}>{val}</Option>
-                  })
-                }
+                  })}
                 </Select>
             </Form>
         </div>
