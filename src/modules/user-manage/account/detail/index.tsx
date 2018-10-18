@@ -19,6 +19,8 @@ const FormItem = Form.Item
 const Option = Select.Option
 const styles = require('./style')
 interface Props extends FormComponentProps {
+  companyCode: string
+  type: 'DirectCompany' | 'Agent'
   item?: UserManage.AccountItemProps
   disabled?: boolean
   onOk?: (values?: UserManage.AccountItemProps) => void // 确认回调
@@ -43,7 +45,8 @@ class Main extends React.Component<Props, State> {
     departmentList: []
   }
   public componentWillMount () {
-    fetchDepartment(this.props.item.companyId).then((res) => {
+    const item = this.props.item || {}
+    fetchDepartment(this.props.companyCode, this.props.type).then((res) => {
       console.log(this.handleDepartmentData(res), 'res')
       this.setState({
         departmentList: this.handleDepartmentData(res)
@@ -152,7 +155,8 @@ class Main extends React.Component<Props, State> {
     this.setState({ value })
   }
   public render () {
-    const { item, disabled, form: { getFieldDecorator } } = this.props
+    const { disabled, form: { getFieldDecorator } } = this.props
+    const item = this.props.item || {}
     // 树形选择属性
     const tProps = {
       treeData,
@@ -223,11 +227,7 @@ class Main extends React.Component<Props, State> {
         <div>
           <Form>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='公司名称'>
-              {
-                getFieldDecorator('companyName', validation.companyName)(
-                  <Input disabled={disabled} size='small' placeholder='请输入公司名称'/>
-                )
-              }
+              <span>{item.companyName}</span>
             </FormItem>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
               {

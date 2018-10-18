@@ -1,5 +1,5 @@
 import {
-  Form, Input, Table, Divider
+  Input, Table, Divider, Select
 } from 'antd'
 import React from 'react'
 import { Modal } from 'pilipa'
@@ -9,8 +9,11 @@ import { fetchDepartmentAction } from '../action'
 const styles = require('./style.styl')
 import Detail from './detail'
 import { addDepartment, updateDepartment, changeDepartmentStatus, deleteDepartment } from '../api'
-
-class Main extends React.Component<UserManage.Props> {
+interface Props extends UserManage.Props {
+  type: 'Agent' | 'DirectCompany'
+}
+class Main extends React.Component<Props> {
+  public companyCode: string
   public columns: ColumnProps<UserManage.DepartmentItemProps>[] = [
     { title: '部门名称', dataIndex: 'name', key: 'department',
       onHeaderCell: (column) => {
@@ -48,10 +51,18 @@ class Main extends React.Component<UserManage.Props> {
     }
   ]
   public componentWillMount () {
-    this.fetchData()
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        department: {
+          dataSource: []
+        },
+        companyCode: undefined
+      }
+    })
   }
   public fetchData () {
-    fetchDepartmentAction()
+    fetchDepartmentAction(this.companyCode, this.props.type)
   }
   public add (record: UserManage.DepartmentItemProps) {
     const modal = new Modal({
@@ -62,7 +73,9 @@ class Main extends React.Component<UserManage.Props> {
             addDepartment(
               {
                 name: value.name,
-                parentId: record.id
+                parentId: record.id,
+                companyId: this.companyCode,
+                organizationType: this.props.type
               }
             ).then((res) => {
               this.fetchData()
@@ -122,13 +135,36 @@ class Main extends React.Component<UserManage.Props> {
   }
   public render () {
     const { dataSource } = this.props.department
+    const { companyList } = this.props
     return (
       <div>
         <div className={styles.formitem}>
-          <Input
+          <Select
+            showSearch
             placeholder='请输入公司名称'
             className={styles.searchcondition}
-          />
+            showArrow={false}
+            labelInValue
+            onSelect={(value: {key: string, label: any}) => {
+              APP.dispatch<UserManage.Props>({
+                type: 'change user manage data',
+                payload: {
+                  companyCode: value.key,
+                  companyName: value.label
+                }
+              })
+              this.companyCode = value.key
+              this.fetchData()
+            }}
+          >
+            {
+              companyList.map((item) => {
+                return (
+                  <Select.Option key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
+          </Select>
         </div>
         <Table
           childrenColumnName='organizationList'

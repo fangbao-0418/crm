@@ -3,11 +3,12 @@ declare namespace Organ {
     companyType?: 'Agent' | 'DirectCompany'
     pageCurrent?: number
     pageSize?: number
-    regionCity?: number
+    regionCity?: string
     name?: string
   }
   export interface AgentItemProps {}
   export interface DirectItemProps {
+    id?: number
     name?: string
     regionProvince?: number
     regionCity?: number

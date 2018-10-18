@@ -1,68 +1,105 @@
 import React from 'react'
-import { Table, Input, Divider } from 'antd'
-import { DropDown } from 'pilipa'
-const Search = Input.Search
+import Agent from '../direct'
+import { ColumnProps } from 'antd/lib/table'
+import { Divider } from 'antd'
+import { Modal } from 'pilipa'
+import Detail from '../direct/detail'
+import { changeCompanyInfo } from '../api'
 class Main extends React.Component {
-  public columns = [
+  public columns: ColumnProps<Organ.DirectItemProps>[] = [
     {
-      title: '代理商'
+      title: '代理商',
+      dataIndex: 'name'
     },
     {
-      title: '级别'
+      title: '级别',
+      render: (text, record) => {
+        return (
+          <span>{record.regionProvinceName}-{record.regionCityName}</span>
+        )
+      }
     },
     {
-      title: '区域'
+      title: '区域',
+      render: (text, record) => {
+        return (
+          <span>{record.regionProvinceName}-{record.regionCityName}</span>
+        )
+      }
     },
     {
-      title: '创建时间'
+      title: '创建时间',
+      dataIndex: 'createTime'
     },
     {
-      title: '状态'
+      title: '状态',
+      dataIndex: 'companyStatus'
     },
     {
       title: '操作',
-      render: () => {
+      width: 160,
+      align: 'center',
+      render: (text, record) => {
         return (
           <div>
-            <span>查看</span>
+            <span
+              className='href'
+              onClick={() => {
+                this.show('view', record)
+              }}
+            >
+              查看
+            </span>
             <Divider type='vertical' />
-            <span>修改</span>
+            <span
+              className='href'
+              onClick={() => {
+                this.show('update', record)
+              }}
+            >
+              修改
+            </span>
             <Divider type='vertical' />
-            <span>准备解约</span>
-            <Divider type='vertical' />
-            <span>删除</span>
+            <span
+              className='href'
+            >
+              删除
+            </span>
           </div>
         )
       }
     }
   ]
+  public show (type: 'view' | 'update', record: Organ.DirectItemProps) {
+    const modal = new Modal({
+      title: '新增',
+      content: (
+        <Detail
+          disabled={type === 'view'}
+          item={record}
+          onOk={(values) => {
+            console.log(values)
+            changeCompanyInfo(values).then((res) => {
+              const ins: any = this.refs.ins
+              ins.fetchList()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
+        />
+      ),
+      footer: null
+    })
+    modal.show()
+  }
   public render () {
     return (
-      <div>
-        <div className='mb10'>
-          <Search
-            className='inline-block middle mr5'
-            placeholder='请输入代理商名称'
-            onSearch={(value) => {
-              console.log(value)
-            }}
-            style={{ width: 200 }}
-          />
-          <DropDown
-            className='inline-block middle mr5'
-            data={[]}
-          />
-          <DropDown
-            className='inline-block middle'
-            data={[]}
-          />
-        </div>
-        <div>
-          <Table
-            columns={this.columns}
-          />
-        </div>
-      </div>
+      <Agent
+        ref='ins'
+        columns={this.columns}
+        type='Agent'
+      />
     )
   }
 }

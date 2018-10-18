@@ -1,7 +1,6 @@
-import { fetchDepartment, fetchAccountList, fetchRoleList } from './api'
-export const fetchDepartmentAction = () => {
-  fetchDepartment().then((res) => {
-    console.log(res, 'res')
+import { fetchDepartment, fetchAccountList, fetchRoleList, fetchCompanyList } from './api'
+export const fetchDepartmentAction = (id: string, type: 'Agent' | 'DirectCompany') => {
+  fetchDepartment(id, type).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -13,8 +12,16 @@ export const fetchDepartmentAction = () => {
   })
 }
 
-export const fetchAccountListAction = () => {
-  fetchAccountList().then((res) => {
+export const fetchAccountListAction = (payload: {
+  pageCurrent?: number,
+  pageSize?: number,
+  name?: string,
+  phone?: string
+  organizationName?: string,
+  companyId: string,
+  userType: 'Agent' | 'DirectCompany'
+}) => {
+  fetchAccountList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -31,14 +38,31 @@ export const fetchAccountListAction = () => {
   })
 }
 
-export const fetchRoleListAction = () => {
-  fetchRoleList().then((res) => {
+export const fetchRoleListAction = (payload: {
+  pageCurrent: number,
+  pageSize?: number,
+  roleType: 'Agent' | 'DirectCompany',
+  companyId: string
+}) => {
+  payload.pageSize = payload.pageSize || 15
+  fetchRoleList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
         role: {
-          dataSource: res
+          dataSource: res.records
         }
+      }
+    })
+  })
+}
+
+export const fetchCompanyListAction = (type: 'Agent' | 'DirectCompany') => {
+  fetchCompanyList(type).then((res) => {
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        companyList: res
       }
     })
   })

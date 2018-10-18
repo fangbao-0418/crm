@@ -1,5 +1,5 @@
 import {
-  Button , Divider, Form, Input, Table, Modal as M
+  Button , Divider, Form, Input, Table, Modal as M, Select
 } from 'antd'
 import { Modal } from 'pilipa'
 import React from 'react'
@@ -13,7 +13,11 @@ const Formitem = Form.Item
 interface States {
   selectedRowKeys: string[]
 }
-class Main extends React.Component<UserManage.Props> {
+interface Props extends UserManage.Props {
+  type: 'DirectCompany' | 'Agent'
+}
+class Main extends React.Component<Props> {
+  public companyCode?: string
   public state: States = {
     selectedRowKeys: []
   }
@@ -74,10 +78,13 @@ class Main extends React.Component<UserManage.Props> {
     }
   ]
   public componentWillMount () {
-    this.fetchList()
+    this.fetchData()
   }
-  public fetchList () {
-    fetchAccountListAction()
+  public fetchData () {
+    fetchAccountListAction({
+      companyId: this.companyCode,
+      userType: this.props.type
+    })
   }
   public onSelectChange = (selectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys)
@@ -110,18 +117,20 @@ class Main extends React.Component<UserManage.Props> {
 
   // 查看、修改、添加账号
   public update = (type: 'view' | 'modify' | 'add', item?: UserManage.AccountItemProps) => {
-    console.log(item, 'item')
+    item.companyName = this.props.companyName
     const modal = new Modal({
       title: '添加账号',
       content: (
         <Detail
+          companyCode={this.props.companyCode}
+          type={this.props.type}
           item={item}
           disabled={type === 'view'}
           onOk={(values) => {
             console.log(values, 'values')
             if (type === 'modify') {
               updateAccount(values).then(() => {
-                this.fetchList()
+                this.fetchData()
               })
             }
             // console.log(445, val)
@@ -138,6 +147,7 @@ class Main extends React.Component<UserManage.Props> {
   public render () {
     const { dataSource } = this.props.account
     const { selectedRowKeys } = this.state
+    const { companyList } = this.props
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange
@@ -145,10 +155,32 @@ class Main extends React.Component<UserManage.Props> {
     return (
       <div>
         <div className={styles.formitem}>
-          <Input
+          <Select
+            showSearch
             placeholder='请输入公司名称'
             className={styles.searchcondition}
-          />
+            showArrow={false}
+            labelInValue
+            onSelect={(value: {key: string, label: any}) => {
+              APP.dispatch<UserManage.Props>({
+                type: 'change user manage data',
+                payload: {
+                  companyCode: value.key,
+                  companyName: value.label
+                }
+              })
+              this.companyCode = value.key
+              this.fetchData()
+            }}
+          >
+            {
+              companyList.map((item) => {
+                return (
+                  <Select.Option key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
+          </Select>
           <Input
             placeholder='请输入姓名'
             className={styles.searchcondition}

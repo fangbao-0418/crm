@@ -1,4 +1,9 @@
 declare namespace UserManage {
+  interface CompanyProps {
+    id?: number
+    name?: string
+    regionArea?: number
+  }
   interface DepartmentItemProps {
     id?: string
     name?: string
@@ -29,10 +34,31 @@ declare namespace UserManage {
     pageSize: number
     current: number
   }
+  interface RoleSearchPayload {
+    pageCurrent: number,
+    pageSize: number,
+    roleType: 'Agent' | 'DirectCompany'
+    companyId: string
+  }
   interface RoleItem {
     id?: number
     name?: string
     status?: 0 | 1
+    shareFlag?: 0 | 1
+    companyId?: string
+    roleName?: string
+    roleType?: 'Agent' | 'DirectCompany'
+    authorityIdList?: string[]
+  }
+  interface RolePermissionItemProps {
+    authorityResponseList?: RolePermissionItemProps[]
+    code?: string
+    enableFlag?: boolean
+    name?: string
+    parentId?: number
+    status?: number
+    url?: string
+    id?: any
   }
   interface Props {
     department?: {
@@ -46,6 +72,9 @@ declare namespace UserManage {
       dataSource?: RoleItem[],
       pagination?: PaginationProps
     }
-    tab?: 'department' | 'account' | 'role'
+    tab?: 'department' | 'account' | 'role',
+    companyList?: CompanyProps[]
+    companyCode?: string
+    companyName?: string
   }
 }
