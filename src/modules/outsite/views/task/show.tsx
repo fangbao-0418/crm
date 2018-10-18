@@ -109,6 +109,7 @@ class Main extends React.Component<any> {
     dataSource: [],
     selectedRowKeys: [],
     trackdata: [], // 跟进小计
+    personList:[], // 人员数组
     pageConf: {
       currentPage: 1,
       total: 1,
@@ -117,7 +118,8 @@ class Main extends React.Component<any> {
     taskid: '',  // 工单id
     auditTaskName: '', // 审批任务的名称
     auditTaskReason: '', // 审批任务的原因
-    imageUrl:''  // 凭证的图片
+    imageUrl: '' , // 凭证的图片
+    transferTasksPer:'' // 转接任务存的人
   }
   public taskid: any
   public childTaskid: any
@@ -204,6 +206,14 @@ class Main extends React.Component<any> {
         })
       }
     })
+    Service.getWorkerList().then((res: any) => {
+      console.log('人员', res)
+      if (res) {
+        this.setState({
+          personList:res
+        })
+      }
+    })
   }
 
   public componentDidMount () {
@@ -271,8 +281,15 @@ class Main extends React.Component<any> {
     if (!selectedRowKeys.length) {
       return
     }
-    console.log('批量分配list::', selectedRowKeys)
-    // service.delList(selectedRowKeys)
+    console.log('批量确定转接任务', this.state.transferTasksPer, selectedRowKeys)
+    const params = {userId:this.state.transferTasksPer}
+    const payload = { ids: selectedRowKeys}
+    Service.transferTasksPer(params, payload).then((res: any) => {
+      console.log('转接任务成功')
+      this.setState({
+        modalChangeVisible: false
+      })
+    })
   }
 
   // 审批任务的弹层
@@ -295,19 +312,26 @@ class Main extends React.Component<any> {
       id: this.childTaskid ,
       status:'CANCELAPPROVE'
     }
-    Service.AuditTaskSure(params).then((res: any) => {
+    Service.auditTaskSure(params).then((res: any) => {
       console.log('审批任务确定', res)
-      if (res) {
-        this.setState({
-          modalCancelVisible: false
-        })
-      }
+      this.setState({
+        modalCancelVisible: false
+      })
     })
   }
 
   // 转接任务
   public onChangeUser (item: TaskItem) {
-    console.log('change user item::', item)
+    const { selectedRowKeys } = this.state
+    console.log('单个确定转接任务', this.state.transferTasksPer, selectedRowKeys)
+    const params = {userId:this.state.transferTasksPer}
+    const payload = { ids: selectedRowKeys}
+    Service.transferTasksPer(params, payload).then((res: any) => {
+      console.log('转接任务成功')
+      this.setState({
+        modalChangeVisible: false
+      })
+    })
   }
 
   // 查看凭证确定
@@ -383,10 +407,12 @@ class Main extends React.Component<any> {
   }
 
   // 转接任务
-  public showChangeModal () {
+  public showChangeModal (item: any) {
+    console.log('99999999999', item.id)
     console.log('change modal show')
     this.setState({
-      modalChangeVisible: true
+      modalChangeVisible: true,
+      selectedRowKeys: [item.id]
     })
   }
   public hideChangeModal () {
@@ -395,8 +421,11 @@ class Main extends React.Component<any> {
     })
   }
   // 切换人员
-  public onChangeChange () {
-    console.log('转接任务：', arguments)
+  public onChangeChange (value: any) {
+    console.log('转接任务：', value)
+    this.setState({
+      transferTasksPer: value
+    })
   }
 
   public render () {
@@ -407,7 +436,8 @@ class Main extends React.Component<any> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
-    const { trackdata } = this.state
+    const { trackdata, personList } = this.state
+    console.log('```````````````````````', personList)
     return (
     <div className={styles.container}>
       <HCframe title='客户的名称在这里显示'>
@@ -455,10 +485,13 @@ class Main extends React.Component<any> {
         onCancel={this.hideAllotModal.bind(this)}
       >
       <div className={styles.modalbox}>
-        <Select style={{width: '100%'}} placeholder='选择分配的外勤' onChange={this.onMultiChange.bind(this)}>
-          <Select.Option key='a'>冻豆腐</Select.Option>
-          <Select.Option key='b'>冻豆腐</Select.Option>
-          <Select.Option key='c'>冻豆腐</Select.Option>
+        <Select style={{width: '100%'}} placeholder='选择分配的外勤' onChange={this.onChangeChange.bind(this)}>
+          {
+            personList.length > 0 && personList.map((item: any, index: number) => {
+              return (
+                <Select.Option key={`personList-${index}`} value={item.id}>{item.name}</Select.Option>)
+            })
+          }
         </Select>
       </div>
       </Modal>
@@ -495,10 +528,13 @@ class Main extends React.Component<any> {
         onCancel={this.hideChangeModal.bind(this)}
       >
         <span>分配：</span>
-        <Select style={{width: '50%'}} onChange={this.onChangeChange.bind(this)}>
-          <Select.Option key='1'>李小龙</Select.Option>
-          <Select.Option key='2'>李连杰</Select.Option>
-          <Select.Option key='3'>成龙</Select.Option>
+          <Select style={{ width: '50%' }} onChange={this.onChangeChange.bind(this)}>
+            {
+              personList.length > 0 && personList.map((item: any, index: number) => {
+                return (
+                  <Select.Option key={`personList-${index}`} value={item.id}>{item.name}</Select.Option>)
+              })
+            }
         </Select>
       </Modal>
     </div>
