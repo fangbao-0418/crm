@@ -26,7 +26,7 @@ declare namespace Organ {
     legal?: string
     /** 银行账号 */
     bankNo?: string
-    /** 注册资金 */
+    /** 保证金 */
     assureMoney?: string
     /** 身份证图片路径 */
     cardNoPath?: string
@@ -34,7 +34,10 @@ declare namespace Organ {
     qualificationsPath?: string
     /** 营业执照路径 */
     businessLicensePath?: string
+    /** 负责人手机号 */
     managerPhone?: string
+    /** 负责人 */
+    managerName?: string
     companyType?: 'Agent' | 'System' | 'DirectCompany'
   }
   export interface PaginationProps {

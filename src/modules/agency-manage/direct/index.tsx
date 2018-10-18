@@ -10,11 +10,7 @@ interface State {
 }
 class Main extends React.Component<{}, State> {
   public state: State = {
-    dataSource: [
-      {
-        name: '1'
-      }
-    ]
+    dataSource: []
   }
   public payload: Organ.DirectSearchPayload = {
     // companyType: 'DirectCompany',
@@ -37,7 +33,7 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '创建时间',
-      dataIndex: ''
+      dataIndex: 'createTime'
     },
     {
       title: '操作',

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button } from 'antd'
+import { Form, Row, Col, Input, Button, Cascader } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { fetchRegion } from '@/modules/common/api'
 import Uploader from './Uploader'
@@ -10,9 +10,38 @@ interface Props extends FormComponentProps {
   onOk?: (item?: Organ.DirectItemProps) => void
   onCancel?: () => void
 }
-class Main extends React.Component<Props> {
+interface State {
+  ProvinceList: Common.RegionProps[]
+}
+class Main extends React.Component<Props, State> {
+  public region: Common.RegionProps[] = []
+  public state: State = {
+    ProvinceList: []
+  }
   public componentWillMount () {
-    fetchRegion().then((res) => {})
+    fetchRegion().then((res) => {
+      res.map((item: {isLeaf: boolean}) => {
+        item.isLeaf = false
+      })
+      this.setState({
+        ProvinceList: res
+      })
+    })
+  }
+  public loadCityData (selectedOptions: Common.RegionProps[]) {
+    const targetOption = selectedOptions[selectedOptions.length - 1]
+    targetOption.loading = true
+    const current = selectedOptions[0]
+    fetchRegion({
+      parentId: current.code,
+      level: 2
+    }).then((res) => {
+      targetOption.loading = false
+      targetOption.children = res
+      this.setState({
+        ProvinceList: [...this.state.ProvinceList]
+      })
+    })
   }
   public handleSubmit () {}
   public render () {
@@ -27,6 +56,7 @@ class Main extends React.Component<Props> {
         sm: { span: 14 }
       }
     }
+    const { ProvinceList } = this.state
     const { disabled } = this.props
     const item = this.props.item || {}
     return (
@@ -55,13 +85,13 @@ class Main extends React.Component<Props> {
               {...formItemLayout}
               label='负责人'
             >
-              {getFieldDecorator('name', {
+              {getFieldDecorator('managerName', {
                 rules: [{
-                  required: true, message: '请输入负责人!'
+                  required: true, message: '请输入负责人'
                 }],
-                initialValue: item.name
+                initialValue: item.managerName
               })(
-                <Input placeholder='请输入' disabled={disabled}/>
+                <Input placeholder='请输入负责人' disabled={disabled}/>
               )}
             </FormItem>
           </Col>
@@ -70,13 +100,25 @@ class Main extends React.Component<Props> {
               {...formItemLayout}
               label='省份城市'
             >
-              {getFieldDecorator('regionCityName', {
+              {getFieldDecorator('region', {
                 rules: [{
-                  required: true, message: '请选择省份城市!'
+                  required: true, message: '请选择省份城市'
                 }],
-                initialValue: item.regionCityName
+                initialValue: [item.regionProvince, item.regionCity]
               })(
-                <Input placeholder='请选择省份城市' disabled={disabled} />
+                <Cascader
+                  fieldNames={{
+                    label: 'name',
+                    value: 'code'
+                  }}
+                  placeholder='请选择省份城市'
+                  options={ProvinceList}
+                  loadData={this.loadCityData.bind(this)}
+                  onChange={(value, selectedOptions: Common.RegionProps[]) => {
+                    this.region = selectedOptions
+                  }}
+                  changeOnSelect
+                />
               )}
             </FormItem>
           </Col>
@@ -119,7 +161,7 @@ class Main extends React.Component<Props> {
             >
               {getFieldDecorator('email', {
                 rules: [{
-                  required: true, message: '请输入邮箱!'
+                  required: true, message: '请输入邮箱'
                 }],
                 initialValue: item.email
               })(
@@ -165,7 +207,10 @@ class Main extends React.Component<Props> {
               label='开户名'
             >
               {getFieldDecorator('openingName', {
-                initialValue: item.openingName
+                initialValue: item.openingName,
+                rules: [{
+                  required: true, message: '请输入开户名'
+                }]
               })(
                 <Input placeholder='请输入开户名' disabled={disabled} />
               )}
@@ -208,11 +253,11 @@ class Main extends React.Component<Props> {
               {...formItemLayout}
               label='保证金'
             >
-              {getFieldDecorator('openingName', {
+              {getFieldDecorator('assureMoney', {
                 rules: [{
-                  required: true, message: ''
+                  required: true, message: '请输入保证金'
                 }],
-                initialValue: item.openingName
+                initialValue: item.assureMoney
               })(
                 <Input placeholder='请输入保证金' disabled={disabled} />
               )}
@@ -291,6 +336,17 @@ class Main extends React.Component<Props> {
             onClick={() => {
               if (this.props.onOk) {
                 this.props.form.validateFields((errs, values) => {
+                  if (errs !== null) {
+                    return
+                  }
+                  const region = this.region
+                  values.regionProvinceName = region[0].name
+                  values.regionProvince = region[0].code
+                  if (region[1]) {
+                    values.regionCity = region[1].name
+                    values.regionCityName = region[1].code
+                  }
+                  delete values.region
                   this.props.onOk(Object.assign({}, item, values))
                 })
               }

@@ -12,8 +12,11 @@ declare namespace Common {
   export interface RegionProps {
     code: string
     name: string
-    level: number
-    id: number
+    level?: number
+    id?: number
+    isLeaf?: boolean
+    loading?: boolean
+    children?: RegionProps[]
   }
   export interface Props {
     ajaxCount?: number
