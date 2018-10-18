@@ -51,7 +51,6 @@ class Main extends React.Component<Business.Props> {
   public fetchList () {
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
-    console.log(this.props, 'data')
     const { pagination } = data
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
@@ -116,8 +115,6 @@ class Main extends React.Component<Business.Props> {
     this.params.customerSource = values.customerSource.value || undefined
     this.params.payTaxesNature = values.payTaxesNature.value || undefined
     const { selectedTab } = this.props
-    console.log(selectedTab, 'selectedTab')
-    console.log(this.params, 'this.params')
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
