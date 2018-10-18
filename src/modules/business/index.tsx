@@ -52,7 +52,9 @@ class Main extends React.Component<Business.Props> {
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
     const { pagination } = data
-    fetchList(data.searchPayload).then((res) => {
+    this.params.pageSize = pagination.pageSize
+    this.params.pageCurrent = pagination.current
+    fetchList(this.params).then((res) => {
       pagination.total = res.pageTotal
       APP.dispatch<Business.Props>({
         type: 'change business data',
@@ -363,6 +365,8 @@ class Main extends React.Component<Business.Props> {
       mask: true,
       onCancel: () => {
         modal.hide()
+        this.fetchList()
+        this.fetchCount()
       }
     })
     modal.show()

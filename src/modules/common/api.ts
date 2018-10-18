@@ -11,6 +11,9 @@ export const userLogin = (payload: {
     data: payload
   })
 }
+export const companylist = (token: string) => {
+  return http(`/user/v1/api/user/company/list?token=${token}`)
+}
 export const fetchUserInfo = () => {
   return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
     fetchPermissionCode().then((res2) => {

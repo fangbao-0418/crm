@@ -1,12 +1,20 @@
 import React from 'react'
 const styles = require('./style')
+import { companylist } from '@/modules/common/api'
+interface States {
+  dataSource: Array<{companyName: string, companyId: string}>
+}
 class Main extends React.Component {
-  public state = {
-    dataSource: [
-      {name: '北京爱康鼎科技有限公司'},
-      {name: '北京爱康鼎科技有限公司'},
-      {name: '北京爱康鼎科技有限公司'}
-    ]
+  public state: States = {
+    dataSource: []
+  }
+  public componentWillMount () {
+    const token = APP.token
+    companylist(token).then((res) => {
+      this.setState({
+        dataSource: res
+      })
+    })
   }
   public render () {
     const { dataSource } = this.state
@@ -22,7 +30,7 @@ class Main extends React.Component {
                       APP.history.push('/')
                     }}
                   >
-                    {item.name}
+                    {item.companyName}
                   </span>
                 </li>
               )

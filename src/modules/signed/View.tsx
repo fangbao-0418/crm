@@ -38,7 +38,7 @@ class Main extends React.Component<Props> {
             <Detail/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='订单信息' key='2'>
-            <OrderInfo />
+            <OrderInfo customerId={this.props.customerId}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab='工单信息' key='3'>
             <WorkList customerId={this.props.customerId}/>

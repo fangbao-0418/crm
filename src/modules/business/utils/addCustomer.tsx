@@ -29,7 +29,8 @@ export default function () {
             ins.refs.wrappedComponent.save().then(() => {
               APP.success('保存成功')
               modal.hide()
-              // this.fetchList()
+              this.fetchList()
+              this.fetchCount()
             }, () => {
               APP.error('保存失败')
             })
