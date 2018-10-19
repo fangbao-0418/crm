@@ -12,7 +12,6 @@ export default function (customerId: string, customerName: string, index?: numbe
     content: (
       <Provider>
         <Detail
-
           type='business'
           getWrappedInstance={(ins) => {
             that.ins = ins

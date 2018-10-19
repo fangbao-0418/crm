@@ -19,7 +19,7 @@ class Main extends React.Component<Props> {
     sales: []
   }
   public componentWillMount () {
-    getSalesList(1).then((res) => {
+    getSalesList().then((res) => {
       this.setState({
         sales: res
       })
