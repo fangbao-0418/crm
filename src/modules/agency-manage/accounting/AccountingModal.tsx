@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Row, Col, Input, TreeSelect, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { fetchRegion } from '@/modules/common/api'
-import { fetchAccountingInfo } from '../api'
+import { fetchAccountingInfo, fetchAccountingProvince } from '../api'
 
 const FormItem = Form.Item
 const TreeNode = TreeSelect.TreeNode
@@ -15,12 +15,14 @@ interface Props extends FormComponentProps {
 
 interface State {
   info: any // 机构信息
+  provice: any
 }
 
 class Main extends React.Component<Props, State> {
 
   public state: State = {
-    info: {}
+    info: {},
+    provice: []
   }
 
   public componentWillMount () {
@@ -28,8 +30,15 @@ class Main extends React.Component<Props, State> {
     if (id) {
       this.getAccountingInfo(id)
     }
+    this.fetchProvince()
   }
 
+  // 获取负责区域信息
+  public fetchProvince () {
+    fetchAccountingProvince().then((res) => {
+      this.setState({provice: res})
+    })
+  }
   // 根据id获取信息
   public getAccountingInfo (id: number) {
     fetchAccountingInfo(id)
@@ -85,6 +94,18 @@ class Main extends React.Component<Props, State> {
               {...formItemLayout}
               label='核算地区范围：'
             >
+              {getFieldDecorator('region', {
+                rules: [{
+                  required: true, message: '请输入机构名称!'
+                }],
+                initialValue: info.region
+              })(
+                <TreeSelect
+                  treeData={this.state.provice}
+                  treeCheckable={true}
+                  showCheckedStrategy={TreeSelect.SHOW_PARENT}
+                />
+              )}
             </FormItem>
           </Col>
         </Row>

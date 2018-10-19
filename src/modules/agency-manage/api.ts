@@ -31,3 +31,8 @@ export const setAccounting = (payload: Organ.SetAccountingPayload) => {
 export const fetchAccountingInfo = (id: number) => {
   return http(`/user/v1/api/adjust/account/get?id=${id}`)
 }
+
+// 查询负责区域信息
+export const fetchAccountingProvince = () => {
+  return http(`/user/v1/api/adjust/account/province`)
+}
