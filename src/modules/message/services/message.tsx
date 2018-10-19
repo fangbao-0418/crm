@@ -65,7 +65,7 @@ class Msg implements MsgI {
   private conf: Conf = {
     // 拉模式配置
     pullConf : {
-      duration: 10000
+      duration: 1000 * 60 * 15
     }
   }
   private looptimer: any
@@ -140,7 +140,7 @@ class Msg implements MsgI {
   private pullConnect (conf: any) {
     const fetchMsg = () => {
       // 获取单条消息提醒
-      MsgService.getCurrentByUserid(5).then((data: any) => {
+      MsgService.getCurrentByUserid().then((data: any) => {
         // 手动关闭弹层,同一时刻，只保留一个
         this.uiClose()
 
@@ -164,12 +164,13 @@ class Msg implements MsgI {
       })
 
       // 获取未读消息数
-      MsgService.countUnreadedByUserid(5).then((data: any) => {
+      MsgService.countUnreadedByUserid().then((data: any) => {
         this.evTrigger('service:get unreaded count data', data)
       })
     }
     fetchMsg()
-    this.looptimer = setInterval(fetchMsg, this.conf.pullConf.duration || 5000)
+    this.looptimer = setInterval(fetchMsg, this.conf.pullConf.duration || 1000 * 60 * 15)
+    // this.looptimer = fetchMsg
     return this
   }
   private pullClose () {

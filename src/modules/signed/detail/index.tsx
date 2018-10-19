@@ -37,6 +37,13 @@ class Main extends React.Component<Props> {
       return
     }
     console.log(this.props.detail, 'this.props.detail.id')
+    if (!this.props.detail.customerName) {
+      APP.error('请输入公司名称！')
+      return
+    }
+    if (this.props.detail.legalPersonCard.length > 18) {
+      return
+    }
     updateCustomer(id, this.props.detail).then(() => {
       APP.success('保存成功')
     })

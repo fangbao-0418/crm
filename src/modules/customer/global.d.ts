@@ -57,6 +57,7 @@ declare namespace Customer {
     tagTelephoneStatus?: string
     businessLicenseUrl?: string
     legalPersonCardUrl?: string
+    lastReleaseSalesperson?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string

@@ -155,7 +155,7 @@ class Main extends React.Component {
   // 获取列表数据
   public getList () {
     const {pageConf, chooseDate} = this.state
-    MsgService.getListByUserid('5', chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
+    MsgService.getListByUserid(chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
       this.setState({
         dataSource: d.records,
         pageConf: {
