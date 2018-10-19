@@ -383,7 +383,7 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
           bordered
-          rowKey={'customerId'}
+          rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),
             onShowSizeChange: this.onShowSizeChange.bind(this),

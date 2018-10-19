@@ -57,7 +57,10 @@ declare namespace Customer {
     tagTelephoneStatus?: string
     businessLicenseUrl?: string
     legalPersonCardUrl?: string
+    /** 最后跟进人 */
     lastReleaseSalesperson?: string
+    /** 信息来源 */
+    companyInfoSource?: number
   }
   export interface AutoAssignProps {
     bigAreaName: string

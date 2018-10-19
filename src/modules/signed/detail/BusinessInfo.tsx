@@ -58,63 +58,80 @@ class Main extends React.Component<Props, State> {
           // onSubmit={this.handleSubmit}
         >
           <Row >
-            <Col span={18}>
-              <FormItem
-                style={{marginLeft: '-4px'}}
-                labelCol={{span: 3}}
-                wrapperCol={{span: 21}}
-                label='公司名称'
-              >
-                {!disabled ? getFieldDecorator(
-                  'customerName',
-                  {
-                    initialValue: detail.customerName
-                  }
-                )(
-                  <div>
-                    <CompanySearch
-                      className='inline-block'
-                      enterButton='查询'
-                      style={{width: '322px'}}
-                      value={detail.customerName}
-                      onSelectCompany={(item) => {
-                        fetchTianYanDetail(item.id).then((res) => {
-                          res.isConfirmed = 1
-                          APP.dispatch({
-                            type: 'change customer data',
-                            payload: {
-                              detail: Object.assign({}, detail, res)
-                            }
+            {
+              disabled &&
+              <Col span={6}>
+                <FormItem
+                  style={{marginLeft: '-4px'}}
+                  labelCol={{span: 9}}
+                  wrapperCol={{span: 12}}
+                  label='信息来源：'
+                >
+                  <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
+                </FormItem>
+              </Col>
+            }
+            {
+              !disabled &&
+              <Col span={18}>
+                <FormItem
+                  style={{marginLeft: '-4px'}}
+                  labelCol={{span: 3}}
+                  wrapperCol={{span: 21}}
+                  label='公司名称'
+                >
+                  {!disabled ? getFieldDecorator(
+                    'customerName',
+                    {
+                      initialValue: detail.customerName
+                    }
+                  )(
+                    <div>
+                      <CompanySearch
+                        className='inline-block'
+                        enterButton='查询'
+                        style={{width: '322px'}}
+                        value={detail.customerName}
+                        onSelectCompany={(item) => {
+                          fetchTianYanDetail(item.id).then((res) => {
+                            res.companyInfoSource = 1
+                            res.isConfirmed = 1
+                            APP.dispatch({
+                              type: 'change customer data',
+                              payload: {
+                                detail: Object.assign({}, detail, res)
+                              }
+                            })
                           })
-                        })
-                        this.setState({
-                          disabled: true
-                        })
-                      }}
-                    />
-                    <Button
-                      className='ml5 mr5'
-                      type='primary'
-                      onClick={this.searchUrl.bind(this)}
-                    >
-                      网址
-                    </Button>
-                    <Button
-                      type='primary'
-                      onClick={() => {
-                        detail.isConfirmed = 0
-                        this.setState({
-                          disabled: false
-                        })
-                      }}
-                    >
-                      特殊公司
-                    </Button>
-                  </div>
-                ) : <span>{detail.customerName}</span>
-                }
-              </FormItem>
-            </Col>
+                          this.setState({
+                            disabled: true
+                          })
+                        }}
+                      />
+                      <Button
+                        className='ml5 mr5'
+                        type='primary'
+                        onClick={this.searchUrl.bind(this)}
+                      >
+                        网址
+                      </Button>
+                      <Button
+                        type='primary'
+                        onClick={() => {
+                          detail.isConfirmed = 0
+                          detail.companyInfoSource = 3
+                          this.setState({
+                            disabled: false
+                          })
+                        }}
+                      >
+                        特殊公司
+                      </Button>
+                    </div>
+                  ) : ''}
+                </FormItem>
+              </Col>
+            }
             <Col span={6}>
               <FormItem
                 labelCol={{span: 8}}

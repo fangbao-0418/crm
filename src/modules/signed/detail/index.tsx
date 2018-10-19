@@ -36,14 +36,6 @@ class Main extends React.Component<Props> {
     if (this.state.disabled === false) {
       return
     }
-    console.log(this.props.detail, 'this.props.detail.id')
-    if (!this.props.detail.customerName) {
-      APP.error('请输入公司名称！')
-      return
-    }
-    if (this.props.detail.legalPersonCard.length > 18) {
-      return
-    }
     updateCustomer(id, this.props.detail).then(() => {
       APP.success('保存成功')
     })
@@ -59,6 +51,25 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
+                if (!this.state.disabled) {
+                  if (!this.props.detail.customerName) {
+                    APP.error('请输入公司名称！')
+                    return
+                  }
+                  if (this.props.detail.legalPersonCard.length > 18) {
+                    return false
+                  }
+                  if (!this.props.detail.unifiedCreditCode) {
+                    APP.error('统一信用代码不能为空！')
+                    return
+                  }
+                  console.log(this.props.detail.isConfirmed === 0)
+                  console.log((/^[3 | 5]/.test(this.props.detail.unifiedCreditCode)))
+                  if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
+                    APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
+                    return
+                  }
+                }
                 this.setState({
                   disabled: !this.state.disabled
                 }, () => {
