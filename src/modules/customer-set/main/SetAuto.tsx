@@ -24,7 +24,7 @@ class Main extends React.Component<Props> {
   }, {
     title: (
       <span>
-        自动分配权值
+        自动分配权值/天
         <Tooltip placement='top' title='自动分配客户量会根据分配权值比例来分，权值为0，则不予分配，输入范围（0-10）'>
           <i className='fa fa-exclamation-circle ml5'></i>
         </Tooltip>
@@ -54,7 +54,7 @@ class Main extends React.Component<Props> {
   }, {
     title: (
       <span>
-        自动分配日最大值
+        自动分配日最大值/个
         <Tooltip placement='top' title='自动分配客户量若达到日最大值上限，则系统不再自动分与该代理商，输入范围 （0-99999）'>
           <i className='fa fa-exclamation-circle ml5'></i>
         </Tooltip>

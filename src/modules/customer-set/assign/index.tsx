@@ -13,12 +13,14 @@ interface State {
   diabled: boolean
   sales: Array<{id?: string, name?: string, salespersonId?: string, salespersonName?: string}>
   salesPerson?: Array<{salespersonId: string, salespersonName: string}>
+  selectRadio?: number
 }
 class Main extends React.Component<Customer.Props, State> {
   public state: State = {
     diabled: true,
     sales: [],
-    salesPerson: []
+    salesPerson: [],
+    selectRadio: 0
   }
   public componentWillMount () {
     this.getSalesList()
@@ -54,6 +56,10 @@ class Main extends React.Component<Customer.Props, State> {
                 console.log(this.state.diabled, 'this.state.diabled')
                 if (!this.state.diabled) {
                   console.log(this.state.salesPerson, 'this.state.salesPerson')
+                  if (this.state.selectRadio === 2 && this.state.salesPerson.length === 0) { // 自定义的时候销售不能为空
+                    APP.error('请选择销售')
+                    return
+                  }
                   saveGeneralCapacity(this.state.salesPerson).then(() => {
                     APP.success('操作成功')
                   })
@@ -73,7 +79,8 @@ class Main extends React.Component<Customer.Props, State> {
             onChange={(values) => {
               console.log(values, 'values')
               this.setState({
-                salesPerson: values.salesPerson
+                salesPerson: values.salesPerson,
+                selectRadio: values.selectradio
               })
             }}
           />

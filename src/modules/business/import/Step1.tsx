@@ -51,10 +51,10 @@ class Main extends React.Component<Props> {
         </div>
         <div className='mt12'>
           <span>
-            分配销售：
-            <Tooltip placement='top' title='客户未被跟进的天数'>
-              <i className='fa fa-exclamation-circle ml5'></i>
+            <Tooltip placement='top' title='默认分给自己；若勾选其他多个销售，可直接平均分配到其他销售库中'>
+              <i className='fa fa-exclamation-circle ml5' style={{color: '#FBCD5D', marginRight: 5}}></i>
             </Tooltip>
+            分配销售：
           </span>
           <Select
             labelInValue

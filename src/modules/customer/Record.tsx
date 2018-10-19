@@ -9,6 +9,7 @@ interface Props extends Customer.Props {
 }
 class Main extends React.Component<Props> {
   public render () {
+    console.log(this.props, 'this.props')
     const { trackRecords, clueRecords } = this.props
     return (
       <div style={{ borderLeft: '1px solid #e5e5e5' }}>
