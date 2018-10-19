@@ -102,9 +102,12 @@ declare namespace Customer {
     dataSource?: DetailProps[]
     detail?: DetailProps
     autoAssign?: AutoAssignProps[]
-    capacity?: CapacityProps[],
+    capacity?: CapacityProps[]
     assignResult?: AssignResultProps
     spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
-    detailVisibleState?: boolean
+    /** 跟进记录 */
+    trackRecords?: TrackRecord[]
+    /** 线索记录 */
+    clueRecords?: TrackRecord[]
   }
 }

@@ -1,51 +1,22 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import moment from 'moment'
-import { fetchTrackRecords, fetchClueRecords } from './api'
+import { connect } from 'react-redux'
 const styles = require('./style')
-interface States {
-  trackRecords: Customer.TrackRecord[]
-  clueRecords: Customer.TrackRecord[]
-}
-interface Props {
+interface Props extends Customer.Props {
   customerId?: string
   height?: number
 }
 class Main extends React.Component<Props> {
-  public state: States = {
-    trackRecords: [],
-    clueRecords: []
-  }
-  public componentWillMount () {
-    this.fetchList()
-  }
-  public fetchList () {
-    const payload = {
-      pageNum: 1,
-      pageSize: 999
-    }
-    fetchTrackRecords(this.props.customerId, payload).then((res) => {
-      this.setState({
-        trackRecords: res.data
-      })
-    })
-    fetchClueRecords(this.props.customerId, payload).then((res) => {
-      this.setState({
-        clueRecords: res.data
-      })
-    })
-  }
-  public callback () {
-    console.log('11')
-  }
   public render () {
+    const { trackRecords, clueRecords } = this.props
     return (
       <div style={{ borderLeft: '1px solid #e5e5e5' }}>
-        <Tabs animated={false} defaultActiveKey='1' onChange={this.callback}>
+        <Tabs animated={false} defaultActiveKey='1'>
           <Tabs.TabPane tab='跟进记录' key='1'>
             <div style={{overflowY: 'auto', height: this.props.height }}>
             {
-              this.state.trackRecords.length > 0 && this.state.trackRecords.map((item, index) => {
+              trackRecords.length > 0 && trackRecords.map((item, index) => {
                 return (
                   <div className={styles.record} key={index}>
                     <div className={styles['line-height']}>
@@ -94,7 +65,7 @@ class Main extends React.Component<Props> {
           <Tabs.TabPane tab='线索记录' key='2'>
             <div style={{overflowY: 'auto', height: this.props.height }}>
               {
-                this.state.clueRecords.length > 0 && this.state.clueRecords.map((item, index) => {
+                clueRecords.length > 0 && clueRecords.map((item, index) => {
                   return (
                     <div className={styles.record} key={index}>
                       <div className={styles['line-height']}>
@@ -145,4 +116,6 @@ class Main extends React.Component<Props> {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.customer
+})(Main)

@@ -4,7 +4,11 @@ import { handleActions } from 'redux-actions'
 const defaultVal: Business.Props = {
   tab1: {
     dataSource: [],
-    searchPayload: {},
+    searchPayload: {
+      tab: '1',
+      pageCurrent: 1,
+      pageSize: 15
+    },
     pagination: {
       total: 0,
       current: 1,
@@ -13,7 +17,11 @@ const defaultVal: Business.Props = {
   },
   tab2: {
     dataSource: [],
-    searchPayload: {},
+    searchPayload: {
+      tab: '2',
+      pageCurrent: 1,
+      pageSize: 15
+    },
     pagination: {
       total: 0,
       current: 1,
@@ -22,7 +30,11 @@ const defaultVal: Business.Props = {
   },
   tab3: {
     dataSource: [],
-    searchPayload: {},
+    searchPayload: {
+      tab: '3',
+      pageCurrent: 1,
+      pageSize: 15
+    },
     pagination: {
       total: 0,
       current: 1,
@@ -31,7 +43,11 @@ const defaultVal: Business.Props = {
   },
   tab4: {
     dataSource: [],
-    searchPayload: {},
+    searchPayload: {
+      tab: '4',
+      pageCurrent: 1,
+      pageSize: 15
+    },
     pagination: {
       total: 0,
       current: 1,

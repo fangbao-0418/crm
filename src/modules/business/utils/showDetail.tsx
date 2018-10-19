@@ -5,9 +5,9 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
+import store from '@/store'
 export default function (record: Business.DetailProps, index?: number, cb?: () => void) {
-  const { customerName } = record
-  const customerId = record.id
+  let customerId = record.id
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
@@ -33,6 +33,7 @@ export default function (record: Business.DetailProps, index?: number, cb?: () =
                     title: '转公海',
                     mask: true,
                     onOk: () => {
+                      customerId = store.getState().customer.detail.id
                       if (!reason.label) {
                         APP.error('请选择原因！')
                         return false
@@ -42,7 +43,6 @@ export default function (record: Business.DetailProps, index?: number, cb?: () =
                         bus_sea_memo: reason.label
                       }
                       toOpen(openparams).then(() => {
-                        //
                         APP.success('操作成功')
                         if (cb) {
                           cb()
@@ -64,18 +64,6 @@ export default function (record: Business.DetailProps, index?: number, cb?: () =
                 onClick={() => {
                   that.ins.save().then(() => {
                     APP.success('保存成功')
-                    APP.dispatch<Customer.Props>({
-                      type: 'change customer data',
-                      payload: {
-                        detailVisibleState: false
-                      }
-                    })
-                    APP.dispatch<Customer.Props>({
-                      type: 'change customer data',
-                      payload: {
-                        detailVisibleState: true
-                      }
-                    })
                   })
                 }}
               >

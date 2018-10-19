@@ -36,19 +36,15 @@ export default function (): ColumnProps<Business.DetailProps>[] {
                       }
                     }
                   })
-                  APP.dispatch<Customer.Props>({
-                    type: 'change customer data',
-                    payload: {
-                      detailVisibleState: false
-                    }
-                  })
                   if (res.data[index]) {
                     const customerId = res.data[index].id
                     changeCustomerDetailAction(customerId)
                     APP.dispatch<Customer.Props>({
                       type: 'change customer data',
                       payload: {
-                        detailVisibleState: true
+                        detail: {
+                          id: customerId
+                        }
                       }
                     })
                   } else {
