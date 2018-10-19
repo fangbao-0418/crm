@@ -5,7 +5,9 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
-export default function (customerId: string, index?: number, cb?: () => void) {
+import store from '@/store'
+export default function (record: Business.DetailProps, index?: number, cb?: () => void) {
+  let customerId = record.id
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
@@ -31,6 +33,7 @@ export default function (customerId: string, index?: number, cb?: () => void) {
                     title: '转公海',
                     mask: true,
                     onOk: () => {
+                      customerId = store.getState().customer.detail.id
                       if (!reason.label) {
                         APP.error('请选择原因！')
                         return false
@@ -40,13 +43,6 @@ export default function (customerId: string, index?: number, cb?: () => void) {
                         bus_sea_memo: reason.label
                       }
                       toOpen(openparams).then(() => {
-                        this.setState({
-                          visible: false
-                        }, () => {
-                          this.setState({
-                            visible: true
-                          })
-                        })
                         APP.success('操作成功')
                         if (cb) {
                           cb()

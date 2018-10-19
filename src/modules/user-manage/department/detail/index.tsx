@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Input, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 interface Props extends FormComponentProps {
+  type?: 'Agent' | 'DirectCompany'
   value?: string
   onOk?: (value?: {name: string}) => void
   onCancel?: () => void

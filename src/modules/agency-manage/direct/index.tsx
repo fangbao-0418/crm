@@ -1,22 +1,33 @@
 import React from 'react'
-import { Table, Divider } from 'antd'
+import { Table, Divider, Input } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchDirectList, changeCompanyInfo } from '../api'
+import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail } from '../api'
 import { Modal } from 'pilipa'
 import Detail from './detail'
+import Area from './Area'
+const Search = Input.Search
+interface Props {
+  type?: 'DirectCompany' | 'Agent'
+  columns?: ColumnProps<any>[]
+}
 interface State {
   pagination?: Common.PaginationProps
   dataSource?: Organ.DirectItemProps[]
 }
-class Main extends React.Component<{}, State> {
+class Main extends React.Component<Props, State> {
+  public type = this.props.type !== undefined ? this.props.type : 'DirectCompany'
   public state: State = {
-    dataSource: []
+    dataSource: [],
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
   }
   public payload: Organ.DirectSearchPayload = {
-    // companyType: 'DirectCompany',
-    companyType: 'Agent',
+    companyType: this.type,
     pageCurrent: 1,
-    pageSize: 10
+    pageSize: 15
   }
   public columns: ColumnProps<Organ.DirectItemProps>[] = [
     {
@@ -74,6 +85,7 @@ class Main extends React.Component<{}, State> {
     this.fetchList()
   }
   public fetchList () {
+    this.payload.name = this.payload.name || undefined
     fetchDirectList(this.payload).then((res) => {
       this.setState({
         dataSource: res.records,
@@ -86,36 +98,78 @@ class Main extends React.Component<{}, State> {
     })
   }
   public show (type: 'view' | 'update', record: Organ.DirectItemProps) {
-    const modal = new Modal({
-      title: '新增',
-      content: (
-        <Detail
-          disabled={type === 'view'}
-          item={record}
-          onOk={(values) => {
-            console.log(values)
-            changeCompanyInfo(values).then((res) => {
-              this.fetchList()
-            })
-          }}
-          onCancel={() => {
-            modal.hide()
-          }}
-        />
-      ),
-      footer: null
-    })
-    modal.show()
+    if (record) {
+      fetchCompanyDetail({id: record.id}).then((res) => {
+        const modal = new Modal({
+          title: '新增',
+          content: (
+            <Detail
+              disabled={type === 'view'}
+              item={res}
+              onOk={(values) => {
+                changeCompanyInfo(values).then(() => {
+                  this.fetchList()
+                })
+                modal.hide()
+              }}
+              onCancel={() => {
+                modal.hide()
+              }}
+            />
+          ),
+          footer: null
+        })
+        modal.show()
+      })
+    }
   }
   public render () {
-    const { dataSource } = this.state
+    const { dataSource, pagination } = this.state
     return (
       <div>
+        <div className='mb10'>
+          <Search
+            className='inline-block middle mr5'
+            placeholder={`请输入${this.type === 'Agent' ? '代理商' : '直营'}名称`}
+            onSearch={(value) => {
+              this.payload.pageCurrent = 1
+              this.payload.name = value
+              this.fetchList()
+            }}
+            style={{ width: 200 }}
+          />
+          <Area
+            onChange={(value) => {
+              if (value.length === 2) {
+                this.payload.pageCurrent = 1
+                this.payload.regionCity = value[1].code
+                this.fetchList()
+              }
+              if (value.length === 0) {
+                this.payload.regionCity = undefined
+                this.fetchList()
+              }
+            }}
+          />
+        </div>
         <div>
           <Table
             bordered
-            columns={this.columns}
+            columns={this.props.columns || this.columns}
             dataSource={dataSource}
+            pagination={{
+              total: pagination.total,
+              pageSize: pagination.pageSize,
+              current: pagination.current,
+              onChange: (current) => {
+                pagination.current = current
+                this.payload.pageCurrent = current
+                this.fetchList()
+                this.setState({
+                  pagination
+                })
+              }
+            }}
           />
         </div>
       </div>

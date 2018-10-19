@@ -7,7 +7,7 @@ export default class extends React.Component {
     return (
       <LocaleProvider locale={zhCN}>
         <div>
-          <div className={styles.container}>Index</div>
+          <div className={styles.container}></div>
         </div>
       </LocaleProvider>
     )

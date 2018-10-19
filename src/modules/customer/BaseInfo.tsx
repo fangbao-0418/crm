@@ -170,6 +170,10 @@ class Main extends React.Component<Props> {
           return
         }
         const params = this.props.detail
+        if (this.props.type === 'customer' && !params.cityCode) {
+          APP.error('请选择城市！')
+          return
+        }
         params.customerNameType = '1' // 后端不需要改代码所以加上
         // console.log(params.isConfirmed, 'params.isConfirmed')
         params.contactPersons = this.props.linkMan
@@ -478,6 +482,7 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <Input
+                  maxlength='11'
                   required
                   label='主联系电话'
                   disabled={disabled}
@@ -535,6 +540,7 @@ class Main extends React.Component<Props> {
             <Col span={12}>
               <FormItemLayout
                 label='城市'
+                required
               >
                 <AutoComplete
                   className={styles['auto-complete']}

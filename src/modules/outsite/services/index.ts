@@ -204,8 +204,13 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 外勤工单信息详情
-  public AuditTaskSure (params: any) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', params)
+  public auditTaskSure (payload: any) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', payload)
+  }
+
+  // 转接任务
+  public transferTasksPer (params: any, payload: any) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/user/${params.userId}`, 'PUT', payload)
   }
 
   // 获取外勤任务列表

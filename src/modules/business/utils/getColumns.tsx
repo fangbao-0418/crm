@@ -8,7 +8,6 @@ import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('../style')
 export default function (): ColumnProps<Business.DetailProps>[] {
-  console.log(this, 'this')
   return [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -22,7 +21,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           <span
             className='href'
             onClick={() => {
-              const modal = showDetail.call(this, record.id, index, () => {
+              const modal = showDetail.call(this, record, index, () => {
                 const business: any = store.getState().business
                 const tab = business.selectedTab
                 const { searchPayload, pagination } = business[tab]
@@ -37,19 +36,15 @@ export default function (): ColumnProps<Business.DetailProps>[] {
                       }
                     }
                   })
-                  APP.dispatch<Customer.Props>({
-                    type: 'change customer data',
-                    payload: {
-                      detailVisibleState: false
-                    }
-                  })
                   if (res.data[index]) {
                     const customerId = res.data[index].id
                     changeCustomerDetailAction(customerId)
                     APP.dispatch<Customer.Props>({
                       type: 'change customer data',
                       payload: {
-                        detailVisibleState: true
+                        detail: {
+                          id: customerId
+                        }
                       }
                     })
                   } else {

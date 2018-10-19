@@ -1,7 +1,7 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Cascader } from 'antd'
+import { Form, Row, Col, Input, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchRegion } from '@/modules/common/api'
+import Area from '../Area'
 import Uploader from './Uploader'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
@@ -10,40 +10,8 @@ interface Props extends FormComponentProps {
   onOk?: (item?: Organ.DirectItemProps) => void
   onCancel?: () => void
 }
-interface State {
-  ProvinceList: Common.RegionProps[]
-}
-class Main extends React.Component<Props, State> {
+class Main extends React.Component<Props> {
   public region: Common.RegionProps[] = []
-  public state: State = {
-    ProvinceList: []
-  }
-  public componentWillMount () {
-    fetchRegion().then((res) => {
-      res.map((item: {isLeaf: boolean}) => {
-        item.isLeaf = false
-      })
-      this.setState({
-        ProvinceList: res
-      })
-    })
-  }
-  public loadCityData (selectedOptions: Common.RegionProps[]) {
-    const targetOption = selectedOptions[selectedOptions.length - 1]
-    targetOption.loading = true
-    const current = selectedOptions[0]
-    fetchRegion({
-      parentId: current.code,
-      level: 2
-    }).then((res) => {
-      targetOption.loading = false
-      targetOption.children = res
-      this.setState({
-        ProvinceList: [...this.state.ProvinceList]
-      })
-    })
-  }
-  public handleSubmit () {}
   public render () {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -56,12 +24,10 @@ class Main extends React.Component<Props, State> {
         sm: { span: 14 }
       }
     }
-    const { ProvinceList } = this.state
     const { disabled } = this.props
     const item = this.props.item || {}
     return (
       <Form
-        onSubmit={this.handleSubmit.bind(this)}
         style={{width: '800px'}}
       >
         <Row>
@@ -104,20 +70,12 @@ class Main extends React.Component<Props, State> {
                 rules: [{
                   required: true, message: '请选择省份城市'
                 }],
-                initialValue: [item.regionProvince, item.regionCity]
+                initialValue: (item.regionProvince || item.regionCity) ? [String(item.regionProvince), String(item.regionCity)] : undefined
               })(
-                <Cascader
-                  fieldNames={{
-                    label: 'name',
-                    value: 'code'
+                <Area
+                  onChange={(region) => {
+                    this.region = region
                   }}
-                  placeholder='请选择省份城市'
-                  options={ProvinceList}
-                  loadData={this.loadCityData.bind(this)}
-                  onChange={(value, selectedOptions: Common.RegionProps[]) => {
-                    this.region = selectedOptions
-                  }}
-                  changeOnSelect
                 />
               )}
             </FormItem>
@@ -340,11 +298,13 @@ class Main extends React.Component<Props, State> {
                     return
                   }
                   const region = this.region
-                  values.regionProvinceName = region[0].name
-                  values.regionProvince = region[0].code
-                  if (region[1]) {
-                    values.regionCity = region[1].name
-                    values.regionCityName = region[1].code
+                  if (region[0]) {
+                    values.regionProvinceName = region[0].name
+                    values.regionProvince = region[0].code
+                    if (region[1]) {
+                      values.regionCityName = region[1].name
+                      values.regionCity = region[1].code
+                    }
                   }
                   delete values.region
                   this.props.onOk(Object.assign({}, item, values))
@@ -354,7 +314,15 @@ class Main extends React.Component<Props, State> {
           >
             保存
           </Button>
-          <Button>取消</Button>
+          <Button
+            onClick={() => {
+              if (this.props.onCancel) {
+                this.props.onCancel()
+              }
+            }}
+          >
+            取消
+          </Button>
         </div>
       </Form>
     )

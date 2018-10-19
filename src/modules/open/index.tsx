@@ -94,7 +94,7 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.show.bind(this, record.id)}>{val}</a>
+        <a onClick={this.show.bind(this, record.id, record.customerName)}>{val}</a>
       )
     }
   }, {
@@ -240,7 +240,7 @@ class Main extends React.Component {
   public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({ selectedRowKeys })
   }
-  public show (customerId: string) {
+  public show (customerId: string, customerName: string) {
     const modal = new Modal({
       content: (
         <Provider>

@@ -1,24 +1,23 @@
-import { Form, Select, TreeSelect, Button, Input, Checkbox } from 'antd'
+import { Form, Select, TreeSelect, Tree, Button, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchDepartment } from '../../api'
+import { TreeNode } from 'antd/lib/tree-select'
+const TreeNode = Tree.TreeNode
+import {
+  fetchDepartment,
+  fetchRole,
+  fetchRolePermission,
+  fetchSuperior,
+  fetchIdentity,
+  fetchOwnArea
+} from '../../api'
 import React from 'react'
 const SHOW_PARENT = TreeSelect.SHOW_PARENT
-const treeData = [
-  {
-    title: '河北区',
-    value: '0-0',
-    key: '0-0'
-  },
-  {
-    title: '和平区',
-    value: '0-1',
-    key: '0-1'
-  }
-]
 const FormItem = Form.Item
 const Option = Select.Option
 const styles = require('./style')
 interface Props extends FormComponentProps {
+  companyCode: string
+  type: UserManage.TypeProps
   item?: UserManage.AccountItemProps
   disabled?: boolean
   onOk?: (values?: UserManage.AccountItemProps) => void // 确认回调
@@ -26,31 +25,73 @@ interface Props extends FormComponentProps {
 }
 
 interface State {
-  isSell: boolean // 是否是销售
-  expandedKeys: string[]
-  checkedKeys: string[]
-  value: string[]
-  departmentList?: any[]
+  isShowOwnArea: boolean // 是否是销售
+  departmentList?: TreeNode[]
+  roleList?: UserManage.RoleItem[]
+  permissionList?: UserManage.RolePermissionItemProps[]
+  superiorList?: UserManage.SuperiorProps[]
+  identityList?: UserManage.IdentityProps[]
+  ownAraeList?: TreeNode[]
 }
 
 class Main extends React.Component<Props, State> {
-
   public state: State = {
-    isSell: false,
-    expandedKeys: [],
-    checkedKeys: [],
-    value: [''],
-    departmentList: []
+    isShowOwnArea: true,
+    departmentList: [],
+    roleList: [],
+    permissionList: [],
+    superiorList: [],
+    identityList: [],
+    ownAraeList: []
   }
   public componentWillMount () {
-    fetchDepartment(this.props.item.companyId).then((res) => {
-      console.log(this.handleDepartmentData(res), 'res')
+    this.fetchData()
+  }
+  public fetchData () {
+    const item = this.props.item || {}
+    fetchRole(this.props.type).then((res) => {
+      this.setState({
+        roleList: res
+      })
+    })
+    fetchDepartment(this.props.companyCode, this.props.type).then((res) => {
       this.setState({
         departmentList: this.handleDepartmentData(res)
       })
     })
+    fetchIdentity(this.props.type).then((res) => {
+      this.setState({
+        identityList: res
+      })
+    })
+    fetchOwnArea(this.props.companyCode).then((res) => {
+      this.setState({
+        ownAraeList: this.handleOwnAreaData(res)
+      })
+    })
+    if (item.organizationId !== undefined) {
+      this.onDepartmentChange(item.organizationId)
+    }
   }
-  public handleDepartmentData (data: UserManage.DepartmentItemProps[]) {
+  public onDepartmentChange (value: any) {
+    fetchSuperior(value).then((res) => {
+      this.setState({
+        superiorList: res
+      })
+    })
+  }
+  public handleOwnAreaData (data: UserManage.OwnAreaProps[]): any[] {
+    data.map((item) => {
+      item.value = item.code
+      item.title = item.name
+      item.children = item.regionList
+      if (item.children instanceof Array && item.children.length > 0) {
+        this.handleOwnAreaData(item.children)
+      }
+    })
+    return data
+  }
+  public handleDepartmentData (data: UserManage.DepartmentItemProps[]): any[] {
     data.map((item) => {
       item.value = item.id
       item.title = item.name
@@ -65,106 +106,55 @@ class Main extends React.Component<Props, State> {
   public onOk = () => {
     this.props.form.validateFields((err, vals: UserManage.AccountItemProps) => {
       if (err) {return}
+      vals.regionList = vals.regionList || []
+      vals.regionList.map((item: {
+        regionArea?: string,
+        regionAreaName?: string,
+        value?: string,
+        label?: string
+      }) => {
+        item.regionArea = item.value
+        item.regionAreaName = item.label
+        delete item.value
+        delete item.label
+      })
       vals = Object.assign({}, this.props.item, vals)
       if (this.props.onOk) {
         this.props.onOk(vals)
       }
     })
   }
-  // 点击取消按钮
-  public cancel = () => {
-    this.props.onCancel()
+
+  public changePermission (roleId?: any) {
+    fetchRolePermission(roleId).then((res) => {
+      this.setState({
+        permissionList: res
+      })
+    })
   }
-  // // 获取区域数据
-  // public setRegionTree () {
-  //   if (this.props.mode === 'add') {
-  //     fetchRegionList().then((res) => {
-  //       this.setState({regionTree: res})
-  //     })
-  //   } else {
-  //     this.setState({regionTree: this.props.item.region})
-  //   }
-  // }
-
-  // 获取所有区域最末级公司的id
-  // public getChildIds (data: any) {
-  //   const endIds: string[] = []
-  //   function getId (arr: any) {
-  //     arr.forEach((item: any) => {
-  //       if (item.region) {
-  //         getId(item.region)
-  //       } else {
-  //         if (!item.regionFlag) {
-  //           endIds.push(item.id)
-  //         }
-  //       }
-  //     })
-  //   }
-  //   getId(data)
-  //   return endIds
-  // }
-
-  // // 获取已勾选区域id
-  // public getCheckedKeys (data: any) {
-  //   const checkedIds: any[] = []
-  //   function getId (arr: any) {
-  //     arr.forEach((item: any) => {
-  //       if (item.region) {
-  //         getId(item.region)
-  //       } else {
-  //         if (item.enableFlag) {
-  //           checkedIds.push(item.id)
-  //         }
-  //       }
-  //     })
-  //   }
-  //   getId(data)
-  //   return checkedIds
-  // }
-
-  // 渲染区域树
-  // public renderTreeNodes = (data: any) => {
-  //   if (!data.length) {return}
-  //   return data.map((item: any) => {
-  //     if (item.region) {
-  //       return (
-  //         <TreeNode title={item.name} key={item.id} dataRef={item}>
-  //           {this.renderTreeNodes(item.region)}
-  //         </TreeNode>
-  //       )
-  //     }
-  //     return <TreeNode key={item.id} title={item.name} {...item} />
-  //   })
-  // }
-
-  // // 区域勾选时触发
-  // public onCheck = (checkedKeys: string[]) => {
-  //   this.setState({ checkedKeys })
-  // }
-
-  // // 区域展开时触发
-  // public onExpand = (expandedKeys: string[]) => {
-  //   this.setState({expandedKeys})
-  // }
-
-  public onChange = (value: any) => {
-    console.log('onChange ', value)
-    this.setState({ value })
+  public renderPermissionTreeNodes (data: UserManage.RolePermissionItemProps[]) {
+    return data.map((item) => {
+      if (item) {
+        const key = item.id
+        if (item.authorityResponseList.length === 0) {
+        }
+        if (item.authorityResponseList) {
+          return (
+            <TreeNode title={item.name} key={key} dataRef={item}>
+              {this.renderPermissionTreeNodes(item.authorityResponseList)}
+            </TreeNode>
+          )
+        }
+        return (
+          <TreeNode key={key} {...item} />
+        )
+      }
+    })
   }
   public render () {
-    const { item, disabled, form: { getFieldDecorator } } = this.props
-    // 树形选择属性
-    const tProps = {
-      treeData,
-      value: this.state.value,
-      onChange: this.onChange,
-      treeCheckable: true,
-      showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder: '请选择负责区域',
-      style: {
-        width: 200
-      }
-    }
+    const { disabled, form: { getFieldDecorator } } = this.props
+    const item = this.props.item || {}
+    const { roleList, superiorList, identityList, ownAraeList } = this.state
     // 过滤规则
     const validation = {
       companyName: {
@@ -197,25 +187,20 @@ class Main extends React.Component<Props, State> {
           {pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '邮箱格式不正确！'}
         ]
       },
-      organizationName: {
-        initialValue: item.organizationName,
+      organizationId: {
+        initialValue: item.organizationId,
         rules:[
           {required: true, message: '请选择部门！'}
         ]
       },
-      roleName: {
-        initialValue: item.roleName,
+      roleId: {
+        initialValue: item.roleId ? String(item.roleId) : undefined,
         rules:[
           {required: true, message: '请选择角色！'}
         ]
       },
-      resource: {
-        rules:[
-          {required: true, message: '请选择是否接收资源！'}
-        ]
-      },
-      center: {
-        rules: [{}]
+      parentId: {
+        initialValue: item.parentId
       }
     }
     return (
@@ -223,11 +208,7 @@ class Main extends React.Component<Props, State> {
         <div>
           <Form>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='公司名称'>
-              {
-                getFieldDecorator('companyName', validation.companyName)(
-                  <Input disabled={disabled} size='small' placeholder='请输入公司名称'/>
-                )
-              }
+              <span>{item.companyName}</span>
             </FormItem>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
               {
@@ -255,8 +236,9 @@ class Main extends React.Component<Props, State> {
 
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
               {
-                getFieldDecorator('organizationName', validation.organizationName)(
+                getFieldDecorator('organizationId', validation.organizationId)(
                   <TreeSelect
+                    onChange={this.onDepartmentChange.bind(this)}
                     treeData={this.state.departmentList}
                     placeholder='请选择所属部门'
                     treeDefaultExpandAll
@@ -264,59 +246,86 @@ class Main extends React.Component<Props, State> {
                 )
               }
             </FormItem>
-
+            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='身份' required>
+              {
+                getFieldDecorator(
+                  'identity',
+                  {
+                    initialValue: item.identity
+                  }
+                )(
+                  <Select
+                    onChange={(value) => {
+                      this.setState({isShowOwnArea: value === 'outWorker'})
+                    }}
+                  >
+                    {
+                      identityList.map((val) => {
+                        return (
+                          <Option key={val.code}>{val.name}</Option>
+                        )
+                      })
+                    }
+                  </Select>
+                )
+              }
+            </FormItem>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
               {
-                getFieldDecorator('roleName', validation.roleName)(
+                getFieldDecorator('roleId', validation.roleId)(
                   <Select
                     disabled={disabled}
                     size='small'
                     placeholder='请选择角色'
                     notFoundContent='暂无数据'
                     onSelect={
-                      (value, option) => {
-                        this.setState({isSell: value === '2'})
+                      (value) => {
+                        this.changePermission(value)
                       }
                     }
                   >
-                    <Option key='1'>11</Option>
-                    <Option key='2'>22</Option>
-                    <Option key='3'>33</Option>
+                    {
+                      roleList.map((val) => {
+                        return (
+                          <Option key={val.id}>{val.name}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
             </FormItem>
-
             {
-              this.state.isSell &&
-              <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='接受资源'>
-              {
-                getFieldDecorator('resource', validation.resource)(
-                  <Select disabled={disabled} size='small' placeholder='请选择是否接受资源' notFoundContent='暂无数据'>
-                    <Option key='1'>是</Option>
-                    <Option key='0'>否</Option>
-                  </Select>
-                )
-              }
-              </FormItem>
-            }
-
-            {
-              this.state.isSell &&
+              this.state.isShowOwnArea &&
               <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
-                <TreeSelect
-                  {...tProps}
-                  size='small'
-                />
+                {
+                  getFieldDecorator(
+                    'regionList'
+                  )(
+                    <TreeSelect
+                      treeData={ownAraeList}
+                      multiple
+                      labelInValue
+                      treeCheckable={true}
+                      placeholder='请选择负责区域'
+                      size='small'
+                    />
+                  )
+                }
               </FormItem>
             }
 
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='上级直属'>
               {
-                getFieldDecorator('center', validation.center)(
+                getFieldDecorator('parentId', validation.parentId)(
                   <Select disabled={disabled} size='small' placeholder='请选择上级直属' notFoundContent='暂无数据'>
-                    <Option key='1'>是</Option>
-                    <Option key='0'>否</Option>
+                    {
+                      superiorList.map((val) => {
+                        return (
+                          <Option key={val.id}>{val.name}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
@@ -325,10 +334,14 @@ class Main extends React.Component<Props, State> {
 
           <div className={styles.permission}>
             <b>所属权限：</b>
-            <Checkbox disabled>渠道用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
+            <Tree
+              disabled={true}
+              defaultExpandAll={true}
+              autoExpandParent={true}
+              checkable={false}
+            >
+              {this.renderPermissionTreeNodes(this.state.permissionList)}
+            </Tree>
           </div>
         </div>
         <div className='text-right mt10'>

@@ -1,7 +1,6 @@
-import { fetchDepartment, fetchAccountList, fetchRoleList } from './api'
-export const fetchDepartmentAction = () => {
-  fetchDepartment().then((res) => {
-    console.log(res, 'res')
+import { fetchDepartment, fetchAccountList, fetchRoleList, fetchCompanyList } from './api'
+export const fetchDepartmentAction = (id: string, type: UserManage.TypeProps) => {
+  fetchDepartment(id, type).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -13,8 +12,8 @@ export const fetchDepartmentAction = () => {
   })
 }
 
-export const fetchAccountListAction = () => {
-  fetchAccountList().then((res) => {
+export const fetchAccountListAction = (payload: UserManage.AccoutSearchPayload) => {
+  fetchAccountList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -31,14 +30,31 @@ export const fetchAccountListAction = () => {
   })
 }
 
-export const fetchRoleListAction = () => {
-  fetchRoleList().then((res) => {
+export const fetchRoleListAction = (payload: {
+  pageCurrent: number,
+  pageSize?: number,
+  roleType: UserManage.TypeProps,
+  companyId: string
+}) => {
+  payload.pageSize = payload.pageSize || 15
+  fetchRoleList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
         role: {
-          dataSource: res
+          dataSource: res.records
         }
+      }
+    })
+  })
+}
+
+export const fetchCompanyListAction = (type: UserManage.TypeProps) => {
+  fetchCompanyList(type).then((res) => {
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        companyList: res
       }
     })
   })

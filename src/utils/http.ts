@@ -1,6 +1,15 @@
-import loading from 'pilipa/libs/loading'
+import { notification, loading } from 'pilipa'
 import store from '@/store'
-
+function handleError (err: JQuery.jqXHR) {
+  let res = {}
+  const { responseJSON, responseText } = err
+  try {
+    res = responseJSON || JSON.parse(responseText)
+  } catch (e) {
+    console.log(e)
+  }
+  return res
+}
 $(document).ajaxSend((event, response, options) => {
   const disableUrls = [
     '/notification/v1/api/remind/prompt/last/(\\w)+',
@@ -32,6 +41,44 @@ $(document).ajaxComplete((event, response, options) => {
   }
 })
 $(document).ajaxError((event, response) => {
+  let msgConf = null
+  const err: any = handleError(response) || {}
+  err.message = err.message || err.errMsg
+  if (response.status === 401) {
+    APP.history.push('/logout')
+  }
+  if (err && err.status && err.errors instanceof Array) {
+    const { status, errors } = err
+    const message: string[] = []
+    errors.forEach((item: {message: string, code: string}) => {
+      message.push(item.message)
+    })
+    if (/^5\d+$/g.test(status)) {
+      msgConf = {
+        title: '服务异常',
+        message: '系统处理失败'
+      }
+      notification.error(msgConf)
+    } else if (/^4\d+$/g.test(status)) {
+      msgConf = {
+        title: '系统提示',
+        message: message.join('，')
+      }
+      notification.warning(msgConf)
+    } else {
+      // msgConf = {
+      //   title: '系统提示',
+      //   message: '未知错误，我们的程序员小哥哥正在拼命处理中'
+      // }
+      // notification.warning(msgConf)
+    }
+  } else {
+    // msgConf = {
+    //   title: '系统提示',
+    //   message: '未知错误，我们的程序员小哥哥正在拼命处理中'
+    // }
+    // notification.warning(msgConf)
+  }
 })
 const RequestTypes = ['GET', 'POST', 'DELETE', 'PUT']
 export interface AjaxConfigProps extends JQuery.AjaxSettings {

@@ -16,6 +16,12 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    // 120.24:9016
+    // '/user': {
+    //   target: 'http://192.168.120.24:9016',
+    //   changeOrigin: true,
+    //   secure: false
+    // },
     '/user': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
