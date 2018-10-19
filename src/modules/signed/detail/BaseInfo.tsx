@@ -71,7 +71,7 @@ class Main extends React.Component<Props, State> {
               {!disabled ? getFieldDecorator(
                 'payTaxesNature',
                 {
-                  initialValue: detail.payTaxesNature
+                  initialValue: detail.payTaxesNature ? String(detail.payTaxesNature) : ''
                 }
               )(
                 <Select
@@ -99,6 +99,7 @@ class Main extends React.Component<Props, State> {
             {!disabled ? getFieldDecorator(
               'legalPersonCard',
               {
+                rules: [{ max: 18, message: '身份证格式不正确' }],
                 initialValue: detail.legalPersonCard
               }
             )(

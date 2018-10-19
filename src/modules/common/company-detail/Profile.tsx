@@ -34,15 +34,22 @@ class Main extends React.Component<Props> {
           <p>
             {
               this.props.type === 'open' &&
-              <label>最后跟进人:</label>
+              <span>
+                <label>最后跟进人:</label>
+                <span>
+                  {this.props.detail.lastReleaseSalesperson}
+                </span>
+              </span>
             }
             {
                this.props.type !== 'open' &&
-               <label>跟进人:</label>
+               <span>
+                <label>跟进人:</label>
+                <span>
+                  {this.props.detail.currentSalesperson}
+                </span>
+               </span>
             }
-            <span>
-              {this.props.detail.currentSalesperson}
-            </span>
             <span>
               {/* 所属机构过滤 */}
               ({APP.user.companyName})

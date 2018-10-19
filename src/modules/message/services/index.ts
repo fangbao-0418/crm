@@ -17,23 +17,22 @@ class MessageService extends Service {
     })
   }
   // 未读消息数
-  public countUnreadedByUserid (userid: any = '') {
-    return Service.http(`/notification/v1/api/remind/unread/${userid}`)
+  public countUnreadedByUserid () {
+    return Service.http(`/notification/v1/api/remind/unread`)
   }
   // 最新消息
-  public getCurrentByUserid (userid: any = '') {
+  public getCurrentByUserid () {
     // return Service.http(`notification/v1/api/remind/unread/last/${userid}`) // @181010 变更接口
-    return Service.http(`/notification/v1/api/remind/prompt/last/${userid}`)
+    return Service.http(`/notification/v1/api/remind/prompt/last`)
   }
   // 详细详情
   public getItemById (id: any = '') {
     return Service.http(`/notification/v1/api/remind/${id}`)
   }
   // 消息列表
-  public getListByUserid (userid: any = '', createAt: any = '', pageCurrent: any = '1', pageSize: any = '10') {
+  public getListByUserid (createAt: any = '', pageCurrent: any = '1', pageSize: any = '10') {
     return Service.http(
       `/notification/v1/api/remind/page?` +
-      `recipient=${userid}&` +
       `createAt=${createAt}&` +
       `pageCurrent=${pageCurrent}&` +
       `pageSize=${pageSize}`

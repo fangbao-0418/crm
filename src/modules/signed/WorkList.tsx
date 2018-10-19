@@ -42,9 +42,6 @@ export default class extends React.Component<Props> {
     title: '创建日期',
     dataIndex: 'createTime'
   }, {
-    title: '提单人',
-    dataIndex: 'sales'
-  }, {
     title: '服务内容',
     dataIndex: 'name'
   }, {

@@ -130,7 +130,7 @@ class Msg implements MsgI {
   // 拉模式的连接、中断、基础数据返回操作方法
   private pullConnect (conf: any) {
     this.looptimer = setInterval(() => {
-      MsgService.getCurrentByUserid(123).then((data: any) => {
+      MsgService.getCurrentByUserid().then((data: any) => {
         this.evTrigger('data', data)
         this.onData(data)
       }).catch((e: any) => {
