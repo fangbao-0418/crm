@@ -75,7 +75,7 @@ class Main extends React.Component<Business.Props> {
     })
   }
   public fetchSales () {
-    getSalesList(1).then((res) => {
+    getSalesList().then((res) => {
       this.setState({
         sales: res
       })
