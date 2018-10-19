@@ -13,6 +13,7 @@ const list = [
   {label: '查看', value: '333'}
 ]
 interface Props extends FormComponentProps {
+  item?: UserManage.RoleItem
   type?: 'Agent' | 'DirectCompany'
   disabled?: boolean
   onOk?: (value?: UserManage.RoleItem) => void
@@ -58,7 +59,7 @@ class Main extends React.Component<Props, State> {
       )
     })
   }
-  public getFinalIds (ids?: any[]) {
+  public getFinalIds (ids: any[] = []) {
     const res: any[] = []
     ids.map((id) => {
       if (this.lastIds.findIndex((val) => String(val) === String(id)) > -1) {
@@ -74,13 +75,17 @@ class Main extends React.Component<Props, State> {
     this.lastIds = []
     const { disabled } = this.props
     const { getFieldDecorator } = this.props.form
+    const item = this.props.item || {}
     return (
       <div>
         <Form layout='inline'>
           <FormItem className={styles.input} label='角色名称' required>
             {
               getFieldDecorator(
-                'roleName'
+                'roleName',
+                {
+                  initialValue: item.roleName
+                }
               )(
                 <Input disabled={disabled} size='small' />
               )
@@ -89,7 +94,10 @@ class Main extends React.Component<Props, State> {
           <FormItem className={styles.input} label='数据共享' required>
             {
               getFieldDecorator(
-                'shareFlag'
+                'shareFlag',
+                {
+                  initialValue: item.shareFlag
+                }
               )(
                 <Select disabled={disabled} size='small' style={{width: '160px'}} placeholder='请选择是否数据共享'>
                   <Option value={0}>是</Option>
@@ -141,7 +149,7 @@ class Main extends React.Component<Props, State> {
                 this.props.form.validateFields((errs, values) => {
                   values.authorityIdList = this.getFinalIds(values.authorityIdList)
                   if (errs === null) {
-                    this.props.onOk(values)
+                    this.props.onOk(Object.assign({}, item, values))
                   }
                 })
               }

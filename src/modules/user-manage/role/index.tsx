@@ -7,7 +7,7 @@ import React from 'react'
 import { Modal } from 'pilipa'
 import { connect } from 'react-redux'
 import { fetchRoleListAction } from '../action'
-import { deleteRole, changeRoleStatus } from '../api'
+import { deleteRole, changeRoleStatus, fetchRoleDetail, editRole } from '../api'
 const styles = require('../style')
 interface States {
   selectedRowKeys: string[]
@@ -36,9 +36,9 @@ class Main extends React.Component<Props, any> {
       render: (text, record) => {
         return (
           <div>
-            <span className='href' onClick={() => {this.update('view')}}>查看</span>
+            <span className='href' onClick={() => {this.update('view', record)}}>查看</span>
             <Divider type='vertical'/>
-            <span className='href' onClick={() => {this.update('modify')}}>修改</span>
+            <span className='href' onClick={() => {this.update('modify', record)}}>修改</span>
             <Divider type='vertical'/>
             <span
               className='href'
@@ -84,29 +84,60 @@ class Main extends React.Component<Props, any> {
   }
 
   // 修改、添加、查看角色
-  public update = (type: 'view' | 'modify' | 'add') => {
+  public update = (type: 'view' | 'modify' | 'add', record: UserManage.RoleItem) => {
     const titles = {
       view: '查看角色',
       modify: '修改角色',
       add: '添加角色'
     }
-    const modal = new Modal({
-      title: titles[type],
-      content: (
-        <Detail
-          type={this.props.type}
-          disabled={type === 'view'}
-          onOk={(value) => {
-            console.log(value, 'role')
-          }}
-          onCancel={() => {
-            modal.hide()
-          }}
-        />
-      ),
-      footer: null
-    })
-    modal.show()
+    const disabled = type === 'view'
+    let modal: any
+    if (type !== 'add') {
+      fetchRoleDetail(record.id, this.props.type).then((item) => {
+        modal = new Modal({
+          title: titles[type],
+          content: (
+            <Detail
+              item={item}
+              type={this.props.type}
+              disabled={disabled}
+              onOk={(value) => {
+                editRole(value).then(() => {
+                  this.fetchList()
+                })
+                modal.hide()
+              }}
+              onCancel={() => {
+                modal.hide()
+              }}
+            />
+          ),
+          footer: null
+        })
+        modal.show()
+      })
+    } else {
+      modal = new Modal({
+        title: titles[type],
+        content: (
+          <Detail
+            type={this.props.type}
+            disabled={disabled}
+            onOk={(value) => {
+              editRole(value).then(() => {
+                this.fetchList()
+              })
+              modal.hide()
+            }}
+            onCancel={() => {
+              modal.hide()
+            }}
+          />
+        ),
+        footer: null
+      })
+      modal.show()
+    }
   }
   // 确认删除
   public delConfirm = (ids: any[] = this.state.selectedRowKeys) => {

@@ -41,6 +41,9 @@ declare namespace UserManage {
     companyId: string
   }
   interface RoleItem {
+    /** 角色Id */
+    roleId?: number
+    /** 角色Id */
     id?: number
     name?: string
     status?: 0 | 1
