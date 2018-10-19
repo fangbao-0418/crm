@@ -15,6 +15,7 @@ interface State {
 }
 interface ValueProps {
   salesPerson?: Array<{salespersonId: string, salespersonName: string}>
+  selectradio?: number
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
@@ -55,6 +56,8 @@ class Main extends React.Component<Props, State> {
             this.setState({
               value: e.target.value
             })
+            this.values.selectradio = e.target.value
+            this.props.onChange(this.values)
           }}
           value={this.state.value}
         >
@@ -92,6 +95,7 @@ class Main extends React.Component<Props, State> {
                   this.setState({
                     selectSales: val
                   })
+                  this.values.selectradio = this.state.value
                   this.values.salesPerson = newVal
                   this.props.onChange(this.values)
                 }}
