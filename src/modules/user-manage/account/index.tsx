@@ -14,7 +14,7 @@ interface States {
   selectedRowKeys: string[]
 }
 interface Props extends UserManage.Props {
-  type: 'DirectCompany' | 'Agent'
+  type: UserManage.TypeProps
 }
 class Main extends React.Component<Props> {
   public companyCode?: string
@@ -61,7 +61,7 @@ class Main extends React.Component<Props> {
             <Divider type='vertical'/>
             <span
               className='href'
-              onClick={() => {this.update('modify', record)}}
+              onClick={() => {this.update('update', record)}}
             >
               修改
             </span>
@@ -78,7 +78,15 @@ class Main extends React.Component<Props> {
     }
   ]
   public componentWillMount () {
-    this.fetchData()
+    // this.fetchData()
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        account: {
+          dataSource: []
+        }
+      }
+    })
   }
   public fetchData () {
     fetchAccountListAction({
@@ -116,7 +124,7 @@ class Main extends React.Component<Props> {
   }
 
   // 查看、修改、添加账号
-  public update = (type: 'view' | 'modify' | 'add', item?: UserManage.AccountItemProps) => {
+  public update = (type: 'view' | 'update', item?: UserManage.AccountItemProps) => {
     item.companyName = this.props.companyName
     const modal = new Modal({
       title: '添加账号',
@@ -128,15 +136,15 @@ class Main extends React.Component<Props> {
           disabled={type === 'view'}
           onOk={(values) => {
             values.companyId = this.props.companyCode
-            if (type === 'modify') {
+            if (type === 'update') {
               updateAccount(values).then(() => {
                 this.fetchData()
               })
             }
-            // console.log(445, val)
+            modal.hide()
           }}
           onCancel={() => {
-            // this.setState({visible: false})
+            modal.hide()
           }}
         />
       ),

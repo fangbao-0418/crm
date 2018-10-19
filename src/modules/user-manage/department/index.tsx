@@ -10,7 +10,7 @@ const styles = require('./style.styl')
 import Detail from './detail'
 import { addDepartment, updateDepartment, changeDepartmentStatus, deleteDepartment } from '../api'
 interface Props extends UserManage.Props {
-  type: 'Agent' | 'DirectCompany'
+  type: UserManage.TypeProps
 }
 class Main extends React.Component<Props> {
   public companyCode: string

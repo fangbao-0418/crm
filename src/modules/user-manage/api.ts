@@ -70,8 +70,9 @@ export const fetchIdentity = (type: UserManage.TypeProps) => {
   return http(`/user/v1/api/identity/list/${type}`)
 }
 /** 获取负责区域 */
-export const fetchOwnArea = (type: UserManage.TypeProps) => {
-  return http(`/user/v1/api/user/region/list/${type}`)
+export const fetchOwnArea = (id: string) => {
+  // /v1/api/region/list/company/{companyId}
+  return http(`/user/v1/api/region/list/company/${id}`)
 }
 /** 获取自定义角色列表 */
 export const fetchRoleList = (payload: {

@@ -13,7 +13,7 @@ interface States {
   selectedRowKeys: string[]
 }
 interface Props extends UserManage.Props {
-  type: 'Agent' | 'DirectCompany'
+  type: UserManage.TypeProps
 }
 class Main extends React.Component<Props, any> {
   public payload: UserManage.RoleSearchPayload = {
@@ -142,8 +142,8 @@ class Main extends React.Component<Props, any> {
   // 确认删除
   public delConfirm = (ids: any[] = this.state.selectedRowKeys) => {
     M.confirm({
-      title: '删除账号',
-      content: '确定删除账号吗？',
+      title: '删除角色',
+      content: '确定删除角色吗？',
       onOk: () => {
         deleteRole(ids).then(() => {
           this.fetchList()
@@ -152,6 +152,7 @@ class Main extends React.Component<Props, any> {
     })
   }
   public onSelectChange = (selectedRowKeys: string[]) => {
+    console.log(selectedRowKeys, 'selectedRowKeys')
     this.setState({ selectedRowKeys })
   }
   public render () {
@@ -195,6 +196,7 @@ class Main extends React.Component<Props, any> {
         </div>
         <div>
           <Table
+            rowKey='id'
             columns={this.columns}
             dataSource={dataSource}
             rowSelection={rowSelection}
@@ -209,7 +211,7 @@ class Main extends React.Component<Props, any> {
             type='primary'
             disabled={!this.state.selectedRowKeys.length}
             className={styles.delBtn}
-            onClick={this.delConfirm.bind(this)}
+            onClick={this.delConfirm.bind(this, undefined)}
           >
             批量删除
           </Button>

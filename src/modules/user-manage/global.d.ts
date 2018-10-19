@@ -30,6 +30,7 @@ declare namespace UserManage {
     parentId?: string
     companyId?: string
     companyName?: string
+    regionList?: OwnAreaProps[]
   }
   // 上级直属
   interface SuperiorProps {
@@ -66,7 +67,7 @@ declare namespace UserManage {
   interface RoleSearchPayload {
     pageCurrent: number,
     pageSize: number,
-    roleType: 'Agent' | 'DirectCompany'
+    roleType: TypeProps
     companyId: string
   }
   interface RoleItem {
@@ -81,7 +82,7 @@ declare namespace UserManage {
     shareFlag?: 0 | 1
     companyId?: string
     roleName?: string
-    roleType?: 'Agent' | 'DirectCompany'
+    roleType?: TypeProps
     authorityIdList?: string[]
   }
   interface RolePermissionItemProps {

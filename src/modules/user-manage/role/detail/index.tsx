@@ -8,7 +8,7 @@ const TreeNode = Tree.TreeNode
 const styles = require('./style')
 interface Props extends FormComponentProps {
   item?: UserManage.RoleItem
-  type?: 'Agent' | 'DirectCompany'
+  type?: UserManage.TypeProps
   disabled?: boolean
   onOk?: (value?: UserManage.RoleItem) => void
   onCancel?: () => void

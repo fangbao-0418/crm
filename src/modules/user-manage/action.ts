@@ -1,5 +1,5 @@
 import { fetchDepartment, fetchAccountList, fetchRoleList, fetchCompanyList } from './api'
-export const fetchDepartmentAction = (id: string, type: 'Agent' | 'DirectCompany') => {
+export const fetchDepartmentAction = (id: string, type: UserManage.TypeProps) => {
   fetchDepartment(id, type).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
@@ -19,7 +19,7 @@ export const fetchAccountListAction = (payload: {
   phone?: string
   organizationName?: string,
   companyId: string,
-  userType: 'Agent' | 'DirectCompany'
+  userType: UserManage.TypeProps
 }) => {
   fetchAccountList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
@@ -41,7 +41,7 @@ export const fetchAccountListAction = (payload: {
 export const fetchRoleListAction = (payload: {
   pageCurrent: number,
   pageSize?: number,
-  roleType: 'Agent' | 'DirectCompany',
+  roleType: UserManage.TypeProps,
   companyId: string
 }) => {
   payload.pageSize = payload.pageSize || 15
@@ -57,7 +57,7 @@ export const fetchRoleListAction = (payload: {
   })
 }
 
-export const fetchCompanyListAction = (type: 'Agent' | 'DirectCompany') => {
+export const fetchCompanyListAction = (type: UserManage.TypeProps) => {
   fetchCompanyList(type).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',

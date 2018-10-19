@@ -19,7 +19,7 @@ import { addDepartment, addAccount, addRole } from './api'
 import { connect } from 'react-redux'
 const TabPane = Tabs.TabPane
 interface Props extends UserManage.Props {
-  type: 'Agent' | 'DirectCompany'
+  type: UserManage.TypeProps
 }
 class Main extends React.Component<Props> {
   public type = this.props.type
@@ -83,6 +83,7 @@ class Main extends React.Component<Props> {
                   userType: this.type
                 })
               })
+              modal.hide()
             }}
             onCancel={() => {
               modal.hide()

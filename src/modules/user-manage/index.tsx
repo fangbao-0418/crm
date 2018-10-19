@@ -23,7 +23,6 @@ class Main extends React.Component<Props, State> {
   }
   public render () {
     const type = this.props.match.params.type === 'direct' ? 'DirectCompany' : 'Agent'
-    console.log(type, 'type xxxxx')
     return (
       <div>
         {
