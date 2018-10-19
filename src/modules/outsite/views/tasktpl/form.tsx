@@ -315,7 +315,7 @@ class Main extends React.Component<any, any> {
     formdata.status = 'NORMAL'
     Service.addTplItem(formdata).then(() => {
       APP.success('保存成功')
-      APP.history.push(`/${Service.moduleName}/tasktpl/list`)
+      APP.history.push(`/outsite/tasktpl/list`)
     })
   }
 

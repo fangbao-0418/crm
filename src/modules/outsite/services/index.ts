@@ -12,8 +12,22 @@ class ModuleService extends Service {
   // 有全局配置后，再用全局配置
   public pageConf: any = {}
 
+  /*
+  UNDISTRIBUTED 未分配
+  DISTRIBUTED 已分配
+  WAITING	已接受/待处理
+  FINISHED 已完成（外勤主管审批交付通过）
+  REFUSED	已驳回 (外勤主管审批交付不通过)
+  RUNNING 进行中
+  SUBMITED 已交付
+  CANCELUNAPPROVED 待审批（取消）
+  REJECTUNAPPROVED	待审批（拒绝）
+  CANCELED	已取消(外勤主管审批取消通过)
+  */
+
   // 任务服务状态
   public taskStatusDict: Map<string> = {
+    /* @181019 太扯了，所有状态都改了！对应的列表、状态和动作映射全部重写！
     UNDISTRIBUTED: '未分配', // 驳回
     DISTRIBUTED: '已分配', // 初始
     WAITING: '待处理', // 已接收
@@ -22,10 +36,23 @@ class ModuleService extends Service {
     RUNNING: '进行中', // 接受
     FINISHED: '已交付', // 子任务完成
     CANCELLED: '已取消' // 取消
+    */
+    UNDISTRIBUTED: '未分配',
+    DISTRIBUTED: '已分配',
+    // WAITING: '已接受/待处理', @181019 第二次修改该处状态
+    COLLECTING: '收集资料',
+    FINISHED: '已完成', // （外勤主管审批交付通过）
+    REFUSED: '已驳回', // (外勤主管审批交付不通过)
+    RUNNING: '进行中',
+    SUBMITED: '已交付',
+    CANCELUNAPPROVED: '待审批', // （取消）
+    REJECTUNAPPROVED: '待审批', // （拒绝）
+    CANCELED: '已取消' // (外勤主管审批取消通过)
   }
 
   // 子任务服务状态
   public subStatusDict: Map<string> = {
+    /*
     WAITING: '待处理', // 第二个任务初始
     DISTRIBUTED: '已分配', // 第一个任务初始
     RUNNING: '进行中', // 接受
@@ -33,6 +60,14 @@ class ModuleService extends Service {
     UNAPPROVED: '待审批', // 取消
     REFUSED: '已拒绝', // 取消审批拒绝
     CANCELLED: '已取消' // 取消审批通过
+    */
+    WAITING: '待处理',
+    DISTRIBUTED: '已分配',
+    UNDISTRIBUTED: '未分配',
+    RUNNING: '进行中',
+    FINISHED: '已完成',
+    UNAPPROVED: '待审批',
+    CANCELED: '已取消'
   }
 
   // 任务模板分类
@@ -61,6 +96,81 @@ class ModuleService extends Service {
   constructor () {
     super()
     this.pageConf.pageSize = 10
+  }
+
+  /*
+  ACCEPT 接受
+  REFUSE 驳回
+  REFUSEAPPROVE 驳回审批通过
+  REFUSEUNAPPROVE 驳回审批不通过
+  CANCEL 取消
+  CANCELAPPROVE 取消审批通过
+  CANCELUNAPPROVE 取消审批不通过
+  ------ 以上废弃
+  ACCEPT 接受 已分配
+  REJECT 拒绝(外勤人员app拒绝)	已分配
+  REJECTAPPROVE	拒绝审批通过 拒绝待审批
+  REJECTUNAPPROVE 拒绝审批不通过 拒绝待审批
+  CANCEL 取消 已分配
+  CANCELAPPROVE 取消审批通过 取消待审批
+  CANCELUNAPPROVE 取消审批不通过 取消待审批
+  SUBMITAPPROVE	提交审批通过	已提交
+  SUBMITUNAPPROVE	提交审批不通过	已提交
+
+  状态 -》 动作 对应关系
+  ACCEPT 接受 已分配
+REFUSE 驳回	已分配
+REFUSEAPPROVE	驳回审批通过 已驳回
+REFUSEUNAPPROVE 驳回审批不通过 已驳回
+CANCEL 取消 除已完成都可以
+CANCELAPPROVE 取消审批通过 已取消
+CANCELUNAPPROVE 取消审批不通过 已取消
+SUBMITAPPROVE	提交审批通过	已提交
+SUBMITUNAPPROVE	提交审批不通过	已提交
+------- 以前对应关系 废弃
+ACCEPT 接受 已分配
+REJECT 拒绝(外勤人员app拒绝)	已分配
+REJECTAPPROVE	拒绝审批通过 拒绝待审批
+REJECTUNAPPROVE 拒绝审批不通过 拒绝待审批
+CANCEL 取消 已分配
+CANCELAPPROVE 取消审批通过 取消待审批
+CANCELUNAPPROVE 取消审批不通过 取消待审批
+SUBMITAPPROVE	提交审批通过	已提交
+SUBMITUNAPPROVE	提交审批不通过	已提交
+  */
+  // 根据任务状态，获取当前能进行的操作
+  public getActionByStatus (status: string = '') {
+    const status2act: Map<any> = {
+      // 驳回审批
+      REJECTPENDING: {
+        YES: 'REJECTAPPROVE',
+        NO: 'REJECTUNAPPROVE'
+      },
+      // 取消审批
+      CANCELLED: {
+        YES: 'CANCELAPPROVE',
+        NO: 'CANCELUNAPPROVE'
+      },
+      // 完成审批
+      SUBMITED: {
+        YES: 'SUBMITAPPROVE',
+        NO: 'SUBMITUNAPPROVE'
+      }
+    }
+    return status2act[status]
+  }
+  // 审批：取消、驳回、完成
+  public auditTaskByTaskidStatus (id: any = '', status: string = '', rst: 'YES' | 'NO' = 'YES') {
+    // act: 'REFUSE' | 'REFUSEAPPROVE' | 'REFUSEUNAPPROVE' | 'CANCEL' | 'ACCEPT' | 'CANCELAPPROVE' | 'CANCELUNAPPROVE') {
+    let act = this.getActionByStatus(status)
+    if (!act) {return}
+    act = act[rst]
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', {id, status: act})
+  }
+
+  // 根据订单号，模糊查询
+  public getOrderItemByOrderNO (orderCode: string = '') {
+    return Service.http(`/shop-order/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`)
   }
 
   // 获取外勤人员
@@ -161,7 +271,7 @@ class ModuleService extends Service {
   }
 
   // 获取全部子任务列表
-  public getTplSublist (conf: Map<string>) {
+  public getTplSublist (conf: Map<string> = {}) {
     const cond = {
       name: '',
       status: 'NORMAL',

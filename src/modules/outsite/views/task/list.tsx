@@ -1,6 +1,6 @@
 import React from 'react'
 import monent, { Moment } from 'moment'
-import { Modal, Icon, Tabs, Table, Row, Col } from 'antd'
+import { Divider, Modal, Icon, Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
@@ -58,6 +58,7 @@ interface States {
   showData?: any, // 弹出层的数据
   pageConf?: any,
   searchData?: any,
+  currentItem?: any,
   tab?: string // 当前tab标签
 }
 interface ColProps extends TaskItem {
@@ -70,6 +71,7 @@ class Main extends React.Component {
   public state: States = {
     modalTitle: '',
     modalVisible: false,
+    currentItem: {},
     dataSource: [],
     selectedRowKeys: [],
     pageConf: {
@@ -94,8 +96,22 @@ class Main extends React.Component {
   public tabList: any = [
     {key: 'UNDISTRIBUTED', name: '待分配'},
     {key: 'DISTRIBUTED', name: '已分配'},
-    {key: 'APPROVED', name: '已完成'}
+    {key: 'FINISHED', name: '已完成'}
   ]
+  public taskIcoMap: any = {
+    CANCELPENDING: {
+      text: '消',
+      className: 'xiao'
+    },
+    xxx: {
+      text: '催',
+      className: 'cui'
+    },
+    REJECTPENDING: {
+      text: '驳',
+      className: 'bo'
+    }
+  }
   public columns: any = [{
     title: '订单号',
     dataIndex: 'orderNo',
@@ -106,9 +122,12 @@ class Main extends React.Component {
     title: '客户名称',
     dataIndex: 'customerName',
     render: (k: any, item: TaskItem) => {
+      const { status } = item
+      let icoConf = this.taskIcoMap[status]
+      icoConf = icoConf ? icoConf : { text: '', className: styles.icohide}
       return (
       <>
-        <span className={item.status ? styles.icohide : styles.icocui}><i>催</i></span>
+        <span className={`${styles.taskico} ${icoConf.className}`}><i>{icoConf.text}</i></span>
         <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
       </>)
     }
@@ -185,8 +204,13 @@ class Main extends React.Component {
     title: '操作',
     dataIndex: 'operation',
     render: (k: any, item: TaskItem) => {
+      const { status } = item
+      const act = Service.getActionByStatus(status)
+      const canAudit = act ? true : false
       return (
         <span>
+          <span className={`likebtn ${canAudit ? '' : 'likebtn-disabled'}`} onClick={() => { this.showAuditModal.bind(this)(item) }}>审批</span>
+          <Divider type='vertical' />
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
         </span>
       )
@@ -314,6 +338,39 @@ class Main extends React.Component {
     // this.getList() // 不同状态参数
   }
 
+  // 审批弹层
+  public showAuditModal (currentItem: TaskItem) {
+    const { status } = currentItem
+    const act = Service.getActionByStatus(status)
+    if (!act) {return}
+    console.log('current item::', status, currentItem)
+    this.setState({
+      currentItem,
+      modalVisible: true
+    })
+  }
+  public hideAuditModal () {
+    this.setState({
+      modalVisible: false
+    })
+  }
+
+  // 审批
+  public audit (rst: 'YES' | 'NO') {
+    const { currentItem } = this.state
+    const { status } = currentItem
+    const act = Service.getActionByStatus(status)
+    console.log('audit::', this.state.currentItem.status, rst, act)
+    if (!act) {
+      this.hideAuditModal()
+      return
+    }
+    Service.auditTaskByTaskidStatus(currentItem.id, status, rst).then((res: any) => {
+      this.getList()
+      this.hideAuditModal()
+    })
+  }
+
   // 导出
   public export () {
 
@@ -327,6 +384,7 @@ class Main extends React.Component {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { currentItem } = this.state
     return (
     <div className={styles.container}>
       <HCframe
@@ -347,7 +405,7 @@ class Main extends React.Component {
                 <Table
                   columns={this.columns}
                   dataSource={this.state.dataSource}
-                  rowSelection={rowSelection}
+                  // rowSelection={rowSelection}
                   bordered
                   pagination={this.state.searchData}
                   rowKey={'key'}
@@ -357,6 +415,30 @@ class Main extends React.Component {
           </Tabs>
         </Row>
       </HCframe>
+      <Modal
+        title={`审批`}
+        visible={this.state.modalVisible}
+        onOk={this.audit.bind(this, 'YES')}
+        onCancel={this.audit.bind(this, 'NO')}
+      >
+        <div className={styles.popbox}>
+          <div style={{display: currentItem.status === 'CANCELPENDING' ? 'block' : 'none'}}>
+            确定取消"{currentItem.name}"在内及后续的子任务？
+            <div className={styles.reason}>
+              {currentItem.cancelReason}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'REJECTPENDING' ? 'block' : 'none'}}>
+            确定驳回?
+            <div className={styles.reason}>
+              {currentItem.approveMsg}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'SUBMITED' ? 'block' : 'none'}}>
+            {currentItem.name}任务已完成
+          </div>
+        </div>
+      </Modal>
     </div>
     )
   }

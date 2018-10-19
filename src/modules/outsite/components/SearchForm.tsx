@@ -24,6 +24,18 @@ function hasErrors (fieldsError: any) {
   return Object.keys(fieldsError).some((field: any) => fieldsError[field])
 }
 
+  /*
+    UNDISTRIBUTED: '未分配',
+    DISTRIBUTED: '已分配',
+    COLLECTING: '收集资料',
+    FINISHED: '已完成', // （外勤主管审批交付通过）
+    REFUSED: '已驳回', // (外勤主管审批交付不通过)
+    RUNNING: '进行中',
+    SUBMITED: '已交付',
+    CANCELUNAPPROVED: '待审批', // （取消）
+    REJECTUNAPPROVED: '待审批', // （拒绝）
+    CANCELED: '已取消' // (外勤主管审批取消通过)
+    */
 // 搜索表单
 class Main extends React.Component<any, any> {
   public state: any = {
@@ -31,26 +43,31 @@ class Main extends React.Component<any, any> {
     tplTaskList: [], // 任务模板列表
     tplSubList: [], // 子任务列表
     tplTaskMap: {}, // 任务id:name map
-    tplSubData: {}, // 子任务按照任务id分组数据
+    tplSubGroup: {}, // 子任务按照任务id分组数据
+    tplSubData: [], // 全部子任务
     statusGroup: {
       UNDISTRIBUTED: {
         UNDISTRIBUTED: '未分配' // 驳回
       },
       DISTRIBUTED: {
         DISTRIBUTED: '已分配', // 初始
-        WAITING: '待处理', // 已接收
-        REFUSED: '已驳回', // （外勤/会计主管驳回）审批不通过
-        RUNNING: '进行中' // 接受
+        COLLECTING: '收集资料',
+        REFUSED: '已驳回', // (外勤主管审批交付不通过)
+        RUNNING: '进行中',
+        SUBMITED: '已交付'
       },
-      APPROVED: {
-        APPROVED: '已完成', // （外勤主管审核通过）', // 审批通过
-        FINISHED: '已交付', // 子任务完成
-        CANCELLED: '已取消' // 取消
+      FINISHED: {
+        FINISHED: '已完成', // （外勤主管审批交付通过）
+        // REFUSED: '已驳回', // (外勤主管审批交付不通过)
+        SUBMITED: '已交付',
+        // CANCELUNAPPROVED: '待审批', // （取消）
+        // REJECTUNAPPROVED: '待审批', // （拒绝）
+        CANCELED: '已取消' // (外勤主管审批取消通过)
       }
     },
     statusDict: {}, // @181017 产品确认：待分配、已分配、已完成三个状态的可筛选属性不同
     searchData: {
-      names: '', // 客户或联系人名称
+      name: '', // 客户或联系人名称
       templeteId: '',
       subId: '',
       userName: '', // 外勤人员
@@ -113,14 +130,34 @@ class Main extends React.Component<any, any> {
         return
       }
       const tplTaskMap: Map<string> = {}
-      const tplSubData: Map<Array<TasktplItem>> = {}
+      const tplSubGroup: Map<Array<TasktplItem>> = {}
       data.map((item: TasktplItem, index: number) => {
         tplTaskMap[item.id] = item.name
-        tplSubData[item.id] = item.subList
+        item.subList.unshift({
+          id: '',
+          name: '全部'
+        })
+        tplSubGroup[item.id] = item.subList
+      })
+      data.unshift({
+        id: '',
+        name: '全部'
       })
       this.setState({
         tplTaskList: data,
         tplTaskMap,
+        tplSubGroup
+      })
+    })
+
+    Service.getTplSublist().then((tplSubData: any) => {
+      if (!tplSubData) {return}
+      // const tplSubData: Array<TasktplItem> = []
+      tplSubData.unshift({
+        id: '',
+        name: '全部子任务'
+      })
+      this.setState({
         tplSubData
       })
     })
@@ -164,9 +201,9 @@ class Main extends React.Component<any, any> {
       // this.props.onSearch(Object.assign({}, this.state.searchData, values))
       const vals: Map<any> = {}
       _.map(values, (val: any, key: any) => {
-        if (val) {
-          vals[key] = val
-        }
+        // if (val) {
+        vals[key] = val
+        // }
       })
       const searchData = Object.assign({}, this.state.searchData, vals)
       console.log('search form change::', searchData, vals)
@@ -209,7 +246,7 @@ class Main extends React.Component<any, any> {
         // onSubmit={this.props.onSearch}
       >
         <FormItem>
-        {getFieldDecorator(`names`, {
+        {getFieldDecorator(`name`, {
           rules: [{
             required: false,
             message: ''
@@ -231,8 +268,8 @@ class Main extends React.Component<any, any> {
               this.syncSearchData({
                 templeteId: e
               })
-              const sublist = this.state.tplSubData[e]
-              console.log('.......', e, sublist, this.state.tplSubData)
+              const sublist = this.state.tplSubGroup[e]
+              console.log('.......', e, sublist, this.state.tplSubGroup)
               this.setState({
                 tplSubList: sublist ? sublist : []
               })
@@ -265,7 +302,7 @@ class Main extends React.Component<any, any> {
             }}
             placeholder='全部当前子任务'
           >
-            {this.createTaskNameOptions(this.state.tplSubList)}
+            {this.createTaskNameOptions(this.state.searchData.templeteId ? this.state.tplSubList : this.state.tplSubData)}
           </Select>
         )}
         </FormItem>

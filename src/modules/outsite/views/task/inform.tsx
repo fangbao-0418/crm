@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter, RouteProps } from 'react-router'
-import monent, { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 import { Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
 import HCframe from '@/modules/common/components/HCframe'
 import SearchOrder from '@/modules/outsite/components/SearchOrder'
@@ -66,8 +66,14 @@ class Main extends React.Component<any, any> {
   }
 
   // 下拉变更
-  public handleChange (value: any) {
-    console.log(`selected ${value}`)
+  public handleChange (e: any) {
+    const orderNo = e.target.value
+    if (orderNo.length < 4) {
+      return
+    }
+    Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
+      console.log('order list ::', res)
+    })
   }
 
   // 表单提交
@@ -76,6 +82,9 @@ class Main extends React.Component<any, any> {
     this.props.form.validateFields((err: any, values: any) => {
       const data = Object.assign({}, this.state.formdata, values)
       console.log('Received values of form: ', data)
+      // 格式化时间
+      data.startTime = moment(data.startTime).format('YYYY-MM-DD')
+      data.start_time = data.startTime
       Service.addTaskItem(data).then(() => {
         APP.success('操作成功')
         APP.history.push(`/${Service.moduleName}/task/list`)
@@ -135,7 +144,11 @@ class Main extends React.Component<any, any> {
                           message: '请输入订单编号'
                         }]
                       })(
-                        <Input placeholder='请输入订单编号' value={this.state.item.orderNo} />
+                        <Input
+                          placeholder='请输入订单编号'
+                          value={this.state.item.orderNo}
+                          onChange={this.handleChange}
+                        />
                       )}
                     </FormItem>
                   </Col>
@@ -164,7 +177,7 @@ class Main extends React.Component<any, any> {
                         message: '请选择外勤'
                       }]
                     })(
-                      <Select onChange={this.handleChange} placeholder='请选择外勤人员' value={this.state.item.userId}>
+                      <Select placeholder='请选择外勤人员' value={this.state.item.userId}>
                       {
                         this.state.workerList.map((worker: any, i: number) => {
                           return <Option key={`worker-${i}`} value={worker.id}>{worker.name}</Option>
