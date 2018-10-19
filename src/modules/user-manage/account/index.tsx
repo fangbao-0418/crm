@@ -127,7 +127,7 @@ class Main extends React.Component<Props> {
           item={item}
           disabled={type === 'view'}
           onOk={(values) => {
-            console.log(values, 'values')
+            values.companyId = this.props.companyCode
             if (type === 'modify') {
               updateAccount(values).then(() => {
                 this.fetchData()

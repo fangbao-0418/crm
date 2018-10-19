@@ -1,4 +1,5 @@
 declare namespace UserManage {
+  export type TypeProps = 'DirectCompany' | 'Agent' | 'System'
   interface CompanyProps {
     id?: number
     name?: string
@@ -25,9 +26,37 @@ declare namespace UserManage {
     /** 部门名称 */
     organizationName?: string
     identity?: string
+    userType?: TypeProps
     parentId?: string
     companyId?: string
     companyName?: string
+  }
+  // 上级直属
+  interface SuperiorProps {
+    id?: string
+    name: string
+    /** 是否是管理者 */
+    managerFlag: boolean
+  }
+  /** 身份 */
+  interface IdentityProps {
+    code: string
+    name: string
+    identityType: string
+  }
+  /** 负责区域 */
+  interface OwnAreaProps extends Common.RegionProps {
+    /** 是否选中 */
+    enableFlag?: boolean
+    /** 是否是负责区域 */
+    regionFlag?: boolean
+    /** 子区域集合 */
+    regionList?: OwnAreaProps[]
+    /** 地区缩写名称 */
+    shortName?: string
+    title?: string
+    value?: string
+    children?: OwnAreaProps[]
   }
   interface PaginationProps {
     total: number
@@ -46,7 +75,9 @@ declare namespace UserManage {
     /** 角色Id */
     id?: number
     name?: string
+    /** 启用状态 */
     status?: 0 | 1
+    /** 是否分享数据 */
     shareFlag?: 0 | 1
     companyId?: string
     roleName?: string

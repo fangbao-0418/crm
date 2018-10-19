@@ -1,6 +1,6 @@
 import http from '@/utils/http'
 
-export const fetchDepartment = (id: string , type: 'Agent' | 'DirectCompany' = 'Agent') => {
+export const fetchDepartment = (id: string , type: UserManage.TypeProps = 'Agent') => {
   return http(`/user/v1/api/organization/list/${type}/${id}`)
 }
 
@@ -8,7 +8,7 @@ export const addDepartment = (payload: {
   name: string,
   parentId?: string,
   companyId: string,
-  organizationType: 'Agent' | 'DirectCompany'
+  organizationType: UserManage.TypeProps
 }) => {
   payload.parentId = payload.parentId !== undefined ? payload.parentId : '0'
   return http(`/user/v1/api/organization`, 'POST', payload)
@@ -41,35 +41,54 @@ export const fetchAccountList = (payload: {
   phone?: string
   organizationName?: string,
   companyId: string,
-  userType: 'Agent' | 'DirectCompany'
+  userType: UserManage.TypeProps
 }) => {
   payload.pageCurrent = payload.pageCurrent || 1
   payload.pageSize = payload.pageSize || 15
   return http(`/user/v1/api/user/list`, 'GET', payload)
 }
-
 export const addAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user`, 'POST', payload)
 }
 export const updateAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user/${payload.id}`, 'PUT', payload)
 }
-
+/** 获取账号详情角色权限 */
+export const fetchRolePermission = (id?: number) => {
+  return http(`/user/v1/api/authority/role/${id}`)
+}
+/** 获取账号详情角色列表 */
+export const fetchRole = (type: UserManage.TypeProps) => {
+  return http(`/user/v1/api/role/list/${type}`)
+}
+/** 获取上级直属 */
+export const fetchSuperior = (id?: string) => {
+  return http(`/user/v1/api/user/list/organization/${id}`)
+}
+/** 获取身份列表 */
+export const fetchIdentity = (type: UserManage.TypeProps) => {
+  return http(`/user/v1/api/identity/list/${type}`)
+}
+/** 获取负责区域 */
+export const fetchOwnArea = (type: UserManage.TypeProps) => {
+  return http(`/user/v1/api/user/region/list/${type}`)
+}
+/** 获取自定义角色列表 */
 export const fetchRoleList = (payload: {
   pageCurrent: number,
   pageSize?: number,
-  roleType: 'Agent' | 'DirectCompany',
+  roleType: UserManage.TypeProps,
   companyId: string
 }) => {
   return http(`/user/v1/api/role/list`, 'GET', payload)
 }
-export const fetchRolePermissionList = (type: 'Agent' | 'DirectCompany') => {
+export const fetchRolePermissionList = (type: UserManage.TypeProps) => {
   return http(`/user/v1/api/role/roleType/${type}`)
 }
 export const addRole = (payload: {
   roleName?: string,
   shareFlag?: 0 | 1,
-  roleType?: 'Agent' | 'DirectCompany',
+  roleType?: UserManage.TypeProps,
   companyId?: string,
   authorityIdList?: string[]
 }) => {
@@ -86,9 +105,9 @@ export const deleteRole = (ids: any[]) => {
 export const changeRoleStatus = (id: number, status: 0 | 1) => {
   return http(`/user/v1/api/role/${id}/${status}`, 'PUT')
 }
-export const fetchRoleDetail = (id: number, type: 'Agent' | 'DirectCompany') => {
+export const fetchRoleDetail = (id: number, type: UserManage.TypeProps) => {
   return http(`/user/v1/api/role/roleId/${id}/roleType/${type}`)
 }
-export const fetchCompanyList = (type: 'Agent' | 'DirectCompany') => {
+export const fetchCompanyList = (type: UserManage.TypeProps) => {
   return http(`/user/v1/api/company/list/${type}`)
 }

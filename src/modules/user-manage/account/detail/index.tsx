@@ -1,26 +1,23 @@
-import { Form, Select, TreeSelect, Button, Input, Checkbox } from 'antd'
+import { Form, Select, TreeSelect, Tree, Button, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchDepartment } from '../../api'
+import { TreeNode } from 'antd/lib/tree-select'
+const TreeNode = Tree.TreeNode
+import {
+  fetchDepartment,
+  fetchRole,
+  fetchRolePermission,
+  fetchSuperior,
+  fetchIdentity,
+  fetchOwnArea
+} from '../../api'
 import React from 'react'
 const SHOW_PARENT = TreeSelect.SHOW_PARENT
-const treeData = [
-  {
-    title: '河北区',
-    value: '0-0',
-    key: '0-0'
-  },
-  {
-    title: '和平区',
-    value: '0-1',
-    key: '0-1'
-  }
-]
 const FormItem = Form.Item
 const Option = Select.Option
 const styles = require('./style')
 interface Props extends FormComponentProps {
   companyCode: string
-  type: 'DirectCompany' | 'Agent'
+  type: UserManage.TypeProps
   item?: UserManage.AccountItemProps
   disabled?: boolean
   onOk?: (values?: UserManage.AccountItemProps) => void // 确认回调
@@ -32,28 +29,72 @@ interface State {
   expandedKeys: string[]
   checkedKeys: string[]
   value: string[]
-  departmentList?: any[]
+  departmentList?: TreeNode[]
+  roleList?: UserManage.RoleItem[]
+  permissionList?: UserManage.RolePermissionItemProps[]
+  superiorList?: UserManage.SuperiorProps[]
+  identityList?: UserManage.IdentityProps[]
+  ownAraeList?: TreeNode[]
 }
 
 class Main extends React.Component<Props, State> {
-
   public state: State = {
-    isSell: false,
+    isSell: true,
     expandedKeys: [],
     checkedKeys: [],
     value: [''],
-    departmentList: []
+    departmentList: [],
+    roleList: [],
+    permissionList: [],
+    superiorList: [],
+    identityList: [],
+    ownAraeList: []
   }
   public componentWillMount () {
-    const item = this.props.item || {}
+    this.fetchData()
+  }
+  public fetchData () {
+    fetchRole(this.props.type).then((res) => {
+      this.setState({
+        roleList: res
+      })
+    })
     fetchDepartment(this.props.companyCode, this.props.type).then((res) => {
-      console.log(this.handleDepartmentData(res), 'res')
       this.setState({
         departmentList: this.handleDepartmentData(res)
       })
     })
+    fetchIdentity(this.props.type).then((res) => {
+      this.setState({
+        identityList: res
+      })
+    })
+    fetchOwnArea(this.props.type).then((res) => {
+      this.setState({
+        ownAraeList: this.handleOwnAreaData(res)
+      })
+    })
   }
-  public handleDepartmentData (data: UserManage.DepartmentItemProps[]) {
+  public onDepartmentChange (value: any) {
+    console.log(value, 'onDepartmentChange')
+    fetchSuperior(value).then((res) => {
+      this.setState({
+        superiorList: res
+      })
+    })
+  }
+  public handleOwnAreaData (data: UserManage.OwnAreaProps[]): any[] {
+    data.map((item) => {
+      item.value = item.code
+      item.title = item.name
+      item.children = item.regionList
+      if (item.children.length > 0) {
+        this.handleOwnAreaData(item.children)
+      }
+    })
+    return data
+  }
+  public handleDepartmentData (data: UserManage.DepartmentItemProps[]): any[] {
     data.map((item) => {
       item.value = item.id
       item.title = item.name
@@ -67,6 +108,7 @@ class Main extends React.Component<Props, State> {
   // 点击确认按钮
   public onOk = () => {
     this.props.form.validateFields((err, vals: UserManage.AccountItemProps) => {
+      console.log(vals, '账号提交结果')
       if (err) {return}
       vals = Object.assign({}, this.props.item, vals)
       if (this.props.onOk) {
@@ -154,21 +196,36 @@ class Main extends React.Component<Props, State> {
     console.log('onChange ', value)
     this.setState({ value })
   }
+  public changePermission (roleId?: any) {
+    fetchRolePermission(roleId).then((res) => {
+      this.setState({
+        permissionList: res
+      })
+    })
+  }
+  public renderPermissionTreeNodes (data: UserManage.RolePermissionItemProps[]) {
+    return data.map((item) => {
+      if (item) {
+        const key = item.id
+        if (item.authorityResponseList.length === 0) {
+        }
+        if (item.authorityResponseList) {
+          return (
+            <TreeNode title={item.name} key={key} dataRef={item}>
+              {this.renderPermissionTreeNodes(item.authorityResponseList)}
+            </TreeNode>
+          )
+        }
+        return (
+          <TreeNode key={key} {...item} />
+        )
+      }
+    })
+  }
   public render () {
     const { disabled, form: { getFieldDecorator } } = this.props
     const item = this.props.item || {}
-    // 树形选择属性
-    const tProps = {
-      treeData,
-      value: this.state.value,
-      onChange: this.onChange,
-      treeCheckable: true,
-      showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder: '请选择负责区域',
-      style: {
-        width: 200
-      }
-    }
+    const { roleList, superiorList, identityList, ownAraeList } = this.state
     // 过滤规则
     const validation = {
       companyName: {
@@ -201,14 +258,14 @@ class Main extends React.Component<Props, State> {
           {pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '邮箱格式不正确！'}
         ]
       },
-      organizationName: {
-        initialValue: item.organizationName,
+      organizationId: {
+        initialValue: item.organizationId,
         rules:[
           {required: true, message: '请选择部门！'}
         ]
       },
-      roleName: {
-        initialValue: item.roleName,
+      roleId: {
+        initialValue: item.roleId,
         rules:[
           {required: true, message: '请选择角色！'}
         ]
@@ -255,8 +312,9 @@ class Main extends React.Component<Props, State> {
 
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
               {
-                getFieldDecorator('organizationName', validation.organizationName)(
+                getFieldDecorator('organizationId', validation.organizationId)(
                   <TreeSelect
+                    onChange={this.onDepartmentChange.bind(this)}
                     treeData={this.state.departmentList}
                     placeholder='请选择所属部门'
                     treeDefaultExpandAll
@@ -264,24 +322,45 @@ class Main extends React.Component<Props, State> {
                 )
               }
             </FormItem>
-
+            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='身份' required>
+              {
+                getFieldDecorator(
+                  'identity'
+                )(
+                  <Select>
+                    {
+                      identityList.map((val) => {
+                        return (
+                          <Option key={val.code}>{val.name}</Option>
+                        )
+                      })
+                    }
+                  </Select>
+                )
+              }
+            </FormItem>
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
               {
-                getFieldDecorator('roleName', validation.roleName)(
+                getFieldDecorator('roleId', validation.roleId)(
                   <Select
                     disabled={disabled}
                     size='small'
                     placeholder='请选择角色'
                     notFoundContent='暂无数据'
                     onSelect={
-                      (value, option) => {
+                      (value) => {
                         this.setState({isSell: value === '2'})
+                        this.changePermission(value)
                       }
                     }
                   >
-                    <Option key='1'>11</Option>
-                    <Option key='2'>22</Option>
-                    <Option key='3'>33</Option>
+                    {
+                      roleList.map((val) => {
+                        return (
+                          <Option key={val.id}>{val.name}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
@@ -305,7 +384,13 @@ class Main extends React.Component<Props, State> {
               this.state.isSell &&
               <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
                 <TreeSelect
-                  {...tProps}
+                  treeData={ownAraeList}
+                  multiple
+                  // value: this.state.value,
+                  // onChange: this.onChange,
+                  treeCheckable={true}
+                  // showCheckedStrategy: SHOW_PARENT,
+                  placeholder='请选择负责区域'
                   size='small'
                 />
               </FormItem>
@@ -315,8 +400,13 @@ class Main extends React.Component<Props, State> {
               {
                 getFieldDecorator('center', validation.center)(
                   <Select disabled={disabled} size='small' placeholder='请选择上级直属' notFoundContent='暂无数据'>
-                    <Option key='1'>是</Option>
-                    <Option key='0'>否</Option>
+                    {
+                      superiorList.map((val) => {
+                        return (
+                          <Option key={val.id}>{val.name}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
@@ -325,10 +415,14 @@ class Main extends React.Component<Props, State> {
 
           <div className={styles.permission}>
             <b>所属权限：</b>
-            <Checkbox disabled>渠道用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
-            <Checkbox disabled>直营用户</Checkbox><br/>
+            <Tree
+              disabled={true}
+              defaultExpandAll={true}
+              autoExpandParent={true}
+              checkable={false}
+            >
+              {this.renderPermissionTreeNodes(this.state.permissionList)}
+            </Tree>
           </div>
         </div>
         <div className='text-right mt10'>

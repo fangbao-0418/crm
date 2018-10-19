@@ -75,7 +75,8 @@ class Main extends React.Component<Props> {
             type={this.type}
             companyCode={this.props.companyCode}
             onOk={(values: UserManage.AccountItemProps) => {
-              console.log(values, 'values')
+              values.companyId = this.props.companyCode
+              values.userType = this.type
               addAccount(values).then(() => {
                 fetchAccountListAction({
                   companyId: this.props.companyCode,

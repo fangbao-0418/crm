@@ -6,12 +6,6 @@ const FormItem = Form.Item
 const Option = Select.Option
 const TreeNode = Tree.TreeNode
 const styles = require('./style')
-const list = [
-  {label: '增加', value: '111'},
-  {label: '删除', value: '222'},
-  {label: '修改', value: '333'},
-  {label: '查看', value: '333'}
-]
 interface Props extends FormComponentProps {
   item?: UserManage.RoleItem
   type?: 'Agent' | 'DirectCompany'
