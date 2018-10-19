@@ -11,10 +11,12 @@ import ChannelModal from './agent/ChannelModal'
 const TabPane = Tabs.TabPane
 interface States {
   defaultActiveKey: string
+  showAccountingModal: number // 用于核算中心添加窗口的显示
 }
 class Main extends React.Component<null, States> {
   public state: States = {
-    defaultActiveKey: 'direct'
+    defaultActiveKey: 'direct',
+    showAccountingModal: 0
   }
   public callback (value?: string) {
     this.setState({
@@ -25,7 +27,9 @@ class Main extends React.Component<null, States> {
     console.log(this.state.defaultActiveKey)
     if (this.state.defaultActiveKey === 'direct') {}
     if (this.state.defaultActiveKey === 'agent') { this.addAgent() }
-    if (this.state.defaultActiveKey === 'accounting') { this.addAccounting() }
+    if (this.state.defaultActiveKey === 'accounting') {
+      this.setState({showAccountingModal: ++this.state.showAccountingModal})
+    }
   }
   public addAgent () {
     const modal = new Modal({
@@ -42,21 +46,7 @@ class Main extends React.Component<null, States> {
     })
     modal.show()
   }
-  public addAccounting () {
-    const modal = new Modal({
-      content: <AccountingModal />,
-      title: '新增核算中心',
-      mask: true,
-      style: 'width: 500px;',
-      onOk: () => {
-        modal.hide()
-      },
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-  }
+
   public render () {
     return (
       <ContentBox
@@ -82,7 +72,7 @@ class Main extends React.Component<null, States> {
             <Agent />
           </TabPane>
           <TabPane tab='核算中心' key='accounting'>
-            <Accounting />
+            <Accounting showAccountingModal={this.state.showAccountingModal} />
           </TabPane>
         </Tabs>
       </ContentBox>

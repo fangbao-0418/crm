@@ -6,6 +6,15 @@ declare namespace Organ {
     regionCity?: number
     name?: string
   }
+  interface SetAccountingPayload {
+    id?: number // id（修改时Id为必传）
+    name: string // 核算中心名称
+    region: { // 区域信息
+      regionProvince: number
+      regionProvinceName: string
+      city: {regionCity: number, regionCityName: string}[]
+    }[]
+  }
   export interface AgentItemProps {}
   export interface DirectItemProps {
     name?: string
