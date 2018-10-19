@@ -78,10 +78,7 @@ class Main extends React.Component<Props> {
               values.companyId = this.props.companyCode
               values.userType = this.type
               addAccount(values).then(() => {
-                fetchAccountListAction({
-                  companyId: this.props.companyCode,
-                  userType: this.type
-                })
+                fetchAccountListAction(this.props.account.searchPayload)
               })
               modal.hide()
             }}

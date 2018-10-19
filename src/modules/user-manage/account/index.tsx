@@ -7,7 +7,7 @@ import Detail from './detail'
 import { connect } from 'react-redux'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchAccountListAction } from '../action'
-import { updateAccount } from '../api'
+import { updateAccount, deleteAccount } from '../api'
 const styles = require('../style')
 const Formitem = Form.Item
 interface States {
@@ -17,7 +17,11 @@ interface Props extends UserManage.Props {
   type: UserManage.TypeProps
 }
 class Main extends React.Component<Props> {
-  public companyCode?: string
+  public searchPayload: UserManage.AccoutSearchPayload = {
+    pageCurrent: 1,
+    pageSize: 15,
+    userType: this.props.type
+  }
   public state: States = {
     selectedRowKeys: []
   }
@@ -68,7 +72,7 @@ class Main extends React.Component<Props> {
             <Divider type='vertical' />
             <span
               className='href'
-              onClick={() => this.delete('single', record)}
+              onClick={() => this.delete([record.id])}
             >
               删除
             </span>
@@ -78,7 +82,6 @@ class Main extends React.Component<Props> {
     }
   ]
   public componentWillMount () {
-    // this.fetchData()
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -89,21 +92,30 @@ class Main extends React.Component<Props> {
     })
   }
   public fetchData () {
-    fetchAccountListAction({
-      companyId: this.companyCode,
-      userType: this.props.type
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        companyCode: this.searchPayload.companyId,
+        companyName: this.searchPayload.companyName,
+        account: {
+          searchPayload: this.searchPayload
+        }
+      }
     })
+    fetchAccountListAction(this.searchPayload)
   }
   public onSelectChange = (selectedRowKeys: any) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
   // 确认删除
-  public delete = (type: 'batch' | 'single', record: UserManage.AccountItemProps) => {
+  public delete = (ids: any[] = this.state.selectedRowKeys) => {
     M.confirm({
       title: '删除账号',
       content: '确定删除账号吗？',
       onOk: () => {
+        deleteAccount(ids).then(() => {
+          this.fetchData()
+        })
       }
     })
   }
@@ -170,14 +182,8 @@ class Main extends React.Component<Props> {
             showArrow={false}
             labelInValue
             onSelect={(value: {key: string, label: any}) => {
-              APP.dispatch<UserManage.Props>({
-                type: 'change user manage data',
-                payload: {
-                  companyCode: value.key,
-                  companyName: value.label
-                }
-              })
-              this.companyCode = value.key
+              this.searchPayload.companyId = value.key
+              this.searchPayload.companyName = value.label
               this.fetchData()
             }}
           >
@@ -189,21 +195,43 @@ class Main extends React.Component<Props> {
               })
             }
           </Select>
-          <Input
+          <Input.Search
             placeholder='请输入姓名'
             className={styles.searchcondition}
+            onChange={(e) => {
+              this.searchPayload.name = e.target.value
+            }}
+            onSearch={(value) => {
+              this.searchPayload.name = value
+              this.fetchData()
+            }}
           />
-          <Input
+          <Input.Search
             placeholder='请输入手机号'
             className={styles.searchcondition}
+            onChange={(e) => {
+              this.searchPayload.phone = e.target.value
+            }}
+            onSearch={(value) => {
+              this.searchPayload.phone = value
+              this.fetchData()
+            }}
           />
-          <Input
+          <Input.Search
             placeholder='请输入部门名称'
             className={styles.searchcondition}
+            onChange={(e) => {
+              this.searchPayload.organizationName = e.target.value
+            }}
+            onSearch={(value) => {
+              this.searchPayload.organizationName = value
+              this.fetchData()
+            }}
           />
         </div>
         <div>
           <Table
+            rowKey='id'
             bordered
             columns={this.columns}
             dataSource={dataSource}
@@ -229,7 +257,7 @@ class Main extends React.Component<Props> {
             type='primary'
             disabled={!this.state.selectedRowKeys.length}
             className={styles.delBtn}
-            onClick={this.delete.bind(this, 'batch')}
+            onClick={this.delete.bind(this, undefined)}
           >
             批量删除
           </Button>

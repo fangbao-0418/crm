@@ -95,13 +95,24 @@ declare namespace UserManage {
     url?: string
     id?: any
   }
+  interface AccoutSearchPayload {
+    pageCurrent?: number,
+    pageSize?: number,
+    name?: string,
+    phone?: string
+    organizationName?: string,
+    companyId?: string,
+    userType?: UserManage.TypeProps
+    companyName?: string
+  }
   interface Props {
     department?: {
       dataSource: DepartmentItemProps[]
     },
     account?: {
       dataSource?: AccountItemProps[],
-      pagination?: PaginationProps
+      pagination?: PaginationProps,
+      searchPayload?: AccoutSearchPayload
     },
     role?: {
       dataSource?: RoleItem[],

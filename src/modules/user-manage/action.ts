@@ -12,15 +12,7 @@ export const fetchDepartmentAction = (id: string, type: UserManage.TypeProps) =>
   })
 }
 
-export const fetchAccountListAction = (payload: {
-  pageCurrent?: number,
-  pageSize?: number,
-  name?: string,
-  phone?: string
-  organizationName?: string,
-  companyId: string,
-  userType: UserManage.TypeProps
-}) => {
+export const fetchAccountListAction = (payload: UserManage.AccoutSearchPayload) => {
   fetchAccountList(payload).then((res) => {
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',

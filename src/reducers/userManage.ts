@@ -11,7 +11,8 @@ const defaultVal: UserManage.Props = {
       total: 0,
       current: 1,
       pageSize: 15
-    }
+    },
+    searchPayload: {}
   },
   role: {
     dataSource: [],

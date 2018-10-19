@@ -34,21 +34,16 @@ export const deleteDepartment = (id: string) => {
   return http(`/user/v1/api/organization/${id}`, 'DELETE')
 }
 
-export const fetchAccountList = (payload: {
-  pageCurrent?: number,
-  pageSize?: number,
-  name?: string,
-  phone?: string
-  organizationName?: string,
-  companyId: string,
-  userType: UserManage.TypeProps
-}) => {
-  payload.pageCurrent = payload.pageCurrent || 1
-  payload.pageSize = payload.pageSize || 15
+export const fetchAccountList = (payload: UserManage.AccoutSearchPayload) => {
   return http(`/user/v1/api/user/list`, 'GET', payload)
 }
 export const addAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user`, 'POST', payload)
+}
+export const deleteAccount = (ids: any[]) => {
+  return http(`/user/v1/api/user`, 'DELETE', {
+    ids
+  })
 }
 export const updateAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user/${payload.id}`, 'PUT', payload)
