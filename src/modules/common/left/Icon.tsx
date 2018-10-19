@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 const styles = require('./style')
 interface Props {
-  type: 'bussiness' | 'open' | 'customer' | 'sign' | 'set' | 'center' | 'agency' | 'user' | 'worker' | 'message' | 'task' | 'tasktpl' | 'perform' | 'data'
+  type: 'bussiness' | 'open' | 'customer' | 'sign' | 'set' | 'center' | 'organ' | 'user' | 'worker' | 'message' | 'task' | 'tasktpl' | 'perform' | 'data'
 }
 class Main extends React.Component<Props> {
   public render () {

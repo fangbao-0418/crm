@@ -115,11 +115,11 @@ class Main extends React.Component<Props, State> {
     {
       title: '机构管理',
       path: '',
-      icon: <MenuIcon type='agency' />,
+      icon: <MenuIcon type='organ' />,
       children: [
         {
           title: '机构管理',
-          path: '/agency-manage'
+          path: '/organ'
         }
       ]
     },

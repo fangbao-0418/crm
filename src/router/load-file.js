@@ -22,7 +22,7 @@ export { default as loadCenterRole } from 'bundle-loader?lazy&name=[name]!@/modu
 export { default as loadUserManage } from 'bundle-loader?lazy&name=[name]!@/modules/user-manage'
 
 // 机构管理
-export { default as loadAgencyManage } from 'bundle-loader?lazy&name=[name]!@/modules/agency-manage' // 机构管理
+export { default as loadOrgan } from 'bundle-loader?lazy&name=[name]!@/modules/organ' // 机构管理
 
 // 消息
 export { default as loadMessageList } from 'bundle-loader?lazy&name=[name]!@/modules/message/views/list' // 消息列表
