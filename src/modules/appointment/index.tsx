@@ -116,7 +116,7 @@ class Main extends React.Component {
     dataIndex: 'freeDays'
   }, {
     title: '当前销售',
-    dataIndex: 'current_salesperson'
+    dataIndex: 'currentSalesperson'
   }, {
     title: '客户来源',
     dataIndex: 'source',
