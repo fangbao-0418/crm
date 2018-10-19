@@ -62,6 +62,10 @@ class Main extends React.Component<Props> {
                 {
                   required: true,
                   message: '电话不能为空'
+                },
+                {
+                  max: 11,
+                  message: '电话格式不正确'
                 }
               ]
             })(
@@ -69,7 +73,6 @@ class Main extends React.Component<Props> {
                 <span>{text}</span>
               :
                 <Input
-                  max='11'
                   onChange={this.onChange.bind(this, index, 'contactPhone')}
                   value={text}
                 />

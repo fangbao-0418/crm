@@ -446,6 +446,7 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <Input
+                  maxlength='50'
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
@@ -580,6 +581,7 @@ class Main extends React.Component<Props> {
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <Input
+              maxlength='100'
               field='address'
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}
