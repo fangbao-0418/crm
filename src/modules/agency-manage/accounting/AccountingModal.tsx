@@ -122,13 +122,13 @@ class Main extends React.Component<Props, State> {
               label='核算地区范围：'
             >
               <Tree
-                  // disabled={disable}
-                  defaultExpandAll={true}
-                  autoExpandParent={true}
-                  checkable={true}
-                >
-                  {this.renderRegionTreeNodes(this.state.areaList)}
-                </Tree>
+                // disabled={disable}
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                checkable={true}
+              >
+                {this.renderRegionTreeNodes(this.state.areaList)}
+              </Tree>
             </FormItem>
           </Col>
         </Row>

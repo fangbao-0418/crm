@@ -36,6 +36,7 @@ class Main extends React.Component<Props> {
     if (this.state.disabled === false) {
       return
     }
+    console.log(this.props.detail, 'this.props.detail.id')
     updateCustomer(id, this.props.detail).then(() => {
       APP.success('保存成功')
     })
