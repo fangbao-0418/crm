@@ -32,6 +32,11 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    '/shop-order': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
+    },
     // '/config': {
     //   target: 'http://192.168.160.45:9001/',
     //   changeOrigin: true,
