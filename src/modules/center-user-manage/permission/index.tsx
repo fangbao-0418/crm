@@ -20,6 +20,7 @@ interface Info {
   name: string,
   url: string,
   code: string,
+  protocol: string,
   button: any[]
 }
 
@@ -115,12 +116,14 @@ class Main extends React.Component {
 
   // 新增权限
   public addPermission (val: Info) {
-    const {name, code, url, button} = val
+    console.log(val, 'val')
+    const {name, code, url, button, protocol} = val
     const {currentId, permissionList, tab} = this.state
     const payload = {
       name,
       code,
       url,
+      protocol,
       buttonList: button,
       parentId: currentId,
       systemCode: permissionList[tab].id
@@ -134,11 +137,12 @@ class Main extends React.Component {
   // 修改权限
   public modifyPermission (val: Info) {
     const {currentId} = this.state
-    const {name, code, url, button} = val
+    const {name, code, url, button, protocol} = val
     const payload = {
       name,
       code,
       url,
+      protocol,
       buttonList: button
     }
     modifyPermission(currentId, payload).then((res) => {
