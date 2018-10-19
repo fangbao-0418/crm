@@ -313,7 +313,6 @@ class Main extends React.Component<Customer.Props, States> {
             }}
             onClose={() => modal.hide()}
             customerId={customerId}
-            customerName={customerName}
             footer={(
               <div className='text-right mt10'>
                 <Button

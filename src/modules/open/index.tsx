@@ -246,7 +246,6 @@ class Main extends React.Component {
         <Provider>
           <Detail
             customerId={customerId}
-            customerName={customerName}
             type='open'
             onClose={() => modal.hide()}
             footer={(

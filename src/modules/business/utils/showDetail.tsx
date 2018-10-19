@@ -5,7 +5,9 @@ import Detail from '@/modules/customer/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
-export default function (customerId: string, customerName: string, index?: number, cb?: () => void) {
+export default function (record: Business.DetailProps, index?: number, cb?: () => void) {
+  const { customerName } = record
+  const customerId = record.id
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
@@ -18,7 +20,6 @@ export default function (customerId: string, customerName: string, index?: numbe
           }}
           onClose={() => modal.hide()}
           customerId={customerId}
-          customerName={customerName}
           footer={(
             <div className='text-right mt10'>
               <Button
@@ -41,13 +42,7 @@ export default function (customerId: string, customerName: string, index?: numbe
                         bus_sea_memo: reason.label
                       }
                       toOpen(openparams).then(() => {
-                        this.setState({
-                          visible: false
-                        }, () => {
-                          this.setState({
-                            visible: true
-                          })
-                        })
+                        //
                         APP.success('操作成功')
                         if (cb) {
                           cb()
