@@ -1,11 +1,11 @@
 import React from 'react'
-import { Form, Row, Col, Input, TreeSelect, Button } from 'antd'
+import { Form, Row, Col, Input, Tree, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { fetchRegion } from '@/modules/common/api'
 import { fetchAccountingInfo, fetchAccountingProvince } from '../api'
-
+import { TreeNode } from 'antd/lib/tree-select'
 const FormItem = Form.Item
-const TreeNode = TreeSelect.TreeNode
+const TreeNode = Tree.TreeNode
 
 interface Props extends FormComponentProps {
   id: number
@@ -15,14 +15,13 @@ interface Props extends FormComponentProps {
 
 interface State {
   info: any // 机构信息
-  provice: any
+  areaList: UserManage.OwnAreaProps[]
 }
 
 class Main extends React.Component<Props, State> {
-
   public state: State = {
     info: {},
-    provice: []
+    areaList: []
   }
 
   public componentWillMount () {
@@ -36,7 +35,36 @@ class Main extends React.Component<Props, State> {
   // 获取负责区域信息
   public fetchProvince () {
     fetchAccountingProvince().then((res) => {
-      this.setState({provice: res})
+      console.log(this.handleOwnAreaData(res), 'xxxxxxxxx')
+      this.setState({areaList: this.handleOwnAreaData(res)})
+    })
+  }
+  public handleOwnAreaData (data: UserManage.OwnAreaProps[]): any[] {
+    data.map((item) => {
+      item.value = item.code
+      item.title = item.name
+      item.children = item.regionList
+      if (item.children instanceof Array && item.children.length > 0) {
+        this.handleOwnAreaData(item.children)
+      }
+    })
+    return data
+  }
+  public renderRegionTreeNodes (data: UserManage.OwnAreaProps[]): any[] {
+    return data.map((item) => {
+      if (item) {
+        const key: any = item.id
+        if (item.regionList instanceof Array && item.regionList.length > 0) {
+          return (
+            <TreeNode title={item.name} key={key} dataRef={item}>
+              {this.renderRegionTreeNodes(item.regionList)}
+            </TreeNode>
+          )
+        }
+        return (
+          <TreeNode key={key} {...item} />
+        )
+      }
     })
   }
   // 根据id获取信息
@@ -55,7 +83,6 @@ class Main extends React.Component<Props, State> {
       this.props.onOk(val)
     })
   }
-
   public render () {
     const { getFieldDecorator } = this.props.form
     const {info} = this.state
@@ -94,18 +121,14 @@ class Main extends React.Component<Props, State> {
               {...formItemLayout}
               label='核算地区范围：'
             >
-              {getFieldDecorator('region', {
-                rules: [{
-                  required: true, message: '请输入机构名称!'
-                }],
-                initialValue: info.region
-              })(
-                <TreeSelect
-                  treeData={this.state.provice}
-                  treeCheckable={true}
-                  showCheckedStrategy={TreeSelect.SHOW_PARENT}
-                />
-              )}
+              <Tree
+                  // disabled={disable}
+                  defaultExpandAll={true}
+                  autoExpandParent={true}
+                  checkable={true}
+                >
+                  {this.renderRegionTreeNodes(this.state.areaList)}
+                </Tree>
             </FormItem>
           </Col>
         </Row>
