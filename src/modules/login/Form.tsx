@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import GVerify from '@/utils/gVerify'
-import { userLogin } from '@/modules/common/api'
+import { userLogin, fetchSmsVerifyCode } from '@/modules/common/api'
 const styles = require('./style')
 import classNames from 'classnames'
 interface Props {
@@ -65,7 +65,7 @@ class Main extends React.Component<Props> {
         this.props.onOk()
       }
     }, () => {
-      error.phone = '手机号尚未注册'
+      error.phone = '手机号尚未注册或短信验证码不正确'
       this.setState({
         error
       })
@@ -81,6 +81,7 @@ class Main extends React.Component<Props> {
   }
   public getSmsVerifyCode () {
     if (this.num === 0) {
+      fetchSmsVerifyCode(this.values.phone)
       this.num = 59
       this.setState({
         message: '获取验证码'
@@ -136,7 +137,7 @@ class Main extends React.Component<Props> {
             </li>
             <li className={classNames({[styles['has-error']]: !!error['sms-verify-code']})}>
               <div className={styles['sms-verify-text']}>
-                <input maxLength={4} onChange={this.handleChange.bind(this, 'sms-verify-code')}/>
+                <input maxLength={6} onChange={this.handleChange.bind(this, 'sms-verify-code')}/>
                 <span
                   style={{color: message === '获取验证码' ? null : '#cccccc'}}
                   onClick={this.getSmsVerifyCode.bind(this)}

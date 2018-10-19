@@ -14,6 +14,14 @@ export const userLogin = (payload: {
 export const companylist = (token: string) => {
   return http(`/user/v1/api/user/company/list?token=${token}`)
 }
+export const userLogout = () => {
+  return http(`/user/v1/api/logout`, 'POST')
+}
+export const fetchSmsVerifyCode = (phone: string) => {
+  return http(`/user/v1/api/short/message/send`, 'GET', {
+    phone
+  })
+}
 export const fetchUserInfo = () => {
   return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
     fetchPermissionCode().then((res2) => {

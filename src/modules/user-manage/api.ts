@@ -76,10 +76,13 @@ export const addRole = (payload: {
   return http(`/user/v1/api/role/`, 'POST', payload)
 }
 export const deleteRole = (ids: any[]) => {
-  return http(`/user/v1/api/role`, 'DELETE', ids)
+  return http(`/user/v1/api/role`, 'DELETE', {ids})
 }
 export const changeRoleStatus = (id: number, status: 0 | 1) => {
-  return http(`/user/v1/api/role/${id}/${status}`)
+  return http(`/user/v1/api/role/${id}/${status}`, 'PUT')
+}
+export const fetchRoleDetail = (id?: string) => {
+  return http(`/user/v1/api/role/roleId/${id}/roleType/DirectCompany`)
 }
 export const fetchCompanyList = (type: 'Agent' | 'DirectCompany') => {
   return http(`/user/v1/api/company/list/${type}`)
