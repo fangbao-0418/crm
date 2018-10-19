@@ -1,19 +1,55 @@
 import React from 'react'
-import { Form, Row, Col, Input, TreeSelect } from 'antd'
+import { Form, Row, Col, Input, TreeSelect, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { fetchRegion } from '@/modules/common/api'
+import { fetchAccountingInfo } from '../api'
+
 const FormItem = Form.Item
 const TreeNode = TreeSelect.TreeNode
+
 interface Props extends FormComponentProps {
-  detail?: { organizationName: string }
+  id: number
+  onOk: (val: any) => void
+  onCancel: () => void
 }
-class Main extends React.Component<Props> {
-  public componentWillMount () {
-    fetchRegion().then((res) => {})
+
+interface State {
+  info: any // 机构信息
+}
+
+class Main extends React.Component<Props, State> {
+
+  public state: State = {
+    info: {}
   }
-  public handleSubmit () {}
+
+  public componentWillMount () {
+    const {id} = this.props
+    if (id) {
+      this.getAccountingInfo(id)
+    }
+  }
+
+  // 根据id获取信息
+  public getAccountingInfo (id: number) {
+    fetchAccountingInfo(id)
+      .then((res) => {
+        this.setState({info: res})
+      })
+  }
+
+  // 点击保存按钮
+  public save = () => {
+    this.props.form.validateFields((err: any, val: any) => {
+      if (err) {return}
+      val.region = []
+      this.props.onOk(val)
+    })
+  }
+
   public render () {
     const { getFieldDecorator } = this.props.form
+    const {info} = this.state
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -25,7 +61,7 @@ class Main extends React.Component<Props> {
       }
     }
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <Form>
         <Row>
           <Col span={24}>
             <FormItem
@@ -36,7 +72,7 @@ class Main extends React.Component<Props> {
                 rules: [{
                   required: true, message: '请输入机构名称!'
                 }],
-                initialValue: this.props.detail.organizationName
+                initialValue: info.name
               })(
                 <Input placeholder='请输入'/>
               )}
@@ -52,6 +88,16 @@ class Main extends React.Component<Props> {
             </FormItem>
           </Col>
         </Row>
+        <div style={{justifyContent: 'flex-end', display: 'flex'}}>
+          <Button
+            type='primary'
+            style={{marginRight: '10px'}}
+            onClick={() => {this.save()}}
+          >
+            保存
+          </Button>
+          <Button onClick={() => {this.props.onCancel()}}>取消</Button>
+        </div>
       </Form>
     )
   }
