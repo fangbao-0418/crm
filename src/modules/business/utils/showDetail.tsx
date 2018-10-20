@@ -6,7 +6,7 @@ import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
-export default function (record: Business.DetailProps, index?: number, cb?: () => void) {
+export default function (record: Business.DetailProps, cb?: () => void) {
   let customerId = record.id
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}

@@ -45,9 +45,17 @@ export const fetchUserInfo = () => {
 export const fetchPermissionCode = () => {
   return http(`/user/v1/api/authority/code?token=${APP.token}`)
 }
+/** 获取机构管理状态字典 */
+export const fetchOrganStatus = () => {
+  return http(`/user/v1/api/company/getCompanyStatus`)
+}
 export const fetchEnum = () => {
-  return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
+  return Promise.all([
+    http(`/crm-manage/v1/api/code-text/list`),
+    fetchOrganStatus()
+  ]).then(([res, res2]) => {
     const data: any = {}
+    res.data.EnumOrganAgentSource = res2
     for (const key in res.data) {
       if (res.data.hasOwnProperty(key)) {
         data[key] = []

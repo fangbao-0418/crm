@@ -8,6 +8,7 @@ import moment from 'moment'
 import { fetchListappoint } from '@/modules/business/api'
 import _ from 'lodash'
 import { showDetail } from '@/modules/business/utils'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Business.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -88,9 +89,14 @@ class Main extends React.Component {
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
-    render: (val, record) => {
+    render: (val, record, index) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.id, record.customerName)}>{val}</span>
+        <span
+          className='href'
+          onClick={this.show.bind(this, record, index)}
+        >
+          {val}
+        </span>
       )
     }
   }, {
@@ -144,12 +150,13 @@ class Main extends React.Component {
     const pagination = this.state.pagination
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
-    fetchListappoint(this.params).then((res) => {
+    return fetchListappoint(this.params).then((res) => {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
         dataSource: res.data
       })
+      return res
     })
   }
   public handlePageChange (page: number) {
@@ -210,8 +217,21 @@ class Main extends React.Component {
     this.params[values.key] = values.value || undefined
     this.fetchList()
   }
-  public show (customerId: string, customerName: string) {
-    showDetail.call(this, customerId, customerName)
+  public show (record: DetailProps, index: number) {
+    let id = record.id
+    const modal = showDetail.call(this, record, () => {
+      this.fetchList().then((res) => {
+        const data = res.data
+        if (data instanceof Array && data[index]) {
+          id = data[index].id
+          changeCustomerDetailAction(id)
+        } else {
+          modal.hide()
+        }
+      }, () => {
+        modal.hide()
+      })
+    })
   }
   public render () {
     const { pagination } = this.state

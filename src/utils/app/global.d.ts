@@ -25,6 +25,8 @@ declare namespace APP {
     EnumSignCustomerSearchType?: Array<{label: string, value: string}>
     EnumNeedStatus?: Array<{label: string, value: string}>
     EnumFollowWay?: Array<{label: string, value: string}>
+    /** 机构管理代理商公司状态 */
+    EnumOrganAgentSource?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token'
   interface StorageProps {
@@ -46,6 +48,7 @@ declare namespace APP {
   export const success: (msg: string) => void
   export const error: (msg: string) => void
   export let keys: EnumProps
+  /** 字典 */
   export let dictionary: DictProps
   export const env: 'development' | 'production'
   export let token: string
