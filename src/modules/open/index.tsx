@@ -27,17 +27,20 @@ const all = [{
   value: ''
 }]
 class Main extends React.Component {
+  public params: Open.SearchProps = {
+    pageCurrent: 1,
+    pageSize: 15
+  }
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
     pagination: {
       total: 0,
-      current: 1,
-      pageSize: 15
+      current: this.params.pageCurrent,
+      pageSize: this.params.pageSize
     }
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
-  public params: Open.SearchProps = {}
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -168,10 +171,10 @@ class Main extends React.Component {
   }
   public fetchList () {
     const pagination = this.state.pagination
-    this.params.pageSize = pagination.pageSize
-    this.params.pageCurrent = pagination.current
     return fetchList(this.params).then((res) => {
       pagination.total = res.pageTotal
+      pagination.pageSize = res.pageSize
+      pagination.current = res.pageCurrent
       this.setState({
         pagination,
         dataSource: res.data
@@ -182,6 +185,7 @@ class Main extends React.Component {
   public handlePageChange (page: number) {
     const { pagination } = this.state
     pagination.current = page
+    this.params.pageCurrent = page
     this.setState({
       pagination
     }, () => {
@@ -192,6 +196,8 @@ class Main extends React.Component {
     const { pagination } = this.state
     pagination.current = current
     pagination.pageSize = size
+    this.params.pageCurrent = current
+    this.params.pageSize = size
     this.setState({
       pagination
     }, () => {
@@ -249,6 +255,8 @@ class Main extends React.Component {
   }
   public show (record: DetailProps, index: number) {
     let customerId = record.id
+    let dataSource: DetailProps[] = []
+    const searchPayload = this.params
     const modal = new Modal({
       content: (
         <Provider>
@@ -276,7 +284,6 @@ class Main extends React.Component {
                             modal.hide()
                           }
                         })
-                        // modal.hide()
                       })
                     }}
                   >
@@ -306,6 +313,24 @@ class Main extends React.Component {
                   <Button
                     type='primary'
                     onClick={() => {
+                      index -= 1
+                      if (index === -1) {
+                        if (searchPayload.pageCurrent === 1) {
+                          modal.hide()
+                          return
+                        }
+                        index = searchPayload.pageSize - 1
+                        searchPayload.pageCurrent -= 1
+                        dataSource = []
+                      }
+                      if (dataSource.length === 0) {
+                        this.fetchList().then((res) => {
+                          dataSource = res.data || []
+                          changeCustomerDetailAction(dataSource[index].id)
+                        })
+                      } else {
+                        changeCustomerDetailAction(dataSource[index].id)
+                      }
                     }}
                   >
                     上一页
@@ -314,15 +339,29 @@ class Main extends React.Component {
                     style={{ marginLeft: 5}}
                     type='ghost'
                     onClick={() => {
-                      this.fetchList().then((res) => {
-                        const data = res.data
-                        if (data instanceof Array && data[index]) {
-                          customerId = data[index].id
-                          changeCustomerDetailAction(customerId)
-                        } else {
+                      index += 1
+                      if (index >= searchPayload.pageSize) {
+                        searchPayload.pageCurrent += 1
+                        dataSource = []
+                        index = 0
+                      }
+                      if (dataSource.length === 0) {
+                        this.fetchList().then((res) => {
+                          if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                            searchPayload.pageCurrent -= 1
+                            modal.hide()
+                            return
+                          }
+                          dataSource = res.data || []
+                          changeCustomerDetailAction(dataSource[index].id)
+                        })
+                      } else {
+                        if (dataSource[index] === undefined) {
                           modal.hide()
+                          return
                         }
-                      })
+                        changeCustomerDetailAction(dataSource[index].id)
+                      }
                     }}
                   >
                     下一页
