@@ -35,7 +35,7 @@ class Main extends React.Component<Props> {
     })
   }
   public getCompany (citycode: string) {
-    citycode = '300171' // 先默认这个值有数据
+    // citycode = '300171' // 先默认这个值有数据
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
