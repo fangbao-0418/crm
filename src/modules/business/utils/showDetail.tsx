@@ -18,7 +18,9 @@ export default function (record: Business.DetailProps, cb?: () => void) {
           getWrappedInstance={(ins) => {
             that.ins = ins
           }}
-          onClose={() => modal.hide()}
+          onClose={() => 
+            modal.onCancel()
+          }
           customerId={customerId}
           footer={(
             <div className='text-right mt10'>
@@ -79,6 +81,8 @@ export default function (record: Business.DetailProps, cb?: () => void) {
     mask: true,
     onCancel: () => {
       modal.hide()
+      this.fetchCount()
+      this.fetchList()
     }
   })
   modal.show()

@@ -431,6 +431,7 @@ class Main extends React.Component<Customer.Props, States> {
         })
         // console.log(customers, 'customers')
         allocateAuto(customers).then((res) => {
+          APP.success(res.message)  
           APP.dispatch({
             type: 'change customer data',
             payload: {
