@@ -47,6 +47,7 @@ class ModuleService extends Service {
     SUBMITED: '已交付',
     CANCELUNAPPROVED: '待审批', // （取消）
     REJECTUNAPPROVED: '待审批', // （拒绝）
+    COMMITED: '已提交', // 已提交 // @181020 后端开始补充
     CANCELED: '已取消' // (外勤主管审批取消通过)
   }
 
