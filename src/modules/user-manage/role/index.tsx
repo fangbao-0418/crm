@@ -16,6 +16,7 @@ interface Props extends UserManage.Props {
   type: UserManage.TypeProps
 }
 class Main extends React.Component<Props, any> {
+  public loaded = false
   public payload: UserManage.RoleSearchPayload = {
     pageCurrent: 1,
     pageSize: 15,
@@ -65,7 +66,15 @@ class Main extends React.Component<Props, any> {
       }
     })
   }
+  public componentWillReceiveProps (props: Props) {
+    if (props.onlyOne && props.role.dataSource.length === 0 && props.type && props.companyCode !== undefined && this.loaded === false) {
+      this.payload.companyId = props.companyCode
+      this.payload.roleType = props.type
+      this.fetchList()
+    }
+  }
   public fetchList () {
+    this.loaded = true
     fetchRoleListAction(this.payload)
   }
 
@@ -162,11 +171,15 @@ class Main extends React.Component<Props, any> {
       onChange: this.onSelectChange
     }
     const { dataSource } = this.props.role
-    const { companyList } = this.props
+    const { companyList, onlyOne, companyCode } = this.props
+    const disabled = onlyOne
+    const selectValue: any = companyCode !== undefined ? {key: String(companyCode)} : undefined
     return (
       <div>
         <div className={styles.formitem}>
           <Select
+            disabled={disabled}
+            value={selectValue}
             showSearch
             placeholder='请输入公司名称'
             className={styles.searchcondition}

@@ -148,7 +148,7 @@ class Main extends React.Component<Customer.Props, States> {
     }
   }, {
     title: '创建时间',
-    dataIndex: 'enterStorageTime'
+    dataIndex: 'createTime'
   }, {
     title: (
       <span>
@@ -431,6 +431,7 @@ class Main extends React.Component<Customer.Props, States> {
         })
         // console.log(customers, 'customers')
         allocateAuto(customers).then((res) => {
+          APP.success(res.message)
           APP.dispatch({
             type: 'change customer data',
             payload: {

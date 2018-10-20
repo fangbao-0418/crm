@@ -7,7 +7,7 @@ export const fetchCountAction = (payload: Business.SearchProps) => {
       res2.trackContactNums,
       res2.newCustomerNums,
       res,
-      res3
+      res3.data
     ]
     APP.dispatch<Business.Props>({
       type: 'change business data',

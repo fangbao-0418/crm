@@ -23,7 +23,8 @@ export const fetchAccountListAction = (payload: UserManage.AccoutSearchPayload) 
             total: res.pageTotal,
             pageSize: res.pageSize,
             current: res.pageCurrent
-          }
+          },
+          searchPayload: payload
         }
       }
     })
@@ -51,11 +52,25 @@ export const fetchRoleListAction = (payload: {
 
 export const fetchCompanyListAction = (type: UserManage.TypeProps) => {
   fetchCompanyList(type).then((res) => {
-    APP.dispatch<UserManage.Props>({
-      type: 'change user manage data',
-      payload: {
-        companyList: res
-      }
-    })
+    // res = [res[0]]
+    if (res.length === 1) {
+      APP.dispatch<UserManage.Props>({
+        type: 'change user manage data',
+        payload: {
+          companyList: res,
+          companyName: res[0].name,
+          companyCode: res[0].id,
+          onlyOne: true
+        }
+      })
+    } else {
+      APP.dispatch<UserManage.Props>({
+        type: 'change user manage data',
+        payload: {
+          companyList: res,
+          onlyOne: false
+        }
+      })
+    }
   })
 }

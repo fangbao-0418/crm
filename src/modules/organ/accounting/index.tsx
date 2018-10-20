@@ -1,17 +1,50 @@
 import React from 'react'
 import { Table, Input, Divider, Modal as AntdModal } from 'antd'
-import { fetchAccountingList, delAccounting, setAccounting } from '../api'
+import { fetchAccountingList, delAccounting, changeAccounting } from '../api'
 import Modal from 'pilipa/libs/modal'
-import AccountingModal from './AccountingModal'
-
+import Detail from './Detail'
+import { ColumnProps } from 'antd/lib/table'
 const Search = Input.Search
 
 interface State {
   pageTotal: number // 列表总数
-  dataSource: any[] // 数据源
+  dataSource: Organ.AccountingItemProps[] // 数据源
 }
 
 class Main extends React.Component<any, State> {
+  public columns: ColumnProps<Organ.AccountingItemProps>[] = [
+    {
+      title: '机构名称',
+      dataIndex: 'name'
+    },
+    {
+      title: '核算地区范围',
+      dataIndex: 'regionList',
+      render: (text) => {
+        text = text || []
+        const arr: string[] = []
+        text.forEach((item: {name: string}) => {
+          arr.push(item.name)
+        })
+        const str = arr.join(',')
+        return (
+          <span>{str}</span>
+        )
+      }
+    },
+    {
+      title: '操作',
+      render: (val, item) => {
+        return (
+          <div>
+            <a onClick={() => {this.setAccounting('modify', item)}}>修改</a>
+            <Divider type='vertical' />
+            <a onClick={() => {this.delAccounting(item.id)}}>删除</a>
+          </div>
+        )
+      }
+    }
+  ]
 
   public searchVal = {
     pageCurrent: 1,
@@ -63,16 +96,17 @@ class Main extends React.Component<any, State> {
   }
 
   // 添加修改机构
-  public setAccounting (mode: 'add' | 'modify', id?: number) {
+  public setAccounting (mode: 'add' | 'modify', item?: Organ.AccountingItemProps) {
     const modal = new Modal({
       content: (
-        <AccountingModal
-          id={id}
-          onOk={(val) => {
-            console.log('val', val)
-            const payload: any = {name: val.name}
-            if (mode === 'modify') {payload.id = id}
-            setAccounting(payload).then((res) => {
+        <Detail
+          item={item}
+          onOk={(vals) => {
+            // const payload: any = {name: val.name}
+            // if (mode === 'modify') {
+            //   payload.id = id
+            // }
+            changeAccounting(vals).then((res) => {
               this.getList()
               modal.hide()
             })
@@ -87,42 +121,7 @@ class Main extends React.Component<any, State> {
     })
     modal.show()
   }
-
   public render () {
-
-    const columns = [
-      {
-        title: '机构名称',
-        dataIndex: 'name'
-      },
-      {
-        title: '核算地区范围',
-        dataIndex: 'cityNames',
-        render: (val: any) => {
-          let str = ''
-          val.forEach((item: {regionCityName: string}) => {
-            str += item.regionCityName + ','
-          })
-          str = str.slice(0, str.length - 1)
-          return (
-            <span>{str}</span>
-          )
-        }
-      },
-      {
-        title: '操作',
-        render: (val: any, item: any) => {
-          return (
-            <div>
-              <a onClick={() => {this.setAccounting('modify', item.id)}}>修改</a>
-              <Divider type='vertical' />
-              <a onClick={() => {this.delAccounting(item.id)}}>删除</a>
-            </div>
-          )
-        }
-      }
-    ]
-
     return (
       <div>
         <div className='mb10'>
@@ -138,7 +137,7 @@ class Main extends React.Component<any, State> {
         </div>
         <div>
           <Table
-            columns={columns}
+            columns={this.columns}
             dataSource={this.state.dataSource}
             rowKey='id'
             pagination={{

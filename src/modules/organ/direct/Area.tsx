@@ -5,6 +5,7 @@ import { fetchRegion } from '@/modules/common/api'
 interface Props {
   onChange?: (options?: Common.RegionProps[]) => void
   value?: any[]
+  style?: React.CSSProperties
 }
 interface State {
   options: Common.RegionProps[]
@@ -55,6 +56,7 @@ class Main extends React.Component<Props, State> {
     const { options } = this.state
     return (
       <Cascader
+        style={this.props.style}
         fieldNames={{
           label: 'name',
           value: 'code'

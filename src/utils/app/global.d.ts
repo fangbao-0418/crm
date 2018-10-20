@@ -6,7 +6,7 @@ declare namespace APP {
     goForward (): void
   }
   export type ActionType =
-  'change user info' | 'change customer data' | 'change business data' | 'change organ manage data' | 'change user manage data' | 'change perform data'
+   'change user info' | 'change customer data' | 'change business data' | 'change perform data'| 'change screen data' | 'change organ manage data' | 'change user manage data'
   interface DispatchAction<T = any> {
     type: ActionType
     payload?: T
@@ -25,6 +25,8 @@ declare namespace APP {
     EnumSignCustomerSearchType?: Array<{label: string, value: string}>
     EnumNeedStatus?: Array<{label: string, value: string}>
     EnumFollowWay?: Array<{label: string, value: string}>
+    /** 机构管理代理商公司状态 */
+    EnumOrganAgentSource?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token'
   interface StorageProps {
@@ -46,6 +48,7 @@ declare namespace APP {
   export const success: (msg: string) => void
   export const error: (msg: string) => void
   export let keys: EnumProps
+  /** 字典 */
   export let dictionary: DictProps
   export const env: 'development' | 'production'
   export let token: string

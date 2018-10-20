@@ -1,6 +1,6 @@
 import React from 'react'
 const styles = require('./style')
-import { companylist } from '@/modules/common/api'
+import { companylist, bindCompany } from '@/modules/common/api'
 interface States {
   dataSource: Array<{companyName: string, companyId: string}>
 }
@@ -27,6 +27,13 @@ class Main extends React.Component {
                 <li key={`search-company-${index}`}>
                   <span
                     onClick={() => {
+                      // bindCompany({
+                      //   companyId: item.companyId,
+                      //   token: APP.token
+                      // }).then((res) => {
+                      //   console.log(res)
+                      //   APP.history.push('/')
+                      // })
                       APP.history.push('/')
                     }}
                   >

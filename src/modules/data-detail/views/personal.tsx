@@ -1,8 +1,9 @@
 import React from 'react'
 import { Radio, DatePicker, Select, Tabs } from 'antd'
 import moment from 'moment'
-import Rate from '@/modules/data-detail/views/personal.rate'
-import Perform from '@/modules/data-detail/views/personal.perform'
+import { connect } from 'react-redux'
+import Rate from '@/modules/data-detail/views/model.rate'
+import Perform from '@/modules/data-detail/views/model.perform'
 import { findDOMNode } from 'react-dom'
 const styles = require('@/modules/data-detail/styles/personal.styl')
 const RadioGroup = Radio.Group
@@ -11,6 +12,7 @@ const dateFormat = 'YYYY/MM/DD'
 const monthFormat = 'YYYY/MM'
 const Option = Select.Option
 const TabPane = Tabs.TabPane
+type PersonalTask = Statistics.HistogramTaskDataListProps
 interface States {
   cities: any,
   secondCity: any
@@ -20,7 +22,7 @@ const cityData: any = {
   河北: ['邯郸', '秦皇岛', '廊坊'],
   河南: ['信阳', '郑州', '南阳']
 }
-class Main extends React.Component<any, any> {
+class Main extends React.Component<Statistics.Props, any> {
   public constructor (props: any, state: any) {
     super(props)
     this.state = {
@@ -96,4 +98,6 @@ class Main extends React.Component<any, any> {
   }
 }
 
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.statistics
+})(Main)

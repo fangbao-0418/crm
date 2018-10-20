@@ -29,13 +29,7 @@ class Main extends React.Component<Props> {
         return (
           <FormItem>
             {getFieldDecorator(`contactPerson-${index}`, {
-              valuePropName: text,
-              rules: [
-                {
-                  required: true,
-                  message: '联系人不能为空'
-                }
-              ]
+              valuePropName: text
             })(
               this.props.disabled ?
                 <span>{text}</span>
@@ -59,10 +53,6 @@ class Main extends React.Component<Props> {
             {getFieldDecorator(`contactPhone-${index}`, {
               valuePropName: text,
               rules: [
-                {
-                  required: true,
-                  message: '电话不能为空'
-                },
                 {
                   max: 11,
                   message: '电话格式不正确'

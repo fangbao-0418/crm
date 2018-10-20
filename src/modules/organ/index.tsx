@@ -7,8 +7,8 @@ import DirectDetail from './direct/detail'
 import Agent from './agent'
 import Accounting from './accounting'
 import Modal from 'pilipa/libs/modal'
-import AccountingModal from './accounting/AccountingModal'
-import { changeCompanyInfo } from './api'
+import AccountingDetail from './accounting/Detail'
+import { changeCompanyInfo, changeAccounting } from './api'
 const TabPane = Tabs.TabPane
 interface States {
   defaultActiveKey: string
@@ -30,7 +30,7 @@ class Main extends React.Component<null, States> {
     }
     if (this.state.defaultActiveKey === 'agent') { this.addAgent() }
     if (this.state.defaultActiveKey === 'accounting') {
-      this.setState({showAccountingModal: ++this.state.showAccountingModal})
+      this.addAccounting()
     }
   }
   public addAgent () {
@@ -55,7 +55,26 @@ class Main extends React.Component<null, States> {
     })
     modal.show()
   }
-
+  public addAccounting () {
+    const modal = new Modal({
+      content: (
+        <AccountingDetail
+          onOk={(value) => {
+            changeAccounting(value).then(() => {
+              modal.hide()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
+        />
+      ),
+      title: '新增核算中心',
+      mask: true,
+      footer: null
+    })
+    modal.show()
+  }
   public render () {
     return (
       <ContentBox

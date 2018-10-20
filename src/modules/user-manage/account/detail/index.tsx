@@ -36,7 +36,7 @@ interface State {
 
 class Main extends React.Component<Props, State> {
   public state: State = {
-    isShowOwnArea: true,
+    isShowOwnArea: false,
     departmentList: [],
     roleList: [],
     permissionList: [],
@@ -203,6 +203,7 @@ class Main extends React.Component<Props, State> {
         initialValue: item.parentId
       }
     }
+    console.log(item, '账号item')
     return (
       <div>
         <div>
@@ -296,13 +297,17 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
             {
-              this.state.isShowOwnArea &&
+              (ownAraeList.length > 0 && (this.state.isShowOwnArea || item.identity === 'outWorker')) &&
               <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
                 {
                   getFieldDecorator(
-                    'regionList'
+                    'regionList',
+                    {
+                      initialValue: item.regionList
+                    }
                   )(
                     <TreeSelect
+                      value={item.regionList}
                       treeData={ownAraeList}
                       multiple
                       labelInValue

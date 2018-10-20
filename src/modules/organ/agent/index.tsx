@@ -4,7 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { Divider } from 'antd'
 import { Modal } from 'pilipa'
 import Detail from '../direct/detail'
-import { changeCompanyInfo } from '../api'
+import { changeCompanyInfo, fetchCompanyDetail } from '../api'
 class Main extends React.Component {
   public columns: ColumnProps<Organ.DirectItemProps>[] = [
     {
@@ -33,7 +33,10 @@ class Main extends React.Component {
     },
     {
       title: '状态',
-      dataIndex: 'companyStatus'
+      dataIndex: 'companyStatus',
+      render: (text) => {
+        return APP.dictionary[`EnumOrganAgentSource-${text}`]
+      }
     },
     {
       title: '操作',
@@ -71,27 +74,33 @@ class Main extends React.Component {
     }
   ]
   public show (type: 'view' | 'update', record: Organ.DirectItemProps) {
-    const modal = new Modal({
-      title: '新增',
-      content: (
-        <Detail
-          disabled={type === 'view'}
-          item={record}
-          onOk={(values) => {
-            console.log(values)
-            changeCompanyInfo(values).then((res) => {
-              const ins: any = this.refs.ins
-              ins.fetchList()
-            })
-          }}
-          onCancel={() => {
-            modal.hide()
-          }}
-        />
-      ),
-      footer: null
-    })
-    modal.show()
+    if (record) {
+      fetchCompanyDetail({id: record.id}).then((item) => {
+        const modal = new Modal({
+          title: '新增',
+          content: (
+            <Detail
+              disabled={type === 'view'}
+              item={item}
+              onOk={(values) => {
+                if (type === 'update') {
+                  changeCompanyInfo(values).then((res) => {
+                    const ins: any = this.refs.ins
+                    ins.fetchList()
+                  })
+                }
+                modal.hide()
+              }}
+              onCancel={() => {
+                modal.hide()
+              }}
+            />
+          ),
+          footer: null
+        })
+        modal.show()
+      })
+    }
   }
   public render () {
     return (

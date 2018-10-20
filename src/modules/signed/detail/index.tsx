@@ -63,10 +63,19 @@ class Main extends React.Component<Props> {
                     APP.error('统一信用代码不能为空！')
                     return
                   }
+                  console.log(this.props.detail, 'detail')
                   console.log(this.props.detail.isConfirmed === 0)
                   console.log((/^[3 | 5]/.test(this.props.detail.unifiedCreditCode)))
                   if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
                     APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
+                    return
+                  }
+                  if (this.props.detail.contactPersons.length === 0 || (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPerson)) {
+                    APP.error('主联系人不能为空！')
+                    return
+                  }
+                  if (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPhone) {
+                    APP.error('主联系电话不能为空！')
                     return
                   }
                 }

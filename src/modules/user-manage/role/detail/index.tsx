@@ -37,7 +37,6 @@ class Main extends React.Component<Props, State> {
   public renderTreeNodes = (data: UserManage.RolePermissionItemProps[]) => {
     return data.map((item) => {
       const key = item.id
-      console.log(key, 'renderTreeNodes')
       if (item.authorityResponseList.length === 0) {
         this.lastIds.push(item.id)
       }

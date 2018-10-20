@@ -15,7 +15,9 @@ export const companylist = (token: string) => {
   return http(`/user/v1/api/user/company/list?token=${token}`)
 }
 export const userLogout = () => {
-  return http(`/user/v1/api/logout`, 'POST')
+  return http(`/user/v1/api/logout`, 'POST', {
+    token: APP.token
+  })
 }
 export const fetchSmsVerifyCode = (phone: string) => {
   return http(`/user/v1/api/short/message/send`, 'GET', {
@@ -43,9 +45,17 @@ export const fetchUserInfo = () => {
 export const fetchPermissionCode = () => {
   return http(`/user/v1/api/authority/code?token=${APP.token}`)
 }
+/** 获取机构管理状态字典 */
+export const fetchOrganStatus = () => {
+  return http(`/user/v1/api/company/getCompanyStatus`)
+}
 export const fetchEnum = () => {
-  return http(`/crm-manage/v1/api/code-text/list`).then((res) => {
+  return Promise.all([
+    http(`/crm-manage/v1/api/code-text/list`),
+    fetchOrganStatus()
+  ]).then(([res, res2]) => {
     const data: any = {}
+    res.data.EnumOrganAgentSource = res2
     for (const key in res.data) {
       if (res.data.hasOwnProperty(key)) {
         data[key] = []
@@ -104,4 +114,7 @@ export const getSalesList = () => {
 // 根据机构获取销售列表
 export const getSalesByCompany = (companyid: string) => {
   return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
+}
+export const bindCompany = (payload: {token: string, companyId: string}) => {
+  return http(`/user/v1/api/user/company/bind`, 'POST', payload)
 }

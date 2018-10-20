@@ -22,8 +22,8 @@ export const delAccounting = (id: number) => {
   return http(`/user/v1/api/adjust/account/delete?id=${id}`)
 }
 
-// 修改删除核算中心
-export const setAccounting = (payload: Organ.SetAccountingPayload) => {
+// 修改核算中心
+export const changeAccounting = (payload: Organ.AccountingItemProps) => {
   return http(`/user/v1/api/adjust/account/add`, 'POST', payload)
 }
 

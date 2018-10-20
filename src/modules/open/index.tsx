@@ -11,6 +11,7 @@ import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
 import moment from 'moment'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Open.DetailProps
 interface States {
   dataSource: DetailProps[]
@@ -92,9 +93,14 @@ class Main extends React.Component {
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
-    render: (val, record) => {
+    render: (val, record, index) => {
       return (
-        <a onClick={this.show.bind(this, record.id, record.customerName)}>{val}</a>
+        <span
+          className='href'
+          onClick={this.show.bind(this, record, index)}
+        >
+          {val}
+        </span>
       )
     }
   }, {
@@ -164,12 +170,13 @@ class Main extends React.Component {
     const pagination = this.state.pagination
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
-    fetchList(this.params).then((res) => {
+    return fetchList(this.params).then((res) => {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
         dataSource: res.data
       })
+      return res
     })
   }
   public handlePageChange (page: number) {
@@ -240,7 +247,8 @@ class Main extends React.Component {
   public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({ selectedRowKeys })
   }
-  public show (customerId: string, customerName: string) {
+  public show (record: DetailProps, index: number) {
+    let customerId = record.id
     const modal = new Modal({
       content: (
         <Provider>
@@ -249,35 +257,77 @@ class Main extends React.Component {
             type='open'
             onClose={() => modal.hide()}
             footer={(
-              <div className='text-right mt10'>
-                <Button
-                  type='primary'
-                  className='mr5'
-                  onClick={() => {
-                    pickCustomer({
-                      customerIdArr: [customerId]
-                    }).then(() => {
-                      APP.success('操作成功')
-                      this.fetchList()
-                      modal.hide()
-                    })
-                  }}
-                >
-                  抢客户
-                </Button>
-                <Button
-                  type='ghost'
-                  onClick={() => {
-                    const payload = customerId
-                    deleteCustomer(payload).then(() => {
-                      APP.success('操作成功')
-                      this.fetchList()
-                      modal.hide()
-                    })
-                  }}
-                >
-                  删除
-                </Button>
+              <div className='mt10'>
+                <div style={{ display: 'inlineBlock'}}>
+                  <Button
+                    type='primary'
+                    className='mr5'
+                    onClick={() => {
+                      pickCustomer({
+                        customerIdArr: [customerId]
+                      }).then(() => {
+                        APP.success('抢客户操作成功')
+                        this.fetchList().then((res) => {
+                          const data = res.data
+                          if (data instanceof Array && data[index]) {
+                            customerId = data[index].id
+                            changeCustomerDetailAction(customerId)
+                          } else {
+                            modal.hide()
+                          }
+                        })
+                        // modal.hide()
+                      })
+                    }}
+                  >
+                    抢客户
+                  </Button>
+                  <Button
+                    type='ghost'
+                    onClick={() => {
+                      deleteCustomer(customerId).then(() => {
+                        APP.success('删除成功')
+                        this.fetchList().then((res) => {
+                          const data = res.data
+                          if (data instanceof Array && data[index]) {
+                            customerId = data[index].id
+                            changeCustomerDetailAction(customerId)
+                          } else {
+                            modal.hide()
+                          }
+                        })
+                      })
+                    }}
+                  >
+                    删除
+                  </Button>
+                </div>
+                <div style={{ display: 'inlineBlock'}}>
+                  <Button
+                    type='primary'
+                    onClick={() => {
+                      
+                    }}
+                  >
+                    上一页
+                  </Button>
+                  <Button
+                    type='ghost'
+                    onClick={() => {
+                      this.fetchList().then((res) => {
+                        const data = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = data[index].id
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
+                      })
+                    }}
+                  >
+                    下一页
+                  </Button>
+                </div>
               </div>
             )}
           />

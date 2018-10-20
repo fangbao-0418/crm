@@ -122,5 +122,6 @@ declare namespace UserManage {
     companyList?: CompanyProps[]
     companyCode?: string
     companyName?: string
+    onlyOne?: boolean
   }
 }

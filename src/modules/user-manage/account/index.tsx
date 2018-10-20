@@ -25,6 +25,7 @@ class Main extends React.Component<Props> {
   public state: States = {
     selectedRowKeys: []
   }
+  public loaded = false
   public columns: ColumnProps<UserManage.AccountItemProps>[] = [
     {
       title: '姓名',
@@ -86,12 +87,22 @@ class Main extends React.Component<Props> {
       type: 'change user manage data',
       payload: {
         account: {
-          dataSource: []
+          dataSource: [],
+          searchPayload: this.searchPayload
         }
       }
     })
   }
+  public componentWillReceiveProps (props: Props) {
+    if (props.onlyOne && props.account.dataSource.length === 0 && props.type && props.companyCode !== undefined && this.loaded === false) {
+      this.searchPayload.companyId = props.companyCode
+      this.searchPayload.companyName = props.companyName
+      this.searchPayload.userType = props.type
+      this.fetchData()
+    }
+  }
   public fetchData () {
+    this.loaded = true
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -167,16 +178,20 @@ class Main extends React.Component<Props> {
   public render () {
     const { dataSource } = this.props.account
     const { selectedRowKeys } = this.state
-    const { companyList } = this.props
+    const { companyList, onlyOne, companyCode } = this.props
+    const disabled = onlyOne
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange
     }
+    const selectValue: any = companyCode !== undefined ? {key: String(companyCode)} : undefined
     return (
       <div>
         <div className={styles.formitem}>
           <Select
             showSearch
+            value={selectValue}
+            disabled={disabled}
             placeholder='请输入公司名称'
             className={styles.searchcondition}
             showArrow={false}
