@@ -12,6 +12,7 @@ import Allot from '@/modules/customer/allot'
 import AllotResult from './AllotResult'
 import Detail from './detail'
 import { fetchList, fetchCityCount, deleteCustomer, allocateAuto } from './api'
+import { changeCustomerDetailAction } from './action'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 import { connect } from 'react-redux'
@@ -100,25 +101,28 @@ const data: ConditionOptionProps[] = [
   }
 ]
 class Main extends React.Component<Customer.Props, States> {
+  public params: ParamsProps = {
+    pageCurrent: 1,
+    pageSize: 15
+  }
   public state: States = {
     dataSource: [],
     selectedRowKeys: [],
     cityList: [],
     pagination: {
       total: 0,
-      current: 1,
-      pageSize: 15
+      current: this.params.pageCurrent,
+      pageSize: this.params.pageSize
     },
     data
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
-  public params: ParamsProps = {}
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
-    render: (val, record) => {
+    render: (val, record, index) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.customerId, record.customerName)}>{val}</span>
+        <span className='href' onClick={this.show.bind(this, record, index)}>{val}</span>
       )
     }
   }, {
@@ -179,14 +183,15 @@ class Main extends React.Component<Customer.Props, States> {
   }
   public fetchList () {
     const pagination = this.state.pagination
-    this.params.pageSize = pagination.pageSize
-    this.params.pageCurrent = pagination.current
-    fetchList(this.params).then((res) => {
+    return fetchList(this.params).then((res) => {
       pagination.total = res.pageTotal
+      pagination.pageSize = res.pageSize
+      pagination.current = res.pageCurrent
       this.setState({
         pagination,
         dataSource: res.data
       })
+      return res
     })
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
@@ -302,7 +307,10 @@ class Main extends React.Component<Customer.Props, States> {
     })
     modal.show()
   }
-  public show (customerId: string, customerName: string) {
+  public show (record: DetailProps, index: number) {
+    const searchPayload = this.params
+    let dataSource: DetailProps[] = []
+    let customerId = record.customerId
     let instance: any
     const modal: any = new Modal({
       content: (
@@ -330,15 +338,79 @@ class Main extends React.Component<Customer.Props, States> {
                   保存
                 </Button>
                 <Button
+                  style={{marginRight: '172px'}}
                   type='ghost'
                   onClick={() => {
                     deleteCustomer(customerId).then(() => {
-                      modal.hide()
-                      this.fetchList()
+                      APP.success('删除成功')
+                      this.fetchList().then((res) => {
+                        dataSource = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = dataSource[index].customerId
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
+                      })
                     })
                   }}
                 >
                   删除
+                </Button>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    index -= 1
+                    if (index === -1) {
+                      if (searchPayload.pageCurrent === 1) {
+                        modal.hide()
+                        return
+                      }
+                      index = searchPayload.pageSize - 1
+                      searchPayload.pageCurrent -= 1
+                      dataSource = []
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].customerId)
+                      })
+                    } else {
+                      changeCustomerDetailAction(dataSource[index].customerId)
+                    }
+                  }}
+                >
+                  上一页
+                </Button>
+                <Button
+                  onClick={() => {
+                    index += 1
+                    if (index >= searchPayload.pageSize) {
+                      searchPayload.pageCurrent += 1
+                      dataSource = []
+                      index = 0
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                          searchPayload.pageCurrent -= 1
+                          modal.hide()
+                          return
+                        }
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].customerId)
+                      })
+                    } else {
+                      if (dataSource[index] === undefined) {
+                        modal.hide()
+                        return
+                      }
+                      changeCustomerDetailAction(dataSource[index].customerId)
+                    }
+                  }}
+                >
+                  下一页
                 </Button>
               </div>
             )}
@@ -383,20 +455,6 @@ class Main extends React.Component<Customer.Props, States> {
       }
     })
     modal.show()
-  }
-  // public SelectAll () {
-  //   const ids: string[] = []
-  //   this.state.dataSource.forEach((item) => {
-  //     ids.push(item.customerId)
-  //   })
-  //   // console.log(ids, 'ids')
-  //   this.setState({
-  //     selectedRowKeys: ids,
-  //     selectAll: true
-  //   })
-  // }
-  public deleteCustomer () {
-
   }
   public toOrganizationAuto () {
     if (!this.state.selectedRowKeys.length) {
@@ -482,6 +540,7 @@ class Main extends React.Component<Customer.Props, States> {
   public handlePageChange (page: number) {
     const { pagination } = this.state
     pagination.current = page
+    this.params.pageCurrent = page
     this.setState({
       pagination
     }, () => {
@@ -492,6 +551,8 @@ class Main extends React.Component<Customer.Props, States> {
     const { pagination } = this.state
     pagination.current = current
     pagination.pageSize = size
+    this.params.pageCurrent = current
+    this.params.pageSize = size
     this.setState({
       pagination
     }, () => {
