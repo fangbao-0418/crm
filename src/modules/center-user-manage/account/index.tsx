@@ -24,7 +24,8 @@ class Main extends React.Component {
     pageSize: 10,
     name: '',
     phone: '',
-    organizationName: ''
+    organizationName: '',
+    userType: 'System'
   }
 
   public state: State = {
@@ -38,6 +39,44 @@ class Main extends React.Component {
 
   public componentWillMount () {
     this.getList()
+  }
+
+  // 点击确认按钮
+  public onOk (val: any) {
+    const {mode, itemInfo} = this.state
+    const {center, department, email, identity, name, phone, region, resource, role} = val
+    const payload = {
+      name,
+      phone,
+      email,
+      organizationId: department,
+      roleId: role,
+      adjustAccountId: center,
+      acceptType: resource,
+      identity,
+      regionList: region,
+      userType: 'System'
+    }
+    if (mode === 'add') {
+      addAccount(payload)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getList()
+        })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
+    } else {
+      modifyAccount(payload, itemInfo.id)
+        .then((res) => {
+          this.setState({visible: false})
+          this.getList()
+        })
+        .catch((err: any) => {
+          console.log(738758, err)
+          APP.error(err.responseJSON.errors[0].message)
+        })
+    }
   }
 
   // 获取数据列表
@@ -58,6 +97,7 @@ class Main extends React.Component {
 
   // 查看、修改、添加账户
   public showAccountModal = (mode: 'view' | 'modify' | 'add', itemInfo?: any) => {
+    itemInfo = itemInfo || {}
     this.setState({mode, itemInfo, visible: true})
   }
 
@@ -69,8 +109,7 @@ class Main extends React.Component {
       onOk: () => {
         let ids
         type === 'batch' ? ids = this.state.selectedRowKeys : ids = [id]
-        // todo updateUser要从全局获取
-        delAccount({ids, updateUser: 111111}).then(() => {
+        delAccount({ids}).then(() => {
           this.getList()
         })
       }
@@ -194,9 +233,7 @@ class Main extends React.Component {
           <AccountModal
             info={itemInfo}
             mode={mode}
-            onOk={(val: any) => {
-              console.log(445, val)
-            }}
+            onOk={(val: any) => {this.onOk(val)}}
             onCancel={() => {
               this.setState({visible: false})
             }}

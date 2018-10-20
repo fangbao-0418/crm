@@ -115,11 +115,11 @@ class Main extends React.Component<Props, State> {
     {
       title: '机构管理',
       path: '',
-      icon: <MenuIcon type='agency' />,
+      icon: <MenuIcon type='organ' />,
       children: [
         {
           title: '机构管理',
-          path: '/agency-manage'
+          path: '/organ'
         }
       ]
     },
@@ -130,11 +130,11 @@ class Main extends React.Component<Props, State> {
       children: [
         {
           title: '代理商账号',
-          path: '/agent-account'
+          path: '/user-manage/agent'
         },
         {
           title: '直营账号',
-          path: '/direct-account'
+          path: '/user-manage/direct'
         }
       ]
     },

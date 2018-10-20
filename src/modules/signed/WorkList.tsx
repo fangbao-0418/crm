@@ -1,51 +1,67 @@
 import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { fetchWorks } from './api'
 export interface DetailProps {
-  orderId: string
-  workList: string
+  id: string
+  workNo: string
+  orderNo: string
   createTime: string
   sales: string
-  service: string
+  name: string
   status: string
-  person: string
 }
 interface States {
   data: DetailProps[]
 }
-export default class extends React.Component {
+interface Props {
+  customerId: string
+}
+export default class extends React.Component<Props> {
   public state: States = {
     data: []
   }
   public columns: ColumnProps<DetailProps>[] = [{
-    title: '订单号',
-    dataIndex: 'orderId'
+    title: '工单号',
+    dataIndex: 'workNo',
+    render: (val) => {
+      return (
+        <a
+          onClick={() => {
+            window.open('http://www.baidu.com')
+          }}
+        >
+          {val}
+        </a>
+      )
+    }
   }, {
-    title: '对应工单',
-    dataIndex: 'workList'
+    title: '对应订单',
+    dataIndex: 'orderNo'
   }, {
     title: '创建日期',
     dataIndex: 'createTime'
   }, {
-    title: '提单人',
-    dataIndex: 'sales'
-  }, {
     title: '服务内容',
-    dataIndex: 'service'
+    dataIndex: 'name'
   }, {
     title: '当前状态',
     dataIndex: 'status'
-  }, {
-    title: '当前负责人',
-    dataIndex: 'person'
   }]
+  public componentWillMount () {
+    fetchWorks(this.props.customerId).then((res) => {
+      this.setState({
+        data: res
+      })
+    })
+  }
   public render () {
     return (
       <Table
         columns={this.columns}
         dataSource={this.state.data}
         bordered
-        rowKey={'orderId'}
+        rowKey={'id'}
       />
     )
   }

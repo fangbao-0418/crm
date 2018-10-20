@@ -15,7 +15,6 @@ interface Props {
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
   onClose?: () => void
-  detailVisibleState?: boolean
 }
 class Main extends React.Component<Props> {
   public defaultTrackRecord = [
@@ -92,7 +91,9 @@ class Main extends React.Component<Props> {
         </span>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Profile type={type}/>
+            <Profile
+              type={type}
+            />
             <Card
               title='基本信息'
               showFold
@@ -127,6 +128,7 @@ class Main extends React.Component<Props> {
                 <div className='mt10' >
                   预约下次拜访日期&nbsp;&nbsp;
                   <DatePicker
+                    placeholder=''
                     onChange={(moment) => {
                       this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
                     }}
@@ -139,11 +141,10 @@ class Main extends React.Component<Props> {
             </div>
           </div>
           <div className={styles.right}>
-            {this.props.detailVisibleState && (
-              <Record
-                customerId={this.props.customerId}
-              />
-            )}
+            <Record
+              customerId={this.props.customerId}
+              height={this.props.type === 'business' ? 710 : 395}
+            />
           </div>
         </div>
       </div>

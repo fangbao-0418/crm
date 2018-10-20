@@ -3,7 +3,8 @@ interface User {
     username?: string
 }
 interface TaskItem {
-    id?: number // id   
+    id?: any // id   
+    subId?: any // 子任务时，id居然是关系表id
     code?: string // 编号 
     name?: string // 名称 
     productId?: string, // 绑定商品id
@@ -29,6 +30,7 @@ interface TaskItem {
     officeId?: number // 机构id   
     officeName?: string // 机构名称 
     contacter?: any // 后台暂不确定
+    sort?: any,
     subList?: Array<TaskItem> // 子任务集合  类型为task
 }
 type TaskList = Array<TaskItem>

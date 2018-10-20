@@ -14,8 +14,8 @@ const Option = Select.Option
 const { RangePicker } = DatePicker
 const data = [
   {
-    name:'销售提单', // 节点名称
-    showContract: true, // 是否显示合同
+    name:'销售提单', // 节点名e
+    showContract: false, // 是否显示合同
     showReminder: false, // 是否显示催办
     labelOwner: '签单销售', // 负责人标签文字
     ownerId: 111111, // 负责人标识
@@ -27,14 +27,14 @@ const data = [
   }, {
     name: '外勤任务',
     showContract: false,
-    showReminder: true,
+    showReminder: false,
     labelOwner: '签单销售',
     ownerId: 2222,
     labelSupervisor:'外勤主管',
     supervisorId: 3333,
     labelDate: '完成时间',
     operateDate: '2018年09月25日',
-    status: '已分配'
+    status: '已签约'
   }
 ]
 const stateData = [
@@ -64,7 +64,7 @@ class Show extends React.Component<any, any> {
         customerName:'北京爱康鼎科技有限公司',
         workNo:'XX10001',
         startTime:'2018-09-25',
-        nodeList:data,
+        nodeList:[],
         processLogList:[]
       },
       modalVisible: false,
@@ -134,13 +134,13 @@ class Show extends React.Component<any, any> {
       >
         <Row  className={styles['order-list']}>
         <div className={styles.topTitle}>
-        <Col span={4}>工单号:{this.state.dataSource.id}</Col>
+        <Col span={4}>工单号:{this.state.dataSource.workNo}</Col>
         </div>
         <div className={styles.topTitle}>
         <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>
         </div>
         <div className={styles.topTitle}>
-        <Col span={4}>开始日期:{this.state.dataSource.startTime}</Col>
+        <Col span={4}>创建日期:{this.state.dataSource.createTime}</Col>
         </div>
         </Row>
         <Row >{
@@ -150,25 +150,36 @@ class Show extends React.Component<any, any> {
                   <Col span={3}  >
                     <div className={styles.node}>
                       {item.name && (<p className={styles.title}>{item.name}</p>)}
-                      {item.labelOwner && (<p className={styles.des}>{item.labelOwner}:
-                          <a  onClick={() => { this.onShow.bind(this)(item) }}>
-                            {item.ownerName}
-                          </a>
-                        </p>)}
-                      {item.labelSupervisor && (<p className={styles.des}>{item.labelSupervisor}:
-                        <a  onClick={() => { this.onSupervisorShow.bind(this)(item) }}>
-                            {item.supervisorName}
-                          </a>
-                        </p>)}
-                      {item.labelDate && (<p className={styles.des}>{item.labelDate}:{item.operateDate}</p>)}
-                      {item.status && (<p className={styles.des}>{item.status}</p>)}
-                      {item.showContract && (<p className={styles['btn-p']}>
-                          <a style={{color:'white'}} onClick={() => { this.lookContract.bind(this)(item) }}>
-                            查看合同
-                          </a>
-                      </p>)}
-                      {item.showReminder && (<Button  type='primary' className={styles['btn-button']} onClick={() => { this.getRemind.bind(this)(item) }}>催办</Button>)}
-                    </div>
+                      <div className={styles.desBack}>
+                        {/* {item.status && (<Row><Col >当前状态:</Col><Col>{item.status}</Col></Row>)} */}
+                        {/* {item.status && (<Row  className={styles.des}>
+                                          <Col  span={12}>当前状态:</Col>
+                                          <Col  span={12} >{item.status}</Col>
+                                        </Row>)} */}
+                        {item.status && (<p className={styles.des}>当前状态:
+                            <a style={{color: item.status === '已完成' ? 'LawnGreen' :'orange'}}>
+                              {item.status}
+                            </a>
+                          </p>)}
+                        {item.labelOwner && (<p className={styles.des}>{item.labelOwner}:
+                            <a  onClick={() => { this.onShow.bind(this)(item) }}>
+                              {item.ownerName}
+                            </a>
+                          </p>)}
+                        {item.labelSupervisor && (<p className={styles.des}>{item.labelSupervisor}:
+                          <a  onClick={() => { this.onSupervisorShow.bind(this)(item) }}>
+                              {item.supervisorName}
+                            </a>
+                          </p>)}
+                        {item.labelDate && (<p className={styles.des}>{item.labelDate}:{item.operateDate}</p>)}
+                      </div>
+                        {item.showContract && (<p className={styles['btn-p']}>
+                              <a style={{color:'white'}} onClick={() => { this.lookContract.bind(this)(item) }}>
+                                查看合同
+                              </a>
+                          </p>)}
+                          {item.showReminder && (<Button  type='primary' className={styles['btn-button']} onClick={() => { this.getRemind.bind(this)(item) }}>催办</Button>)}
+                      </div>
                   </Col>
                   <Col  span={1} className={styles.arrow}>{}
                       <Row >
@@ -229,8 +240,9 @@ class Show extends React.Component<any, any> {
   }
   // 催单
   public getRemind (item: any) {
-    Service.getRemind(item.id, '1').then((res: any) => {
+    Service.getRemind(item.id).then((res: any) => {
       console.log('催单成功')
+      this.getOrderDetail()
     }, () => {
 
     })

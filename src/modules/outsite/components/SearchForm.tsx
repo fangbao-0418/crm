@@ -1,8 +1,8 @@
 import React from 'react'
 import { Icon, Table, Input, Form, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { DatePicker, Radio, Row, Col } from 'antd'
-import { Moment } from 'moment'
+import { Cascader, DatePicker, Radio, Row, Col } from 'antd'
+import moment, { Moment } from 'moment'
 import Service from '@/modules/outsite/services'
 import { Map } from '@/modules/outsite/types/outsite'
 import { TasktplItem, TasktplList } from '@/modules/outsite/types/tploutside'
@@ -24,25 +24,100 @@ function hasErrors (fieldsError: any) {
   return Object.keys(fieldsError).some((field: any) => fieldsError[field])
 }
 
+  /*
+    UNDISTRIBUTED: '未分配',
+    DISTRIBUTED: '已分配',
+    COLLECTING: '收集资料',
+    FINISHED: '已完成', // （外勤主管审批交付通过）
+    REFUSED: '已驳回', // (外勤主管审批交付不通过)
+    RUNNING: '进行中',
+    SUBMITED: '已交付',
+    CANCELUNAPPROVED: '待审批', // （取消）
+    REJECTUNAPPROVED: '待审批', // （拒绝）
+    CANCELED: '已取消' // (外勤主管审批取消通过)
+    */
 // 搜索表单
 class Main extends React.Component<any, any> {
   public state: any = {
     extshow: false,
     tplTaskList: [], // 任务模板列表
+    tplSubList: [], // 子任务列表
     tplTaskMap: {}, // 任务id:name map
-    tplSubData: {}, // 子任务按照任务id分组数据
+    tplSubGroup: {}, // 子任务按照任务id分组数据
+    tplSubData: [], // 全部子任务
+    statusGroup: {
+      UNDISTRIBUTED: {
+        UNDISTRIBUTED: '未分配' // 驳回
+      },
+      DISTRIBUTED: {
+        DISTRIBUTED: '已分配', // 初始
+        COLLECTING: '收集资料',
+        REFUSED: '已驳回', // (外勤主管审批交付不通过)
+        RUNNING: '进行中',
+        SUBMITED: '已交付'
+      },
+      FINISHED: {
+        FINISHED: '已完成', // （外勤主管审批交付通过）
+        COMMITED: '已提交', // 已提交 // @181020 后端开始补充
+        CANCELED: '已取消' // (外勤主管审批取消通过)
+      }
+    },
+    statusDict: {}, // @181017 产品确认：待分配、已分配、已完成三个状态的可筛选属性不同
     searchData: {
-      names: '', // 客户或联系人名称
-      tplTaskid: '',
-      tplSubid: '',
+      name: '', // 客户或联系人名称
+      templeteId: '',
+      subId: '',
       userName: '', // 外勤人员
       status: '',
-      areaId: '',
+      orgId: '',
       startTime: ''
-    }
+    },
+    areaData: [{
+      value: 'zhejiang',
+      label: 'Zhejiang',
+      children: [{
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        children: [{
+          value: 'xihu',
+          label: 'West Lake'
+        }, {
+          value: 'xiasha',
+          label: 'Xia Sha',
+          disabled: true
+        }]
+      }]
+    }, {
+      value: 'jiangsu',
+      label: 'Jiangsu',
+      children: [{
+        value: 'nanjing',
+        label: 'Nanjing',
+        children: [{
+          value: 'zhonghuamen',
+          label: 'Zhong Hua men'
+        }]
+      }]
+    }]
   }
 
   public componentWillMount () {
+    this.getTplTaskList()
+    this.setCurrentStatusDict()
+  }
+
+  public componentWillReceiveProps (props: any) {
+    this.setCurrentStatusDict(props.parData.tab)
+  }
+
+  // 设置当前的状态字典
+  public setCurrentStatusDict (tab: any = '') {
+    const { statusGroup } = this.state
+    tab = tab ? tab : this.props.parData.tab
+    console.log('?????????', this.props.parData.tab, statusGroup[tab])
+    this.setState({
+      statusDict: statusGroup[tab]
+    })
   }
 
   // 获取全部任务
@@ -52,14 +127,34 @@ class Main extends React.Component<any, any> {
         return
       }
       const tplTaskMap: Map<string> = {}
-      const tplSubData: Map<Array<TasktplItem>> = {}
+      const tplSubGroup: Map<Array<TasktplItem>> = {}
       data.map((item: TasktplItem, index: number) => {
         tplTaskMap[item.id] = item.name
-        tplSubData[item.id] = item.subList
+        item.subList.unshift({
+          id: '',
+          name: '全部'
+        })
+        tplSubGroup[item.id] = item.subList
+      })
+      data.unshift({
+        id: '',
+        name: '全部'
       })
       this.setState({
         tplTaskList: data,
         tplTaskMap,
+        tplSubGroup
+      })
+    })
+
+    Service.getTplSublist().then((tplSubData: any) => {
+      if (!tplSubData) {return}
+      // const tplSubData: Array<TasktplItem> = []
+      tplSubData.unshift({
+        id: '',
+        name: '全部子任务'
+      })
+      this.setState({
         tplSubData
       })
     })
@@ -84,9 +179,43 @@ class Main extends React.Component<any, any> {
     })
   }
 
+  // 同步搜索表单数据
+  public syncSearchData (data: any = {}) {
+    const { searchData } = this.state
+    this.setState({
+      searchData: Object.assign({}, searchData, data)
+    }, () => {
+      this.hookCallback()
+    })
+  }
+
   // 搜索提交
-  public onChange (a: any) {
-    console.log('search form changed::', a, arguments)
+  public onChange (e: Event) {
+    // console.log('search form changed::', a, arguments)
+    e.preventDefault()
+    this.props.form.validateFields((err: any, values: any) => {
+      // console.log('Received values of form: ', values)
+      // this.props.onSearch(Object.assign({}, this.state.searchData, values))
+      const vals: Map<any> = {}
+      _.map(values, (val: any, key: any) => {
+        // if (val) {
+        vals[key] = val
+        // }
+      })
+      const searchData = Object.assign({}, this.state.searchData, vals)
+      console.log('search form change::', searchData, vals)
+      this.setState({
+        searchData
+      }, () => {
+        this.hookCallback()
+      })
+    })
+  }
+
+  // 挂父组件回调
+  public hookCallback () {
+    console.log('search form callback::', this.state.searchData)
+    this.props.onSearch(this.state.searchData)
   }
 
   // 搜索项显藏
@@ -105,10 +234,6 @@ class Main extends React.Component<any, any> {
   public render () {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
 
-    // Only show error after a field is touched.
-    const userNameError = isFieldTouched('userName') && getFieldError('userName')
-    const passwordError = isFieldTouched('password') && getFieldError('password')
-
     return (
     <div className='t-search-form'>
       <Form
@@ -118,7 +243,7 @@ class Main extends React.Component<any, any> {
         // onSubmit={this.props.onSearch}
       >
         <FormItem>
-        {getFieldDecorator(`names`, {
+        {getFieldDecorator(`name`, {
           rules: [{
             required: false,
             message: ''
@@ -128,13 +253,26 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`tplTaskid`, {
+        {getFieldDecorator(`templeteId`, {
           rules: [{
             required: false,
             message: ''
           }]
         })(
-          <Select style={{width: '120px'}}>
+          <Select
+            style={{width: '120px'}}
+            onChange={(e: any) => {
+              this.syncSearchData({
+                templeteId: e
+              })
+              const sublist = this.state.tplSubGroup[e]
+              console.log('.......', e, sublist, this.state.tplSubGroup)
+              this.setState({
+                tplSubList: sublist ? sublist : []
+              })
+            }}
+            placeholder='全部任务名称'
+          >
             {this.createTaskNameOptions(this.state.tplTaskList)}
           </Select>
         )}
@@ -146,8 +284,22 @@ class Main extends React.Component<any, any> {
             message: ''
           }]
         })(
-          <Select style={{width: '120px'}}>
-            {this.createTaskNameOptions(this.state.tplTaskList)}
+          <Select
+            style={{width: '120px'}}
+            onChange={(e: any) => {
+              /*
+              this.syncSearchData({
+                tplTaskid: d
+              })
+              */
+              console.log('.......', e)
+              this.syncSearchData({
+                subId: e
+              })
+            }}
+            placeholder='全部当前子任务'
+          >
+            {this.createTaskNameOptions(this.state.searchData.templeteId ? this.state.tplSubList : this.state.tplSubData)}
           </Select>
         )}
         </FormItem>
@@ -171,31 +323,68 @@ class Main extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
+                <FormItem>
                 {getFieldDecorator(`status`, {
                   rules: [{
                     required: false,
                     message: ''
                   }]
                 })(
-                  <Select style={{width: '120px'}}>
+                  <Select
+                    style={{width: '120px'}}
+                    onChange={(status: any) => {
+                      this.syncSearchData({
+                        status
+                      })
+                    }}
+                    placeholder='请选择服务状态'
+                  >
                     {
-                      _.map(Service.taskStatusDict, (val: string, key: string) => {
+                      // _.map(Service.taskStatusDict, (val: string, key: string) => {
+                      // 待分配、已分配、已完成三个页面，可筛选状态不同
+                      _.map(this.state.statusDict, (val: string, key: string) => {
                         return <Select.Option key={`option-${key}`} value={key}>{val}</Select.Option>
                       })
                     }
                   </Select>
                 )}
+                </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
                 <FormItem>
-                  <Input placeholder='选择所属区县'  name='areaId' />
+                  {getFieldDecorator(`orgId`, {})(
+                    <Cascader
+                      options={this.state.areaData}
+                      onChange={(d: any) => {
+                        console.log('orgid::', d)
+                        this.syncSearchData({
+                          orgId: d
+                        })
+                      }}
+                      placeholder='选择所属区县'
+                    />
+                  )}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem>
-                  <Input placeholder='请选择提交日期' name='startTime' />
+                  {getFieldDecorator(`startTime`, {
+                    placeholder: '请输入日期',
+                    format: `YY-MM-DD`
+                  })(
+                    <DatePicker
+                      style={{width:'100%'}}
+                      onChange={(d: any) => {
+                        const v = moment(d).format('YYYY-MM-DD')
+                        console.log('date change::', d, v)
+                        this.syncSearchData({
+                          startTime: v
+                        })
+                      }}
+                    />
+                  )}
                 </FormItem>
               </Col>
             </Row>

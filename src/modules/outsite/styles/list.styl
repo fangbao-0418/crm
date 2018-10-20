@@ -7,7 +7,7 @@
     button 
       margin: 0 .5em
 
-  .icocui
+  .taskico
     i
       display: inline-block 
       border-radius: 50%
@@ -19,12 +19,19 @@
       font-size: 11px
       line-height: 1
       font-style: normal
+      vertical-align: middle
   .icohide
     display: none
+  .cui i
+    background: #e84845
+  .xiao i
+    background: rgb(247, 184, 54)
+  .bo i
+    background: rgb(247, 184, 54)
 
   .bottom-btns
     position: relative
-    top: -56px
+    // top: -56px
     button 
       margin: 10px 1em
   .trackbox
@@ -84,6 +91,17 @@
       border-radius: 5px
       box-shadow: 0 0 10px rgba(100, 100, 100, .3)
       background:#fff
+
+// 审批弹层
+.popbox
+  padding: 1em
+  .reason
+    margin: 1em 0
+    border: 1px solid #ddd
+    background: #f7f7f7
+    padding: 1em
+    color: #888
+    border-radius: 3px
 :global
   .ant-modal-header
     padding:10px

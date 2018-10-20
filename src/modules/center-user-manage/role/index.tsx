@@ -8,15 +8,15 @@ import { fetchRoleList, toggleForbidRole, delRole, modifyRole, addRole } from '.
 const styles = require('./style')
 
 interface State {
-  tab: 'System' | 'Proxy'
-  selectedRowKeys: any[]
-  mode: 'view' | 'modify' | 'add'
-  visible: boolean
-  pageCurrent: number
-  pageSize: number
-  pageTotal: number
-  currentRoleId: number
-  dataSource: any[]
+  tab: 'System' | 'Agent' | 'DirectCompany' // 切换类型  直营中心 | 代理商 | 直营公司
+  selectedRowKeys: any[] // 选中项索引
+  mode: 'view' | 'modify' | 'add' // 弹窗模式
+  visible: boolean // 弹窗是否显示
+  pageCurrent: number // 当前页
+  pageSize: number // 一页容量
+  pageTotal: number // 总数
+  currentRoleId: number // 当前角色id
+  dataSource: any[] // 数据源
 }
 
 class Main extends React.Component {
@@ -46,18 +46,13 @@ class Main extends React.Component {
   // 获取角色列表
   public getRoleList () {
     const {tab, pageCurrent, pageSize} = this.state
+    this.setState({selectedRowKeys: []})
     fetchRoleList(pageCurrent, pageSize, tab).then((res) => {
       this.setState({
         dataSource: res.records,
         pageTotal: res.pageTotal
       })
     })
-  }
-
-  // 多选事件触发
-  public onSelectChange = (selectedRowKeys: any) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys)
-    this.setState({ selectedRowKeys })
   }
 
   // 确认删除
@@ -67,14 +62,26 @@ class Main extends React.Component {
       content: '确定删除账号吗？',
       onOk: () => {
         let ids
-        type === 'batch' ? ids = this.state.selectedRowKeys : ids = [id]
-        // todo updateUser要从全局获取
-        delRole({ids, updateUser: 111111}).then(() => {
-          this.getRoleList()
-        })
+        type === 'batch' ? ids = this.getSelectIDs(this.state.dataSource) : ids = [id]
+        delRole({ids})
+          .then(() => {
+            this.getRoleList()
+          })
+          .catch((err: any) => {
+            APP.error(err.responseJSON.errors[0].message)
+          })
       },
       onCancel: () => {}
     })
+  }
+
+  // 根据selectedRowKeys索引值得到id
+  public getSelectIDs (data: any[]) {
+    const roleIds: any[] = []
+    this.state.selectedRowKeys.forEach((item: any) => {
+      roleIds.push(data[item].id)
+    })
+    return roleIds
   }
 
   // 确认禁用
@@ -83,8 +90,7 @@ class Main extends React.Component {
       title: '禁用角色',
       content: '确定禁用角色吗？',
       onOk: () => {
-        const updateUser = 111 // todo 改为全局id
-        toggleForbidRole(id, updateUser, 1).then((res) => {
+        toggleForbidRole(id, 1).then((res) => {
           this.getRoleList()
         })
       },
@@ -94,8 +100,7 @@ class Main extends React.Component {
 
   // 启用
   public unforbidRole = (id: number) => {
-    const updateUser = 111 // todo 改为全局id
-    toggleForbidRole(id, updateUser, 0).then((res) => {
+    toggleForbidRole(id, 0).then((res) => {
       this.getRoleList()
     })
   }
@@ -112,8 +117,6 @@ class Main extends React.Component {
   // 点击确认
   public onOk (info: any) {
     const {mode, currentRoleId} = this.state
-    const updateUser = 111 // todo 改为登陆id
-    info.updateUser = updateUser
     if (mode === 'add') {
       addRole(info)
         .then((res) => {
@@ -170,11 +173,6 @@ class Main extends React.Component {
       }
     ]
 
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    }
-
     return (
       <ContentBox
         title='角色'
@@ -188,15 +186,21 @@ class Main extends React.Component {
         <div className={styles.wrap}>
 
           <div className={styles.tabWrap}>
-            <div className={this.state.tab === 'System' ? styles.active : ''} onClick={() => {this.changeTab('System')}}>系统角色</div>
-            <div className={this.state.tab === 'Proxy' ? styles.active : ''} onClick={() => {this.changeTab('Proxy')}}>代理商角色</div>
+            <div className={this.state.tab === 'System' ? styles.active : ''} onClick={() => {this.changeTab('System')}}>直营中心</div>
+            <div className={this.state.tab === 'Agent' ? styles.active : ''} onClick={() => {this.changeTab('Agent')}}>代理商</div>
+            <div className={this.state.tab === 'DirectCompany' ? styles.active : ''} onClick={() => {this.changeTab('DirectCompany')}}>直营公司</div>
           </div>
 
           <div className={styles.contentWrap}>
             <Table
               dataSource={this.state.dataSource}
               columns={columns}
-              rowSelection={rowSelection}
+              rowSelection={{
+                selectedRowKeys,
+                onChange: (keys: any) => {
+                  this.setState({ selectedRowKeys: keys })
+                }
+              }}
               pagination={{
                 showQuickJumper: true,
                 total: this.state.pageTotal,

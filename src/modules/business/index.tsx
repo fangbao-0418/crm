@@ -20,32 +20,16 @@ import {
   conditionOptions
 } from './utils'
 import _ from 'lodash'
-import { appointment, toSales, toOpen, toCity, getRecycleNum, getCustomerNum, getcapacityNum } from './api'
-
+import { appointment, toSales, toOpen, toCity, fetchList } from './api'
+import { fetchCountAction } from './action'
+import { connect } from 'react-redux'
 const styles = require('./style')
 interface States {
-  visible: boolean
-  defaultActiveKey: string
-  recycleNum: string
-  customerNum: {
-    allNums?: string
-    trackContactNums?: string
-    newCustomerNums?: string
-    ForthcomingNums?: string
-  }
   citys: Common.RegionProps[],
   sales: Array<{id: number, name: string}>
 }
-class Main extends React.Component {
+class Main extends React.Component<Business.Props> {
   public state: States = {
-    visible: true,
-    defaultActiveKey: '1',
-    recycleNum: '',
-    customerNum: {
-      allNums: '',
-      trackContactNums: '',
-      newCustomerNums: ''
-    },
     citys: [],
     sales: []
   }
@@ -53,36 +37,34 @@ class Main extends React.Component {
   public params: Business.SearchProps = {tab: '1'}
   public appointmentTime: string = ''
   public curSale: {key: string, label: string} = { key: '', label: ''}
-  public cityCode: string = ''
+  public city: {key: string, label: string }
   public reason: {value: string, label: string} = { value: '', label: ''}
-  public capacityNum: number = 0
   public columns = getColumns.call(this)
   public componentWillMount () {
-    this.fetchRecycleNum()
-    this.fetchCustomerNum()
-    this.fetchCapacityNum()
+    this.fetchCount()
     this.fetchCitys()
     this.fetchSales()
   }
-  public fetchCapacityNum () {
-    getcapacityNum().then((res) => {
-      this.capacityNum = res.data
-    })
+  public fetchCount () {
+    fetchCountAction(this.params)
   }
-  public fetchCustomerNum () {
-    getCustomerNum(this.params).then((res) => {
-      this.setState({
-        customerNum: res
+  public fetchList () {
+    const { selectedTab } = this.props
+    const data = this.props[selectedTab]
+    const { pagination } = data
+    this.params.pageSize = pagination.pageSize
+    this.params.pageCurrent = pagination.current
+    fetchList(this.params).then((res) => {
+      pagination.total = res.pageTotal
+      APP.dispatch<Business.Props>({
+        type: 'change business data',
+        payload: {
+          [selectedTab]: {
+            dataSource: res.data,
+            pagination
+          }
+        }
       })
-    })
-  }
-  public fetchRecycleNum () {
-    getRecycleNum(this.params).then((res) => {
-      if (res) {
-        this.setState({
-          recycleNum: '(有' + res + '个客户即将被收回！)'
-        })
-      }
     })
   }
   public fetchCitys () {
@@ -93,7 +75,7 @@ class Main extends React.Component {
     })
   }
   public fetchSales () {
-    getSalesList(1).then((res) => {
+    getSalesList().then((res) => {
       this.setState({
         sales: res
       })
@@ -124,7 +106,7 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进时间') {
+    } else if (values.date.label === '最后跟进') {
       this.params.lastTrackBeginTime = beginTime
       this.params.lastTrackEndTime = endTime
     }
@@ -132,52 +114,44 @@ class Main extends React.Component {
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
     this.params.customerSource = values.customerSource.value || undefined
     this.params.payTaxesNature = values.payTaxesNature.value || undefined
-    this.fetchRecycleNum()
-    this.fetchCustomerNum()
-    this.params.tab = this.state.defaultActiveKey
+    const { selectedTab } = this.props
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
-        [`tab${this.state.defaultActiveKey}`]: {
+        [`${selectedTab}`]: {
           searchPayload: this.params
         }
       }
     })
-    this.setState({
-      visible: false
-    }, () => {
-      this.setState({
-        visible: true
-      })
-    })
+    this.fetchCount()
+    this.fetchList()
   }
   public handleSearchType (values: {key: string, value?: string}) {
+    const { selectedTab } = this.props
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     this.params.contactPhone = undefined
     this.params.currentSalesperson = undefined
     this.params[values.key] = values.value || undefined
-    this.fetchRecycleNum()
-    this.fetchCustomerNum()
-    this.params.tab = this.state.defaultActiveKey
-    this.setState({
-      visible: false
-    }, () => {
-      this.setState({
-        visible: true
-      })
-    })
-  }
-  public callback (value?: string) {
-    this.params.tab = value
-    this.setState({
-      defaultActiveKey: value
-    })
-    const tab: any = `tab-${value}`
+    this.params.tab = selectedTab.replace('tab', '')
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
-        selectedTab: tab
+        [`${selectedTab}`]: {
+          searchPayload: this.params
+        }
+      }
+    })
+    this.fetchCount()
+    this.fetchList()
+  }
+  public callback (value?: 'tab1' | 'tab2' | 'tab3' | 'tab4') {
+    this.params.tab = value.replace('tab', '')
+    console.log(this.params.tab, 'params')
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        selectedTab: value
       }
     })
   }
@@ -191,6 +165,7 @@ class Main extends React.Component {
         <div>
           <span>请选择预约时间：</span>
           <DatePicker
+            placeholder=''
             format={'YYYY-MM-DD'}
             onChange={(current) => {
               this.appointmentTime = current.format('YYYY-MM-DD')
@@ -330,15 +305,16 @@ class Main extends React.Component {
         <div>
           <span>请选择客资池：</span>
           <Select
+            labelInValue
             style={{width:'200px'}}
-            onChange={(current: string) => {
-              this.cityCode = current
+            onChange={(val: {key: string, label: string, code?: string, name?: string}) => {
+              this.city = val
             }}
           >
             {
               this.state.citys.map((item, index) => {
                 return (
-                  <Select.Option value={item.code} key={item.code}>{item.name}</Select.Option>
+                  <Select.Option key={item.code}>{item.name}</Select.Option>
                 )
               })
             }
@@ -348,13 +324,14 @@ class Main extends React.Component {
       title: '转客资池',
       mask: true,
       onOk: () => {
-        if (!this.cityCode) {
+        if (!this.city) {
           APP.error('请选择客资池！')
           return false
         }
         const cityparams = {
           customerIdArr: selectedRowKeys,
-          cityCode: this.cityCode
+          cityCode: this.city.key,
+          cityName: this.city.label
         }
         toCity(cityparams).then((res) => {
           this.setState({
@@ -388,6 +365,8 @@ class Main extends React.Component {
       mask: true,
       onCancel: () => {
         modal.hide()
+        this.fetchList()
+        this.fetchCount()
       }
     })
     modal.show()
@@ -406,7 +385,7 @@ class Main extends React.Component {
     }
   }
   public render () {
-    const { defaultActiveKey } = this.state
+    const { count } = this.props
     return (
       <ContentBox
         title='我的商机'
@@ -429,12 +408,17 @@ class Main extends React.Component {
         )}
       >
         {
-          this.capacityNum > 0 &&
+          count[4] > 0 &&
           <div className={styles.note}>
-            <span className={styles['note-icon1']} />
-            <span className='mr10'>库容剩余不足{this.capacityNum}个，即将达到上限！</span>
-            <span className={styles['note-icon1']} />
-            <span>您的库容已达上限！</span>
+            {
+              count[4] < 11 &&
+              <span>
+                <span className={styles['note-icon1']} />
+                <span className='mr10'>库容剩余不足{count[4]}个，即将达到上限！</span>
+                <span className={styles['note-icon1']} />
+                <span>您的库容已达上限！</span>
+              </span>
+            }
           </div>
         }
         <div className='mb12 clear'>
@@ -452,11 +436,8 @@ class Main extends React.Component {
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'contactPhone', label: '联系电话'},
                 { value: 'currentSalesperson', label: '所属销售'}
-                // { value: 'customerSource', label: '客户来源'}
-                // { value: 'payTaxesNature', label: '纳税类别'}
               ]}
               placeholder={''}
-              // onChange={this.handleSearchType.bind(this)}
               onKeyDown={(e, val) => {
                 if (e.keyCode === 13) {
                   this.handleSearchType(val)
@@ -468,12 +449,12 @@ class Main extends React.Component {
         {
           <Tabs
             animated={false}
-            defaultActiveKey={this.state.defaultActiveKey}
+            defaultActiveKey={this.props.selectedTab}
             onChange={this.callback.bind(this)}
           >
-            <Tabs.TabPane tab={<span>全部({this.state.customerNum.allNums})</span>} key='1'>
+            <Tabs.TabPane tab={<span>全部({count[0]})</span>} key='tab1'>
               {
-                (defaultActiveKey === '1' && this.state.visible) && (
+                (
                   <Tab1
                     columns={this.columns}
                     params={this.params}
@@ -482,23 +463,36 @@ class Main extends React.Component {
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>已有沟通({this.state.customerNum.trackContactNums})</span>} key='2'>
+            <Tabs.TabPane tab={<span>已有沟通({count[1]})</span>} key='tab2'>
               {
-                (defaultActiveKey === '2' && this.state.visible) && (
+                (
                   <Tab2 columns={this.columns} params={this.params}/>
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>新客资({this.state.customerNum.newCustomerNums})</span>} key='3'>
+            <Tabs.TabPane tab={<span>新客资({count[2]})</span>} key='tab3'>
               {
-                (defaultActiveKey === '3' && this.state.visible) && (
+                (
                   <Tab3 columns={this.columns} params={this.params}/>
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>即将被收回<span style={{ color: '#F9B91F'}}>{this.state.recycleNum}</span></span>} key='4'>
+            <Tabs.TabPane
+              tab={(
+                <span>即将被收回
+                  {
+                    count[3] > 0 && (
+                      <span style={{ color: '#F9B91F'}}>
+                        ({`有${count[3]}个客户即将被收回！`})
+                      </span>
+                    )
+                  }
+                </span>
+              )}
+              key='tab4'
+            >
               {
-                (defaultActiveKey === '4' && this.state.visible) && (
+                (
                   <Tab4 columns={this.columns} params={this.params}/>
                 )
               }
@@ -508,4 +502,6 @@ class Main extends React.Component {
     )
   }
 }
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.business
+})(Main)

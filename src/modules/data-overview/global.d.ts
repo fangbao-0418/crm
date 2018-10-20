@@ -4,6 +4,9 @@ declare namespace Statistics {
     dateFlag?: 'YEAR' | 'MONTH'
     date?: string
   }
+  interface OverYearView {
+    typeValue?:''
+  }
   /** 饼图类型 */
   interface ItemPieProps {
     /** 名称 */

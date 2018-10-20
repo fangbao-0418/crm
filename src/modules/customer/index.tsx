@@ -118,7 +118,7 @@ class Main extends React.Component<Customer.Props, States> {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.customerId)}>{val}</span>
+        <span className='href' onClick={this.show.bind(this, record.customerId, record.customerName)}>{val}</span>
       )
     }
   }, {
@@ -302,7 +302,7 @@ class Main extends React.Component<Customer.Props, States> {
     })
     modal.show()
   }
-  public show (customerId: string) {
+  public show (customerId: string, customerName: string) {
     let instance: any
     const modal: any = new Modal({
       content: (

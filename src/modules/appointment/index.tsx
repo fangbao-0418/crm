@@ -37,7 +37,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['预约时间', '创建时间', '最后跟进时间'],
+      label: ['预约时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
@@ -90,7 +90,7 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record.id)}>{val}</span>
+        <span className='href' onClick={this.show.bind(this, record.id, record.customerName)}>{val}</span>
       )
     }
   }, {
@@ -116,12 +116,12 @@ class Main extends React.Component {
     dataIndex: 'freeDays'
   }, {
     title: '当前销售',
-    dataIndex: 'current_salesperson'
+    dataIndex: 'currentSalesperson'
   }, {
     title: '客户来源',
     dataIndex: 'source',
     render: (val) => {
-      return (APP.dictionary[`EnumContactSource-${val}`])
+      return (APP.dictionary[`EnumCustomerSource-${val}`])
     }
   }, {
     title: '创建时间',
@@ -210,8 +210,8 @@ class Main extends React.Component {
     this.params[values.key] = values.value || undefined
     this.fetchList()
   }
-  public show (customerId: string) {
-    showDetail.call(this, customerId)
+  public show (customerId: string, customerName: string) {
+    showDetail.call(this, customerId, customerName)
   }
   public render () {
     const { pagination } = this.state

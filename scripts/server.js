@@ -16,6 +16,12 @@ const options = {
       changeOrigin: true,
       secure: false
     },
+    // 120.24:9016
+    // '/user': {
+    //   target: 'http://192.168.120.24:9016',
+    //   changeOrigin: true,
+    //   secure: false
+    // },
     '/user': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
@@ -26,13 +32,26 @@ const options = {
       changeOrigin: true,
       secure: false
     },
-    // '/crm-manage': {
-    //   target: 'http://192.168.170.14:9008/',
+    '/shop-order': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
+    },
+    // '/config': {
+    //   target: 'http://192.168.160.45:9001/',
     //   changeOrigin: true,
     //   secure: false,
     //   pathRewrite: {
-    //     '^/crm-manage/v1': '/v1'
+    //     '^/config/v1': '/v1'
     //   }
+    // },
+    // '/crm-manage': {
+    //   target: 'http://192.168.120.24:9016/',
+    //   changeOrigin: true,
+    //   secure: false
+    //   // pathRewrite: {
+    //   //   '^/crm-manage/v1': '/v1'
+    //   // }
     // },
     '/crm-manage': {
       target: 'https://x-sys.i-counting.cn',
@@ -53,6 +72,11 @@ const options = {
       secure: false
     },
     '/notification': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
+    },
+    '/log': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
       secure: false

@@ -5,7 +5,10 @@ import { Input, Select, Form, DatePicker, Button, Row, Col, Modal } from 'antd'
 import React from 'react'
 import { withRouter } from 'react-router'
 import HCframe from '@/modules/common/components/HCframe'
-import MessageShowModal from '@/modules/outsite/views/task/workorder.modal'
+import MessageShowModal from '@/modules/workorder/views/show.modal'
+// import Service from '@/modules/workorder/api'
+import WokerService from '@/modules/workorder/api'
+import ContentBox from '@/modules/common/content'
 
 const styles = require('@/modules/workorder/styles/show.styl')
 const Option = Select.Option
@@ -54,7 +57,6 @@ interface States {
   personID: string
 }
 class Show extends React.Component<any, any> {
-  public taskid: any = 0
   constructor (props: any) {
     super(props)
     this.state = {
@@ -63,7 +65,8 @@ class Show extends React.Component<any, any> {
         customerName:'北京爱康鼎科技有限公司',
         workNo:'XX10001',
         startTime:'2018-09-25',
-        nodeList:data
+        nodeList:data,
+        processLogList:[]
       },
       modalVisible: false,
       personID: '',
@@ -73,15 +76,48 @@ class Show extends React.Component<any, any> {
   }
   public componentWillMount () {
     // console.log('......', this.props)
-    this.taskid = this.props.data.taskid
+    this.getOrderDetail()
+  }
+    // 获取详情数据
+  public getOrderDetail () {
+    console.log('工单详情orderId:::::', this.props.data.taskid)
+    const params = this.props.data.taskid
+    WokerService.getOrderDetail(1).then((res: any) => {
+      console.log(JSON.stringify(res))
+      this.setState({
+        dataSource: res
+      })
+    }, () => {
+
+    })
+  }
+  // 查看合同
+  public lookContract (item: any) {
+    console.log('查看合同')
   }
   public onShow (item: any) {
-    this.modalShow(item)
+    WokerService.getUserDetail(item.ownerId).then((res: any) => {
+      console.log(JSON.stringify(res))
+      this.setState({
+        showData: res
+      }, () => {
+        this.modalShow()
+      })
+    })
   }
-  public modalShow (showData: any = {}) {
+  public onSupervisorShow (item: any) {
+    WokerService.getUserDetail(item.supervisorId).then((res: any) => {
+      console.log(JSON.stringify(res))
+      this.setState({
+        showData: res
+      }, () => {
+        this.modalShow()
+      })
+    })
+  }
+  public modalShow () {
     this.setState({
-      modalVisible: true,
-      showData
+      modalVisible: true
     })
   }
   public modalHide () {
@@ -98,14 +134,21 @@ class Show extends React.Component<any, any> {
     this.modalHide()
   }
   public render () {
-    const { size } = this.props
-    const state = this.state
+    const params = this.props.match.params
+    // console.log('....', params)
 
     return (
       <div className={styles.container}>
+      <ContentBox
+        title='工单详情'
+        rightCotent={(
+          <span className={styles.acts}>
+            </span>
+        )}
+      >
         <Row  className={styles['order-list']}>
         <div className={styles.topTitle}>
-        <Col span={4}>工单号:{this.state.dataSource.id}</Col>
+        <Col span={4}>工单号:{this.state.dataSource.workNo}</Col>
         </div>
         <div className={styles.topTitle}>
         <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>
@@ -121,19 +164,24 @@ class Show extends React.Component<any, any> {
                   <Col span={3}  >
                     <div className={styles.node}>
                       {item.name && (<p className={styles.title}>{item.name}</p>)}
-                      {item.labelOwner && (<p>{item.labelOwner}:
-                          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>
-                            {item.ownerId}
-                          </span>
+                      {item.labelOwner && (<p className={styles.des}>{item.labelOwner}:
+                          <a  onClick={() => { this.onShow.bind(this)(item) }}>
+                            {item.ownerName}
+                          </a>
                         </p>)}
-                      {item.labelSupervisor && (<p>{item.labelSupervisor}:
-                        <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>
-                            {item.supervisorId}
-                          </span>
+                      {item.labelSupervisor && (<p className={styles.des}>{item.labelSupervisor}:
+                        <a  onClick={() => { this.onSupervisorShow.bind(this)(item) }}>
+                            {item.supervisorName}
+                          </a>
                         </p>)}
-                      {item.labelDate && (<p>{item.labelDate}:{item.operateDate}</p>)}
-                      {item.status && (<p>{item.status}</p>)}
-                      {item.showContract && (<p className={styles['btn-p']}>查看合同</p>)}
+                      {item.labelDate && (<p className={styles.des}>{item.labelDate}:{item.operateDate}</p>)}
+                      {item.status && (<p className={styles.des}>{item.status}</p>)}
+                      {item.showContract && (<p className={styles['btn-p']}>
+                          <a style={{color:'white'}} onClick={() => { this.lookContract.bind(this)(item) }}>
+                            查看合同
+                          </a>
+                      </p>)}
+                      {/* {item.showReminder && (<Button  type='primary' className={styles['btn-button']} onClick={() => { this.getRemind.bind(this)(item) }}>催办</Button>)} */}
                     </div>
                   </Col>
                   <Col  span={1} className={styles.arrow}>{}
@@ -152,14 +200,22 @@ class Show extends React.Component<any, any> {
         }</Row>
         <div className={styles.orderTitle}>工单状态</div>
         <div className={styles.orderState}>{
-          this.state.stateData.map((item: any, index: any) => {
+          this.state.dataSource.processLogList.length !== 0 ?
+          (this.state.dataSource.processLogList.map((item: any, index: any) => {
             return(
-              <div key={index}>{this.state.stateData[index]}</div>
+              <div key={index} className={styles.orderCell}>
+                <p className={styles.orderText}>{item.operationTime}</p>
+                <p className={styles.orderText}>{item.dataMode}</p>
+              </div>
             )
-          })
-
+          })) : (
+            <div  className={styles.orderCell}>
+              <p className={styles.orderText}>暂无</p>
+            </div>
+          )
         }
         </div>
+      </ContentBox>
        <Modal
         title={`人员信息`}
         visible={this.state.modalVisible}
@@ -174,4 +230,4 @@ class Show extends React.Component<any, any> {
     )
   }
 }
-export default Show
+export default withRouter(Show)

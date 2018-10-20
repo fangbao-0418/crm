@@ -2,18 +2,20 @@ import React from 'react'
 import Bundle from '@/components/Bundle'
 import * as loadFile from './load-file'
 const modules = {}
-for (var key in loadFile) {
-  if (key) {
-    ((k) => {
-      let Component = (props) => {
+for (const key in loadFile) {
+  ((k) => {
+    if (k) {
+      const Component = (props) => {
         return (
-          <Bundle load={loadFile[k]}>
-            {(Component) => <Component {...props}/>}
+          <Bundle
+            load={loadFile[k]}
+          >
+            {(C) => <C {...props}/>}
           </Bundle>
         )
       }
       modules[k.replace('load', '')] = Component
-    })(key)
-  }
+    }
+  })(key)
 }
 export default modules

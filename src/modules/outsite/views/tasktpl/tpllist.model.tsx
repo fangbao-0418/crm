@@ -1,5 +1,8 @@
 import React from 'react'
 import { Button, Select, Row, Col, Input } from 'antd'
+import Service from '@/modules/outsite/services'
+import _ from 'lodash'
+
 const Option = Select.Option
 const styles = require('@/modules/outsite/styles/tpllist.model.styl')
 const data =
@@ -21,15 +24,25 @@ class Main extends React.Component<any, any> {
     super(props)
     const { name, category, id} = props.data
     this.state = {
-      data,
-      searchText: name,
-      classify: category || '请选择任务分类', // 分类
-      deadline: id || '请选择任务期限' // 期限
+      // data,
+      name,
+      category: category || '请选择任务分类' // 分类
+      // deadline: id || '请选择任务期限' // 期限
     }
   }
   public componentDidMount () {
+    console.log('sub form::', this.props)
+  }
+  public componentWillReceiveProps (props: any) {
+    const { name, category, id} = props.data
+    this.setState({
+      name,
+      category
+    })
   }
   public render () {
+    console.log('sub form render...............')
+    const { name, category, id} = this.props.data
     return (
       <div >
        {this.show()}
@@ -40,6 +53,7 @@ class Main extends React.Component<any, any> {
     const {id, name, category, status} = this.props.data
     const {identifying} = this.props
     const state = this.state
+    console.log('show::', this.state)
     if (identifying === '新增' || identifying === '编辑') {
       return (
         <Row className={styles['page-show']}>
@@ -47,7 +61,7 @@ class Main extends React.Component<any, any> {
                 <span className={styles.div}>任务名称:</span>
                 <Input
                     type='text'
-                    value={state.searchText}
+                    value={state.name}
                     placeholder='请输入任务名称'
                     onChange={this.handleTextChange}
                     style={{ width: '30%',  marginLeft: '3%'}}
@@ -56,14 +70,15 @@ class Main extends React.Component<any, any> {
           <Col style={{margin: 15}}>
                 <span className={styles.div}>任务分类:</span>
                 <Select
-                    value={state.classify}
+                    value={state.category}
                     style={{ width: '35%', marginLeft: '3%' }}
                     onChange={this.workClassChange}
                 >
-                    <Option value='税务'>税务</Option>
-                    <Option value='工商'>工商</Option>
-                    <Option value='其他'>其他</Option>
-                    <Option value='特殊'>特殊</Option>
+                {
+                  _.map(Service.taskTplCateDict, (val: any, key: any) => {
+                    return <Option value={key}>{val}</Option>
+                  })
+                }
                 </Select>
           </Col>
           {/*
@@ -82,28 +97,15 @@ class Main extends React.Component<any, any> {
                 <span className={styles.div}> 天</span>
           </Col>
           */}
-          <Col style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button type='primary' style={{marginRight: 15}} onClick={this.sureBtn.bind(this)}>保存</Button>
-              <Button type='primary' ghost onClick={this.cancelBtn.bind(this)}>取消</Button>
-            </span>
-          </Col>
         </Row>
       )
     }  else {
       return (
         <Row className={styles['page-show']}>
           <Col style={{margin: 15}}>
-            <div className={styles.div}>确定 {status === 'normal' ? '启用' : '禁用'} {name} 的子任务吗?</div>
-          </Col>
-          <Col style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button type='primary' style={{marginRight: 15}} onClick={this.sureBtn.bind(this)}>保存</Button>
-              <Button type='primary' ghost onClick={this.cancelBtn.bind(this)}>取消</Button>
-            </span>
+            <div className={styles.div}>确定 {status === 'NORMAL' ? '禁用' : '启用'} {name} 的子任务吗?</div>
           </Col>
         </Row>
-
       )
     }
   }
@@ -113,12 +115,12 @@ class Main extends React.Component<any, any> {
   }
   // 输入框
   public handleTextChange = (e: any) => {
-    const searchText  = e.target.value
+    const name = e.target.value
     if (!('value' in this.props)) {
-      this.setState({ searchText })
+      this.setState({ name })
     }
 
-    this.triggerChange({ searchText })
+    this.triggerChange({ name })
   }
 
   public triggerChange = (changedValue: any) => {
@@ -129,12 +131,11 @@ class Main extends React.Component<any, any> {
     }
   }
   // 任务分类
-  public workClassChange = (classify: any) => {
+  public workClassChange = (category: any) => {
     if (!('value' in this.props)) {
-      this.setState({ classify })
+      this.setState({ category })
     }
-    this.triggerChange({ classify })
-    console.log('1__', classify)
+    this.triggerChange({ category })
   }
   // 任务期限
   public workDeadlineChange = (deadline: any) => {

@@ -6,5 +6,6 @@ declare namespace Reducer {
     perform: Perform.Props
     statistics:Statistics.Props
     organ: Organ.Props
+    userManage: UserManage.Props
   }
 }

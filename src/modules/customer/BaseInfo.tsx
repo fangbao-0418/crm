@@ -71,7 +71,7 @@ class Main extends React.Component<Props> {
     if (this.props.type !== 'customer') {
       const cityCode = APP.user.cityCode || '110100'
       fetchRegion({
-        parentId: cityCode , // 登陆的客户城市对应的地区
+        parentId: cityCode, // 登陆的客户城市对应的地区
         level: 3
       }).then((res) => {
         this.setState({
@@ -81,6 +81,9 @@ class Main extends React.Component<Props> {
     }
   }
   public editLinkMan () {
+    if (this.props.type === 'open') {
+      return false
+    }
     const modal = new Modal({
       header: (
         <div>
@@ -167,11 +170,13 @@ class Main extends React.Component<Props> {
           return
         }
         const params = this.props.detail
+        if (this.props.type === 'customer' && !params.cityCode) {
+          APP.error('请选择城市！')
+          return
+        }
         params.customerNameType = '1' // 后端不需要改代码所以加上
-        params.isConfirmed = '1' // 是否天眼查
+        // console.log(params.isConfirmed, 'params.isConfirmed')
         params.contactPersons = this.props.linkMan
-        // delete params.tagIntention
-        // delete params.tagTelephoneStatus
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -260,7 +265,8 @@ class Main extends React.Component<Props> {
                         message: '公司名不能为空'
                       }
                     ],
-                    initialValue: this.props.detail.customerName
+                    initialValue: this.props.detail.customerName,
+                    valuePropName: this.props.detail.customerName
                   }
                 )(
                   <FormItemLayout
@@ -275,11 +281,22 @@ class Main extends React.Component<Props> {
                           key: 'customerName',
                           value: item.name
                         })
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 1
+                        })
                       }}
                       onChange={(e) => {
                         this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 0
+                        })
+                        this.handleChange(null, {
                           key: 'customerName',
-                          value: e.target.value
+                          value: e.target.value || undefined
+                        })
+                        this.props.form.setFieldsValue({
+                          customerName: e.target.value || undefined
                         })
                       }}
                     />
@@ -312,7 +329,8 @@ class Main extends React.Component<Props> {
                         message: '公司名不能为空'
                       }
                     ],
-                    initialValue: this.props.detail.customerName
+                    initialValue: this.props.detail.customerName,
+                    valuePropName: this.props.detail.customerName
                   }
                 )(
                   <FormItemLayout
@@ -327,11 +345,22 @@ class Main extends React.Component<Props> {
                           key: 'customerName',
                           value: item.name
                         })
+                        this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 1
+                        })
                       }}
                       onChange={(e) => {
                         this.handleChange(null, {
+                          key: 'isConfirmed',
+                          value: 0
+                        })
+                        this.handleChange(null, {
                           key: 'customerName',
-                          value: e.target.value
+                          value: e.target.value || undefined
+                        })
+                        this.props.form.setFieldsValue({
+                          customerName: e.target.value || undefined
                         })
                       }}
                     />
@@ -351,7 +380,17 @@ class Main extends React.Component<Props> {
             <FormItem
               >
                 {getFieldDecorator(
-                  'customerSource'
+                  'customerSource',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '客户来源不能为空'
+                      }
+                    ],
+                    initialValue: this.props.detail.customerSource,
+                    valuePropName: this.props.detail.customerSource
+                  }
                 )(
                   <FormItemLayout
                     label='客户来源'
@@ -365,6 +404,9 @@ class Main extends React.Component<Props> {
                         this.handleChange(null, {
                           key: 'customerSource',
                           value
+                        })
+                        this.props.form.setFieldsValue({
+                          customerSource: value
                         })
                       }}
                     >
@@ -404,6 +446,7 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <Input
+                  maxlength='50'
                   required
                   label={'主联系人'}
                   field='linkMan[0].contactPerson'
@@ -440,6 +483,7 @@ class Main extends React.Component<Props> {
                 }
               )(
                 <Input
+                  maxlength='11'
                   required
                   label='主联系电话'
                   disabled={disabled}
@@ -497,6 +541,7 @@ class Main extends React.Component<Props> {
             <Col span={12}>
               <FormItemLayout
                 label='城市'
+                required
               >
                 <AutoComplete
                   className={styles['auto-complete']}
@@ -536,6 +581,7 @@ class Main extends React.Component<Props> {
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <Input
+              maxlength='100'
               field='address'
               onChange={this.handleChange.bind(this)}
               label={'公司地址'}

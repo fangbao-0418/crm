@@ -1,8 +1,12 @@
 declare namespace CustomerSet {
   export interface SpecialAssetsProps {
-    sourceId?: number
+    key?: number
+    sourceId?: string
     sourceName?: string
-    salesPersons: {salesPersonId: string, salesPersonName: string}[]
+    salesperson: {salespersonId: string, salespersonName: string}[]
     disabled?: boolean
+  }
+  export interface Props {
+    spicalAssetsList: SpecialAssetsProps[]
   }
 }

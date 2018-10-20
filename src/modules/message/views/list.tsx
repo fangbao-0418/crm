@@ -85,8 +85,12 @@ class Main extends React.Component {
     render: (k: any, item: MessageItem) => {
       return (
       <>
-        <span className={item.read ? styles.icohide : styles.icocui}><i>催</i></span>
-        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.title}</span>
+        <span hidden={item.action !== 'REMINDER'} className={styles.icocui}><i>催</i></span>
+        {
+          item.read
+            ? <span style={{paddingLeft: '8px'}}>{item.title}</span>
+            : <span className={'likebtn'} onClick={this.onShow.bind(this, item)}>{item.title}</span>
+        }
       </>)
     }
   }, {
@@ -151,7 +155,7 @@ class Main extends React.Component {
   // 获取列表数据
   public getList () {
     const {pageConf, chooseDate} = this.state
-    MsgService.getListByUserid('5', chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
+    MsgService.getListByUserid(chooseDate, pageConf.currentPage, pageConf.pageSize).then((d: any) => {
       this.setState({
         dataSource: d.records,
         pageConf: {
@@ -195,18 +199,26 @@ class Main extends React.Component {
 
   // 搜索 日期切换
   public onDateChange (date: Moment, dateString: string) {
-    console.log('date change::', date.format('YYYY-MM-DD'))
-    this.setState({
-      chooseDate:date.format('YYYY-MM-DD')
-    }, () => {
-      this.getList()
-    })
+    if (date) {
+      this.setState({
+        chooseDate:date.format('YYYY-MM-DD')
+      }, () => {
+        this.getList()
+      })
+    } else { // date为null，代表取消搜索条件
+      this.setState({
+        chooseDate: ''
+      }, () => {
+        this.getList()
+      })
+    }
   }
 
   // 批量删除
   public delList () {
     const { selectedRowKeys, dataSource} = this.state
     if (!selectedRowKeys.length) {
+      APP.error('至少选中一条消息')
       return
     }
     const tempArr: any = []
@@ -227,6 +239,7 @@ class Main extends React.Component {
   public setReadedList () {
     const { selectedRowKeys, dataSource} = this.state
     if (!selectedRowKeys.length) {
+      APP.error('至少选中一条消息')
       return
     }
     const tempArr: any = []
@@ -292,12 +305,6 @@ class Main extends React.Component {
           <Col span={20}>
             <SearchForm onDateChange={this.onDateChange.bind(this)} />
           </Col>
-          <Col span={4} style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button type='primary' onClick={this.setReadedList.bind(this)}>标记为已读</Button>
-              <Button onClick={this.delList.bind(this)}>删除</Button>
-            </span>
-          </Col>
         </Row>
         <Row>
           <Table
@@ -309,6 +316,22 @@ class Main extends React.Component {
             rowKey={'key'}
             onChange={this.pageChange}
           />
+        </Row>
+        <Row>
+          <Button
+            style={{position: 'relative', top: '-50px', marginRight: '10px'}}
+            type='primary'
+            onClick={this.delList.bind(this)}
+          >
+            批量删除
+          </Button>
+          <Button
+            style={{position: 'relative', top: '-50px'}}
+            type='primary'
+            onClick={this.setReadedList.bind(this)}
+          >
+            批量标记已读
+          </Button>
         </Row>
       </HCframe>
       <Modal

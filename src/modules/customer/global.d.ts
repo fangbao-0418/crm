@@ -46,7 +46,7 @@ declare namespace Customer {
     customerNameType?: string
     areaCode?: string
     areaName?: string
-    isConfirmed?: string
+    isConfirmed?: number
     contactPersons?: LinkManProps[]
     /** 销售 */
     currentSalesperson?: string
@@ -57,6 +57,10 @@ declare namespace Customer {
     tagTelephoneStatus?: string
     businessLicenseUrl?: string
     legalPersonCardUrl?: string
+    /** 最后跟进人 */
+    lastReleaseSalesperson?: string
+    /** 信息来源 */
+    companyInfoSource?: number
   }
   export interface AutoAssignProps {
     bigAreaName: string
@@ -101,9 +105,12 @@ declare namespace Customer {
     dataSource?: DetailProps[]
     detail?: DetailProps
     autoAssign?: AutoAssignProps[]
-    capacity?: CapacityProps[],
+    capacity?: CapacityProps[]
     assignResult?: AssignResultProps
     spicalAssetsList?: CustomerSet.SpecialAssetsProps[]
-    detailVisibleState?: boolean
+    /** 跟进记录 */
+    trackRecords?: TrackRecord[]
+    /** 线索记录 */
+    clueRecords?: TrackRecord[]
   }
 }

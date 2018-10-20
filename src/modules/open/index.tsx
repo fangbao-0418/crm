@@ -41,7 +41,7 @@ class Main extends React.Component {
     {
       field: 'date',
       value: '',
-      label: ['释放时间', '创建时间', '最后跟进时间'],
+      label: ['释放时间', '创建时间', '最后跟进'],
       options: [
         {
           label: '全部',
@@ -94,7 +94,7 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
-        <a onClick={this.show.bind(this, record.id)}>{val}</a>
+        <a onClick={this.show.bind(this, record.id, record.customerName)}>{val}</a>
       )
     }
   }, {
@@ -122,7 +122,7 @@ class Main extends React.Component {
     title: '客户来源',
     dataIndex: 'customerSource',
     render: (val) => {
-      return (APP.dictionary[`EnumContactSource-${val}`])
+      return (APP.dictionary[`EnumCustomerSource-${val}`])
     }
   }, {
     title: (
@@ -217,7 +217,7 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.params.createBeginDate = beginTime
       this.params.createEndDate = endTime
-    } else if (values.date.label === '最后跟进时间') {
+    } else if (values.date.label === '最后跟进') {
       this.params.lastTrackTimeBegin = beginTime
       this.params.lastTrackTimeEnd = endTime
     }
@@ -240,7 +240,7 @@ class Main extends React.Component {
   public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({ selectedRowKeys })
   }
-  public show (customerId: string) {
+  public show (customerId: string, customerName: string) {
     const modal = new Modal({
       content: (
         <Provider>

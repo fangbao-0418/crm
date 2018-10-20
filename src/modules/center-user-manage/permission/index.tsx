@@ -12,6 +12,7 @@ interface State {
   mode: 'view' | 'modify' | 'add' // 弹窗模式
   visible: boolean // 弹窗是否显示
   currentId: number // 当前选中权限id
+  itemInfo: any // 当前选中权限信息
   permissionList: any[] // 权限列表
 }
 
@@ -19,6 +20,7 @@ interface Info {
   name: string,
   url: string,
   code: string,
+  protocol: string,
   button: any[]
 }
 
@@ -28,6 +30,7 @@ class Main extends React.Component {
     mode: 'add',
     visible: false,
     currentId: 0,
+    itemInfo: null,
     permissionList: []
   }
 
@@ -39,6 +42,7 @@ class Main extends React.Component {
   public getPermissionList () {
     fetchPermissionList()
       .then((res) => {
+        this.filterNoData(res)
         this.setState({permissionList: res})
       })
   }
@@ -49,14 +53,13 @@ class Main extends React.Component {
   }
 
   // 修改、添加权限
-  public setPermission = (mode: 'view' | 'modify' | 'add', currentId: number) => {
-    this.setState({visible: true, mode, currentId})
+  public setPermission = (mode: 'view' | 'modify' | 'add', currentId: number, itemInfo: any) => {
+    this.setState({visible: true, mode, currentId, itemInfo})
   }
 
   // 禁用、启用权限
   public forbidPermission = (id: number, status: 0 | 1) => {
-    const updateUser = 111 // todo 改为登陆id
-    toggleForbidPermission(id, updateUser, status)
+    toggleForbidPermission(id, status)
       .then((res) => {
         this.getPermissionList()
       })
@@ -68,8 +71,7 @@ class Main extends React.Component {
       title: '删除权限',
       content: '确认删除权限吗？',
       onOk: () => {
-        const updateUser = 111 // todo 改为登陆id
-        delPermission(id, updateUser)
+        delPermission(id)
           .then((res) => {
             this.getPermissionList()
           })
@@ -86,29 +88,45 @@ class Main extends React.Component {
     return this.state.permissionList.map((item, index) => {
       return (
         <div
-          key={item.systemCode}
+          key={item.id}
           className={this.state.tab === index ? styles.active : ''}
           onClick={() => {this.changeTab(index)}}
         >
-          {item.systemName}
+          {item.name}
         </div>
       )
     })
   }
 
+  // 过滤空的权限信息，防止没有子权限还会有展开的加号
+  public filterNoData (data: any) {
+    function del (list: any[]) {
+      list.forEach((item: any) => {
+        if (item.authorityResponseList) {
+          if (item.authorityResponseList.length === 0) {
+            delete item.authorityResponseList
+          } else {
+            del(item.authorityResponseList)
+          }
+        }
+      })
+    }
+    del(data)
+  }
+
   // 新增权限
   public addPermission (val: Info) {
-    const {name, code, url, button} = val
+    console.log(val, 'val')
+    const {name, code, url, button, protocol} = val
     const {currentId, permissionList, tab} = this.state
-    const createUser = 111 // todo 改为登陆ID
     const payload = {
       name,
       code,
       url,
+      protocol,
       buttonList: button,
       parentId: currentId,
-      systemCode: permissionList[tab].systemCode,
-      createUser
+      systemCode: permissionList[tab].id
     }
     addPermission(payload).then((res) => {
       this.setState({visible: false})
@@ -119,14 +137,13 @@ class Main extends React.Component {
   // 修改权限
   public modifyPermission (val: Info) {
     const {currentId} = this.state
-    const {name, code, url, button} = val
-    const updateUser = 111 // todo 改为登陆ID
+    const {name, code, url, button, protocol} = val
     const payload = {
       name,
       code,
       url,
-      buttonList: button,
-      updateUser
+      protocol,
+      buttonList: button
     }
     modifyPermission(currentId, payload).then((res) => {
       this.setState({visible: false})
@@ -150,9 +167,9 @@ class Main extends React.Component {
               {
                 status === 0
                 ? <div>
-                    <a onClick={() => {this.setPermission('modify', id)}}>修改</a>
+                    <a onClick={() => {this.setPermission('modify', id, itemInfo)}}>修改</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.setPermission('add', id)}}>添加子页面权限</a>
+                    <a onClick={() => {this.setPermission('add', id, {})}}>添加子页面权限</a>
                     <Divider type='vertical'/>
                     <a onClick={() => {this.forbidPermission(id, 1)}}>禁用</a>
                     <Divider type='vertical'/>
@@ -179,7 +196,7 @@ class Main extends React.Component {
         rightCotent={(
           <AddButton
             title='添加页面权限'
-            onClick={() => {this.setPermission('add', 0)}} // 添加根级权限时id传0
+            onClick={() => {this.setPermission('add', 0, {})}} // 添加根级权限时id传0
           />
         )}
       >
@@ -192,7 +209,7 @@ class Main extends React.Component {
           <div className={styles.contentWrap}>
             <Table
               pagination={false}
-              childrenColumnName='authorityList'
+              childrenColumnName='authorityResponseList'
               dataSource={permissionList.length ? permissionList[tab].authorityResponseList : []}
               columns={columns}
               rowKey='id'
@@ -206,7 +223,8 @@ class Main extends React.Component {
           <PermissionModal
             mode={mode}
             id={currentId}
-            systemCode={permissionList[tab].systemCode}
+            info={this.state.itemInfo}
+            systemCode={permissionList[tab].id}
             onOk={(val) => {
               if (mode === 'add') {
                 this.addPermission(val)

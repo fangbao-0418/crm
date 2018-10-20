@@ -56,17 +56,23 @@ export const fetchCityCount = () => {
   return http(`/crm-manage/v1/api/customer/stats/by-city`)
 }
 export const importFile = (file: File, query: {
-  cityCode?: string,
+  c?: string,
   cityName?: string,
   agencyId?: string,
   salesPersonIds: string,
   salesPersonNames: string,
-  customerSource: string
+  customerSource: string,
+  [field: string]: string
 }) => {
   const data = new FormData()
-  const q = $.param(query)
+  // const q = $.param(query)
   data.append('file', file)
-  return http(`/crm-manage/v1/api/customer/upload?${q}`, 'POST', {
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      data.append(key, query[key])
+    }
+  }
+  return http(`/crm-manage/v1/api/customer/upload`, 'POST', {
     dataType: 'JSON',
     contentType: false,
     raw: true,
@@ -93,8 +99,4 @@ export const allocateAuto = (payload: Array<{id: string, customerName: string, c
 // 根据城市获取机构列表
 export const getCompanyByCitycode = (citycode: string) => {
   return http(`/user/v1/api/company/list/region/${citycode}`)
-}
-// 根据机构获取销售列表
-export const getSalesByCompany = (companyid: string) => {
-  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
 }

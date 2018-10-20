@@ -112,6 +112,7 @@ class Main extends React.Component<any, any> {
                     style={{ width: '15%', marginLeft: '3%', marginRight: '3%' }}
                     onChange={this.handleOrderStateChange}
                 >
+                <Option value=''>全部状态</Option>
                 {
                   this.state.stateArr.map((item: any, index: any) => {
                     return (
@@ -136,7 +137,7 @@ class Main extends React.Component<any, any> {
   }
   // 获取列表筛选服务
   public getOrderSever () {
-    Service.getOrderSever('MAIN').then((res: any) => {
+    Service.getOrderSever('NORMAL').then((res: any) => {
       console.log('1212121', JSON.stringify(res))
       this.setState({
         severArr: res

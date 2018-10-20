@@ -37,7 +37,7 @@ class Main extends React.Component {
       name: this.state.val,
       parentId: 0,
       companyId: 0,
-      createUser: 111 /// todo 改为操作人id
+      organizationType: 'System'
     }
     if (this.state.val === '') {
       this.setState({verification: 'empty'})
@@ -52,18 +52,21 @@ class Main extends React.Component {
         .then((res) => {
           this.getDepartmentList()
         })
-        .catch((err) => {
-          APP.error('222')
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
         })
     } else if (mode === 'addRoot') {
       params.parentId = 0
-      addOrganization(params).then((res) => {
-        this.getDepartmentList()
-      })
+      addOrganization(params)
+        .then((res) => {
+          this.getDepartmentList()
+        })
+        .catch((err: any) => {
+          APP.error(err.responseJSON.errors[0].message)
+        })
     } else if (mode === 'modify') {
       const data = {
-        name: this.state.val,
-        updateUser: 111 // todo 改为操作人id
+        name: this.state.val
       }
       modifyOrganization(data, this.state.currentInfo.id)
         .then((res) => {
@@ -78,8 +81,25 @@ class Main extends React.Component {
   // 获取部门信息
   public getDepartmentList () {
     fetchOrganizationList().then((res) => {
+      this.filterNoData(res)
       this.setState({dataSource: res})
     })
+  }
+
+  // 过滤空的部门信息，防止没有子部门还会有展开的加号
+  public filterNoData (data: any) {
+    function del (list: any[]) {
+      list.forEach((item: any) => {
+        if (item.organizationList) {
+          if (item.organizationList.length === 0) {
+            delete item.organizationList
+          } else {
+            del(item.organizationList)
+          }
+        }
+      })
+    }
+    del(data)
   }
 
   // 修改、添加部门
@@ -91,20 +111,18 @@ class Main extends React.Component {
 
   // 启用、禁用部门
   public toggleForbidDepartment = (id: number, status: 0 | 1) => {
-    const updateUser = 111 // todo 改为操作人ID
-    toggleForbidOrganization(id, updateUser, status).then((res) => {
+    toggleForbidOrganization(id, status).then((res) => {
       this.getDepartmentList()
     })
   }
 
   // 删除部门
   public delDepartment = (id: number) => {
-    const updateUser = 123 // todo 改为操作人ID
     Modal.confirm({
       title: '删除部门',
       content: '确定要删除部门吗？',
       onOk: () => {
-        delOrganization(id, updateUser)
+        delOrganization(id)
           .then((res) => {
             this.getDepartmentList()
           })

@@ -7,6 +7,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
 import { updateCustomer } from '@/modules/customer/api'
+import moment from 'moment'
 const styles = require('./style')
 interface Props {
   linkMan: Customer.LinkManProps[]
@@ -50,6 +51,34 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
+                if (!this.state.disabled) {
+                  if (!this.props.detail.customerName) {
+                    APP.error('请输入公司名称！')
+                    return
+                  }
+                  if (this.props.detail.legalPersonCard.length > 18) {
+                    return false
+                  }
+                  if (!this.props.detail.unifiedCreditCode) {
+                    APP.error('统一信用代码不能为空！')
+                    return
+                  }
+                  console.log(this.props.detail, 'detail')
+                  console.log(this.props.detail.isConfirmed === 0)
+                  console.log((/^[3 | 5]/.test(this.props.detail.unifiedCreditCode)))
+                  if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
+                    APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
+                    return
+                  }
+                  if (this.props.detail.contactPersons.length === 0 || (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPerson)) {
+                    APP.error('主联系人不能为空！')
+                    return
+                  }
+                  if (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPhone) {
+                    APP.error('主联系电话不能为空！')
+                    return
+                  }
+                }
                 this.setState({
                   disabled: !this.state.disabled
                 }, () => {

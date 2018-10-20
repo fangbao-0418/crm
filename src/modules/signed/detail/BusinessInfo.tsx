@@ -16,7 +16,7 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    disabled: false
+    disabled: true
   }
   public searchUrl () {
     let url: string
@@ -51,67 +51,87 @@ class Main extends React.Component<Props, State> {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
     const detail = this.props.detail
+    console.log(detail, 'detail')
     return (
       <div style={{width: '790px', marginLeft: '10px'}}>
         <Form
           // onSubmit={this.handleSubmit}
         >
           <Row >
-            <Col span={18}>
-              <FormItem
-                style={{marginLeft: '-4px'}}
-                labelCol={{span: 3}}
-                wrapperCol={{span: 21}}
-                label='公司名称'
-              >
-                {!disabled ? getFieldDecorator(
-                  'customerName',
-                  {
-                    initialValue: detail.customerName
-                  }
-                )(
-                  <div>
-                    <CompanySearch
-                      className='inline-block'
-                      enterButton='查询'
-                      style={{width: '322px'}}
-                      value={detail.customerName}
-                      onSelectCompany={(item) => {
-                        fetchTianYanDetail(item.id).then((res) => {
-                          APP.dispatch({
-                            type: 'change customer data',
-                            payload: {
-                              detail: res
-                            }
+            {
+              disabled &&
+              <Col span={6}>
+                <FormItem
+                  style={{marginLeft: '-4px'}}
+                  labelCol={{span: 9}}
+                  wrapperCol={{span: 12}}
+                  label='信息来源：'
+                >
+                  <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
+                </FormItem>
+              </Col>
+            }
+            {
+              !disabled &&
+              <Col span={18}>
+                <FormItem
+                  style={{marginLeft: '-4px'}}
+                  labelCol={{span: 3}}
+                  wrapperCol={{span: 21}}
+                  label='公司名称'
+                >
+                  {!disabled ? getFieldDecorator(
+                    'customerName',
+                    {
+                      initialValue: detail.customerName
+                    }
+                  )(
+                    <div>
+                      <CompanySearch
+                        className='inline-block'
+                        enterButton='查询'
+                        style={{width: '322px'}}
+                        value={detail.customerName}
+                        onSelectCompany={(item) => {
+                          fetchTianYanDetail(item.id).then((res) => {
+                            res.companyInfoSource = 1
+                            res.isConfirmed = 1
+                            APP.dispatch({
+                              type: 'change customer data',
+                              payload: {
+                                detail: Object.assign({}, detail, res)
+                              }
+                            })
                           })
-                        })
-                        this.setState({
-                          disabled: true
-                        })
-                      }}
-                    />
-                    <Button
-                      className='ml5 mr5'
-                      type='primary'
-                      onClick={this.searchUrl.bind(this)}
-                    >
-                      网址
-                    </Button>
-                    <Button
-                      type='primary'
-                      onClick={() => {
-                        this.setState({
-                          disabled: false
-                        })
-                      }}
-                    >
-                      特殊公司
-                    </Button>
-                  </div>
-                ) : <span>{detail.customerName}</span>
-                }
-              </FormItem>
-            </Col>
+                          this.setState({
+                            disabled: true
+                          })
+                        }}
+                      />
+                      <Button
+                        className='ml5 mr5'
+                        type='primary'
+                        onClick={this.searchUrl.bind(this)}
+                      >
+                        网址
+                      </Button>
+                      <Button
+                        type='primary'
+                        onClick={() => {
+                          detail.isConfirmed = 0
+                          detail.companyInfoSource = 3
+                          this.setState({
+                            disabled: false
+                          })
+                        }}
+                      >
+                        特殊公司
+                      </Button>
+                    </div>
+                  ) : ''}
+                </FormItem>
+              </Col>
+            }
             <Col span={6}>
               <FormItem
                 labelCol={{span: 8}}
@@ -147,7 +167,7 @@ class Main extends React.Component<Props, State> {
                 ) : <span>{detail.unifiedCreditCode}</span>}
               </FormItem>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
               <FormItem
                 // className='inline-block'
                 labelCol={{span: 8}}
@@ -163,8 +183,8 @@ class Main extends React.Component<Props, State> {
                   <Input disabled={this.state.disabled} />
                 ) : <span>{detail.companyRegisterCode}</span>}
               </FormItem>
-            </Col>
-            <Col span={6}>
+            </Col> */}
+            <Col span={8}>
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
@@ -197,7 +217,7 @@ class Main extends React.Component<Props, State> {
                         initialValue: detail.businessHoursBegin ? moment(detail.businessHoursBegin) : undefined
                       }
                     )(
-                      <DatePicker disabled={this.state.disabled}  />
+                      <DatePicker disabled={this.state.disabled} placeholder=''/>
                     )}
                   </FormItem>
                   <span
@@ -218,6 +238,7 @@ class Main extends React.Component<Props, State> {
                       }
                     )(
                       <DatePicker
+                        placeholder=''
                         disabled={this.state.disabled || detail.isFixedPeriod === 1}
                       />
                     )}
@@ -228,7 +249,7 @@ class Main extends React.Component<Props, State> {
                     {!disabled && getFieldDecorator(
                       'isFixedPeriod'
                     )(
-                      <Checkbox checked={detail.isFixedPeriod === 1}>无期限</Checkbox>
+                      <Checkbox checked={detail.isFixedPeriod === 1} disabled={this.state.disabled}>无期限</Checkbox>
                     )}
                   </FormItem>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Switch, Button } from 'antd'
+import { Select, Switch, Button, Tooltip } from 'antd'
 import FormItem from '@/components/form/Item1'
 import { getSalesList } from '@/modules/common/api'
 const Option = Select.Option
@@ -19,7 +19,7 @@ class Main extends React.Component<Props> {
     sales: []
   }
   public componentWillMount () {
-    getSalesList(1).then((res) => {
+    getSalesList().then((res) => {
       this.setState({
         sales: res
       })
@@ -29,7 +29,7 @@ class Main extends React.Component<Props> {
     return (
       <div className='text-center mt10'>
         <div>
-          <span>客户来源：</span>
+          <span>选择客户来源：</span>
           <Select
             style={{width:'200px'}}
             onChange={(val: string) => {
@@ -50,7 +50,12 @@ class Main extends React.Component<Props> {
           </Select>
         </div>
         <div className='mt12'>
-          <span>分配销售：</span>
+          <span>
+            <Tooltip placement='top' title='默认分给自己；若勾选其他多个销售，可直接平均分配到其他销售库中'>
+              <i className='fa fa-exclamation-circle ml5' style={{color: '#FBCD5D', marginRight: 5}}></i>
+            </Tooltip>
+            分配销售：
+          </span>
           <Select
             labelInValue
             style={{width:'200px'}}

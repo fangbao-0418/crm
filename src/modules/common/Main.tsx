@@ -46,9 +46,8 @@ class Main extends React.Component {
               <Route path='/center-department' component={modules.CenterDepartment}/>
               <Route path='/center-permission' component={modules.CenterPermission}/>
               <Route path='/center-role' component={modules.CenterRole}/>
-              <Route path='/agency-manage' component={modules.AgencyManage}/>
-              <Route path='/agent-account' component={modules.AgentAccount}/>
-              <Route path='/direct-account' component={modules.DirectAccount}/>
+              <Route path='/organ' component={modules.Organ}/>
+              <Route path='/user-manage/:type' component={modules.UserManage}/>
 
               {/* 消息 */}
               <Route path='/message/list' component={modules.MessageList}/>

@@ -56,12 +56,12 @@ class Main extends React.Component<Props> {
           })
         }
         const paramsFile = {
-          agencyId: this.props.paramsValue.step1.agencyId || undefined,
-          customerSource: this.props.paramsValue.step1.customerSource || undefined,
-          salesPersonIds: ids.join(',') || undefined,
-          salesPersonNames: salesNames.join(',') || undefined,
-          cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
-          cityName: this.props.paramsValue.step1.city.cityName || undefined
+          agencyId: this.props.paramsValue.step1.agencyId || '',
+          customerSource: this.props.paramsValue.step1.customerSource,
+          salesPersonIds: ids.join(','),
+          salesPersonNames: salesNames.join(','),
+          cityCode: this.props.paramsValue.step1.city.cityCode,
+          cityName: this.props.paramsValue.step1.city.cityName
         }
         console.log(paramsFile, 'paramsFile')
         return importFile(info.file, paramsFile).then((res) => {

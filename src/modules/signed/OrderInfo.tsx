@@ -1,97 +1,124 @@
 import React from 'react'
-import { Row, Col } from 'antd'
-import ContractInfo from './ContractInfo'
+import { Row, Col, Tooltip, Icon } from 'antd'
 import Modal from 'pilipa/libs/modal'
-import OrderTable from './OrderTable'
-import PayTable from './PayTable'
+import classNames from 'classnames'
+import { fetchOrders } from './api'
 const styles = require('./style')
-class Main extends React.Component {
-  public viewContract () {
-    const modal = new Modal({
-      content: (
-        <OrderTable />
-      ),
-      title: '相关合同',
-      footer: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+interface Props {
+  customerId: string
+}
+interface States {
+  OrderData: Array<{
+    orderCode: string
+    createTime: string
+    salerName: string
+    status: number
+    startDate: string
+    endDate: string
+    amount: number
+    remark: string
+    products?: Array<{
+      productName: string
+      quantity: number
+      productSalePrice: string
+    }>
+  }>
+}
+class Main extends React.Component<Props> {
+  public state: States = {
+    OrderData: [{
+      orderCode: 'D00120180102001',
+      createTime: '2018-10-11',
+      salerName: '张三三',
+      status: 1,
+      startDate: '2018-09-10',
+      endDate: '2018-11-12',
+      amount: 2000,
+      remark: '11111',
+      products: [{
+        productName: '小规模记账',
+        quantity: 12,
+        productSalePrice: '4800.00'
+      }]
+    }]
   }
-  public viewPayInfo () {
-    const modal = new Modal({
-      content: (
-        <PayTable />
-      ),
-      title: '支付信息',
-      footer: null,
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
+  public componentWillMount () {
+    // fetchOrders(this.props.customerId).then((res) => {
+    //   this.setState({
+    //     OrderData: res.data.records
+    //   })
+    // })
   }
   public render () {
     return (
       <div>
-        <div className={styles.gray}>
-          <Row gutter={12}>
-            <Col span={8}>
-              <label>订单号：</label>
-              <span>D00120180102001 </span>
-            </Col>
-            <Col span={8}>
-              <label></label>
-              <span>2018-05-16</span>
-            </Col>
-            <Col span={8}>
-              <label>销售：</label>
-              <span>张磊</span>
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={8}>
-              <label>来源：</label>
-              <span>天眼查</span>
-            </Col>
-            <Col span={8}>
-              <label>状态：</label>
-              <span>正常</span>
-            </Col>
-            <Col span={8}>
-              <label>服务账期：</label>
-              <span>2018.01-2019.01</span>
-            </Col>
-          </Row>
-        </div>
-        <div className={styles.marg}>
-          <ContractInfo />
-          <ContractInfo />
-        </div>
-        <div>
-          <Row>
-            <Col span={3}>
-              <span>共4个服务</span>
-            </Col>
-            <Col span={6}>
-              <label>订单金额：</label>
-              <span>14000.00</span>
-            </Col>
-            <Col span={6}>
-              <label>实收：</label>
-              <span>3000.00</span>
-            </Col>
-            <Col span={9}>
-              <span className='fr'>
-                <a className='mr40' onClick={this.viewContract.bind(this)}>合同查看</a>
-                <a onClick={this.viewPayInfo.bind(this)}>支付查看</a>
-              </span>
-            </Col>
-          </Row>
-        </div>
+        {
+          this.state.OrderData.map((item, index) => {
+            return (
+              <div className={classNames(styles.order, 'clear')} key={index}>
+                <div className={classNames(styles['order-info'])}>
+                  <div className={classNames(styles.col, styles.note)}>
+                    <Tooltip placement='top' title={item.remark}>
+                      注
+                    </Tooltip>
+                  </div>
+                  <div className={styles.col}>
+                    <label>订单号：</label>
+                    <span>{item.orderCode}</span>
+                  </div>
+                  <div className={styles.col}>
+                    <label>签单时间：</label>
+                    <span>{item.createTime}</span>
+                  </div>
+                  <div className={styles.col}>
+                    <label>签单人：</label>
+                    <span>{item.salerName}</span>
+                  </div>
+                  <div className={styles.col}>
+                    <label>状态：</label>
+                    <span>{item.status}</span>
+                  </div>
+                  <div className={styles.col}>
+                    <label>服务账期：</label>
+                    <span>{item.startDate}-{item.endDate}</span>
+                  </div>
+                </div>
+                <div className={styles.marg}>
+                  <div className={styles.left}>
+                    <Icon type='left' theme='outlined' />
+                  </div>
+                  <div className={styles['order-con']}>
+                    {
+                      item.products.map((children, index1) => {
+                        return (
+                          <div className={styles.con} key={index1}>
+                            <div>{children.productName}*{children.quantity}</div>
+                            <div>
+                              <span className={classNames(styles.small, styles.black)}>¥</span>
+                              <span className={classNames(styles.big, styles.black)}>{children.productSalePrice}</span>
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <div className={styles.right}>
+                    <Icon type='right' theme='outlined' />
+                  </div>
+                </div>
+                <div className={styles['order-bottom']}>
+                  <div className={styles.col}>
+                    <span>共{item.products.length}个服务</span>
+                  </div>
+                  <div className={styles.col}>
+                    <label>订单金额：</label>
+                    <span>{item.amount}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        }
       </div>
     )
   }

@@ -11,6 +11,17 @@ export const userLogin = (payload: {
     data: payload
   })
 }
+export const companylist = (token: string) => {
+  return http(`/user/v1/api/user/company/list?token=${token}`)
+}
+export const userLogout = () => {
+  return http(`/user/v1/api/logout`, 'POST')
+}
+export const fetchSmsVerifyCode = (phone: string) => {
+  return http(`/user/v1/api/short/message/send`, 'GET', {
+    phone
+  })
+}
 export const fetchUserInfo = () => {
   return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
     fetchPermissionCode().then((res2) => {
@@ -86,7 +97,11 @@ export const fetchOssToken = () => {
   const query = $.param(payload)
   return http(`/oss/api/v1/oss/write-token?${query}`)
 }
-// 除去我的客资其他销售列表都是根据当前用户获取-->改成不需要传参数接口
-export const getSalesList = (userId: number) => {
-  return http(`/user/v1/api/user/list/sale/${userId}`)
+// 根据当前用户获取-->改成不需要传参数接口
+export const getSalesList = () => {
+  return http(`/user/v1/api/user/list/sale`)
+}
+// 根据机构获取销售列表
+export const getSalesByCompany = (companyid: string) => {
+  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
 }

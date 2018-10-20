@@ -1,7 +1,8 @@
 import React from 'react'
-import { Select, Switch, Button } from 'antd'
+import { Select, Switch, Button, Tooltip } from 'antd'
 import { fetchRegion } from '@/modules/common/api'
-import { getCompanyByCitycode, getSalesByCompany } from '../api'
+import { getCompanyByCitycode } from '../api'
+import { getSalesByCompany } from '@/modules/common/api'
 const Option = Select.Option
 interface State {
   isChecked: boolean,
@@ -34,7 +35,7 @@ class Main extends React.Component<Props> {
     })
   }
   public getCompany (citycode: string) {
-    citycode = '300171' // 先默认这个值有数据
+    // citycode = '300171' // 先默认这个值有数据
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
@@ -130,7 +131,12 @@ class Main extends React.Component<Props> {
                   </Select>
                 </div>
                 <div className='mt12'>
-                  <span>分配销售：</span>
+                  <span>
+                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中'>
+                      <i className='fa fa-exclamation-circle ml5' style={{color: '#FBCD5D', marginRight: 5}}></i>
+                    </Tooltip>
+                    分配销售：
+                  </span>
                   <Select
                     labelInValue
                     style={{width:'200px'}}

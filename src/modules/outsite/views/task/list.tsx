@@ -1,6 +1,6 @@
 import React from 'react'
 import monent, { Moment } from 'moment'
-import { Modal, Icon, Tabs, Table, Row, Col } from 'antd'
+import { Divider, Modal, Icon, Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
@@ -55,8 +55,11 @@ interface States {
   modalVisible: boolean,
   dataSource: TaskList,
   selectedRowKeys: string[],
-  showData?: any // 弹出层的数据
-  pageConf?: any
+  showData?: any, // 弹出层的数据
+  pageConf?: any,
+  searchData?: any,
+  currentItem?: any,
+  tab?: string // 当前tab标签
 }
 interface ColProps extends TaskItem {
   dataIndex: string
@@ -68,19 +71,47 @@ class Main extends React.Component {
   public state: States = {
     modalTitle: '',
     modalVisible: false,
+    currentItem: {},
     dataSource: [],
     selectedRowKeys: [],
     pageConf: {
       currentPage: 1,
       total: 1,
       pageSize: 10
-    }
+    },
+    searchData: {
+      pageSize: 10,
+      currentPage: 1,
+      customerName: '',
+      name: '',
+      templeteId: '',
+      subId: '',
+      userId: '',
+      status: 'UNDISTRIBUTED', // 待分配
+      startTime: '',
+      orgId: ''
+    },
+    tab: 'UNDISTRIBUTED' // 当前tab, 用于过滤搜索框的状态列表
   }
   public tabList: any = [
-    {key: '1', name: '待分配'},
-    {key: '2', name: '已分配'},
-    {key: '3', name: '已完成'}
+    {key: 'UNDISTRIBUTED', name: '待分配'},
+    {key: 'DISTRIBUTED', name: '已分配'},
+    {key: 'FINISHED', name: '已完成'}
   ]
+  public taskIcoMap: any = {
+    CANCELPENDING: {
+      text: '消',
+      className: 'xiao'
+    },
+    xxx: {
+      text: '催',
+      className: 'cui'
+    },
+    REJECTPENDING: {
+      text: '驳',
+      className: 'bo'
+    }
+  }
   public columns: any = [{
     title: '订单号',
     dataIndex: 'orderNo',
@@ -91,9 +122,12 @@ class Main extends React.Component {
     title: '客户名称',
     dataIndex: 'customerName',
     render: (k: any, item: TaskItem) => {
+      const { status } = item
+      let icoConf = this.taskIcoMap[status]
+      icoConf = icoConf ? icoConf : { text: '', className: styles.icohide}
       return (
       <>
-        <span className={item.status ? styles.icohide : styles.icocui}><i>催</i></span>
+        <span className={`${styles.taskico} ${icoConf.className}`}><i>{icoConf.text}</i></span>
         <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
       </>)
     }
@@ -121,16 +155,16 @@ class Main extends React.Component {
     render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span>{item.status}</span>
+        <span>{Service.taskStatusDict[item.status]}</span>
       </>)
     }
   }, {
     title: '任务名称',
-    dataIndex: 'category',
+    dataIndex: 'name',
     render: (k: any, item: TaskItem) => {
       return (
       <>
-        <span>{item.category}</span>
+        <span>{item.name}</span>
       </>)
     }
   }, {
@@ -146,7 +180,7 @@ class Main extends React.Component {
     dataIndex: 'subtaskStatus',
     render: (k: any, item: TaskItem) => {
       return (
-        <span>{item.subList.length && item.subList[0].status}</span>
+        <span>{item.subList.length && Service.subStatusDict[item.subList[0].status]}</span>
       )
     }
   }, {
@@ -158,7 +192,8 @@ class Main extends React.Component {
       )
     }
   }, {
-    title: '第一个子任务点击开始时间',
+    // title: '第一个子任务点击开始时间', // @181018 产品修改为 接受任务时间
+    title: '接受任务时间',
     dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
@@ -169,8 +204,13 @@ class Main extends React.Component {
     title: '操作',
     dataIndex: 'operation',
     render: (k: any, item: TaskItem) => {
+      const { status } = item
+      const act = Service.getActionByStatus(status)
+      const canAudit = act ? true : false
       return (
         <span>
+          <span className={`likebtn ${canAudit ? '' : 'likebtn-disabled'}`} onClick={() => { this.showAuditModal.bind(this)(item) }}>审批</span>
+          <Divider type='vertical' />
           <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
         </span>
       )
@@ -205,25 +245,31 @@ class Main extends React.Component {
 
   // 获取列表数据
   public getList () {
+    /*
     this.virData()
     this.setState({
       dataSource: data
     })
-    /*
-    Service.getListByUserid(2).then((d: any) => {
-      const { pageSize, total, currentPage } = d
+    */
+    const { searchData } = this.state
+    Service.getListByCond(searchData).then((d: any) => {
+      const { pageSize, total, pageCurrent } = d
       this.setState({
         dataSource: d.records,
         pageConf: {
           pageSize,
           total,
-          currentPage
+          pageCurrent
+        },
+        searchData: {
+          ...searchData,
+          pageSize,
+          pageCurrent
         }
       }, () => {
         console.log('........', this.state)
       })
     })
-    */
   }
 
   // 查看
@@ -243,8 +289,17 @@ class Main extends React.Component {
   }
 
   // 搜索
-  public onSearch (values: any) {
-    console.log('search::', arguments, values)
+  public onSearch (searchData: any) {
+    console.log('-------::', searchData)
+    if (!searchData.status) {
+      searchData.status = this.state.tab
+    }
+    console.log('search::', this.state.tab, searchData)
+    this.setState({
+      searchData
+    }, () => {
+      this.getList()
+    })
   }
 
   // 搜索 日期切换
@@ -271,8 +326,54 @@ class Main extends React.Component {
 
   // tab切换
   public onTabChange (key: string) {
-    console.log('tab change::', arguments)
+    console.log('tab change::', key)
+    const { searchData } = this.state
+    searchData.status = key
+    this.setState({
+      tab: key,
+      searchData
+    }, () => {
+      this.getList()
+    })
     // this.getList() // 不同状态参数
+  }
+
+  // 审批弹层
+  public showAuditModal (currentItem: TaskItem) {
+    const { status } = currentItem
+    const act = Service.getActionByStatus(status)
+    if (!act) {return}
+    console.log('current item::', status, currentItem)
+    this.setState({
+      currentItem,
+      modalVisible: true
+    })
+  }
+  public hideAuditModal () {
+    this.setState({
+      modalVisible: false
+    })
+  }
+
+  // 审批
+  public audit (rst: 'YES' | 'NO') {
+    const { currentItem } = this.state
+    const { status } = currentItem
+    const act = Service.getActionByStatus(status)
+    console.log('audit::', this.state.currentItem.status, rst, act)
+    if (!act) {
+      this.hideAuditModal()
+      return
+    }
+    Service.auditTaskByTaskidStatus(currentItem.id, status, rst).then((res: any) => {
+      this.getList()
+      this.hideAuditModal()
+    })
+  }
+
+  // 导出
+  public export () {
+
   }
 
   public render () {
@@ -283,29 +384,30 @@ class Main extends React.Component {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
+    const { currentItem } = this.state
     return (
     <div className={styles.container}>
-      <HCframe title='外勤任务'>
+      <HCframe
+        title='外勤任务'
+        act={<div>
+          <a onClick={this.export.bind(this)} className='btn'><i></i> 导出</a>
+        </div>}
+      >
         <Row>
           <Col span={20}>
-            <SearchForm onSearch={this.onSearch.bind(this)} />
-          </Col>
-          <Col span={4} style={{textAlign: 'right'}}>
-            <span className={styles.acts}>
-              <Button size={'small'} onClick={this.delList.bind(this)}>导出</Button>
-            </span>
+            <SearchForm parData={this.state} onSearch={this.onSearch.bind(this)} />
           </Col>
         </Row>
         <Row>
-          <Tabs defaultActiveKey='1' onChange={this.onTabChange}>
+          <Tabs defaultActiveKey='UNDISTRIBUTED' onChange={this.onTabChange.bind(this)}>
             {this.tabList.map((item: any) => {
               return (<Tabs.TabPane key={item.key} tab={item.name}>
                 <Table
                   columns={this.columns}
                   dataSource={this.state.dataSource}
-                  rowSelection={rowSelection}
+                  // rowSelection={rowSelection}
                   bordered
-                  pagination={this.state.pageConf}
+                  pagination={this.state.searchData}
                   rowKey={'key'}
                 />
               </Tabs.TabPane>)
@@ -313,6 +415,30 @@ class Main extends React.Component {
           </Tabs>
         </Row>
       </HCframe>
+      <Modal
+        title={`审批`}
+        visible={this.state.modalVisible}
+        onOk={this.audit.bind(this, 'YES')}
+        onCancel={this.audit.bind(this, 'NO')}
+      >
+        <div className={styles.popbox}>
+          <div style={{display: currentItem.status === 'CANCELPENDING' ? 'block' : 'none'}}>
+            确定取消"{currentItem.name}"在内及后续的子任务？
+            <div className={styles.reason}>
+              {currentItem.cancelReason}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'REJECTPENDING' ? 'block' : 'none'}}>
+            确定驳回?
+            <div className={styles.reason}>
+              {currentItem.approveMsg}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'SUBMITED' ? 'block' : 'none'}}>
+            {currentItem.name}任务已完成
+          </div>
+        </div>
+      </Modal>
     </div>
     )
   }

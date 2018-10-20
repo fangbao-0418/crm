@@ -42,15 +42,15 @@ class Service {
   */
   public getUserDetail (id: any = '') {
     return http(
-    `user/v1/api/user/${id}`
+    `/user/v1/api/user/${id}`
     )
   }
   /*
     工单详情催单
   */
-  public getRemind (id: any = '', remind: any) {
+  public getRemind (id: any = '') {
     return http(
-    `work/v1/api/order/remind/${id}/${remind}`
+    `/work/v1/api/order/remind/${id}`
     )
   }
   /*
@@ -58,15 +58,15 @@ class Service {
   */
   public getOrderStatus () {
     return http(
-    `work/v1/api/order/status`
+    `/work/v1/api/order/status`
     )
   }
   /*
     工单列表选择服务
   */
-  public getOrderSever (MAIN: any = '') {
+  public getOrderSever (NORMAL: any = '') {
     return http(
-    `outside/v1/api/outside/task/template/all?type=${MAIN}`
+    `/outside/v1/api/outside/task/template/nosub/all?status=${NORMAL}`
     )
   }
 }
