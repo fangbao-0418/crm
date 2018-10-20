@@ -386,6 +386,7 @@ class Main extends React.Component<Business.Props> {
   }
   public render () {
     const { count } = this.props
+    // console.log(count, 'count')
     return (
       <ContentBox
         title='我的商机'
