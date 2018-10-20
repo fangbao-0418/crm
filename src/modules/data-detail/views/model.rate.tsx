@@ -20,9 +20,12 @@ class Main extends React.Component<Statistics.Props, any> {
         data: ['任务总数', '已完成']
       },
       xAxis: {
-        data:['1']
+        type: 'category',
+        data:['王小二', '阿萨德', '奥迪', '阿大', '大额']
       },
-      yAxis: {},
+      yAxis: {
+        type: 'value'
+      },
       series: [
         {
           name: '任务总数',

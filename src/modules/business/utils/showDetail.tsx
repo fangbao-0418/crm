@@ -6,6 +6,7 @@ import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 export default function (record: Business.DetailProps, cb?: () => void) {
   let customerId = record.id
   const that = this
@@ -18,7 +19,9 @@ export default function (record: Business.DetailProps, cb?: () => void) {
           getWrappedInstance={(ins) => {
             that.ins = ins
           }}
-          onClose={() => modal.hide()}
+          onClose={() =>
+            modal.onCancel()
+          }
           customerId={customerId}
           footer={(
             <div className='text-right mt10'>
@@ -69,6 +72,32 @@ export default function (record: Business.DetailProps, cb?: () => void) {
               >
                 保存
               </Button>
+              <Button
+                type='ghost'
+                onClick={() => {
+                  if (cb) {
+                    cb()
+                  }
+                }}
+              >
+                上一条
+              </Button>
+              <Button
+                type='ghost'
+                onClick={() => {
+                  // this.fetchList().then((res) => {
+                  //   const data = res.data
+                  //   if (data instanceof Array && data[index]) {
+                  //     customerId = data[index].id
+                  //     changeCustomerDetailAction(customerId)
+                  //   } else {
+                  //     modal.hide()
+                  //   }
+                  // })
+                }}
+              >
+                下一条
+              </Button>
             </div>
           )}
         />
@@ -79,6 +108,8 @@ export default function (record: Business.DetailProps, cb?: () => void) {
     mask: true,
     onCancel: () => {
       modal.hide()
+      this.fetchCount()
+      this.fetchList()
     }
   })
   modal.show()

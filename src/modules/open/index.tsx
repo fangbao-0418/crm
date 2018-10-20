@@ -257,15 +257,63 @@ class Main extends React.Component {
             type='open'
             onClose={() => modal.hide()}
             footer={(
-              <div className='text-right mt10'>
-                <Button
-                  type='primary'
-                  className='mr5'
-                  onClick={() => {
-                    pickCustomer({
-                      customerIdArr: [customerId]
-                    }).then(() => {
-                      APP.success('抢客户操作成功')
+              <div className='mt10'>
+                <div style={{ display: 'inlineBlock'}}>
+                  <Button
+                    type='primary'
+                    className='mr5'
+                    onClick={() => {
+                      pickCustomer({
+                        customerIdArr: [customerId]
+                      }).then(() => {
+                        APP.success('抢客户操作成功')
+                        this.fetchList().then((res) => {
+                          const data = res.data
+                          if (data instanceof Array && data[index]) {
+                            customerId = data[index].id
+                            changeCustomerDetailAction(customerId)
+                          } else {
+                            modal.hide()
+                          }
+                        })
+                        // modal.hide()
+                      })
+                    }}
+                  >
+                    抢客户
+                  </Button>
+                  <Button
+                    type='ghost'
+                    onClick={() => {
+                      deleteCustomer(customerId).then(() => {
+                        APP.success('删除成功')
+                        this.fetchList().then((res) => {
+                          const data = res.data
+                          if (data instanceof Array && data[index]) {
+                            customerId = data[index].id
+                            changeCustomerDetailAction(customerId)
+                          } else {
+                            modal.hide()
+                          }
+                        })
+                      })
+                    }}
+                  >
+                    删除
+                  </Button>
+                </div>
+                <div style={{ display: 'inlineBlock'}}>
+                  <Button
+                    type='primary'
+                    onClick={() => {
+                      
+                    }}
+                  >
+                    上一页
+                  </Button>
+                  <Button
+                    type='ghost'
+                    onClick={() => {
                       this.fetchList().then((res) => {
                         const data = res.data
                         if (data instanceof Array && data[index]) {
@@ -275,31 +323,11 @@ class Main extends React.Component {
                           modal.hide()
                         }
                       })
-                      // modal.hide()
-                    })
-                  }}
-                >
-                  抢客户
-                </Button>
-                <Button
-                  type='ghost'
-                  onClick={() => {
-                    deleteCustomer(customerId).then(() => {
-                      APP.success('删除成功')
-                      this.fetchList().then((res) => {
-                        const data = res.data
-                        if (data instanceof Array && data[index]) {
-                          customerId = data[index].id
-                          changeCustomerDetailAction(customerId)
-                        } else {
-                          modal.hide()
-                        }
-                      })
-                    })
-                  }}
-                >
-                  删除
-                </Button>
+                    }}
+                  >
+                    下一页
+                  </Button>
+                </div>
               </div>
             )}
           />

@@ -136,9 +136,6 @@ class Main extends React.Component<Props> {
                 </div>
               </Card>
             }
-            <div>
-              {this.props.footer || this.footer}
-            </div>
           </div>
           <div className={styles.right}>
             <Record
@@ -146,6 +143,9 @@ class Main extends React.Component<Props> {
               height={this.props.type === 'business' ? 710 : 395}
             />
           </div>
+        </div>
+        <div>
+          {this.props.footer || this.footer}
         </div>
       </div>
     )
