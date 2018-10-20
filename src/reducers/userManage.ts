@@ -22,8 +22,9 @@ const defaultVal: UserManage.Props = {
       pageSize: 15
     }
   },
-  tab: 'role',
-  companyList: []
+  tab: 'department',
+  companyList: [],
+  onlyOne: false
 }
 export default handleActions<UserManage.Props>({
   'change user manage data': (state, { payload }) => {

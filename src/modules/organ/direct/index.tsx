@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider, Input } from 'antd'
+import { Table, Divider, Input, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail } from '../api'
 import { Modal } from 'pilipa'
@@ -141,6 +141,9 @@ class Main extends React.Component<Props, State> {
             style={{ width: 200 }}
           />
           <Area
+            style={{
+              verticalAlign: 'middle'
+            }}
             onChange={(value) => {
               if (value.length === 2) {
                 this.payload.pageCurrent = 1
@@ -153,6 +156,28 @@ class Main extends React.Component<Props, State> {
               }
             }}
           />
+          {
+            this.props.type === 'Agent' && (
+              <Select
+                className='ml5'
+                style={{width: 120}}
+                onChange={(value: any) => {
+                  this.payload.companyStatus = value
+                  this.fetchList()
+                }}
+              >
+                {
+                  APP.keys.EnumOrganAgentSource.map((item) => {
+                    return (
+                      <Select.Option key={item.value}>
+                        {item.label}
+                      </Select.Option>
+                    )
+                  })
+                }
+              </Select>
+            )
+          }
         </div>
         <div>
           <Table

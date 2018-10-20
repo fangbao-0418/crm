@@ -1,8 +1,9 @@
 import React from 'react'
 import { Form, Row, Col, Input, Tree, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchAccountingInfo, fetchAccountingProvince } from '../api'
+import { fetchAccountingProvince } from '../api'
 import { TreeNode } from 'antd/lib/tree-select'
+import _ from 'lodash'
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
 
@@ -18,7 +19,7 @@ class Main extends React.Component<Props, State> {
   public state: State = {
     areaList: []
   }
-  public areaMapper: {[id: string]: UserManage.OwnAreaProps} = {}
+  public areaMapper: {[code: string]: UserManage.OwnAreaProps} = {}
   public componentWillMount () {
     this.fetchProvince()
   }
@@ -43,7 +44,8 @@ class Main extends React.Component<Props, State> {
   public renderRegionTreeNodes (data: UserManage.OwnAreaProps[]): any[] {
     return data.map((item) => {
       if (item) {
-        const key: any = item.id
+        const key = item.code
+        this.areaMapper[key] = item
         if (item.regionList instanceof Array && item.regionList.length > 0) {
           return (
             <TreeNode title={item.name} key={key} dataRef={item}>
@@ -57,27 +59,33 @@ class Main extends React.Component<Props, State> {
       }
     })
   }
-  // 根据id获取信息
-  public getAccountingInfo (id: number) {
-    fetchAccountingInfo(id)
-      .then((res) => {
-        // this.setState({info: res})
-      })
-  }
-  public getFinalTreeData (ids: any[] = []) {
-    // return res
+
+  public getRegion (ids: any[] = []) {
+    const areaMapper = _.cloneDeep(this.areaMapper)
+    const arr: Common.RegionProps[] = []
+    ids.map((id) => {
+      delete areaMapper[id].regionList
+      arr.push(areaMapper[id])
+    })
+    return arr
   }
   // 点击保存按钮
   public save = () => {
     if (this.props.onOk) {
       this.props.form.validateFields((err, vals) => {
-        console.log(vals)
-        this.getFinalTreeData(vals.region)
+        console.log(vals, 'vals')
+        vals.regionList = this.getRegion(vals.regionList)
         if (err) {return}
-        // vals.region = []
-        // this.props.onOk(vals)
+        this.props.onOk(vals)
       })
     }
+  }
+  public getRegionIds (region: Common.RegionProps[] = []): any[] {
+    const res: string[] = []
+    region.map((item) => {
+      res.push(item.code)
+    })
+    return res
   }
   public render () {
     const { getFieldDecorator } = this.props.form
@@ -113,30 +121,38 @@ class Main extends React.Component<Props, State> {
         </Row>
         <Row>
           <Col>
-            <FormItem
-              {...formItemLayout}
-              label='核算地区范围：'
-            >
-              {
-                getFieldDecorator(
-                  'region'
-                )(
-                  <Tree
-                    defaultExpandAll={true}
-                    autoExpandParent={true}
-                    checkable={true}
-                    onCheck={(checkedKeys) => {
-                      console.log(checkedKeys)
-                      this.props.form.setFieldsValue({
-                        region: checkedKeys
-                      })
-                    }}
-                  >
-                    {this.renderRegionTreeNodes(this.state.areaList)}
-                  </Tree>
-                )
-              }
-            </FormItem>
+            {
+              this.state.areaList.length > 0 && (
+              <FormItem
+                {...formItemLayout}
+                label='核算地区范围：'
+              >
+                {
+                  this.state.areaList.length > 0 && getFieldDecorator(
+                    'regionList',
+                    {
+                      initialValue: this.getRegionIds(item.regionList)
+                    }
+                  )(
+                    <Tree
+                      defaultCheckedKeys={this.getRegionIds(item.regionList)}
+                      // defaultExpandAll={true}
+                      // autoExpandParent={true}
+                      checkable={true}
+                      onCheck={(checkedKeys) => {
+                        console.log(checkedKeys)
+                        this.props.form.setFieldsValue({
+                          regionList: checkedKeys
+                        })
+                      }}
+                    >
+                      {this.renderRegionTreeNodes(this.state.areaList)}
+                    </Tree>
+                  )
+                }
+              </FormItem>
+              )
+            }
           </Col>
         </Row>
         <div style={{justifyContent: 'flex-end', display: 'flex'}}>

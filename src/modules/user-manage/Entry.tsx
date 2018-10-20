@@ -32,7 +32,8 @@ class Main extends React.Component<Props> {
     fetchCompanyListAction(this.type)
   }
   public add () {
-    if (!this.props.companyCode) {
+    console.log(this.props, 'add')
+    if (this.props.companyCode === undefined) {
       APP.error('请选择公司！')
       return
     }
@@ -129,7 +130,6 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { tab } = this.props
-    console.log(this.props.account, 'render')
     return (
       <div>
         <ContentBox

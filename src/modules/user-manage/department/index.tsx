@@ -13,6 +13,7 @@ interface Props extends UserManage.Props {
   type: UserManage.TypeProps
 }
 class Main extends React.Component<Props> {
+  public loaded = false
   public companyCode: string
   public columns: ColumnProps<UserManage.DepartmentItemProps>[] = [
     { title: '部门名称', dataIndex: 'name', key: 'department',
@@ -61,8 +62,17 @@ class Main extends React.Component<Props> {
       }
     })
   }
-  public fetchData () {
-    fetchDepartmentAction(this.companyCode, this.props.type)
+  public componentWillReceiveProps (props: Props) {
+    if (props.onlyOne && props.department.dataSource.length === 0 && props.type && props.companyCode !== undefined && this.loaded === false) {
+      this.fetchData(props.companyCode, props.type)
+    }
+  }
+  public fetchData (
+    companyCode: string = this.companyCode,
+    type: UserManage.TypeProps = this.props.type
+  ) {
+    this.loaded = true
+    fetchDepartmentAction(companyCode, type)
   }
   public add (record: UserManage.DepartmentItemProps) {
     const modal = new Modal({
@@ -135,11 +145,15 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { dataSource } = this.props.department
-    const { companyList } = this.props
+    const { companyList, onlyOne, companyCode } = this.props
+    const disabled = onlyOne
+    const selectValue: any = companyCode !== undefined ? {key: String(companyCode)} : undefined
     return (
       <div>
         <div className={styles.formitem}>
           <Select
+            disabled={disabled}
+            value={selectValue}
             showSearch
             placeholder='请输入公司名称'
             className={styles.searchcondition}

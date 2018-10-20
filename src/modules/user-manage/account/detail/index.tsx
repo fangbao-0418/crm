@@ -203,6 +203,7 @@ class Main extends React.Component<Props, State> {
         initialValue: item.parentId
       }
     }
+    console.log(item, '账号item')
     return (
       <div>
         <div>

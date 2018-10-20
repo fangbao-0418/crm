@@ -8,7 +8,7 @@ import Agent from './agent'
 import Accounting from './accounting'
 import Modal from 'pilipa/libs/modal'
 import AccountingDetail from './accounting/Detail'
-import { changeCompanyInfo } from './api'
+import { changeCompanyInfo, changeAccounting } from './api'
 const TabPane = Tabs.TabPane
 interface States {
   defaultActiveKey: string
@@ -60,8 +60,9 @@ class Main extends React.Component<null, States> {
       content: (
         <AccountingDetail
           onOk={(value) => {
-            // changeCompanyInfo(value)
-            modal.hide()
+            changeAccounting(value).then(() => {
+              modal.hide()
+            })
           }}
           onCancel={() => {
             modal.hide()
