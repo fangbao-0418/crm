@@ -22,7 +22,7 @@ class Main extends React.Component<Perform.Props> {
   }, {
     title: '任务价格',
     dataIndex: 'productPrice',
-    render: (text) => {
+    render: (text, item) => {
       return <span>{text}</span>
     }
   }, {

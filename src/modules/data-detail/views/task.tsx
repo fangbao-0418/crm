@@ -1,8 +1,9 @@
 import React from 'react'
 import { Radio, DatePicker, Select, Tabs } from 'antd'
 import moment from 'moment'
-import Rate from '@/modules/data-detail/views/task.rate'
-import Perform from '@/modules/data-detail/views/task.perform'
+import Rate from '@/modules/data-detail/views/model.rate'
+import Perform from '@/modules/data-detail/views/model.perform'
+import { connect } from 'react-redux'
 import { findDOMNode } from 'react-dom'
 const styles = require('@/modules/data-detail/styles/task.styl')
 const RadioGroup = Radio.Group
@@ -103,4 +104,6 @@ class Main extends React.Component<any, any> {
   }
 }
 
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.statistics
+})(Main)

@@ -1,11 +1,20 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { Icon } from 'antd'
-class Main extends React.Component {
+import { connect } from 'react-redux'
+type PerformProps = Statistics.HistogramTaskDataListProps
+type P = Statistics.NumberProps
+class Main extends React.Component<Statistics.Props, any> {
+  public chart: echarts.ECharts
   public componentDidMount () {
-    const el: any = this.refs.perPerform
-    const myChart = echarts.init(el)
-  // 指定图表的配置项和数据
+    const dom: any = this.refs.perPerform
+    this.chart = echarts.init(dom)
+  }
+  public componentDidUpdate () {
+    this.renderChart(this.props.histogramRewardDataList)
+    console.log(this.props.histogramRewardDataList)
+  }
+  public renderChart (histogramRewardDataList: PerformProps[]) {
     const option = {
       tooltip: {},
       legend: {
@@ -27,7 +36,7 @@ class Main extends React.Component {
         }
       ]
     }
-    myChart.setOption(option)
+    this.chart.setOption(option)
   }
 
   public render () {
@@ -43,4 +52,6 @@ class Main extends React.Component {
   }
 }
 
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.statistics
+})(Main)
