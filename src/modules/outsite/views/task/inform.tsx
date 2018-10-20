@@ -24,7 +24,7 @@ const formItemLayout = {
 const Option = Select.Option
 const { MonthPicker, RangePicker } = DatePicker
 
-const dateFormat = 'YYYY-MM-DD'
+const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 
 // 列表
 class Main extends React.Component<any, any> {
@@ -83,11 +83,10 @@ class Main extends React.Component<any, any> {
       const data = Object.assign({}, this.state.formdata, values)
       console.log('Received values of form: ', data)
       // 格式化时间
-      data.startTime = moment(data.startTime).format('YYYY-MM-DD')
-      data.start_time = data.startTime
+      data.startTime = moment(data.startTime).format('YYYY-MM-DD hh:mm:ss')
       Service.addTaskItem(data).then(() => {
         APP.success('操作成功')
-        APP.history.push(`/${Service.moduleName}/task/list`)
+        APP.history.push(`/outesite/task/list`)
       })
     })
   }
@@ -195,7 +194,7 @@ class Main extends React.Component<any, any> {
                         message: '请选择开始时间'
                       }]
                     })(
-                      <DatePicker style={{width:'100%'}} format={dateFormat} value={this.state.item.startTime} />
+                      <DatePicker style={{width:'100%'}} showTime format={dateFormat} value={this.state.item.startTime} />
                     )}
                   </FormItem>
                 </Row>
