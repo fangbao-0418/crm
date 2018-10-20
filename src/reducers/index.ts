@@ -11,12 +11,8 @@ const reducers = combineReducers<Reducer.State>({
   customer,
   business,
   perform,
-<<<<<<< HEAD
   statistics,
-  organ
-=======
   organ,
   userManage
->>>>>>> origin/dev
 })
 export default reducers
