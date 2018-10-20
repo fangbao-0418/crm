@@ -98,5 +98,5 @@ export const allocateAuto = (payload: Array<{id: string, customerName: string, c
 }
 // 根据城市获取机构列表
 export const getCompanyByCitycode = (citycode: string) => {
-  return http(`/user/v1/api/company/list/region/${citycode}`)
+  return http(`/user/v1/api/company/list/region/region_area/${citycode}`)
 }
