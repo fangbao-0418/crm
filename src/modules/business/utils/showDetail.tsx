@@ -24,80 +24,82 @@ export default function (record: Business.DetailProps, cb?: () => void) {
           }
           customerId={customerId}
           footer={(
-            <div className='text-right mt10'>
-              <Button
-                type='primary'
-                className='mr5'
-                onClick={() => {
-                  const modal1 = new Modal({
-                    content: (
-                      <ToOpenReason onChange={(item) => { reason = item }}/>
-                    ),
-                    title: '转公海',
-                    mask: true,
-                    onOk: () => {
-                      customerId = store.getState().customer.detail.id
-                      if (!reason.label) {
-                        APP.error('请选择原因！')
-                        return false
-                      }
-                      const openparams = {
-                        customerIdArr: [customerId],
-                        bus_sea_memo: reason.label
-                      }
-                      toOpen(openparams).then(() => {
-                        APP.success('操作成功')
-                        if (cb) {
-                          cb()
+            <div className='mt10'>
+              <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
+                <Button
+                  type='primary'
+                  className='mr5'
+                  onClick={() => {
+                    const modal1 = new Modal({
+                      content: (
+                        <ToOpenReason onChange={(item) => { reason = item }}/>
+                      ),
+                      title: '转公海',
+                      mask: true,
+                      onOk: () => {
+                        customerId = store.getState().customer.detail.id
+                        if (!reason.label) {
+                          APP.error('请选择原因！')
+                          return false
                         }
-                      })
-                      modal1.hide()
-                    },
-                    onCancel: () => {
-                      modal1.hide()
-                    }
-                  })
-                  modal1.show()
-                }}
-              >
-                转公海
-              </Button>
-              <Button
-                type='ghost'
-                onClick={() => {
-                  that.ins.save().then(() => {
-                    APP.success('保存成功')
-                  })
-                }}
-              >
-                保存
-              </Button>
-              <Button
-                type='ghost'
-                onClick={() => {
-                  if (cb) {
-                    cb()
-                  }
-                }}
-              >
-                上一条
-              </Button>
-              <Button
-                type='ghost'
-                onClick={() => {
-                  // this.fetchList().then((res) => {
-                  //   const data = res.data
-                  //   if (data instanceof Array && data[index]) {
-                  //     customerId = data[index].id
-                  //     changeCustomerDetailAction(customerId)
-                  //   } else {
-                  //     modal.hide()
-                  //   }
-                  // })
-                }}
-              >
-                下一条
-              </Button>
+                        const openparams = {
+                          customerIdArr: [customerId],
+                          bus_sea_memo: reason.label
+                        }
+                        toOpen(openparams).then(() => {
+                          APP.success('操作成功')
+                          if (cb) {
+                            cb()
+                          }
+                        })
+                        modal1.hide()
+                      },
+                      onCancel: () => {
+                        modal1.hide()
+                      }
+                    })
+                    modal1.show()
+                  }}
+                >
+                  转公海
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    that.ins.save().then(() => {
+                      APP.success('保存成功')
+                    })
+                  }}
+                >
+                  保存
+                </Button>
+              </div>
+              <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
+                <Button
+                  type='primary'
+                  onClick={() => {
+                  }}
+                >
+                  上一条
+                </Button>
+                <Button
+                  style={{ marginLeft: 5}}
+                  type='ghost'
+                  onClick={() => {
+                    // this.fetchList().then((res) => {
+                    //   const data = res.data
+                    //   if (data instanceof Array && data[index]) {
+                    //     customerId = data[index].id
+                    //     changeCustomerDetailAction(customerId)
+                    //   } else {
+                    //     modal.hide()
+                    //   }
+                    // })
+                  }}
+                >
+                  下一条
+                </Button>
+              </div>
             </div>
           )}
         />

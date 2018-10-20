@@ -258,7 +258,7 @@ class Main extends React.Component {
             onClose={() => modal.hide()}
             footer={(
               <div className='mt10'>
-                <div style={{ display: 'inlineBlock'}}>
+                <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
                   <Button
                     type='primary'
                     className='mr5'
@@ -302,16 +302,16 @@ class Main extends React.Component {
                     删除
                   </Button>
                 </div>
-                <div style={{ display: 'inlineBlock'}}>
+                <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
                   <Button
                     type='primary'
                     onClick={() => {
-                      
                     }}
                   >
                     上一页
                   </Button>
                   <Button
+                    style={{ marginLeft: 5}}
                     type='ghost'
                     onClick={() => {
                       this.fetchList().then((res) => {
