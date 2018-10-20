@@ -70,6 +70,7 @@ class Main extends React.Component<any, any> {
   // 全部的子任务 key id, val item
   public suballMap: Map<any> = {}
   public suballList: Array<any> = []
+  public productList: Array<any> = []
   constructor (props: any) {
     super(props)
     // 从接口获取
@@ -114,6 +115,15 @@ class Main extends React.Component<any, any> {
         ...item,
         sort: item.sort === null ? 1 : item.sort
       }
+    })
+  }
+
+  // 获取商品列表
+  public getProductList () {
+    Service.getProductList().then((res: any) => {
+      this.setState({
+
+      })
     })
   }
 

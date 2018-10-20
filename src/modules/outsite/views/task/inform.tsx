@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter, RouteProps } from 'react-router'
 import moment, { Moment } from 'moment'
-import { Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
+import { AutoComplete, Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
 import HCframe from '@/modules/common/components/HCframe'
 import SearchOrder from '@/modules/outsite/components/SearchOrder'
 import Mission from '@/modules/outsite/views/task/mission'
@@ -28,12 +28,15 @@ const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 
 // 列表
 class Main extends React.Component<any, any> {
+  public orderMap: any = {}
   public constructor (props: any, state: any) {
     super(props)
     this.state = {
       formdata: {},
       workerList: [],
-      item: {}
+      item: {},
+      orderNOList: [], // 订单下拉
+      order: {} // 当前选中的订单
     }
     console.log('----------> props::', this.props)
   }
@@ -66,13 +69,44 @@ class Main extends React.Component<any, any> {
   }
 
   // 下拉变更
-  public handleChange (e: any) {
+  public handleChangeOrderNO (orderNo: any) {
+    console.log('???????', orderNo)
+    /*
     const orderNo = e.target.value
-    if (orderNo.length < 4) {
+    */
+    if (orderNo.length < 1) {
       return
     }
     Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
       console.log('order list ::', res)
+      this.orderMap = {}
+      const orderNOList = res.map((order: any) => {
+        this.orderMap[order.orderCode] = order
+        return order.orderCode
+      })
+      this.setState({
+        orderNOList
+      })
+    })
+  }
+
+  // 设置订单下拉值
+  public onSelectOrderNO (orderNo: any) {
+    console.log('selected::', orderNo)
+    const order = this.orderMap[orderNo]
+    this.syncFormdata({
+      orderNo,
+      customerId: order.customerOrgId,
+      customerName: order.customerOrgName,
+      areaId: order.countyCode,
+      areaName: order.countyName
+    })
+  }
+
+  // 生成订单列表
+  public createOrderNOoptions () {
+    return this.state.orderNOList.map((order: any, i: number) => {
+      return <AutoComplete.Option key={`option-${i}`} value={order.orderCode}>{order.orderCode}</AutoComplete.Option>
     })
   }
 
@@ -81,31 +115,41 @@ class Main extends React.Component<any, any> {
     e.preventDefault()
     this.props.form.validateFields((err: any, values: any) => {
       const data = Object.assign({}, this.state.formdata, values)
-      console.log('Received values of form: ', data)
+      console.log('Received values of form: ', this.state.formdata, values, data)
+      if (err) { return }
       // 格式化时间
       data.startTime = moment(data.startTime).format('YYYY-MM-DD hh:mm:ss')
       Service.addTaskItem(data).then(() => {
         APP.success('操作成功')
-        APP.history.push(`/outesite/task/list`)
+        APP.history.push(`/outsite/task/list`)
       })
     })
   }
 
   public handleReset = () => {
     this.props.form.resetFields()
+    this.syncFormdata({
+      templateId: '',
+      orderNo: '',
+      areaId: '',
+      areaName: '',
+      customerId: '',
+      customerName: ''
+    })
   }
 
   // 同步数据
   public syncFormdata (data: any = {}) {
     const formdata = Object.assign({}, this.state.formdata, data)
+    console.log('sync data::', data, formdata)
     this.setState({
       formdata
     })
   }
 
   // 任务选择值同步
-  public onTaskidChange (templeteId: any) {
-    this.syncFormdata({templeteId})
+  public onTaskidChange (templateId: any) {
+    this.syncFormdata({templateId})
   }
 
   public render () {
@@ -143,10 +187,12 @@ class Main extends React.Component<any, any> {
                           message: '请输入订单编号'
                         }]
                       })(
-                        <Input
-                          placeholder='请输入订单编号'
-                          value={this.state.item.orderNo}
-                          onChange={this.handleChange}
+                        <AutoComplete
+                          dataSource={this.state.orderNOList}
+                          style={{ width: 200 }}
+                          onSelect={this.onSelectOrderNO.bind(this)}
+                          onSearch={this.handleChangeOrderNO.bind(this)}
+                          placeholder='请输入订单号'
                         />
                       )}
                     </FormItem>
@@ -154,18 +200,12 @@ class Main extends React.Component<any, any> {
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label='公司名称'>
-                    {getFieldDecorator('customerId', {
-                    })(
-                      <Input disabled value={this.state.item.customerName} />
-                    )}
+                    <Input disabled value={this.state.formdata.customerName} />
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label='区域'>
-                    {getFieldDecorator('areaId', {
-                    })(
-                      <Input disabled  value={this.state.item.areaName} />
-                    )}
+                    <Input disabled  value={this.state.formdata.areaName} />
                   </FormItem>
                 </Row>
                 <Row>
