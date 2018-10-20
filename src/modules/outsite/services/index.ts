@@ -85,7 +85,7 @@ class ModuleService extends Service {
   }
   // 状态是否启用
   public taskTplStatusDict: Map<string> = {
-    NORMAL:     '正常',
+    NORMAL:     '启用', // '正常',
     FORBIDDEN:  '禁用'
   }
   // 优先级
@@ -166,12 +166,47 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
     let act = this.getActionByStatus(status)
     if (!act) {return}
     act = act[rst]
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', {id, status: act})
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changemain`, 'PUT', {id, status: act})
   }
 
   // 根据订单号，模糊查询
+  /*
+  {
+    'orderCode': 'TJxdfdsafds',
+    'customerOrgId': 341341431,
+    'customerOrgName': '天津小菜有限公司',
+    'cityCode' : '201000',
+
+    'cityName' : '天津'
+    'countyCode': '201001',
+    'countyName':'蓟县'
+  }
+  */
   public getOrderItemByOrderNO (orderCode: string = '') {
-    return Service.http(`/shop-order/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`)
+    const item = {
+      orderCode: 'TJxdfdsafds',
+      customerOrgId: 341341431,
+      customerOrgName: '天津小菜有限公司',
+      cityCode : '201000',
+      cityName: '天津',
+      countyCode: '201001',
+      countyName:'蓟县'
+    }
+    return Service.http(`/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`).then((res: any) => {
+      // return res && res.data ? res.data.records : []
+      const arr = ['a1', 'a2', 'a3', 'a4', 'a5']
+      console.log(arr)
+      return arr.map((x: any) => {
+        const y = _.clone(item)
+        y.orderCode = x
+        return y
+      })
+    })
+  }
+
+  // 获取当前登录人可操作的商品列表
+  public getProductList () {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/product/list`)
   }
 
   // 获取外勤人员

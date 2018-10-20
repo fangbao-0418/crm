@@ -10,6 +10,7 @@ import _ from 'lodash'
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker
 const FormItem = Form.Item
+const Search = Input.Search
 const styles = require('@/modules/outsite/styles/list')
 
 interface States {
@@ -249,7 +250,7 @@ class Main extends React.Component<any, any> {
             message: ''
           }]
         })(
-          <Input placeholder='请输入客户名称或者联系人' style={{width: '200px'}}/>
+          <Search placeholder='请输入客户名称或者联系人' style={{width: '200px'}}/>
         )}
         </FormItem>
         <FormItem>
@@ -318,7 +319,7 @@ class Main extends React.Component<any, any> {
                       message: ''
                     }]
                   })(
-                    <Input placeholder='请输入外勤人员' />
+                    <Search placeholder='请输入外勤人员' />
                   )}
                 </FormItem>
               </Col>
