@@ -57,6 +57,9 @@ class Main extends React.Component<Props, State> {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled
     const detail = this.props.detail
+    if (detail.isFixedPeriod) {
+      detail.businessHoursEnd = ''
+    }
     console.log(detail, 'detail')
     return (
       <div style={{width: '790px', marginLeft: '10px'}}>
