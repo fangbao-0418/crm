@@ -1,8 +1,8 @@
 import React from 'react'
 import { Table, Input, Divider, Modal as AntdModal } from 'antd'
-import { fetchAccountingList, delAccounting, setAccounting } from '../api'
+import { fetchAccountingList, delAccounting, changeAccounting } from '../api'
 import Modal from 'pilipa/libs/modal'
-import AccountingModal from './AccountingModal'
+import Detail from './Detail'
 
 const Search = Input.Search
 
@@ -66,13 +66,12 @@ class Main extends React.Component<any, State> {
   public setAccounting (mode: 'add' | 'modify', id?: number) {
     const modal = new Modal({
       content: (
-        <AccountingModal
-          id={id}
+        <Detail
           onOk={(val) => {
             console.log('val', val)
             const payload: any = {name: val.name}
             if (mode === 'modify') {payload.id = id}
-            setAccounting(payload).then((res) => {
+            changeAccounting(payload).then((res) => {
               this.getList()
               modal.hide()
             })

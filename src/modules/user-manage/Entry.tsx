@@ -32,7 +32,6 @@ class Main extends React.Component<Props> {
     fetchCompanyListAction(this.type)
   }
   public add () {
-    console.log(this.type, 'add department')
     if (!this.props.companyCode) {
       APP.error('请选择公司！')
       return
@@ -53,8 +52,8 @@ class Main extends React.Component<Props> {
                 }
               ).then((res) => {
                 fetchDepartmentAction(this.props.companyCode, this.type)
+                modal.hide()
               })
-              modal.hide()
             }}
             onCancel={() => {
               modal.hide()
@@ -77,10 +76,11 @@ class Main extends React.Component<Props> {
             onOk={(values: UserManage.AccountItemProps) => {
               values.companyId = this.props.companyCode
               values.userType = this.type
+              console.log(this.props, 'props')
               addAccount(values).then(() => {
                 fetchAccountListAction(this.props.account.searchPayload)
+                modal.hide()
               })
-              modal.hide()
             }}
             onCancel={() => {
               modal.hide()
@@ -105,8 +105,8 @@ class Main extends React.Component<Props> {
                   roleType: this.type,
                   companyId: this.props.companyCode
                 })
+                modal.hide()
               })
-              modal.hide()
             }}
             onCancel={() => {
               modal.hide()
@@ -129,6 +129,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { tab } = this.props
+    console.log(this.props.account, 'render')
     return (
       <div>
         <ContentBox

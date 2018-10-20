@@ -86,12 +86,14 @@ class Main extends React.Component<Props> {
       type: 'change user manage data',
       payload: {
         account: {
-          dataSource: []
+          dataSource: [],
+          searchPayload: this.searchPayload
         }
       }
     })
   }
   public fetchData () {
+    console.log(this.searchPayload, 'fetch data')
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {

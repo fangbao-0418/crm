@@ -78,11 +78,13 @@ class Main extends React.Component {
           disabled={type === 'view'}
           item={record}
           onOk={(values) => {
-            console.log(values)
-            changeCompanyInfo(values).then((res) => {
-              const ins: any = this.refs.ins
-              ins.fetchList()
-            })
+            if (type === 'view') {
+              changeCompanyInfo(values).then((res) => {
+                const ins: any = this.refs.ins
+                ins.fetchList()
+              })
+            }
+            modal.hide()
           }}
           onCancel={() => {
             modal.hide()

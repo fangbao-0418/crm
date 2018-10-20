@@ -1,8 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import Viewer from 'viewerjs'
 const styles = require('./style')
-const defaultVal = require('@/assets/images/noimage.png')
+const defaultVal = require('@/assets/images/upload-img-bg.png')
 interface Props {
   className?: string
   style?: React.CSSProperties
@@ -12,10 +11,6 @@ interface Props {
   title?: string
 }
 class Main extends React.Component<Props> {
-  public componentDidMount () {
-    // const el: any = this.refs.img
-    // const viewer = new Viewer(el)
-  }
   public handleClick () {
     if (this.props.disabled) {
       return

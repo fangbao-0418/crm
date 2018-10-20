@@ -15,7 +15,9 @@ export const companylist = (token: string) => {
   return http(`/user/v1/api/user/company/list?token=${token}`)
 }
 export const userLogout = () => {
-  return http(`/user/v1/api/logout`, 'POST')
+  return http(`/user/v1/api/logout`, 'POST', {
+    token: APP.token
+  })
 }
 export const fetchSmsVerifyCode = (phone: string) => {
   return http(`/user/v1/api/short/message/send`, 'GET', {
@@ -104,4 +106,7 @@ export const getSalesList = () => {
 // 根据机构获取销售列表
 export const getSalesByCompany = (companyid: string) => {
   return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
+}
+export const bindCompany = (payload: {token: string, companyId: string}) => {
+  return http(`/user/v1/api/user/company/bind`, 'POST', payload)
 }

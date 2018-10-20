@@ -1,41 +1,31 @@
 import React from 'react'
 import { Form, Row, Col, Input, Tree, Button } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { fetchRegion } from '@/modules/common/api'
 import { fetchAccountingInfo, fetchAccountingProvince } from '../api'
 import { TreeNode } from 'antd/lib/tree-select'
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
 
 interface Props extends FormComponentProps {
-  id: number
+  item?: Organ.AccountingItemProps
   onOk: (val: any) => void
   onCancel: () => void
 }
-
 interface State {
-  info: any // 机构信息
   areaList: UserManage.OwnAreaProps[]
 }
-
 class Main extends React.Component<Props, State> {
   public state: State = {
-    info: {},
     areaList: []
   }
-
+  public areaMapper: {[id: string]: UserManage.OwnAreaProps} = {}
   public componentWillMount () {
-    const {id} = this.props
-    if (id) {
-      this.getAccountingInfo(id)
-    }
     this.fetchProvince()
   }
 
   // 获取负责区域信息
   public fetchProvince () {
     fetchAccountingProvince().then((res) => {
-      console.log(this.handleOwnAreaData(res), 'xxxxxxxxx')
       this.setState({areaList: this.handleOwnAreaData(res)})
     })
   }
@@ -71,21 +61,27 @@ class Main extends React.Component<Props, State> {
   public getAccountingInfo (id: number) {
     fetchAccountingInfo(id)
       .then((res) => {
-        this.setState({info: res})
+        // this.setState({info: res})
       })
   }
-
+  public getFinalTreeData (ids: any[] = []) {
+    // return res
+  }
   // 点击保存按钮
   public save = () => {
-    this.props.form.validateFields((err: any, val: any) => {
-      if (err) {return}
-      val.region = []
-      this.props.onOk(val)
-    })
+    if (this.props.onOk) {
+      this.props.form.validateFields((err, vals) => {
+        console.log(vals)
+        this.getFinalTreeData(vals.region)
+        if (err) {return}
+        // vals.region = []
+        // this.props.onOk(vals)
+      })
+    }
   }
   public render () {
     const { getFieldDecorator } = this.props.form
-    const {info} = this.state
+    const item = this.props.item || {}
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -108,7 +104,7 @@ class Main extends React.Component<Props, State> {
                 rules: [{
                   required: true, message: '请输入机构名称!'
                 }],
-                initialValue: info.name
+                initialValue: item.name
               })(
                 <Input placeholder='请输入'/>
               )}
@@ -121,14 +117,25 @@ class Main extends React.Component<Props, State> {
               {...formItemLayout}
               label='核算地区范围：'
             >
-              <Tree
-                // disabled={disable}
-                defaultExpandAll={true}
-                autoExpandParent={true}
-                checkable={true}
-              >
-                {this.renderRegionTreeNodes(this.state.areaList)}
-              </Tree>
+              {
+                getFieldDecorator(
+                  'region'
+                )(
+                  <Tree
+                    defaultExpandAll={true}
+                    autoExpandParent={true}
+                    checkable={true}
+                    onCheck={(checkedKeys) => {
+                      console.log(checkedKeys)
+                      this.props.form.setFieldsValue({
+                        region: checkedKeys
+                      })
+                    }}
+                  >
+                    {this.renderRegionTreeNodes(this.state.areaList)}
+                  </Tree>
+                )
+              }
             </FormItem>
           </Col>
         </Row>

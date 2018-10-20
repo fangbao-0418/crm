@@ -2,7 +2,6 @@ import React from 'react'
 import { Layout, Dropdown, Menu } from 'antd'
 // 消息提醒
 import Msg from '@/modules/message/services/message.tsx'
-
 const { Header } = Layout
 const styles = require('@/stylus/top')
 class Main extends React.Component {
@@ -15,8 +14,7 @@ class Main extends React.Component {
     // 消息初始化
     this.msg = Msg({}).connect()
     // 交互：获取到已读消息数
-    this.msg.evAdd('service:get unreaded count data', (data: any) => {
-      console.log('get unreaded count::', data)
+    this.msg.evAdd('service:get unreaded count data', (data: number) => {
       data = data ? data : 0
       this.setState({
         msgCount: data
@@ -35,7 +33,10 @@ class Main extends React.Component {
   }
   public render () {
     const menu = (
-      <Menu>
+      <Menu
+        mode='inline'
+        style={{width: 200}}
+      >
         <Menu.Item>
           <span
             onClick={() => {
@@ -45,6 +46,11 @@ class Main extends React.Component {
             注销
           </span>
         </Menu.Item>
+        <Menu.SubMenu title='切换公司'>
+          <Menu.Item>
+            <span>公司1</span>
+          </Menu.Item>
+        </Menu.SubMenu>
       </Menu>
     )
     return (

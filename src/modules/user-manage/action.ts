@@ -23,7 +23,8 @@ export const fetchAccountListAction = (payload: UserManage.AccoutSearchPayload) 
             total: res.pageTotal,
             pageSize: res.pageSize,
             current: res.pageCurrent
-          }
+          },
+          searchPayload: payload
         }
       }
     })

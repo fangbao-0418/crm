@@ -107,9 +107,11 @@ class Main extends React.Component<Props, State> {
               disabled={type === 'view'}
               item={res}
               onOk={(values) => {
-                changeCompanyInfo(values).then(() => {
-                  this.fetchList()
-                })
+                if (type === 'update') {
+                  changeCompanyInfo(values).then(() => {
+                    this.fetchList()
+                  })
+                }
                 modal.hide()
               }}
               onCancel={() => {
