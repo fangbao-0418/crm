@@ -1,19 +1,35 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
-
-class Main extends React.Component {
+import { connect } from 'react-redux'
+import { fetchListAction } from '../action'
+type OverViewProps = Statistics.ItemPieProps
+class Main extends React.Component<Statistics.Props, any> {
+  public chart: echarts.ECharts
+  public values: {
+    companyId: number,
+    dateFlag: string,
+    date: string
+  } = {
+    companyId:2001,
+    dateFlag: 'YEAR',
+    date:'2018-10-10'
+  }
   public componentDidMount () {
     const dom: any = this.refs.container
-    const myChart = echarts.init(dom)
+    this.chart = echarts.init(dom)
+  }
+  public componentDidUpdate () {
+    this.renderChart(this.props.dataPieList)
+  }
+  public renderChart (dataPieList: OverViewProps[]) {
     const option = {
       tooltip: {
-        trigger: 'item',
+        axisPointer: 'line',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
       },
       legend: {
         orient: 'vertical',
         x: 'left',
-        data:['已完成任务数', '待分配任务数', '已取消任务数']
+        data: [`${dataPieList[0].name}:${dataPieList[0].value}`, `${dataPieList[1].name}:${dataPieList[1].value}`, `${dataPieList[2].name}:${dataPieList[2].value}`]
       },
       series: [
         {
@@ -36,22 +52,40 @@ class Main extends React.Component {
           },
           labelLine: {
             normal: {
-              show: false
+              show: true
             }
           },
-          data:[
-                  {value:335, name:'已完成任务数', itemStyle: {color: '#fa250c'}},
-                  {value:310, name:'待分配任务数', itemStyle: {color: '#1790ff'}},
-                  {value:234, name:'已取消任务数', itemStyle: {color: '#ff7d00'}}
+          itemStyle:{
+            color: '#fa250c'
+          },
+          data:
+          [
+            {
+              value: dataPieList[0].value,
+              name:`${dataPieList[0].name}:${dataPieList[0].value}`,
+              itemStyle: {color: '#fa250c'}
+            },
+            {
+              value: dataPieList[1].value,
+              name:`${dataPieList[1].name}:${dataPieList[1].value}`,
+              itemStyle: {color: '#1790ff'}
+            },
+            {
+              value: dataPieList[2].value,
+              name:`${dataPieList[2].name}:${dataPieList[2].value}`,
+              itemStyle: {color: '#ff7d00'}
+            }
           ]
         }
       ]
     }
     if (option && typeof option === 'object') {
-      myChart.setOption(option, true)
+      this.chart.setOption(option, true)
     }
   }
   public render () {
+    const { dataPieList } = this.props
+    {console.log(dataPieList)}
     return (
     <div>
       <div ref='container' style={{height: '300px'}}></div>
@@ -60,4 +94,6 @@ class Main extends React.Component {
   }
 }
 
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.statistics
+})(Main)

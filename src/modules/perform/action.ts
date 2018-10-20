@@ -5,6 +5,7 @@ export const fetchListAction = (payload: Perform.SearchPayload = {
   productName: ''
 }) => {
   fetchList(payload).then((res) => {
+   // console.log(res)
     APP.dispatch<Perform.Props>({
       type: 'change perform data',
       payload: {
