@@ -21,38 +21,107 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           <span
             className='href'
             onClick={() => {
-              const modal = showDetail.call(this, record, index, () => {
-                const business: any = store.getState().business
-                const tab = business.selectedTab
-                const { searchPayload, pagination } = business[tab]
-                fetchList(searchPayload).then((res) => {
-                  pagination.total = res.pageTotal
-                  APP.dispatch<Business.Props>({
-                    type: 'change business data',
-                    payload: {
-                      [tab]: {
-                        dataSource: res.data,
-                        pagination
-                      }
-                    }
-                  })
-                  if (res.data[index]) {
-                    const customerId = res.data[index].id
-                    changeCustomerDetailAction(customerId)
-                    APP.dispatch<Customer.Props>({
-                      type: 'change customer data',
-                      payload: {
-                        detail: {
-                          id: customerId
+              const business: Business.Props = store.getState().business
+              const tab = business.selectedTab
+              let dataSource: Business.DetailProps[] = []
+              const { searchPayload, pagination } = business[tab]
+              const modal = showDetail.call(this, record, index,
+                {
+                  onOk: () => {
+                    APP.success('操作成功')
+                    fetchList(searchPayload).then((res) => {
+                      pagination.total = res.pageTotal
+                      APP.dispatch<Business.Props>({
+                        type: 'change business data',
+                        payload: {
+                          [tab]: {
+                            dataSource: res.data,
+                            pagination
+                          }
                         }
+                      })
+                      if (res.data[index]) {
+                        const customerId = res.data[index].id
+                        changeCustomerDetailAction(customerId)
+                        APP.dispatch<Customer.Props>({
+                          type: 'change customer data',
+                          payload: {
+                            detail: {
+                              id: customerId
+                            }
+                          }
+                        })
+                      } else {
+                        modal.hide()
                       }
                     })
-                  } else {
-                    modal.hide()
+                    return
+                  },
+                  onPrev: () => {
+                    index -= 1
+                    if (index === -1) {
+                      if (searchPayload.pageCurrent === 1) {
+                        modal.hide()
+                        return
+                      }
+                      index = searchPayload.pageSize - 1
+                      searchPayload.pageCurrent -= 1
+                      dataSource = []
+                    }
+                    if (dataSource.length === 0) {
+                      fetchList(searchPayload).then((res) => {
+                        pagination.current = res.pageCurrent
+                        APP.dispatch<Business.Props>({
+                          type: 'change business data',
+                          payload: {
+                            [tab]: {
+                              searchPayload,
+                              dataSource: res.data,
+                              pagination
+                            }
+                          }
+                        })
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
+                  },
+                  onNext: () => {
+                    index += 1
+                    if (index >= searchPayload.pageSize) {
+                      searchPayload.pageCurrent += 1
+                      dataSource = []
+                      index = 0
+                    }
+                    if (dataSource.length === 0) {
+                      fetchList(searchPayload).then((res) => {
+                        // if (res.data)
+                        pagination.current = res.pageCurrent
+                        APP.dispatch<Business.Props>({
+                          type: 'change business data',
+                          payload: {
+                            [tab]: {
+                              searchPayload,
+                              dataSource: res.data,
+                              pagination
+                            }
+                          }
+                        })
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      if (dataSource[index] === undefined) {
+                        modal.hide()
+                        return
+                      }
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
                   }
-                })
-                return
-              })
+                }
+              )
             }}
           >
             {val}

@@ -7,7 +7,12 @@ import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
-export default function (record: Business.DetailProps, cb?: () => void) {
+export default function (record: Business.DetailProps, index?: number,
+  operate: {
+    onOk?: () => void
+    onPrev?: () => void
+    onNext?: () => void
+  } = {}) {
   let customerId = record.id
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
@@ -47,9 +52,8 @@ export default function (record: Business.DetailProps, cb?: () => void) {
                           bus_sea_memo: reason.label
                         }
                         toOpen(openparams).then(() => {
-                          APP.success('操作成功')
-                          if (cb) {
-                            cb()
+                          if (operate.onOk) {
+                            operate.onOk()
                           }
                         })
                         modal1.hide()
@@ -78,6 +82,9 @@ export default function (record: Business.DetailProps, cb?: () => void) {
                 <Button
                   type='primary'
                   onClick={() => {
+                    if (operate.onPrev) {
+                      operate.onPrev()
+                    }
                   }}
                 >
                   上一条
@@ -86,15 +93,9 @@ export default function (record: Business.DetailProps, cb?: () => void) {
                   style={{ marginLeft: 5}}
                   type='ghost'
                   onClick={() => {
-                    // this.fetchList().then((res) => {
-                    //   const data = res.data
-                    //   if (data instanceof Array && data[index]) {
-                    //     customerId = data[index].id
-                    //     changeCustomerDetailAction(customerId)
-                    //   } else {
-                    //     modal.hide()
-                    //   }
-                    // })
+                    if (operate.onNext) {
+                      operate.onNext()
+                    }
                   }}
                 >
                   下一条
