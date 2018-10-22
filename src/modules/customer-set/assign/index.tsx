@@ -59,6 +59,9 @@ class Main extends React.Component<Customer.Props, State> {
                   if (this.state.selectRadio === 2 && !this.state.salesPerson) { // 自定义的时候销售不能为空
                     APP.error('请选择销售')
                     return
+                  } 
+                  if (this.state.selectRadio === 1) {
+                    this.state.salesPerson = []
                   }
                   saveGeneralCapacity(this.state.salesPerson).then(() => {
                     APP.success('操作成功')
