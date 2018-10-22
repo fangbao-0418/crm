@@ -5,9 +5,9 @@ export const userLogin = (payload: {
   phoneValidCode?: string
 }) => {
   return http(`/user/v1/api/login`, 'POST', {
-    contentType: 'application/x-www-form-urlencoded',
-    processData: true,
-    raw: true,
+    // contentType: 'application/x-www-form-urlencoded',
+    // processData: true,
+    // raw: true,
     data: payload
   })
 }
