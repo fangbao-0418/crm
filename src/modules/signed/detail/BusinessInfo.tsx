@@ -111,6 +111,9 @@ class Main extends React.Component<Props, State> {
                           fetchTianYanDetail(item.id).then((res) => {
                             res.companyInfoSource = 1
                             res.isConfirmed = 1
+                            if (!res.businessHoursEnd) {
+                              res.isFixedPeriod = 1 // 如果返回没有结束日期 勾选无期限
+                            }
                             APP.dispatch({
                               type: 'change customer data',
                               payload: {

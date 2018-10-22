@@ -250,7 +250,7 @@ class Main extends React.Component<any, any> {
             message: ''
           }]
         })(
-          <Search placeholder='请输入客户名称或者联系人' style={{width: '200px'}}/>
+          <Search placeholder='请输入' style={{width: '200px'}}/>
         )}
         </FormItem>
         <FormItem>

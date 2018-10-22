@@ -28,7 +28,7 @@ export default class extends React.Component<Props> {
       return (
         <a
           onClick={() => {
-            window.open('http://www.baidu.com')
+            window.open(`${window.location.origin}/#/workorder/list`)
           }}
         >
           {val}
