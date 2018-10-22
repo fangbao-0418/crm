@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tag, DatePicker, Menu, Dropdown } from 'antd'
+import { Tag, DatePicker, Menu, Dropdown, Icon } from 'antd'
 import DropDown from 'pilipa/libs/dropdown'
 import classNames from 'classnames'
 const { RangePicker } = DatePicker
@@ -192,6 +192,7 @@ class Main extends React.Component<Props> {
           <label
             className={styles.label}
           >
+          {/* <Icon type="down" theme="outlined" /> */}
             {
               item.label.length > 1 ? (
                 <Dropdown

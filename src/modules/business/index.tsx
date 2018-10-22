@@ -8,7 +8,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
-import { fetchRegion, getSalesList } from '@/modules/common/api'
+import { fetchRegion, getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -75,7 +75,7 @@ class Main extends React.Component<Business.Props> {
     })
   }
   public fetchSales () {
-    getSalesList().then((res) => {
+    getSalesByCompany(APP.user.companyId).then((res) => {
       this.setState({
         sales: res
       })
