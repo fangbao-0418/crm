@@ -250,7 +250,7 @@ class Main extends React.Component<any, any> {
             message: ''
           }]
         })(
-          <Search placeholder='请输入' style={{width: '200px'}}/>
+          <Search placeholder='请输入客户或联系人名称' style={{width: '200px'}}/>
         )}
         </FormItem>
         <FormItem>
@@ -286,7 +286,7 @@ class Main extends React.Component<any, any> {
           }]
         })(
           <Select
-            style={{width: '120px'}}
+            style={{width: '140px'}}
             onChange={(e: any) => {
               /*
               this.syncSearchData({
@@ -332,7 +332,7 @@ class Main extends React.Component<any, any> {
                   }]
                 })(
                   <Select
-                    style={{width: '120px'}}
+                    style={{width: '140px'}}
                     onChange={(status: any) => {
                       this.syncSearchData({
                         status
