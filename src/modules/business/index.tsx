@@ -8,7 +8,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
-import { fetchRegion, getSalesList } from '@/modules/common/api'
+import { fetchRegion, getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
@@ -75,7 +75,7 @@ class Main extends React.Component<Business.Props> {
     })
   }
   public fetchSales () {
-    getSalesList().then((res) => {
+    getSalesByCompany(APP.user.companyId).then((res) => {
       this.setState({
         sales: res
       })
@@ -409,6 +409,13 @@ class Main extends React.Component<Business.Props> {
         )}
       >
         {
+          count[4] === 0 &&
+          <div className={styles.note}>
+            <span className={styles['note-icon1']} />
+            <span>您的库容已达上限！</span>
+          </div>
+        }
+        {
           count[4] > 0 &&
           <div className={styles.note}>
             {
@@ -416,8 +423,6 @@ class Main extends React.Component<Business.Props> {
               <span>
                 <span className={styles['note-icon1']} />
                 <span className='mr10'>库容剩余不足{count[4]}个，即将达到上限！</span>
-                <span className={styles['note-icon1']} />
-                <span>您的库容已达上限！</span>
               </span>
             }
           </div>
@@ -443,6 +448,9 @@ class Main extends React.Component<Business.Props> {
                 if (e.keyCode === 13) {
                   this.handleSearchType(val)
                 }
+              }}
+              onSearch={(val) => {
+                this.handleSearchType(val)
               }}
             />
           </div>

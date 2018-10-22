@@ -226,8 +226,8 @@ class Main extends React.Component<Customer.Props, States> {
         createBeginDate = undefined
         createEndDate = undefined
       } else if (values.date.value.indexOf('至') > -1) {
-        createBeginDate = values.date.split('至')[0]
-        createEndDate = values.date.split('至')[1]
+        createBeginDate = values.date.value.split('至')[0]
+        createEndDate = values.date.value.split('至')[1]
       } else {
         createBeginDate = moment().startOf('day').subtract(values.date - 1, 'day').format('YYYY-MM-DD')
         createEndDate = moment().format('YYYY-MM-DD')
@@ -609,6 +609,9 @@ class Main extends React.Component<Customer.Props, States> {
                 if (e.keyCode === 13) {
                   this.handleSearchType(val)
                 }
+              }}
+              onSearch={(val) => {
+                this.handleSearchType(val)
               }}
             />
           </div>

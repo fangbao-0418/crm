@@ -14,6 +14,7 @@ interface Props {
   }>
   onKeyDown?: (e?: React.KeyboardEvent<HTMLInputElement>, value?: {value?: string, key: string}) => void
   onChange?: (value?: {value?: string, key: string}) => void
+  onSearch?: (value?: {value?: string, key: string}) => void
 }
 class Main extends React.Component<Props> {
   public value: {key: string, value?: string}
@@ -80,7 +81,18 @@ class Main extends React.Component<Props> {
           }}
           style={{ width: '50%' }}
           placeholder={this.props.placeholder}
-          suffix={<Icon className={styles.icon} type='search' theme='outlined'/>}
+          suffix={
+            <Icon
+              className={styles.icon}
+              type='search'
+              theme='outlined'
+              onClick={() => {
+                if (this.props.onSearch) {
+                  this.props.onSearch(_.cloneDeep(this.value))
+                }
+              }}
+            />
+          }
         />
       </InputGroup>
     )

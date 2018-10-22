@@ -22,6 +22,9 @@ class Main extends React.Component<Props, State> {
     if (this.props.disabled) {
       return
     }
+    if (!value) {
+      return false
+    }
     fetchTianYanCompanyList(value).then((res) => {
       this.setState({
         tianyanDataSource: res.body,
