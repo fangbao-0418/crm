@@ -7,6 +7,7 @@ declare namespace Customer {
     worker?: string
     isMainContact?: string
     source?: number
+    key?: number
   }
   export type ActionPayload = Props
   export interface DetailProps {

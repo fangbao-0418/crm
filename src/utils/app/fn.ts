@@ -56,3 +56,20 @@ export const ossUpload = (file: File): Promise<any> => {
     })
   })
 }
+
+export const generateKey = <T extends {key?: number}>(arr: T[]): T[] => {
+  let key = 0
+  const noKeyArr: T[] = []
+  arr.map((item) => {
+    if (item.key !== undefined) {
+      key = item.key
+    } else {
+      noKeyArr.push(item)
+    }
+  })
+  noKeyArr.map((item) => {
+    key += 1
+    item.key = key
+  })
+  return arr
+}

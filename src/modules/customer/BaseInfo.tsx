@@ -95,15 +95,36 @@ class Main extends React.Component<Props> {
           </b>
         </div>
       ),
-      content: <Provider><LinkMain /></Provider>,
-      onOk: () => {
-        console.log(this.props.linkMan, 'linkMan')
-        const contactPersons = this.props.detail.contactPersons
-        this.props.form.setFieldsValue({
-          'linkMan[0].contactPerson': contactPersons[0].contactPerson,
-          'linkMan[0].contactPhone': contactPersons[0].contactPhone
-        })
-        modal.hide()
+      content: (
+        <Provider>
+          <LinkMain
+            onOk={(data) => {
+              const detail = this.props.detail
+              detail.contactPersons = data
+              APP.dispatch<Customer.Props>({
+                type: 'change customer data',
+                payload: {
+                  detail
+                }
+              })
+              this.props.form.setFieldsValue({
+                'linkMan[0].contactPerson': data[0].contactPerson,
+                'linkMan[0].contactPhone': data[0].contactPhone
+              })
+              modal.hide()
+            }}
+            onCancel={() => {
+              modal.hide()
+            }}
+          />
+        </Provider>
+      ),
+      footer: null
+    })
+    APP.dispatch<Customer.Props>({
+      type: 'change customer data',
+      payload: {
+        linkMan: this.props.detail.contactPersons
       }
     })
     modal.show()
@@ -113,11 +134,7 @@ class Main extends React.Component<Props> {
     data.push({
       contactPerson: '',
       contactPhone: ''
-      // customerSource: '',
-      // mark: '',
-      // worker: ''
     })
-    console.log(data, 'data')
     APP.dispatch({
       type: 'change customer data',
       payload: {
@@ -175,8 +192,6 @@ class Main extends React.Component<Props> {
           return
         }
         params.customerNameType = '1' // 后端不需要改代码所以加上
-        // console.log(params.isConfirmed, 'params.isConfirmed')
-        params.contactPersons = this.props.linkMan
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()
@@ -435,7 +450,6 @@ class Main extends React.Component<Props> {
               {getFieldDecorator(
                 'linkMan[0].contactPerson',
                 {
-                  valuePropName: this.props.linkMan[0].contactPerson,
                   initialValue: this.props.linkMan[0].contactPerson,
                   rules: [
                     {
@@ -472,7 +486,6 @@ class Main extends React.Component<Props> {
               {getFieldDecorator(
                 'linkMan[0].contactPhone',
                 {
-                  valuePropName: this.props.linkMan[0].contactPhone,
                   initialValue: this.props.linkMan[0].contactPhone,
                   rules: [
                     {
@@ -487,7 +500,7 @@ class Main extends React.Component<Props> {
                   required
                   label='主联系电话'
                   disabled={disabled}
-                  field='contactPersons[0].contactPhone'
+                  field='linkMan[0].contactPhone'
                   onChange={this.handleChange.bind(this)}
                   value={this.props.linkMan[0].contactPhone}
                 />

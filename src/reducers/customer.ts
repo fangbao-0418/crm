@@ -29,12 +29,12 @@ export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
     payload = Object.assign({}, state, _.cloneDeep(payload))
     payload = _.merge(_.cloneDeep(defaultVal), payload)
-    const linkMan: any = payload.linkMan
+    const linkMan: any = APP.fn.generateKey(payload.linkMan)
     linkMan[0].isMainContact = 1
-    payload.detail.contactPersons = linkMan
     return {
       ...state,
-      ...payload
+      ...payload,
+      linkMan
     }
   }
 }, _.cloneDeep(defaultVal))

@@ -1,26 +1,20 @@
 import React from 'react'
-import { Table, Input, Form } from 'antd'
+import { Table, Input, Form, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
   disabled?: boolean
-}
-interface States {
-  dataSource: LinkManProps[]
+  onOk?: (data?: LinkManProps[]) => void
+  onCancel?: () => void
 }
 const FormItem = Form.Item
 const styles = require('./style')
 class Main extends React.Component<Props> {
-  public dataSource = [{
-    contactPerson: '22',
-    contactPhone: '222'
-  }]
-  public state: States = {
-    dataSource: []
-  }
+  public data: LinkManProps[] = []
   public columns: ColumnProps<LinkManProps>[] = [
     {
       title: '联系人',
@@ -29,8 +23,8 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         return (
           <FormItem>
-            {getFieldDecorator(`contactPerson-${index}`, {
-              valuePropName: text,
+            {getFieldDecorator(`contactPerson-${record.key}`, {
+              initialValue: text,
               rules: [
                 {
                   required: true,
@@ -39,11 +33,10 @@ class Main extends React.Component<Props> {
               ]
             })(
               this.props.disabled ?
-                <span>text</span>
+                <span>{text}</span>
               :
                 <Input
                   onChange={this.onChange.bind(this, index, 'contactPerson')}
-                  value={text}
                 />
             )}
           </FormItem>
@@ -56,9 +49,9 @@ class Main extends React.Component<Props> {
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
         return (
-          <FormItem>
-            {getFieldDecorator(`contactPhone-${index}`, {
-              valuePropName: text,
+          <FormItem key={`input-${record.key}`}>
+            {getFieldDecorator(`contactPhone-${record.key}`, {
+              initialValue: text,
               rules: [
                 {
                   required: true,
@@ -71,34 +64,12 @@ class Main extends React.Component<Props> {
               :
                 <Input
                   onChange={this.onChange.bind(this, index, 'contactPhone')}
-                  value={text}
                 />
             )}
           </FormItem>
         )
       }
     },
-    // {
-    //   title: '来源',
-    //   dataIndex: 'customerSource',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'customerSource')} value={text}/>
-    //   }
-    // },
-    // {
-    //   title: '备注',
-    //   dataIndex: 'mark',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'mark')} value={text}/>
-    //   }
-    // },
-    // {
-    //   title: '职务',
-    //   dataIndex: 'worker',
-    //   render: (text, record, index) => {
-    //     return <Input onChange={this.onChange.bind(this, index, 'worker')} value={text}/>
-    //   }
-    // },
     {
       title: '操作',
       width: '80px',
@@ -109,11 +80,10 @@ class Main extends React.Component<Props> {
             hidden={this.props.disabled}
             onClick={() => {
               const data = this.props.linkMan
-              data.splice(index, 1)
               APP.dispatch({
                 type: 'change customer data',
                 payload: {
-                  linkMan: data
+                  linkMan: data.filter((item) => item.key !== record.key)
                 }
               })
             }}
@@ -129,7 +99,7 @@ class Main extends React.Component<Props> {
     const value = $(e.target).val()
     const data: any = this.props.linkMan
     data[index][field] = value
-    APP.dispatch({
+    APP.dispatch<Customer.Props>({
       type: 'change customer data',
       payload: {
         linkMan: data
@@ -137,7 +107,6 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
-    console.log(this.props.linkMan)
     return (
       <div className={styles.container} style={{width: '100%'}}>
         <Form>
@@ -148,6 +117,37 @@ class Main extends React.Component<Props> {
             bordered
           />
         </Form>
+        <div className='mt20 text-right'>
+          <Button
+            type='primary'
+            className='mr5'
+            onClick={() => {
+              this.props.form.validateFields((errs, vals) => {
+                if (errs) {
+                  return
+                }
+                const data = _.cloneDeep(this.props.linkMan)
+                data.map((item) => {
+                  delete item.key
+                })
+                if (this.props.onOk) {
+                  this.props.onOk(data)
+                }
+              })
+            }}
+          >
+            保存
+          </Button>
+          <Button
+            onClick={() => {
+              if (this.props.onCancel) {
+                this.props.onCancel()
+              }
+            }}
+          >
+            取消
+          </Button>
+        </div>
       </div>
     )
   }
