@@ -27,7 +27,6 @@ export const fetchSmsVerifyCode = (phone: string) => {
 export const fetchUserInfo = () => {
   return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
     fetchPermissionCode().then((res2) => {
-      console.log(res2)
     })
     APP.user = res
     APP.dispatch({
@@ -38,8 +37,8 @@ export const fetchUserInfo = () => {
     })
     return res
   }, () => {
-    // APP.token = ''
-    // APP.history.push('/login')
+    APP.token = ''
+    APP.history.push('/login')
   })
 }
 export const fetchPermissionCode = () => {

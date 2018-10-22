@@ -7,6 +7,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
 import { updateCustomer } from '@/modules/customer/api'
+import _ from 'lodash'
 const styles = require('./style')
 interface Props {
   linkMan: Customer.LinkManProps[]
@@ -16,6 +17,8 @@ class Main extends React.Component<Props> {
   public state = {
     disabled: true
   }
+  public linkMan: any = {}
+  public businessInfo: any = {}
   public addLinkMan () {
     const linkMan = this.props.linkMan
     linkMan.push({
@@ -50,48 +53,69 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
-                console.log(this.refs.linkMan, 'save')
-                return
-                if (!this.state.disabled) {
-                  if (!this.props.detail.customerName) {
-                    APP.error('请输入公司名称！')
-                    return
+                Promise.all([
+                  new Promise((resolve, reject) => {
+                    this.businessInfo.props.form.validateFields((errs: any) => {
+                      if (errs) {
+                        reject()
+                      } else {
+                        const linkMan = _.cloneDeep(this.props.linkMan)
+                        const detail = this.props.detail
+                        linkMan.map((item) => {
+                          delete item.key
+                        })
+                        detail.contactPersons = linkMan
+                        APP.dispatch<Customer.Props>({
+                          type: 'change customer data',
+                          payload: {
+                            detail
+                          }
+                        })
+                        resolve()
+                      }
+                    })
+                  }),
+                  new Promise((resolve, reject) => {
+                    this.linkMan.props.form.validateFields((errs: any) => {
+                      if (errs) {
+                        reject()
+                      } else {
+                        resolve()
+                      }
+                    })
+                  })
+                ]).then(() => {
+                  if (!this.state.disabled) {
+                    if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
+                      APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
+                      return
+                    }
                   }
-                  if (this.props.detail.legalPersonCard.length > 18) {
-                    return false
-                  }
-                  if (!this.props.detail.unifiedCreditCode) {
-                    APP.error('统一信用代码不能为空！')
-                    return
-                  }
-                  if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
-                    APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
-                    return
-                  }
-                  if (this.props.detail.contactPersons.length === 0 || (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPerson)) {
-                    APP.error('主联系人不能为空！')
-                    return
-                  }
-                  if (this.props.detail.contactPersons.length > 0 && !this.props.detail.contactPersons[0].contactPhone) {
-                    APP.error('主联系电话不能为空！')
-                    return
-                  }
-                }
-                this.setState({
-                  disabled: !this.state.disabled
+                  this.setState({
+                    disabled: !this.state.disabled
+                  }, () => {
+                    this.save()
+                  })
                 }, () => {
-                  this.save()
+                  APP.error('请检查输入项')
                 })
               }}
             />
           )}
         >
-          <BusinessInfo disabled={this.state.disabled} />
+          <BusinessInfo
+            getWrappedInstance={(ref) => {
+              this.businessInfo = ref
+            }}
+            disabled={this.state.disabled}
+          />
         </Card>
         <Card
           title='基本信息'
         >
-          <BaseInfo disabled={this.state.disabled} />
+          <BaseInfo
+            disabled={this.state.disabled}
+          />
         </Card>
         <Card
           title='联系方式'
@@ -101,7 +125,12 @@ class Main extends React.Component<Props> {
             />
           )}
         >
-          <LinkMan ref='linkMan' disabled={this.state.disabled} />
+          <LinkMan
+            getWrappedInstance={(ref) => {
+              this.linkMan = ref
+            }}
+            disabled={this.state.disabled}
+          />
         </Card>
       </div>
     )

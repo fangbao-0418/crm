@@ -7,6 +7,7 @@ type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
   disabled?: boolean
+  getWrappedInstance?: (ref?: any) => any
 }
 interface States {
   dataSource: LinkManProps[]
@@ -29,7 +30,13 @@ class Main extends React.Component<Props> {
         return (
           <FormItem>
             {getFieldDecorator(`contactPerson-${record.key}`, {
-              initialValue: text
+              initialValue: text,
+              rules: [
+                {
+                  required: true,
+                  message: '联系人不能为空'
+                }
+              ]
             })(
               this.props.disabled ?
                 <span>{text}</span>
@@ -54,8 +61,8 @@ class Main extends React.Component<Props> {
               initialValue: text,
               rules: [
                 {
-                  max: 11,
-                  message: '电话格式不正确'
+                  required: true,
+                  message: '联系电话不能为空'
                 }
               ]
             })(
@@ -148,6 +155,11 @@ class Main extends React.Component<Props> {
       }
     }
   ]
+  public componentWillMount () {
+    if (this.props.getWrappedInstance) {
+      this.props.getWrappedInstance(this)
+    }
+  }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const value = $(e.target).val()
     const data: any = this.props.linkMan
@@ -160,7 +172,6 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
-    console.log(this.props.linkMan)
     return (
       <div
         style={{width: '100%'}}

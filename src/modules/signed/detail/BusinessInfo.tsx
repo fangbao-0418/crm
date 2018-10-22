@@ -10,6 +10,7 @@ const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
   detail: Customer.DetailProps
+  getWrappedInstance?: (ref?: any) => any
 }
 interface State {
   disabled?: boolean
@@ -17,6 +18,11 @@ interface State {
 class Main extends React.Component<Props, State> {
   public state: State = {
     disabled: true
+  }
+  public componentWillMount () {
+    if (this.props.getWrappedInstance) {
+      this.props.getWrappedInstance(this)
+    }
   }
   public searchUrl () {
     let url: string
@@ -83,7 +89,13 @@ class Main extends React.Component<Props, State> {
                   {!disabled ? getFieldDecorator(
                     'customerName',
                     {
-                      initialValue: detail.customerName
+                      initialValue: detail.customerName,
+                      rules: [
+                        {
+                          required: true,
+                          message: '公司名称不能为空'
+                        }
+                      ]
                     }
                   )(
                     <div>
@@ -156,11 +168,18 @@ class Main extends React.Component<Props, State> {
                 labelCol={{span: 10}}
                 wrapperCol={{span: 14}}
                 label='统一社会信用代码'
+                required
               >
                 {!disabled ? getFieldDecorator(
                   'unifiedCreditCode',
                   {
-                    initialValue: detail.unifiedCreditCode
+                    initialValue: detail.unifiedCreditCode,
+                    rules: [
+                      {
+                        required: true,
+                        message: '统一社会信用代码不能为空'
+                      }
+                    ]
                   }
                 )(
                   <Input disabled={this.state.disabled} />
