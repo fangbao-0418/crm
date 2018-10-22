@@ -1,55 +1,17 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import { fetchRegion } from '@/modules/common/api'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
-import Modal from 'pilipa/libs/modal'
-import Provider from '@/components/Provider'
-import BaseInfo from '@/modules/customer/BaseInfo'
 import SetAuto from '@/modules/outsite/components/SetAuto'
 import SetCapacity from '@/modules/outsite/components/SetCapacity'
 
 const TabPane = Tabs.TabPane
 
-function callback (key: string) {
-  console.log(key)
-}
-
-function onShowSizeChange (current: any, pageSize: any) {
-  console.log(current, pageSize)
-}
-
 class Main extends React.Component {
-  public componentWillMount () {
-    /*
-    fetchRegion().then((res: any) => {
-      console.log(res)
-    })
-    */
-  }
 
   /*新增自定义任务未修改，这里是方法*/
   public add () {
     APP.history.push('/outsite/tasktpl/form')
-    /*
-    const modal = new Modal({
-      style: 'width: 800px',
-      content: (
-      <Provider><BaseInfo onClose={() => {modal.hide()}}/></Provider>
-    ),
-      footer: null,
-      title: '新增',
-      mask: true,
-      onCancel: () => {
-        modal.hide()
-      }
-    })
-    modal.show()
-    */
-  }
-
-  public callback (key: string) {
-    console.log('key', key)
   }
 
   public render () {
@@ -68,7 +30,7 @@ class Main extends React.Component {
         </div>
       )}
     >
-      <Tabs defaultActiveKey='1' onChange={callback}>
+      <Tabs defaultActiveKey='1'>
       <TabPane tab='系统任务' key='1'>
         <SetAuto/>
       </TabPane>

@@ -63,30 +63,21 @@ class Main extends React.Component<Props, State> {
   }
   public sortItem (item: OutSite.SubTaskItem, action: 'up' | 'down') {
     const { dataSource } = this.state
-    // const {checkedIdMap} = this.state
     if (action === 'up') {
       if (item.sort !== 1) {
-        const nitem = dataSource[item.sort - 2]
-        nitem.sort = nitem.sort + 1
+        const prevItem = dataSource[item.sort - 2]
+        prevItem.sort = prevItem.sort + 1
         item.sort = item.sort - 1
-        // checkedIdMap[item.id] = item
-        // checkedIdMap[nitem.id] = nitem
       }
     }
     if (action === 'down') {
       if (item.sort !== dataSource.length) {
-        const nitem = dataSource[item.sort]
-        nitem.sort = nitem.sort - 1
+        const nextItem = dataSource[item.sort]
+        nextItem.sort = nextItem.sort - 1
         item.sort = item.sort + 1
-        // checkedIdMap[item.id] = item
-        // checkedIdMap[nitem.id] = nitem
       }
     }
-    this.setState({
-      // checkedIdMap
-    }, () => {
-      this.sortData()
-    })
+    this.sortData()
   }
   public sortData () {
     let { dataSource } = this.state

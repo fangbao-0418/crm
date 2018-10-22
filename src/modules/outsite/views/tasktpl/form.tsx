@@ -1,67 +1,44 @@
 import {  Form, Checkbox, Input, Select, Row, Col, Table, Button } from 'antd'
 import React from 'react'
 import { withRouter } from 'react-router'
-import HCframe from '@/modules/common/components/HCframe'
+import ContentBox from '@/modules/common/content'
 import Service from '@/modules/outsite/services'
-import { Map } from '@/modules/outsite/types/outsite'
 import { isArray } from 'util'
 import _ from 'lodash'
-import { TaskItem } from '@/modules/outsite/types/outsite'
 import TaskSort from './TaskSort'
-import { ColumnProps } from 'antd/lib/table'
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 const FormItem = Form.Item
 const Option = Select.Option
-
+type Map<T> = OutSite.Map<T>
 interface States {
-  modalVisible: boolean,
-  personID: string
+  item: OutSite.TaskItem
+  /** 选中的子任务 */
+  checkedIdMap?: Map<OutSite.SubTaskItem>
+  /** 子任务列表 */
+  subList?: OutSite.SubTaskItem[]
+  /** 子任务分组 */
+  subGroup: Map<OutSite.TaskItem[]>
+  /** 子任务mapper */
+  subMap: Map<OutSite.SubTaskItem>
 }
 
 /*编辑系统任务   未完成*/
-class Main extends React.Component<any, any> {
-  public params: Map<string> = {}
-  // 全部的子任务 key id, val item
-  public suballMap: Map<any> = {}
-  public suballList: Array<any> = []
-  public productList: Array<any> = []
-  constructor (props: any) {
-    super(props)
-    // 从接口获取
-    // this.suballList = vlist // this.initDecoratorData(vlist)
-    // this.suballMap = this.arr2map(this.suballList, 'id')
-
-    this.state = {
-      dataSource: {
-        id: '1211',
-        customerName:'北京爱康鼎科技有限公司',
-        workNo:'XX10001',
-        startTime:'2018-09-25'
-      },
-      modalVisible: false,
-      personID: '',
-      subList: [], // 全部子任务列表
-      subMap: {}, // 子任务id: item map
-      subGroup: {}, // 按分类分组子任务列表
-      formdata:{
-        name: '',
-        priority: '',
-        status: 'NORMAL',
-        productId: '',
-        productName: '',
-        subList: [] // vlist
-      },
-      checkedIdMap: {} // this.arr2map(vlist, 'id') // 默认配置选中项
-    }
+class Main extends React.Component<any, States> {
+  public state: States = {
+    item: {
+      subList: []
+    },
+    checkedIdMap: {},
+    subList: [],
+    subGroup: {},
+    subMap: {}
   }
-
+  public params: Map<string> = {}
   public componentWillMount () {
     this.params = this.props.match.params
     this.getSublist()
     this.getItem()
-    console.log('params::', this.params, APP.user)
   }
-
   // 初始化数据
   public initDecoratorData (data: any) {
     return data.map((item: any) => {
@@ -86,14 +63,14 @@ class Main extends React.Component<any, any> {
     if (!this.params.id) {
       return
     }
-    let checkedIdMap: Map<any> = {}
-    Service.getTplItemById(this.params.id).then((item: TaskItem) => {
-      item.subList.map((subitem: any, i: number) => {
-        subitem.sort = i + 1
+    let checkedIdMap: Map<OutSite.SubTaskItem> = {}
+    Service.getTplItemById(this.params.id).then((item: OutSite.TaskItem) => {
+      item.subList.map((subitem, index) => {
+        subitem.sort = index + 1
       })
       checkedIdMap = this.arr2map(item.subList, 'subId')
       this.setState({
-        formdata: item,
+        item,
         checkedIdMap
       })
     })
@@ -116,8 +93,8 @@ class Main extends React.Component<any, any> {
   }
 
   // 数组转map
-  public arr2map (arr: Array<any>, key: string = 'id', val: any = '') {
-    const rst: Map<any> = {}
+  public arr2map<T = any> (arr: Array<T>, key: string = 'id', val: string = ''): Map<T> {
+    const rst: Map<T> = {}
     if (isArray(arr)) {
       arr.map((item: any) => {
         rst[item[key]] = val ? item[val] : item
@@ -127,7 +104,7 @@ class Main extends React.Component<any, any> {
   }
 
   // 根据字典生成下拉
-  public dict2list (dict: Map<any>) {
+  public dict2list (dict: Map<string>): Array<{key: string, val: string}> {
     const clist: any = []
     for (const i in dict) {
       if (i) {
@@ -153,43 +130,41 @@ class Main extends React.Component<any, any> {
 
   // 选择子任务
   public onCheckItem (e: any) {
-    let { formdata } = this.state
+    let { item } = this.state
     const { checkedIdMap } = this.state
-    let { subList } = formdata
+    let { subList } = item
     const val = e.target.value
     if (e.target.checked) {
       if (checkedIdMap && !checkedIdMap[val]) {
         // 缓存已经选中的子任务
         checkedIdMap[val] = this.state.subMap[e.target.value]
         const nitem = checkedIdMap[val]
-        console.log('new item::', val, nitem)
         nitem.sort = subList.length + 1
         subList.push(nitem)
-        formdata = {
-          ...formdata,
+        item = {
+          ...item,
           subList
         }
         this.setState({
           checkedIdMap,
-          formdata
+          item
         })
       }
     } else {
       delete checkedIdMap[val]
-      subList = _.filter(subList, (item: TaskItem) => {
-        console.log(val, item.id, item.subId, item)
-        return item.subId !== val
+      subList = _.filter(subList, (v) => {
+        return v.subId !== val
       })
-      subList.map((item: TaskItem, i: number) => {
+      subList.map((v: OutSite.TaskItem, i: number) => {
         subList[i].sort = i + 1
-        checkedIdMap[item.subId] = item
+        checkedIdMap[v.subId] = v
       })
-      formdata = {
-        ...formdata,
+      item = {
+        ...item,
         subList
       }
       this.setState({
-        formdata,
+        item,
         checkedIdMap
       })
     }
@@ -215,21 +190,19 @@ class Main extends React.Component<any, any> {
   // 切换排序
   public syncFormdata (k: string, v: any) {
     console.log('sync::', k, v)
-    const { formdata } = this.state
-    formdata[k] = v
+    const { item } = this.state
+    item[k] = v
     this.setState({
-      formdata
+      item
     })
   }
 
   // 保存
-  public onSave (data: TaskItem[]) {
-    const { formdata } = this.state
-    formdata.subList = data
-    console.log('save::', formdata)
-    // @181018 接口方要求status 必传 NORMAL, :(
-    formdata.status = 'NORMAL'
-    Service.addTplItem(formdata).then(() => {
+  public onSave (data: OutSite.TaskItem[]) {
+    const { item } = this.state
+    item.subList = data
+    item.status = 'NORMAL'
+    Service.addTplItem(item).then(() => {
       APP.success('保存成功')
       APP.history.push(`/outsite/tasktpl/list`)
     })
@@ -247,99 +220,97 @@ class Main extends React.Component<any, any> {
       }
     }
     return (
-            <div className={styles.container}>
-              <HCframe title='编辑系统任务'>
-              <Form
-                onChange={this.onChange.bind(this)}
-              >
-                <Row>
-                  <Col span={5}>
-                    <FormItem label='任务名称' {...formItemLayout}>
-                      <Input
-                        name='name'
-                        value={this.state.formdata.name}
-                        placeholder={`任务名称`}
-                        onChange={(ev: any) => {
-                          this.syncFormdata('name', ev.target.value)
-                        }}
-                      />
-                    </FormItem>
-                  </Col>
-                  <Col span={5}>
-                    <FormItem label='是否优先级' {...formItemLayout}>
-                      <Select
-                        placeholder={`是否优先级`}
-                        value={this.state.formdata.priority}
-                        onChange={(val: any) => {
-                          this.syncFormdata('priority', val)
-                        }
-                        }
-                      >
-                        {this.dict2options(Service.taskTplPriorityDict)}
-                      </Select>
-                    </FormItem>
-                  </Col>
-                  <Col span={5}>
-                    <FormItem label='关联商品' {...formItemLayout}>
-                      <Select
-                        placeholder={`关联商品`}
-                        value={this.state.formdata.productId}
-                        onChange={(val: any) => {
-                          this.syncFormdata('productId', val)
-                        }
-                        }
-                      >
-                        {this.dict2options({
-                          1: '商品1',
-                          2: '商品2'
-                        })}
-                      </Select>
-                    </FormItem>
-                  </Col>
-                </Row>
-
-                <Row>
-                    <Col span={14}>
-                      {
-                        // 遍历分类
-                        this.dict2list(Service.taskTplCateDict).map((item: any, index: number) => {
-                          return (
-                            <div key={`cate-${index}`} className={styles['page-hc']}>
-                              <div className={styles['hc-h']}>
-                                {item.val}
-                              </div>
-                              <div className={styles['hc-c']}>
-                              {
-                                this.state.subGroup[item.key] && this.state.subGroup[item.key].map((checkitem: any, i: number) => {
-                                  return (
-                                    <Checkbox
-                                      key={`checkbox-${index}-${i}`}
-                                      indeterminate={this.state.indeterminate}
-                                      value={checkitem.id}
-                                      onChange={this.onCheckItem.bind(this)}
-                                      checked={this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
-                                    >
-                                      {checkitem.name}
-                                    </Checkbox>
-                                  )
-                                })
-                              }
-                              </div>
-                            </div>
-                          )
-                        })
-                      }
-                    </Col>
-                    <Col span={10}>
-                      <TaskSort
-                        dataSource={this.state.formdata.subList}
-                        onOk={this.onSave.bind(this)}
-                      />
-                    </Col>
-                </Row>
-              </Form>
-              </HCframe>
-            </div>
+      <div className={styles.container}>
+        <ContentBox title='编辑系统任务'>
+          <Form
+            onChange={this.onChange.bind(this)}
+          >
+            <Row>
+              <Col span={5}>
+                <FormItem label='任务名称' {...formItemLayout}>
+                  <Input
+                    name='name'
+                    value={this.state.item.name}
+                    placeholder={`任务名称`}
+                    onChange={(e) => {
+                      this.syncFormdata('name', e.target.value)
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={7}>
+                <FormItem label='是否优先级' {...formItemLayout}>
+                  <Select
+                    placeholder={`是否优先级`}
+                    value={this.state.item.priority}
+                    onChange={(val: any) => {
+                      this.syncFormdata('priority', val)
+                    }
+                    }
+                  >
+                    {this.dict2options(Service.taskTplPriorityDict)}
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span={6}>
+                <FormItem label='关联商品' {...formItemLayout}>
+                  <Select
+                    placeholder={`关联商品`}
+                    value={this.state.item.productId}
+                    onChange={(val: any) => {
+                      this.syncFormdata('productId', val)
+                    }
+                    }
+                  >
+                    {this.dict2options({
+                      1: '商品1',
+                      2: '商品2'
+                    })}
+                  </Select>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+                <Col span={14}>
+                  {
+                    // 遍历分类
+                    this.dict2list(Service.taskTplCateDict).map((item: any, index: number) => {
+                      return (
+                        <div key={`cate-${index}`} className={styles['page-hc']}>
+                          <div className={styles['hc-h']}>
+                            {item.val}
+                          </div>
+                          <div className={styles['hc-c']}>
+                          {
+                            this.state.subGroup[item.key] && this.state.subGroup[item.key].map((checkitem, i: number) => {
+                              return (
+                                <Checkbox
+                                  key={`checkbox-${index}-${i}`}
+                                  value={checkitem.id}
+                                  onChange={this.onCheckItem.bind(this)}
+                                  checked={!!this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
+                                >
+                                  {checkitem.name}
+                                </Checkbox>
+                              )
+                            })
+                          }
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                </Col>
+                <Col span={10}>
+                  <TaskSort
+                    dataSource={this.state.item.subList}
+                    onOk={this.onSave.bind(this)}
+                  />
+                </Col>
+            </Row>
+          </Form>
+        </ContentBox>
+      </div>
     )
   }
 }

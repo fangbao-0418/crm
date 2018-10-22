@@ -73,10 +73,10 @@ class ModuleService extends Service {
 
   // 任务模板分类
   public taskTplCateDict: Map<string> = {
-    TAX:      '税务',
+    TAX: '税务',
     BUSINESS: '工商',
-    OTHERS:   '其他',
-    SPECIAL:  '特殊'
+    OTHERS: '其他',
+    SPECIAL: '特殊'
   }
   // 任务类别（主任务、子任务)
   public taskTypeDict: Map<string> = {

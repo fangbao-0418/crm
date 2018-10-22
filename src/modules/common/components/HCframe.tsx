@@ -3,19 +3,12 @@
  */
 import React from 'react'
 import '@/modules/common/styles/base.styl'
-
-interface States {
-  a?: any
+interface Props {
+  act?: any
+  title?: string
 }
-
 // 标题+内容结构
-class Main extends React.Component<any, any> {
-  public state: States = {
-  }
-
-  public componentWillMount () {
-  }
-
+class Main extends React.Component<Props> {
   public render () {
     return (
       <div className='t-hc t-hc-1'>
