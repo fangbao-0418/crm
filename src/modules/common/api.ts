@@ -38,8 +38,8 @@ export const fetchUserInfo = () => {
     })
     return res
   }, () => {
-    APP.token = ''
-    APP.history.push('/login')
+    // APP.token = ''
+    // APP.history.push('/login')
   })
 }
 export const fetchPermissionCode = () => {

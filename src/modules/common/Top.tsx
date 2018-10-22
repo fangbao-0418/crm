@@ -11,15 +11,15 @@ class Main extends React.Component {
     collapsed: false
   }
   public componentWillMount () {
-    // 消息初始化
-    this.msg = Msg({}).connect()
-    // 交互：获取到已读消息数
-    this.msg.evAdd('service:get unreaded count data', (data: number) => {
-      data = data ? data : 0
-      this.setState({
-        msgCount: data
-      })
-    })
+    // // 消息初始化
+    // this.msg = Msg({}).connect()
+    // // 交互：获取到已读消息数
+    // this.msg.evAdd('service:get unreaded count data', (data: number) => {
+    //   data = data ? data : 0
+    //   this.setState({
+    //     msgCount: data
+    //   })
+    // })
   }
   // 设置右上角消息提醒
   public msgAlert () {
@@ -35,14 +35,15 @@ class Main extends React.Component {
     const menu = (
       <Menu
         mode='inline'
-        style={{width: 200}}
+        // style={{width: 00}}
       >
-        <Menu.Item>
-          <span
-            onClick={() => {
-              APP.history.push('/logout')
-            }}
-          >
+        <Menu.Item
+          onClick={() => {
+            console.log('logout')
+            APP.history.push('/logout')
+          }}
+        >
+          <span>
             注销
           </span>
         </Menu.Item>

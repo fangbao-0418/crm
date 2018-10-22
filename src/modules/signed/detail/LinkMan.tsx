@@ -28,8 +28,8 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         return (
           <FormItem>
-            {getFieldDecorator(`contactPerson-${index}`, {
-              valuePropName: text
+            {getFieldDecorator(`contactPerson-${record.key}`, {
+              initialValue: text
             })(
               this.props.disabled ?
                 <span>{text}</span>
@@ -50,8 +50,8 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         return (
           <FormItem>
-            {getFieldDecorator(`contactPhone-${index}`, {
-              valuePropName: text,
+            {getFieldDecorator(`contactPhone-${record.key}`, {
+              initialValue: text,
               rules: [
                 {
                   max: 11,
@@ -77,7 +77,6 @@ class Main extends React.Component<Props> {
       width: '100px',
       align: 'center',
       render: (text, record, index) => {
-        console.log(APP.dictionary[`EnumContactSource-${text}`], text)
         return APP.dictionary[`EnumContactSource-${text}`]
       }
     },
@@ -87,8 +86,8 @@ class Main extends React.Component<Props> {
       render: (text, record, index) => {
         return (
           <FormItem>
-            {this.props.form.getFieldDecorator(`remark-${index}`, {
-              valuePropName: text
+            {this.props.form.getFieldDecorator(`remark-${record.key}`, {
+              initialValue: text
             })(
               this.props.disabled ?
                 <span>{text}</span>
@@ -108,8 +107,8 @@ class Main extends React.Component<Props> {
       render: (text, record, index) => {
         return (
           <FormItem>
-            {this.props.form.getFieldDecorator(`duty-${index}`, {
-              valuePropName: text
+            {this.props.form.getFieldDecorator(`duty-${record.key}`, {
+              initialValue: text
             })(
               this.props.disabled ?
                 <span>{text}</span>
@@ -134,7 +133,6 @@ class Main extends React.Component<Props> {
             onClick={() => {
               const data = this.props.linkMan
               data.splice(index, 1)
-              console.log(data, 'data')
               APP.dispatch({
                 type: 'change customer data',
                 payload: {

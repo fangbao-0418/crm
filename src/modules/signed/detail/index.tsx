@@ -7,7 +7,6 @@ import AddButton from '@/modules/common/content/AddButton'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
 import { updateCustomer } from '@/modules/customer/api'
-import moment from 'moment'
 const styles = require('./style')
 interface Props {
   linkMan: Customer.LinkManProps[]
@@ -51,6 +50,8 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
+                console.log(this.refs.linkMan, 'save')
+                return
                 if (!this.state.disabled) {
                   if (!this.props.detail.customerName) {
                     APP.error('请输入公司名称！')
@@ -63,9 +64,6 @@ class Main extends React.Component<Props> {
                     APP.error('统一信用代码不能为空！')
                     return
                   }
-                  console.log(this.props.detail, 'detail')
-                  console.log(this.props.detail.isConfirmed === 0)
-                  console.log((/^[3 | 5]/.test(this.props.detail.unifiedCreditCode)))
                   if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
                     APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
                     return
@@ -103,7 +101,7 @@ class Main extends React.Component<Props> {
             />
           )}
         >
-          <LinkMan disabled={this.state.disabled} />
+          <LinkMan ref='linkMan' disabled={this.state.disabled} />
         </Card>
       </div>
     )
