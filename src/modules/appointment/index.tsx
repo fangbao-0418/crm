@@ -24,8 +24,8 @@ const all = [{
 }]
 class Main extends React.Component {
   public params: Business.SearchProps = {
-    pageSize: 1,
-    pageCurrent: 15
+    pageSize: 15,
+    pageCurrent: 1
   }
   public state: States = {
     dataSource: [],
