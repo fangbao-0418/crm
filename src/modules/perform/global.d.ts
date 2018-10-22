@@ -19,7 +19,7 @@ declare namespace Perform {
     current: number
   }
   export interface Props {
-    dataSource?: ItemProps[]
-    pagintaion?: PaginationProps
+    dataSource?: ItemProps
+    pagination?: PaginationProps
   } 
 }
