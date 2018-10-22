@@ -19,7 +19,7 @@ export const fetchRelatedCompanyListy = (customerId: string) => {
   return http(`/crm-manage/v1/api/related_company/${customerId}`)
 }
 export const fetchWorks = (customerId: string) => {
-  return http(`/crm-manage/v1/api/order/list/${customerId}`)
+  return http(`/work/v1/api/order/list/${customerId}`)
 }
 export const fetchWorkers = (companyId: string) => {
   return http(`/user/v1/api/user/list/company/${companyId}`)
