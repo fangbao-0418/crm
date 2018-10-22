@@ -50,7 +50,14 @@ export const fetchAssignSuperior = (payload: {
   organizationId: number,
   userIds: number[]
 }) => {
-  return http(`/user/v1/api/user/list/batch/select`, 'POST', payload)
+  return http(`/user/v1/api/user/batch/select`, 'PUT', payload)
+}
+/** 批量分配账号 */
+export const batchAssignAccount = (payload: {
+  parentId: number,
+  userIds: number[]
+}) => {
+  return http(`/user/v1/api/user/batch`, 'PUT', payload)
 }
 export const updateAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user/${payload.id}`, 'PUT', payload)

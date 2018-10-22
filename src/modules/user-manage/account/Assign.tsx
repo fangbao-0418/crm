@@ -6,33 +6,57 @@ const FormItem = Form.Item
 interface Props extends FormComponentProps {
   organizationId?: number
   userIds?: number[]
-  onOk?: () => void
+  onOk?: (id?: number) => void
+  onCancel?: () => void
 }
-class Main extends React.Component<Props> {
+interface State {
+  list: UserManage.SuperiorProps[]
+}
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    list: []
+  }
   public componentWillMount () {
     fetchAssignSuperior({
       organizationId: this.props.organizationId,
       userIds: this.props.userIds
+    }).then((res) => {
+      this.setState({
+        list: res
+      })
     })
   }
   public render () {
     const { getFieldDecorator } = this.props.form
+    const { list } = this.state
     return (
-      <Form>
+      <Form style={{margin: '0 10%'}}>
         <FormItem
           label='上级直属'
           required
-          labelCol={{span: 4}}
-          wrapperCol={{span: 20}}
+          labelCol={{span: 5}}
+          wrapperCol={{span: 18}}
         >
           {
             getFieldDecorator(
-              'a'
+              'id',
+              {
+                rules: [{
+                  required: true,
+                  message: '请选择上级直属'
+                }]
+              }
             )(
               <Select>
-                {/* {
-                  xx
-                } */}
+                {
+                  list.map((val) => {
+                    return (
+                      <Select.Option key={val.id}>
+                        {val.name}
+                      </Select.Option>
+                    )
+                  })
+                }
               </Select>
             )
           }
@@ -40,12 +64,25 @@ class Main extends React.Component<Props> {
         <div className='mt10 text-right'>
           <Button
             type='primary'
-            onClick={() => {}}
+            className='mr5'
+            onClick={() => {
+              if (this.props.onOk) {
+                this.props.form.validateFields((errs, vals) => {
+                  if (errs === null) {
+                    this.props.onOk(vals.id)
+                  }
+                })
+              }
+            }}
           >
             保存
           </Button>
           <Button
-            onClick={() => {}}
+            onClick={() => {
+              if (this.props.onCancel) {
+                this.props.onCancel()
+              }
+            }}
           >
             取消
           </Button>

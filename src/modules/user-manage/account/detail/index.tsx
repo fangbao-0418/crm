@@ -217,7 +217,7 @@ class Main extends React.Component<Props, State> {
         ]
       },
       parentId: {
-        initialValue: item.parentId
+        initialValue: item.parentId !== undefined ? String(item.parentId) : undefined
       }
     }
     console.log(item, '账号item')
@@ -339,8 +339,16 @@ class Main extends React.Component<Props, State> {
 
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='上级直属'>
               {
-                getFieldDecorator('parentId', validation.parentId)(
-                  <Select disabled={disabled} size='small' placeholder='请选择上级直属' notFoundContent='暂无数据'>
+                getFieldDecorator(
+                  'parentId',
+                  validation.parentId
+                )(
+                  <Select
+                    disabled={disabled}
+                    size='small'
+                    placeholder='请选择上级直属'
+                    notFoundContent='暂无数据'
+                  >
                     {
                       superiorList.map((val) => {
                         return (

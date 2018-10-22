@@ -7,7 +7,7 @@ import Detail from './detail'
 import { connect } from 'react-redux'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchAccountListAction } from '../action'
-import { updateAccount, deleteAccount } from '../api'
+import { updateAccount, deleteAccount, batchAssignAccount } from '../api'
 import Assign from './Assign'
 const styles = require('../style')
 interface States {
@@ -157,6 +157,19 @@ class Main extends React.Component<Props> {
         <Assign
           organizationId={organizationId}
           userIds={selectedRowKeys}
+          onOk={(id) => {
+            batchAssignAccount({
+              parentId: id,
+              userIds: selectedRowKeys
+            }).then(() => {
+              APP.success('批量分配成功')
+              modal.hide()
+              this.fetchData()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
         />
       ),
       footer: null

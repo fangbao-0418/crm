@@ -1,4 +1,4 @@
-import {  Icon, Form, Checkbox, Input, Select, Row, Col, Table, Button } from 'antd'
+import {  Form, Checkbox, Input, Select, Row, Col, Table, Button } from 'antd'
 import React from 'react'
 import { withRouter } from 'react-router'
 import HCframe from '@/modules/common/components/HCframe'
@@ -7,7 +7,8 @@ import { Map } from '@/modules/outsite/types/outsite'
 import { isArray } from 'util'
 import _ from 'lodash'
 import { TaskItem } from '@/modules/outsite/types/outsite'
-
+import TaskSort from './TaskSort'
+import { ColumnProps } from 'antd/lib/table'
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 const FormItem = Form.Item
 const Option = Select.Option
@@ -16,53 +17,6 @@ interface States {
   modalVisible: boolean,
   personID: string
 }
-
-const vlist: any = [
-  {
-    id: 1,
-    mainId: 1,
-    subId: 2,
-    sort: null,
-    name: '核名',
-    status: 'normal',
-    type: 'sub',
-    category: 'tax',
-    delFlag: 0,
-    priority: 'close'
-  }, {
-    id: 2,
-    mainId: 1,
-    subId: 3,
-    sort: null,
-    name: '网上申请',
-    status: 'normal',
-    type: 'sub',
-    category: 'tax',
-    delFlag: 0,
-    priority: 'close'
-  }, {
-    id: 3,
-    mainId: 1,
-    subId: 4,
-    sort: null,
-    name: '网上申请3',
-    status: 'normal',
-    type: 'sub',
-    category: 'tax',
-    delFlag: 0,
-    priority: 'close'
-  }, {
-    id: 4,
-    mainId: 1,
-    subId: 5,
-    sort: null,
-    name: '网上申请4',
-    status: 'normal',
-    type: 'sub',
-    category: 'tax',
-    delFlag: 0,
-    priority: 'close'
-  }]
 
 /*编辑系统任务   未完成*/
 class Main extends React.Component<any, any> {
@@ -78,7 +32,7 @@ class Main extends React.Component<any, any> {
     // this.suballMap = this.arr2map(this.suballList, 'id')
 
     this.state = {
-      dataSource:{
+      dataSource: {
         id: '1211',
         customerName:'北京爱康鼎科技有限公司',
         workNo:'XX10001',
@@ -197,20 +151,6 @@ class Main extends React.Component<any, any> {
     console.log('form change::', arguments)
   }
 
-  public sortData () {
-    let { formdata } = this.state
-    const subList = _.sortBy(formdata.subList, (item: TaskItem) => {
-      return item.sort
-    })
-    formdata = {
-      ...formdata,
-      subList
-    }
-    this.setState({
-      formdata
-    })
-  }
-
   // 选择子任务
   public onCheckItem (e: any) {
     let { formdata } = this.state
@@ -273,34 +213,6 @@ class Main extends React.Component<any, any> {
   }
 
   // 切换排序
-  public sortItem (item: any, action: 'up' | 'down') {
-    console.log('sort item::', item)
-    const {checkedIdMap} = this.state
-    if (action === 'up') {
-      if (item.sort !== 1) {
-        const nitem = this.state.formdata.subList[item.sort - 2]
-        nitem.sort = nitem.sort + 1
-        item.sort = item.sort - 1
-        checkedIdMap[item.id] = item
-        checkedIdMap[nitem.id] = nitem
-      }
-    }
-    if (action === 'down') {
-      if (item.sort !== this.state.formdata.subList.length) {
-        const nitem = this.state.formdata.subList[item.sort]
-        nitem.sort = nitem.sort - 1
-        item.sort = item.sort + 1
-        checkedIdMap[item.id] = item
-        checkedIdMap[nitem.id] = nitem
-      }
-    }
-    this.setState({
-      checkedIdMap
-    }, () => {
-      this.sortData()
-    })
-  }
-
   public syncFormdata (k: string, v: any) {
     console.log('sync::', k, v)
     const { formdata } = this.state
@@ -311,15 +223,9 @@ class Main extends React.Component<any, any> {
   }
 
   // 保存
-  public onSave () {
-    // console.log('save::', this.state.formdata)
-    const {formdata} = this.state
-    formdata.subList.map((subitem: TaskItem, i: number) => {
-      formdata.subList[i] = {
-        subId: subitem.subId ? subitem.subId : subitem.id,
-        sort: subitem.sort
-      }
-    })
+  public onSave (data: TaskItem[]) {
+    const { formdata } = this.state
+    formdata.subList = data
     console.log('save::', formdata)
     // @181018 接口方要求status 必传 NORMAL, :(
     formdata.status = 'NORMAL'
@@ -330,48 +236,6 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
-    console.log('state::', this.state)
-    const cols: any = [{
-      title: '顺序',
-      dataIndex: 'sort',
-      render: (k: any, item: any) => {
-        return item.sort ? item.sort : 1
-      }
-    }, {
-      title: '名称',
-      dataIndex: 'name'
-    }, {
-      title: '排序',
-      dataIndex: 'take',
-      render: (k: any, item: any) => {
-        return (
-          <span>
-            <span
-              className={`likebtn ${item.sort === 1 ? styles.disabled : ''}`}
-              onClick={() => {
-                if (item.sort === 1) {
-                  return
-                }
-                this.sortItem.bind(this)(item, 'up')
-              }}
-            >
-              <Icon type='caret-up' />
-            </span>
-            <span
-              className={`likebtn ${item.sort === this.state.formdata.subList.length ? styles.disabled : ''}`}
-              onClick={() => {
-                if (item.sort === this.state.formdata.subList.length) {
-                  return
-                }
-                this.sortItem.bind(this)(item, 'down')
-              }}
-            >
-              <Icon type='caret-down' />
-            </span>
-          </span>
-        )
-      }
-    }]
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -467,19 +331,10 @@ class Main extends React.Component<any, any> {
                       }
                     </Col>
                     <Col span={10}>
-                      <Table
-                        bordered={false}
-                        size={`small`}
-                        rowClassName={(record, index) => {
-                          return index % 2 === 0 ? styles.roweven : styles.rowodd
-                        }}
-                        columns={cols}
+                      <TaskSort
                         dataSource={this.state.formdata.subList}
-                        pagination={false}
+                        onOk={this.onSave.bind(this)}
                       />
-                      <div className={styles.actbtns}>
-                        <Button onClick={this.onSave.bind(this)} type={`primary`}>保存</Button>
-                      </div>
                     </Col>
                 </Row>
               </Form>
