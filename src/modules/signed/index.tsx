@@ -375,6 +375,9 @@ class Main extends React.Component {
                   this.handleSearchType(val)
                 }
               }}
+              onSearch={(val) => {
+                this.handleSearchType(val)
+              }}
             />
           </div>
         </div>

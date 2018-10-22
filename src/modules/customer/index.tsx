@@ -610,6 +610,9 @@ class Main extends React.Component<Customer.Props, States> {
                   this.handleSearchType(val)
                 }
               }}
+              onSearch={(val) => {
+                this.handleSearchType(val)
+              }}
             />
           </div>
         </div>

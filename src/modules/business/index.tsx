@@ -449,6 +449,9 @@ class Main extends React.Component<Business.Props> {
                   this.handleSearchType(val)
                 }
               }}
+              onSearch={(val) => {
+                this.handleSearchType(val)
+              }}
             />
           </div>
         </div>
