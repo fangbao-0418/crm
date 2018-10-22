@@ -49,6 +49,9 @@ class Main extends React.Component<Props, State> {
   }
   public fetchData () {
     const item = this.props.item || {}
+    this.setState({
+      isShowOwnArea: item.identity === 'outWorker'
+    })
     fetchRole(this.props.type).then((res) => {
       this.setState({
         roleList: res
@@ -82,6 +85,7 @@ class Main extends React.Component<Props, State> {
   }
   public handleOwnAreaData (data: UserManage.OwnAreaProps[]): any[] {
     data.map((item) => {
+      item.key = item.code
       item.value = item.code
       item.title = item.name
       item.children = item.regionList
@@ -90,6 +94,19 @@ class Main extends React.Component<Props, State> {
       }
     })
     return data
+  }
+  public handleOwnAreaValue (codes: any[]): any[] {
+    if (codes instanceof Array === false) {
+      return undefined
+    }
+    const res: Array<{key: string, value: string}> = []
+    codes.map((code) => {
+      res.push({
+        value: code,
+        key: code
+      })
+    })
+    return res
   }
   public handleDepartmentData (data: UserManage.DepartmentItemProps[]): any[] {
     data.map((item) => {
@@ -297,18 +314,18 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
             {
-              (ownAraeList.length > 0 && (this.state.isShowOwnArea || item.identity === 'outWorker')) &&
+              (ownAraeList.length > 0 && this.state.isShowOwnArea) &&
               <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
                 {
                   getFieldDecorator(
                     'regionList',
                     {
-                      initialValue: item.regionList
+                      initialValue: this.handleOwnAreaValue(item.regionList)
                     }
                   )(
                     <TreeSelect
-                      value={item.regionList}
                       treeData={ownAraeList}
+                      showCheckedStrategy={TreeSelect.SHOW_PARENT}
                       multiple
                       labelInValue
                       treeCheckable={true}

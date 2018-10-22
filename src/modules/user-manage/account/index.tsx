@@ -1,5 +1,5 @@
 import {
-  Button , Divider, Form, Input, Table, Modal as M, Select
+  Button , Divider, Input, Table, Modal as M, Select
 } from 'antd'
 import { Modal } from 'pilipa'
 import React from 'react'
@@ -8,10 +8,10 @@ import { connect } from 'react-redux'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchAccountListAction } from '../action'
 import { updateAccount, deleteAccount } from '../api'
+import Assign from './Assign'
 const styles = require('../style')
-const Formitem = Form.Item
 interface States {
-  selectedRowKeys: string[]
+  selectedRowKeys: number[]
 }
 interface Props extends UserManage.Props {
   type: UserManage.TypeProps
@@ -25,6 +25,7 @@ class Main extends React.Component<Props> {
   public state: States = {
     selectedRowKeys: []
   }
+  public selectedRow: UserManage.AccountItemProps[] = []
   public loaded = false
   public columns: ColumnProps<UserManage.AccountItemProps>[] = [
     {
@@ -115,7 +116,8 @@ class Main extends React.Component<Props> {
     })
     fetchAccountListAction(this.searchPayload)
   }
-  public onSelectChange = (selectedRowKeys: any) => {
+  public onSelectChange = (selectedRowKeys: number[], selectedRow: UserManage.AccountItemProps[]) => {
+    this.selectedRow = selectedRow
     this.setState({ selectedRowKeys })
   }
   // 确认删除
@@ -132,6 +134,34 @@ class Main extends React.Component<Props> {
   }
   // 批量添加
   public assignment () {
+    const { selectedRowKeys } = this.state
+    if (selectedRowKeys.length === 0) {
+      APP.error('请选择账号')
+      return
+    }
+    let organizationId: number
+    let error = false
+    this.selectedRow.map((item) => {
+      if (organizationId !== undefined && organizationId !== item.organizationId) {
+        error = true
+      }
+      organizationId = item.organizationId
+    })
+    if (error) {
+      APP.error('请选择同部门账号')
+      return
+    }
+    const modal = new Modal({
+      title: '批量分配',
+      content: (
+        <Assign
+          organizationId={organizationId}
+          userIds={selectedRowKeys}
+        />
+      ),
+      footer: null
+    })
+    modal.show()
   }
   // 设置错误信息
   public getErrorInfo: any = (verification: 'empty' | 'same' | 'normal') => {

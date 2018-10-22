@@ -45,6 +45,13 @@ export const deleteAccount = (ids: any[]) => {
     ids
   })
 }
+/** 获取上级直属列表 */
+export const fetchAssignSuperior = (payload: {
+  organizationId: number,
+  userIds: number[]
+}) => {
+  return http(`/user/v1/api/user/list/batch/select`, 'POST', payload)
+}
 export const updateAccount = (payload: UserManage.AccountItemProps) => {
   return http(`/user/v1/api/user/${payload.id}`, 'PUT', payload)
 }

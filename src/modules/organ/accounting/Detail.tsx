@@ -64,8 +64,10 @@ class Main extends React.Component<Props, State> {
     const areaMapper = _.cloneDeep(this.areaMapper)
     const arr: Common.RegionProps[] = []
     ids.map((id) => {
-      delete areaMapper[id].regionList
-      arr.push(areaMapper[id])
+      if (areaMapper[id].level === 2 || areaMapper[id].regionList === null) {
+        delete areaMapper[id].regionList
+        arr.push(areaMapper[id])
+      }
     })
     return arr
   }
@@ -73,7 +75,6 @@ class Main extends React.Component<Props, State> {
   public save = () => {
     if (this.props.onOk) {
       this.props.form.validateFields((err, vals) => {
-        console.log(vals, 'vals')
         vals.regionList = this.getRegion(vals.regionList)
         if (err) {return}
         this.props.onOk(vals)

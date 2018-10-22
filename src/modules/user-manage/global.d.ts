@@ -22,7 +22,7 @@ declare namespace UserManage {
     email?: string
     roleId?: string
     roleName?: string
-    organizationId?: string
+    organizationId?: number
     /** 部门名称 */
     organizationName?: string
     identity?: string
@@ -47,6 +47,7 @@ declare namespace UserManage {
   }
   /** 负责区域 */
   interface OwnAreaProps extends Common.RegionProps {
+    key?: string
     /** 是否选中 */
     enableFlag?: boolean
     /** 是否是负责区域 */
