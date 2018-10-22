@@ -192,6 +192,11 @@ class Main extends React.Component<Props> {
           return
         }
         params.customerNameType = '1' // 后端不需要改代码所以加上
+        const person = _.cloneDeep(this.props.linkMan)
+        person.forEach((item) => {
+          delete item.key
+        })
+        params.contactPersons = person
         if (this.props.customerId) {
           updateCustomer(this.props.customerId, params).then(() => {
             resolve()

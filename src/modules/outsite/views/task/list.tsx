@@ -193,7 +193,7 @@ class Main extends React.Component {
     }
   }, {
     // title: '第一个子任务点击开始时间', // @181018 产品修改为 接受任务时间
-    title: '接受任务时间',
+    title: '创建时间',
     dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
