@@ -189,26 +189,25 @@ class Main extends React.Component<Props> {
       const label = labels[item.field]
       nodes.push(
         <li>
-          <span style={{ paddingRight: 10, cursor: 'pointer'}}>
-            <label
-              className={styles.label}
-            >
-              {
-                item.label.length > 1 ? (
-                  <Dropdown
-                    overlay={menu}
-                    trigger={['click']}
-                  >
-                    <span>{label}</span>
-                  </Dropdown>
-                ) : label
-              }
-            </label>
+          <label
+            className={styles.label}
+            // style={{cursor: 'pointer'}}
+          >
+            {
+              item.label.length > 1 ? (
+                <Dropdown
+                  overlay={menu}
+                  trigger={['click']}
+                >
+                  <span>{label}</span>
+                </Dropdown>
+              ) : label
+            }
             {
               item.field === 'date' &&
               <Icon type='down' theme='outlined' />
             }
-          </span>
+          </label>
           <div className={styles.options}>
             {tagNodes}
           </div>
