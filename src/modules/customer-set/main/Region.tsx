@@ -68,12 +68,13 @@ class Main extends React.Component<Props> {
       })
     })
     this.setState({
+      showareaValues: [],
       cityName: labels.join(','),
       areaName: '全部'
     })
   }
-  public handleAreaChange (values: {key: string, label: string}[]) {
-    const labels: string[] = []
+  public handleAreaChange (values: LabeledValue[]) {
+    const labels: any[] = []
     values.forEach((item) => {
       labels.push(item.label)
     })
@@ -82,6 +83,9 @@ class Main extends React.Component<Props> {
       areaName: labels.join(',')
     })
     if (this.props.onChange) {
+      if (values.length === 0) {
+        values = this.state.areaValues
+      }
       this.props.onChange(values)
     }
   }
