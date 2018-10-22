@@ -15,8 +15,6 @@ declare namespace Perform {
   }
   interface PaginationProps {
     total: number
-    pageSize: number
-    current: number
   }
   export interface Props {
     dataSource?: ItemProps[]

@@ -96,7 +96,7 @@ class Main extends React.Component<Perform.Props> {
       >
         <div>
           <Input.Search
-            placeholder='请输入客户和联系人名称'
+            placeholder='输入任务名称'
             onSearch={(value) => {
               this.values.productName = value
               this.fetchData()

@@ -11,9 +11,7 @@ export const fetchListAction = (payload: Perform.SearchPayload = {
       payload: {
         dataSource: res.records,
         pagintaion: {
-          total: res.total,
-          current: res.current,
-          pageSize: res.size
+          total: res.total
         }
       }
     })
