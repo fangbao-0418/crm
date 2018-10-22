@@ -70,6 +70,7 @@ class Main extends React.Component<Props> {
                 <span>{text}</span>
               :
                 <Input
+                  type='number'
                   onChange={this.onChange.bind(this, index, 'contactPhone')}
                   value={text}
                 />
