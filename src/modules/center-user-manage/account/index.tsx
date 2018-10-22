@@ -63,9 +63,9 @@ class Main extends React.Component {
           this.setState({visible: false})
           this.getList()
         })
-        .catch((err: any) => {
-          APP.error(err.responseJSON.errors[0].message)
-        })
+        // .catch((err: any) => {
+        //   APP.error(err.responseJSON.errors[0].message)
+        // })
     } else {
       modifyAccount(payload, itemInfo.id)
         .then((res) => {
