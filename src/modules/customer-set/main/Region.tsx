@@ -13,6 +13,7 @@ interface State {
   areaName: string
   areaList: Common.RegionProps[]
   areaValues: LabeledValue[]
+  showareaValues: LabeledValue[]
 }
 class Main extends React.Component<Props> {
   public state: State = {
@@ -20,7 +21,8 @@ class Main extends React.Component<Props> {
     areaName: '',
     cityList: [],
     areaList: [],
-    areaValues: []
+    areaValues: [],
+    showareaValues: []
   }
   public areaList: Common.RegionProps[] = []
   public componentWillMount () {
@@ -76,7 +78,7 @@ class Main extends React.Component<Props> {
       labels.push(item.label)
     })
     this.setState({
-      areaValues: values,
+      showareaValues: values,
       areaName: labels.join(',')
     })
     if (this.props.onChange) {
@@ -93,6 +95,7 @@ class Main extends React.Component<Props> {
           labelInValue
           maxTagCount={0}
           // showArrow={true}
+          placeholder='全部'
           maxTagPlaceholder={(
             <span title={this.state.cityName} className={styles['tag-placeholder']}>{this.state.cityName}</span>
           )}
@@ -111,13 +114,14 @@ class Main extends React.Component<Props> {
             })
           }
         </Select>
-        <label>市区</label>
+        <label>城市</label>
         <Select
           mode='tags'
           labelInValue
           maxTagCount={0}
           // showArrow={true}
-          value={this.state.areaValues}
+          placeholder='全部'
+          value={this.state.showareaValues}
           maxTagPlaceholder={(
             <span title={this.state.areaName} className={styles['tag-placeholder']}>        {this.state.areaName}
             </span>
