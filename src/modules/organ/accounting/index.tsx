@@ -147,6 +147,9 @@ class Main extends React.Component<any, State> {
                 this.searchVal.pageCurrent = pageCurrent
                 this.searchVal.pageSize = pageSize
                 this.getList()
+              },
+              showTotal (total) {
+                return `共计 ${total} 条`
               }
             }}
           />

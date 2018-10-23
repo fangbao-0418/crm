@@ -195,6 +195,9 @@ class Main extends React.Component<Props, State> {
                 this.setState({
                   pagination
                 })
+              },
+              showTotal (total) {
+                return `共计 ${total} 条`
               }
             }}
           />
