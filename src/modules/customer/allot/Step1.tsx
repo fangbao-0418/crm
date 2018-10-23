@@ -23,7 +23,7 @@ class Main extends React.Component<Props> {
     companys: []
   }
   public componentWillMount () {
-    const citycode = APP.user.cityCode || '300171' // 从登陆信息获取城市code得到机构
+    const citycode = APP.user.cityCode // 从登陆信息获取城市code得到机构
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
