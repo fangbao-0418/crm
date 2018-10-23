@@ -295,7 +295,10 @@ class Main extends React.Component<Props> {
             dataSource={dataSource}
             rowSelection={rowSelection}
             pagination={{
-              showQuickJumper: true
+              showQuickJumper: true,
+              showTotal (total) {
+                return `共计 ${total} 条`
+              }
             }}
           />
         </div>

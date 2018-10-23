@@ -73,7 +73,6 @@ class Main extends React.Component<Props, State> {
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>
-                  
                 }
               </Radio>
             </Col>
@@ -89,7 +88,6 @@ class Main extends React.Component<Props, State> {
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>
-                  
                 }
               </Radio>
             </Col>

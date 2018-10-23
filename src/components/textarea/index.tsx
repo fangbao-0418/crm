@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'antd'
+import { Input, Tooltip } from 'antd'
 import { TextAreaProps } from 'antd/lib/input/TextArea'
 const { TextArea } = Input
 interface Props extends TextAreaProps {
@@ -20,6 +20,12 @@ class Main extends React.Component<Props> {
                 <span className='ant-input-group-addon'>
                   <div style={{width: labelWidth}}>
                     {this.props.label}
+                    {
+                      this.props.label === '相关公司' &&
+                      <Tooltip placement='top' title='指与该客户有相同联系电话的其他公司'>
+                        <i className='fa fa-exclamation-circle ml5'></i>
+                      </Tooltip>
+                    }
                   </div>
                 </span>
               )

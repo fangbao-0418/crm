@@ -535,6 +535,9 @@ class Main extends React.Component<Customer.Props, States> {
       },
       onCancel: () => {
         this.fetchList()
+        this.setState({
+          selectedRowKeys: []
+        })
         modal.hide()
       }
     })

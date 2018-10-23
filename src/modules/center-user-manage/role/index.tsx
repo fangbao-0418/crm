@@ -209,6 +209,9 @@ class Main extends React.Component {
                   this.setState({pageCurrent: page}, () => {
                     this.getRoleList()
                   })
+                },
+                showTotal (total) {
+                  return `共计 ${total} 条`
                 }
               }}
             />

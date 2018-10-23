@@ -11,7 +11,7 @@ import AccountingDetail from './accounting/Detail'
 import { changeCompanyInfo, changeAccounting } from './api'
 const TabPane = Tabs.TabPane
 interface States {
-  defaultActiveKey: string
+  defaultActiveKey: 'direct' | 'agent' | 'accounting'
   showAccountingModal: number // 用于核算中心添加窗口的显示
 }
 class Main extends React.Component<null, States> {
@@ -19,7 +19,8 @@ class Main extends React.Component<null, States> {
     defaultActiveKey: 'direct',
     showAccountingModal: 0
   }
-  public callback (value?: string) {
+  public callback (value?: 'direct' | 'agent' | 'accounting') {
+    console.log(value, '11111')
     this.setState({
       defaultActiveKey: value
     })
@@ -39,6 +40,7 @@ class Main extends React.Component<null, States> {
     const modal = new Modal({
       content: (
         <DirectDetail
+          type={defaultActiveKey}
           onOk={(value) => {
             value.companyType = defaultActiveKey === 'direct' ? 'DirectCompany' : 'Agent'
             changeCompanyInfo(value)

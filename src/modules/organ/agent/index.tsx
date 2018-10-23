@@ -11,14 +11,14 @@ class Main extends React.Component {
       title: '代理商',
       dataIndex: 'name'
     },
-    {
-      title: '级别',
-      render: (text, record) => {
-        return (
-          <span>{record.regionProvinceName}-{record.regionCityName}</span>
-        )
-      }
-    },
+    // {
+    //   title: '级别',
+    //   render: (text, record) => {
+    //     return (
+    //       <span>{record.regionProvinceName}-{record.regionCityName}</span>
+    //     )
+    //   }
+    // },
     {
       title: '区域',
       render: (text, record) => {

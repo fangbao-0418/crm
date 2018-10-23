@@ -210,6 +210,9 @@ class Main extends React.Component {
               onChange: (page, pageSize) => {
                 this.searchVal = {...this.searchVal, pageCurrent: page, pageSize}
                 this.getList()
+              },
+              showTotal (total) {
+                return `共计 ${total} 条`
               }
             }}
             rowKey='id'
