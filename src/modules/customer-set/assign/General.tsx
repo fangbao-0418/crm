@@ -1,7 +1,6 @@
 import React from 'react'
-import { Row, Col, Radio, Select } from 'antd'
+import { Row, Col, Radio, Select, Tooltip } from 'antd'
 import { fetchGeneralList } from '../api'
-import { getSalesByCompany } from '@/modules/common/api'
 const Option = Select.Option
 const children: JSX.Element[] = []
 interface Props {
@@ -67,7 +66,15 @@ class Main extends React.Component<Props, State> {
                 disabled={disabled}
                 value={1}
               >
-                全部销售
+                {
+                  <span>
+                    全部销售
+                    <Tooltip placement='top' title='勾选全部销售，系统分配资源平均分到所有销售人员库中，若全部库满，分与总经理'>
+                      <i className='fa fa-exclamation-circle ml5'></i>
+                    </Tooltip>
+                  </span>
+                  
+                }
               </Radio>
             </Col>
             <Col span={3}>
@@ -75,7 +82,15 @@ class Main extends React.Component<Props, State> {
                 disabled={disabled}
                 value={2}
               >
-                自定义销售
+                {
+                  <span>
+                    自定义销售
+                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中，若全部库满，分与总经理'>
+                      <i className='fa fa-exclamation-circle ml5'></i>
+                    </Tooltip>
+                  </span>
+                  
+                }
               </Radio>
             </Col>
             <Col span={15}>

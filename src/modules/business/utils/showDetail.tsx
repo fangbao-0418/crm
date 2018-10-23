@@ -71,7 +71,8 @@ export default function (record: Business.DetailProps, index?: number,
                   type='ghost'
                   onClick={() => {
                     that.ins.save().then(() => {
-                      APP.success('保存成功')
+                      // APP.success('保存成功')
+                      operate.onOk()
                     })
                   }}
                 >

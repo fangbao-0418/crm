@@ -441,6 +441,7 @@ class Main extends React.Component<Customer.Props, States> {
               const payload = ids.join(',')
               deleteCustomer(payload).then(() => {
                 APP.success('操作成功')
+                this.fetchList()
                 modal.hide()
               })
             }}
@@ -452,6 +453,7 @@ class Main extends React.Component<Customer.Props, States> {
       mask: true,
       onCancel: () => {
         modal.hide()
+        this.fetchList()
       }
     })
     modal.show()
@@ -532,6 +534,7 @@ class Main extends React.Component<Customer.Props, States> {
         modal.hide()
       },
       onCancel: () => {
+        this.fetchList()
         modal.hide()
       }
     })
