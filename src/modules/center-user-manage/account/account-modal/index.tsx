@@ -135,7 +135,8 @@ class Main extends React.Component<Props, State> {
 
   // 是否显示接受资源和负责地区选项
   public showOption (val: string) {
-    const arr = ['district_manager', 'channel_accounting', 'channel_manager', 'channel_director']
+    console.log(val, 'val')
+    const arr = ['districtManager', 'channelAccounting', 'channelManager', 'channelDirector', 'channelOperationsManager']
     let identityType: 'showArea' | 'none' = 'none'
     if (arr.includes(val)) {
       identityType = 'showArea'

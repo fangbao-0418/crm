@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Table, Divider, Form, Input, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
+import Modalshow from 'pilipa/libs/modal'
 import { fetchOrganizationList, delOrganization, addOrganization, modifyOrganization, toggleForbidOrganization } from './api'
 
 const styles = require('./style')
@@ -52,18 +53,18 @@ class Main extends React.Component {
         .then((res) => {
           this.getDepartmentList()
         })
-        .catch((err: any) => {
-          APP.error(err.responseJSON.errors[0].message)
-        })
+        // .catch((err: any) => {
+        //   APP.error(err.responseJSON.errors[0].message)
+        // })
     } else if (mode === 'addRoot') {
       params.parentId = 0
       addOrganization(params)
         .then((res) => {
           this.getDepartmentList()
         })
-        .catch((err: any) => {
-          APP.error(err.responseJSON.errors[0].message)
-        })
+        // .catch((err: any) => {
+        //   APP.error(err.responseJSON.errors[0].message)
+        // })
     } else if (mode === 'modify') {
       const data = {
         name: this.state.val
@@ -72,9 +73,9 @@ class Main extends React.Component {
         .then((res) => {
           this.getDepartmentList()
         })
-        .catch((err: any) => {
-          APP.error(err.responseJSON.errors[0].message)
-        })
+        // .catch((err: any) => {
+        //   APP.error(err.responseJSON.errors[0].message)
+        // })
     }
   }
 
@@ -111,9 +112,29 @@ class Main extends React.Component {
 
   // 启用、禁用部门
   public toggleForbidDepartment = (id: number, status: 0 | 1) => {
-    toggleForbidOrganization(id, status).then((res) => {
-      this.getDepartmentList()
+    let title = ''
+    if (status === 1) {
+      title = '禁用'
+    } else {
+      title = '启用'
+    }
+    const modal = new Modalshow({
+      content: (
+        <div>你确定{title}此部门吗？</div>
+      ),
+      title: `${title}部门`,
+      mask: true,
+      onOk: () => {
+        toggleForbidOrganization(id, status).then((res) => {
+          this.getDepartmentList()
+          modal.hide()
+        })
+      },
+      onCancel: () => {
+        modal.hide()
+      }
     })
+    modal.show()
   }
 
   // 删除部门
