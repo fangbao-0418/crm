@@ -63,6 +63,10 @@ class Main extends React.Component<Props> {
                 {
                   required: true,
                   message: '联系电话不能为空'
+                },
+                {
+                  max: 11,
+                  message: '电话最多11位'
                 }
               ]
             })(
