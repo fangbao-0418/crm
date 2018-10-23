@@ -80,6 +80,14 @@ class Main extends React.Component<Props> {
     this.values[field] = value
   }
   public getSmsVerifyCode () {
+    const { error } = this.state
+    if (!/^1[3|4|5|7|8|9][0-9]\d{8}$/.test(this.values.phone)) {
+      error.phone = '手机号码格式不正确'
+      this.setState({
+        error
+      })
+      return
+    }
     if (this.num === 0) {
       fetchSmsVerifyCode(this.values.phone)
       this.num = 59
@@ -113,8 +121,8 @@ class Main extends React.Component<Props> {
       <div className={styles.box}>
         <div className={styles.title}>噼里啪管理系统</div>
         <div className={styles.switch}>
-          <span className={classNames({[styles.active]: this.state.type === 1})} onClick={this.changeType.bind(this, 1)}>短信登陆</span>
-          <span className={classNames({[styles.active]: this.state.type === 2})} onClick={this.changeType.bind(this, 2)}>微信登陆</span>
+          <span className={classNames({[styles.active]: this.state.type === 1})} onClick={this.changeType.bind(this, 1)}>短信登录</span>
+          <span className={classNames({[styles.active]: this.state.type === 2})} onClick={this.changeType.bind(this, 2)}>微信登录</span>
         </div>
         <div className={styles.sms} ref='sms'>
           <ul>
