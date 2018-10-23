@@ -20,6 +20,9 @@ class Main extends React.Component<Statistics.Props, any> {
     this.renderChart(this.props.dataPieList)
   }
   public renderChart (dataPieList: OverViewProps[]) {
+    if (dataPieList.length !== 3) {
+      return
+    }
     const option = {
       tooltip: {
         axisPointer: 'line',

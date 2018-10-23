@@ -23,9 +23,9 @@ class Main extends React.Component<Statistics.Props, any> {
     }
   }
   public render () {
-    const { companyProps, taskSumRewardList, allProps, dataLineList, areaSumRewardList, overView } = this.props
-    const { cities, numberList, isabled } = this.state
-    const { type } = overView
+    const { taskSumRewardList, allProps, dataLineList, areaSumRewardList, overView } = this.props
+    const { numberList } = this.state
+    const { type, date } = overView
     return (
     <div className={styles.container}>
       <ContentBox title='数据总览'>
@@ -35,14 +35,14 @@ class Main extends React.Component<Statistics.Props, any> {
       <Total />
       <Row className={styles.listLeft}>
         <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
-          <p className={styles.clientLeft}>任务总览</p>
+          <p className={styles.clientLeft}>{date}任务总览</p>
           <p className={styles.clientRight}>任务总数：{allProps.customerTotal}</p>
           <div className={styles.pic}>
             <PieList />
           </div>
         </Col>
         <Col span={11} className={styles.allPic}>
-          <p className={styles.clientLeft}>绩效总览</p>
+          <p className={styles.clientLeft}>{date}绩效总览</p>
           <p className={styles.clientRight}>绩效总额：￥{allProps.rewardTotal}</p>
           <div style={{clear:'both'}}>
             <ul className={styles.listPerform}>

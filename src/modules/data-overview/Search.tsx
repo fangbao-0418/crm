@@ -65,7 +65,6 @@ class Main extends React.Component<{}, State> {
   }
   public render () {
     const { type, provinceList, cityList, agentList } = this.state
-    console.log(cityList, 'cityList')
     return (
       <div className={styles['overview-search']}>
         <Select
@@ -74,6 +73,14 @@ class Main extends React.Component<{}, State> {
           style={{width: 120}}
           onChange={(value: 'MONTH' | 'YEAR') => {
             this.payload.dateFlag = value
+            APP.dispatch<Statistics.Props>({
+              type: 'change screen data',
+              payload: {
+                overView: {
+                  type: value
+                }
+              }
+            })
             this.setState({
               type: value
             })
@@ -94,6 +101,14 @@ class Main extends React.Component<{}, State> {
               className={styles.selected}
               format={monthFormat}
               onChange={(current) => {
+                APP.dispatch<Statistics.Props>({
+                  type: 'change screen data',
+                  payload: {
+                    overView: {
+                      date: current.format('YYYY年MM月')
+                    }
+                  }
+                })
                 this.payload.date = current.format('YYYY-MM-DD')
                 this.fetchData()
               }}
@@ -103,6 +118,14 @@ class Main extends React.Component<{}, State> {
               style={{width: '100px'}}
               className={styles.selected}
               onChange={(value: string) => {
+                APP.dispatch<Statistics.Props>({
+                  type: 'change screen data',
+                  payload: {
+                    overView: {
+                      date: moment(value).format('YYYY年')
+                    }
+                  }
+                })
                 this.payload.date = value
                 this.fetchData()
               }}

@@ -76,6 +76,7 @@ declare namespace Statistics {
   export interface OverViewProps {
     total?: OverViewTotalProps
     type?: 'MONTH' | 'YEAR'
+    date?: string
   }
   export interface Props {
     overView?: OverViewProps

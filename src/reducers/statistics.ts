@@ -45,8 +45,8 @@ const defaultVal: Statistics.Props = {
 }
 export default handleActions<Statistics.Props>({
   'change screen data': (state, { payload }) => {
-    payload = Object.assign({}, state, _.cloneDeep(payload))
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
+    payload = _.merge({}, _.cloneDeep(defaultVal), state, payload)
+    console.log(payload, 'payload')
     return {
       ...state,
       ...payload
