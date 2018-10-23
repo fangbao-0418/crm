@@ -20,7 +20,7 @@ import {
   conditionOptions
 } from './utils'
 import _ from 'lodash'
-import { appointment, toSales, toOpen, toCity, fetchList } from './api'
+import { appointment, toSales, toOpen, toCity, fetchList, fetchListRecycle } from './api'
 import { fetchCountAction } from './action'
 import { connect } from 'react-redux'
 const styles = require('./style')
@@ -54,18 +54,34 @@ class Main extends React.Component<Business.Props> {
     const { pagination } = data
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
-    fetchList(this.params).then((res) => {
-      pagination.total = res.pageTotal
-      APP.dispatch<Business.Props>({
-        type: 'change business data',
-        payload: {
-          [selectedTab]: {
-            dataSource: res.data,
-            pagination
+    console.log(selectedTab, 'selectedTab')
+    if (selectedTab === 'tab4') {
+      fetchListRecycle(this.params).then((res) => {
+        pagination.total = res.pageTotal
+        APP.dispatch<Business.Props>({
+          type: 'change business data',
+          payload: {
+            tab4: {
+              dataSource: res.data,
+              pagination
+            }
           }
-        }
+        })
       })
-    })
+    } else {
+      fetchList(this.params).then((res) => {
+        pagination.total = res.pageTotal
+        APP.dispatch<Business.Props>({
+          type: 'change business data',
+          payload: {
+            [selectedTab]: {
+              dataSource: res.data,
+              pagination
+            }
+          }
+        })
+      })
+    }
   }
   public fetchCitys () {
     fetchRegion({level: 2}).then((res) => {
