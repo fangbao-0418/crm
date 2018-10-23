@@ -66,8 +66,11 @@ export const fetchRegionList = (userId?: any) => {
 }
 
 // 获取部门列表
+// export const fetchDepartmentList = () => {
+//   return http(`/user/v1/api/organization/list/System/0`)
+// }
 export const fetchDepartmentList = () => {
-  return http(`/user/v1/api/organization/list/System/0`)
+  return http(`/user/v1/api/organization/select/System/0`)
 }
 
 // 获取角色列表
