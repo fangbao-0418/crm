@@ -54,19 +54,19 @@ export default function () {
                 {
                   onOk: () => {
                     APP.success('操作成功')
-                    fetchList(searchPayload).then((res) => {
-                      pagination.total = res.pageTotal
+                    fetchList(searchPayload).then((res1) => {
+                      pagination.total = res1.pageTotal
                       APP.dispatch<Business.Props>({
                         type: 'change business data',
                         payload: {
                           [tab]: {
-                            dataSource: res.data,
+                            dataSource: res1.data,
                             pagination
                           }
                         }
                       })
-                      if (res.data[index]) {
-                        const customerId = res.data[index].id
+                      if (res1.data[index]) {
+                        const customerId = res1.data[index].id
                         changeCustomerDetailAction(customerId)
                         APP.dispatch<Customer.Props>({
                           type: 'change customer data',
@@ -94,19 +94,19 @@ export default function () {
                       dataSource = []
                     }
                     if (dataSource.length === 0) {
-                      fetchList(searchPayload).then((res) => {
-                        pagination.current = res.pageCurrent
+                      fetchList(searchPayload).then((res2) => {
+                        pagination.current = res2.pageCurrent
                         APP.dispatch<Business.Props>({
                           type: 'change business data',
                           payload: {
                             [tab]: {
                               searchPayload,
-                              dataSource: res.data,
+                              dataSource: res2.data,
                               pagination
                             }
                           }
                         })
-                        dataSource = res.data || []
+                        dataSource = res2.data || []
                         changeCustomerDetailAction(dataSource[index].id)
                       })
                     } else {
@@ -121,20 +121,20 @@ export default function () {
                       index = 0
                     }
                     if (dataSource.length === 0) {
-                      fetchList(searchPayload).then((res) => {
+                      fetchList(searchPayload).then((res3) => {
                         // if (res.data)
-                        pagination.current = res.pageCurrent
+                        pagination.current = res3.pageCurrent
                         APP.dispatch<Business.Props>({
                           type: 'change business data',
                           payload: {
                             [tab]: {
                               searchPayload,
-                              dataSource: res.data,
+                              dataSource: res3.data,
                               pagination
                             }
                           }
                         })
-                        dataSource = res.data || []
+                        dataSource = res3.data || []
                         changeCustomerDetailAction(dataSource[index].id)
                       })
                     } else {

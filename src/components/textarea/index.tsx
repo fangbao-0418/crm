@@ -25,7 +25,7 @@ class Main extends React.Component<Props> {
                       <Tooltip placement='top' title='指与该客户有相同联系电话的其他公司'>
                         <i className='fa fa-exclamation-circle ml5'></i>
                       </Tooltip>
-                    }              
+                    }
                   </div>
                 </span>
               )
