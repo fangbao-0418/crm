@@ -37,7 +37,7 @@ class Main extends React.Component<Business.Props> {
   public params: Business.SearchProps = {tab: '1'}
   public appointmentTime: string = ''
   public curSale: {key: string, label: string} = { key: '', label: ''}
-  public city: {key: string, label: string }
+  public city: {key: string, label: string } = { key: APP.user.cityCode, label: APP.user.city }
   public reason: {value: string, label: string} = { value: '', label: ''}
   public columns = getColumns.call(this)
   public componentWillMount () {
@@ -184,13 +184,8 @@ class Main extends React.Component<Business.Props> {
         console.log(params, 'params')
         const time = this.appointmentTime
         appointment(params, time).then(() => {
-          this.setState({
-            visible: false
-          }, () => {
-            this.setState({
-              visible: true
-            })
-          })
+          this.fetchCount()
+          this.fetchList()
           APP.success('预约成功')
         })
         modal.hide()
@@ -240,13 +235,8 @@ class Main extends React.Component<Business.Props> {
         }
         const saleId = this.curSale.key
         toSales(saleparams, saleId).then((res) => {
-          this.setState({
-            visible: false
-          }, () => {
-            this.setState({
-              visible: true
-            })
-          })
+          this.fetchCount()
+          this.fetchList()
           APP.success('操作成功')
         })
         modal.hide()
@@ -278,13 +268,8 @@ class Main extends React.Component<Business.Props> {
           bus_sea_memo: this.reason.label
         }
         toOpen(openparams).then(() => {
-          this.setState({
-            visible: false
-          }, () => {
-            this.setState({
-              visible: true
-            })
-          })
+          this.fetchCount()
+          this.fetchList()
           APP.success('操作成功')
         })
         modal.hide()
@@ -307,6 +292,7 @@ class Main extends React.Component<Business.Props> {
           <Select
             labelInValue
             style={{width:'200px'}}
+            value={this.city}
             onChange={(val: {key: string, label: string, code?: string, name?: string}) => {
               this.city = val
             }}
@@ -334,13 +320,8 @@ class Main extends React.Component<Business.Props> {
           cityName: this.city.label
         }
         toCity(cityparams).then((res) => {
-          this.setState({
-            visible: false
-          }, () => {
-            this.setState({
-              visible: true
-            })
-          })
+          this.fetchCount()
+          this.fetchList()
           APP.success('操作成功')
         })
         modal.hide()

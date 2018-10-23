@@ -186,7 +186,7 @@ class Main extends React.Component {
         <div className={styles.wrap}>
 
           <div className={styles.tabWrap}>
-            <div className={this.state.tab === 'System' ? styles.active : ''} onClick={() => {this.changeTab('System')}}>直营中心</div>
+            <div className={this.state.tab === 'System' ? styles.active : ''} onClick={() => {this.changeTab('System')}}>中心</div>
             <div className={this.state.tab === 'Agent' ? styles.active : ''} onClick={() => {this.changeTab('Agent')}}>代理商</div>
             <div className={this.state.tab === 'DirectCompany' ? styles.active : ''} onClick={() => {this.changeTab('DirectCompany')}}>直营公司</div>
           </div>

@@ -55,7 +55,7 @@ const defaultVal: Business.Props = {
     }
   },
   selectedTab: 'tab1',
-  count: [0, 0, 0, 0, 0]
+  count: [0, 0, 0, 0, -1]
 }
 export default handleActions<Business.Props>({
   'change business data': (state, { payload }) => {

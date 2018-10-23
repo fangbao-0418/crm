@@ -38,8 +38,7 @@ class Main extends React.Component<Customer.Props, State> {
         }
       }
       this.setState({
-        // sales: saleslist
-        sales: [{ salespersonId: '1', salespersonName: '销售1' }, { salespersonId: '2', salespersonName: '销售2' }]
+        sales: saleslist
       })
     })
   }

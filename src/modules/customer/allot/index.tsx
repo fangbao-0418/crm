@@ -27,8 +27,7 @@ class Main extends React.Component<Props> {
               ids.push(item.id)
             })
             const saleCapacityParams = {
-              // agencyId: value.agencyId,
-              agencyId: '1001',
+              agencyId: value.agencyId,
               customerNum: this.props.selectedRowKeys.length,
               salesPersons: ids.join(',')
             }
