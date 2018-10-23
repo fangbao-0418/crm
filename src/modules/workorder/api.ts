@@ -32,7 +32,7 @@ class Service {
   /*
     工单详情
   */
-  public getOrderDetail (id: any = '') {
+  public getOrderDetail (id: string) {
     return http(
     `/work/v1/api/order/${id}`
    )

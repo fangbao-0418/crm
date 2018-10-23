@@ -38,6 +38,7 @@ class Main extends React.Component<any, States> {
     this.params = this.props.match.params
     this.getSublist()
     this.getItem()
+    this.getProductList()
   }
   // 初始化数据
   public initDecoratorData (data: any) {
@@ -51,7 +52,8 @@ class Main extends React.Component<any, States> {
 
   // 获取商品列表
   public getProductList () {
-    Service.getProductList().then((res: any) => {
+    Service.getProductList().then((res) => {
+      console.log(res)
       this.setState({
 
       })

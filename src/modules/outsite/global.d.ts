@@ -1,4 +1,8 @@
 declare namespace OutSite {
+  export enum Status {
+    UNDISTRIBUTED = '待分配',
+    CANCELLED = '已取消'
+  }
   export type Map<T> = {[index: string]: T}
   /** 任务类型 */
   export interface TaskItem {

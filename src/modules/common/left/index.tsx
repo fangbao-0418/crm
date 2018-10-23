@@ -219,12 +219,12 @@ class Main extends React.Component<Props, State> {
     {
       title: '配置中心',
       path: '/configure',
-      icon: <MenuIcon type='data' />
+      icon: <MenuIcon type='configure' />
     },
     {
       title: '操作日志',
       path: '/operate-log',
-      icon: <MenuIcon type='data' />
+      icon: <MenuIcon type='log' />
     }
   ]
   public componentDidMount () {

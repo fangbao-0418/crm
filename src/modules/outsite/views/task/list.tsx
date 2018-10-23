@@ -1,25 +1,13 @@
 import React from 'react'
 import monent, { Moment } from 'moment'
-import { Divider, Modal, Icon, Tabs, Table, Row, Col } from 'antd'
+import { Divider, Modal, Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
-import { Button } from 'antd'
 import SearchForm from '@/modules/outsite/components/SearchForm'
-import HCframe from '@/modules/common/components/HCframe'
-import MessageShowModal from '@/modules/message/views/show.modal'
+import ContentBox from '@/modules/common/content'
 import Service from '@/modules/outsite/services'
-
-const styles = require('../../styles/list.styl')
-
-const content = `哈哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了
-    经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬
-    ，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，
-    这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE哈还多
-    方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计
-    权威肉铺前无配偶入侵我IE哈还多方哈士大夫哈市的合法化撒旦法，这里是内容阿萨德法师打发斯蒂芬，放假去
-    玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE还多方哈士大夫哈市的合法化撒旦法，这里是内容
-    阿萨德法师打发斯蒂芬，放假去玩儿去玩儿去玩儿就开了经历会计权威肉铺前无配偶入侵我IE`
+import classNames from 'classnames'
+const styles = require('@/modules/outsite/styles/list')
 const data: TaskList = [
   {
     id: 1,
@@ -387,10 +375,10 @@ class Main extends React.Component {
     const { currentItem } = this.state
     return (
     <div className={styles.container}>
-      <HCframe
+      <ContentBox
         title='外勤任务'
-        act={<div>
-          <a onClick={this.export.bind(this)} className='btn'><i></i> 导出</a>
+        rightCotent={<div>
+          <span onClick={this.export.bind(this)} className={classNames('href', styles.btn)} ><i></i> 导出</span>
         </div>}
       >
         <Row>
@@ -414,7 +402,7 @@ class Main extends React.Component {
             })}
           </Tabs>
         </Row>
-      </HCframe>
+      </ContentBox>
       <Modal
         title={`审批`}
         visible={this.state.modalVisible}

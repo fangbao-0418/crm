@@ -1,14 +1,13 @@
 import React from 'react'
-import { Icon, Table, Input, Form, Select } from 'antd'
-import { ColumnProps } from 'antd/lib/table'
-import { Cascader, DatePicker, Radio, Row, Col } from 'antd'
+import { Input, Form, Select } from 'antd'
+import { DatePicker, Row, Col } from 'antd'
+import Area from './Area'
 import moment, { Moment } from 'moment'
 import Service from '@/modules/outsite/services'
 import { Map } from '@/modules/outsite/types/outsite'
-import { TasktplItem, TasktplList } from '@/modules/outsite/types/tploutside'
+import { TasktplItem } from '@/modules/outsite/types/tploutside'
+import classNames from 'classnames'
 import _ from 'lodash'
-
-const { MonthPicker, RangePicker, WeekPicker } = DatePicker
 const FormItem = Form.Item
 const Search = Input.Search
 const styles = require('@/modules/outsite/styles/list')
@@ -101,7 +100,7 @@ class Main extends React.Component<any, any> {
       }]
     }]
   }
-
+  public throttleChange = _.throttle(this.onChange.bind(this), 1000)
   public componentWillMount () {
     this.getTplTaskList()
     this.setCurrentStatusDict()
@@ -215,8 +214,9 @@ class Main extends React.Component<any, any> {
 
   // 挂父组件回调
   public hookCallback () {
-    console.log('search form callback::', this.state.searchData)
-    this.props.onSearch(this.state.searchData)
+    if (this.props.onSearch) {
+      this.props.onSearch(this.state.searchData)
+    }
   }
 
   // 搜索项显藏
@@ -231,16 +231,15 @@ class Main extends React.Component<any, any> {
       extshow: false
     })
   }
-
   public render () {
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
+    const { getFieldDecorator } = this.props.form
 
     return (
     <div className='t-search-form'>
       <Form
         layout='inline'
         style={{width: '80%'}}
-        onChange={this.onChange.bind(this)}
+        onChange={this.throttleChange}
         // onSubmit={this.props.onSearch}
       >
         <FormItem>
@@ -250,7 +249,13 @@ class Main extends React.Component<any, any> {
             message: ''
           }]
         })(
-          <Search placeholder='请输入客户或联系人名称' style={{width: '200px'}}/>
+          <Search
+            placeholder='请输入客户或联系人名称'
+            style={{width: '200px'}}
+            onSearch={() => {
+              this.hookCallback()
+            }}
+          />
         )}
         </FormItem>
         <FormItem>
@@ -267,7 +272,6 @@ class Main extends React.Component<any, any> {
                 templeteId: e
               })
               const sublist = this.state.tplSubGroup[e]
-              console.log('.......', e, sublist, this.state.tplSubGroup)
               this.setState({
                 tplSubList: sublist ? sublist : []
               })
@@ -305,11 +309,13 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
 
-        <div className={styles.extshow}>
+        <div className={styles.extshow} style={{marginTop: '5px'}}>
           <span onClick={this.setExtshow.bind(this)} className={styles.searchico}>
-            <Icon type={this.state.extshow ? 'up' : 'down'} />
+            <i className={classNames('fa', this.state.extshow ? 'fa-angle-double-down' : 'fa-angle-double-up')} aria-hidden='true'></i>
           </span>
-          <div className={`${styles.extcontent} ${this.state.extshow ? styles.show : styles.hide}`}>
+          <div
+            className={`mt10 ${styles.extcontent} ${this.state.extshow ? styles.show : styles.hide}`}
+          >
             <Row>
               <Col span={12}>
                 <FormItem>
@@ -356,15 +362,18 @@ class Main extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem>
                   {getFieldDecorator(`orgId`, {})(
-                    <Cascader
-                      options={this.state.areaData}
-                      onChange={(d: any) => {
-                        console.log('orgid::', d)
+                    <Area
+                      style={{width: '148px'}}
+                      placeholder='选择所属区县'
+                      onChange={(value) => {
+                        let orgId
+                        if (value.key !== 'all') {
+                          orgId = value.key
+                        }
                         this.syncSearchData({
-                          orgId: d
+                          orgId
                         })
                       }}
-                      placeholder='选择所属区县'
                     />
                   )}
                 </FormItem>

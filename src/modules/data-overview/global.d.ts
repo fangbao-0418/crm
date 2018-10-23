@@ -1,6 +1,6 @@
 declare namespace Statistics {
   interface OverViewSearchPayload {
-    customerId?: string
+    customerId?: number
     dateFlag?: 'YEAR' | 'MONTH'
     date?: string
   }
@@ -55,7 +55,30 @@ declare namespace Statistics {
     rewardDayIncrease: number //绩效日同比
     rewardWeekIncrease: number    //绩效周同比
   }
+  export interface OverViewTotalProps {
+    /** 总客户数 */
+    customerTotal: number
+    /** 当日客户数 */
+    customerTodayTotal: number
+    /** 客户数日同比 */
+    customerTotalDayIncrease: number
+    /** 客户数周同比 */
+    customerTotalWeekIncrease: number
+    /** 总绩效 */
+    rewardTotal: number
+    /** 今天绩效数 */
+    todayRewardTotal: number
+    /** 绩效日同比 */
+    rewardDayIncrease: number
+    /** 绩效周同比  */
+    rewardWeekIncrease: number
+  }
+  export interface OverViewProps {
+    total?: OverViewTotalProps
+    type?: 'MONTH' | 'YEAR'
+  }
   export interface Props {
+    overView?: OverViewProps
     dataPieList?: ItemPieProps[]
     dataLineList?: ItemLineProps[]
     taskSumRewardList?: TaskListProps[]

@@ -88,6 +88,10 @@ export const fetchRegion = (payload: {
 }) => {
   return http(`/config/v1/api/region`, payload)
 }
+/** 获取登录用户所负责的地区 */
+export const fetchOwnRegion = () => {
+  return http(`/user/v1/api/user/list/login/province/city`)
+}
 export const fetchTianYanCompanyList = (name: string) => {
   return http(`/crm-manage/v1/api/tianyan/list?name=${name}`)
 }

@@ -50,9 +50,9 @@ declare namespace Statistics {
     rewardDayIncrease: number //绩效日同比
     rewardWeekIncrease: number    //绩效周同比
   }
-  interface OverViewProps {
-    type: 'YEAR' | 'MONTH'
-  }
+  // interface OverViewProps {
+  //   type: 'YEAR' | 'MONTH'
+  // }
   interface OverYearProps {
     typeValue: '2015年' |'2016年' | '2017年' | '2018年'
   }
@@ -61,7 +61,7 @@ declare namespace Statistics {
     histogramTaskDataList?:HistogramTaskDataListProps[]
     allProps?: NumberProps
     companyProps?: CompanyProps
-    overView?: OverViewProps
+    // overView?: OverViewProps
     yearView?:OverYearProps
   } 
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Cascader } from 'antd'
-import { CascaderProps } from 'antd/lib/cascader'
 import { fetchRegion } from '@/modules/common/api'
 interface Props {
   onChange?: (options?: Common.RegionProps[]) => void
@@ -37,7 +36,6 @@ class Main extends React.Component<Props, State> {
     })
   }
   public loadCityData (selectedOptions: Common.RegionProps[]) {
-    // console.log(selectedOptions, 'selectedOptions')
     const targetOption = selectedOptions[selectedOptions.length - 1]
     targetOption.loading = true
     const current = selectedOptions[0]

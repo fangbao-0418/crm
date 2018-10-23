@@ -12,7 +12,7 @@ import Left from '@/modules/common/left'
 import modules from '@/router/modules'
 import { fetchUserInfo } from './api'
 const styles = require('@/stylus/main')
-class Main extends React.Component {
+class Main extends React.Component<Common.Props> {
   public componentWillMount () {
     fetchUserInfo()
     fetchEnum().then(() => {
@@ -21,7 +21,7 @@ class Main extends React.Component {
   }
   public render () {
     console.log(APP.user, 'user')
-    if (APP.user === undefined) {
+    if (APP.user === undefined || !this.props.visible) {
       return null
     }
     return (

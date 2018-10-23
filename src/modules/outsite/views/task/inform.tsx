@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter, RouteProps } from 'react-router'
 import moment, { Moment } from 'moment'
 import { AutoComplete, Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
-import HCframe from '@/modules/common/components/HCframe'
+import ContentBox from '@/modules/common/content'
 import SearchOrder from '@/modules/outsite/components/SearchOrder'
 import Mission from '@/modules/outsite/views/task/mission'
 import Other from '@/modules/outsite/views/task/other'
@@ -161,105 +161,103 @@ class Main extends React.Component<any, any> {
     }
 
     return (
-    <div>
-      <HCframe title='新增外勤任务'>
-          <div style={{paddingBottom: '20px'}}>
-          <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
-            <TabPane tab='通办任务' key='1'>
-              <Mission onChange={this.onTaskidChange.bind(this)} />
-            </TabPane>
-            <TabPane tab='其他任务' key='2'>
-              <Other onChange={this.onTaskidChange.bind(this)} />
-            </TabPane>
-          </Tabs>
-          </div>
-          <div>
-              <div>
-                <Form
-                  onSubmit={this.handleSubmit.bind(this)}
-                >
-                <Row>
-                  <Col>
-                    <FormItem {...formItemLayout} label='关联订单'>
-                      {getFieldDecorator('orderNo', {
-                        rules: [{
-                          required: true,
-                          message: '请输入订单编号'
-                        }]
-                      })(
-                        <AutoComplete
-                          dataSource={this.state.orderNOList}
-                          style={{ width: 200 }}
-                          onSelect={this.onSelectOrderNO.bind(this)}
-                          onSearch={this.handleChangeOrderNO.bind(this)}
-                          placeholder='请输入订单号'
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <FormItem {...formItemLayout} label='公司名称'>
-                    <Input disabled value={this.state.formdata.customerName} />
-                  </FormItem>
-                </Row>
-                <Row>
-                  <FormItem {...formItemLayout} label='区域'>
-                    <Input disabled  value={this.state.formdata.areaName} />
-                  </FormItem>
-                </Row>
-                <Row>
-                  <FormItem {...formItemLayout} label='选择外勤'>
-                    {getFieldDecorator('userId', {
+    <ContentBox title='新增外勤任务'>
+        <div style={{paddingBottom: '20px'}}>
+        <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
+          <TabPane tab='通办任务' key='1'>
+            <Mission onChange={this.onTaskidChange.bind(this)} />
+          </TabPane>
+          <TabPane tab='其他任务' key='2'>
+            <Other onChange={this.onTaskidChange.bind(this)} />
+          </TabPane>
+        </Tabs>
+        </div>
+        <div>
+            <div>
+              <Form
+                onSubmit={this.handleSubmit.bind(this)}
+              >
+              <Row>
+                <Col>
+                  <FormItem {...formItemLayout} label='关联订单'>
+                    {getFieldDecorator('orderNo', {
                       rules: [{
                         required: true,
-                        message: '请选择外勤'
+                        message: '请输入订单编号'
                       }]
                     })(
-                      <Select placeholder='请选择外勤人员' value={this.state.item.userId}>
-                      {
-                        this.state.workerList.map((worker: any, i: number) => {
-                          return <Option key={`worker-${i}`} value={worker.id}>{worker.name}</Option>
-                        })
-                      }
-                      </Select>
+                      <AutoComplete
+                        dataSource={this.state.orderNOList}
+                        style={{ width: 200 }}
+                        onSelect={this.onSelectOrderNO.bind(this)}
+                        onSearch={this.handleChangeOrderNO.bind(this)}
+                        placeholder='请输入订单号'
+                      />
                     )}
                   </FormItem>
-                </Row>
-                <Row>
-                  <FormItem {...formItemLayout} label='开始时间'>
-                    {getFieldDecorator('startTime', {
-                      rules: [{
-                        required: true,
-                        message: '请选择开始时间'
-                      }]
-                    })(
-                      <DatePicker style={{width:'100%'}} showTime format={dateFormat} value={this.state.item.startTime} />
-                    )}
-                  </FormItem>
-                </Row>
-                <Row>
-                  <FormItem {...formItemLayout} label='备注'>
-                    {getFieldDecorator('summary', {
-                    })(
-                      <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} value={this.state.item.summary} />
-                    )}
-                  </FormItem>
-                </Row>
-                <Row>
-                  <Col span={24} style={{ textAlign: 'left', margin:'0 0 60px 80px' }}>
-                    <Button type='primary' htmlType='submit'>提交</Button>
-                    <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                      重置
-                    </Button>
-                  </Col>
-                </Row>
-                </Form>
-              </div>
-
+                </Col>
+              </Row>
+              <Row>
+                <FormItem {...formItemLayout} label='公司名称'>
+                  <Input disabled value={this.state.formdata.customerName} />
+                </FormItem>
+              </Row>
+              <Row>
+                <FormItem {...formItemLayout} label='区域'>
+                  <Input disabled  value={this.state.formdata.areaName} />
+                </FormItem>
+              </Row>
+              <Row>
+                <FormItem {...formItemLayout} label='选择外勤'>
+                  {getFieldDecorator('userId', {
+                    rules: [{
+                      required: true,
+                      message: '请选择外勤'
+                    }]
+                  })(
+                    <Select placeholder='请选择外勤人员' value={this.state.item.userId}>
+                    {
+                      this.state.workerList.map((worker: any, i: number) => {
+                        return <Option key={`worker-${i}`} value={worker.id}>{worker.name}</Option>
+                      })
+                    }
+                    </Select>
+                  )}
+                </FormItem>
+              </Row>
+              <Row>
+                <FormItem {...formItemLayout} label='开始时间'>
+                  {getFieldDecorator('startTime', {
+                    rules: [{
+                      required: true,
+                      message: '请选择开始时间'
+                    }]
+                  })(
+                    <DatePicker style={{width:'100%'}} showTime format={dateFormat} value={this.state.item.startTime} />
+                  )}
+                </FormItem>
+              </Row>
+              <Row>
+                <FormItem {...formItemLayout} label='备注'>
+                  {getFieldDecorator('summary', {
+                  })(
+                    <TextArea rows={8} style={{width:'600px', maxWidth:'none'}} value={this.state.item.summary} />
+                  )}
+                </FormItem>
+              </Row>
+              <Row>
+                <Col span={24} style={{ textAlign: 'left', margin:'0 0 60px 80px' }}>
+                  <Button type='primary' htmlType='submit'>提交</Button>
+                  <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                    重置
+                  </Button>
+                </Col>
+              </Row>
+              </Form>
             </div>
-        </HCframe>
-    </div>
+
+          </div>
+      </ContentBox>
     )
   }
 }

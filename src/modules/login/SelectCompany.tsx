@@ -27,14 +27,14 @@ class Main extends React.Component {
                 <li key={`search-company-${index}`}>
                   <span
                     onClick={() => {
-                      // bindCompany({
-                      //   companyId: item.companyId,
-                      //   token: APP.token
-                      // }).then((res) => {
-                      //   console.log(res)
-                      //   APP.history.push('/')
-                      // })
-                      APP.history.push('/')
+                      bindCompany({
+                        companyId: item.companyId,
+                        token: APP.token
+                      }).then((res) => {
+                        console.log(res)
+                        APP.history.push('/')
+                      })
+                      // APP.history.push('/')
                     }}
                   >
                     {item.companyName}

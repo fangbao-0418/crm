@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchListAction } from '../action'
 type OverViewProps = Statistics.ItemPieProps
 class Main extends React.Component<Statistics.Props, any> {
   public chart: echarts.ECharts

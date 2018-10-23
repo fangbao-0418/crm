@@ -27,7 +27,17 @@ const defaultVal: Statistics.Props = {
     rewardWeekIncrease: 0
   },
   overView: {
-    type: 'MONTH'
+    type: 'MONTH',
+    total: {
+      customerTotal: 0,
+      customerTodayTotal: 0,
+      customerTotalDayIncrease: 0,
+      customerTotalWeekIncrease: 0,
+      rewardTotal: 0,
+      todayRewardTotal: 0,
+      rewardDayIncrease: 0,
+      rewardWeekIncrease: 0
+    }
   },
   yearView:{
     typeValue: '2015年'

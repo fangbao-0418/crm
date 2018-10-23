@@ -2,13 +2,20 @@ import React from 'react'
 import { Layout, Dropdown, Menu } from 'antd'
 // 消息提醒
 import Msg from '@/modules/message/services/message.tsx'
+import { companylist, bindCompany } from './api'
 const { Header } = Layout
 const styles = require('@/stylus/top')
-class Main extends React.Component {
+interface State {
+  msgCount: number
+  collapsed: boolean
+  companyList: Array<{companyName: string, companyId: string}>
+}
+class Main extends React.Component<{}, State> {
   public msg: any
-  public state = {
+  public state: State = {
     msgCount: 0,
-    collapsed: false
+    collapsed: false,
+    companyList: []
   }
   public componentWillMount () {
     // 消息初始化
@@ -20,37 +27,76 @@ class Main extends React.Component {
         msgCount: data
       })
     })
+    companylist(APP.token).then((res) => {
+      this.setState({
+        companyList: res
+      })
+    })
   }
   // 设置右上角消息提醒
   public msgAlert () {
 
   }
-
   public toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed
     })
   }
+  public switchCompany (code: string) {
+    bindCompany({
+      token: APP.token,
+      companyId: code
+    }).then(() => {
+      APP.dispatch<Common.Props>({
+        type: 'change main display status',
+        payload: {
+          visible: false
+        }
+      })
+      APP.dispatch<Common.Props>({
+        type: 'change main display status',
+        payload: {
+          visible: true
+        }
+      })
+    })
+  }
   public render () {
+    const { companyList } = this.state
     const menu = (
       <Menu
         mode='inline'
         // style={{width: 00}}
       >
+        {
+          companyList.length > 1 && (
+            <Menu.SubMenu title='切换公司'>
+              {
+                companyList.map((item) => {
+                  return (
+                    <Menu.Item
+                      onClick={(val: {key: string}) => {
+                        this.switchCompany(val.key)
+                      }}
+                      key={item.companyId}
+                    >
+                      <span>{item.companyName}</span>
+                    </Menu.Item>
+                  )
+                })
+              }
+            </Menu.SubMenu>
+          )
+        }
         <Menu.Item
           onClick={() => {
             APP.history.push('/logout')
           }}
         >
           <span>
-            注销
+            退出
           </span>
         </Menu.Item>
-        <Menu.SubMenu title='切换公司'>
-          <Menu.Item>
-            <span>公司1</span>
-          </Menu.Item>
-        </Menu.SubMenu>
       </Menu>
     )
     return (

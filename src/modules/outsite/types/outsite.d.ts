@@ -32,6 +32,9 @@ interface TaskItem {
     contacter?: any // 后台暂不确定
     sort?: any,
     subList?: Array<TaskItem> // 子任务集合  类型为task
+    /** 取消原因 */
+    cancelReason?: string
+    imageUrl?: string
 }
 type TaskList = Array<TaskItem>
 

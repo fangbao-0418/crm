@@ -206,7 +206,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
 
   // 获取当前登录人可操作的商品列表
   public getProductList () {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/product/list`)
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/product/list`)
   }
 
   // 获取外勤人员
@@ -225,13 +225,13 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取单个任务
-  public getItemByTaskid (taskid: any = '') {
+  public getItemByTaskid (taskid: string) {
     return Service.http(`/${this.moduleName}/v1/api/outside/task/get/${taskid}`)
   }
 
   // 外勤任务跟进日志
-  public getLogByTaskid (taskid: any) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/logs/${taskid}`)
+  public getLogByTaskid (taskid: string) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/record/${taskid}`)
   }
 
   // 外勤工单信息详情
@@ -240,13 +240,20 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 外勤工单信息详情
-  public auditTaskSure (payload: any) {
+  public auditTaskSure (payload: {
+    id: number,
+    status: string
+  }) {
     return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changesub`, 'PUT', payload)
   }
 
   // 转接任务
-  public transferTasksPer (params: any, payload: any) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/user/${params.userId}`, 'PUT', payload)
+  public transferTasksPer (payload: {
+    userid: number,
+    ids: number[]
+  }) {
+    const ids = payload.ids.join(',')
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/user/${payload.userid}?ids=${ids}`, 'PUT')
   }
 
   // 获取外勤任务列表

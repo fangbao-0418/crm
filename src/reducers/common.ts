@@ -21,8 +21,15 @@ export default handleActions<Common.Props>({
       ...state,
       user: payload.user
     }
+  },
+  'change main display status': (state, { payload }) => {
+    return {
+      ...state,
+      visible: payload.visible
+    }
   }
 }, {
   ajaxCount: 0,
-  user: undefined
+  user: undefined,
+  visible: true
 })

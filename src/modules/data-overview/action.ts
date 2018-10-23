@@ -1,10 +1,6 @@
-import { fetchList } from './api'
-export const fetchListAction = (payload: Statistics.OverViewSearchPayload = {
-  customerId: '0',
-  dateFlag: 'MONTH',
-  date: ''
-}) => {
-  fetchList(payload).then((res) => {
+import { fetchOverView, fetchOverViewTotal } from './api'
+export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = {}) => {
+  fetchOverView(payload).then((res) => {
     // console.log(res)
     APP.dispatch<Statistics.Props>({
       type: 'change screen data',
@@ -30,6 +26,18 @@ export const fetchListAction = (payload: Statistics.OverViewSearchPayload = {
           todayRewardTotal: res.todayRewardTotal,
           rewardDayIncrease: res.rewardDayIncrease,
           rewardWeekIncrease: res.rewardWeekIncrease
+        }
+      }
+    })
+  })
+}
+export const fetchOverViewTotalAction = (id: number) => {
+  fetchOverViewTotal(id).then((res) => {
+    APP.dispatch<Statistics.Props>({
+      type: 'change screen data',
+      payload: {
+        overView: {
+          total: res
         }
       }
     })

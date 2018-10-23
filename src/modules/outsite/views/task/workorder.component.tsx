@@ -1,94 +1,40 @@
 /**
  * 工单详情页
  */
-import { Input, Select, Form, DatePicker, Button, Row, Col, Modal } from 'antd'
+import { Row, Col, Modal } from 'antd'
 import React from 'react'
-import { withRouter } from 'react-router'
-import HCframe from '@/modules/common/components/HCframe'
 import MessageShowModal from '@/modules/workorder/views/show.modal'
-// import Service from '@/modules/workorder/api'
 import WokerService from '@/modules/workorder/api'
 import ContentBox from '@/modules/common/content'
-
+import { withRouter, RouteComponentProps } from 'react-router'
 const styles = require('@/modules/workorder/styles/show.styl')
-const Option = Select.Option
-const { RangePicker } = DatePicker
-const data = [
-  {
-    name:'销售提单', // 节点名称
-    showContract: true, // 是否显示合同
-    showReminder: false, // 是否显示催办
-    labelOwner: '签单销售', // 负责人标签文字
-    ownerId: 111111, // 负责人标识
-    labelSupervisor:'',
-    supervisorId: 0,
-    labelDate: '签约时间', // 日期标签文字
-    operateDate: '2018年09月25日', // 操作时间
-    status: '工单生成' // 当前状态(待审核,审核中)
-  }, {
-    name: '外勤任务',
-    showContract: false,
-    showReminder: true,
-    labelOwner: '签单销售',
-    ownerId: 2222,
-    labelSupervisor:'外勤主管',
-    supervisorId: 3333,
-    labelDate: '完成时间',
-    operateDate: '2018年09月25日',
-    status: '已分配'
-  }
-]
-const stateData = [
-  '王小二 2018/09/02 12:02:01',
-  '客户要办理代开公司和国地税申报业务,满意度55%',
-  '2018/09/05 15:02:01 由张一鸣进行用户维护',
-  '外勤任务状态变为材料已确认',
-  '王小二 2018/09/02 12:02:01',
-  '客户要办理代开公司和国地税申报业务,满意度55%',
-  '2018/09/05 15:02:01 由张一鸣进行用户维护',
-  '外勤任务状态变为材料已确认',
-  '王小二 2018/09/02 12:02:01',
-  '客户要办理代开公司和国地税申报业务,满意度55%',
-  '2018/09/05 15:02:01 由张一鸣进行用户维护',
-  '外勤任务状态变为材料已确认'
-]
-interface States {
-  modalVisible: boolean,
-  personID: string
+interface Props extends RouteComponentProps<{id: string}> {
+  taskid?: string
 }
-class Show extends React.Component<any, any> {
-  constructor (props: any) {
-    super(props)
-    this.state = {
-      dataSource:{
-        id: '1211',
-        customerName:'北京爱康鼎科技有限公司',
-        workNo:'XX10001',
-        startTime:'2018-09-25',
-        nodeList:data,
-        processLogList:[]
-      },
-      modalVisible: false,
-      personID: '',
-      stateData,
-      showData:{}
-    }
+interface State {
+  dataSource: any
+  modalVisible: boolean
+  showData: any
+}
+class Show extends React.Component<Props, any> {
+  public state: State = {
+    dataSource: {
+      nodeList: [],
+      processLogList: []
+    },
+    modalVisible: false,
+    showData: {}
   }
   public componentWillMount () {
-    // console.log('......', this.props)
     this.getOrderDetail()
   }
     // 获取详情数据
   public getOrderDetail () {
-    console.log('工单详情orderId:::::', this.props.data.taskid)
-    const params = this.props.data.taskid
-    WokerService.getOrderDetail(1).then((res: any) => {
-      console.log(JSON.stringify(res))
+    const taskid = this.props.match.params.id
+    WokerService.getOrderDetail(taskid).then((res) => {
       this.setState({
         dataSource: res
       })
-    }, () => {
-
     })
   }
   // 查看合同
@@ -134,9 +80,6 @@ class Show extends React.Component<any, any> {
     this.modalHide()
   }
   public render () {
-    const params = this.props.match.params
-    // console.log('....', params)
-
     return (
       <div className={styles.container}>
       <ContentBox
