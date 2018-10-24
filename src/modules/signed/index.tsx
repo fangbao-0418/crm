@@ -409,10 +409,7 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          {
-            APP.hasPermission('crm_sign_myself_list_principals') &&
-            <Button type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
-          }
+          <Button type='primary' hidden={APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>
       </ContentBox>
     )

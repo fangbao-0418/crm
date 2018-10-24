@@ -45,84 +45,72 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.container}>
-        {
-          APP.hasPermission('crm_sign_myself_detail_save') ?
-          <Card
-            title='工商信息'
-            rightContent={(
-              <Icon
-                className='href'
-                type={!this.state.disabled ? 'save' : 'edit'}
-                theme='outlined'
-                onClick={() => {
-                  Promise.all([
-                    new Promise((resolve, reject) => {
-                      this.businessInfo.props.form.validateFields((errs: any) => {
-                        if (errs) {
-                          reject()
-                        } else {
-                          const linkMan = _.cloneDeep(this.props.linkMan)
-                          const detail = this.props.detail
-                          linkMan.map((item) => {
-                            delete item.key
-                          })
-                          detail.contactPersons = linkMan
-                          APP.dispatch<Customer.Props>({
-                            type: 'change customer data',
-                            payload: {
-                              detail
-                            }
-                          })
-                          resolve()
-                        }
-                      })
-                    }),
-                    new Promise((resolve, reject) => {
-                      this.linkMan.props.form.validateFields((errs: any) => {
-                        if (errs) {
-                          reject()
-                        } else {
-                          resolve()
-                        }
-                      })
-                    })
-                  ]).then(() => {
-                    if (!this.state.disabled) {
-                      if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
-                        APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
-                        return
+        <Card
+          title='工商信息'
+          rightContent={
+            APP.hasPermission('crm_sign_myself_detail_save') && (
+            <Icon
+              className='href'
+              type={!this.state.disabled ? 'save' : 'edit'}
+              theme='outlined'
+              onClick={() => {
+                Promise.all([
+                  new Promise((resolve, reject) => {
+                    this.businessInfo.props.form.validateFields((errs: any) => {
+                      if (errs) {
+                        reject()
+                      } else {
+                        const linkMan = _.cloneDeep(this.props.linkMan)
+                        const detail = this.props.detail
+                        linkMan.map((item) => {
+                          delete item.key
+                        })
+                        detail.contactPersons = linkMan
+                        APP.dispatch<Customer.Props>({
+                          type: 'change customer data',
+                          payload: {
+                            detail
+                          }
+                        })
+                        resolve()
                       }
-                    }
-                    this.setState({
-                      disabled: !this.state.disabled
-                    }, () => {
-                      this.save()
                     })
-                  }, () => {
-                    APP.error('请检查输入项')
+                  }),
+                  new Promise((resolve, reject) => {
+                    this.linkMan.props.form.validateFields((errs: any) => {
+                      if (errs) {
+                        reject()
+                      } else {
+                        resolve()
+                      }
+                    })
                   })
-                }}
-              />
-            )}
-          >
-            <BusinessInfo
-              getWrappedInstance={(ref) => {
-                this.businessInfo = ref
+                ]).then(() => {
+                  if (!this.state.disabled) {
+                    if (this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
+                      APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
+                      return
+                    }
+                  }
+                  this.setState({
+                    disabled: !this.state.disabled
+                  }, () => {
+                    this.save()
+                  })
+                }, () => {
+                  APP.error('请检查输入项')
+                })
               }}
-              disabled={this.state.disabled}
             />
-          </Card> : 
-          <Card
-            title='工商信息'
-          >
-            <BusinessInfo
-              getWrappedInstance={(ref) => {
-                this.businessInfo = ref
-              }}
-              disabled={this.state.disabled}
-            />
-          </Card>
-        } 
+          )}
+        >
+          <BusinessInfo
+            getWrappedInstance={(ref) => {
+              this.businessInfo = ref
+            }}
+            disabled={this.state.disabled}
+          />
+        </Card>
         <Card
           title='基本信息'
         >
