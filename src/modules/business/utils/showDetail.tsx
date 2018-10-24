@@ -110,6 +110,7 @@ export default function (record: Business.DetailProps, index?: number,
     footer: null,
     header: null,
     mask: true,
+    maskClosable: false,
     onCancel: () => {
       modal.hide()
       this.fetchCount()
