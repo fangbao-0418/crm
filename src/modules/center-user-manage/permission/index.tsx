@@ -59,10 +59,23 @@ class Main extends React.Component {
 
   // 禁用、启用权限
   public forbidPermission = (id: number, status: 0 | 1) => {
-    toggleForbidPermission(id, status)
-      .then((res) => {
-        this.getPermissionList()
-      })
+    let title = ''
+    if (status === 1) {
+      title =  '禁用'
+    } else {
+      title = '启用'
+    }
+    Modal.confirm({
+      title: `${title}` + '权限',
+      content: `确定${title}权限吗？`,
+      onOk: () => {
+        toggleForbidPermission(id, status)
+          .then((res) => {
+            this.getPermissionList()
+          })
+      },
+      onCancel: () => {}
+    })
   }
 
   // 删除权限
@@ -74,9 +87,6 @@ class Main extends React.Component {
         delPermission(id)
           .then((res) => {
             this.getPermissionList()
-          })
-          .catch((err: any) => {
-            APP.error(err.responseJSON.errors[0].message)
           })
       },
       onCancel: () => {}

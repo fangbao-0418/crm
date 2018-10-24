@@ -72,10 +72,6 @@ class Main extends React.Component {
           this.setState({visible: false})
           this.getList()
         })
-        .catch((err: any) => {
-          console.log(738758, err)
-          APP.error(err.responseJSON.errors[0].message)
-        })
     }
   }
 

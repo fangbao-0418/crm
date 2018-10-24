@@ -162,9 +162,15 @@ class Main extends React.Component {
   }, {
     title: '操作',
     render: (record) => {
-      return (
-        <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
-      )
+      if (APP.hasPermission('crm_sign_myself_list_principals')) {
+        return (
+          <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+        )
+      } else {
+        return (
+          <span></span>
+        )
+      }
     }
   }]
   public componentWillMount () {
@@ -403,7 +409,10 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          <Button type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          {
+            APP.hasPermission('crm_sign_myself_list_principals') &&
+            <Button type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          }
         </div>
       </ContentBox>
     )

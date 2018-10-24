@@ -49,10 +49,12 @@ class Main extends React.Component<Props, State> {
       title: '公海管理',
       path: '',
       icon: <MenuIcon type='open'/>,
+      hidden: !APP.hasPermission('crm_sea'),
       children: [
         {
           title: '公海管理',
-          path: '/open'
+          path: '/open',
+          hidden: !APP.hasPermission('crm_sea_manage')
         }
       ]
     },
@@ -60,10 +62,12 @@ class Main extends React.Component<Props, State> {
       title: '客资管理',
       path: '',
       icon: <MenuIcon type='customer'/>,
+      hidden: !APP.hasPermission('crm_customer'),
       children: [
         {
           title: '我的客资',
-          path: '/customer'
+          path: '/customer',
+          hidden: !APP.hasPermission('crm_customer_list')
         }
       ]
     },
@@ -71,10 +75,12 @@ class Main extends React.Component<Props, State> {
       title: '签约客户',
       path: '',
       icon: <MenuIcon type='sign'/>,
+      hidden: !APP.hasPermission('crm_sign'),
       children: [
         {
           title: '签约客户',
-          path: '/signed'
+          path: '/signed',
+          hidden: !APP.hasPermission('crm_sign_myself')
         }
       ]
     },
@@ -82,14 +88,17 @@ class Main extends React.Component<Props, State> {
       title: '客户设置',
       path: '',
       icon: <MenuIcon type='set' />,
+      hidden: !APP.hasPermission('crm_set'),
       children: [
         {
           title: '客户设置',
-          path: '/customer-set/index'
+          path: '/customer-set/index',
+          hidden: !APP.hasPermission('crm_set_customer')
         },
         {
           title: '分客设置',
-          path: '/customer-set/assign'
+          path: '/customer-set/assign',
+          hidden: !APP.hasPermission('crm_set_customer_diversion')
         }
       ]
     },
@@ -108,11 +117,13 @@ class Main extends React.Component<Props, State> {
         },
         {
           title: '权限',
-          path: '/center-permission'
+          path: '/center-permission',
+          hidden: !APP.hasPermission('crm_sign_myself')
         },
         {
           title: '角色',
-          path: '/center-role'
+          path: '/center-role',
+          hidden: !APP.hasPermission('crm_sign_myself')
         }
       ]
     },
