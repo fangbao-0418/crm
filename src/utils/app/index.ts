@@ -13,6 +13,17 @@ Object.assign(APP, {
     notification.warning({
       message: msg
     })
+  },
+  hasPermission: (key: string) => {
+    if (key !== undefined) {
+      if (APP.user.codes.indexOf(key) > -1) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
   }
 })
 APP.keys = {

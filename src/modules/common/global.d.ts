@@ -8,6 +8,7 @@ declare namespace Common {
     /** 城市编码 */
     cityCode?: string
     city?: string
+    codes?: string[]
   }
   export type ActionPayload = Props
   export interface RegionProps {

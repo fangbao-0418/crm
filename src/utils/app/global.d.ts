@@ -54,5 +54,6 @@ declare namespace APP {
   export const env: 'development' | 'production'
   export let token: string
   export let user: Common.UserProps
+  export const hasPermission: (code: string) => boolean
 }
 

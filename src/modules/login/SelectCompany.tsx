@@ -11,13 +11,27 @@ class Main extends React.Component {
   public componentWillMount () {
     const token = APP.token
     companylist(token).then((res) => {
-      this.setState({
-        dataSource: res
-      })
+      // res = res.slice(0, 1)
+      if (res.length === 1) {
+        const item = res[0]
+        bindCompany({
+          companyId: item.companyId,
+          token: APP.token
+        }).then(() => {
+          APP.history.push('/')
+        })
+      } else {
+        this.setState({
+          dataSource: res
+        })
+      }
     })
   }
   public render () {
     const { dataSource } = this.state
+    // if (dataSource.length <= 1) {
+    //   return null
+    // }
     return (
       <div className={styles['select-company']}>
         <ul>

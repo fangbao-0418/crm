@@ -6,7 +6,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN'
 import modules from '@/router/modules'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { connect, DispatchProp } from 'react-redux'
-interface Props extends RouteComponentProps<any>, DispatchProp<any> {}
+interface Props extends RouteComponentProps<any>, DispatchProp<any>, Common.Props {}
 class App extends React.Component<Props> {
   public componentWillMount () {
     APP.history = this.props.history
@@ -18,10 +18,14 @@ class App extends React.Component<Props> {
         <Switch>
           <Route path='/login' component={modules.Login} />
           <Route path='/logout' component={modules.Logout} />
-          <Main></Main>
+          {
+            this.props.visible && <Main></Main>
+          }
         </Switch>
       </LocaleProvider>
     )
   }
 }
-export default withRouter(connect()(App))
+export default withRouter(connect((state: Reducer.State) => {
+  return state.common
+})(App))

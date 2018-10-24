@@ -4,9 +4,13 @@ interface Props {
   onClick?: () => void
   title?: string
   style?: React.CSSProperties
+  hidden?: boolean
 }
 class Main extends React.Component<Props> {
   public render () {
+    if (this.props.hidden) {
+      return null
+    }
     return (
       <div
         style={this.props.style}

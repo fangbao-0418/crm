@@ -25,10 +25,12 @@ export const fetchSmsVerifyCode = (phone: string) => {
   })
 }
 export const fetchUserInfo = () => {
-  return http(`/user/v1/api/user/info?token=${APP.token}`).then((res) => {
-    fetchPermissionCode().then((res2) => {
-    })
+  return Promise.all([
+    http(`/user/v1/api/user/info?token=${APP.token}`),
+    fetchPermissionCode()
+  ]).then(([res, res2]) => {
     APP.user = res
+    APP.user.codes = res2
     APP.dispatch({
       type: 'change user info',
       payload: {

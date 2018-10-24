@@ -20,8 +20,7 @@ class Main extends React.Component<Common.Props> {
     })
   }
   public render () {
-    console.log(APP.user, 'user')
-    if (APP.user === undefined || !this.props.visible) {
+    if (APP.user === undefined) {
       return null
     }
     return (

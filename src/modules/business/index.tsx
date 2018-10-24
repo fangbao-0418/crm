@@ -399,6 +399,7 @@ class Main extends React.Component<Business.Props> {
         rightCotent={(
           <div>
             <AddButton
+              hidden={!APP.hasPermission('crm_business_mine_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
               onClick={() => {
@@ -406,6 +407,7 @@ class Main extends React.Component<Business.Props> {
               }}
             />
             <AddButton
+              hidden={!APP.hasPermission('crm_business_mine_list_upload')}
               title='导入'
               onClick={() => {
                 this.import()
