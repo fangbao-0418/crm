@@ -105,11 +105,22 @@ class Main extends React.Component<Props> {
           }}
         />
         <div className='btn-position'>
-          {/* <Button type='primary' className='mr5' onClick={this.props.haneleSelectAll.bind(this, this.state.selectedRowKeys, 1)}>批量预约</Button> */}
-          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 1)}>批量预约</Button>
-          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 2)}>转销售</Button>
-          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 3)}>转公海</Button>
-          <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 4)}>转客资池</Button>
+          {
+            APP.hasPermission('crm_business_mine_list_appoint') &&
+            <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 1)}>批量预约</Button>
+          }
+          {
+            APP.hasPermission('crm_business_mine_list_distribute') &&
+            <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 2)}>转销售</Button>
+          }
+          {
+            APP.hasPermission('crm_business_mine_list_sea') &&
+            <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 3)}>转公海</Button>
+          }
+          {
+            APP.hasPermission('crm_business_mine_list_pool') &&
+            <Button type='primary' className='mr5' onClick={this.handleSelectAll.bind(this, 4)}>转客资池</Button>
+          }
         </div>
       </div>
     )
