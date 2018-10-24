@@ -326,26 +326,22 @@ class Main extends React.Component<Customer.Props, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
-                {
-                  APP.hasPermission('crm_customer_detail_save') && (
-                    <Button 
-                      type='primary'
-                      className='mr5'
-                      onClick={() => {
-                        instance.save().then(() => {
-                          APP.success('保存成功')
-                          this.fetchList()
-                        }, () => {
-                          APP.error('保存失败')
-                        })
-                      }}
-                    >
-                      保存
-                    </Button>
-                  )
-                } 
-                {
-                  <Button
+                <Button
+                  type='primary'
+                  hidden={!APP.hasPermission('crm_customer_detail_save')}
+                  className='mr5'
+                  onClick={() => {
+                    instance.save().then(() => {
+                      APP.success('保存成功')
+                      this.fetchList()
+                    }, () => {
+                      APP.error('保存失败')
+                    })
+                  }}
+                >
+                  保存
+                </Button>
+                <Button
                   style={{marginRight: '172px'}}
                   type='ghost'
                   hidden={!APP.hasPermission('crm_customer_detail_delete')}
@@ -363,10 +359,9 @@ class Main extends React.Component<Customer.Props, States> {
                       })
                     })
                   }}
-                  >
-                    删除
-                  </Button>
-                }
+                >
+                  删除
+                </Button>
                 <Button
                   type='primary'
                   className='mr5'
@@ -659,14 +654,8 @@ class Main extends React.Component<Customer.Props, States> {
         />
         <div className='btn-position'>
           {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
-          {
-             APP.hasPermission('crm_customer_list_allocate') &&  <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
-          }
-          {
-             APP.hasPermission('crm_customer_list_allocate_auto') &&   <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
-          
-          }
-          
+          <Button type='primary' className='mr5' hidden={!APP.hasPermission('crm_customer_list_allocate')} onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
+          <Button type='primary' hidden={!APP.hasPermission('crm_customer_list_allocate_auto')} className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>
       </ContentBox>
     )
