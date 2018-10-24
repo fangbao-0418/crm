@@ -35,7 +35,7 @@ class Main extends React.Component<Props> {
           <Col span={8}>
             <FormItem
               {...formItemLayout}
-              label='直营'
+              label={this.props.type === 'direct' ? '直营' : '代理商'}
             >
               {getFieldDecorator('name', {
                 rules: [{
