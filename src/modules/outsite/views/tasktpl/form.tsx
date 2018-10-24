@@ -9,18 +9,18 @@ import TaskSort from './TaskSort'
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 const FormItem = Form.Item
 const Option = Select.Option
-type Map<T> = OutSite.Map<T>
+type Map<T> = OutSide.Map<T>
 interface States {
-  item: OutSite.TaskItem
+  item: OutSide.TaskItem
   /** 选中的子任务 */
-  checkedIdMap?: Map<OutSite.SubTaskItem>
+  checkedIdMap?: Map<OutSide.SubTaskItem>
   /** 子任务列表 */
-  subList?: OutSite.SubTaskItem[]
+  subList?: OutSide.SubTaskItem[]
   /** 子任务分组 */
-  subGroup: Map<OutSite.TaskItem[]>
+  subGroup: Map<OutSide.TaskItem[]>
   /** 子任务mapper */
-  subMap: Map<OutSite.SubTaskItem>
-  goods: OutSite.GoodProps[]
+  subMap: Map<OutSide.SubTaskItem>
+  goods: OutSide.GoodProps[]
 }
 
 /*编辑系统任务   未完成*/
@@ -77,8 +77,8 @@ class Main extends React.Component<any, States> {
       })
       return
     }
-    let checkedIdMap: Map<OutSite.SubTaskItem> = {}
-    Service.getTplItemById(this.params.id).then((item: OutSite.TaskItem) => {
+    let checkedIdMap: Map<OutSide.SubTaskItem> = {}
+    Service.getTplItemById(this.params.id).then((item: OutSide.TaskItem) => {
       item.subList.map((subitem, index) => {
         subitem.sort = index + 1
       })
@@ -169,7 +169,7 @@ class Main extends React.Component<any, States> {
       subList = _.filter(subList, (v) => {
         return v.subId !== val
       })
-      subList.map((v: OutSite.TaskItem, i: number) => {
+      subList.map((v: OutSide.TaskItem, i: number) => {
         subList[i].sort = i + 1
         checkedIdMap[v.subId] = v
       })
@@ -212,7 +212,7 @@ class Main extends React.Component<any, States> {
   }
 
   // 保存
-  public onSave (data: OutSite.TaskItem[]) {
+  public onSave (data: OutSide.TaskItem[]) {
     const { item } = this.state
     item.subList = data
     item.status = 'NORMAL'

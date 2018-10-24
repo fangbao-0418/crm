@@ -23,13 +23,13 @@ const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 interface Props extends FormComponentProps, RouteComponentProps<{id: string}> {}
 interface State {
   formdata: any
-  workerList: OutSite.OutSiterProps[]
+  workerList: OutSide.OutSiterProps[]
   item: TaskItem
   orderNOList: string[]
 }
 // 列表
 class Main extends React.Component<Props, State> {
-  public orderMap: {[code: string]: OutSite.OrderProps} = {}
+  public orderMap: {[code: string]: OutSide.OrderProps} = {}
   public throttleChangeOrderNO = _.throttle(this.handleChangeOrderNO.bind(this), 1000)
   public state: State = {
     formdata: {},
@@ -70,7 +70,7 @@ class Main extends React.Component<Props, State> {
       return
     }
     Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
-      let orders: OutSite.OrderProps[] = []
+      let orders: OutSide.OrderProps[] = []
       if (res.data && res.data.records instanceof Array) {
         orders = res.data.records
       }

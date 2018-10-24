@@ -4,17 +4,17 @@ import { ColumnProps } from 'antd/lib/table'
 import _ from 'lodash'
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 interface Props {
-  dataSource: OutSite.SubTaskItem[]
-  onOk?: (data?: OutSite.SubTaskItem[]) => void
+  dataSource: OutSide.SubTaskItem[]
+  onOk?: (data?: OutSide.SubTaskItem[]) => void
 }
 interface State {
-  dataSource: OutSite.SubTaskItem[]
+  dataSource: OutSide.SubTaskItem[]
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
     dataSource: this.props.dataSource || []
   }
-  public columns: ColumnProps<OutSite.SubTaskItem>[] = [{
+  public columns: ColumnProps<OutSide.SubTaskItem>[] = [{
     title: '顺序',
     dataIndex: 'sort',
     render: (text, item) => {
@@ -61,7 +61,7 @@ class Main extends React.Component<Props, State> {
       dataSource: props.dataSource
     })
   }
-  public sortItem (item: OutSite.SubTaskItem, action: 'up' | 'down') {
+  public sortItem (item: OutSide.SubTaskItem, action: 'up' | 'down') {
     const { dataSource } = this.state
     if (action === 'up') {
       if (item.sort !== 1) {

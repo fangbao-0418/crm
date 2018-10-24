@@ -7,13 +7,13 @@ interface Props {
   id?: string
 }
 interface State {
-  dataSource: OutSite.ReceiveItemProps[]
+  dataSource: OutSide.ReceiveItemProps[]
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
     dataSource: []
   }
-  public columns: ColumnProps<OutSite.ReceiveItemProps>[] = [
+  public columns: ColumnProps<OutSide.ReceiveItemProps>[] = [
     {
       title: '子项目',
       dataIndex: 'taskName'
@@ -43,7 +43,7 @@ class Main extends React.Component<Props, State> {
       dataIndex: 'taskName'
     }
   ]
-  public payload: OutSite.ReceivePayload = {
+  public payload: OutSide.ReceivePayload = {
     pageCurrent: 1,
     pageSize: 15
   }

@@ -1,4 +1,4 @@
-declare namespace OutSite {
+declare namespace OutSide {
   /** 商品属性 */
   export interface GoodProps {
     code: string

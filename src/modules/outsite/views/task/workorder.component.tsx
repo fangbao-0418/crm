@@ -9,7 +9,7 @@ import ContentBox from '@/modules/common/content'
 import { withRouter, RouteComponentProps } from 'react-router'
 const styles = require('@/modules/workorder/styles/show.styl')
 interface Props extends RouteComponentProps<{id: string}> {
-  taskid?: string
+  id?: any
 }
 interface State {
   dataSource: any
@@ -30,10 +30,13 @@ class Show extends React.Component<Props, any> {
   }
     // 获取详情数据
   public getOrderDetail () {
-    const taskid = this.props.match.params.id
+    const taskid = this.props.id
     WokerService.getOrderDetail(taskid).then((res) => {
       this.setState({
-        dataSource: res
+        dataSource: res || {
+          nodeList: [],
+          processLogList: []
+        }
       })
     })
   }
@@ -82,13 +85,6 @@ class Show extends React.Component<Props, any> {
   public render () {
     return (
       <div className={styles.container}>
-      <ContentBox
-        title='工单详情'
-        rightCotent={(
-          <span className={styles.acts}>
-            </span>
-        )}
-      >
         <Row  className={styles['order-list']}>
         <div className={styles.topTitle}>
         <Col span={4}>工单号:{this.state.dataSource.workNo}</Col>
@@ -158,7 +154,6 @@ class Show extends React.Component<Props, any> {
           )
         }
         </div>
-      </ContentBox>
        <Modal
         title={`人员信息`}
         visible={this.state.modalVisible}

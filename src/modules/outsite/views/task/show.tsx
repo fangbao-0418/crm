@@ -10,6 +10,7 @@ import { ColumnProps } from 'antd/lib/table'
 import Workorder from '@/modules/outsite/views/task/workorder.component'
 import Status from '@/modules/outsite/enum'
 import Receive from './Receive'
+import { fetchTaskDetail } from '@/modules/outsite/api'
 const styles = require('../../styles/list.styl')
 type Props = RouteComponentProps<{id?: string}>
 interface State {
@@ -18,6 +19,8 @@ interface State {
   trackdata: any[]
   personList: any[]
   orderId?: string
+  /** 任务详情 */
+  detail: TaskItem
 }
 // 列表
 class Main extends React.Component<Props, State> {
@@ -25,7 +28,8 @@ class Main extends React.Component<Props, State> {
     dataSource: [],
     selectedRowKeys: [],
     trackdata: [], // 跟进小计
-    personList:[] // 人员数组
+    personList:[], // 人员数组
+    detail: {}
   }
   public taskid: string
   public childTaskid: number
@@ -119,6 +123,11 @@ class Main extends React.Component<Props, State> {
           personList:res
         })
       }
+    })
+    fetchTaskDetail(this.taskid).then((res) => {
+      this.setState({
+        detail: res
+      })
     })
   }
 
@@ -296,10 +305,10 @@ class Main extends React.Component<Props, State> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
-    const { trackdata, personList } = this.state
+    const { trackdata, detail } = this.state
     return (
     <div className={styles.container}>
-      <ContentBox title='客户的名称在这里显示'>
+      <ContentBox title={detail.customerName}>
         <Row>
           <Tabs defaultActiveKey='sublist' onChange={this.onTabChange}>
               <Tabs.TabPane key={`sublist`} tab={'任务详情'}>
@@ -333,7 +342,11 @@ class Main extends React.Component<Props, State> {
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
                 <div>
-                  <Workorder />
+                  {
+                    detail.workId !== undefined && (
+                      <Workorder id={detail.workId}/>
+                    )
+                  }
                 </div>
               </Tabs.TabPane>
           </Tabs>
