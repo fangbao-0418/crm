@@ -326,40 +326,45 @@ class Main extends React.Component<Customer.Props, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
-                <Button
-                  type='primary'
-                  className='mr5'
-                  onClick={() => {
-                    instance.save().then(() => {
-                      APP.success('保存成功')
-                      this.fetchList()
-                    }, () => {
-                      APP.error('保存失败')
-                    })
-                  }}
-                >
-                  保存
-                </Button>
-                <Button
-                  style={{marginRight: '172px'}}
-                  type='ghost'
-                  onClick={() => {
-                    deleteCustomer(customerId).then(() => {
-                      APP.success('删除成功')
-                      this.fetchList().then((res) => {
-                        dataSource = res.data
-                        if (data instanceof Array && data[index]) {
-                          customerId = dataSource[index].customerId
-                          changeCustomerDetailAction(customerId)
-                        } else {
-                          modal.hide()
-                        }
-                      })
-                    })
-                  }}
-                >
-                  删除
-                </Button>
+               {
+                APP.hasPermission('crm_customer_detail_save') &&  <Button 
+                type='primary'
+                className='mr5'
+                onClick={() => {
+                  instance.save().then(() => {
+                    APP.success('保存成功')
+                    this.fetchList()
+                  }, () => {
+                    APP.error('保存失败')
+                  })
+                }}
+              >
+                保存
+              </Button>
+               } 
+              {
+                 APP.hasPermission('crm_customer_detail_delete') && <Button
+                 style={{marginRight: '172px'}}
+                 type='ghost'
+                 onClick={() => {
+                   deleteCustomer(customerId).then(() => {
+                     APP.success('删除成功')
+                     this.fetchList().then((res) => {
+                       dataSource = res.data
+                       if (data instanceof Array && data[index]) {
+                         customerId = dataSource[index].customerId
+                         changeCustomerDetailAction(customerId)
+                       } else {
+                         modal.hide()
+                       }
+                     })
+                   })
+                 }}
+               >
+                 删除
+               </Button>
+              }
+                
                 <Button
                   type='primary'
                   className='mr5'
@@ -583,6 +588,7 @@ class Main extends React.Component<Customer.Props, States> {
         rightCotent={(
           <div>
             <AddButton
+              hidden={!APP.hasPermission('crm_customer_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
               onClick={() => {
@@ -590,6 +596,7 @@ class Main extends React.Component<Customer.Props, States> {
               }}
             />
             <AddButton
+              hidden={!APP.hasPermission('crm_customer_list_upload')}
               title='导入'
               onClick={() => {
                 this.import()
@@ -650,8 +657,14 @@ class Main extends React.Component<Customer.Props, States> {
         />
         <div className='btn-position'>
           {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
-          <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
-          <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
+          {
+             APP.hasPermission('crm_customer_list_allocate') &&  <Button type='primary' className='mr5' onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
+          }
+          {
+             APP.hasPermission('crm_customer_list_allocate_auto') &&   <Button type='primary' className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
+          
+          }
+          
         </div>
       </ContentBox>
     )

@@ -267,7 +267,8 @@ class Main extends React.Component {
             footer={(
               <div className='mt10'>
                 <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
-                  <Button
+                 {
+                    APP.hasPermission('crm_sea_manage_grab_customer') && <Button
                     type='primary'
                     className='mr5'
                     onClick={() => {
@@ -289,7 +290,9 @@ class Main extends React.Component {
                   >
                     抢客户
                   </Button>
-                  <Button
+                 } 
+                 {
+                    APP.hasPermission('crm_sea_manage_delete') && <Button
                     type='ghost'
                     onClick={() => {
                       deleteCustomer(customerId).then(() => {
@@ -308,6 +311,7 @@ class Main extends React.Component {
                   >
                     删除
                   </Button>
+                 } 
                 </div>
                 <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
                   <Button
@@ -492,8 +496,12 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '50%' }}>
-          <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
-          <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
+         {
+           APP.hasPermission('crm_sea_manage_grab_customer') && <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
+         } 
+         {
+           APP.hasPermission('crm_sea_manage_delete') && <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
+         }
         </div>
       </ContentBox>
     )
