@@ -117,13 +117,11 @@ class Main extends React.Component<Props, State> {
         },
         {
           title: '权限',
-          path: '/center-permission',
-          hidden: !APP.hasPermission('crm_sign_myself')
+          path: '/center-permission'
         },
         {
           title: '角色',
-          path: '/center-role',
-          hidden: !APP.hasPermission('crm_sign_myself')
+          path: '/center-role'
         }
       ]
     },
