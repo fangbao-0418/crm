@@ -72,6 +72,7 @@ class Main extends React.Component<Common.Props> {
               {/* 操作日志 */}
               <Route path='/operate-log' component={modules.OperateLog} exact />
               <Route path='/operate-log/detail/:id' component={modules.OperateLogDetail}/>
+              <Route component={modules.Unfound} />
             </Switch>
           </Content>
         </Layout>

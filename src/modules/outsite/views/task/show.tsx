@@ -328,17 +328,22 @@ class Main extends React.Component<Props, State> {
                 <Receive id={this.taskid} />
               </Tabs.TabPane>
               <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
-                <div className={styles.trackbox}>
                 {
-                  trackdata.length > 0 && trackdata.map((item: any, index: number) => {
-                    return (
-                    <div className={styles.trackitem} key={`trackitem-${index}`}>
-                      <div><em>{item.userName}</em><span>{item.updateTime}</span></div>
-                      <p>{item.content}</p>
-                    </div>)
-                  })
+                  trackdata.length > 0 && (
+                    <div className={styles.trackbox}>
+                    {
+                      trackdata.map((item, index) => {
+                        return (
+                          <div className={styles.trackitem} key={`trackitem-${index}`}>
+                            <div><em>{item.userName}</em><span>{item.updateTime}</span></div>
+                            <p>{item.content}</p>
+                          </div>
+                        )
+                      })
+                    }
+                    </div>
+                  )
                 }
-                </div>
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
                 <div>

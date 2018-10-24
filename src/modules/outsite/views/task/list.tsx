@@ -198,8 +198,8 @@ class Main extends React.Component {
       return (
         <span>
           <span className={`likebtn ${canAudit ? '' : 'likebtn-disabled'}`} onClick={() => { this.showAuditModal.bind(this)(item) }}>审批</span>
-          <Divider type='vertical' />
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>
+          {/* <Divider type='vertical' />
+          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span> */}
         </span>
       )
     }
