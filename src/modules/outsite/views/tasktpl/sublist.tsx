@@ -71,8 +71,8 @@ class Main extends React.Component<any, any> {
     render: (k: any, item: TasktplItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
-          <span className={`likebtn ${item.status === 'NORMAL' ? '' : 'likebtn-disabled'}`} onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
+          <span className='href mr5' onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
+          <span className='href' onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
         </span>
       )
     }

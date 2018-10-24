@@ -355,10 +355,16 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 添加子任务
-  public addTplSubItem (data: any) {
+  public addTplSubItem (data: {
+    id?: string,
+    name?: string,
+    category?: string,
+    status?: string
+  }) {
     if (data.id) {
       return Service.http(
-        `/${this.moduleName}/v1/api/outside/subtask/template/update`,
+        // `/${this.moduleName}/v1/api/outside/subtask/template/update`,
+        '/outside/v1/api/outside/subtask/template/status/change',
         'PUT',
         data
       )
