@@ -9,6 +9,7 @@ interface MenuItem {
   title: string
   path?: string
   icon?: JSX.Element
+  hidden?: boolean
   children?: Array<MenuItem>
 }
 const styles = require('./style')
@@ -30,14 +31,17 @@ class Main extends React.Component<Props, State> {
       title: '商机管理',
       icon: <MenuIcon type='bussiness'/>,
       path: '',
+      hidden: !APP.hasPermission('crm_business'),
       children: [
         {
           title: '我的商机',
-          path: '/business'
+          path: '/business',
+          hidden: !APP.hasPermission('crm_business_mine')
         },
         {
           title: '我的预约',
-          path: '/appointment'
+          path: '/appointment',
+          hidden: !APP.hasPermission('crm_business_appointment')
         }
       ]
     },
@@ -250,6 +254,7 @@ class Main extends React.Component<Props, State> {
       if (item.children) {
         Item = (
           <SubMenu
+            hidden={item.hidden}
             key={key}
             title={<span>{item.icon}<span>{item.title}</span></span>}
             onTitleClick={() => {
@@ -264,6 +269,7 @@ class Main extends React.Component<Props, State> {
       } else {
         Item = (
           <Menu.Item
+            hidden={item.hidden}
             key={key}
             onClick={(menuitem: {key: string}) => {
               console.log(menuitem)

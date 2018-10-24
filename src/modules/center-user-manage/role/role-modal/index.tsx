@@ -95,10 +95,11 @@ class Main extends React.Component<Props, State> {
     const endIds: string[] = []
     function getId (arr: any) {
       arr.forEach((item: any) => {
+        if (/^\d+$/.test(item.id)) {
+          endIds.push(item.id + '')
+        }
         if (item.authorityResponseList.length) {
           getId(item.authorityResponseList)
-        } else {
-          endIds.push(item.id + '')
         }
       })
     }

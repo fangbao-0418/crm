@@ -5,9 +5,9 @@ const { Content } = Layout
 import { connect } from 'react-redux'
 import Top from './Top'
 import {
-  Route,
   Switch
 } from 'react-router-dom'
+import Route from '@/components/Route'
 import Left from '@/modules/common/left'
 import modules from '@/router/modules'
 import { fetchUserInfo } from './api'
@@ -31,9 +31,9 @@ class Main extends React.Component<Common.Props> {
           <Content className={styles.content}>
             <Switch>
               {/*crm*/}
-              <Route path='/' component={modules.Index} exact/>
+              <Route hidden={!APP.hasPermission('index')} path='/' component={modules.Index} exact/>
               <Route path='/customer' component={modules.Customer} />
-              <Route path='/business' component={modules.Business} />
+              <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
               <Route path='/appointment' component={modules.Appointment} />
               <Route path='/signed' component={modules.Signed} />
               <Route path='/open' component={modules.Open} />
