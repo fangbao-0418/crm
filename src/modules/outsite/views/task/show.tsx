@@ -9,6 +9,7 @@ import Service from '@/modules/outsite/services'
 import { ColumnProps } from 'antd/lib/table'
 import Workorder from '@/modules/outsite/views/task/workorder.component'
 import Status from '@/modules/outsite/enum'
+import Receive from './Receive'
 const styles = require('../../styles/list.styl')
 type Props = RouteComponentProps<{id?: string}>
 interface State {
@@ -313,6 +314,9 @@ class Main extends React.Component<Props, State> {
                 <div className={styles['bottom-btns']}>
                   <Button type='primary' onClick={this.showAllotModal.bind(this)}>批量分配</Button>
                 </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane key={`receive`} tab={'领用详情'}>
+                <Receive id={this.taskid} />
               </Tabs.TabPane>
               <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
                 <div className={styles.trackbox}>

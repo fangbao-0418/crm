@@ -53,31 +53,11 @@ $(document).ajaxError((event, response) => {
     errors.forEach((item: {message: string, code: string}) => {
       message.push(item.message)
     })
-    if (/^5\d+$/g.test(status)) {
-      msgConf = {
-        title: '服务异常',
-        message: '系统处理失败'
-      }
-      notification.error(msgConf)
-    } else if (/^4\d+$/g.test(status)) {
-      msgConf = {
-        title: '系统提示',
-        message: message.join('，')
-      }
-      notification.warning(msgConf)
-    } else {
-      // msgConf = {
-      //   title: '系统提示',
-      //   message: '未知错误，我们的程序员小哥哥正在拼命处理中'
-      // }
-      // notification.warning(msgConf)
+    msgConf = {
+      title: '系统提示',
+      message: message.join('，')
     }
-  } else {
-    // msgConf = {
-    //   title: '系统提示',
-    //   message: '未知错误，我们的程序员小哥哥正在拼命处理中'
-    // }
-    // notification.warning(msgConf)
+    notification.warning(msgConf)
   }
 })
 const RequestTypes = ['GET', 'POST', 'DELETE', 'PUT']

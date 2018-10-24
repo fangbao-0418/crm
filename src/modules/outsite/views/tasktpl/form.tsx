@@ -20,6 +20,7 @@ interface States {
   subGroup: Map<OutSite.TaskItem[]>
   /** 子任务mapper */
   subMap: Map<OutSite.SubTaskItem>
+  goods: OutSite.GoodProps[]
 }
 
 /*编辑系统任务   未完成*/
@@ -31,7 +32,13 @@ class Main extends React.Component<any, States> {
     checkedIdMap: {},
     subList: [],
     subGroup: {},
-    subMap: {}
+    subMap: {},
+    goods: []
+  }
+  public titles = {
+    '0' : '编辑自定义任务',
+    '1': '编辑系统任务',
+    '-1': '新增自定义任务'
   }
   public params: Map<string> = {}
   public componentWillMount () {
@@ -55,7 +62,7 @@ class Main extends React.Component<any, States> {
     Service.getProductList().then((res) => {
       console.log(res)
       this.setState({
-
+        goods: res
       })
     })
   }
@@ -63,6 +70,11 @@ class Main extends React.Component<any, States> {
   // 获取当前任务
   public getItem () {
     if (!this.params.id) {
+      const item = this.state.item
+      item.systemFlag = '-1'
+      this.setState({
+        item
+      })
       return
     }
     let checkedIdMap: Map<OutSite.SubTaskItem> = {}
@@ -223,7 +235,7 @@ class Main extends React.Component<any, States> {
     }
     return (
       <div className={styles.container}>
-        <ContentBox title='编辑系统任务'>
+        <ContentBox title={this.titles[this.state.item.systemFlag]}>
           <Form
             onChange={this.onChange.bind(this)}
           >
@@ -240,7 +252,7 @@ class Main extends React.Component<any, States> {
                   />
                 </FormItem>
               </Col>
-              <Col span={7}>
+              <Col span={7} hidden={this.state.item.systemFlag !== '1'}>
                 <FormItem label='是否优先级' {...formItemLayout}>
                   <Select
                     placeholder={`是否优先级`}
@@ -259,15 +271,20 @@ class Main extends React.Component<any, States> {
                   <Select
                     placeholder={`关联商品`}
                     value={this.state.item.productId}
-                    onChange={(val: any) => {
+                    onChange={(val: string) => {
                       this.syncFormdata('productId', val)
                     }
                     }
                   >
-                    {this.dict2options({
-                      1: '商品1',
-                      2: '商品2'
-                    })}
+                    {
+                      this.state.goods.map((item) => {
+                        return (
+                          <Option key={item.id}>
+                            {item.name}
+                          </Option>
+                        )
+                      })
+                    }
                   </Select>
                 </FormItem>
               </Col>

@@ -183,25 +183,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
   */
   public getOrderItemByOrderNO (orderCode: string = '') {
-    const item = {
-      orderCode: 'TJxdfdsafds',
-      customerOrgId: 341341431,
-      customerOrgName: '天津小菜有限公司',
-      cityCode : '201000',
-      cityName: '天津',
-      countyCode: '201001',
-      countyName:'蓟县'
-    }
-    return Service.http(`/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`).then((res: any) => {
-      // return res && res.data ? res.data.records : []
-      const arr = ['a1', 'a2', 'a3', 'a4', 'a5']
-      console.log(arr)
-      return arr.map((x: any) => {
-        const y = _.clone(item)
-        y.orderCode = x
-        return y
-      })
-    })
+    return Service.http(`/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`)
   }
 
   // 获取当前登录人可操作的商品列表

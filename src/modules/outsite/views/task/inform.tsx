@@ -1,18 +1,15 @@
 import React from 'react'
-import { withRouter, RouteProps } from 'react-router'
 import moment, { Moment } from 'moment'
 import { AutoComplete, Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
 import ContentBox from '@/modules/common/content'
-import SearchOrder from '@/modules/outsite/components/SearchOrder'
 import Mission from '@/modules/outsite/views/task/mission'
 import Other from '@/modules/outsite/views/task/other'
 import Service from '@/modules/outsite/services'
 import { TaskItem } from '@/modules/outsite/types/outsite'
-
+import _ from 'lodash'
+import { FormComponentProps } from 'antd/lib/form'
+import { withRouter, RouteComponentProps } from 'react-router'
 const TabPane = Tabs.TabPane
-function callback (key: string) {
-  console.log(key)
-}
 const styles = require('@/modules/outsite/styles/form.styl')
 
 const FormItem = Form.Item
@@ -22,28 +19,28 @@ const formItemLayout = {
   wrapperCol: { span:8 }
 }
 const Option = Select.Option
-const { MonthPicker, RangePicker } = DatePicker
-
 const dateFormat = 'YYYY-MM-DD hh:mm:ss'
-
+interface Props extends FormComponentProps, RouteComponentProps<{id: string}> {}
+interface State {
+  formdata: any
+  workerList: OutSite.OutSiterProps[]
+  item: TaskItem
+  orderNOList: string[]
+}
 // 列表
-class Main extends React.Component<any, any> {
-  public orderMap: any = {}
-  public constructor (props: any, state: any) {
-    super(props)
-    this.state = {
-      formdata: {},
-      workerList: [],
-      item: {},
-      orderNOList: [], // 订单下拉
-      order: {} // 当前选中的订单
-    }
-    console.log('----------> props::', this.props)
+class Main extends React.Component<Props, State> {
+  public orderMap: {[code: string]: OutSite.OrderProps} = {}
+  public throttleChangeOrderNO = _.throttle(this.handleChangeOrderNO.bind(this), 1000)
+  public state: State = {
+    formdata: {},
+    workerList: [],
+    item: {},
+    orderNOList: [] // 订单下拉
   }
-
   public componentWillMount () {
     this.getWorker()
     this.getItem()
+    // fetchOrderList().then
   }
 
   // 获取外勤人员
@@ -67,20 +64,18 @@ class Main extends React.Component<any, any> {
       })
     })
   }
-
   // 下拉变更
   public handleChangeOrderNO (orderNo: any) {
-    console.log('???????', orderNo)
-    /*
-    const orderNo = e.target.value
-    */
     if (orderNo.length < 1) {
       return
     }
     Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
-      console.log('order list ::', res)
+      let orders: OutSite.OrderProps[] = []
+      if (res.data && res.data.records instanceof Array) {
+        orders = res.data.records
+      }
       this.orderMap = {}
-      const orderNOList = res.map((order: any) => {
+      const orderNOList = orders.map((order) => {
         this.orderMap[order.orderCode] = order
         return order.orderCode
       })
@@ -91,8 +86,7 @@ class Main extends React.Component<any, any> {
   }
 
   // 设置订单下拉值
-  public onSelectOrderNO (orderNo: any) {
-    console.log('selected::', orderNo)
+  public onSelectOrderNO (orderNo: string) {
     const order = this.orderMap[orderNo]
     this.syncFormdata({
       orderNo,
@@ -105,8 +99,14 @@ class Main extends React.Component<any, any> {
 
   // 生成订单列表
   public createOrderNOoptions () {
-    return this.state.orderNOList.map((order: any, i: number) => {
-      return <AutoComplete.Option key={`option-${i}`} value={order.orderCode}>{order.orderCode}</AutoComplete.Option>
+    return this.state.orderNOList.map((order, i) => {
+      return (
+        <AutoComplete.Option
+          key={`option-${i}`}
+        >
+          {order}
+        </AutoComplete.Option>
+      )
     })
   }
 
@@ -154,16 +154,10 @@ class Main extends React.Component<any, any> {
 
   public render () {
     const { getFieldDecorator } = this.props.form
-
-    const taskCprops = {
-      onChange: this.onTaskidChange.bind(this),
-      taskid: 1
-    }
-
     return (
     <ContentBox title='新增外勤任务'>
         <div style={{paddingBottom: '20px'}}>
-        <Tabs defaultActiveKey='1' onChange={callback} className={styles.add}>
+        <Tabs defaultActiveKey='1' className={styles.add}>
           <TabPane tab='通办任务' key='1'>
             <Mission onChange={this.onTaskidChange.bind(this)} />
           </TabPane>
@@ -190,7 +184,7 @@ class Main extends React.Component<any, any> {
                         dataSource={this.state.orderNOList}
                         style={{ width: 200 }}
                         onSelect={this.onSelectOrderNO.bind(this)}
-                        onSearch={this.handleChangeOrderNO.bind(this)}
+                        onSearch={this.throttleChangeOrderNO}
                         placeholder='请输入订单号'
                       />
                     )}
@@ -233,7 +227,11 @@ class Main extends React.Component<any, any> {
                       message: '请选择开始时间'
                     }]
                   })(
-                    <DatePicker style={{width:'100%'}} showTime format={dateFormat} value={this.state.item.startTime} />
+                    <DatePicker
+                      style={{width:'100%'}}
+                      showTime
+                      format={dateFormat}
+                    />
                   )}
                 </FormItem>
               </Row>
@@ -261,4 +259,4 @@ class Main extends React.Component<any, any> {
     )
   }
 }
-export default Form.create()(Main)
+export default Form.create()(withRouter(Main))
