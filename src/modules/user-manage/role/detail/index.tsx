@@ -15,18 +15,59 @@ interface Props extends FormComponentProps {
 }
 interface State {
   roleList: UserManage.RolePermissionItemProps[]
+  checkedKeys: any[] // 选中节点key值
+  expandedKeys: string[] // 展开节点key值
 }
 class Main extends React.Component<Props, State> {
   public lastIds: any[] = []
   public state: State = {
-    roleList: []
+    roleList: [],
+    checkedKeys: [],
+    expandedKeys: []
   }
   public componentWillMount () {
-    fetchRolePermissionList(this.props.type).then((res) => {
+    // console.log(this.props.type, 'fetchRolePermissionList')
+    // if (this.props.item && !this.props.item.roleId) {
+    //   fetchRolePermissionList(this.props.type).then((res) => {
+    //     this.setState({
+    //       roleList: res
+    //     })
+    //   })
+    // }
+    if (this.props.item) {
       this.setState({
-        roleList: res
+        roleList: this.props.item.roleSystemAuthorityList,
+        checkedKeys: this.getCheckedIds(this.props.item.roleSystemAuthorityList)
       })
-    })
+    } else {
+      fetchRolePermissionList(this.props.type).then((res) => {
+        this.setState({
+          roleList: res
+        })
+      })
+    }
+  }
+  // 获取已勾选id
+  public getCheckedIds (data: any) {
+    const checkedIds: any[] = []
+    data = data || []
+    function getId (arr: any) {
+      arr.forEach((item: any) => {
+        if (item.authorityResponseList && item.authorityResponseList.length !== 0) {
+          getId(item.authorityResponseList)
+        } else {
+          if (item.enableFlag) {
+            checkedIds.push(item.id)
+          }
+        }
+      })
+    }
+    getId(data)
+    return checkedIds
+  }
+   // 区域展开时触发
+  public onExpand = (expandedKeys: string[]) => {
+    this.setState({expandedKeys})
   }
   public onOk = () => {
     this.props.onOk()
@@ -111,16 +152,17 @@ class Main extends React.Component<Props, State> {
                       <Tree
                         disabled={disabled}
                         checkable
-                        // onExpand={this.onExpand}
-                        // expandedKeys={this.state.expandedKeys}
+                        onExpand={this.onExpand}
+                        expandedKeys={this.state.expandedKeys}
                         // autoExpandParent={this.state.autoExpandParent}
-                        onCheck={(checkedKeys) => {
+                        onCheck={(checkedKeys: string[]) => {
                           console.log(checkedKeys)
+                          this.setState({ checkedKeys })
                           this.props.form.setFieldsValue({
                             authorityIdList: checkedKeys
                           })
                         }}
-                        // checkedKeys={this.state.checkedKeys}
+                        checkedKeys={this.state.checkedKeys}
                         // onSelect={this.onSelect}
                         // selectedKeys={this.state.selectedKeys}
                       >

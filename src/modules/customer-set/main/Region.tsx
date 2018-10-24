@@ -107,7 +107,7 @@ class Main extends React.Component<Props> {
           onChange={this.handleCityChange.bind(this)}
         >
           {
-            this.state.cityList.map((item) => {
+            (this.state.cityList instanceof Array) && this.state.cityList.map((item) => {
               return (
                 <Option
                   key={item.code}
