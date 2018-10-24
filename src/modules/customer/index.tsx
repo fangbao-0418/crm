@@ -284,6 +284,7 @@ class Main extends React.Component<Customer.Props, States> {
       ),
       title: '录入客资',
       mask: true,
+      maskClosable: false,
       onCancel: () => {
         modal.hide()
       }
@@ -299,9 +300,11 @@ class Main extends React.Component<Customer.Props, States> {
       footer: null,
       title: '导入',
       mask: true,
+      maskClosable: false,
       onOk: () => {
       },
       onCancel: () => {
+        this.fetchList()
         modal.hide()
       }
     })
@@ -451,6 +454,7 @@ class Main extends React.Component<Customer.Props, States> {
       footer: null,
       title: '执行结果',
       mask: true,
+      maskClosable: false,
       onCancel: () => {
         modal.hide()
         this.fetchList()
@@ -469,6 +473,7 @@ class Main extends React.Component<Customer.Props, States> {
       ),
       title: '自动分配客资',
       mask: true,
+      maskClosable: false,
       onOk: () => {
         // console.log(this.state.selectedRowKeys, 'this.state.selectedRowKeys')
         const customers: Array<{
@@ -530,6 +535,7 @@ class Main extends React.Component<Customer.Props, States> {
       title: '分配客资',
       footer: null,
       mask: true,
+      maskClosable: false,
       onOk: () => {
         modal.hide()
       },

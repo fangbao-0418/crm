@@ -191,6 +191,7 @@ class Main extends React.Component<Business.Props> {
       ),
       title: '批量预约',
       mask: true,
+      maskClosable: false,
       onOk: () => {
         if (!this.appointmentTime) {
           APP.error('请选择预约时间！')
@@ -240,6 +241,7 @@ class Main extends React.Component<Business.Props> {
       ),
       title: '销售',
       mask: true,
+      maskClosable: false,
       onOk: () => {
         if (!this.curSale.key) {
           APP.error('请选择销售！')
@@ -274,6 +276,7 @@ class Main extends React.Component<Business.Props> {
       ),
       title: '转公海',
       mask: true,
+      maskClosable: false,
       onOk: () => {
         if (!this.reason.label) {
           APP.error('请选择原因！')
@@ -325,6 +328,7 @@ class Main extends React.Component<Business.Props> {
       ),
       title: '转客资池',
       mask: true,
+      maskClosable: false,
       onOk: () => {
         if (!this.city) {
           APP.error('请选择客资池！')
@@ -360,6 +364,7 @@ class Main extends React.Component<Business.Props> {
       footer: null,
       title: '导入客资',
       mask: true,
+      maskClosable: false,
       onCancel: () => {
         modal.hide()
         this.fetchList()
@@ -371,6 +376,10 @@ class Main extends React.Component<Business.Props> {
   public handleSelectAll (selectedRowKeys: string[], type: number) {
     console.log(type)
     console.log(selectedRowKeys)
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户')
+      return
+    }
     if (type === 1) {
       this.appointmentAll(selectedRowKeys)
     } else if (type === 2) {

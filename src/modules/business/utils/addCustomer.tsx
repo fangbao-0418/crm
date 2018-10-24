@@ -158,6 +158,7 @@ export default function () {
     ),
     title: '录入客资',
     mask: true,
+    maskClosable: false,
     onCancel: () => {
       modal.hide()
     }

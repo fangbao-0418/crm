@@ -265,7 +265,7 @@ class Main extends React.Component {
     this.fetchList()
   }
   public toSale (id?: string) {
-    console.log([id], 'id')
+    console.log(id, 'id')
     if (!id && !this.state.selectedRowKeys.length) {
       APP.error('请选择客户！')
       return false
@@ -328,6 +328,7 @@ class Main extends React.Component {
       header: null,
       footer: null,
       mask: true,
+      maskClosable: false,
       onCancel: () => {
         modal.hide()
       }
