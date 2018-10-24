@@ -21,6 +21,7 @@
     "@babel/core": "^7.0.1",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@types/ali-oss": "^1.0.2",
     "@types/classnames": "^2.2.6",
     "@types/echarts": "^4.1.1",
     "@types/jquery": "^3.3.8",
@@ -76,7 +77,6 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "dependencies": {
-    "@types/ali-oss": "^1.0.2",
     "antd": "^3.9.2",
     "babel-polyfill": "^6.26.0",
     "bundle-loader": "^0.5.6",
