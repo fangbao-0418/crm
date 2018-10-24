@@ -44,7 +44,9 @@ class Main extends React.Component<Props> {
       // },
       onChange: (info: any) => {
         console.log(info)
-        if (info.file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        const name = info.file.name
+        const suffix = name.substr(name.lastIndexOf('.'))
+        if (suffix !== '.xls' && suffix !== '.xlsx') {
           APP.error('请导入excel格式文件')
           return
         }

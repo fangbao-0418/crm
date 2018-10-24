@@ -133,7 +133,7 @@ class Main extends React.Component<Props> {
     return (
       <div>
         <ContentBox
-          title='代理商账号'
+          title={ this.props.type === 'DirectCompany' ? '直营账号' : '代理商账号'}
           rightCotent={(
             <AddButton
               title={this.titles[tab]}

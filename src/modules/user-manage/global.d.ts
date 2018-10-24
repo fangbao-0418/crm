@@ -85,6 +85,7 @@ declare namespace UserManage {
     roleName?: string
     roleType?: TypeProps
     authorityIdList?: string[]
+    roleSystemAuthorityList?: RolePermissionItemProps[]
   }
   interface RolePermissionItemProps {
     authorityResponseList?: RolePermissionItemProps[]

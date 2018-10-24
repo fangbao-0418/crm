@@ -155,7 +155,7 @@ class Main extends React.Component<null, States> {
       >
         <div className='mb10'>
           <Search
-            placeholder='请输入键值名称'
+            placeholder='请输入类型名称'
             onSearch={(value) => {
               this.payload.typeCode = value
               this.fetchList()
