@@ -268,50 +268,52 @@ class Main extends React.Component {
               <div className='mt10'>
                 <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
                  {
-                    APP.hasPermission('crm_sea_manage_grab_customer') && <Button
-                    type='primary'
-                    className='mr5'
-                    onClick={() => {
-                      pickCustomer({
-                        customerIdArr: [customerId]
-                      }).then(() => {
-                        APP.success('抢客户操作成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
+                    APP.hasPermission('crm_sea_manage_grab_customer') &&
+                    <Button
+                      type='primary'
+                      className='mr5'
+                      onClick={() => {
+                        pickCustomer({
+                          customerIdArr: [customerId]
+                        }).then(() => {
+                          APP.success('抢客户操作成功')
+                          this.fetchList().then((res) => {
+                            const data = res.data
+                            if (data instanceof Array && data[index]) {
+                              customerId = data[index].id
+                              changeCustomerDetailAction(customerId)
+                            } else {
+                              modal.hide()
+                            }
+                          })
                         })
-                      })
-                    }}
-                  >
+                      }}
+                    >
                     抢客户
                   </Button>
-                 } 
-                 {
-                    APP.hasPermission('crm_sea_manage_delete') && <Button
-                    type='ghost'
-                    onClick={() => {
-                      deleteCustomer(customerId).then(() => {
-                        APP.success('删除成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
+                }
+                {
+                  APP.hasPermission('crm_sea_manage_delete') &&
+                    <Button
+                      type='ghost'
+                      onClick={() => {
+                        deleteCustomer(customerId).then(() => {
+                          APP.success('删除成功')
+                          this.fetchList().then((res) => {
+                            const data = res.data
+                            if (data instanceof Array && data[index]) {
+                              customerId = data[index].id
+                              changeCustomerDetailAction(customerId)
+                            } else {
+                              modal.hide()
+                            }
+                          })
                         })
-                      })
-                    }}
-                  >
+                      }}
+                    >
                     删除
                   </Button>
-                 } 
+                }
                 </div>
                 <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
                   <Button
@@ -498,7 +500,7 @@ class Main extends React.Component {
         <div style={{ position: 'relative', bottom: '48px', width: '50%' }}>
          {
            APP.hasPermission('crm_sea_manage_grab_customer') && <Button type='primary' className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
-         } 
+         }
          {
            APP.hasPermission('crm_sea_manage_delete') && <Button type='primary' className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
          }

@@ -32,13 +32,13 @@ class Main extends React.Component<Common.Props> {
             <Switch>
               {/*crm*/}
               <Route hidden={!APP.hasPermission('index')} path='/' component={modules.Index} exact/>
-              <Route path='/customer' component={modules.Customer} />
+              <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
               <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
-              <Route path='/appointment' component={modules.Appointment} />
-              <Route path='/signed' component={modules.Signed} />
-              <Route path='/open' component={modules.Open} />
-              <Route path='/customer-set/index' component={modules.CustomerSet} />
-              <Route path='/customer-set/assign' component={modules.CustomerSetAssign} />
+              <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />
+              <Route hidden={!APP.hasPermission('crm_sign_myself')} path='/signed' component={modules.Signed} />
+              <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />
+              <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />
+              <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />
 
               {/*权限管理*/}
               <Route path='/center-account' component={modules.CenterAccount}/>

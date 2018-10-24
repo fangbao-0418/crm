@@ -326,45 +326,47 @@ class Main extends React.Component<Customer.Props, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
-               {
-                APP.hasPermission('crm_customer_detail_save') &&  <Button 
-                type='primary'
-                className='mr5'
-                onClick={() => {
-                  instance.save().then(() => {
-                    APP.success('保存成功')
-                    this.fetchList()
-                  }, () => {
-                    APP.error('保存失败')
-                  })
-                }}
-              >
-                保存
-              </Button>
-               } 
-              {
-                 APP.hasPermission('crm_customer_detail_delete') && <Button
-                 style={{marginRight: '172px'}}
-                 type='ghost'
-                 onClick={() => {
-                   deleteCustomer(customerId).then(() => {
-                     APP.success('删除成功')
-                     this.fetchList().then((res) => {
-                       dataSource = res.data
-                       if (data instanceof Array && data[index]) {
-                         customerId = dataSource[index].customerId
-                         changeCustomerDetailAction(customerId)
-                       } else {
-                         modal.hide()
-                       }
-                     })
-                   })
-                 }}
-               >
-                 删除
-               </Button>
-              }
-                
+                {
+                  APP.hasPermission('crm_customer_detail_save') && (
+                    <Button 
+                      type='primary'
+                      className='mr5'
+                      onClick={() => {
+                        instance.save().then(() => {
+                          APP.success('保存成功')
+                          this.fetchList()
+                        }, () => {
+                          APP.error('保存失败')
+                        })
+                      }}
+                    >
+                      保存
+                    </Button>
+                  )
+                } 
+                {
+                  <Button
+                  style={{marginRight: '172px'}}
+                  type='ghost'
+                  hidden={!APP.hasPermission('crm_customer_detail_delete')}
+                  onClick={() => {
+                    deleteCustomer(customerId).then(() => {
+                      APP.success('删除成功')
+                      this.fetchList().then((res) => {
+                        dataSource = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = dataSource[index].customerId
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
+                      })
+                    })
+                  }}
+                  >
+                    删除
+                  </Button>
+                }
                 <Button
                   type='primary'
                   className='mr5'
