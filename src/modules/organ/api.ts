@@ -36,3 +36,8 @@ export const fetchAccountingInfo = (id: number) => {
 export const fetchAccountingProvince = () => {
   return http(`/user/v1/api/adjust/account/province`)
 }
+
+// 删除直营中心
+export const delDirect = (id: number) => {
+  return http(`/user/v1/api/company/deleteCompany?id=${id}`)
+}

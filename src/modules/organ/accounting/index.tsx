@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Input, Divider, Modal as AntdModal } from 'antd'
+import { Table, Input, Divider } from 'antd'
 import { fetchAccountingList, delAccounting, changeAccounting } from '../api'
 import Modal from 'pilipa/libs/modal'
 import Detail from './Detail'
@@ -80,19 +80,20 @@ class Main extends React.Component<any, State> {
 
   // 删除
   public delAccounting (id: number) {
-    AntdModal.confirm({
+    const modal = new Modal({
+      content: (
+        <div>确认要删除吗？</div>
+      ),
       title: '删除机构',
-      content: '确认要删除吗？',
+      mask: true,
       onOk: () => {
-        delAccounting(id)
-          .then((res) => {
-            this.getList()
-          })
-          .catch((err: any) => {
-            APP.error(err.responseJSON.errors[0].message)
-          })
+        delAccounting(id).then(() => {
+          this.getList()
+          modal.hide()
+        })
       }
     })
+    modal.show()
   }
 
   // 添加修改机构

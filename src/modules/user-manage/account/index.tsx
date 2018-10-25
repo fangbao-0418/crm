@@ -180,7 +180,7 @@ class Main extends React.Component<Props> {
   public getErrorInfo: any = (verification: 'empty' | 'same' | 'normal') => {
     let errorInfo
     if (verification === 'empty') {
-      errorInfo = {help: '部门名称不能为空', validateStatus: 'error'}
+      errorInfo = {help: '请输入部门名称', validateStatus: 'error'}
     } else if (verification === 'same') {
       errorInfo = {help: '部门名称重复', validateStatus: 'error'}
     } else if (verification === 'normal') {
