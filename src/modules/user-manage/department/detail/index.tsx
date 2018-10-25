@@ -33,12 +33,13 @@ class Main extends React.Component<Props> {
                   rules: [
                     {
                       required: true,
-                      message: '部门名称不能为空'
+                      message: '请输入部门名称'
                     }
                   ]
                 }
               )(
                 <Input
+                  placeholder='请输入部门名称'
                 />
               )
             }
