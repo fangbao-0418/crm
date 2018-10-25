@@ -233,11 +233,19 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
 
   // 转接任务
   public transferTasksPer (payload: {
-    userid: number,
-    ids: number[]
+    userId: number,
+    ids: number[] | string,
+    userName: string
   }) {
-    const ids = payload.ids.join(',')
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/user/${payload.userid}?ids=${ids}`, 'PUT')
+    if (payload.ids instanceof Array) {
+      payload.ids = payload.ids.join(',')
+    }
+    const query = $.param(payload)
+    return Service.http(
+      `/outside/v1/api/outside/task/user?${query}`,
+      // `/${this.moduleName}/v1/api/outside/task/user/${payload.userid}?ids=${ids}`,
+      'PUT'
+    )
   }
 
   // 获取外勤任务列表
@@ -258,7 +266,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
 
   // 获取全部任务列表
   public getTplList (systemFlag: string = '') {
-    return Service.http(`${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=${systemFlag}`)
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=${systemFlag}`)
   }
 
   // 获取任务模板列表

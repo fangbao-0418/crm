@@ -221,16 +221,19 @@ class Main extends React.Component<Props, State> {
       return
     }
     const { personList } = this.state
-    let transferTasksPer: number
+    let userId: number
+    let userName: string
     const modal = new Modal({
       title: '批量分配',
       content: (
         <div className={styles.modalbox}>
           <Select
+            labelInValue
             style={{width: '100%'}}
             placeholder='选择分配的外勤'
-            onChange={(value: number) => {
-              transferTasksPer = value
+            onChange={(value: any) => {
+              userName = value.label
+              userId = value.key
             }}
           >
             {
@@ -244,12 +247,13 @@ class Main extends React.Component<Props, State> {
         </div>
       ),
       onOk: () => {
-        if (transferTasksPer === undefined) {
+        if (userId === undefined) {
           APP.error('请选择分配的外勤人员')
           return
         }
         Service.transferTasksPer({
-          userid: transferTasksPer,
+          userId,
+          userName,
           ids: selectedRowKeys
         }).then((res: any) => {
           this.getList()
@@ -273,16 +277,19 @@ class Main extends React.Component<Props, State> {
       return
     }
     const { personList } = this.state
-    let transferTasksPer: number
+    let userId: number
+    let userName: string
     const modal = new Modal({
       title: '转接任务',
       content: (
         <div>
           <span>分配：</span>
           <Select
+            labelInValue
             style={{ width: '50%' }}
-            onChange={(value: number) => {
-              transferTasksPer = value
+            onChange={(value: any) => {
+              userId = value.key
+              userName = value.label
             }}
           >
             {
@@ -301,12 +308,13 @@ class Main extends React.Component<Props, State> {
         </div>
       ),
       onOk: () => {
-        if (transferTasksPer === undefined) {
+        if (userId === undefined) {
           APP.error('请选择转接的外勤人员')
           return
         }
         Service.transferTasksPer({
-          userid: transferTasksPer,
+          userName,
+          userId,
           ids: [record.id]
         }).then((res) => {
           modal.hide()
