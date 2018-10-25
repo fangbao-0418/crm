@@ -55,6 +55,9 @@ class Main extends React.Component<any, any> {
       return data.join(',')
     }
   }, {
+    title: '已绑定商品名',
+    dataIndex: 'productName'
+  }, {
     title: '是否优先',
     dataIndex: 'priority',
     render: (k: any, item: any) => {

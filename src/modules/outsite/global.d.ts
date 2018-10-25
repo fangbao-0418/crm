@@ -39,6 +39,10 @@ declare namespace OutSide {
     priority?: number
     status?: string
     systemFlag?: '0' | '1' | '-1'
+    customerId?: any
+    customerName?: string
+    areaId?: any
+    areaName?: string
     [field: string]: any
   }
   /** 子任务类型 */

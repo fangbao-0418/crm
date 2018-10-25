@@ -22,7 +22,7 @@ const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 interface Props extends FormComponentProps, RouteComponentProps<{id: string}> {}
 interface State {
-  formdata: any
+  formdata: TaskItem
   workerList: OutSide.OutSiterProps[]
   item: TaskItem
   orderNOList: string[]
@@ -69,6 +69,14 @@ class Main extends React.Component<Props, State> {
     if (orderNo.length < 1) {
       return
     }
+    const { formdata } = this.state
+    formdata.customer = undefined
+    formdata.customerName = ''
+    formdata.areaId = undefined
+    formdata.areaName = ''
+    this.setState({
+      formdata
+    })
     Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
       let orders: OutSide.OrderProps[] = []
       if (res.data && res.data.records instanceof Array) {
@@ -112,10 +120,18 @@ class Main extends React.Component<Props, State> {
 
   // 表单提交
   public handleSubmit = (e: any) => {
+    const { formdata } = this.state
     e.preventDefault()
+    if (formdata.customerId === undefined) {
+      this.props.form.setFields({
+        orderNo: {
+          errors: [new Error('请选择关联订单')]
+        }
+      })
+      return
+    }
     this.props.form.validateFields((err: any, values: any) => {
-      const data = Object.assign({}, this.state.formdata, values)
-      console.log('Received values of form: ', this.state.formdata, values, data)
+      const data = Object.assign({}, formdata, values)
       if (err) { return }
       // 格式化时间
       data.startTime = moment(data.startTime).format('YYYY-MM-DD hh:mm:ss')
@@ -133,15 +149,14 @@ class Main extends React.Component<Props, State> {
       orderNo: '',
       areaId: '',
       areaName: '',
-      customerId: '',
-      customerName: ''
+      customerId: undefined,
+      customerName: undefined
     })
   }
 
   // 同步数据
-  public syncFormdata (data: any = {}) {
+  public syncFormdata (data: TaskItem = {}) {
     const formdata = Object.assign({}, this.state.formdata, data)
-    console.log('sync data::', data, formdata)
     this.setState({
       formdata
     })
