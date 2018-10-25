@@ -53,7 +53,7 @@ class Main extends React.Component<Props> {
                       {
                         item.appointTime &&
                         <span className={styles.tag}>
-                          {moment(item.appointTime).format('YYYY-MM-DD HH:mm:ss')}
+                          {moment(item.appointTime).format('YYYY-MM-DD')}
                         </span>
                       }
                     </div>

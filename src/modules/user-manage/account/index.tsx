@@ -233,7 +233,7 @@ class Main extends React.Component<Props> {
         <div className={styles.formitem}>
           <Select
             showSearch
-            value={selectValue}
+            // value={selectValue}
             disabled={disabled}
             placeholder='请输入公司名称'
             className={styles.searchcondition}

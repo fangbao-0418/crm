@@ -488,6 +488,7 @@ class Main extends React.Component {
             showQuickJumper: true,
             showSizeChanger: true,
             pageSizeOptions: this.pageSizeOptions,
+            size: 'small',
             showTotal (total) {
               return `共计 ${total} 条`
             }
