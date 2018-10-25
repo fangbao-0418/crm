@@ -228,6 +228,9 @@ class Main extends React.Component<Props, State> {
                     }]
                   })(
                     <DatePicker
+                      disabledDate={(current) => {
+                        return current < moment().startOf('day')
+                      }}
                       style={{width:'100%'}}
                       showTime
                       format={dateFormat}

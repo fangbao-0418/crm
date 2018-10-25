@@ -324,7 +324,21 @@ class Main extends React.Component<Props, State> {
     const { trackdata, detail } = this.state
     return (
     <div className={styles.container}>
-      <ContentBox title={detail.customerName}>
+      <ContentBox
+        title={(
+          <span>
+            <i
+              className='href fa fa-angle-left font18 mr10'
+              aria-hidden='true'
+              onClick={() => {
+                APP.history.push('/outsite/task/list')
+              }}
+            >
+            </i>
+            {detail.customerName}
+          </span>
+        )}
+      >
         <Row>
           <Tabs defaultActiveKey='sublist' onChange={this.onTabChange}>
               <Tabs.TabPane key={`sublist`} tab={'任务详情'}>
