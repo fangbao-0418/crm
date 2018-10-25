@@ -1,5 +1,6 @@
 import { notification, loading } from 'pilipa'
 import store from '@/store'
+import filters from './filters'
 function handleError (err: JQuery.jqXHR) {
   let res = {}
   const { responseJSON, responseText } = err
@@ -47,7 +48,14 @@ $(document).ajaxError((event, response) => {
   if (response.status === 401) {
     APP.history.push('/logout')
   }
-  if (err && err.status && err.errors instanceof Array) {
+  let pass = true
+  const url = response.responseJSON.path
+  filters.errorPrompt.map((pattern) => {
+    if (!new RegExp(pattern).test(url)) {
+      pass = false
+    }
+  })
+  if (err && err.status && err.errors instanceof Array && pass) {
     const { status, errors } = err
     const message: string[] = []
     errors.forEach((item: {message: string, code: string}) => {
@@ -89,11 +97,10 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
   }
   const extension = config.extension || {}
   delete config.extension
-  data = config.data || config || {}
+  data = config.data || config || undefined
   const headers = Object.assign({}, config.headers, {
     token: `${APP.token}`
   })
-  console.log(headers, 'headers')
   let ajaxConfig: JQuery.AjaxSettings = {
     url,
     method: type,

@@ -35,16 +35,18 @@ class Main extends React.Component<{}, State> {
   public componentWillMount () {
     // this.fetchData()
     fetchOwnRegion().then((res) => {
+      if (res.length === 0) {
+        this.payload.customerId = APP.user.companyId
+        this.fetchData()
+      }
       this.setState({
         provinceList: res
       })
     })
   }
   public fetchData () {
-    if (this.payload.date && this.payload.customerId) {
+    if (this.payload.customerId !== undefined) {
       fetchOverViewAction(this.payload)
-    }
-    if (this.payload.customerId) {
       fetchOverViewTotalAction(this.payload.customerId)
     }
   }
@@ -84,7 +86,7 @@ class Main extends React.Component<{}, State> {
             this.setState({
               type: value
             })
-            this.fetchData()
+            // this.fetchData()
           }}
         >
           <Option key='MONTH'>
@@ -140,51 +142,57 @@ class Main extends React.Component<{}, State> {
             </Select>
           )
         }
-        <Select
-          style={{width: '100px'}}
-          placeholder='请选择省份'
-          className={styles.selected}
-          onChange={this.onProvinceChange.bind(this)}
-        >
-          {
-            provinceList.map((item, index: any) => {
-              return (
-                <Option key={index}>{item.name}</Option>
-              )
-            })
-          }
-        </Select>
-        <Select
-          style={{width: '100px'}}
-          placeholder='请选择城市'
-          className={styles.selected}
-          onChange={this.onCityChange.bind(this)}
-        >
-          {
-            cityList.map((item) => {
-              return (
-                <Option key={item.id}>{item.name}</Option>
-              )
-            })
-          }
-        </Select>
-        <Select
-          style={{width: '100px'}}
-          placeholder='请选择代理商'
-          className={styles.selected}
-          onChange={(id: string) => {
-            this.payload.customerId = id
-            this.fetchData()
-          }}
-        >
-          {
-            agentList.map((item) => {
-              return (
-                <Option key={item.id}>{item.name}</Option>
-              )
-            })
-          }
-        </Select>
+        {
+          provinceList.length > 0 && (
+            <span>
+              <Select
+                style={{width: '100px'}}
+                placeholder='请选择省份'
+                className={styles.selected}
+                onChange={this.onProvinceChange.bind(this)}
+              >
+                {
+                  provinceList.map((item, index: any) => {
+                    return (
+                      <Option key={index}>{item.name}</Option>
+                    )
+                  })
+                }
+              </Select>
+              <Select
+                style={{width: '100px'}}
+                placeholder='请选择城市'
+                className={styles.selected}
+                onChange={this.onCityChange.bind(this)}
+              >
+                {
+                  cityList.map((item) => {
+                    return (
+                      <Option key={item.id}>{item.name}</Option>
+                    )
+                  })
+                }
+              </Select>
+              <Select
+                style={{width: '100px'}}
+                placeholder='请选择代理商'
+                className={styles.selected}
+                onChange={(id: number) => {
+                  this.payload.customerId = id
+                  this.fetchData()
+                }}
+              >
+                {
+                  agentList.map((item) => {
+                    return (
+                      <Option key={item.id}>{item.name}</Option>
+                    )
+                  })
+                }
+              </Select>
+            </span>
+          )
+        }
       </div>
     )
   }

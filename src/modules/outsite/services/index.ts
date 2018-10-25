@@ -284,7 +284,13 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
       `/${this.moduleName}/v1/api/outside/task/template/get/${id}`
     )
   }
-
+  // 解除商品关系
+  public removeShopRelation (taskId: number, productId: number) {
+    return Service.http(
+      `/outside/v1/api/outside/task/template/product?id=${taskId}&productId=${productId}`,
+      'PUT'
+    )
+  }
   // 添加、修改任务模板
   public addTplItem (data: any) {
     if (data.id) {
