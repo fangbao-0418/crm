@@ -70,7 +70,7 @@ class Main extends React.Component<Props, State> {
       return
     }
     const { formdata } = this.state
-    formdata.customer = undefined
+    formdata.customerId = undefined
     formdata.customerName = ''
     formdata.areaId = undefined
     formdata.areaName = ''

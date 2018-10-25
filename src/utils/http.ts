@@ -49,7 +49,7 @@ $(document).ajaxError((event, response) => {
     APP.history.push('/logout')
   }
   let pass = true
-  const url = response.responseJSON.path
+  const url = err.path
   filters.errorPrompt.map((pattern) => {
     if (!new RegExp(pattern).test(url)) {
       pass = false

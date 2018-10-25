@@ -43,6 +43,7 @@ declare namespace OutSide {
     customerName?: string
     areaId?: any
     areaName?: string
+    orderNo?: string
     [field: string]: any
   }
   /** 子任务类型 */
