@@ -186,14 +186,14 @@ class Main extends React.Component<Props, State> {
           info
             ? <div>
                 <Form layout='inline'>
-                  <FormItem className={styles.input} label='角色名称' required>
+                  <FormItem label='角色名称' required>
                     {
                       getFieldDecorator('name', validation.name)(
                         <Input disabled={mode === 'view'} size='small' defaultValue={info.roleName} />
                       )
                     }
                   </FormItem>
-                  <FormItem className={styles.input} label='数据共享' required>
+                  <FormItem label='数据共享' required>
                     {
                       getFieldDecorator('share', validation.share)(
                         <Select disabled={mode === 'view'} size='small' style={{width: '160px'}} placeholder='请选择是否数据共享' defaultValue={info.shareFlag}>
