@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider, Input, Select } from 'antd'
+import { Table, Divider, Input, Modal as M, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail } from '../api'
 import { Modal } from 'pilipa'
@@ -73,6 +73,7 @@ class Main extends React.Component<Props, State> {
             <Divider type='vertical' />
             <span
               className='href'
+              onClick={() => this.delete()}
             >
               删除
             </span>
@@ -125,6 +126,15 @@ class Main extends React.Component<Props, State> {
       })
     }
   }
+  // 确认删除
+  public delete = () => {
+    M.confirm({
+      title: '删除机构',
+      content: '确定删除机构吗？',
+      onOk: () => {
+      }
+    })
+  }
   public render () {
     const { dataSource, pagination } = this.state
     return (
@@ -156,7 +166,7 @@ class Main extends React.Component<Props, State> {
               }
             }}
           />
-          {
+          {/* {
             this.props.type === 'Agent' && (
               <Select
                 className='ml5'
@@ -177,7 +187,7 @@ class Main extends React.Component<Props, State> {
                 }
               </Select>
             )
-          }
+          } */}
         </div>
         <div>
           <Table
