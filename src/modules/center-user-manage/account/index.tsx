@@ -6,7 +6,6 @@ import AccountModal from './account-modal'
 import { fetchAccountList, delAccount, addAccount, modifyAccount, fetchRegionList } from './api'
 
 const styles = require('./style')
-const Search = Input.Search
 
 interface State {
   pageTotal: number // 数据条数
@@ -168,30 +167,28 @@ class Main extends React.Component {
       >
 
         <div className={styles.topWarp}>
-          <Search
+          <Input
             className={styles.search}
             placeholder='请输入姓名'
-            onSearch={(value) => {
-              this.searchVal = {...this.searchVal, name: value, phone: '', organizationName: ''}
-              this.getList()
+            onChange={(e) => {
+              this.searchVal.name = e.target.value
             }}
           />
-          <Search
+          <Input
             className={styles.search}
             placeholder='请输入手机号'
-            onSearch={(value) => {
-              this.searchVal = {...this.searchVal, name: '', phone: value, organizationName: ''}
-              this.getList()
+            onChange={(e) => {
+              this.searchVal.phone = e.target.value
             }}
           />
-          <Search
+          <Input
             className={styles.search}
             placeholder='请输入部门名称'
-            onSearch={(value) => {
-              this.searchVal = {...this.searchVal, name: '', phone: '', organizationName: value}
-              this.getList()
+            onChange={(e) => {
+              this.searchVal.organizationName = e.target.value
             }}
           />
+          <Button type='primary' onClick={() => {this.getList()}}>查询</Button>
         </div>
 
         <div style={styles.tableWrap}>
