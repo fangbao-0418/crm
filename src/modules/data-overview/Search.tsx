@@ -147,7 +147,7 @@ class Main extends React.Component<{}, State> {
           onChange={this.onProvinceChange.bind(this)}
         >
           {
-            provinceList.map((item, index) => {
+            provinceList.map((item, index: any) => {
               return (
                 <Option key={index}>{item.name}</Option>
               )
@@ -172,7 +172,7 @@ class Main extends React.Component<{}, State> {
           style={{width: '100px'}}
           placeholder='请选择代理商'
           className={styles.selected}
-          onChange={(id: number) => {
+          onChange={(id: string) => {
             this.payload.customerId = id
             this.fetchData()
           }}

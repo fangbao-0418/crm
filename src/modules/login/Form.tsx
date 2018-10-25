@@ -163,7 +163,7 @@ class Main extends React.Component<Props> {
             className={styles['login-btn']}
             onClick={this.toLogin.bind(this)}
           >
-            登陆
+            登录
           </Button>
         </div>
       </div>

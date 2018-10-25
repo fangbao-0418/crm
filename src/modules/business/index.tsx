@@ -26,7 +26,7 @@ import { connect } from 'react-redux'
 const styles = require('./style')
 interface States {
   citys: Common.RegionProps[],
-  sales: Array<{id: number, name: string}>
+  sales: Array<{id: string, name: string}>
 }
 class Main extends React.Component<Business.Props> {
   public state: States = {

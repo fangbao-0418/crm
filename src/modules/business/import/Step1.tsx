@@ -7,7 +7,7 @@ interface Props {
   onOk?: (value: ValueProps) => void
 }
 interface State {
-  sales: Array<{id: number, name: string}>
+  sales: Array<{id: string, name: string}>
 }
 interface ValueProps {
   customerSource?: string,

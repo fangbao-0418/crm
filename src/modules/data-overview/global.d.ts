@@ -1,6 +1,6 @@
 declare namespace Statistics {
   interface OverViewSearchPayload {
-    customerId?: number
+    customerId?: any
     dateFlag?: 'YEAR' | 'MONTH'
     date?: string
   }

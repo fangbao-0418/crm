@@ -113,7 +113,7 @@ class Main extends React.Component<Props, State> {
     return (
       <div>
         <Form layout='inline'>
-          <FormItem className={styles.input} label='角色名称' required>
+          <FormItem label='角色名称' required>
             {
               getFieldDecorator(
                 'roleName',
@@ -125,7 +125,7 @@ class Main extends React.Component<Props, State> {
               )
             }
           </FormItem>
-          <FormItem className={styles.input} label='数据共享' required>
+          <FormItem label='数据共享' required>
             {
               getFieldDecorator(
                 'shareFlag',

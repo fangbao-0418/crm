@@ -7,7 +7,7 @@ const Option = Select.Option
 interface State {
   isChecked: boolean,
   citys: Common.RegionProps[]
-  sales: Array<{id: number, name: string}>
+  sales: Array<{id: string, name: string}>
   companys: Array<{id: string, name: string}>
 }
 interface Props {

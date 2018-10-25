@@ -1,7 +1,7 @@
 declare namespace UserManage {
   export type TypeProps = 'DirectCompany' | 'Agent' | 'System'
   interface CompanyProps {
-    id?: number
+    id?: any
     name?: string
     regionArea?: number
   }
@@ -73,9 +73,9 @@ declare namespace UserManage {
   }
   interface RoleItem {
     /** 角色Id */
-    roleId?: number
+    roleId?: any
     /** 角色Id */
-    id?: number
+    id?: any
     name?: string
     /** 启用状态 */
     status?: 0 | 1
