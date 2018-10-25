@@ -3,6 +3,7 @@
  */
 import Service from '@/modules/common/services/service'
 import _ from 'lodash'
+import http from '@/utils/http';
 type Map<T> = OutSide.Map<T>
 class ModuleService extends Service {
   // 模块名称
@@ -299,8 +300,12 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
       'PUT'
     )
   }
+  // 自定义任务保存并同步
+  public taskSave2sync = (data: OutSide.TaskItem) => {
+    return http(`/outside/v1/api/outside/task/template/sync`, 'PUT', data)
+  }
   // 添加、修改任务模板
-  public addTplItem (data: any) {
+  public addTplItem (data: OutSide.TaskItem) {
     if (data.id) {
       return Service.http(
         `/${this.moduleName}/v1/api/outside/task/template/update`,

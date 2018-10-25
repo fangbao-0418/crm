@@ -4,15 +4,17 @@ import { ColumnProps } from 'antd/lib/table'
 import _ from 'lodash'
 const styles = require('@/modules/outsite/styles/tpllist.styl')
 interface Props {
-  dataSource: OutSide.SubTaskItem[]
-  onOk?: (data?: OutSide.SubTaskItem[]) => void
+  item: OutSide.TaskItem
+  onOk?: (data?: OutSide.SubTaskItem[], sync?: boolean) => void
 }
 interface State {
-  dataSource: OutSide.SubTaskItem[]
+  item: OutSide.TaskItem
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    dataSource: this.props.dataSource || []
+    item: {
+      subList: []
+    }
   }
   public columns: ColumnProps<OutSide.SubTaskItem>[] = [{
     title: '顺序',
@@ -27,7 +29,7 @@ class Main extends React.Component<Props, State> {
     title: '排序',
     dataIndex: 'take',
     render: (text, item) => {
-      const { dataSource } = this.state
+      const dataSource = this.state.item.subList
       return (
         <span>
           <span
@@ -58,11 +60,11 @@ class Main extends React.Component<Props, State> {
   }]
   public componentWillReceiveProps (props: Props) {
     this.setState({
-      dataSource: props.dataSource
+      item: props.item
     })
   }
   public sortItem (item: OutSide.SubTaskItem, action: 'up' | 'down') {
-    const { dataSource } = this.state
+    const dataSource = this.state.item.subList
     if (action === 'up') {
       if (item.sort !== 1) {
         const prevItem = dataSource[item.sort - 2]
@@ -80,17 +82,17 @@ class Main extends React.Component<Props, State> {
     this.sortData()
   }
   public sortData () {
-    let { dataSource } = this.state
-    dataSource = _.sortBy(dataSource, (item) => {
-      return item.sort
+    const item = this.state.item
+    let dataSource = item.subList
+    dataSource = _.sortBy(dataSource, (val) => {
+      return val.sort
     })
-    console.log(dataSource, 'sort')
     this.setState({
-      dataSource
+      item
     })
   }
   public render () {
-    const dataSource = this.state.dataSource || []
+    const dataSource = this.state.item.subList || []
     return (
       <div>
         <Table
@@ -106,14 +108,26 @@ class Main extends React.Component<Props, State> {
         />
         <div className={styles.actbtns}>
           <Button
+            className='mr10'
             onClick={() => {
               if (this.props.onOk) {
-                this.props.onOk(this.state.dataSource)
+                this.props.onOk(this.state.item.subList)
               }
             }}
             type={`primary`}
           >
             保存
+          </Button>
+          <Button
+            hidden={['0', '-1'].indexOf(this.state.item.systemFlag) === -1}
+            onClick={() => {
+              if (this.props.onOk) {
+                this.props.onOk(this.state.item.subList, true)
+              }
+            }}
+            type={`primary`}
+          >
+            保存并同步
           </Button>
         </div>
       </div>

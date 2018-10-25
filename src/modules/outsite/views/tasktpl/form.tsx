@@ -212,14 +212,22 @@ class Main extends React.Component<any, States> {
   }
 
   // 保存
-  public onSave (data: OutSide.SubTaskItem[]) {
+  public onSave (data: OutSide.SubTaskItem[], sync: boolean) {
     const { item } = this.state
     item.subList = data
     item.status = 'NORMAL'
-    Service.addTplItem(item).then(() => {
-      APP.success('保存成功')
-      APP.history.push(`/outsite/tasktpl/list`)
-    })
+    item.systemFlag = item.systemFlag === '1' ? '1' : '0'
+    if (sync) {
+      Service.taskSave2sync(item).then(() => {
+        APP.success('保存并同步成功')
+        APP.history.push(`/outsite/tasktpl/list`)
+      })
+    } else {
+      Service.addTplItem(item).then(() => {
+        APP.success('保存成功')
+        APP.history.push(`/outsite/tasktpl/list`)
+      })
+    }
   }
 
   public render () {
@@ -322,7 +330,7 @@ class Main extends React.Component<any, States> {
                 </Col>
                 <Col span={10}>
                   <TaskSort
-                    dataSource={this.state.item.subList}
+                    item={this.state.item}
                     onOk={this.onSave.bind(this)}
                   />
                 </Col>
