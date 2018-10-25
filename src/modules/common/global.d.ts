@@ -15,7 +15,7 @@ declare namespace Common {
     code: string
     name: string
     level?: number
-    id?: number
+    id?: any
     isLeaf?: boolean
     loading?: boolean
     children?: RegionProps[]
@@ -25,7 +25,7 @@ declare namespace Common {
     areaCode?: number
     areaName?: string
     name?: string
-    id?: number
+    id?: string
     companyType?: UserManage.TypeProps
   }
   export interface Props {
