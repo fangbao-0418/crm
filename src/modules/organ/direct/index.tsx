@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Divider, Input, Modal as M, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail } from '../api'
+import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail, delDirect } from '../api'
 import { Modal } from 'pilipa'
 import Detail from './detail'
 import Area from './Area'
@@ -73,7 +73,7 @@ class Main extends React.Component<Props, State> {
             <Divider type='vertical' />
             <span
               className='href'
-              onClick={() => this.delete()}
+              onClick={() => {this.delDirect(record.id)}}
             >
               删除
             </span>
@@ -127,11 +127,16 @@ class Main extends React.Component<Props, State> {
     }
   }
   // 确认删除
-  public delete = () => {
+  public delDirect = (id: number) => {
     M.confirm({
       title: '删除机构',
       content: '确定删除机构吗？',
       onOk: () => {
+        delDirect(id)
+          .then(() => {
+            APP.success('操作成功')
+            this.fetchList()
+          })
       }
     })
   }
