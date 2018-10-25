@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider, Input, Modal as M, Select } from 'antd'
+import { Table, Divider, Input, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail, delDirect } from '../api'
 import { Modal } from 'pilipa'
@@ -128,17 +128,20 @@ class Main extends React.Component<Props, State> {
   }
   // 确认删除
   public delDirect = (id: number) => {
-    M.confirm({
+    const modal = new Modal({
+      content: (
+        <div>确认要删除吗？</div>
+      ),
       title: '删除机构',
-      content: '确定删除机构吗？',
+      mask: true,
       onOk: () => {
-        delDirect(id)
-          .then(() => {
-            APP.success('操作成功')
-            this.fetchList()
-          })
+        delDirect(id).then(() => {
+          modal.hide()
+          this.fetchList()
+        })
       }
     })
+    modal.show()
   }
   public render () {
     const { dataSource, pagination } = this.state

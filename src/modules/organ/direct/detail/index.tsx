@@ -74,6 +74,7 @@ class Main extends React.Component<Props> {
                 initialValue: (item.regionProvince || item.regionCity) ? [String(item.regionProvince), String(item.regionCity)] : undefined
               })(
                 <Area
+                  disabled={disabled}
                   onChange={(region) => {
                     this.region = region
                   }}
@@ -294,41 +295,60 @@ class Main extends React.Component<Props> {
           </div>
         }
         <div className='text-right mt10'>
-          <Button
-            className='mr5'
-            type='primary'
-            onClick={() => {
-              if (this.props.onOk) {
-                this.props.form.validateFields((errs, values) => {
-                  if (errs !== null) {
-                    return
-                  }
-                  const region = this.region
-                  if (region[0]) {
-                    values.regionProvinceName = region[0].name
-                    values.regionProvince = region[0].code
-                    if (region[1]) {
-                      values.regionCityName = region[1].name
-                      values.regionCity = region[1].code
+          {
+            !disabled &&
+            (
+              <div>
+                <Button
+                  className='mr5'
+                  type='primary'
+                  onClick={() => {
+                    if (this.props.onOk) {
+                      this.props.form.validateFields((errs, values) => {
+                        if (errs !== null) {
+                          return
+                        }
+                        const region = this.region
+                        if (region[0]) {
+                          values.regionProvinceName = region[0].name
+                          values.regionProvince = region[0].code
+                          if (region[1]) {
+                            values.regionCityName = region[1].name
+                            values.regionCity = region[1].code
+                          }
+                        }
+                        delete values.region
+                        this.props.onOk(Object.assign({}, item, values))
+                      })
                     }
-                  }
-                  delete values.region
-                  this.props.onOk(Object.assign({}, item, values))
-                })
-              }
-            }}
-          >
-            保存
-          </Button>
-          <Button
-            onClick={() => {
-              if (this.props.onCancel) {
-                this.props.onCancel()
-              }
-            }}
-          >
-            取消
-          </Button>
+                  }}
+                >
+                  保存
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (this.props.onCancel) {
+                      this.props.onCancel()
+                    }
+                  }}
+                >
+                  取消
+                </Button>
+              </div>
+            )
+          }
+          {
+            disabled &&
+            <Button
+              onClick={() => {
+                if (this.props.onCancel) {
+                  this.props.onCancel()
+                }
+              }}
+            >
+              关闭
+            </Button>
+          }
         </div>
       </Form>
     )

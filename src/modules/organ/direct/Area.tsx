@@ -5,6 +5,7 @@ interface Props {
   onChange?: (options?: Common.RegionProps[]) => void
   value?: any[]
   style?: React.CSSProperties
+  disabled?: boolean
 }
 interface State {
   options: Common.RegionProps[]
@@ -60,6 +61,7 @@ class Main extends React.Component<Props, State> {
           value: 'code'
         }}
         placeholder='请选择省份城市'
+        disabled={this.props.disabled}
         options={options}
         loadData={this.loadCityData.bind(this)}
         onChange={(value, selectedOptions: Common.RegionProps[]) => {
