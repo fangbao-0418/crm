@@ -28,7 +28,7 @@ class Main extends React.Component<Props> {
             }
             {/* <span className={styles.telphone} />
             <span className='mr20 ml10'>电话</span> */}
-            <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.customerName}`)}}/>
+            <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
             <span className='mr20 ml10'>天眼查</span>
           </p>
           <p>

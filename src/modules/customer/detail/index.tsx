@@ -5,6 +5,7 @@ import Record from '@/modules/customer/Record'
 import Card from '@/components/Card'
 import Tags from '@/components/tags'
 import _ from 'lodash'
+import moment from 'moment'
 import { Button, Input, DatePicker, Icon } from 'antd'
 import { connect } from 'react-redux'
 const styles = require('./style')
@@ -65,6 +66,9 @@ class Main extends React.Component<Props> {
     const sourceBaseinfo: any = this.refs.baseinfo
     const baseinfo = sourceBaseinfo.getWrappedInstance()
     return baseinfo.refs.wrappedComponent.save()
+  }
+  public disabledDate (current: any) {
+    return current && current < moment().subtract(1, 'days').endOf('day')
   }
   public handleChange (field: string, value: any) {
     const detail = this.props.detail
@@ -129,8 +133,9 @@ class Main extends React.Component<Props> {
                   预约下次拜访日期&nbsp;&nbsp;
                   <DatePicker
                     placeholder=''
-                    onChange={(moment) => {
-                      this.handleChange('trackRecord.appointTime', moment.format('YYYY-MM-DD HH:mm:ss'))
+                    disabledDate={this.disabledDate}
+                    onChange={(date) => {
+                      this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
                     }}
                   />
                 </div>
