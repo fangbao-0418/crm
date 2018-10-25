@@ -27,10 +27,10 @@ declare namespace OutSide {
     /** 订单号 */
     orderCode: string
   }
-  export type Map<T> = {[index: string]: T}
+  export type Map<T = any> = {[index: string]: T}
   /** 任务类型 */
   export interface TaskItem {
-    id?: number
+    id?: any
     name?: string
     productId?: number
     productName?: string
@@ -43,10 +43,20 @@ declare namespace OutSide {
   }
   /** 子任务类型 */
   export interface SubTaskItem {
-    id?: number
+    id?: any
     name?: string
+    userName?: string
     subId?: number
     sort?: number
+    status?: string
+    category?: string
+    customerName?: string
+    contacter?: string
+    subList?: SubTaskItem[]
+    areaName?: string
+    startTime?: string
+    endTime?: string
+    cancelReason?: string
   }
   /** 领用详情搜索条件 */
   export interface ReceivePayload {

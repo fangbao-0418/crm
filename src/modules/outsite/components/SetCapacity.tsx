@@ -1,11 +1,9 @@
 import React from 'react'
 import { Table, Modal, Divider } from 'antd'
-import { connect } from 'react-redux'
 import _ from 'lodash'
 import '@/modules/common/styles/base.styl'
-import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import Service from '@/modules/outsite/services'
-
+type TaskItem = OutSide.TaskItem
 const showPath = '/outsite/tasktpl/form'
 
 /*路径未修改，跳转编辑系统任务  subform组件中*/
@@ -13,7 +11,7 @@ interface States {
   selectedRowKeys: string[]
   modalVisible: boolean
   searchData: any,
-  dataSource: TaskList,
+  dataSource: TaskItem[],
   item: TaskItem,
   pageConf: any
 }

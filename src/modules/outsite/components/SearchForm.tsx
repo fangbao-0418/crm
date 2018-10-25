@@ -4,14 +4,12 @@ import { DatePicker, Row, Col } from 'antd'
 import Area from './Area'
 import moment, { Moment } from 'moment'
 import Service from '@/modules/outsite/services'
-import { Map } from '@/modules/outsite/types/outsite'
-import { TasktplItem } from '@/modules/outsite/types/tploutside'
 import classNames from 'classnames'
 import _ from 'lodash'
+type Map<T> = OutSide.Map<T>
 const FormItem = Form.Item
 const Search = Input.Search
 const styles = require('@/modules/outsite/styles/list')
-
 interface States {
   a?: any
 }
@@ -122,13 +120,13 @@ class Main extends React.Component<any, any> {
 
   // 获取全部任务
   public getTplTaskList () {
-    Service.getTplList().then((data: any) => {
+    Service.getTplList().then((data) => {
       if (!data) {
         return
       }
       const tplTaskMap: Map<string> = {}
-      const tplSubGroup: Map<Array<TasktplItem>> = {}
-      data.map((item: TasktplItem, index: number) => {
+      const tplSubGroup: Map<OutSide.SubTaskItem[]> = {}
+      data.map((item: OutSide.TaskItem, index: number) => {
         tplTaskMap[item.id] = item.name
         item.subList.unshift({
           id: '',
@@ -149,7 +147,7 @@ class Main extends React.Component<any, any> {
 
     Service.getTplSublist().then((tplSubData: any) => {
       if (!tplSubData) {return}
-      // const tplSubData: Array<TasktplItem> = []
+      // const tplSubData: Array<OutSide.TaskItem[]> = []
       tplSubData.unshift({
         id: '',
         name: '全部子任务'

@@ -2,11 +2,10 @@ import React from 'react'
 import { Table, Button, Row, Col, Modal } from 'antd'
 import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import HCframe from '@/modules/common/components/HCframe'
-import {  TasktplItem } from '@/modules/outsite/types/tploutside'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
 import Service from '@/modules/outsite/services'
 import _ from 'lodash'
-
+type TasktplItem = OutSide.TaskItem
 const styles = require('@/modules/outsite/styles/tpllist')
 const data: any = [
   {

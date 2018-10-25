@@ -5,10 +5,10 @@ import ContentBox from '@/modules/common/content'
 import Mission from '@/modules/outsite/views/task/mission'
 import Other from '@/modules/outsite/views/task/other'
 import Service from '@/modules/outsite/services'
-import { TaskItem } from '@/modules/outsite/types/outsite'
 import _ from 'lodash'
 import { FormComponentProps } from 'antd/lib/form'
 import { withRouter, RouteComponentProps } from 'react-router'
+type TaskItem = OutSide.TaskItem
 const TabPane = Tabs.TabPane
 const styles = require('@/modules/outsite/styles/form.styl')
 

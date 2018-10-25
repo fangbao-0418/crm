@@ -169,7 +169,7 @@ class Main extends React.Component<any, States> {
       subList = _.filter(subList, (v) => {
         return v.subId !== val
       })
-      subList.map((v: OutSide.TaskItem, i: number) => {
+      subList.map((v, i) => {
         subList[i].sort = i + 1
         checkedIdMap[v.subId] = v
       })
@@ -212,7 +212,7 @@ class Main extends React.Component<any, States> {
   }
 
   // 保存
-  public onSave (data: OutSide.TaskItem[]) {
+  public onSave (data: OutSide.SubTaskItem[]) {
     const { item } = this.state
     item.subList = data
     item.status = 'NORMAL'

@@ -1,47 +1,17 @@
 import React from 'react'
 import monent, { Moment } from 'moment'
-import { Divider, Modal, Tabs, Table, Row, Col } from 'antd'
+import { Tabs, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { TaskItem, TaskList } from '@/modules/outsite/types/outsite'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import ContentBox from '@/modules/common/content'
 import Service from '@/modules/outsite/services'
 import classNames from 'classnames'
+import { Modal } from 'pilipa'
 const styles = require('@/modules/outsite/styles/list')
-const data: TaskList = [
-  {
-    id: 1,
-    name: '测试1',
-    category: 'tax',
-    customerName: '客户名称',
-    contacter: '联系人',
-    subList: [
-      {
-        id: 2,
-        name: '测试1',
-        category: 'tax',
-        customerName: '客户名称',
-        contacter: '联系人',
-        subList: [
-
-        ],
-        status: 'complete',
-        areaName: '华东',
-        userName: '外勤'
-      }
-    ],
-    orderNo: 'sdf123123123',
-    status: 'complete',
-    areaName: '华东',
-    userName: '外勤',
-    startTime: '2018-09-12 18:23'
-  }
-]
+type TaskItem = OutSide.TaskItem
 
 interface States {
-  modalTitle: string,
-  modalVisible: boolean,
-  dataSource: TaskList,
+  dataSource: OutSide.TaskItem[],
   selectedRowKeys: string[],
   showData?: any, // 弹出层的数据
   pageConf?: any,
@@ -57,8 +27,6 @@ interface ColProps extends TaskItem {
 // 列表
 class Main extends React.Component {
   public state: States = {
-    modalTitle: '',
-    modalVisible: false,
     currentItem: {},
     dataSource: [],
     selectedRowKeys: [],
@@ -100,16 +68,16 @@ class Main extends React.Component {
       className: 'bo'
     }
   }
-  public columns: any = [{
+  public columns: ColumnProps<OutSide.TaskItem>[] = [{
     title: '订单号',
     dataIndex: 'orderNo',
-    render: (key: any, item: TaskItem) => {
+    render: (key, item) => {
       return <span>{item.orderNo}</span>
     }
   }, {
     title: '客户名称',
     dataIndex: 'customerName',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       const { status } = item
       let icoConf = this.taskIcoMap[status]
       icoConf = icoConf ? icoConf : { text: '', className: styles.icohide}
@@ -122,7 +90,7 @@ class Main extends React.Component {
   }, {
     title: '联系人',
     dataIndex: 'userName',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
       <>
         <span>{item.userName}</span>
@@ -131,7 +99,7 @@ class Main extends React.Component {
   }, {
     title: '所属区域',
     dataIndex: 'areaName',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
       <>
         <span>{item.areaName}</span>
@@ -140,7 +108,7 @@ class Main extends React.Component {
   }, {
     title: '服务状态',
     dataIndex: 'status',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
       <>
         <span>{Service.taskStatusDict[item.status]}</span>
@@ -149,7 +117,7 @@ class Main extends React.Component {
   }, {
     title: '任务名称',
     dataIndex: 'name',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
       <>
         <span>{item.name}</span>
@@ -158,7 +126,7 @@ class Main extends React.Component {
   }, {
     title: '当前子任务',
     dataIndex: 'subtask',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
         <span>{item.subList.length && item.subList[0].name}</span>
       )
@@ -166,7 +134,7 @@ class Main extends React.Component {
   }, {
     title: '子任务状态',
     dataIndex: 'subtaskStatus',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
         <span>{item.subList.length && Service.subStatusDict[item.subList[0].status]}</span>
       )
@@ -174,7 +142,7 @@ class Main extends React.Component {
   }, {
     title: '当前外勤人员',
     dataIndex: 'sublistUsername',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       return (
         <span>{item.subList.length && item.subList[0].userName}</span>
       )
@@ -222,14 +190,14 @@ class Main extends React.Component {
     this.setState({selectedRowKeys})
   }
 
-  public virData () {
-    const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const item = data[0]
-    ids.map((id: number) => {
-      item.id = id
-      data.push(item)
-    })
-  }
+  // public virData () {
+  //   const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  //   const item = data[0]
+  //   ids.map((id: number) => {
+  //     item.id = id
+  //     data.push(item)
+  //   })
+  // }
 
   // 获取列表数据
   public getList () {
@@ -331,48 +299,47 @@ class Main extends React.Component {
     const { status } = currentItem
     const act = Service.getActionByStatus(status)
     if (!act) {return}
-    console.log('current item::', status, currentItem)
-    this.setState({
-      currentItem,
-      modalVisible: true
+    const modal = new Modal({
+      title: '任务审批',
+      content: (
+        <div className={styles.popbox}>
+          <div style={{display: currentItem.status === 'CANCELPENDING' ? 'block' : 'none'}}>
+            确定取消"{currentItem.name}"在内及后续的子任务？
+            <div className={styles.reason}>
+              {currentItem.cancelReason}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'REJECTPENDING' ? 'block' : 'none'}}>
+            确定驳回?
+            <div className={styles.reason}>
+              {currentItem.approveMsg}
+            </div>
+          </div>
+          <div style={{display: currentItem.status === 'SUBMITED' ? 'block' : 'none'}}>
+            {currentItem.name}任务已完成
+          </div>
+        </div>
+      ),
+      onOk: () => {
+        Service.auditTaskByTaskidStatus(currentItem.id, status, 'YES').then((res: any) => {
+          this.getList()
+          modal.hide()
+        })
+      },
+      onCancel: () => {
+        Service.auditTaskByTaskidStatus(currentItem.id, status, 'NO').then((res: any) => {
+          this.getList()
+          modal.hide()
+        })
+      }
     })
+    modal.show()
   }
-  public hideAuditModal () {
-    this.setState({
-      modalVisible: false
-    })
-  }
-
-  // 审批
-  public audit (rst: 'YES' | 'NO') {
-    const { currentItem } = this.state
-    const { status } = currentItem
-    const act = Service.getActionByStatus(status)
-    console.log('audit::', this.state.currentItem.status, rst, act)
-    if (!act) {
-      this.hideAuditModal()
-      return
-    }
-    Service.auditTaskByTaskidStatus(currentItem.id, status, rst).then((res: any) => {
-      this.getList()
-      this.hideAuditModal()
-    })
-  }
-
   // 导出
   public export () {
 
   }
-
   public render () {
-    const searchPorps = {
-      onSearch: this.onSearch.bind(this)
-    }
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectAllChange.bind(this)
-    }
-    const { currentItem } = this.state
     return (
     <div className={styles.container}>
       <ContentBox
@@ -403,30 +370,6 @@ class Main extends React.Component {
           </Tabs>
         </Row>
       </ContentBox>
-      <Modal
-        title={`审批`}
-        visible={this.state.modalVisible}
-        onOk={this.audit.bind(this, 'YES')}
-        onCancel={this.audit.bind(this, 'NO')}
-      >
-        <div className={styles.popbox}>
-          <div style={{display: currentItem.status === 'CANCELPENDING' ? 'block' : 'none'}}>
-            确定取消"{currentItem.name}"在内及后续的子任务？
-            <div className={styles.reason}>
-              {currentItem.cancelReason}
-            </div>
-          </div>
-          <div style={{display: currentItem.status === 'REJECTPENDING' ? 'block' : 'none'}}>
-            确定驳回?
-            <div className={styles.reason}>
-              {currentItem.approveMsg}
-            </div>
-          </div>
-          <div style={{display: currentItem.status === 'SUBMITED' ? 'block' : 'none'}}>
-            {currentItem.name}任务已完成
-          </div>
-        </div>
-      </Modal>
     </div>
     )
   }

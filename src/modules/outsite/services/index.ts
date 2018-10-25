@@ -2,9 +2,8 @@
  * 外勤数据服务
  */
 import Service from '@/modules/common/services/service'
-import { Map } from '@/modules/outsite/types/outsite'
 import _ from 'lodash'
-
+type Map<T> = OutSide.Map<T>
 class ModuleService extends Service {
   // 模块名称
   public moduleName: string = 'outside'
@@ -166,7 +165,10 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
     let act = this.getActionByStatus(status)
     if (!act) {return}
     act = act[rst]
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changemain`, 'PUT', {id, status: act})
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/status/changemain`, 'PUT', {
+      id,
+      status: act
+    })
   }
 
   // 根据订单号，模糊查询

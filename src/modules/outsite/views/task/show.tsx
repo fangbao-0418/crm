@@ -2,7 +2,6 @@ import React from 'react'
 import { withRouter, RouteComponentProps } from 'react-router'
 import { Tabs, Table, Row, Select } from 'antd'
 import { Modal } from 'pilipa'
-import { TaskItem } from '@/modules/outsite/types/outsite'
 import { Button } from 'antd'
 import ContentBox from '@/modules/common/content'
 import Service from '@/modules/outsite/services'
@@ -10,11 +9,11 @@ import { ColumnProps } from 'antd/lib/table'
 import Workorder from '@/modules/outsite/views/task/workorder.component'
 import Status from '@/modules/outsite/enum'
 import Receive from './Receive'
-import { fetchTaskDetail } from '@/modules/outsite/api'
+type TaskItem = OutSide.TaskItem
 const styles = require('../../styles/list.styl')
 type Props = RouteComponentProps<{id?: string}>
 interface State {
-  dataSource: TaskItem[]
+  dataSource: OutSide.SubTaskItem[]
   selectedRowKeys: number[]
   trackdata: any[]
   personList: any[]
@@ -33,7 +32,7 @@ class Main extends React.Component<Props, State> {
   }
   public taskid: string
   public childTaskid: number
-  public columns: ColumnProps<TaskItem>[] = [{
+  public columns: ColumnProps<OutSide.SubTaskItem>[] = [{
     title: '序列号ID',
     dataIndex: 'id',
     render: (text, item) => {
@@ -86,13 +85,13 @@ class Main extends React.Component<Props, State> {
       return (
         <span>
           <span
-            className='href mr5'
+            className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
             onClick={() => { this.onAuditTask.bind(this)(item) }}
           >
             审批
           </span>
           <span
-            className={`href mr5 ${item.status === '1' ? '' : 'likebtn-disabled'}`}
+            className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
             onClick={() => { this.showChangeModal.bind(this)(item) }}
           >
             转接任务
@@ -124,11 +123,6 @@ class Main extends React.Component<Props, State> {
         })
       }
     })
-    fetchTaskDetail(this.taskid).then((res) => {
-      this.setState({
-        detail: res
-      })
-    })
   }
 
   // 全选反选
@@ -141,13 +135,17 @@ class Main extends React.Component<Props, State> {
     Service.getItemByTaskid(this.taskid).then((d) => {
       this.setState({
         dataSource: d.subList,
-        orderId: d.orderId
+        orderId: d.orderId,
+        detail: d
       })
     })
   }
 
   // 审批任务的弹层
-  public onAuditTask (record: TaskItem) {
+  public onAuditTask (record: OutSide.SubTaskItem) {
+    if (record.status !== 'PENDING') {
+      return
+    }
     this.childTaskid = record.id
     const modal = new Modal({
       title: '审核取消',
@@ -168,7 +166,14 @@ class Main extends React.Component<Props, State> {
         })
       },
       onCancel: () => {
-        modal.hide()
+        const params = {
+          id: record.id,
+          status: 'CANCELUNAPPROVE'
+        }
+        Service.auditTaskSure(params).then((res) => {
+          this.getList()
+          modal.hide()
+        })
       }
     })
     modal.show()
@@ -239,11 +244,15 @@ class Main extends React.Component<Props, State> {
         </div>
       ),
       onOk: () => {
+        if (transferTasksPer === undefined) {
+          APP.error('请选择分配的外勤人员')
+          return
+        }
         Service.transferTasksPer({
           userid: transferTasksPer,
           ids: selectedRowKeys
         }).then((res: any) => {
-          //
+          this.getList()
           modal.hide()
         })
       },
@@ -259,7 +268,10 @@ class Main extends React.Component<Props, State> {
   }
 
   // 转接任务
-  public showChangeModal (record: TaskItem) {
+  public showChangeModal (record: OutSide.SubTaskItem) {
+    if (['FINISHED', 'CANCELLED'].indexOf(record.status) > -1) {
+      return
+    }
     const { personList } = this.state
     let transferTasksPer: number
     const modal = new Modal({
@@ -289,6 +301,10 @@ class Main extends React.Component<Props, State> {
         </div>
       ),
       onOk: () => {
+        if (transferTasksPer === undefined) {
+          APP.error('请选择转接的外勤人员')
+          return
+        }
         Service.transferTasksPer({
           userid: transferTasksPer,
           ids: [record.id]

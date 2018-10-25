@@ -35,7 +35,7 @@ class Main extends React.Component {
         <SetAuto/>
       </TabPane>
       <TabPane tab='自定义任务' key='2'>
-        <SetCapacity/>
+        <SetCapacity />
       </TabPane>
       </Tabs>
     </ContentBox>
