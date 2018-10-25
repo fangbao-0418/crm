@@ -82,6 +82,7 @@ class Main extends React.Component<Props> {
         <div className='mt12'>
             <span>选择城市：</span>
             <Select
+              showSearch
               labelInValue
               style={{width:'200px'}}
               onChange={(val: {key: string, label: string, cityCode: string, cityName: string}) => {
@@ -93,6 +94,8 @@ class Main extends React.Component<Props> {
                 this.getCompany(val.key)
                 this.values.city = newVal
               }}
+              optionFilterProp='children'
+              filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               {
                 this.state.citys.map((item, index) => {
