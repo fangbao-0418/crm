@@ -139,8 +139,8 @@ class Main extends React.Component<any, any> {
   // 解除商品绑定关系
   public onUnbind () {
     console.log('解除绑定：', this.item)
-    this.item.productId = ''
-    this.item.productName = ''
+    // this.item.productId = ''
+    // this.item.productName = ''
     Service.addTplItem(this.item).then(() => {
       this.hideModal()
       this.getList()

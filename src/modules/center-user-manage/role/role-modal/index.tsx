@@ -72,7 +72,7 @@ class Main extends React.Component<Props, State> {
   public onOk = () => {
     this.props.form.validateFields((err: any, val: any) => {
       if (err) {return}
-      const {checkedKeys} = this.state
+      const { checkedKeys } = this.state
       const checkIds = checkedKeys.filter((item: any) => {
         return this.endIds.some((i) => (item + '' === i))
       })
@@ -213,7 +213,7 @@ class Main extends React.Component<Props, State> {
                       expandedKeys={this.state.expandedKeys}
                       onCheck={this.onCheck}
                       checkedKeys={this.state.checkedKeys}
-                      defaultCheckedKeys={['1']}
+                      // defaultCheckedKeys={['1']}
                     >
                       {this.renderTreeNodes(this.state.info.roleSystemAuthorityList)}
                     </Tree>
