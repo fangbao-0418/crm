@@ -58,14 +58,24 @@ class Main extends React.Component<Props, State> {
       align: 'center',
       width: 80,
       render: (text, record) => {
-        return (
-          <span
-            className='href'
-            onClick={this.handleAudit.bind(this, record)}
-          >
-            审核
-          </span>
-        )
+        if (record.requestStatus === 'APPLY') {
+          return (
+            <span
+              className='href'
+              onClick={this.handleAudit.bind(this, record)}
+            >
+              审核
+            </span>
+          )
+        } else {
+          return (
+            <span
+              className='disabled'
+            >
+              审核
+            </span>
+          )
+        }
       }
     }
   ]
