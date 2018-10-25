@@ -1,7 +1,7 @@
 import React from 'react'
 import Agent from '../direct'
 import { ColumnProps } from 'antd/lib/table'
-import { Divider } from 'antd'
+import { Divider, Modal as M } from 'antd'
 import { Modal } from 'pilipa'
 import Detail from '../direct/detail'
 import { changeCompanyInfo, fetchCompanyDetail } from '../api'
@@ -31,13 +31,13 @@ class Main extends React.Component {
       title: '创建时间',
       dataIndex: 'createTime'
     },
-    {
-      title: '状态',
-      dataIndex: 'companyStatus',
-      render: (text) => {
-        return APP.dictionary[`EnumOrganAgentSource-${text}`]
-      }
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'companyStatus',
+    //   render: (text) => {
+    //     return APP.dictionary[`EnumOrganAgentSource-${text}`]
+    //   }
+    // },
     {
       title: '操作',
       width: 160,
@@ -62,12 +62,13 @@ class Main extends React.Component {
             >
               修改
             </span>
-            <Divider type='vertical' />
-            <span
+            {/* <Divider type='vertical' /> */}
+            {/* <span
               className='href'
+              onClick={() => this.delete()}
             >
               删除
-            </span>
+            </span> */}
           </div>
         )
       }
@@ -102,6 +103,15 @@ class Main extends React.Component {
       })
     }
   }
+  // 确认删除
+  // public delete = () => {
+  //   M.confirm({
+  //     title: '删除机构',
+  //     content: '确定删除机构吗？',
+  //     onOk: () => {
+  //     }
+  //   })
+  // }
   public render () {
     return (
       <Agent
