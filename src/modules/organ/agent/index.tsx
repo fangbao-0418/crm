@@ -75,10 +75,16 @@ class Main extends React.Component {
     }
   ]
   public show (type: 'view' | 'update', record: Organ.DirectItemProps) {
+    let title = ''
+    if (type === 'view') {
+      title = '查看'
+    } else {
+      title = '修改'
+    }
     if (record) {
       fetchCompanyDetail({id: record.id}).then((item) => {
         const modal = new Modal({
-          title: '新增',
+          title: `${title}`,
           content: (
             <Detail
               disabled={type === 'view'}

@@ -107,6 +107,8 @@ class Main extends React.Component<Props> {
               {getFieldDecorator('managerPhone', {
                 rules: [{
                   required: true, message: '请输入手机号'
+                }, {
+                  len: 11, message: '手机号格式不对！'
                 }],
                 initialValue: item.managerPhone
               })(
@@ -122,6 +124,8 @@ class Main extends React.Component<Props> {
               {getFieldDecorator('email', {
                 rules: [{
                   required: true, message: '请输入邮箱'
+                }, {
+                  pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '邮箱格式不正确！'
                 }],
                 initialValue: item.email
               })(
