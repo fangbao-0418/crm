@@ -142,6 +142,9 @@ class Main extends React.Component {
       this.setState({visible: false})
       this.getPermissionList()
     })
+    .catch((err: any) => {
+      APP.error(err.responseJSON.errors[0].message)
+    })
   }
 
   // 修改权限

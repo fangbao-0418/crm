@@ -212,15 +212,19 @@ class Main extends React.Component<Props, State> {
 
   // 区域勾选时触发
   public onCheck = (checkedKeys: string[], e: any) => {
+    console.log(checkedKeys, 'checkedKeys')
     this.setState({ checkedKeys })
     this.selectAreaInfoList = []
     const regionTree = this.state.regionTree
     const Positions = e.checkedNodesPositions
+    console.log(regionTree, 'regionTree')
+    console.log(Positions, 'Positions')
     Positions.forEach((item: any) => {
       const indexList = item.pos.split('-')
       const areaInfo: any = {}
       if (indexList.length !== 6) {return} // 不为6代表没有选中最末级公司
       const area1 = regionTree[indexList[1]]
+      console.log(area1, 'area1')
       const area2 = area1.regionList[indexList[2]]
       const area3 = area2.regionList[indexList[3]]
       const area4 = area3.regionList[indexList[4]]
@@ -231,13 +235,18 @@ class Main extends React.Component<Props, State> {
       areaInfo.regionProvinceName = area2.name
       areaInfo.regionCity = area3.code
       areaInfo.regionCityName = area3.name
-      areaInfo.regionArea = area4.code
-      areaInfo.regionAreaName = area4.name
+      // areaInfo.regionArea = area4.code
+      // areaInfo.regionAreaName = area4.name
       areaInfo.companyId = area5.id
       this.selectAreaInfoList.push(areaInfo)
     })
   }
-
+  public onCheck1 = (checkedKeys: string[], e: any) => {
+    console.log(checkedKeys, 'checkedKeys')
+    this.setState({ checkedKeys })
+    this.selectAreaInfoList = []
+    const regionTree = this.state.regionTree
+  }
   // 区域展开时触发
   public onExpand = (expandedKeys: string[]) => {
     this.setState({expandedKeys})
