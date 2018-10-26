@@ -176,6 +176,8 @@ class Main extends React.Component<Customer.Props, States> {
         })
       })
       data[1].options = options
+      data[1].value = options[0].value
+      this.params.cityCode = data[1].value
       this.setState({
         data
       })
@@ -518,6 +520,10 @@ class Main extends React.Component<Customer.Props, States> {
   public toOrganizationByHand () {
     if (!this.state.selectedRowKeys.length) {
       APP.error('请选择需要分配客户')
+      return
+    }
+    if (!this.params.cityCode) {
+      APP.error('请选择所属城市')
       return
     }
     const modal = new Modal({
