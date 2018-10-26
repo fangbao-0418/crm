@@ -1,7 +1,9 @@
 import React from 'react'
-export default class extends React.Component {
+import { withRouter, RouteComponentProps } from 'react-router'
+class Main extends React.Component<RouteComponentProps<{}>> {
   public componentWillMount () {
-    if (APP.homepage !== '/') {
+    console.log(this.props.location.pathname, 'this.props.location.pathname')
+    if (APP.homepage !== '/' && this.props.location.pathname === '/') {
       APP.history.push(APP.homepage)
     }
   }
@@ -13,3 +15,4 @@ export default class extends React.Component {
     )
   }
 }
+export default withRouter(Main)

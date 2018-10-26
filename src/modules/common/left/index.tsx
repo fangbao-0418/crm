@@ -241,7 +241,7 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public componentWillMount () {
-    if (this.props.match.path === '/') {
+    if (this.props.location.pathname === '/') {
       APP.history.push(this.getFirstUrl())
     }
   }

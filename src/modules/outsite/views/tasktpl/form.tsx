@@ -217,6 +217,7 @@ class Main extends React.Component<any, States> {
     item.subList = data
     item.status = 'NORMAL'
     item.systemFlag = item.systemFlag === '1' ? '1' : '0'
+    console.log(item, 'save')
     if (sync) {
       Service.taskSave2sync(item).then(() => {
         APP.success('保存并同步成功')
@@ -241,6 +242,7 @@ class Main extends React.Component<any, States> {
         sm: { span: 16 }
       }
     }
+    const selectValue: any = {key: this.state.item.productId}
     return (
       <div className={styles.container}>
         <ContentBox title={this.titles[this.state.item.systemFlag]}>
@@ -278,11 +280,13 @@ class Main extends React.Component<any, States> {
                 <FormItem label='关联商品' {...formItemLayout}>
                   <Select
                     placeholder={`关联商品`}
-                    value={this.state.item.productId}
-                    onChange={(val: string) => {
-                      this.syncFormdata('productId', val)
-                    }
-                    }
+                    labelInValue
+                    value={selectValue}
+                    onChange={(val: any) => {
+                      console.log(val, 'val')
+                      this.syncFormdata('productId', val.key)
+                      this.syncFormdata('productName', val.label)
+                    }}
                   >
                     {
                       this.state.goods.map((item) => {
