@@ -217,7 +217,10 @@ class Main extends React.Component<any, States> {
     item.subList = data
     item.status = 'NORMAL'
     item.systemFlag = item.systemFlag === '1' ? '1' : '0'
-    console.log(item, 'save')
+    if (!item.name) {
+      APP.error('任务名不能为空')
+      return
+    }
     if (sync) {
       Service.taskSave2sync(item).then(() => {
         APP.success('保存并同步成功')

@@ -36,7 +36,7 @@ declare namespace OutSide {
     productName?: string
     subList?: SubTaskItem[]
     /** 是否优先级 */
-    priority?: number
+    priority?: any
     status?: string
     systemFlag?: '0' | '1' | '-1'
     customerId?: any

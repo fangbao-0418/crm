@@ -1,11 +1,11 @@
 import React from 'react'
 import { Table, Modal, Divider } from 'antd'
 import _ from 'lodash'
+import { ColumnProps } from 'antd/lib/table'
 import '@/modules/common/styles/base.styl'
 import Service from '@/modules/outsite/services'
 type TaskItem = OutSide.TaskItem
 const showPath = '/outsite/tasktpl/form'
-
 /*路径未修改，跳转编辑系统任务  subform组件中*/
 interface States {
   selectedRowKeys: string[]
@@ -13,7 +13,11 @@ interface States {
   searchData: any,
   dataSource: TaskItem[],
   item: TaskItem,
-  pageConf: any
+  pageConf: {
+    total: number,
+    size: number,
+    current: number
+  }
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -39,13 +43,13 @@ class Main extends React.Component<any, any> {
     modalVisible: false
   }
 
-  public columns = [{
+  public columns: ColumnProps<TaskItem>[] = [{
     title: '主任务',
     dataIndex: 'name'
   }, {
     title: '子任务',
     dataIndex: 'age',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       if (!item || !item.subList) {
         return
       }
@@ -57,18 +61,19 @@ class Main extends React.Component<any, any> {
   }, {
     title: '操作',
     dataIndex: 'operation',
-    width: 120,
+    align: 'center',
+    width: 140,
     render: (k: any, item: TaskItem) => {
       return (
-      <span>
-                    <span onClick={() => {this.onShow.bind(this)(item)}} style={{color: '#1890ff'}} className='likebtn'>编辑</span>
-                    <Divider type='vertical' style={{color: '#979797'}}/>
-                    <span
-                      onClick={() => {this.showDisableModal.bind(this)(item)}}
-                      className='likebtn'
-                    >
-                      {item.status === 'NORMAL' ? '禁用' : '启用'}
-                    </span>
+        <span>
+          <span onClick={() => {this.onShow.bind(this)(item)}} style={{color: '#1890ff'}} className='likebtn'>编辑</span>
+          <Divider type='vertical' style={{color: '#979797'}}/>
+          <span
+            onClick={() => {this.showDisableModal.bind(this)(item)}}
+            className='likebtn'
+          >
+            {item.status === 'NORMAL' ? '禁用' : '启用'}
+          </span>
         </span>
       )
     }
@@ -116,10 +121,11 @@ class Main extends React.Component<any, any> {
         return
       }
       const { pageConf, searchData } = this.state
-      searchData.pageSize = pageConf.size = res.pageSize
-      searchData.pageCurrent = pageConf.current = res.pageCurrent
-      pageConf.total = res.pageTotal
+      searchData.pageSize = pageConf.size = res.size
+      searchData.pageCurrent = pageConf.current = res.current
+      pageConf.total = res.total
       this.setState({
+        pageConf,
         dataSource: res.records,
         searchData
       })
@@ -154,16 +160,19 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
+    const { pageConf } = this.state
     return (
     <div>
       <Table
         columns={this.columns}
         dataSource={this.state.dataSource}
-        size='small'
+        bordered
         pagination={{
-          ...this.state.pageConf,
-          onChange: (page: any) => {
-            const { pageConf, searchData } = this.state
+          total: pageConf.total,
+          current: pageConf.current,
+          pageSize: pageConf.size,
+          onChange: (page: number) => {
+            const { searchData } = this.state
             pageConf.current = page
             searchData.pageCurrent = page
             this.setState({
@@ -191,10 +200,3 @@ class Main extends React.Component<any, any> {
 }
 
 export default Main
-/*
-export default connect((state: Reducer.State) => {
-  return {
-    ...state.customer
-  }
-})(Main)
-*/

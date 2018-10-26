@@ -3,6 +3,7 @@ import { Divider, Modal, Table } from 'antd'
 import Service from '@/modules/outsite/services'
 import '@/modules/common/styles/base.styl'
 import _ from 'lodash'
+import { ColumnProps } from 'antd/lib/table'
 type TaskItem = OutSide.TaskItem
 const showPath = '/outsite/tasktpl/form'
 
@@ -13,7 +14,11 @@ interface States {
   searchData: any,
   item: TaskItem,
   dataSource: TaskItem[],
-  pageConf: any
+  pageConf: {
+    total: number,
+    size: number,
+    current: number
+  }
 }
 
 function onShowSizeChange (current: any, pageSize: any) {
@@ -39,13 +44,13 @@ class Main extends React.Component<any, any> {
     dataSource: []
   }
 
-  public columns = [{
+  public columns: ColumnProps<TaskItem>[] = [{
     title: '主任务',
     dataIndex: 'name'
   }, {
     title: '子任务',
     dataIndex: 'subList',
-    render: (k: any, item: TaskItem) => {
+    render: (k, item) => {
       if (!item || !item.subList) {
         return
       }
@@ -60,16 +65,17 @@ class Main extends React.Component<any, any> {
   }, {
     title: '是否优先',
     dataIndex: 'priority',
-    render: (k: any, item: any) => {
-      return item.priority === 'OPEN' ? '是' : '否' // Service.taskPriorityDict[item.priority]
+    render: (k, item) => {
+      return <span>{item.priority === 'OPEN' ? '是' : '否'}</span>
     }
   }, {
     title: '操作',
     dataIndex: 'operation',
-    width: 160,
-    render: (k: any, item: TaskItem) => {
+    width: 180,
+    align: 'center',
+    render: (k: any, item) => {
       return (
-      <span>
+        <span>
           <span onClick={this.onShow.bind(this, item)} style={{color: '#3B91F7'}} className='likebtn'>编辑</span>
           <Divider type='vertical' style={{color: '#979797'}}/>
           <span onClick={this.showModal.bind(this, item)} style={{color: '#3B91F7'}} className='likebtn'>解除商品关系</span>
@@ -125,10 +131,11 @@ class Main extends React.Component<any, any> {
         return
       }
       const { pageConf, searchData } = this.state
-      searchData.pageSize = pageConf.size = res.pageSize
-      searchData.pageCurrent = pageConf.current = res.pageCurrent
-      pageConf.total = res.pageTotal
+      searchData.pageSize = pageConf.size = res.size
+      searchData.pageCurrent = pageConf.current = res.current
+      pageConf.total = res.total
       this.setState({
+        pageConf,
         dataSource: res.records,
         searchData
       })
@@ -165,16 +172,19 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
+    const { pageConf } = this.state
     return (
     <div>
       <Table
+        bordered
         columns={this.columns}
         dataSource={this.state.dataSource}
-        size='small'
         pagination={{
-          ...this.state.pageConf,
+          total: pageConf.total,
+          current: pageConf.current,
+          pageSize: pageConf.size,
           onChange: (page: any) => {
-            const { pageConf, searchData } = this.state
+            const { searchData } = this.state
             pageConf.current = page
             searchData.pageCurrent = page
             this.setState({
