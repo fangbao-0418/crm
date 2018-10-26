@@ -165,7 +165,6 @@ class Main extends React.Component<Customer.Props, States> {
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
-    this.fetchList()
     fetchCityCount().then((res) => {
       const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
       const options: Array<{label: string, value: string}> = []
@@ -176,6 +175,10 @@ class Main extends React.Component<Customer.Props, States> {
         })
       })
       data[1].options = options
+      data[1].value = options[0].value
+      console.log(data[1].value, 'data[1].value')
+      this.params.cityCode = data[1].value
+      this.fetchList()
       this.setState({
         data
       })
@@ -445,7 +448,6 @@ class Main extends React.Component<Customer.Props, States> {
               })
               const payload = ids.join(',')
               deleteCustomer(payload).then(() => {
-                APP.success('操作成功')
                 this.fetchList()
                 modal.hide()
               })
@@ -459,6 +461,9 @@ class Main extends React.Component<Customer.Props, States> {
       maskClosable: false,
       onCancel: () => {
         modal.hide()
+        this.setState({
+          selectedRowKeys: []
+        })
         this.fetchList()
       }
     })
@@ -520,6 +525,11 @@ class Main extends React.Component<Customer.Props, States> {
       APP.error('请选择需要分配客户')
       return
     }
+    console.log(this.params.cityCode, 'this.params.cityCode')
+    if (!this.params.cityCode) {
+      APP.error('请选择所属城市')
+      return
+    }
     const modal = new Modal({
       content: (
         <Provider>
@@ -579,6 +589,7 @@ class Main extends React.Component<Customer.Props, States> {
       onChange: this.onSelectAllChange.bind(this)
     }
     const { pagination } = this.state
+    console.log(this.state.data, 'render')
     return (
       <ContentBox
         title='我的客资'

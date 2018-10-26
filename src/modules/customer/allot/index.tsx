@@ -20,6 +20,7 @@ class Main extends React.Component<Props> {
       title: '1、导入设置',
       component: (
         <Step1
+          cityCode={this.props.params.cityCode}
           onOk={(value) => {
             console.log(value, 'value')
             const ids: string[] = []

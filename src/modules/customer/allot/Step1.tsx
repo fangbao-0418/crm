@@ -4,6 +4,7 @@ import { getCompanyByCitycode } from '../api'
 import { getSalesByCompany } from '@/modules/common/api'
 const Option = Select.Option
 interface Props {
+  cityCode?: string
   onOk?: (value: ValueProps) => void
 }
 interface State {
@@ -23,7 +24,8 @@ class Main extends React.Component<Props> {
     companys: []
   }
   public componentWillMount () {
-    const citycode = APP.user.cityCode // 从登陆信息获取城市code得到机构
+    // const citycode = APP.user.cityCode // 从登陆信息获取城市code得到机构改为从当前客资列表选中的城市码
+    const citycode = this.props.cityCode
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
