@@ -17,11 +17,13 @@ class Main extends React.Component<Props, States> {
   public state: States = {
     selectedRowKeys: []
   }
+  public params: Business.SearchProps = {}
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     this.fetchList()
   }
   public fetchList () {
+    this.params = this.props.params
     const params = _.cloneDeep(this.props.params)
     const pagination = this.props.tab3.pagination
     params.pageSize = pagination.pageSize

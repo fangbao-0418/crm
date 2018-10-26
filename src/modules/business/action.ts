@@ -1,4 +1,5 @@
-import { getRecycleNum, getCustomerNum, getcapacityNum } from './api'
+import store from '@/store'
+import { getRecycleNum, getCustomerNum, getcapacityNum, fetchList } from './api'
 
 export const fetchCountAction = (payload: Business.SearchProps) => {
   Promise.all([getRecycleNum(payload), getCustomerNum(payload), getcapacityNum()]).then(([res, res2, res3]) => {
@@ -15,5 +16,13 @@ export const fetchCountAction = (payload: Business.SearchProps) => {
         count
       }
     })
+  })
+}
+export const changeVisibleAction = (visibled: boolean = true) => {
+  APP.dispatch<Business.Props>({
+    type: 'change business data',
+    payload: {
+      visibled
+    }
   })
 }

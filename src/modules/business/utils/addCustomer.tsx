@@ -7,6 +7,7 @@ import showDetail from './showDetail'
 import { fetchList } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+import { changeVisibleAction } from '../action'
 export default function () {
   let ins: any
   const modal = new Modal({
@@ -30,6 +31,8 @@ export default function () {
           onClick={() => {
             console.log(ins.refs.wrappedComponent)
             ins.refs.wrappedComponent.save().then(() => {
+              changeVisibleAction(false)
+              changeVisibleAction(true)
               APP.success('保存成功')
               modal.hide()
               this.fetchList()
@@ -53,6 +56,8 @@ export default function () {
               showDetail.call(this, {id: res.data}, index,
                 {
                   onOk: () => {
+                    changeVisibleAction(false)
+                    changeVisibleAction(true)
                     APP.success('操作成功')
                     fetchList(searchPayload).then((res1) => {
                       pagination.total = res1.pageTotal
