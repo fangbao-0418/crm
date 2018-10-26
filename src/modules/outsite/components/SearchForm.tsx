@@ -63,7 +63,7 @@ class Main extends React.Component<any, any> {
     statusDict: {}, // @181017 产品确认：待分配、已分配、已完成三个状态的可筛选属性不同
     searchData: {
       name: '', // 客户或联系人名称
-      templeteId: '',
+      templateId: '',
       subTemplateId: '',
       userName: '', // 外勤人员
       status: '',
@@ -257,7 +257,7 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`templeteId`, {
+        {getFieldDecorator(`templateId`, {
           rules: [{
             required: false,
             message: ''
@@ -267,7 +267,7 @@ class Main extends React.Component<any, any> {
             style={{width: '120px'}}
             onChange={(e: any) => {
               this.syncSearchData({
-                templeteId: e
+                templateId: e
               })
               const sublist = this.state.tplSubGroup[e]
               this.setState({
@@ -296,7 +296,7 @@ class Main extends React.Component<any, any> {
             }}
             placeholder='全部当前子任务'
           >
-            {this.createTaskNameOptions(this.state.searchData.templeteId ? this.state.tplSubList : this.state.tplSubData)}
+            {this.createTaskNameOptions(this.state.searchData.templateId ? this.state.tplSubList : this.state.tplSubData)}
           </Select>
         )}
         </FormItem>
