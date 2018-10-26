@@ -57,9 +57,10 @@ class Main extends React.Component {
 
   // 确认删除
   public delConfirm = (type: 'batch' | 'single', id?: number) => {
+
     Modal.confirm({
-      title: '删除账号',
-      content: '确定删除账号吗？',
+      title: '删除角色',
+      content: '确定删除角色吗？',
       onOk: () => {
         let ids
         type === 'batch' ? ids = this.getSelectIDs(this.state.dataSource) : ids = [id]
@@ -67,9 +68,9 @@ class Main extends React.Component {
           .then(() => {
             this.getRoleList()
           })
-          .catch((err: any) => {
-            APP.error(err.responseJSON.errors[0].message)
-          })
+          // .catch((err: any) => {
+          //   APP.error(err.responseJSON.errors[0].message)
+          // })
       },
       onCancel: () => {}
     })
