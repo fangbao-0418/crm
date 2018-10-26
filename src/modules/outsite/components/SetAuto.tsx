@@ -66,7 +66,7 @@ class Main extends React.Component<any, any> {
   }, {
     title: '操作',
     dataIndex: 'operation',
-    width: 120,
+    width: 160,
     render: (k: any, item: TaskItem) => {
       return (
       <span>
@@ -141,7 +141,7 @@ class Main extends React.Component<any, any> {
 
   // 解除商品绑定关系
   public onUnbind () {
-    Service.removeShopRelation(this.item.id, this.item.productId).then(() => {
+    Service.removeShopRelation(this.item.productId).then(() => {
       this.hideModal()
       this.getList()
     })
