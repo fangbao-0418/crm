@@ -10,7 +10,6 @@ class Main extends React.Component<Statistics.Props, any> {
   }
   public componentDidUpdate () {
     this.renderChart(this.props.histogramTaskDataList)
-    console.log(this.props.histogramTaskDataList)
   }
   public renderChart (histogramTaskDataList: RateProps[]) {
     const option = {
@@ -30,19 +29,22 @@ class Main extends React.Component<Statistics.Props, any> {
         {
           name: '任务总数',
           type: 'bar',
-          stack:'two',
-          data: ['2'],
+          stack:'one',
+          barGap: 0,
+          barWidth: '20px',
+          data: ['2', '4', 6, 6, 6],
           itemStyle:{
-            color:'#b2e0ff'
+            color: '#b2e0ff'
           }
         },
         {
           name: '已完成',
           type: 'bar',
           stack:'two',
-          data: ['23'],
+          barWidth: '20px',
+          data: ['23', 44, 5, 6, 7],
           itemStyle:{
-            color:'#d9f0ff'
+            color: '#d9f0ff'
           }
         }
       ]

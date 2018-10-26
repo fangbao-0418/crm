@@ -51,7 +51,7 @@ $(document).ajaxError((event, response) => {
   let pass = true
   const url = err.path
   filters.errorPrompt.map((pattern) => {
-    if (!new RegExp(pattern).test(url)) {
+    if (new RegExp(pattern).test(url)) {
       pass = false
     }
   })

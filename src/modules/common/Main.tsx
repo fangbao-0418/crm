@@ -14,6 +14,10 @@ import { fetchUserInfo } from './api'
 const styles = require('@/stylus/main')
 class Main extends React.Component<Common.Props> {
   public componentWillMount () {
+    if (!APP.token) {
+      APP.history.push('/login')
+      return
+    }
     fetchUserInfo()
     fetchEnum().then(() => {
       this.forceUpdate()
