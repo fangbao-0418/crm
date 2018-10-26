@@ -294,9 +294,9 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
     )
   }
   // 解除商品关系
-  public removeShopRelation (productId: number) {
+  public removeShopRelation (taskId: number, productId?: number) {
     return Service.http(
-      `/outside/v1/api/outside/task/template/product?id=&productId=${productId}`,
+      `/outside/v1/api/outside/task/template/product?id=${taskId}&productId=${productId}`,
       'PUT'
     )
   }
