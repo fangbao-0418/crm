@@ -45,7 +45,15 @@ class Main extends React.Component<null, States> {
           type={defaultActiveKey}
           onOk={(value) => {
             value.companyType = defaultActiveKey === 'direct' ? 'DirectCompany' : 'Agent'
-            changeCompanyInfo(value)
+            changeCompanyInfo(value).then(() => {
+              APP.success('操作成功')
+              this.setState({
+                showAccounting: false
+              })
+              this.setState({
+                showAccounting: true
+              })
+            })
             modal.hide()
           }}
           onCancel={() => {
@@ -105,10 +113,16 @@ class Main extends React.Component<null, States> {
           onChange={this.callback.bind(this)}
         >
           <TabPane tab='直营' key='direct'>
-            <Direct />
+            {
+              this.state.showAccounting &&
+              <Direct />
+            }
           </TabPane>
           <TabPane tab='代理商' key='agent'>
-            <Agent />
+            {
+              this.state.showAccounting &&
+              <Agent />
+            }
           </TabPane>
           <TabPane tab='核算中心' key='accounting'>
             {

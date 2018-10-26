@@ -315,7 +315,7 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
             {
-              (ownAraeList.length > 0 && this.state.isShowOwnArea) &&
+              (this.state.isShowOwnArea) &&
               <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
                 {
                   getFieldDecorator(

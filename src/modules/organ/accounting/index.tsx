@@ -20,6 +20,7 @@ class Main extends React.Component<any, State> {
     {
       title: '核算地区范围',
       dataIndex: 'regionList',
+      width: 500,
       render: (text) => {
         text = text || []
         const arr: string[] = []
