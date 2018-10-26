@@ -7,6 +7,7 @@ import { fetchList } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('../style')
+import { changeVisibleAction } from '../action'
 export default function (): ColumnProps<Business.DetailProps>[] {
   return [{
     title: '客户名称',
@@ -28,6 +29,8 @@ export default function (): ColumnProps<Business.DetailProps>[] {
               const modal = showDetail.call(this, record, index,
                 {
                   onOk: () => {
+                    changeVisibleAction(false)
+                    changeVisibleAction(true)
                     APP.success('操作成功')
                     fetchList(searchPayload).then((res) => {
                       pagination.total = res.pageTotal

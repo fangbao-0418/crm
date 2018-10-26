@@ -53,6 +53,7 @@ declare namespace Business {
     tab3?: TabDataProps,
     tab4?: TabDataProps,
     selectedTab?: 'tab1' | 'tab2' | 'tab3' | 'tab4'
-    count?: number[]
+    count?: number[],
+    visibled?: boolean
   }
 }

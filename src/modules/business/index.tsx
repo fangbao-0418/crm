@@ -463,7 +463,7 @@ class Main extends React.Component<Business.Props> {
             />
           </div>
         </div>
-        {
+        { this.props.visibled &&
           <Tabs
             animated={false}
             defaultActiveKey={this.props.selectedTab}
