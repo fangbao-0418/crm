@@ -35,12 +35,12 @@ class Main extends React.Component<Props> {
   public componentWillReceiveProps (props: Props) {
     this.setState({
       dataSource: props.dataSource,
+      values: this.getValues(props.dataSource),
       labels: this.getLabels(props.dataSource)
     })
   }
-  public getValues () {
+  public getValues (dataSource: ConditionOptionProps[] = this.props.dataSource) {
     const values: ValueProps = {}
-    const dataSource = this.props.dataSource
     dataSource.forEach((item) => {
       const { field, options } = item
       values[field] = options[0]
