@@ -553,6 +553,7 @@ class Main extends React.Component<Props> {
             </FormItemLayout>
           </Col>
         </Row>
+        {/* <Row>{detail.cityName ? 'true' : 'false'}</Row> */}
         <Row gutter={8} className='mt10'>
           {
             this.props.type === 'customer' &&
@@ -564,9 +565,9 @@ class Main extends React.Component<Props> {
                 <AutoComplete
                   className={styles['auto-complete']}
                   data={this.state.cityList}
-                  // defaultValue={{
-                  //   name: detail.cityName
-                  // }}
+                  defaultValue={{
+                    name: detail.cityName || ''
+                  }}
                   onChange={this.handleCityChange.bind(this)}
                   setFields={{
                     title: 'name',
@@ -583,9 +584,9 @@ class Main extends React.Component<Props> {
               <AutoComplete
                 className={styles['auto-complete']}
                 disabled={disabled}
-                // defaultValue={{
-                //   name: detail.areaName
-                // }}
+                defaultValue={{
+                  name: detail.areaName
+                }}
                 data={this.state.areaList}
                 onChange={this.handleAreaChange.bind(this)}
                 setFields={{
