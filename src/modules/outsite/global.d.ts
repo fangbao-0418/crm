@@ -62,6 +62,7 @@ declare namespace OutSide {
     startTime?: string
     endTime?: string
     cancelReason?: string
+    imageUrl?: any
   }
   /** 领用详情搜索条件 */
   export interface ReceivePayload {

@@ -82,28 +82,52 @@ class Main extends React.Component<Props, State> {
     title: '操作',
     dataIndex: 'operation',
     render: (text, item) => {
-      return (
-        <span>
-          <span
-            className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
-            onClick={() => { this.onAuditTask.bind(this)(item) }}
-          >
-            审批
+      if (item.imageUrl !== null) {
+        return (
+          <span>
+            <span
+              className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
+              onClick={() => { this.onAuditTask.bind(this)(item) }}
+            >
+              审批
+            </span>
+            <span
+              className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
+              onClick={() => { this.showChangeModal.bind(this)(item) }}
+            >
+              转接任务
+            </span>
+            <span
+              className='href'
+              onClick={() => { this.showVoucherModal.bind(this)(item) }}
+            >
+              查看凭证
+            </span>
           </span>
-          <span
-            className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
-            onClick={() => { this.showChangeModal.bind(this)(item) }}
-          >
-            转接任务
+        )
+      } else {
+        return (
+          <span>
+            <span
+              className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
+              onClick={() => { this.onAuditTask.bind(this)(item) }}
+            >
+              审批
+            </span>
+            <span
+              className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
+              onClick={() => { this.showChangeModal.bind(this)(item) }}
+            >
+              转接任务
+            </span>
+            <span
+              className='disabled'
+            >
+              查看凭证
+            </span>
           </span>
-          <span
-            className='href'
-            onClick={() => { this.showVoucherModal.bind(this)(item) }}
-          >
-            查看凭证
-          </span>
-        </span>
-      )
+        )
+      }
     }
   }]
   public componentWillMount () {
@@ -124,7 +148,6 @@ class Main extends React.Component<Props, State> {
       }
     })
   }
-
   // 全选反选
   public onSelectAllChange (selectedRowKeys: number[]) {
     this.setState({selectedRowKeys})

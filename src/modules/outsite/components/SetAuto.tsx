@@ -66,6 +66,7 @@ class Main extends React.Component<any, any> {
   }, {
     title: '操作',
     dataIndex: 'operation',
+    width: 120,
     render: (k: any, item: TaskItem) => {
       return (
       <span>
