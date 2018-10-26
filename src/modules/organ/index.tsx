@@ -13,11 +13,13 @@ const TabPane = Tabs.TabPane
 interface States {
   defaultActiveKey: 'direct' | 'agent' | 'accounting'
   showAccountingModal: number // 用于核算中心添加窗口的显示
+  showAccounting: boolean
 }
 class Main extends React.Component<null, States> {
   public state: States = {
     defaultActiveKey: 'direct',
-    showAccountingModal: 0
+    showAccountingModal: 0,
+    showAccounting: true
   }
   public callback (value?: 'direct' | 'agent' | 'accounting') {
     console.log(value, '11111')
@@ -63,6 +65,13 @@ class Main extends React.Component<null, States> {
         <AccountingDetail
           onOk={(value) => {
             changeAccounting(value).then(() => {
+              APP.success('操作成功')
+              this.setState({
+                showAccounting: false
+              })
+              this.setState({
+                showAccounting: true
+              })
               modal.hide()
             })
           }}
@@ -102,7 +111,10 @@ class Main extends React.Component<null, States> {
             <Agent />
           </TabPane>
           <TabPane tab='核算中心' key='accounting'>
-            <Accounting showAccountingModal={this.state.showAccountingModal} />
+            {
+              this.state.showAccounting &&
+              <Accounting showAccountingModal={this.state.showAccountingModal} />
+            }
           </TabPane>
         </Tabs>
       </ContentBox>

@@ -107,10 +107,14 @@ class Main extends React.Component<any, State> {
             // if (mode === 'modify') {
             //   payload.id = id
             // }
-            changeAccounting(vals).then((res) => {
+            changeAccounting(vals).then(() => {
+              APP.success('操作成功')
               this.getList()
               modal.hide()
             })
+            // .catch((err: any) => {
+            //   APP.error(err.responseJSON.errors[0].message)
+            // })
           }}
           onCancel={() => {modal.hide()}}
         />
