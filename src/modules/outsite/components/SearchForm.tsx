@@ -64,7 +64,7 @@ class Main extends React.Component<any, any> {
     searchData: {
       name: '', // 客户或联系人名称
       templeteId: '',
-      subId: '',
+      subTemplateId: '',
       userName: '', // 外勤人员
       status: '',
       orgId: '',
@@ -281,7 +281,7 @@ class Main extends React.Component<any, any> {
         )}
         </FormItem>
         <FormItem>
-        {getFieldDecorator(`tplSubid`, {
+        {getFieldDecorator(`subTemplateId`, {
           rules: [{
             required: false,
             message: ''
@@ -290,14 +290,8 @@ class Main extends React.Component<any, any> {
           <Select
             style={{width: '140px'}}
             onChange={(e: any) => {
-              /*
               this.syncSearchData({
-                tplTaskid: d
-              })
-              */
-              console.log('.......', e)
-              this.syncSearchData({
-                subId: e
+                subTemplateId: e
               })
             }}
             placeholder='全部当前子任务'
