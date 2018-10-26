@@ -274,6 +274,7 @@ class Main extends React.Component<Props, State> {
                 )(
                   <Select
                     onChange={(value) => {
+                      console.log(value, 'value')
                       this.setState({isShowOwnArea: value === 'outWorker'})
                     }}
                   >
