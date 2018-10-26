@@ -253,39 +253,28 @@ class Main extends React.Component<Props> {
               })
             }
           </Select>
-          <Input.Search
+          <Input
             placeholder='请输入姓名'
             className={styles.searchcondition}
             onChange={(e) => {
               this.searchPayload.name = e.target.value
             }}
-            onSearch={(value) => {
-              this.searchPayload.name = value
-              this.fetchData()
-            }}
           />
-          <Input.Search
+          <Input
             placeholder='请输入手机号'
             className={styles.searchcondition}
             onChange={(e) => {
               this.searchPayload.phone = e.target.value
             }}
-            onSearch={(value) => {
-              this.searchPayload.phone = value
-              this.fetchData()
-            }}
           />
-          <Input.Search
+          <Input
             placeholder='请输入部门名称'
             className={styles.searchcondition}
             onChange={(e) => {
               this.searchPayload.organizationName = e.target.value
             }}
-            onSearch={(value) => {
-              this.searchPayload.organizationName = value
-              this.fetchData()
-            }}
           />
+          <Button type='primary' onClick={() => {this.fetchData()}}>查询</Button>
         </div>
         <div>
           <Table
