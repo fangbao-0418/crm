@@ -65,7 +65,7 @@ class Main extends React.Component<any, any> {
                     <Divider type='vertical' style={{color: '#979797'}}/>
                     <span
                       onClick={() => {this.showDisableModal.bind(this)(item)}}
-                      className={`likebtn ${item.status === 'NORMAL' ? 'a' : 'likebtn-disabled'}`}
+                      className='likebtn'
                     >
                       {item.status === 'NORMAL' ? '禁用' : '启用'}
                     </span>

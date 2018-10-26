@@ -141,7 +141,7 @@ class Main extends React.Component<any, any> {
 
   // 解除商品绑定关系
   public onUnbind () {
-    Service.removeShopRelation(this.item.id).then(() => {
+    Service.removeShopRelation(this.item.id, '').then(() => {
       this.hideModal()
       this.getList()
     })
