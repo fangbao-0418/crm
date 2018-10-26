@@ -241,10 +241,19 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public componentWillMount () {
-    console.log(this.props.match.path, ' left will mount ')
+    if (this.props.match.path === '/') {
+      APP.history.push(this.getFirstUrl())
+    }
   }
   public componentDidMount () {
-    const pathname = this.props.location.pathname
+    this.getActive()
+  }
+  public componentWillReceiveProps (props: Props) {
+    if (this.props.location.pathname !== props.location.pathname) {
+      this.getActive(props.location.pathname)
+    }
+  }
+  public getActive (pathname = this.props.location.pathname) {
     let selectedKey = ''
     for (const key in this.pathInfo) {
       if (this.pathInfo[key] === pathname) {
@@ -255,6 +264,28 @@ class Main extends React.Component<Props, State> {
       openKeys: [selectedKey.substr(0, selectedKey.length - 2)],
       selectedKeys: [selectedKey]
     })
+  }
+  public getFirstUrl () {
+    let url = ''
+    this.configs.find((item) => {
+      if (item.hidden !== true) {
+        if (item.path) {
+          url = item.path
+          return true
+        } else {
+          if (item.children) {
+            return item.children.findIndex((item2) => {
+              if (item2.hidden !== true) {
+                url = item2.path
+                return true
+              }
+            }) > -1
+          }
+        }
+      }
+    })
+    APP.homepage = url || '/'
+    return APP.homepage
   }
   public getMenuNodes (configs = this.configs, prefKey = 'm') {
     const nodes: JSX.Element[] = []
@@ -314,7 +345,12 @@ class Main extends React.Component<Props, State> {
         collapsible
         collapsed={this.state.collapsed}
       >
-        <div className={styles.logo} />
+        <div
+          onClick={() => {
+            APP.history.push(this.getFirstUrl())
+          }}
+          className={styles.logo}
+        />
         <div className={styles.menu}>
           <Menu
             theme='dark'

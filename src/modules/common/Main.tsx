@@ -35,7 +35,7 @@ class Main extends React.Component<Common.Props> {
           <Content className={styles.content}>
             <Switch>
               {/*crm*/}
-              <Route hidden={!APP.hasPermission('index')} path='/' component={modules.Index} exact/>
+              <Route path='/' component={modules.Index} exact/>
               <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
               <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
               <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />

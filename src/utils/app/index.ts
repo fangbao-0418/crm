@@ -4,6 +4,7 @@ import * as fn from './fn'
 Object.assign(APP, {
   env: process.env.NODE_ENV,
   fn,
+  homepage: '/',
   success: (msg: string) => {
     notification.success({
       message: msg
