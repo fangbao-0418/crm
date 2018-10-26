@@ -17,7 +17,7 @@ class Main extends React.Component<Statistics.Props, any> {
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.dataPieList)
+    this.renderChart(this.props.overView.data.pieList)
   }
   public renderChart (dataPieList: OverViewProps[]) {
     if (dataPieList.length !== 3) {
@@ -86,8 +86,6 @@ class Main extends React.Component<Statistics.Props, any> {
     }
   }
   public render () {
-    const { dataPieList } = this.props
-    {console.log(dataPieList)}
     return (
     <div>
       <div ref='container' style={{height: '300px'}}></div>

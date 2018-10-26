@@ -241,7 +241,7 @@ class Main extends React.Component<any, any> {
         // onSubmit={this.props.onSearch}
       >
         <FormItem>
-        {getFieldDecorator(`name`, {
+        {getFieldDecorator(`customerName`, {
           rules: [{
             required: false,
             message: ''

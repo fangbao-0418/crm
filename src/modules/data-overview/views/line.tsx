@@ -9,8 +9,7 @@ class Main extends React.Component<Statistics.Props, any> {
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.dataLineList)
-    console.log(this.props.dataLineList)
+    this.renderChart(this.props.overView.data.lineList)
   }
   public renderChart (dataLineList: OverViewProps[]) {
     const option = {

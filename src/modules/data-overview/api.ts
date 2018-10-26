@@ -11,3 +11,7 @@ export const fetchOverViewTotal =  (customerId: number) => {
 export const fetchAgentList = (code: string) => {
   return http(`/user/v1/api/company/list/region/region_city/${code}/Agent`)
 }
+// 获取外勤人员绩效数据
+export const fetchPersonPerf = (payload: Statistics.DetailSearchPayload) => {
+  return http('/outside/v1/api/outside/data/statistics/company/personnel/reward/histogram', 'GET', payload)
+}

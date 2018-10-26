@@ -172,11 +172,6 @@ class Main extends React.Component {
       )
     }
   }]
-
-  public constructor (props: any, state: any) {
-    super({})
-  }
-
   public componentWillMount () {
     this.getList()
   }
@@ -246,7 +241,6 @@ class Main extends React.Component {
 
   // 搜索
   public onSearch (searchData: any) {
-    console.log('-------::', searchData)
     if (!searchData.status) {
       searchData.status = this.state.tab
     }

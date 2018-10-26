@@ -1,59 +1,13 @@
 declare namespace Statistics {
+  interface DetailSearchPayload {
+    customerId?: any
+    dateFlag?: 'DAY' | 'WEEK' | 'MONTH'
+    date?: string
+  }
   interface OverViewSearchPayload {
     customerId?: any
     dateFlag?: 'YEAR' | 'MONTH'
     date?: string
-  }
-  interface OverYearView {
-    typeValue?:''
-  }
-  /** 饼图类型 */
-  interface ItemPieProps {
-    /** 名称 */
-    name: string    //名称
-    value: number   //数据占比
-    // disabled?: boolean
-  }
-  interface ItemLineProps {
-    name:string    //名称
-    finishNum:number   //完成数据
-    finishRate:number   //完成率
-  }
-  interface TaskListProps {
-    taskName: number   //任务名称
-    reward?: string    //绩效
-  }
-  interface AreaListProps {
-    areaName: string         //区域名称
-    reward?: string     //绩效
-  }
-  interface HistogramRewardListProps {
-    name: string         //名称
-    reward?: string     //绩效
-  }
-  interface HistogramTaskDataListProps {
-    customerTotal?: number
-    finishedCount?:number
-    finishRate?:number
-    name?:string
-  }
-  interface NumberProps {
-    customerTotal: number  //总任务数
-    completeCustomerNum: number   //已完成任务数
-    finishRate: number    //完成率
-    incompleteCustomerNum: number   //未分配任务数
-    cancelCustomerNum:number     //取消任务数
-    rewardTotal:any     //总绩效
-    rewardIncrease:any   //绩效涨幅
-    finishedTotal?:any    //完成总数
-  }
-  interface CompanyProps  {
-    customerTodayTotal: number   //当日任务数
-    customerTotalDayIncrease: number  //任务数日同比
-    customerTotalWeekIncrease: number       //任务数周同比
-    todayRewardTotal?: number    //今天绩效数
-    rewardDayIncrease: number //绩效日同比
-    rewardWeekIncrease: number    //绩效周同比
   }
   export interface OverViewTotalProps {
     /** 总客户数 */
@@ -77,16 +31,88 @@ declare namespace Statistics {
     total?: OverViewTotalProps
     type?: 'MONTH' | 'YEAR'
     date?: string
+    data?: {
+      /** 总客户数 */
+      customerTotal: number
+      /** 已完成客户数 */
+      completeCustomerNum: number
+      /** 完成率 */
+      finishRate: number
+      /** 未分配客户数 */
+      incompleteCustomerNum: number
+      /** 取消客户数 */
+      cancelCustomerNum: number
+      /** 总绩效 */
+      rewardTotal: number,
+      /** 饼图数据 */
+      pieList: Array<{
+        name: string,
+        value: number
+      }>
+      /** 线图Y轴数据 */
+      lineList: Array<{
+        /** 完成数 */
+        finishNum: number,
+        /** 完成率 */
+        finishRate: number,
+        /** 名称 */
+        name: string
+      }>,
+      /** 任务分组绩效数据 */
+      taskSumRewardList: Array<{
+        /** 绩效 */
+        reward: number,
+        taskName: string,
+      }>,
+      /** 任务分组绩效数据 */
+      areaSumRewardList: Array<{
+         /** 绩效 */
+         reward: number,
+         areaName: string,
+      }>
+    }
+  }
+  /** 数据明细绩效属性 */
+  export interface DetailPerfProps {
+    /** 绩效总数 */
+    rewardTotal: number
+    /** 绩效涨幅 */
+    rewardIncrease: number
+    /** 柱状图数据 */
+    histogramRewardDataList: Array<{
+      reward: number,
+      name: string
+    }>
+  }
+  /** 数据明细任务完成率属性 */
+  export interface DetailRateProps {
+    /** 完成总数 */
+    finishedTotal: number
+    /** 绩效涨幅 */
+    rewardIncrease: number
+    histogramTaskDataList: Array<{
+      /** 总客户数 */
+      customerTotal: number
+      /** 完成数 */
+      finishedCount: number
+      /** 完成率 */
+      finishRate: number
+      /** 名称 */
+      name: string
+    }>
+  }
+  export interface DetailProps {
+    /** 人员绩效 */
+    personPerf: DetailPerfProps
+    /** 人员完成率 */
+    personRate: DetailRateProps
+    /** 任务绩效 */
+    taskPerf: DetailPerfProps
+    /** 任务完成率 */
+    taskRate: DetailRateProps
   }
   export interface Props {
     overView?: OverViewProps
-    dataPieList?: ItemPieProps[]
-    dataLineList?: ItemLineProps[]
-    taskSumRewardList?: TaskListProps[]
-    areaSumRewardList?: AreaListProps[]
-    histogramRewardDataList?: HistogramRewardListProps[]
-    histogramTaskDataList?:HistogramTaskDataListProps[]
-    allProps?: NumberProps
-    companyProps?: CompanyProps
+    detail?: DetailProps
   } 
 }

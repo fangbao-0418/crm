@@ -53,12 +53,12 @@ class Main extends React.Component<Statistics.Props, any> {
   }
 
   public render () {
-    const {allProps} = this.props
+    const { detail: { personRate } } = this.props
     return (
     <div>
       <div>
-        <span>已完成任务数：200家</span>
-        <span style={{marginLeft:'20px'}}>绩效涨幅：12% <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
+        <span>已完成任务数：{personRate.finishedTotal}家</span>
+        <span style={{marginLeft:'20px'}}>绩效涨幅：{personRate.rewardIncrease}% <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
       </div>
       <div ref='rate' style={{width: '100%', height: '400px'}}></div>
     </div>

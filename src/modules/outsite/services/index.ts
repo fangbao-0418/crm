@@ -254,7 +254,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
     const cond = {
       pageSize: 10,
       pageCurrent: 1,
-      name: '',
+      customerName: '',
       status: '',
       priority: '',
       origId: ''

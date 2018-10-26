@@ -23,9 +23,9 @@ class Main extends React.Component<Statistics.Props, any> {
     }
   }
   public render () {
-    const { taskSumRewardList, allProps, dataLineList, areaSumRewardList, overView } = this.props
+    const { overView } = this.props
     const { numberList } = this.state
-    const { type, date } = overView
+    const { type, date, data } = overView
     return (
     <div className={styles.container}>
       <ContentBox title='数据总览'>
@@ -36,19 +36,19 @@ class Main extends React.Component<Statistics.Props, any> {
       <Row className={styles.listLeft}>
         <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
           <p className={styles.clientLeft}>{date}任务总览</p>
-          <p className={styles.clientRight}>任务总数：{allProps.customerTotal}</p>
+          <p className={styles.clientRight}>任务总数：{data.customerTotal}</p>
           <div className={styles.pic}>
             <PieList />
           </div>
         </Col>
         <Col span={11} className={styles.allPic}>
           <p className={styles.clientLeft}>{date}绩效总览</p>
-          <p className={styles.clientRight}>绩效总额：￥{allProps.rewardTotal}</p>
+          <p className={styles.clientRight}>绩效总额：￥{data.rewardTotal}</p>
           <div style={{clear:'both'}}>
             <ul className={styles.listPerform}>
-              {(dataLineList && dataLineList.length > 0) ? <div>
+              {(data.taskSumRewardList.length > 0) ? <div>
                 <li key={numberList.index}>
-                  {taskSumRewardList.map((item, index) => {
+                  {data.taskSumRewardList.map((item, index) => {
                     const { taskName, reward } = item
                     return  <dd key={index}>{taskName}：￥{reward}</dd>
                   })}
@@ -57,9 +57,9 @@ class Main extends React.Component<Statistics.Props, any> {
             </ul>
           </div>
           <ul className={styles.region}>
-            {(areaSumRewardList && areaSumRewardList.length > 0) ? <div>
+            {(data.areaSumRewardList.length > 0) ? <div>
               <li key={numberList.index}>
-                {areaSumRewardList.map((item, index) => {
+                {data.areaSumRewardList.map((item, index) => {
                   const { areaName, reward } = item
                   return  <dd key={index}>{areaName}：￥{reward}</dd>
                 })}

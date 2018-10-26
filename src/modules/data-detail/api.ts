@@ -1,11 +1,11 @@
 import http from '@/utils/http'
 // 获取外勤人员-绩效柱状图
-export const fetchPerformList = (payload: Statistics.SearchPayload) => {
-  return http(`outside/v1/api/outside/data/statistics/company/personnel/reward/histogram`, 'GET', payload)
+export const fetchPersonPerformance = (payload: Statistics.DetailSearchPayload) => {
+  return http(`/outside/v1/api/outside/data/statistics/company/personnel/reward/histogram`, 'GET', payload)
 }
 // 获取外勤人员-任务完成率
-export const taskList = (payload: Statistics.SearchPayload) => {
-  return http(`outside/v1/api/outside/data/statistics/company/personnel/task/rate/histogram`, 'GET', payload)
+export const fetchPersonFinishRate = (payload: Statistics.SearchPayload) => {
+  return http(`/outside/v1/api/outside/data/statistics/company/personnel/task/rate/histogram`, 'GET', payload)
 }
 // 获取外勤任务-绩效柱状图
 export const missionList =  (payload: {
@@ -14,7 +14,7 @@ export const missionList =  (payload: {
   date?: string       // 查询日期
   category?: string    // 类型  AREA区域;CATEGORY任务类型
 }) => {
-  return http(`outside/v1/api/outside/data/statistics/company/task/reward/histogram`, 'GET', payload)
+  return http(`/outside/v1/api/outside/data/statistics/company/task/reward/histogram`, 'GET', payload)
 }
 // 获取外勤任务-任务完成率柱状图
 export const rate =  (payload: {
@@ -23,5 +23,5 @@ export const rate =  (payload: {
   date?: string       // 查询日期
   category?: string    // 类型  AREA区域;CATEGORY任务类型
 }) => {
-  return http(`outside/v1/api/outside/data/statistics/company/task/rate/histogram`, 'GET', payload)
+  return http(`/outside/v1/api/outside/data/statistics/company/task/rate/histogram`, 'GET', payload)
 }

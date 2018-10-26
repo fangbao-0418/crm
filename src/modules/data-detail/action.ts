@@ -1,11 +1,6 @@
-import { fetchPerformList } from './api'
-export const fetchListAction = (payload: Statistics.SearchPayload = {
-  customerId: 0,
-  dateFlag: '',
-  date: ''
-}) => {
-  fetchPerformList(payload).then((res) => {
-    // console.log(res)
+import { fetchPersonPerformance, fetchPersonFinishRate } from './api'
+export const fetchPersonDataAction = (payload: Statistics.DetailSearchPayload) => {
+  fetchPersonPerformance(payload).then((res) => {
     APP.dispatch<Statistics.Props>({
       type: 'change screen data',
       payload: {
