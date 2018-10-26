@@ -11,6 +11,11 @@ const options = {
     errors: true
   },
   proxy: {
+    '/sys': {
+      target: 'https://x-sys.i-counting.cn',
+      changeOrigin: true,
+      secure: false
+    },
     '/work': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,

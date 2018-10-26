@@ -102,7 +102,7 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
     token: `${APP.token}`
   })
   let ajaxConfig: JQuery.AjaxSettings = {
-    url,
+    url: '/sys' + url,
     method: type,
     headers,
     contentType: config.contentType !== undefined ? config.contentType : 'application/json; charset=utf-8',

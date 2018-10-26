@@ -240,6 +240,9 @@ class Main extends React.Component<Props, State> {
       icon: <MenuIcon type='log' />
     }
   ]
+  public componentWillMount () {
+    console.log(this.props.match.path, ' left will mount ')
+  }
   public componentDidMount () {
     const pathname = this.props.location.pathname
     let selectedKey = ''
