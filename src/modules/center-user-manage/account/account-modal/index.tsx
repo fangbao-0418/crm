@@ -221,14 +221,15 @@ class Main extends React.Component<Props, State> {
     console.log(Positions, 'Positions')
     Positions.forEach((item: any) => {
       const indexList = item.pos.split('-')
+      console.log(indexList, 'indexList')
       const areaInfo: any = {}
-      if (indexList.length !== 6) {return} // 不为6代表没有选中最末级公司
+      if (indexList.length !== 5) {return} // 不为6代表没有选中最末级公司
       const area1 = regionTree[indexList[1]]
       console.log(area1, 'area1')
       const area2 = area1.regionList[indexList[2]]
       const area3 = area2.regionList[indexList[3]]
+      // const area4 = area3.regionList[indexList[4]]
       const area4 = area3.regionList[indexList[4]]
-      const area5 = area4.regionList[indexList[5]]
       areaInfo.regionRootArea = area1.code
       areaInfo.regionRootAreaName = area1.name
       areaInfo.regionProvince = area2.code
@@ -237,7 +238,7 @@ class Main extends React.Component<Props, State> {
       areaInfo.regionCityName = area3.name
       // areaInfo.regionArea = area4.code
       // areaInfo.regionAreaName = area4.name
-      areaInfo.companyId = area5.id
+      areaInfo.companyId = area4.id
       this.selectAreaInfoList.push(areaInfo)
     })
   }
