@@ -189,19 +189,19 @@ class Main extends React.Component<any, any> {
 
   // 搜索提交
   public onChange (e: Event) {
-    // console.log('search form changed::', a, arguments)
-    e.preventDefault()
+    if (e) {
+      e.preventDefault()
+    }
     this.props.form.validateFields((err: any, values: any) => {
-      // console.log('Received values of form: ', values)
-      // this.props.onSearch(Object.assign({}, this.state.searchData, values))
       const vals: Map<any> = {}
       _.map(values, (val: any, key: any) => {
         // if (val) {
         vals[key] = val
         // }
       })
+      vals.userName = vals.personName
+      delete vals.personName
       const searchData = Object.assign({}, this.state.searchData, vals)
-      console.log('search form change::', searchData, vals)
       this.setState({
         searchData
       }, () => {
@@ -311,13 +311,18 @@ class Main extends React.Component<any, any> {
             <Row>
               <Col span={12}>
                 <FormItem>
-                  {getFieldDecorator(`userName`, {
+                  {getFieldDecorator(`personName`, {
                     rules: [{
                       required: false,
                       message: ''
                     }]
                   })(
-                    <Search placeholder='请输入外勤人员' />
+                    <Search
+                      placeholder='请输入外勤人员'
+                      onSearch={() => {
+                        this.onChange(null)
+                      }}
+                    />
                   )}
                 </FormItem>
               </Col>
