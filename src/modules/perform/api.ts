@@ -8,7 +8,9 @@ export const update = (payload: {
   id: string
   reward: string
 }) => {
-  return http(`/outside/v1/api/task/reward/update`, 'PUT', payload)
+  return http(`/outside//v1/api/task/reward/${payload.id}`, 'PUT', {
+    reward: payload.reward
+  })
 }
 // // 新增绩效
 // export const add = (payload: Perform.ItemProps) => {

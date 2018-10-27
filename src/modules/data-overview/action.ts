@@ -1,4 +1,4 @@
-import { fetchOverView, fetchOverViewTotal } from './api'
+import { fetchOverView } from './api'
 export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = {}) => {
   fetchOverView(payload).then((res) => {
     APP.dispatch<Statistics.Props>({
@@ -11,15 +11,15 @@ export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = 
     })
   })
 }
-export const fetchOverViewTotalAction = (id: number) => {
-  fetchOverViewTotal(id).then((res) => {
-    APP.dispatch<Statistics.Props>({
-      type: 'change screen data',
-      payload: {
-        overView: {
-          total: res
-        }
-      }
-    })
-  })
-}
+// export const fetchOverViewTotalAction = (id: number) => {
+//   fetchOverViewTotal(id).then((res) => {
+//     APP.dispatch<Statistics.Props>({
+//       type: 'change screen data',
+//       payload: {
+//         overView: {
+//           total: res
+//         }
+//       }
+//     })
+//   })
+// }

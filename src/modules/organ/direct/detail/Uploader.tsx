@@ -10,7 +10,18 @@ interface Props {
   onUploaded?: (url?: string) => void
   title?: string
 }
-class Main extends React.Component<Props> {
+interface State {
+  value: string
+}
+class Main extends React.Component<Props, State> {
+  public state: State = {
+    value: this.props.value
+  }
+  public componentWillReceiveProps (props: Props) {
+    this.setState({
+      value: props.value
+    })
+  }
   public handleClick () {
     if (this.props.disabled) {
       return
@@ -38,8 +49,13 @@ class Main extends React.Component<Props> {
         <div className={styles['upload-area']}>
           <img
             ref='img'
-            src={this.props.value || defaultVal}
+            src={this.state.value || defaultVal}
             alt=''
+            onError={() => {
+              this.setState({
+                value: defaultVal
+              })
+            }}
             onClick={this.handleClick.bind(this)}
           />
         </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Select, DatePicker } from 'antd'
 import moment from 'moment'
-import { fetchOverViewAction, fetchOverViewTotalAction } from './action'
+import { fetchOverViewAction } from './action'
 import { fetchOwnRegion } from '@/modules/common/api'
 import { fetchAgentList } from './api'
 const styles = require('./style')
@@ -10,7 +10,7 @@ const Option = Select.Option
 const monthFormat = 'YYYY/MM'
 const monthFormatYear = 'YYYY'
 interface State {
-  type: 'MONTH' | 'YEAR'
+  type: 'month' | 'year'
   provinceList: Common.RegionProps[]
   cityList: Common.RegionProps[]
   agentList: Common.AgentProps[]
@@ -25,9 +25,11 @@ while (currentYear >= 2014) {
   currentYear -= 1
 }
 class Main extends React.Component<{}, State> {
-  public payload: Statistics.OverViewSearchPayload = {}
+  public payload: Statistics.OverViewSearchPayload = {
+    dateType: 'month'
+  }
   public state: State = {
-    type: 'MONTH',
+    type: 'month',
     provinceList: [],
     cityList: [],
     agentList: []
@@ -36,7 +38,7 @@ class Main extends React.Component<{}, State> {
     // this.fetchData()
     fetchOwnRegion().then((res) => {
       if (res.length === 0) {
-        this.payload.customerId = APP.user.companyId
+        this.payload.companyId = APP.user.companyId
         this.fetchData()
       }
       this.setState({
@@ -45,9 +47,8 @@ class Main extends React.Component<{}, State> {
     })
   }
   public fetchData () {
-    if (this.payload.customerId !== undefined) {
+    if (this.payload.companyId !== undefined) {
       fetchOverViewAction(this.payload)
-      fetchOverViewTotalAction(this.payload.customerId)
     }
   }
   public onProvinceChange (index?: number) {
@@ -73,8 +74,8 @@ class Main extends React.Component<{}, State> {
           defaultValue='按月查询'
           className={styles.selected}
           style={{width: 120}}
-          onChange={(value: 'MONTH' | 'YEAR') => {
-            this.payload.dateFlag = value
+          onChange={(value: any) => {
+            this.payload.dateType = value
             APP.dispatch<Statistics.Props>({
               type: 'change screen data',
               payload: {
@@ -86,6 +87,7 @@ class Main extends React.Component<{}, State> {
             this.setState({
               type: value
             })
+            this.payload.dateType = value
             // this.fetchData()
           }}
         >
@@ -97,7 +99,7 @@ class Main extends React.Component<{}, State> {
           </Option>
         </Select>
         {
-          type === 'MONTH' ? (
+          type === 'month' ? (
             <MonthPicker
               placeholder='请选择月份'
               className={styles.selected}
@@ -178,7 +180,7 @@ class Main extends React.Component<{}, State> {
                 placeholder='请选择代理商'
                 className={styles.selected}
                 onChange={(id: number) => {
-                  this.payload.customerId = id
+                  this.payload.companyId = id
                   this.fetchData()
                 }}
               >

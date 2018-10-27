@@ -7,24 +7,10 @@ import Line from '@/modules/data-overview/views/line'
 import Total from './Total'
 import Search from './Search'
 const styles = require('./style')
-interface States {
-  cities: any,
-  secondCity: any
-  isabled: boolean
-}
-
 // 列表
-class Main extends React.Component<Statistics.Props, any> {
-  public constructor (props: any) {
-    super(props)
-    this.state = {
-      numberList:[1, 2, 3],
-      isabled: false
-    }
-  }
+class Main extends React.Component<Statistics.Props> {
   public render () {
     const { overView } = this.props
-    const { numberList } = this.state
     const { type, date, data } = overView
     return (
     <div className={styles.container}>
@@ -32,7 +18,7 @@ class Main extends React.Component<Statistics.Props, any> {
       <Row className={styles.tab}>
         <Search />
       </Row>
-      <Total />
+      {/* <Total /> */}
       <Row className={styles.listLeft}>
         <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
           <p className={styles.clientLeft}>{date}任务总览</p>
@@ -47,7 +33,7 @@ class Main extends React.Component<Statistics.Props, any> {
           <div style={{clear:'both'}}>
             <ul className={styles.listPerform}>
               {(data.taskSumRewardList.length > 0) ? <div>
-                <li key={numberList.index}>
+                <li>
                   {data.taskSumRewardList.map((item, index) => {
                     const { taskName, reward } = item
                     return  <dd key={index}>{taskName}：￥{reward}</dd>
@@ -58,13 +44,13 @@ class Main extends React.Component<Statistics.Props, any> {
           </div>
           <ul className={styles.region}>
             {(data.areaSumRewardList.length > 0) ? <div>
-              <li key={numberList.index}>
+              <li>
                 {data.areaSumRewardList.map((item, index) => {
                   const { areaName, reward } = item
                   return  <dd key={index}>{areaName}：￥{reward}</dd>
                 })}
               </li>
-            </div> : <li key={numberList.index}>暂无区域数据</li>}
+            </div> : <li>暂无区域数据</li>}
           </ul>
         </Col>
       </Row>

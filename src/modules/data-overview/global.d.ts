@@ -5,8 +5,8 @@ declare namespace Statistics {
     date?: string
   }
   interface OverViewSearchPayload {
-    customerId?: any
-    dateFlag?: 'YEAR' | 'MONTH'
+    companyId?: any
+    dateType?: 'month' | 'year'
     date?: string
   }
   export interface OverViewTotalProps {
@@ -58,13 +58,13 @@ declare namespace Statistics {
         /** 名称 */
         name: string
       }>,
-      /** 任务分组绩效数据 */
+      /** 任务分类绩效 */
       taskSumRewardList: Array<{
         /** 绩效 */
         reward: number,
         taskName: string,
       }>,
-      /** 任务分组绩效数据 */
+      /** 地区分类绩效 */
       areaSumRewardList: Array<{
          /** 绩效 */
          reward: number,
