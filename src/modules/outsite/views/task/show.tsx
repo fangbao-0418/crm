@@ -82,52 +82,33 @@ class Main extends React.Component<Props, State> {
     title: '操作',
     dataIndex: 'operation',
     render: (text, item) => {
-      if (item.imageUrl !== null) {
-        return (
-          <span>
-            <span
-              className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
-              onClick={() => { this.onAuditTask.bind(this)(item) }}
-            >
-              审批
-            </span>
-            <span
-              className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
-              onClick={() => { this.showChangeModal.bind(this)(item) }}
-            >
-              转接任务
-            </span>
-            <span
-              className='href'
-              onClick={() => { this.showVoucherModal.bind(this)(item) }}
-            >
-              查看凭证
-            </span>
+      return (
+        <span>
+          <span
+            className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
+            onClick={() => { this.onAuditTask.bind(this)(item) }}
+          >
+            审批
           </span>
-        )
-      } else {
-        return (
-          <span>
-            <span
-              className={`mr5 ${item.status === 'PENDING' ? 'href' : 'likebtn-disabled'}`}
-              onClick={() => { this.onAuditTask.bind(this)(item) }}
-            >
-              审批
-            </span>
-            <span
-              className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
-              onClick={() => { this.showChangeModal.bind(this)(item) }}
-            >
-              转接任务
-            </span>
-            <span
-              className='disabled'
-            >
-              查看凭证
-            </span>
+          <span
+            className={`mr5 ${['FINISHED', 'CANCELLED'].indexOf(item.status) === -1 ? 'href' : 'likebtn-disabled'}`}
+            onClick={() => { this.showChangeModal.bind(this)(item) }}
+          >
+            转接任务
           </span>
-        )
-      }
+          <span
+            className={`${item.imageUrl ? 'href' : 'disabled'}`}
+            onClick={() => {
+              if (!item.imageUrl) {
+                return
+              }
+              this.showVoucherModal.bind(this)(item)
+            }}
+          >
+            查看凭证
+          </span>
+        </span>
+      )
     }
   }]
   public componentWillMount () {
@@ -340,6 +321,7 @@ class Main extends React.Component<Props, State> {
           userId,
           ids: [record.id]
         }).then((res) => {
+          this.getList()
           modal.hide()
         })
       }
