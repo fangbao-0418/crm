@@ -31,6 +31,9 @@ class Main extends React.Component<Props> {
   public componentWillMount () {
     fetchCompanyListAction(this.type)
   }
+  public componentWillReceiveProps (props: UserManage.Props) {
+    console.log(props, 'will receive')
+  }
   public add () {
     console.log(this.props, 'add')
     if (this.props.companyCode === undefined) {
@@ -148,13 +151,22 @@ class Main extends React.Component<Props> {
               onChange={this.callback.bind(this)}
             >
               <TabPane tab='部门' key='department'>
-                <Department type={this.type} />
+                {
+                  this.props.tab === 'department' &&
+                  <Department type={this.type} />
+                }
               </TabPane>
               <TabPane tab='账号' key='account'>
-                <Account type={this.type} />
+                {
+                  this.props.tab === 'account' &&
+                  <Account type={this.type} />
+                }
               </TabPane>
               <TabPane tab='自定义角色' key='role'>
-                <Role type={this.type} />
+                {
+                  this.props.tab === 'role' &&
+                  <Role type={this.type} />
+                }
               </TabPane>
             </Tabs>
           </div>

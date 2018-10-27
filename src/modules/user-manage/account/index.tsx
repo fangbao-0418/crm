@@ -84,6 +84,13 @@ class Main extends React.Component<Props> {
     }
   ]
   public componentWillMount () {
+    if (this.props.companyCode) {
+      console.log(this.props.companyCode, 'companyCode')
+      this.searchPayload.companyId = this.props.companyCode
+      this.searchPayload.companyName = this.props.companyName
+      this.searchPayload.userType = this.props.type
+      this.fetchData()
+    }
     APP.dispatch<UserManage.Props>({
       type: 'change user manage data',
       payload: {
@@ -233,7 +240,7 @@ class Main extends React.Component<Props> {
         <div className={styles.formitem}>
           <Select
             showSearch
-            // value={selectValue}
+            value={selectValue}
             disabled={disabled}
             placeholder='请输入公司名称'
             className={styles.searchcondition}

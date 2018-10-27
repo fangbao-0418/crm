@@ -57,10 +57,13 @@ class Main extends React.Component<Props> {
       payload: {
         department: {
           dataSource: []
-        },
-        companyCode: undefined
+        }
+        // companyCode: undefined
       }
     })
+    if (this.props.companyCode) {
+      this.fetchData(this.props.companyCode, this.props.type)
+    }
   }
   public componentWillReceiveProps (props: Props) {
     if (props.onlyOne && props.department.dataSource.length === 0 && props.type && props.companyCode !== undefined && this.loaded === false) {
@@ -153,7 +156,7 @@ class Main extends React.Component<Props> {
         <div className={styles.formitem}>
           <Select
             disabled={disabled}
-            // value={selectValue}
+            value={selectValue}
             showSearch
             placeholder='请输入公司名称'
             className={styles.searchcondition}

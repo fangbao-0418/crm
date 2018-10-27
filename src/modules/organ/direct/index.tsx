@@ -21,13 +21,13 @@ class Main extends React.Component<Props, State> {
     pagination: {
       total: 0,
       current: 1,
-      pageSize: 15
+      pageSize: 10
     }
   }
   public payload: Organ.DirectSearchPayload = {
     companyType: this.type,
     pageCurrent: 1,
-    pageSize: 15
+    pageSize: 10
   }
   public columns: ColumnProps<Organ.DirectItemProps>[] = [
     {

@@ -74,3 +74,11 @@ export const fetchCompanyListAction = (type: UserManage.TypeProps) => {
     }
   })
 }
+export const changeVisibleAction = (visibled: boolean = true) => {
+  APP.dispatch<UserManage.Props>({
+    type: 'change user manage data',
+    payload: {
+      visibled
+    }
+  })
+}

@@ -19,6 +19,13 @@ class Main extends React.Component<Props, State> {
           visible: true
         })
       })
+      APP.dispatch<UserManage.Props>({
+        type: 'change user manage data',
+        payload: {
+          companyCode: '',
+          companyName: ''
+        }
+      })
     }
   }
   public render () {
