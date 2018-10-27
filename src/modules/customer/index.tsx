@@ -78,12 +78,7 @@ const data: ConditionOptionProps[] = [
     value: '',
     field: 'cityCode',
     type: 'select',
-    options: [
-      {
-        label: '',
-        value: ''
-      }
-    ]
+    options: []
   },
   {
     label: ['纳税类别'],
