@@ -125,5 +125,6 @@ declare namespace UserManage {
     companyCode?: string
     companyName?: string
     onlyOne?: boolean
+    visibled?: boolean
   }
 }
