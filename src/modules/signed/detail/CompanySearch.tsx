@@ -57,22 +57,25 @@ class Main extends React.Component<Props, State> {
           value={this.props.value}
           {...this.props}
         />
-        <ul
-          hidden={!this.state.visible}
-        >
-          {
-            tianyanDataSource.map((item, index) => {
-              return (
-                <li
-                  key={`tianyan-company-${index}`}
-                  onClick={this.handleItemClick.bind(this, item)}
-                >
-                  {item.name}
-                </li>
-              )
-            })
-          }
-        </ul>
+        {
+          tianyanDataSource.length > 0 &&
+          <ul
+            hidden={!this.state.visible}
+          >
+            {
+              tianyanDataSource.map((item, index) => {
+                return (
+                  <li
+                    key={`tianyan-company-${index}`}
+                    onClick={this.handleItemClick.bind(this, item)}
+                  >
+                    {item.name}
+                  </li>
+                )
+              })
+            }
+          </ul>
+        }
       </div>
     )
   }

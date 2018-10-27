@@ -60,7 +60,7 @@ class Main extends React.Component<Props, State> {
           label: 'name',
           value: 'code'
         }}
-        placeholder='请选择省份城市'
+        placeholder='请选择省市'
         disabled={this.props.disabled}
         options={options}
         loadData={this.loadCityData.bind(this)}
