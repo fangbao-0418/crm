@@ -11,6 +11,13 @@ class Main extends React.Component<Props, State> {
   }
   public componentWillReceiveProps (props: Props) {
     const type = this.props.match.params.type
+    APP.dispatch<UserManage.Props>({
+      type: 'change user manage data',
+      payload: {
+        companyCode: '',
+        companyName: ''
+      }
+    })
     if (props.match.params.type !== type) {
       this.setState({
         visible: false
@@ -18,13 +25,6 @@ class Main extends React.Component<Props, State> {
         this.setState({
           visible: true
         })
-      })
-      APP.dispatch<UserManage.Props>({
-        type: 'change user manage data',
-        payload: {
-          companyCode: '',
-          companyName: ''
-        }
       })
     }
   }

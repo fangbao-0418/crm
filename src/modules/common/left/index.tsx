@@ -345,12 +345,14 @@ class Main extends React.Component<Props, State> {
         collapsible
         collapsed={this.state.collapsed}
       >
-        <div
-          onClick={() => {
-            APP.history.push(this.getFirstUrl())
-          }}
-          className={styles.logo}
-        />
+        <div className={styles.top}>
+          <div
+            onClick={() => {
+              APP.history.push(this.getFirstUrl())
+            }}
+            className={styles.logo}
+          />
+        </div>
         <div className={styles.menu}>
           <Menu
             theme='dark'
