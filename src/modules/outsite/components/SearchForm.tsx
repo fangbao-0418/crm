@@ -307,6 +307,7 @@ class Main extends React.Component<any, any> {
           </span>
           <div
             className={`mt10 ${styles.extcontent} ${this.state.extshow ? styles.show : styles.hide}`}
+            style={{width: '400px'}}
           >
             <Row>
               <Col span={12}>
