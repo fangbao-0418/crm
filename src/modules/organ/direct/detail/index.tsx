@@ -112,7 +112,7 @@ class Main extends React.Component<Props> {
                 }],
                 initialValue: item.managerPhone
               })(
-                <Input placeholder='请输入手机号' disabled={disabled}/>
+                <Input placeholder='请输入手机号' disabled={disabled} maxLength={11}/>
               )}
             </FormItem>
           </Col>

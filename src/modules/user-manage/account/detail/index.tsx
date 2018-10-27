@@ -239,7 +239,7 @@ class Main extends React.Component<Props, State> {
             <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='手机号'>
               {
                 getFieldDecorator('phone', validation.phone)(
-                  <Input disabled={disabled} size='small' placeholder='请输入手机号'/>
+                  <Input disabled={disabled} size='small' placeholder='请输入手机号' maxLength={11}/>
                 )
               }
             </FormItem>
