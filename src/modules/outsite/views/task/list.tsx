@@ -202,6 +202,7 @@ class Main extends React.Component {
       dataSource: data
     })
     */
+    console.log(this.state.searchData, 'searchData')
     const { searchData } = this.state
     Service.getListByCond(searchData).then((d: any) => {
       const { pageSize, total, pageCurrent } = d
@@ -217,8 +218,6 @@ class Main extends React.Component {
           pageSize,
           pageCurrent
         }
-      }, () => {
-        console.log('........', this.state)
       })
     })
   }
@@ -244,7 +243,6 @@ class Main extends React.Component {
     if (!searchData.status) {
       searchData.status = this.state.tab
     }
-    console.log('search::', this.state.tab, searchData)
     this.setState({
       searchData
     }, () => {
@@ -276,7 +274,6 @@ class Main extends React.Component {
 
   // tab切换
   public onTabChange (key: string) {
-    console.log('tab change::', key)
     const { searchData } = this.state
     searchData.status = key
     this.setState({
@@ -344,7 +341,7 @@ class Main extends React.Component {
       >
         <Row>
           <Col span={20}>
-            <SearchForm parData={this.state} onSearch={this.onSearch.bind(this)} />
+            <SearchForm tab={this.state.tab} onSearch={this.onSearch.bind(this)} />
           </Col>
         </Row>
         <Row>

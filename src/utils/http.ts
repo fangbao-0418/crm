@@ -26,7 +26,6 @@ $(document).ajaxSend((event, response, options) => {
   if (index > -1) {
     return
   }
-  console.log(index, 'url')
   store.dispatch({type: 'loading show'})
   const { ajaxCount } = store.getState().common
   if (ajaxCount > 0 && $('.pilipa-loading').length === 0) {

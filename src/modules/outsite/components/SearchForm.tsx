@@ -1,41 +1,21 @@
 import React from 'react'
-import { Input, Form, Select } from 'antd'
-import { DatePicker, Row, Col } from 'antd'
-import Area from './Area'
-import moment, { Moment } from 'moment'
-import Service from '@/modules/outsite/services'
+import { DatePicker, Input, Form, Select, Row, Col } from 'antd'
+import { FormComponentProps } from 'antd/lib/form'
 import classNames from 'classnames'
+import moment from 'moment'
+import Area from './Area'
+import Service from '@/modules/outsite/services'
 import _ from 'lodash'
 type Map<T> = OutSide.Map<T>
 const FormItem = Form.Item
 const Search = Input.Search
 const styles = require('@/modules/outsite/styles/list')
-interface States {
-  a?: any
+interface Props extends FormComponentProps {
+  tab?: string,
+  onSearch?: (data: any) => void
 }
-interface Props {
-  onSearch: () => {}
-  dateOnChange: (d: Moment) => {}
-}
-
-function hasErrors (fieldsError: any) {
-  return Object.keys(fieldsError).some((field: any) => fieldsError[field])
-}
-
-  /*
-    UNDISTRIBUTED: '未分配',
-    DISTRIBUTED: '已分配',
-    COLLECTING: '收集资料',
-    FINISHED: '已完成', // （外勤主管审批交付通过）
-    REFUSED: '已驳回', // (外勤主管审批交付不通过)
-    RUNNING: '进行中',
-    SUBMITED: '已交付',
-    CANCELUNAPPROVED: '待审批', // （取消）
-    REJECTUNAPPROVED: '待审批', // （拒绝）
-    CANCELED: '已取消' // (外勤主管审批取消通过)
-    */
 // 搜索表单
-class Main extends React.Component<any, any> {
+class Main extends React.Component<Props, any> {
   public state: any = {
     extshow: false,
     tplTaskList: [], // 任务模板列表
@@ -105,14 +85,20 @@ class Main extends React.Component<any, any> {
   }
 
   public componentWillReceiveProps (props: any) {
-    this.setCurrentStatusDict(props.parData.tab)
+    this.setCurrentStatusDict(props.tab)
+    if (props.tab !== this.props.tab) {
+      const { searchData } = this.state
+      searchData.status = undefined
+      this.setState({
+        searchData
+      })
+    }
   }
 
   // 设置当前的状态字典
   public setCurrentStatusDict (tab: any = '') {
     const { statusGroup } = this.state
-    tab = tab ? tab : this.props.parData.tab
-    console.log('?????????', this.props.parData.tab, statusGroup[tab])
+    tab = tab ? tab : this.props.tab
     this.setState({
       statusDict: statusGroup[tab]
     })
@@ -160,7 +146,6 @@ class Main extends React.Component<any, any> {
 
   // 生成下拉
   public createTaskNameOptions (options: Array<any>, key: string = 'id') {
-    console.log(options, 'options')
     return options.map((item: any) => {
       return (
         <Select.Option
@@ -209,7 +194,7 @@ class Main extends React.Component<any, any> {
   // 挂父组件回调
   public hookCallback () {
     if (this.props.onSearch) {
-      this.props.onSearch(this.state.searchData)
+      this.props.onSearch(_.cloneDeep(this.state.searchData))
     }
   }
 
@@ -227,7 +212,7 @@ class Main extends React.Component<any, any> {
   }
   public render () {
     const { getFieldDecorator } = this.props.form
-
+    const { searchData } = this.state
     return (
     <div className='t-search-form'>
       <Form
@@ -328,6 +313,7 @@ class Main extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem>
                 {getFieldDecorator(`status`, {
+                  valuePropName: searchData.status,
                   rules: [{
                     required: false,
                     message: ''
@@ -335,6 +321,7 @@ class Main extends React.Component<any, any> {
                 })(
                   <Select
                     style={{width: '140px'}}
+                    value={this.state.searchData.status}
                     onChange={(status: any) => {
                       this.syncSearchData({
                         status
@@ -377,10 +364,10 @@ class Main extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem>
                   {getFieldDecorator(`startTime`, {
-                    placeholder: '请输入日期',
-                    format: `YY-MM-DD`
                   })(
                     <DatePicker
+                      placeholder='请输入日期'
+                      format='YY-MM-DD'
                       style={{width:'100%'}}
                       onChange={(d: any) => {
                         const v = moment(d).format('YYYY-MM-DD')
