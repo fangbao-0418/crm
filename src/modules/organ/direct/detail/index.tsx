@@ -108,7 +108,7 @@ class Main extends React.Component<Props> {
                 rules: [{
                   required: true, message: '请输入手机号'
                 }, {
-                  len: 11, message: '手机号格式不对！'
+                  pattern: /^1[3|4|5|7|8|9][0-9]\d{8}$/, message: '手机号格式不对！'
                 }],
                 initialValue: item.managerPhone
               })(
