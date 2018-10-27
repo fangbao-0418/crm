@@ -88,6 +88,7 @@ class Main extends React.Component {
           content: (
             <Detail
               disabled={type === 'view'}
+              type='agent'
               item={item}
               onOk={(values) => {
                 if (type === 'update') {
