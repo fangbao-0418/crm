@@ -197,8 +197,8 @@ class Main extends React.Component<Props> {
           delete item.key
         })
         params.contactPersons = person
-        if (this.props.customerId) {
-          updateCustomer(this.props.customerId, params).then(() => {
+        if (this.props.detail.id) {
+          updateCustomer(this.props.detail.id, params).then(() => {
             resolve()
           }, () => {
             reject()
