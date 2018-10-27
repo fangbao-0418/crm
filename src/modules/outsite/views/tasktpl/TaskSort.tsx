@@ -87,6 +87,8 @@ class Main extends React.Component<Props, State> {
     dataSource = _.sortBy(dataSource, (val) => {
       return val.sort
     })
+    console.log(dataSource, 'dataSource')
+    item.subList = dataSource
     this.setState({
       item
     })

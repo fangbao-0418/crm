@@ -159,21 +159,17 @@ class Main extends React.Component<any, any> {
   }
 
   // 生成下拉
-  public createTaskNameOptions (options: Array<any>) {
-    /*
-    const dict = Service.getTplList().then()
-    const options: Array<any> = []
-    for (const i in dict) {
-      if (i) {
-        options.push({
-          field: i,
-          label: dict[i]
-        })
-      }
-    }
-    */
+  public createTaskNameOptions (options: Array<any>, key: string = 'id') {
+    console.log(options, 'options')
     return options.map((item: any) => {
-      return <Select.Option key={`option-${item.id}`} value={item.id}>{item.name}</Select.Option>
+      return (
+        <Select.Option
+          key={`option-${item[key]}`}
+          value={item[key]}
+        >
+          {item.name}
+        </Select.Option>
+      )
     })
   }
 
@@ -296,7 +292,9 @@ class Main extends React.Component<any, any> {
             }}
             placeholder='全部当前子任务'
           >
-            {this.createTaskNameOptions(this.state.searchData.templateId ? this.state.tplSubList : this.state.tplSubData)}
+            {this.createTaskNameOptions(
+              this.state.searchData.templateId ? this.state.tplSubList : this.state.tplSubData, this.state.searchData.templateId ? 'subId' : 'id'
+            )}
           </Select>
         )}
         </FormItem>
