@@ -221,6 +221,10 @@ class Main extends React.Component<any, States> {
       APP.error('任务名不能为空')
       return
     }
+    if (item.subList.length === 0) {
+      APP.error('请选择子任务')
+      return
+    }
     if (sync) {
       Service.taskSave2sync(item).then(() => {
         APP.success('保存并同步成功')
@@ -286,7 +290,6 @@ class Main extends React.Component<any, States> {
                     labelInValue
                     value={selectValue}
                     onChange={(val: any) => {
-                      console.log(val, 'val')
                       this.syncFormdata('productId', val.key)
                       this.syncFormdata('productName', val.label)
                     }}
@@ -294,7 +297,7 @@ class Main extends React.Component<any, States> {
                     {
                       this.state.goods.map((item) => {
                         return (
-                          <Option key={item.id}>
+                          <Option key={item.code}>
                             {item.name}
                           </Option>
                         )

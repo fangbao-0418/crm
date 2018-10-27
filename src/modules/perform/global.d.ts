@@ -1,8 +1,8 @@
 declare namespace Perform {
   export interface SearchPayload {
-    current?: number
-    size?: number
-    productName?: string
+    pageCurrent?: number
+    pageSize?: number
+    templateName?: string
   }
   interface ItemProps {
     id: string

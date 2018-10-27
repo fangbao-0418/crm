@@ -17,7 +17,7 @@ class PerformService extends Service {
   // 绩效列表
   public getPerformListByUserid (current: any = '', size: any = 10) {
     return Service.http(
-      `outside/v1/api/outside/task/reward/list?` +
+      `/outside/v1/api/outside/task/reward/list?` +
       `current=${current}&` +
       `size=${size}&` +
       `productName= `
@@ -25,11 +25,11 @@ class PerformService extends Service {
   }
   // 修改绩效
   public RevisePerformance (payload: PerformPayload) {
-    return Service.http(`outside/v1/api/outside/task/reward/update`, 'PUT', payload)
+    return Service.http(`/outside/v1/api/outside/task/reward/update`, 'PUT', payload)
   }
   // 新增绩效
   public newPerformance (payload: AddPerformPayload) {
-    return Service.http(`outside/v1/api/outside/task/reward/product/data`, 'POST', payload)
+    return Service.http(`/outside/v1/api/outside/task/reward/product/data`, 'POST', payload)
   }
 }
 
