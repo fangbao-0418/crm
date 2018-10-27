@@ -41,9 +41,10 @@ class Main extends React.Component<Props> {
   }
   public getValues (dataSource: ConditionOptionProps[] = this.props.dataSource) {
     const values: ValueProps = {}
+    const sourceValues = (this.state ? this.state.values : {}) || {}
     dataSource.forEach((item) => {
       const { field, options } = item
-      values[field] = options[0]
+      values[field] = sourceValues[field] || options[0]
     })
     return values
   }
