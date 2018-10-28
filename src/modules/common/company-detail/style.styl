@@ -1,14 +1,17 @@
 .profile
-  overflow hidden
+  position relative
   .left
+    position absolute
     width: 120px
-    float: left
+    top: 0
+    bottom: 0
+    left: 0
     .picture
       width: 100px
       height: 72px
       background: url('@/assets/images/profile.png')
   .right
-    float: left
+    margin-left: 120px
     .title
       font-size: 16px
       color: #000000
