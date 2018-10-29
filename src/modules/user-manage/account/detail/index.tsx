@@ -46,6 +46,9 @@ class Main extends React.Component<Props, State> {
   }
   public componentWillMount () {
     this.fetchData()
+    if (this.props.item && this.props.item.id) {
+      this.changePermission(this.props.item.roleId)
+    }
   }
   public fetchData () {
     const item = this.props.item || {}
@@ -169,6 +172,7 @@ class Main extends React.Component<Props, State> {
     })
   }
   public render () {
+    console.log(this.props.type, 'type')
     const { disabled, form: { getFieldDecorator } } = this.props
     const item = this.props.item || {}
     const { roleList, superiorList, identityList, ownAraeList } = this.state
@@ -223,12 +227,12 @@ class Main extends React.Component<Props, State> {
     console.log(item, '账号item')
     return (
       <div>
-        <div>
-          <Form>
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='公司名称'>
+        <div style={{display: 'flex'}}>
+          <Form style={{width: 300}}>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='公司名称'>
               <span>{item.companyName}</span>
             </FormItem>
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='姓名'>
               {
                 getFieldDecorator('name', validation.name)(
                   <Input disabled={disabled} size='small' placeholder='请输入姓名'/>
@@ -236,7 +240,7 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
 
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='手机号'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='手机号'>
               {
                 getFieldDecorator('phone', validation.phone)(
                   <Input disabled={disabled} size='small' placeholder='请输入手机号' maxLength={11}/>
@@ -244,7 +248,7 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
 
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='邮箱'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='邮箱'>
               {
                 getFieldDecorator('email', validation.email)(
                   <Input disabled={disabled} size='small' placeholder='请输入邮箱'/>
@@ -252,10 +256,11 @@ class Main extends React.Component<Props, State> {
               }
             </FormItem>
 
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='部门'>
               {
                 getFieldDecorator('organizationId', validation.organizationId)(
                   <TreeSelect
+                    disabled={disabled}
                     onChange={this.onDepartmentChange.bind(this)}
                     treeData={this.state.departmentList}
                     placeholder='请选择所属部门'
@@ -264,7 +269,7 @@ class Main extends React.Component<Props, State> {
                 )
               }
             </FormItem>
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='身份' required>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='身份' required>
               {
                 getFieldDecorator(
                   'identity',
@@ -273,6 +278,7 @@ class Main extends React.Component<Props, State> {
                   }
                 )(
                   <Select
+                    disabled={disabled}
                     onChange={(value) => {
                       console.log(value, 'value')
                       this.setState({isShowOwnArea: value === 'outWorker'})
@@ -289,7 +295,7 @@ class Main extends React.Component<Props, State> {
                 )
               }
             </FormItem>
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='角色'>
               {
                 getFieldDecorator('roleId', validation.roleId)(
                   <Select
@@ -316,7 +322,7 @@ class Main extends React.Component<Props, State> {
             </FormItem>
             {
               (this.state.isShowOwnArea) &&
-              <FormItem className={styles.item} colon wrapperCol={{ span: 10 }} labelCol={{ span: 4 }} label='负责区域'>
+              <FormItem className={styles.item} colon wrapperCol={{ span: 18 }} labelCol={{ span: 6 }} label='负责区域'>
                 {
                   getFieldDecorator(
                     'regionList',
@@ -338,7 +344,7 @@ class Main extends React.Component<Props, State> {
               </FormItem>
             }
 
-            <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='上级直属'>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='上级直属'>
               {
                 getFieldDecorator(
                   'parentId',
@@ -375,24 +381,38 @@ class Main extends React.Component<Props, State> {
             </Tree>
           </div>
         </div>
-        <div className='text-right mt10'>
-          <Button
-            className='mr5'
-            type='primary'
-            onClick={this.onOk.bind(this)}
-          >
-            保存
-          </Button>
-          <Button
-            onClick={() => {
-              if (this.props.onCancel) {
-                this.props.onCancel()
-              }
-            }}
-          >
-            取消
-          </Button>
-        </div>
+        {
+          (this.props.disabled) ?
+          <div className='text-right mt10'>
+            <Button
+              onClick={() => {
+                if (this.props.onCancel) {
+                  this.props.onCancel()
+                }
+              }}
+            >
+              关闭
+            </Button>
+          </div> :
+          <div className='text-right mt10'>
+            <Button
+              className='mr5'
+              type='primary'
+              onClick={this.onOk.bind(this)}
+            >
+              保存
+            </Button>
+            <Button
+              onClick={() => {
+                if (this.props.onCancel) {
+                  this.props.onCancel()
+                }
+              }}
+            >
+              取消
+            </Button>
+          </div>
+        }
       </div>
     )
   }

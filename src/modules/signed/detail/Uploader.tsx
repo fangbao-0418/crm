@@ -26,6 +26,7 @@ class Main extends React.Component<Props> {
         return
       }
       APP.fn.ossUpload(target.files[0]).then((res: any) => {
+        console.log(res, 'res')
         if (this.props.onUploaded) {
           this.props.onUploaded(res.res.requestUrls[0])
         }

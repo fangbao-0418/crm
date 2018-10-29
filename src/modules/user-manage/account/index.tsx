@@ -199,8 +199,12 @@ class Main extends React.Component<Props> {
   // 查看、修改、添加账号
   public update = (type: 'view' | 'update', item?: UserManage.AccountItemProps) => {
     item.companyName = this.props.companyName
+    let title = '查看账号'
+    if (type === 'update') {
+      title = '修改账号'
+    }
     const modal = new Modal({
-      title: '添加账号',
+      title: `${title}`,
       content: (
         <Detail
           companyCode={this.props.companyCode}
