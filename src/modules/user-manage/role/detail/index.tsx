@@ -118,7 +118,13 @@ class Main extends React.Component<Props, State> {
               getFieldDecorator(
                 'roleName',
                 {
-                  initialValue: item.roleName
+                  initialValue: item.roleName,
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入角色名称'
+                    }
+                  ]
                 }
               )(
                 <Input disabled={disabled} size='small' />
@@ -130,7 +136,13 @@ class Main extends React.Component<Props, State> {
               getFieldDecorator(
                 'shareFlag',
                 {
-                  initialValue: item.shareFlag
+                  initialValue: item.shareFlag,
+                  rules: [
+                    {
+                      required: true,
+                      message: '请选是否择数据共享'
+                    }
+                  ]
                 }
               )(
                 <Select disabled={disabled} size='small' style={{width: '160px'}} placeholder='请选择是否数据共享'>
