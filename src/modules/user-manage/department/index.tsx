@@ -28,19 +28,35 @@ class Main extends React.Component<Props> {
     { title: '操作', key: 'operation',
       width: 350,
       render: (text, record) => {
-        return (
-          <div>
-            <span className='href' onClick={this.add.bind(this, record)}>添加子部门</span>
-            <Divider type='vertical'/>
-            <span className='href' onClick={this.update.bind(this, record)}>修改</span>
-            <Divider type='vertical'/>
-            <span className='href' onClick={this.changeStatus.bind(this, record)}>
-              {record.status === 0 ? '启用' : '禁用'}
-            </span>
-            <Divider type='vertical'/>
-            <span className='href' onClick={this.delete.bind(this, record)}>删除</span>
-          </div>
-        )
+        if (record.status === 1) {
+          return (
+            <div>
+              <span className='href' onClick={this.add.bind(this, record)}>添加子部门</span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={this.update.bind(this, record)}>修改</span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={this.changeStatus.bind(this, record)}>
+                禁用
+              </span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={this.delete.bind(this, record)}>删除</span>
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              <span>添加子部门</span>
+              <Divider type='vertical'/>
+              <span>修改</span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={this.changeStatus.bind(this, record)}>
+                已禁用
+              </span>
+              <Divider type='vertical'/>
+              <span>删除</span>
+            </div>
+          )
+        }
       },
       onHeaderCell: (column: any) => {
         return {
@@ -133,12 +149,32 @@ class Main extends React.Component<Props> {
   }
   // 禁用部门
   public changeStatus = (record?: UserManage.DepartmentItemProps) => {
-    changeDepartmentStatus({
-      id: record.id,
-      status: record.status === 0 ? 1 : 0
-    }).then(() => {
-      this.fetchData()
+    let title = ''
+    if (record.status === 1) {
+      title = '禁用'
+    } else {
+      title = '启用'
+    }
+    const modal = new Modal({
+      content: (
+        <div>你确定{title}此部门吗？</div>
+      ),
+      title: `${title}部门`,
+      mask: true,
+      onOk: () => {
+        changeDepartmentStatus({
+          id: record.id,
+          status: record.status === 0 ? 1 : 0
+        }).then(() => {
+          modal.hide()
+          this.fetchData()
+        })
+      },
+      onCancel: () => {
+        modal.hide()
+      }
     })
+    modal.show()
   }
 
   // 删除部门

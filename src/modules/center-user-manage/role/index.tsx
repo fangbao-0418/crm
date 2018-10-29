@@ -3,6 +3,7 @@ import { Button, Table, Divider, Modal } from 'antd'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import RoleModal from './role-modal'
+import ModalShow from 'pilipa/libs/modal'
 import { fetchRoleList, toggleForbidRole, delRole, modifyRole, addRole } from './api'
 
 const styles = require('./style')
@@ -87,23 +88,44 @@ class Main extends React.Component {
 
   // 确认禁用
   public forbidConfirm = (id: number) => {
-    Modal.confirm({
-      title: '禁用角色',
-      content: '确定禁用角色吗？',
+    const modal = new ModalShow({
+      content: (
+        <div>你确定禁用此角色吗？</div>
+      ),
+      title: `禁用角色`,
+      mask: true,
       onOk: () => {
         toggleForbidRole(id, 1).then((res) => {
+          modal.hide()
           this.getRoleList()
         })
       },
-      onCancel: () => {}
+      onCancel: () => {
+        modal.hide()
+      }
     })
+    modal.show()
   }
 
   // 启用
   public unforbidRole = (id: number) => {
-    toggleForbidRole(id, 0).then((res) => {
-      this.getRoleList()
+    const modal = new ModalShow({
+      content: (
+        <div>你确定启用此角色吗？</div>
+      ),
+      title: `启用角色`,
+      mask: true,
+      onOk: () => {
+        toggleForbidRole(id, 0).then((res) => {
+          modal.hide()
+          this.getRoleList()
+        })
+      },
+      onCancel: () => {
+        modal.hide()
+      }
     })
+    modal.show()
   }
 
   // 修改、添加、查看角色
