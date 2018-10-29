@@ -36,7 +36,7 @@ class Main extends React.Component<Props> {
   }
   public add () {
     console.log(this.props, 'add')
-    if (this.props.companyCode === undefined) {
+    if (!this.props.companyCode) {
       APP.error('请选择公司！')
       return
     }
@@ -81,6 +81,9 @@ class Main extends React.Component<Props> {
               values.companyId = this.props.companyCode
               values.userType = this.type
               console.log(this.props, 'props')
+              if (values.parentId === undefined) {
+                values.parentId = ''
+              }
               addAccount(values).then(() => {
                 fetchAccountListAction(this.props.account.searchPayload)
                 modal.hide()
