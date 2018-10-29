@@ -142,11 +142,11 @@ class Main extends React.Component<Props, State> {
       icon: <MenuIcon type='user' />,
       children: [
         {
-          title: '代理商账号',
+          title: '代理商用户',
           path: '/user-manage/agent'
         },
         {
-          title: '直营账号',
+          title: '直营用户',
           path: '/user-manage/direct'
         }
       ]
