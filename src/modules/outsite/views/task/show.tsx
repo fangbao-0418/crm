@@ -378,7 +378,7 @@ class Main extends React.Component<Props, State> {
                       trackdata.map((item, index) => {
                         return (
                           <div className={styles.trackitem} key={`trackitem-${index}`}>
-                            <div><em>{item.userName}</em><span>{item.updateTime}</span></div>
+                            <div><em>{item.userName}</em><span>{item.createTime}</span></div>
                             <p>{item.content}</p>
                           </div>
                         )

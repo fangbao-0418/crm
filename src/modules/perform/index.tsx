@@ -31,13 +31,41 @@ class Main extends React.Component<Perform.Props> {
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public columns: ColumnProps<Perform.ItemProps>[] = [{
     title: '任务名称',
-    dataIndex: 'productName'
+    dataIndex: 'name'
   }, {
     title: '任务价格',
-    dataIndex: 'productPrice'
+    dataIndex: 'productPrice',
+    width: 120
   }, {
     title: '绩效额度',
     dataIndex: 'reward',
+    width: 120,
+    onCell: (record) => {
+      return {
+        style: {
+          cursor: 'pointer'
+        },
+        onClick: () => {
+          if (record.disabled === false) {
+            return
+          }
+          const dataSource = this.state.dataSource
+          record.disabled = !(record.disabled !== undefined ? record.disabled : true)
+          const index = dataSource.findIndex((item) => {
+            if (item.id === record.id) {
+              return true
+            }
+          })
+          if (index > -1) {
+            dataSource[index] = record
+          }
+          console.log(dataSource, index, 'onClick')
+          this.setState({
+            dataSource
+          })
+        }
+      }
+    },
     render: (text, record, index) => {
       const disabled = record.disabled !== undefined ? record.disabled : true
       const dataSource = this.state.dataSource
@@ -60,6 +88,8 @@ class Main extends React.Component<Perform.Props> {
     }
   }, {
     title: '操作',
+    width: 60,
+    align: 'center',
     render: (text, record, index) => {
       const disabled = record.disabled !== undefined ? record.disabled : true
       const dataSource = this.state.dataSource
@@ -147,6 +177,7 @@ class Main extends React.Component<Perform.Props> {
             columns={this.columns}
             dataSource={this.state.dataSource}
             size='middle'
+            bordered
             pagination={{
               onChange: this.handlePageChange.bind(this),
               onShowSizeChange: this.onShowSizeChange.bind(this),
