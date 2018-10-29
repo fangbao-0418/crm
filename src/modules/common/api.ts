@@ -103,19 +103,19 @@ export const fetchTianYanDetail = (id: string) => {
 export const fetchGovInfo = (url: string) => {
   return http(`/crm-manage/v1/api/gov?url=${url}`)
 }
-// export const fetchOssToken = () => {
-//   const payload = {
-//     prefix: 'pilipa-crm',
-//     bucket: 'pilipa-ml',
-//     durationSeconds: 60 * 60
-//   }
-//   const query = $.param(payload)
-//   return http(`/oss/api/v1/oss/write-token?${query}`)
-// }
 export const fetchOssToken = () => {
-  const customerId = APP.user.companyId
-  return http(`/crm-manage/v1/api/write-token/${customerId}`)
+  const payload = {
+    prefix: 'pilipa-crm',
+    bucket: 'pilipa-ml',
+    durationSeconds: 60 * 60
+  }
+  const query = $.param(payload)
+  return http(`/oss/api/v1/oss/write-token?${query}`)
 }
+// export const fetchOssToken = () => {
+//   const customerId = APP.user.companyId
+//   return http(`/crm-manage/v1/api/write-token/${customerId}`)
+// }
 // 根据当前用户获取-->改成不需要传参数接口
 export const getSalesList = () => {
   return http(`/user/v1/api/user/list/sale`)
