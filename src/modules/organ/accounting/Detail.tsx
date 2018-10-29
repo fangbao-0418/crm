@@ -76,6 +76,10 @@ class Main extends React.Component<Props, State> {
     if (this.props.onOk) {
       this.props.form.validateFields((err, vals) => {
         vals.regionList = this.getRegion(vals.regionList)
+        if (vals.regionList.length === 0) {
+          APP.error('请选择核算地区范围')
+          return
+        }
         if (err) {return}
         this.props.onOk(vals)
       })
@@ -127,6 +131,7 @@ class Main extends React.Component<Props, State> {
               <FormItem
                 {...formItemLayout}
                 label='核算地区范围：'
+                required
               >
                 {
                   this.state.areaList.length > 0 && getFieldDecorator(
