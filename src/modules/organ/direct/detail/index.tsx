@@ -149,7 +149,7 @@ class Main extends React.Component<Props> {
                     }],
                     initialValue: item.openingBank
                   })(
-                    <Input disabled={disabled}/>
+                    <Input disabled={disabled} placeholder='请输入开户行'/>
                   )}
                 </FormItem>
               </Col>

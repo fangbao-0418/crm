@@ -35,24 +35,45 @@ class Main extends React.Component<Props, any> {
       title: '操作',
       width: 300,
       render: (text, record) => {
-        return (
-          <div>
-            <span className='href' onClick={() => {this.update('view', record)}}>查看</span>
-            <Divider type='vertical'/>
-            <span className='href' onClick={() => {this.update('modify', record)}}>修改</span>
-            <Divider type='vertical'/>
-            <span
-              className='href'
-              onClick={() => {
-                this.forbidConfirm(record.id, record.status === 0 ? 1 : 0)
-              }}
-            >
-              {record.status === 0 ? '禁用' : '启用'}
-            </span>
-            <Divider type='vertical'/>
-            <span className='href' onClick={() => {this.delConfirm([record.id])}}>删除</span>
-          </div>
-        )
+        if (record.status === 0) {
+          return (
+            <div>
+              <span className='href' onClick={() => {this.update('view', record)}}>查看</span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={() => {this.update('modify', record)}}>修改</span>
+              <Divider type='vertical'/>
+              <span
+                className='href'
+                onClick={() => {
+                  this.forbidConfirm(record.id, record.status === 0 ? 1 : 0)
+                }}
+              >
+                禁用
+              </span>
+              <Divider type='vertical'/>
+              <span className='href' onClick={() => {this.delConfirm([record.id])}}>删除</span>
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              <span>查看</span>
+              <Divider type='vertical'/>
+              <span>修改</span>
+              <Divider type='vertical'/>
+              <span
+                className='href'
+                onClick={() => {
+                  this.forbidConfirm(record.id, record.status === 0 ? 1 : 0)
+                }}
+              >
+                已禁用
+              </span>
+              <Divider type='vertical'/>
+              <span>删除</span>
+            </div>
+          )
+        }
       }
     }
   ]
@@ -86,15 +107,29 @@ class Main extends React.Component<Props, any> {
   // 确认禁用
   public forbidConfirm = (id: number, status: 0 | 1) => {
     console.log(status)
-    M.confirm({
-      title: '禁用角色',
-      content: '确定禁用角色吗？',
+    let title = ''
+    if (status === 1) {
+      title = '禁用'
+    } else {
+      title = '启用'
+    }
+    const modal = new Modal({
+      content: (
+        <div>你确定{title}此角色吗？</div>
+      ),
+      title: `${title}角色`,
+      mask: true,
       onOk: () => {
         changeRoleStatus(id, status).then(() => {
+          modal.hide()
           this.fetchList()
         })
+      },
+      onCancel: () => {
+        modal.hide()
       }
     })
+    modal.show()
   }
 
   // 修改、添加、查看角色
