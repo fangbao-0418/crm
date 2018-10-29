@@ -9,9 +9,8 @@ const showPath = '/outsite/tasktpl/form'
 
 /*路径未修改，跳转编辑系统任务  subform组件中*/
 interface States {
-  selectedRowKeys: string[]
+  selectedRowKeys: string[],
   modalVisible: boolean,
-  searchData: any,
   item: TaskItem,
   dataSource: TaskItem[],
   pageConf: {
@@ -27,19 +26,32 @@ function onShowSizeChange (current: any, pageSize: any) {
 
 class Main extends React.Component<any, any> {
   public item: TaskItem = {}
+
+  public searchData: {
+    systemFlag: string,
+    pageCurrent: number,
+    pageSize: number,
+    name: string,
+    status: string,
+    priority: string,
+    origId: string
+  } = {
+    systemFlag: '',
+    pageCurrent: 1,
+    pageSize: 15,
+    name: '',
+    status: '',
+    priority: '',
+    origId: ''
+  }
   public state: States = {
     selectedRowKeys: [],
     modalVisible: false,
     item: {},
     pageConf: {
       total: 0,
-      size: 15,
-      current: 1
-    },
-    searchData: {
-      systemFlag: 1,
-      pageCurrent: 1,
-      pageSize: 15
+      size: this.searchData.pageSize,
+      current: this.searchData.pageCurrent
     },
     dataSource: []
   }
@@ -126,18 +138,17 @@ class Main extends React.Component<any, any> {
 
   // 获取列表数据
   public getList () {
-    Service.getTplListByCond(this.state.searchData).then((res: any) => {
+    Service.getTplListByCond(this.searchData).then((res: any) => {
       if (!res || !res.records) {
         return
       }
-      const { pageConf, searchData } = this.state
-      searchData.pageSize = pageConf.size = res.size
-      searchData.pageCurrent = pageConf.current = res.current
+      const { pageConf } = this.state
+      pageConf.size = res.size
+      pageConf.current = res.current
       pageConf.total = res.total
       this.setState({
         pageConf,
-        dataSource: res.records,
-        searchData
+        dataSource: res.records
       })
     })
   }
@@ -184,28 +195,13 @@ class Main extends React.Component<any, any> {
           current: pageConf.current,
           pageSize: pageConf.size,
           onChange: (page: any) => {
-            const { searchData } = this.state
-            pageConf.current = page
-            searchData.pageCurrent = page
-            this.setState({
-              pageConf,
-              searchData
-            }, () => {
-              this.getList()
-            })
+            this.searchData.pageCurrent = page
+            this.getList()
           },
-          onShowSizeChange: (current: number, size: number) => {
-            const { searchData } = this.state
-            pageConf.current = current
-            pageConf.size = size
-            searchData.pageCurrent = current
-            searchData.pageSize = size
-            this.setState({
-              pageConf,
-              searchData
-            }, () => {
-              this.getList()
-            })
+          onShowSizeChange: (current, size) => {
+            this.searchData.pageCurrent = 1
+            this.searchData.pageSize = size
+            this.getList()
           },
           showQuickJumper: true,
           showSizeChanger: true,
