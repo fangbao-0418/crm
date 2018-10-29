@@ -62,11 +62,11 @@ class Main extends React.Component<any, State> {
     this.getList()
   }
 
-  public componentWillReceiveProps (nextProps: any) {
-    if (nextProps.showAccountingModal - this.props.showAccountingModal === 1) { // 该条件代表点击添加
-      this.setAccounting('add')
-    }
-  }
+  // public componentWillReceiveProps (nextProps: any) {
+  //   if (nextProps.showAccountingModal - this.props.showAccountingModal === 1) { // 该条件代表点击添加
+  //     this.setAccounting('add')
+  //   }
+  // }
 
   // 获取列表
   public getList () {
@@ -108,6 +108,10 @@ class Main extends React.Component<any, State> {
             // if (mode === 'modify') {
             //   payload.id = id
             // }
+            if (mode === 'modify') {
+              vals.id = item.id
+            }
+            console.log(vals, 'vals')
             changeAccounting(vals).then(() => {
               APP.success('操作成功')
               this.getList()
