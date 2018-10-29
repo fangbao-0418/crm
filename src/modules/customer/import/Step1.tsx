@@ -181,6 +181,8 @@ class Main extends React.Component<Props> {
                     APP.error('请选择机构和销售')
                   }
                 } else {
+                  this.values.salesPerson = []
+                  this.values.agencyId = ''
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
