@@ -1,10 +1,11 @@
 import React from 'react'
 import { Input, Button, Table, Divider, Modal } from 'antd'
+import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import AccountModal from './account-modal'
 import { fetchAccountList, delAccount, addAccount, modifyAccount, fetchRegionList } from './api'
-
+type TasktplItem = OutSide.TaskItem
 const styles = require('./style')
 
 interface State {
@@ -113,7 +114,7 @@ class Main extends React.Component {
 
   public render () {
     const { selectedRowKeys, itemInfo, mode } = this.state
-    const columns: any[] = [
+    const columns: ColumnProps<TasktplItem>[]  = [
       {
         title: '姓名',
         dataIndex: 'name'
@@ -136,6 +137,7 @@ class Main extends React.Component {
       },
       {
         title: '操作',
+        align: 'center',
         render: (val: any, info: any) => {
           return (
             <div>
