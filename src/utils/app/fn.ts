@@ -41,8 +41,8 @@ export const generateFileName = (file: File, dir: string = '/') => {
 // oss upload
 export const ossUpload = (file: File): Promise<any> => {
   return new Promise((resolve, reject) => {
-    const name = generateFileName(file, '/pilipa-crm')
     fetchOssToken().then((res) => {
+      // console.log(res, 'res')
       const store = OSS({
         region: 'oss-cn-beijing',
         accessKeyId: res.credentials.accessKeyId,
@@ -50,6 +50,7 @@ export const ossUpload = (file: File): Promise<any> => {
         stsToken: res.credentials.securityToken,
         bucket: res.bucket
       })
+      const name = generateFileName(file, res.pathPrefix)
       store.put<any, any>(name, file).then((res2: any) => {
         resolve(res2)
       })

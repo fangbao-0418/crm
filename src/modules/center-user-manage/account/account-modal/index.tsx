@@ -321,140 +321,139 @@ class Main extends React.Component<Props, State> {
         onOk={this.confirm}
         onCancel={this.cancel}
       >
-
-        <Form>
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='姓名'>
-            {
-              getFieldDecorator('name', validation.name)(
-                <Input disabled={mode === 'view'} size='small' placeholder='请输入姓名'/>
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='手机号'>
-            {
-              getFieldDecorator('phone', validation.phone)(
-                <Input disabled={mode === 'view'} size='small' placeholder='请输入手机号' maxLength={11} />
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='邮箱'>
-            {
-              getFieldDecorator('email', validation.email)(
-                <Input disabled={mode === 'view'} size='small' placeholder='请输入邮箱'/>
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='部门'>
-            {
-              getFieldDecorator('department', validation.department)(
-                this.state.departmentTree.length
-                  ? <TreeSelect
-                    size='small'
-                    disabled={mode === 'view'}
-                    placeholder='请选择部门'
-                    treeDefaultExpandedKeys={[info.organizationId]}
-                  >
-                    {this.renderDepartmentNode(this.state.departmentTree)}
-                  </TreeSelect>
-                  : <span></span>
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='身份'>
-            {
-              getFieldDecorator('identity', validation.identity)(
-                <Select
-                  disabled={mode === 'view'}
-                  size='small'
-                  placeholder='请选择身份'
-                  notFoundContent='暂无数据'
-                  onSelect={(value: any, option) => {
-                    this.showOption(value)
-                  }}
-                >
-                  {this.state.identityList.map((item: any) => {
-                    return <Option key={item.code} value={item.code}>{item.name}</Option>
-                  })}
-                </Select>
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='角色'>
-            {
-              getFieldDecorator('role', validation.role)(
-                <Select
-                  disabled={mode === 'view'}
-                  size='small'
-                  placeholder='请选择角色'
-                  notFoundContent='暂无数据'
-                  onSelect={(value: any, option) => {
-                    this.getRoleOfPermission(value)
-                  }}
-                >
-                  {
-                    this.state.roleList.map((item) => {
-                      return <Option key={item.id} value={item.id}>{item.name}</Option>
-                    })
-                  }
-                </Select>
-              )
-            }
-          </FormItem>
-
-          <FormItem className={styles.item} colon wrapperCol={{span: 10}} labelCol={{span: 4}} label='核算中心'>
-            {
-              getFieldDecorator('center', validation.center)(
-                <Select disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
-                  {this.state.accountList.map((item: any) => {
-                    return <Option key={item.id} value={item.id}>{item.name}</Option>
-                  })}
-                </Select>
-              )
-            }
-          </FormItem>
-
-          {this.state.identityType === 'showArea'
-          && <FormItem className={styles.item} colon wrapperCol={{span: 13}} labelCol={{span: 4}} label='负责区域' >
-            <div className={styles.treeWrap}>
+        <div style={{display: 'flex'}}>
+          <Form style={{width: 300}}>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='姓名'>
               {
-                getFieldDecorator('region', validation.region)(
-                  <Tree
-                    disabled={mode === 'view'}
-                    checkable
-                    onExpand={this.onExpand}
-                    expandedKeys={this.state.expandedKeys}
-                    onCheck={this.onCheck}
-                    checkedKeys={this.state.checkedKeys}
-                  >
-                    {this.renderTreeNodes(this.state.regionTree)}
-                  </Tree>
+                getFieldDecorator('name', validation.name)(
+                  <Input disabled={mode === 'view'} size='small' placeholder='请输入姓名'/>
                 )
               }
-            </div>
-          </FormItem>}
+            </FormItem>
 
-        </Form>
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='手机号'>
+              {
+                getFieldDecorator('phone', validation.phone)(
+                  <Input disabled={mode === 'view'} size='small' placeholder='请输入手机号' maxLength={11} />
+                )
+              }
+            </FormItem>
 
-        <div className={styles.permission}>
-          <b>所属权限：</b>
-          {
-            <Tree
-              disabled={mode === 'view'}
-              onExpand={(keys) => {
-                this.setState({expandedPermissionKeys: keys})
-              }}
-              expandedKeys={this.state.expandedPermissionKeys}
-            >
-              {this.renderPermissionTreeNodes(this.state.permissionList)}
-            </Tree>
-          }
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='邮箱'>
+              {
+                getFieldDecorator('email', validation.email)(
+                  <Input disabled={mode === 'view'} size='small' placeholder='请输入邮箱'/>
+                )
+              }
+            </FormItem>
+
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='部门'>
+              {
+                getFieldDecorator('department', validation.department)(
+                  this.state.departmentTree.length
+                    ? <TreeSelect
+                      size='small'
+                      disabled={mode === 'view'}
+                      placeholder='请选择部门'
+                      treeDefaultExpandedKeys={[info.organizationId]}
+                    >
+                      {this.renderDepartmentNode(this.state.departmentTree)}
+                    </TreeSelect>
+                    : <span></span>
+                )
+              }
+            </FormItem>
+
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='身份'>
+              {
+                getFieldDecorator('identity', validation.identity)(
+                  <Select
+                    disabled={mode === 'view'}
+                    size='small'
+                    placeholder='请选择身份'
+                    notFoundContent='暂无数据'
+                    onSelect={(value: any, option) => {
+                      this.showOption(value)
+                    }}
+                  >
+                    {this.state.identityList.map((item: any) => {
+                      return <Option key={item.code} value={item.code}>{item.name}</Option>
+                    })}
+                  </Select>
+                )
+              }
+            </FormItem>
+
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='角色'>
+              {
+                getFieldDecorator('role', validation.role)(
+                  <Select
+                    disabled={mode === 'view'}
+                    size='small'
+                    placeholder='请选择角色'
+                    notFoundContent='暂无数据'
+                    onSelect={(value: any, option) => {
+                      this.getRoleOfPermission(value)
+                    }}
+                  >
+                    {
+                      this.state.roleList.map((item) => {
+                        return <Option key={item.id} value={item.id}>{item.name}</Option>
+                      })
+                    }
+                  </Select>
+                )
+              }
+            </FormItem>
+
+            <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='核算中心'>
+              {
+                getFieldDecorator('center', validation.center)(
+                  <Select disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
+                    {this.state.accountList.map((item: any) => {
+                      return <Option key={item.id} value={item.id}>{item.name}</Option>
+                    })}
+                  </Select>
+                )
+              }
+            </FormItem>
+
+            {this.state.identityType === 'showArea'
+            && <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='负责区域' >
+              <div className={styles.treeWrap}>
+                {
+                  getFieldDecorator('region', validation.region)(
+                    <Tree
+                      disabled={mode === 'view'}
+                      checkable
+                      onExpand={this.onExpand}
+                      expandedKeys={this.state.expandedKeys}
+                      onCheck={this.onCheck}
+                      checkedKeys={this.state.checkedKeys}
+                    >
+                      {this.renderTreeNodes(this.state.regionTree)}
+                    </Tree>
+                  )
+                }
+              </div>
+            </FormItem>}
+
+          </Form>
+          <div className={styles.permission}>
+            <b>所属权限：</b>
+            {
+              <Tree
+                disabled={mode === 'view'}
+                onExpand={(keys) => {
+                  this.setState({expandedPermissionKeys: keys})
+                }}
+                expandedKeys={this.state.expandedPermissionKeys}
+              >
+                {this.renderPermissionTreeNodes(this.state.permissionList)}
+              </Tree>
+            }
+          </div>
         </div>
-
       </Modal>
     )
   }
