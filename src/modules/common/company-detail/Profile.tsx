@@ -39,6 +39,10 @@ class Main extends React.Component<Props> {
                 <span>
                   {this.props.detail.lastReleaseSalesperson}
                 </span>
+                <span>
+                  {/* 所属机构过滤 */}
+                  {this.props.detail.lastReleaseSalesperson ? '('+ APP.user.companyName + ')' : ''}
+                </span>
               </span>
             }
             {
@@ -48,12 +52,12 @@ class Main extends React.Component<Props> {
                 <span>
                   {this.props.detail.currentSalesperson}
                 </span>
+                <span>
+                  {/* 所属机构过滤 */}
+                  {this.props.detail.currentSalesperson? '('+ APP.user.companyName + ')' : ''}
+                </span>
                </span>
             }
-            <span>
-              {/* 所属机构过滤 */}
-              ({APP.user.companyName})
-            </span>
             <label style={{marginLeft: '10px'}}>意向度:</label>
             <span>
               {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}

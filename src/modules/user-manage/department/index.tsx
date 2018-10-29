@@ -28,7 +28,7 @@ class Main extends React.Component<Props> {
     { title: '操作', key: 'operation',
       width: 350,
       render: (text, record) => {
-        if (record.status === 1) {
+        if (record.status === 0) {
           return (
             <div>
               <span className='href' onClick={this.add.bind(this, record)}>添加子部门</span>
@@ -150,7 +150,7 @@ class Main extends React.Component<Props> {
   // 禁用部门
   public changeStatus = (record?: UserManage.DepartmentItemProps) => {
     let title = ''
-    if (record.status === 1) {
+    if (record.status === 0) {
       title = '禁用'
     } else {
       title = '启用'
