@@ -1,5 +1,6 @@
 import React from 'react'
-import { Table, Button, Row, Col, Modal } from 'antd'
+import { Divider, Table, Button, Row, Col, Modal } from 'antd'
+import { ColumnProps } from 'antd/lib/table'
 import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import ContentBox from '@/modules/common/content'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
@@ -10,7 +11,7 @@ type TasktplItem = OutSide.TaskItem
 const styles = require('@/modules/outsite/styles/tpllist')
 class Main extends React.Component<any, any> {
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
-  public columns = [{
+  public columns: ColumnProps<TasktplItem>[] = [{
     title: '子任务名称',
     dataIndex: 'name'
   }, {
@@ -35,11 +36,14 @@ class Main extends React.Component<any, any> {
     }
   }, {
     title: '操作',
+    width: 160,
+    align: 'center',
     dataIndex: 'take',
     render: (k: any, item: TasktplItem) => {
       return (
         <span>
           <span className='href mr5' onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
+          <Divider type='vertical' style={{color: '#979797'}}/>
           <span className='href' onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
         </span>
       )
