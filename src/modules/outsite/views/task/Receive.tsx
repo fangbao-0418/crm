@@ -151,6 +151,17 @@ class Main extends React.Component<Props, State> {
             total: pagination.total,
             pageSize: pagination.pageSize,
             current: pagination.current,
+            showQuickJumper: true,
+            showTotal: (total) => {
+              return `共计 ${total} 条`
+            },
+            showSizeChanger: true,
+            pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
+            onShowSizeChange: (current, size) => {
+              this.payload.pageCurrent = 1
+              this.payload.pageSize = size
+              this.fetchData()
+            },
             onChange: (current) => {
               pagination.current = current
               this.payload.pageCurrent = current

@@ -336,7 +336,6 @@ class Main extends React.Component<Props, State> {
     }
     const { trackdata, detail } = this.state
     return (
-    <div className={styles.container}>
       <ContentBox
         title={(
           <span>
@@ -378,7 +377,7 @@ class Main extends React.Component<Props, State> {
                       trackdata.map((item, index) => {
                         return (
                           <div className={styles.trackitem} key={`trackitem-${index}`}>
-                            <div><em>{item.userName}</em><span>{item.createTime}</span></div>
+                            <div><span>{item.userName}</span><span>{item.createTime}</span></div>
                             <p>{item.content}</p>
                           </div>
                         )
@@ -400,7 +399,6 @@ class Main extends React.Component<Props, State> {
           </Tabs>
         </Row>
       </ContentBox>
-    </div>
     )
   }
 }
