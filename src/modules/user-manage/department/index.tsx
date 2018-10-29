@@ -176,7 +176,21 @@ class Main extends React.Component<Props> {
     })
     modal.show()
   }
-
+  // 过滤空的部门信息，防止没有子部门还会有展开的加号
+  public filterNoData (data: any) {
+    function del (list: any[]) {
+      list.forEach((item: any) => {
+        if (item.organizationList) {
+          if (item.organizationList.length === 0) {
+            delete item.organizationList
+          } else {
+            del(item.organizationList)
+          }
+        }
+      })
+    }
+    del(data)
+  }
   // 删除部门
   public delete = (record: UserManage.DepartmentItemProps) => {
     deleteDepartment(record.id).then(() => {
@@ -185,6 +199,8 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { dataSource } = this.props.department
+    console.log(dataSource, 'dataSource')
+    this.filterNoData(dataSource)
     const { companyList, onlyOne, companyCode } = this.props
     const disabled = onlyOne
     const selectValue: any = companyCode !== undefined ? {key: String(companyCode)} : undefined
