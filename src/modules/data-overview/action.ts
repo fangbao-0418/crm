@@ -5,7 +5,7 @@ export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = 
       type: 'change screen data',
       payload: {
         overView: {
-          data: res
+          data: res || {}
         }
       }
     })

@@ -8,7 +8,6 @@ const styles = require('./style')
 const { MonthPicker } = DatePicker
 const Option = Select.Option
 const monthFormat = 'YYYY/MM'
-const monthFormatYear = 'YYYY'
 interface State {
   type: 'month' | 'year'
   provinceList: Common.RegionProps[]

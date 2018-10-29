@@ -3,40 +3,36 @@ import { connect } from 'react-redux'
 type OverViewProps = Statistics.ItemPieProps
 class Main extends React.Component<Statistics.Props, any> {
   public chart: echarts.ECharts
-  public values: {
-    companyId: number,
-    dateFlag: string,
-    date: string
-  } = {
-    companyId:2001,
-    dateFlag: 'YEAR',
-    date:'2018-10-10'
-  }
   public componentDidMount () {
     const dom: any = this.refs.container
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.overView.data.pieList)
+    this.renderChart()
   }
-  public renderChart (dataPieList: OverViewProps[]) {
-    if (dataPieList.length !== 3) {
-      return
-    }
+  public renderChart () {
+    const data = [
+      { value: this.props.overView.data.completeCount, name: '已完成任务数' },
+      { value: this.props.overView.data.undistributedCount, name: '待分配任务数' },
+      { value: this.props.overView.data.runningCount, name: '进行中任务数' },
+      { value: this.props.overView.data.cancelCount, name: '已取消任务数' }
+    ]
+    data.map((item) => {
+      item.name = `${item.name}: ${item.value}`
+    })
     const option = {
       tooltip: {
-        axisPointer: 'line',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
+        trigger: 'item',
+        formatter: '{a} <br/>{b} ({d}%)'
       },
       legend: {
         orient: 'vertical',
-        x: 'left',
-        data: [`${dataPieList[0].name}:${dataPieList[0].value}`, `${dataPieList[1].name}:${dataPieList[1].value}`, `${dataPieList[2].name}:${dataPieList[2].value}`]
+        x: 'left'
       },
       series: [
         {
-          name:'任务数',
-          type:'pie',
+          name: '任务数',
+          type: 'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,
           label: {
@@ -57,27 +53,7 @@ class Main extends React.Component<Statistics.Props, any> {
               show: true
             }
           },
-          itemStyle:{
-            color: '#fa250c'
-          },
-          data:
-          [
-            {
-              value: dataPieList[0].value,
-              name:`${dataPieList[0].name}:${dataPieList[0].value}`,
-              itemStyle: {color: '#fa250c'}
-            },
-            {
-              value: dataPieList[1].value,
-              name:`${dataPieList[1].name}:${dataPieList[1].value}`,
-              itemStyle: {color: '#1790ff'}
-            },
-            {
-              value: dataPieList[2].value,
-              name:`${dataPieList[2].name}:${dataPieList[2].value}`,
-              itemStyle: {color: '#ff7d00'}
-            }
-          ]
+          data
         }
       ]
     }

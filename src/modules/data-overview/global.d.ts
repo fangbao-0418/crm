@@ -32,43 +32,36 @@ declare namespace Statistics {
     type?: 'MONTH' | 'YEAR'
     date?: string
     data?: {
-      /** 总客户数 */
-      customerTotal: number
-      /** 已完成客户数 */
-      completeCustomerNum: number
-      /** 完成率 */
-      finishRate: number
-      /** 未分配客户数 */
-      incompleteCustomerNum: number
-      /** 取消客户数 */
-      cancelCustomerNum: number
       /** 总绩效 */
       rewardTotal: number,
-      /** 饼图数据 */
-      pieList: Array<{
+      /** 任务总数 */
+      taskTotal: number
+      /** 已完成任务数 */
+      completeCount: number
+      /** 待分配任务数 */
+      undistributedCount: number
+      /** 取消任务数 */
+      cancelCount: number
+      /** 进行中的任务数 */
+      runningCount: number
+      /** 任务分类绩效 */
+      taskRewardList: Array<{
         name: string,
-        value: number
+        reward: number
       }>
-      /** 线图Y轴数据 */
-      lineList: Array<{
-        /** 完成数 */
-        finishNum: number,
-        /** 完成率 */
-        finishRate: number,
+      /** 地区分类绩效 */
+      areaRewardList: Array<{
         /** 名称 */
         name: string
+        reward: number
       }>,
-      /** 任务分类绩效 */
-      taskSumRewardList: Array<{
-        /** 绩效 */
-        reward: number,
-        taskName: string,
-      }>,
-      /** 地区分类绩效 */
-      areaSumRewardList: Array<{
-         /** 绩效 */
-         reward: number,
-         areaName: string,
+      /** 任务每月数据 */
+      taskMonthDataList: Array<{
+        month: string
+        /** 任务总数 */
+        total: number,
+        /** 已完成任务数 */
+        completeCount: number,
       }>
     }
   }

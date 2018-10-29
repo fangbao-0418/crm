@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import { connect } from 'react-redux'
 import ContentBox from '@/modules/common/content'
-import PieList from '@/modules/data-overview/views/pie'
+import Pie from '@/modules/data-overview/views/pie'
 import Line from '@/modules/data-overview/views/line'
 import Total from './Total'
 import Search from './Search'
@@ -13,57 +13,60 @@ class Main extends React.Component<Statistics.Props> {
     const { overView } = this.props
     const { type, date, data } = overView
     return (
-    <div className={styles.container}>
-      <ContentBox title='数据总览'>
-      <Row className={styles.tab}>
-        <Search />
-      </Row>
-      {/* <Total /> */}
-      <Row className={styles.listLeft}>
-        <Col span={11} className={styles.allPic} style={{marginRight:'42px'}}>
-          <p className={styles.clientLeft}>{date}任务总览</p>
-          <p className={styles.clientRight}>任务总数：{data.customerTotal}</p>
-          <div className={styles.pic}>
-            <PieList />
-          </div>
-        </Col>
-        <Col span={11} className={styles.allPic}>
-          <p className={styles.clientLeft}>{date}绩效总览</p>
-          <p className={styles.clientRight}>绩效总额：￥{data.rewardTotal}</p>
-          <div style={{clear:'both'}}>
-            <ul className={styles.listPerform}>
-              {(data.taskSumRewardList.length > 0) ? <div>
-                <li>
-                  {data.taskSumRewardList.map((item, index) => {
-                    const { taskName, reward } = item
-                    return  <dd key={index}>{taskName}：￥{reward}</dd>
-                  })}
-                </li>
-              </div> : <ul className={styles.listPerform}>暂无名称数据</ul>}
-            </ul>
-          </div>
-          <ul className={styles.region}>
-            {(data.areaSumRewardList.length > 0) ? <div>
-              <li>
-                {data.areaSumRewardList.map((item, index) => {
-                  const { areaName, reward } = item
-                  return  <dd key={index}>{areaName}：￥{reward}</dd>
-                })}
-              </li>
-            </div> : <li>暂无区域数据</li>}
-          </ul>
-        </Col>
-      </Row>
-      {
-          type === 'YEAR' ? (
+      <ContentBox title='数据总览' className={styles.container}>
+        <Row className={styles.tab}>
+          <Search />
+        </Row>
+        {/* <Total /> */}
+        <Row className={styles.listLeft}>
+          <Col span={11} className={styles.card} style={{marginRight: '42px', height: 350}}>
+            <div className={styles['card-header']}>
+              <p className='fl'>{date}任务总览</p>
+              <p className='fr'>任务总数：{data.taskTotal}</p>
+            </div>
+            <div className={styles.pic}>
+              <Pie />
+            </div>
+          </Col>
+          <Col span={11} className={styles.card} style={{height: 350}}>
+            <div className={styles['card-header']}>
+              <p className='fl'>{date}绩效总览</p>
+              <p className='fr'>绩效总额：￥{data.rewardTotal}</p>
+            </div>
+            <div className={styles.reward}>
+              <ul className={styles['reward-task']}>
+                {
+                  (data.taskRewardList.length > 0) ? (
+                    data.taskRewardList.map((item, index) => {
+                      const { name, reward } = item
+                      return  <li key={index}>{name}：￥{reward}</li>
+                    })
+                  ) : <li>暂无任务数据</li>
+                }
+              </ul>
+              <ul className={styles.region}>
+                {
+                  (data.areaRewardList.length > 0) ? (
+                    data.areaRewardList.map((item, index) => {
+                      const { name, reward } = item
+                      return  <li key={index}>{name}：￥{reward}</li>
+                    })
+                  ) : <li>暂无区域数据</li>
+                }
+              </ul>
+            </div>
+          </Col>
+        </Row>
+        {
+          type === 'YEAR' && (
           <Row>
-            <Col span={23} style={{borderRadius: '5px', border: '1px solid #dcdcdc'}}>
+            <Col span={23}>
               <Line />
             </Col>
           </Row>
-          ) : ''}
-      </ContentBox>}
-    </div>
+          )
+        }
+      </ContentBox>
     )
   }
 }

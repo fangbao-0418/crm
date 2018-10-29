@@ -2,30 +2,6 @@
 import _ from 'lodash'
 import { handleActions } from 'redux-actions'
 const defaultVal: Statistics.Props = {
-  // dataPieList: [],
-  // dataLineList:[],
-  // taskSumRewardList:[],
-  // areaSumRewardList:[],
-  // histogramRewardDataList:[],
-  // histogramTaskDataList:[],
-  // allProps: {
-  //   customerTotal:0,
-  //   completeCustomerNum: 0,
-  //   finishRate: 0,
-  //   incompleteCustomerNum: 0,
-  //   cancelCustomerNum:0,
-  //   rewardTotal: 0.00,
-  //   rewardIncrease:0.00,
-  //   finishedTotal:0
-  // },
-  // companyProps:{
-  //   customerTodayTotal: 0,
-  //   customerTotalDayIncrease: 0,
-  //   customerTotalWeekIncrease: 0,
-  //   todayRewardTotal: 0,
-  //   rewardDayIncrease: 0,
-  //   rewardWeekIncrease: 0
-  // },
   overView: {
     type: 'MONTH',
     total: {
@@ -39,22 +15,16 @@ const defaultVal: Statistics.Props = {
       rewardWeekIncrease: 0
     },
     data: {
-      /** 总客户数 */
-      customerTotal: 0,
-      /** 已完成客户数 */
-      completeCustomerNum: 0,
-      /** 完成率 */
-      finishRate: 0,
-      /** 未分配客户数 */
-      incompleteCustomerNum: 0,
-      /** 取消客户数 */
-      cancelCustomerNum: 0,
+      taskTotal: 0,
+      completeCount: 0,
+      undistributedCount: 0,
+      cancelCount: 0,
       /** 总绩效 */
       rewardTotal: 0,
-      pieList: [],
-      lineList: [],
-      taskSumRewardList: [],
-      areaSumRewardList: []
+      runningCount: 0,
+      taskRewardList: [],
+      areaRewardList: [],
+      taskMonthDataList: []
     }
   },
   detail: {
@@ -79,9 +49,6 @@ const defaultVal: Statistics.Props = {
       histogramTaskDataList: []
     }
   }
-  // yearView:{
-  //   typeValue: '2015年'
-  // }
 }
 export default handleActions<Statistics.Props>({
   'change screen data': (state, { payload }) => {
