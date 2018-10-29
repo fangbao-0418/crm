@@ -353,7 +353,14 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取子任务列表
-  public getTplSublistByCond (conf: Map<string> = {}) {
+  public getTplSublistByCond (conf: {
+    pageSize: number,
+    pageCurrent: number,
+    name: string,
+    status: string,
+    priority: string,
+    origId: string
+  }) {
     const cond = {
       pageSize: 10,
       pageCurrent: 1,
