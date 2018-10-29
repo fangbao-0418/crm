@@ -271,17 +271,15 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取任务模板列表
-  public getTplListByCond (conf: Map<string> = {}) {
-    const cond = {
-      pageSize: 10,
-      pageCurrent: 1,
-      name: '',
-      status: '',
-      priority: '',
-      origId: '',
-      systemFlag: '' // 空，全部；0 自定义任务； 1 系统任务
-    }
-    conf = _.extend(cond, conf)
+  public getTplListByCond (conf: {
+    systemFlag: string,
+    pageCurrent: number,
+    pageSize: number,
+    name: string,
+    status: string,
+    priority: string,
+    origId: string
+  }) {
     return Service.http(
       this.createUrl(`/${this.moduleName}/v1/api/outside/task/template/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
     )
@@ -353,7 +351,14 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取子任务列表
-  public getTplSublistByCond (conf: Map<string> = {}) {
+  public getTplSublistByCond (conf: {
+    pageSize: number,
+    pageCurrent: number,
+    name: string,
+    status: string,
+    priority: string,
+    origId: string
+  }) {
     const cond = {
       pageSize: 10,
       pageCurrent: 1,

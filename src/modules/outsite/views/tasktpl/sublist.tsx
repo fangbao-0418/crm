@@ -1,5 +1,6 @@
 import React from 'react'
-import { Table, Button, Row, Col, Modal } from 'antd'
+import { Divider, Table, Button, Row, Col, Modal } from 'antd'
+import { ColumnProps } from 'antd/lib/table'
 import SearchForm from '@/modules/outsite/components/TplSearchForm'
 import ContentBox from '@/modules/common/content'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
@@ -8,41 +9,9 @@ import AddButton from '@/modules/common/content/AddButton'
 import _ from 'lodash'
 type TasktplItem = OutSide.TaskItem
 const styles = require('@/modules/outsite/styles/tpllist')
-const data: any = [
-  {
-    id: '3',
-    name: '网上申请',
-    priority: 'close',
-    status: 'normal', // 状态 forbidden 禁用 normal 启用
-    type: 'sub',
-    category: 'tax', // tax 税务，business 工商，others 其他，special 特殊
-
-    subList: null,
-    delFlag: 0
-  },
-  {
-    id: '4',
-    name: '下发执照',
-    priority: 'close',
-    status: 'forbidden',
-    type: 'sub',
-    category: 'business',
-    subList: null,
-    delFlag: 0
-  },
-  {
-    id: '5',
-    name: '刻章',
-    priority: 'close',
-    status: 'normal',
-    type: 'sub',
-    category: 'others',
-    subList: null,
-    delFlag: 0
-  }
-]
 class Main extends React.Component<any, any> {
-  public columns = [{
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
+  public columns: ColumnProps<TasktplItem>[] = [{
     title: '子任务名称',
     dataIndex: 'name'
   }, {
@@ -67,42 +36,50 @@ class Main extends React.Component<any, any> {
     }
   }, {
     title: '操作',
+    width: 160,
+    align: 'center',
     dataIndex: 'take',
     render: (k: any, item: TasktplItem) => {
       return (
         <span>
           <span className='href mr5' onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
+          <Divider type='vertical' style={{color: '#979797'}}/>
           <span className='href' onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
         </span>
       )
     }
   }]
-  constructor (props: any) {
-    super(props)
-    const value = props.value || {}
-    this.state = {
-      selectedRowKeys: [],
-      modalVisible: false,
-      pageConf: {
-        total: 0,
-        size: 10,
-        current: 1
-      },
-      searchData:{
-        name: '',
-        status: '',
-        category: '',
-        pageSize: 10,
-        pageCurrent: 1,
-        pageTotal: 0
-      },
-      subItem: {
-        name: '',
-        category: ''
-      },
-      dataSource: [],
-      showTitle:''// 弹窗的标题
-    }
+  public searchData: {
+    pageSize: number,
+    pageCurrent: number,
+    name: string,
+    status: string,
+    priority: string,
+    origId: string,
+    category?: string
+  } = {
+    name: '',
+    status: '',
+    priority: '',
+    category: '',
+    pageSize: 15,
+    origId: undefined,
+    pageCurrent: 1
+  }
+  public state: any = {
+    selectedRowKeys: [],
+    modalVisible: false,
+    pageConf: {
+      total: 0,
+      size: this.searchData.pageSize,
+      current: this.searchData.pageCurrent
+    },
+    subItem: {
+      name: '',
+      category: ''
+    },
+    dataSource: [],
+    showTitle:''// 弹窗的标题
   }
 
   public componentWillMount () {
@@ -110,7 +87,7 @@ class Main extends React.Component<any, any> {
   }
 
   public render () {
-    const { selectedRowKeys } = this.state
+    const { pageConf, selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -176,22 +153,28 @@ class Main extends React.Component<any, any> {
         </Row>
         <Row>
         <Table
+          bordered
           columns={this.columns}
           dataSource={this.state.dataSource}
           pagination={{
-            ...this.state.pageConf,
+            total: pageConf.total,
+            current: pageConf.current,
+            pageSize: pageConf.size,
             onChange: (page: any) => {
-              const { pageConf, searchData } = this.state
-              pageConf.current = page
-              searchData.pageCurrent = page
-              this.setState({
-                pageConf,
-                searchData
-              }, () => {
-                this.getList()
-              })
+              this.searchData.pageCurrent = page
+              this.getList()
+            },
+            onShowSizeChange: (current, size) => {
+              this.searchData.pageCurrent = 1
+              this.searchData.pageSize = size
+              this.getList()
+            },
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            showTotal (total) {
+              return `共计 ${total} 条`
             }
-
           }}
         />
         </Row>
@@ -209,17 +192,17 @@ class Main extends React.Component<any, any> {
   }
 
   public getList () {
-    Service.getTplSublistByCond(this.state.searchData).then((res: any) => {
+    Service.getTplSublistByCond(this.searchData).then((res: any) => {
       if (!res || !res.records) {
         return
       }
-      const { pageConf, searchData } = this.state
-      searchData.pageSize = pageConf.size = res.pageSize
-      searchData.pageCurrent = pageConf.current = res.pageCurrent
+      const { pageConf } = this.state
+      pageConf.size = res.pageSize
+      pageConf.current = res.pageCurrent
       pageConf.total = res.pageTotal
       this.setState({
-        dataSource: res.records,
-        searchData
+        pageConf,
+        dataSource: res.records
       })
     })
   }
