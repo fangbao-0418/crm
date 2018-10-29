@@ -33,17 +33,17 @@ class Main extends React.Component<any, any> {
     item: {},
     pageConf: {
       total: 0,
-      size: 10,
+      size: 15,
       current: 1
     },
     searchData: {
       systemFlag: 1,
       pageCurrent: 1,
-      pageSize: 10
+      pageSize: 15
     },
     dataSource: []
   }
-
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public columns: ColumnProps<TaskItem>[] = [{
     title: '主任务',
     dataIndex: 'name'
@@ -193,6 +193,12 @@ class Main extends React.Component<any, any> {
             }, () => {
               this.getList()
             })
+          },
+          showQuickJumper: true,
+          showSizeChanger: true,
+          pageSizeOptions: this.pageSizeOptions,
+          showTotal (total) {
+            return `共计 ${total} 条`
           }
         }}
       />
