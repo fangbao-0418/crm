@@ -194,6 +194,19 @@ class Main extends React.Component<any, any> {
               this.getList()
             })
           },
+          onShowSizeChange: (current: number, size: number) => {
+            const { searchData } = this.state
+            pageConf.current = current
+            pageConf.size = size
+            searchData.pageCurrent = current
+            searchData.pageSize = size
+            this.setState({
+              pageConf,
+              searchData
+            }, () => {
+              this.getList()
+            })
+          },
           showQuickJumper: true,
           showSizeChanger: true,
           pageSizeOptions: this.pageSizeOptions,
