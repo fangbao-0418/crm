@@ -26,7 +26,7 @@ class Main extends React.Component<Props> {
   public titles = {
     department: '添加一级部门',
     account: '添加账号',
-    role: '添加角色'
+    role: '添加自定义角色'
   }
   public componentWillMount () {
     fetchCompanyListAction(this.type)
@@ -82,7 +82,7 @@ class Main extends React.Component<Props> {
               values.userType = this.type
               console.log(this.props, 'props')
               if (values.parentId === undefined) {
-                values.parentId = ''
+                values.parentId = '0'
               }
               addAccount(values).then(() => {
                 fetchAccountListAction(this.props.account.searchPayload)
@@ -99,7 +99,7 @@ class Main extends React.Component<Props> {
       break
     case 'role':
       modal = new Modal({
-        title: '添加角色',
+        title: '添加自定义角色',
         content: (
           <RoleDetail
             type={this.type}

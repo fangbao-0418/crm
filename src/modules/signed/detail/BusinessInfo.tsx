@@ -179,13 +179,13 @@ class Main extends React.Component<Props, State> {
                 {!disabled ? getFieldDecorator(
                   'unifiedCreditCode',
                   {
-                    initialValue: detail.unifiedCreditCode,
-                    rules: [
-                      {
-                        required: true,
-                        message: '统一社会信用代码不能为空'
-                      }
-                    ]
+                    initialValue: detail.unifiedCreditCode
+                    // rules: [
+                    //   {
+                    //     required: true,
+                    //     message: '统一社会信用代码不能为空'
+                    //   }
+                    // ]
                   }
                 )(
                   <Input disabled={this.state.disabled} />

@@ -71,13 +71,14 @@ class Main extends React.Component<Props> {
     }
   }
   public fetchData (
-    companyCode: string = this.companyCode,
+    companyCode: string = this.companyCode || this.props.companyCode,
     type: UserManage.TypeProps = this.props.type
   ) {
     this.loaded = true
     fetchDepartmentAction(companyCode, type)
   }
   public add (record: UserManage.DepartmentItemProps) {
+    console.log(record, 'record')
     const modal = new Modal({
       title: '添加部门',
       content: (
@@ -87,7 +88,7 @@ class Main extends React.Component<Props> {
               {
                 name: value.name,
                 parentId: record.id,
-                companyId: this.companyCode,
+                companyId: this.props.companyCode,
                 organizationType: this.props.type
               }
             ).then((res) => {
