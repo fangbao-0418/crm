@@ -1,9 +1,10 @@
 import React from 'react'
 import { Table, Button, Row, Col, Modal } from 'antd'
 import SearchForm from '@/modules/outsite/components/TplSearchForm'
-import HCframe from '@/modules/common/components/HCframe'
+import ContentBox from '@/modules/common/content'
 import MessageShowModal from '@/modules/outsite/views/tasktpl/tpllist.model'
 import Service from '@/modules/outsite/services'
+import AddButton from '@/modules/common/content/AddButton'
 import _ from 'lodash'
 type TasktplItem = OutSide.TaskItem
 const styles = require('@/modules/outsite/styles/tpllist')
@@ -152,12 +153,17 @@ class Main extends React.Component<any, any> {
       // onSelection: this.onSelection
     }
     return (
-      <div className={styles.container}>
-      <HCframe
+      <ContentBox
         title='其他任务配置'
-        act={<div>
-          <a onClick={this.addtBtn.bind(this)} className='btn'><i>+</i> 新增</a>
-        </div>}
+        rightCotent={(
+          <div>
+            <AddButton
+              onClick={this.addtBtn.bind(this)}
+              title='新增'
+            >
+            </AddButton>
+          </div>
+        )}
       >
         <Row>
           <Col span={20}>
@@ -189,17 +195,16 @@ class Main extends React.Component<any, any> {
           }}
         />
         </Row>
-      </HCframe>
-      <Modal
-        title={this.state.showTitle}
-        visible={this.state.modalVisible}
-        onOk={this.modalHandleOk.bind(this)}
-        onCancel={this.modalHandleCancel.bind(this)}
-        // footer={null}
-      >
-        <MessageShowModal data={this.state.subItem} identifying={this.state.showTitle} onChange={this.onSubFormChange.bind(this)}/>
-      </Modal>
-    </div>
+        <Modal
+          title={this.state.showTitle}
+          visible={this.state.modalVisible}
+          onOk={this.modalHandleOk.bind(this)}
+          onCancel={this.modalHandleCancel.bind(this)}
+          // footer={null}
+        >
+          <MessageShowModal data={this.state.subItem} identifying={this.state.showTitle} onChange={this.onSubFormChange.bind(this)}/>
+        </Modal>
+      </ContentBox>
     )
   }
 

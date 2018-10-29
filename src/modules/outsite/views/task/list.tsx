@@ -332,7 +332,6 @@ class Main extends React.Component {
   }
   public render () {
     return (
-    <div className={styles.container}>
       <ContentBox
         title='外勤任务'
         rightCotent={<div>
@@ -361,7 +360,6 @@ class Main extends React.Component {
           </Tabs>
         </Row>
       </ContentBox>
-    </div>
     )
   }
 }

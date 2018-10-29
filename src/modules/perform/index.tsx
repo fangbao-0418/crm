@@ -16,16 +16,16 @@ interface States {
 }
 class Main extends React.Component<Perform.Props> {
   public params: Perform.SearchPayload = {
-    pageCurrent: 1,
-    pageSize: 15,
+    current: 1,
+    size: 15,
     templateName: ''
   }
   public state: States = {
     dataSource: [],
     pagination: {
       total: 0,
-      current: this.params.pageCurrent,
-      pageSize: this.params.pageSize
+      current: this.params.current,
+      pageSize: this.params.size
     }
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
@@ -126,7 +126,7 @@ class Main extends React.Component<Perform.Props> {
   public handlePageChange (page: number) {
     const { pagination } = this.state
     pagination.current = page
-    this.params.pageCurrent = page
+    this.params.current = page
     this.setState({
       pagination
     }, () => {
@@ -137,8 +137,8 @@ class Main extends React.Component<Perform.Props> {
     const { pagination } = this.state
     pagination.current = current
     pagination.pageSize = size
-    this.params.pageCurrent = current
-    this.params.pageSize = size
+    this.params.current = current
+    this.params.size = size
     this.setState({
       pagination
     }, () => {
@@ -176,7 +176,6 @@ class Main extends React.Component<Perform.Props> {
           <Table
             columns={this.columns}
             dataSource={this.state.dataSource}
-            size='middle'
             bordered
             pagination={{
               onChange: this.handlePageChange.bind(this),
