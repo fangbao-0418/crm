@@ -19,7 +19,7 @@ export const fetchAccountingList = (pageCurrent: number, pageSize: number, name?
 
 // 删除核算中心
 export const delAccounting = (id: number) => {
-  return http(`/user/v1/api/adjust/account/delete?id=${id}`)
+  return http(`/user/v1/api/adjust/account/delete/${id}`, 'DELETE')
 }
 
 // 修改核算中心
