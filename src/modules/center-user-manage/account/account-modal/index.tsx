@@ -316,6 +316,7 @@ class Main extends React.Component<Props, State> {
         className={styles.modal}
         title={this.state.title}
         visible={true}
+        width={620}
         okButtonProps={{disabled: mode === 'view'}}
         cancelButtonProps={{disabled: mode === 'view'}}
         onOk={this.confirm}
