@@ -6,13 +6,14 @@ import moment from 'moment'
 import Area from './Area'
 import Service from '@/modules/outsite/services'
 import _ from 'lodash'
+const { RangePicker } = DatePicker
 type Map<T> = OutSide.Map<T>
 const FormItem = Form.Item
 const Search = Input.Search
 const styles = require('@/modules/outsite/styles/list')
 interface Props extends FormComponentProps {
   tab?: string,
-  onSearch?: (data: any) => void
+  onSearch?: (data: OutSide.SearchPayload) => void
 }
 // 搜索表单
 class Main extends React.Component<Props, any> {
@@ -159,8 +160,9 @@ class Main extends React.Component<Props, any> {
   }
 
   // 同步搜索表单数据
-  public syncSearchData (data: any = {}) {
+  public syncSearchData (data: OutSide.SearchPayload) {
     const { searchData } = this.state
+    console.log(searchData, data)
     this.setState({
       searchData: Object.assign({}, searchData, data)
     }, () => {
@@ -218,7 +220,7 @@ class Main extends React.Component<Props, any> {
       <Form
         layout='inline'
         style={{width: '80%'}}
-        onChange={this.throttleChange}
+        onChange={this.throttleChange.bind(this)}
         // onSubmit={this.props.onSearch}
       >
         <FormItem>
@@ -246,11 +248,11 @@ class Main extends React.Component<Props, any> {
         })(
           <Select
             style={{width: '120px'}}
-            onChange={(e: any) => {
+            onChange={(value: number) => {
               this.syncSearchData({
-                templateId: e
+                templateId: value
               })
-              const sublist = this.state.tplSubGroup[e]
+              const sublist = this.state.tplSubGroup[value]
               this.setState({
                 tplSubList: sublist ? sublist : []
               })
@@ -270,9 +272,9 @@ class Main extends React.Component<Props, any> {
         })(
           <Select
             style={{width: '140px'}}
-            onChange={(e: any) => {
+            onChange={(value: number) => {
               this.syncSearchData({
-                subTemplateId: e
+                subTemplateId: value
               })
             }}
             placeholder='全部当前子任务'
@@ -290,7 +292,7 @@ class Main extends React.Component<Props, any> {
           </span>
           <div
             className={`mt10 ${styles.extcontent} ${this.state.extshow ? styles.show : styles.hide}`}
-            style={{width: '400px'}}
+            style={{width: '450px'}}
           >
             <Row>
               <Col span={12}>
@@ -349,7 +351,7 @@ class Main extends React.Component<Props, any> {
                       style={{width: '148px'}}
                       placeholder='选择所属区县'
                       onChange={(value) => {
-                        let orgId
+                        let orgId: any
                         if (value.key !== 'all') {
                           orgId = value.key
                         }
@@ -363,21 +365,23 @@ class Main extends React.Component<Props, any> {
               </Col>
               <Col span={12}>
                 <FormItem>
-                  {getFieldDecorator(`startTime`, {
-                  })(
-                    <DatePicker
-                      placeholder='请输入日期'
-                      format='YY-MM-DD'
-                      style={{width:'100%'}}
-                      onChange={(d: any) => {
-                        const v = moment(d).format('YYYY-MM-DD')
-                        console.log('date change::', d, v)
+                  <RangePicker
+                    // format='YY-MM-DD'
+                    style={{width: '100%'}}
+                    onChange={(current) => {
+                      if (current.length === 0) {
                         this.syncSearchData({
-                          startTime: v
+                          toTime: undefined,
+                          fromTime: undefined
                         })
-                      }}
-                    />
-                  )}
+                        return
+                      }
+                      this.syncSearchData({
+                        toTime: current[0].format('YYYY-MM-DD'),
+                        fromTime: current[1].format('YYYY-MM-DD')
+                      })
+                    }}
+                  />
                 </FormItem>
               </Col>
             </Row>

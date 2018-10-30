@@ -98,7 +98,8 @@ const http = (url: string, type?: AjaxConfigProps | RequestTypeProps, config: Aj
   delete config.extension
   data = config.data || config || undefined
   const headers = Object.assign({}, config.headers, {
-    token: `${APP.token}`
+    token: `${APP.token}`,
+    from: 4
   })
   let ajaxConfig: JQuery.AjaxSettings = {
     url: '/sys' + url,

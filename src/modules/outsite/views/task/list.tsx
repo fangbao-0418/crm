@@ -196,29 +196,12 @@ class Main extends React.Component {
   }
 
   // 全选反选
-  public onSelectAllChange (selectedRowKeys: any) {
-    console.log('select')
+  public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({selectedRowKeys})
   }
 
-  // public virData () {
-  //   const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  //   const item = data[0]
-  //   ids.map((id: number) => {
-  //     item.id = id
-  //     data.push(item)
-  //   })
-  // }
-
   // 获取列表数据
   public getList () {
-    /*
-    this.virData()
-    this.setState({
-      dataSource: data
-    })
-    */
-    console.log(this.state.searchData, 'searchData')
     const { searchData } = this.state
     Service.getListByCond(searchData).then((d: any) => {
       const { pageSize, total, pageCurrent } = d

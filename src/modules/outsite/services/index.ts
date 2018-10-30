@@ -250,18 +250,9 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取外勤任务列表
-  public getListByCond (conf: Map<string> = {}) {
-    const cond = {
-      pageSize: 10,
-      pageCurrent: 1,
-      customerName: '',
-      status: '',
-      priority: '',
-      origId: ''
-    }
-    conf = _.extend(cond, conf)
+  public getListByCond (conf: OutSide.SearchPayload) {
     return Service.http(
-      this.createUrl(`/${this.moduleName}/v1/api/outside/task/list`, conf) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
+      `/outside/v1/api/outside/task/list`, 'GET', conf
     )
   }
 

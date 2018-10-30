@@ -1,4 +1,19 @@
 declare namespace OutSide {
+  export interface SearchPayload {
+    pageCurrent?: number
+    pageSize?: number
+    customerName?: string
+    name?: string
+    status?: string
+    templateId?: number
+    subTemplateId?: number
+    userId?: number
+    userName?: string
+    areaId?: string
+    fromTime?: string
+    toTime?: string
+    orgId?: number
+  }
   /** 商品属性 */
   export interface GoodProps {
     code: string

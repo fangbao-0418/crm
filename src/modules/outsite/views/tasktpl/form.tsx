@@ -62,7 +62,7 @@ class Main extends React.Component<any, States> {
     Service.getProductList().then((res) => {
       console.log(res)
       this.setState({
-        goods: res
+        goods: res || []
       })
     })
   }
