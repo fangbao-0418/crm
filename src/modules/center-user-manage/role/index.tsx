@@ -171,7 +171,7 @@ class Main extends React.Component {
               {
                 status === 0
                   ? <div>
-                      <a hidden={!APP.hasPermission('bizbase_user_role_list')} onClick={() => {this.setRole('view', id)}}>查看</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_info')} onClick={() => {this.setRole('view', id)}}>查看</a>
                       <Divider type='vertical'/>
                       <a hidden={!APP.hasPermission('bizbase_user_role_edit')} onClick={() => {this.setRole('modify', id)}}>修改</a>
                       <Divider type='vertical'/>
@@ -180,7 +180,7 @@ class Main extends React.Component {
                       <a hidden={!APP.hasPermission('bizbase_user_role_delete')} onClick={() => {this.delConfirm('single', id)}}>删除</a>
                     </div>
                   : <div>
-                      <span hidden={!APP.hasPermission('bizbase_user_role_list')} className={styles.disable}>查看</span>
+                      <span hidden={!APP.hasPermission('bizbase_user_role_info')} className={styles.disable}>查看</span>
                       <Divider type='vertical'/>
                       <span hidden={!APP.hasPermission('bizbase_user_role_edit')} className={styles.disable}>修改</span>
                       <Divider type='vertical'/>

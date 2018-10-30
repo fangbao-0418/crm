@@ -54,7 +54,7 @@ class Main extends React.Component<Props, State> {
         return (
           <div>
             <span
-              hidden={!APP.hasPermission('direct_company_list')}
+              hidden={!APP.hasPermission('bizbase_user_direct_company_list_info')}
               className='href'
               onClick={() => {
                 this.show('view', record)
@@ -64,7 +64,7 @@ class Main extends React.Component<Props, State> {
             </span>
             <Divider type='vertical' />
             <span
-              hidden={!APP.hasPermission('direct_company_add')}
+              hidden={!APP.hasPermission('bizbase_user_direct_company_add')}
               className='href'
               onClick={() => {
                 this.show('update', record)
@@ -74,7 +74,7 @@ class Main extends React.Component<Props, State> {
             </span>
             <Divider type='vertical' />
             <span
-              hidden={!APP.hasPermission('direct_company_delete')}
+              hidden={!APP.hasPermission('bizbase_user_direct_company_delete')}
               className='href'
               onClick={() => {this.delDirect(record.id)}}
             >
