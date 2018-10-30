@@ -59,7 +59,7 @@ class Main extends React.Component<Props> {
         return (
           <div>
             <span
-              hidden={!APP.hasPermission('bizbase_user_agent_user_info') || !APP.hasPermission('bizbase_user_direct_user_info')}
+              hidden={!APP.hasPermission('bizbase_user_agent_user_info') && !APP.hasPermission('bizbase_user_direct_user_info')}
               className='href'
               onClick={() => {this.update('view', record)}}
             >
@@ -67,7 +67,7 @@ class Main extends React.Component<Props> {
             </span>
             <Divider type='vertical'/>
             <span
-              hidden={!APP.hasPermission('bizbase_user_agent_user_edit') || !APP.hasPermission('bizbase_user_direct_user_edit')}
+              hidden={!APP.hasPermission('bizbase_user_agent_user_edit') && !APP.hasPermission('bizbase_user_direct_user_edit')}
               className='href'
               onClick={() => {this.update('update', record)}}
             >
@@ -75,7 +75,7 @@ class Main extends React.Component<Props> {
             </span>
             <Divider type='vertical' />
             <span
-              hidden={!APP.hasPermission('bizbase_user_agent_user_delete') || !APP.hasPermission('bizbase_user_direct_user_delete')}
+              hidden={!APP.hasPermission('bizbase_user_agent_user_delete') && !APP.hasPermission('bizbase_user_direct_user_delete')}
               className='href'
               onClick={() => this.delete([record.id])}
             >
