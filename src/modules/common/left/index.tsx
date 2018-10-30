@@ -104,6 +104,7 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '中心用户管理',
+      hidden: !APP.hasPermission('bizbase_user'),
       icon: <MenuIcon type='center' />,
       path: '',
       children: [
@@ -119,6 +120,7 @@ class Main extends React.Component<Props, State> {
         },
         {
           title: '权限',
+          hidden: !APP.hasPermission('bizbase_user_authority'),
           path: '/center-permission'
         },
         {

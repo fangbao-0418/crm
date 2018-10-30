@@ -180,22 +180,22 @@ class Main extends React.Component {
               {
                 status === 0
                 ? <div>
-                    <a onClick={() => {this.setPermission('modify', id, itemInfo)}}>修改</a>
+                    <a hidden={!APP.hasPermission('bizbase_user_authority_update')} onClick={() => {this.setPermission('modify', id, itemInfo)}}>修改</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.setPermission('add', id, {})}}>添加子页面权限</a>
+                    <a hidden={!APP.hasPermission('bizbase_user_authority_add')} onClick={() => {this.setPermission('add', id, {})}}>添加子页面权限</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.forbidPermission(id, 1)}}>禁用</a>
+                    <a hidden={!APP.hasPermission('bizbase_user_authority_update_status')} onClick={() => {this.forbidPermission(id, 1)}}>禁用</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.delPermission(id)}}>删除</a>
+                    <a hidden={!APP.hasPermission('bizbase_user_authority_delete')} onClick={() => {this.delPermission(id)}}>删除</a>
                   </div>
                 : <div>
-                    <span className={styles.disable}>修改</span>
+                    <span hidden={!APP.hasPermission('bizbase_user_authority_update')} className={styles.disable}>修改</span>
                     <Divider type='vertical'/>
-                    <span className={styles.disable}>添加子页面权限</span>
+                    <span hidden={!APP.hasPermission('bizbase_user_authority_add')} className={styles.disable}>添加子页面权限</span>
                     <Divider type='vertical'/>
-                    <a onClick={() => {this.forbidPermission(id, 0)}}>已禁用</a>
+                    <a hidden={!APP.hasPermission('bizbase_user_authority_update_status')} onClick={() => {this.forbidPermission(id, 0)}}>已禁用</a>
                     <Divider type='vertical'/>
-                    <span className={styles.disable}>删除</span>
+                    <span hidden={!APP.hasPermission('bizbase_user_authority_delete')} className={styles.disable}>删除</span>
                   </div>
               }
             </div>
@@ -208,6 +208,7 @@ class Main extends React.Component {
         title='权限'
         rightCotent={(
           <AddButton
+            hidden={!APP.hasPermission(' bizbase_user_authority_add')}
             title='添加页面权限'
             onClick={() => {this.setPermission('add', 0, {})}} // 添加根级权限时id传0
           />
