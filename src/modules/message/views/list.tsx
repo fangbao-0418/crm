@@ -115,9 +115,9 @@ class Main extends React.Component {
     render: (k: any, item: MessageItem) => {
       return (
         <span>
-          <span className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
-          {item.read ? <span className={`likebtn`} style={{color:'#999'}} >已读</span> : <span className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>}
-          <span className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
+          <span hidden={!APP.hasPermission('notifiction_remind_get_id')} className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
+          {item.read ? <span className={`likebtn`} style={{color:'#999'}} >已读</span> : <span hidden={!APP.hasPermission('notification_remind_read')} className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>}
+          <span hidden={!APP.hasPermission('notification_remind_delete')} className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
         </span>
       )
     }
