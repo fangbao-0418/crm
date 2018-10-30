@@ -10,8 +10,6 @@ import { FormComponentProps } from 'antd/lib/form'
 import { withRouter, RouteComponentProps } from 'react-router'
 type TaskItem = OutSide.TaskItem
 const TabPane = Tabs.TabPane
-const styles = require('@/modules/outsite/styles/form.styl')
-
 const FormItem = Form.Item
 const { TextArea } = Input
 const formItemLayout = {
@@ -172,7 +170,7 @@ class Main extends React.Component<Props, State> {
     return (
     <ContentBox title='新增外勤任务'>
         <div style={{paddingBottom: '20px'}}>
-        <Tabs defaultActiveKey='1' className={styles.add}>
+        <Tabs defaultActiveKey='1'>
           <TabPane tab='通办任务' key='1'>
             <Mission onChange={this.onTaskidChange.bind(this)} />
           </TabPane>

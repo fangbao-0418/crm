@@ -257,7 +257,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取全部任务列表
-  public getTplList (systemFlag: string = '') {
+  public getTplList (systemFlag?: string) {
     return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=${systemFlag}`)
   }
 
