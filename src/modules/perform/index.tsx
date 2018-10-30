@@ -1,11 +1,11 @@
 import React from 'react'
-import { Table, Input } from 'antd'
+import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { FormComponentProps } from 'antd/lib/form'
 import ContentBox from '@/modules/common/content'
-// import { fetchListAction } from './action'
-// import { connect } from 'react-redux'
 import { update, fetchList } from './api'
-// type PerfromItem = Perform.ItemProps
+const FormItem = Form.Item
+interface Props extends Perform.Props, FormComponentProps {}
 interface States {
   dataSource: Perform.ItemProps[]
   pagination: {
@@ -14,7 +14,8 @@ interface States {
     pageSize: number
   }
 }
-class Main extends React.Component<Perform.Props> {
+class Main extends React.Component<Props> {
+  public errors: {[index: number]: boolean} = {}
   public params: Perform.SearchPayload = {
     current: 1,
     size: 15,
@@ -74,15 +75,39 @@ class Main extends React.Component<Perform.Props> {
           <span>{text}</span>
         )
         : (
-          <Input
-            value={text}
-            onChange={(e) => {
-              dataSource[index].reward = e.target.value
-              this.setState({
-                dataSource
-              })
-            }}
-          />
+          <FormItem>
+            {
+              this.props.form.getFieldDecorator(
+                `reward-${index}`,
+                {
+                  initialValue: text,
+                  rules: [
+                    {
+                      validator: (rule, value, cb) => {
+                        if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+                          this.errors[index] = true
+                          cb('格式不正确')
+                        } else {
+                          cb()
+                          this.errors[index] = false
+                        }
+                      }
+                    }
+                  ]
+                }
+              )(
+                <Input
+                  // value={text}
+                  onChange={(e) => {
+                    dataSource[index].reward = e.target.value
+                    this.setState({
+                      dataSource
+                    })
+                  }}
+                />
+              )
+            }
+          </FormItem>
         )
       )
     }
@@ -98,11 +123,10 @@ class Main extends React.Component<Perform.Props> {
           <span
             className='href'
             onClick={() => {
+              if (this.errors[index]) {
+                return
+              }
               dataSource[index].disabled = !disabled
-              // const disabled = record.disabled !== undefined ? record.disabled : true
-              // const dataSource = this.state.dataSource
-              // const disabled = dataSource[index].disabled !== undefined ? dataSource[index].disabled : true
-              // dataSource[index].disabled = !disabled
               this.setState({
                 dataSource
               })
@@ -164,7 +188,7 @@ class Main extends React.Component<Perform.Props> {
       <ContentBox
         title='绩效配置'
       >
-        <div>
+        <Form>
           <Input.Search
             placeholder='请输入任务名称'
             onSearch={(value) => {
@@ -191,9 +215,9 @@ class Main extends React.Component<Perform.Props> {
               }
             }}
           />
-        </div>
+        </Form>
       </ContentBox>
     )
   }
 }
-export default Main
+export default Form.create()(Main)
