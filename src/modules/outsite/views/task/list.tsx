@@ -158,11 +158,14 @@ class Main extends React.Component {
     }
   }, {
     title: () => {
-      const text = <span>置灰：表示没有任何需要审批的任务  高亮：有需要审批的任务，需点击进行审批</span>
       return (
         <Tooltip
           placement='bottomRight'
-          title={text}
+          title={
+            <span>
+              置灰：表示没有任何需要审批的任务  高亮：有需要审批的任务，需点击进行审批
+            </span>
+          }
         >
             操作
             <span className='icon-list'>
