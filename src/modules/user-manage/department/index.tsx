@@ -237,6 +237,7 @@ class Main extends React.Component<Props> {
           </Select>
         </div>
         <Table
+          rowKey='id'
           childrenColumnName='organizationList'
           className='components-table-demo-nested'
           columns={this.columns}
