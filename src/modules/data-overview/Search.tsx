@@ -25,7 +25,8 @@ while (currentYear >= 2014) {
 }
 class Main extends React.Component<{}, State> {
   public payload: Statistics.OverViewSearchPayload = {
-    dateType: 'month'
+    dateType: 'month',
+    date: moment().format('YYYY-MM-DD')
   }
   public state: State = {
     type: 'month',
@@ -39,6 +40,15 @@ class Main extends React.Component<{}, State> {
       if (res.length === 0) {
         this.payload.companyId = APP.user.companyId
         this.fetchData()
+      } else {
+        if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
+          this.onCityChange(res[0].regionLevelResponseList[0].id).then((res2) => {
+            if (res2 instanceof Array && res2.length > 0) {
+              this.payload.companyId = res2[0].id
+              this.fetchData()
+            }
+          })
+        }
       }
       this.setState({
         provinceList: res
@@ -59,10 +69,11 @@ class Main extends React.Component<{}, State> {
     }
   }
   public onCityChange (code?: string) {
-    fetchAgentList(code).then((res) => {
+    return fetchAgentList(code).then((res) => {
       this.setState({
         agentList: res
       })
+      return res
     })
   }
   public render () {

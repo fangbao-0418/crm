@@ -24,7 +24,20 @@ const defaultVal: Statistics.Props = {
       runningCount: 0,
       taskRewardList: [],
       areaRewardList: [],
-      taskMonthDataList: []
+      taskMonthDataList: [
+        {month: '1月', total: 0, completeCount: 0},
+        {month: '2月', total: 0, completeCount: 0},
+        {month: '3月', total: 0, completeCount: 0},
+        {month: '4月', total: 0, completeCount: 0},
+        {month: '5月', total: 0, completeCount: 0},
+        {month: '6月', total: 0, completeCount: 0},
+        {month: '7月', total: 0, completeCount: 0},
+        {month: '8月', total: 0, completeCount: 0},
+        {month: '9月', total: 0, completeCount: 0},
+        {month: '10月', total: 0, completeCount: 0},
+        {month: '11月', total: 0, completeCount: 0},
+        {month: '12月', total: 0, completeCount: 0}
+      ]
     }
   },
   detail: {

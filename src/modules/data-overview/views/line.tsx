@@ -6,6 +6,7 @@ class Main extends React.Component<Statistics.Props, any> {
   public componentDidMount () {
     const dom: any = this.refs.line
     this.chart = echarts.init(dom)
+    this.renderChart(this.props.overView.data.taskMonthDataList)
   }
   public componentDidUpdate () {
     this.renderChart(this.props.overView.data.taskMonthDataList)
@@ -29,7 +30,7 @@ class Main extends React.Component<Statistics.Props, any> {
         },
         formatter: (params: any) => {
           const index = params[0].dataIndex
-          const rate = Math.round((data[index].completeCount / data[index].total) * 100)
+          const rate = Math.round((data[index].completeCount / (data[index].total || 1)) * 100)
           return `已完成: ${params[0].value}<br>完成率: ${rate}%`
         }
       },
@@ -42,6 +43,8 @@ class Main extends React.Component<Statistics.Props, any> {
       },
       yAxis: {
         type: 'value'
+        // min: 300
+        // max: 1000
       },
       series: [{
         data: data.map((item) => {
