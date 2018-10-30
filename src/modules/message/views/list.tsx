@@ -317,7 +317,7 @@ class Main extends React.Component {
             onChange={this.pageChange}
           />
         </Row>
-        <Row>
+        <Row hidden={this.state.dataSource.length === 0 ? true : false}>
           <Button
             style={{position: 'relative', top: '-50px', marginRight: '10px'}}
             type='primary'

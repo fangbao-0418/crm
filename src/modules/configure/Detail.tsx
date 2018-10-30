@@ -88,6 +88,16 @@ class Main extends React.Component<Props, State> {
           </FormItem>
           <FormItem
             {...formItemLayout}
+            label='类型名称'
+          >
+            {getFieldDecorator('typeName', {
+              initialValue: item.typeName
+            })(
+              <Input.TextArea />
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
             label='所属系统'
           >
             {getFieldDecorator('system', {
@@ -107,16 +117,6 @@ class Main extends React.Component<Props, State> {
                   })
                 }
               </Select>
-            )}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label='类型名称'
-          >
-            {getFieldDecorator('typeName', {
-              initialValue: item.typeName
-            })(
-              <Input.TextArea />
             )}
           </FormItem>
           <div className='text-right mt10'>
