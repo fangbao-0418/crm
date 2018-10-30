@@ -171,22 +171,22 @@ class Main extends React.Component {
               {
                 status === 0
                   ? <div>
-                      <a onClick={() => {this.setRole('view', id)}}>查看</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_list')} onClick={() => {this.setRole('view', id)}}>查看</a>
                       <Divider type='vertical'/>
-                      <a onClick={() => {this.setRole('modify', id)}}>修改</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_edit')} onClick={() => {this.setRole('modify', id)}}>修改</a>
                       <Divider type='vertical'/>
-                      <a onClick={() => {this.forbidConfirm(id)}}>禁用</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_update_status')} onClick={() => {this.forbidConfirm(id)}}>禁用</a>
                       <Divider type='vertical'/>
-                      <a onClick={() => {this.delConfirm('single', id)}}>删除</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_delete')} onClick={() => {this.delConfirm('single', id)}}>删除</a>
                     </div>
                   : <div>
-                      <span className={styles.disable}>查看</span>
+                      <span hidden={!APP.hasPermission('bizbase_user_role_list')} className={styles.disable}>查看</span>
                       <Divider type='vertical'/>
-                      <span className={styles.disable}>修改</span>
+                      <span hidden={!APP.hasPermission('bizbase_user_role_edit')} className={styles.disable}>修改</span>
                       <Divider type='vertical'/>
-                      <a onClick={() => {this.unforbidRole(id)}}>已禁用</a>
+                      <a hidden={!APP.hasPermission('bizbase_user_role_update_status')} onClick={() => {this.unforbidRole(id)}}>已禁用</a>
                       <Divider type='vertical'/>
-                      <span className={styles.disable}>删除</span>
+                      <span hidden={!APP.hasPermission('bizbase_user_role_delete')} className={styles.disable}>删除</span>
                     </div>
 
               }
@@ -201,6 +201,7 @@ class Main extends React.Component {
         title='角色'
         rightCotent={(
           <AddButton
+            hidden={!APP.hasPermission('bizbase_user_role_add')}
             title='添加角色'
             onClick={() => {this.setRole('add')}}
           />

@@ -195,22 +195,22 @@ class Main extends React.Component {
             {
               status === 0
               ? <div>
-                  <a onClick={() => {this.setDepartment('add', info)}}>添加子部门</a>
+                  <a hidden={!APP.hasPermission('bizbase_user_organization_add')} onClick={() => {this.setDepartment('add', info)}}>添加子部门</a>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.setDepartment('modify', info)}}>修改</a>
+                  <a hidden={!APP.hasPermission('bizbase_user_organization_edit')} onClick={() => {this.setDepartment('modify', info)}}>修改</a>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.toggleForbidDepartment(id, 1)}}>禁用</a>
+                  <a hidden={!APP.hasPermission('bizbase_user_organization_update_status')} onClick={() => {this.toggleForbidDepartment(id, 1)}}>禁用</a>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.delDepartment(id)}}>删除</a>
+                  <a hidden={!APP.hasPermission('bizbase_user_organization_delete')} onClick={() => {this.delDepartment(id)}}>删除</a>
                 </div>
               : <div>
-                  <span className={styles.disable}>添加子部门</span>
+                  <span hidden={!APP.hasPermission('bizbase_user_organization_add')} className={styles.disable}>添加子部门</span>
                   <Divider type='vertical'/>
-                  <span className={styles.disable}>修改</span>
+                  <span hidden={!APP.hasPermission('bizbase_user_organization_edit')} className={styles.disable}>修改</span>
                   <Divider type='vertical'/>
-                  <a onClick={() => {this.toggleForbidDepartment(id, 0)}}>已禁用</a>
+                  <a hidden={!APP.hasPermission('bizbase_user_organization_update_status')} onClick={() => {this.toggleForbidDepartment(id, 0)}}>已禁用</a>
                   <Divider type='vertical'/>
-                  <span className={styles.disable}>删除</span>
+                  <span hidden={!APP.hasPermission('bizbase_user_organization_delete')} className={styles.disable}>删除</span>
                 </div>
             }
           </div>
@@ -223,6 +223,7 @@ class Main extends React.Component {
         title='部门'
         rightCotent={(
           <AddButton
+            hidden={!APP.hasPermission('bizbase_user_organization_add')}
             title='添加一级部门'
             onClick={() => {this.setDepartment('addRoot')}}
           />

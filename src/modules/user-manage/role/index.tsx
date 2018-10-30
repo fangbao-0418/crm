@@ -38,11 +38,16 @@ class Main extends React.Component<Props, any> {
         if (record.status === 0) {
           return (
             <div>
-              <span className='href' onClick={() => {this.update('view', record)}}>查看</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_role_list') || !APP.hasPermission('bizbase_user_direct_role_list')} className='href' onClick={() => {this.update('view', record)}}>
+               查看
+              </span>
               <Divider type='vertical'/>
-              <span className='href' onClick={() => {this.update('modify', record)}}>修改</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_role_edit') || !APP.hasPermission('bizbase_user_direct_role_edit')} className='href' onClick={() => {this.update('modify', record)}}>
+                修改
+              </span>
               <Divider type='vertical'/>
               <span
+                hidden={!APP.hasPermission('bizbase_user_agent_role_update_status') || !APP.hasPermission('bizbase_user_direct_role_update_status')}
                 className='href'
                 onClick={() => {
                   this.forbidConfirm(record.id, record.status === 0 ? 1 : 0)
@@ -51,17 +56,24 @@ class Main extends React.Component<Props, any> {
                 禁用
               </span>
               <Divider type='vertical'/>
-              <span className='href' onClick={() => {this.delConfirm([record.id])}}>删除</span>
+              <span
+                hidden={!APP.hasPermission('bizbase_user_agent_role_delete') || !APP.hasPermission('bizbase_user_direct_role_delete')}
+                className='href'
+                onClick={() => {this.delConfirm([record.id])}}
+              >
+                删除
+              </span>
             </div>
           )
         } else {
           return (
             <div>
-              <span>查看</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_role_list') || !APP.hasPermission('bizbase_user_direct_role_list')}>查看</span>
               <Divider type='vertical'/>
-              <span>修改</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_role_edit') || !APP.hasPermission('bizbase_user_direct_role_edit')}>修改</span>
               <Divider type='vertical'/>
               <span
+                hidden={!APP.hasPermission('bizbase_user_agent_role_update_status') || !APP.hasPermission('bizbase_user_direct_role_update_status')}
                 className='href'
                 onClick={() => {
                   this.forbidConfirm(record.id, record.status === 0 ? 1 : 0)
@@ -70,7 +82,7 @@ class Main extends React.Component<Props, any> {
                 已禁用
               </span>
               <Divider type='vertical'/>
-              <span>删除</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_role_delete') || !APP.hasPermission('bizbase_user_direct_role_delete')}>删除</span>
             </div>
           )
         }

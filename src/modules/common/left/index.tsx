@@ -109,10 +109,12 @@ class Main extends React.Component<Props, State> {
       children: [
         {
           title: '账号',
+          hidden: !APP.hasPermission('bizbase_user_user_list'),
           path: '/center-account'
         },
         {
           title: '部门',
+          hidden: !APP.hasPermission('bizbase_user_organization'),
           path: '/center-department'
         },
         {
@@ -121,6 +123,7 @@ class Main extends React.Component<Props, State> {
         },
         {
           title: '角色',
+          hidden: !APP.hasPermission('bizbase_user_role'),
           path: '/center-role'
         }
       ]
@@ -128,10 +131,12 @@ class Main extends React.Component<Props, State> {
     {
       title: '机构管理',
       path: '',
+      hidden: !APP.hasPermission('bizbase_user_company'),
       icon: <MenuIcon type='organ' />,
       children: [
         {
           title: '机构管理',
+          hidden: !APP.hasPermission('bizbase_user_company'),
           path: '/organ'
         }
       ]
@@ -139,14 +144,17 @@ class Main extends React.Component<Props, State> {
     {
       title: '用户管理',
       path: '',
+      hidden: !APP.hasPermission('bizbase_user_customer'),
       icon: <MenuIcon type='user' />,
       children: [
         {
           title: '代理商用户',
+          hidden: !APP.hasPermission('bizbase_user_agent'),
           path: '/user-manage/agent'
         },
         {
           title: '直营用户',
+          hidden: !APP.hasPermission('bizbase_user_direct'),
           path: '/user-manage/direct'
         }
       ]
@@ -164,11 +172,13 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '消息管理',
+      hidden: !APP.hasPermission('notification_remind'),
       path: '',
       icon: <MenuIcon type='message' />,
       children: [
         {
           title: '我的消息',
+          hidden: !APP.hasPermission('notification_remind'),
           path: '/message/list'
         }
       ]
@@ -232,7 +242,7 @@ class Main extends React.Component<Props, State> {
     {
       title: '配置中心',
       path: '/configure',
-      hidden: !APP.hasPermission('dict'),
+      hidden: !APP.hasPermission('config_dict'),
       icon: <MenuIcon type='configure' />
     },
     {

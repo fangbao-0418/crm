@@ -38,9 +38,9 @@ class Main extends React.Component<any, State> {
       render: (val, item) => {
         return (
           <div>
-            <a onClick={() => {this.setAccounting('modify', item)}}>修改</a>
+            <a hidden={!APP.hasPermission('bizbase_user_adjust_account_add')} onClick={() => {this.setAccounting('modify', item)}}>修改</a>
             <Divider type='vertical' />
-            <a onClick={() => {this.delAccounting(item.id)}}>删除</a>
+            <a hidden={!APP.hasPermission('bizbase_user_adjust_account_delete')} onClick={() => {this.delAccounting(item.id)}}>删除</a>
           </div>
         )
       }

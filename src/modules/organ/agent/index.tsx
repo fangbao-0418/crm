@@ -46,6 +46,7 @@ class Main extends React.Component {
         return (
           <div>
             <span
+              hidden={!APP.hasPermission('agent_company_list')}
               className='href'
               onClick={() => {
                 this.show('view', record)
@@ -55,6 +56,7 @@ class Main extends React.Component {
             </span>
             <Divider type='vertical' />
             <span
+              hidden={!APP.hasPermission('agent_company_add')}
               className='href'
               onClick={() => {
                 this.show('update', record)

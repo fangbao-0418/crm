@@ -31,29 +31,29 @@ class Main extends React.Component<Props> {
         if (record.status === 0) {
           return (
             <div>
-              <span className='href' onClick={this.add.bind(this, record)}>添加子部门</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_add') || !APP.hasPermission('bizbase_user_direct_organization_add')} className='href' onClick={this.add.bind(this, record)}>添加子部门</span>
               <Divider type='vertical'/>
-              <span className='href' onClick={this.update.bind(this, record)}>修改</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_edit') || !APP.hasPermission('bizbase_user_direct_organization_edit')} className='href' onClick={this.update.bind(this, record)}>修改</span>
               <Divider type='vertical'/>
-              <span className='href' onClick={this.changeStatus.bind(this, record)}>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_update_status') || !APP.hasPermission('bizbase_user_direct_organization_update_status')} className='href' onClick={this.changeStatus.bind(this, record)}>
                 禁用
               </span>
               <Divider type='vertical'/>
-              <span className='href' onClick={this.delete.bind(this, record)}>删除</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_delete') || !APP.hasPermission('bizbase_user_direct_organization_delete')} className='href' onClick={this.delete.bind(this, record)}>删除</span>
             </div>
           )
         } else {
           return (
             <div>
-              <span>添加子部门</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_add') || !APP.hasPermission('bizbase_user_direct_organization_add')}>添加子部门</span>
               <Divider type='vertical'/>
-              <span>修改</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_edit') || !APP.hasPermission('bizbase_user_direct_organization_edit')}>修改</span>
               <Divider type='vertical'/>
-              <span className='href' onClick={this.changeStatus.bind(this, record)}>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_update_status') || !APP.hasPermission('bizbase_user_direct_organization_update_status')} className='href' onClick={this.changeStatus.bind(this, record)}>
                 已禁用
               </span>
               <Divider type='vertical'/>
-              <span>删除</span>
+              <span hidden={!APP.hasPermission('bizbase_user_agent_organization_delete') || !APP.hasPermission('bizbase_user_direct_organization_delete')}>删除</span>
             </div>
           )
         }
