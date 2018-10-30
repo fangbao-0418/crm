@@ -129,9 +129,9 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'createTime',
+    dataIndex: 'enterStorageTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: (
@@ -144,7 +144,7 @@ class Main extends React.Component {
     ),
     dataIndex: 'startTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: (
@@ -155,9 +155,19 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'EndTime',
+    dataIndex: 'endTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
+    }
+  }, {
+    title: (
+      <span>
+        预约时间
+      </span>
+    ),
+    dataIndex: 'appointTime',
+    render: (val) => {
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: '操作',

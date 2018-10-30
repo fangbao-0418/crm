@@ -6,8 +6,12 @@ declare namespace Signed {
     area?: string
     currentSalesperson?: string
     operatingAccouting?: string
+    /* 入库时间 */
+    enterStorageTime?: string
+    /* 预约时间 */
+    appointTime?: string
     createTime?: string
-    EndTime?: string
+    endTime?: string
     startTime?: string
   }
   export interface SearchProps {
