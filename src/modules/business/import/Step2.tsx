@@ -9,6 +9,7 @@ interface Props {
     step1?: {
       customerSource?: string,
       salesPerson?: Array<{id: string, name: string}>
+      type?: string
     }
   }
 }
@@ -53,16 +54,18 @@ class Main extends React.Component<Props> {
         console.log(this.props.paramsValue, 'paramsValue')
         const ids: string[] = []
         const salesNames: string[] = []
-        this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
-          ids.push(item.id)
-          salesNames.push(item.name)
-        })
+        if (this.props.paramsValue.step1.salesPerson instanceof Array) {
+          this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
+            ids.push(item.id)
+            salesNames.push(item.name)
+          })
+        }
         const paramsFile = {
           agencyId: APP.user.companyId, // 需要从登陆信息读取
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
           salesPersonNames: salesNames.join(','),
-          // salesPersonNames: 'aaa',
+          type: this.props.paramsValue.step1.type,
           cityCode: APP.user.cityCode || undefined, // 需要从登陆信息读取
           cityName: APP.user.companyName || undefined // 需要从登陆信息读取APP.user.city
         }

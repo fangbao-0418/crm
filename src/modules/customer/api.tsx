@@ -62,6 +62,7 @@ export const importFile = (file: File, query: {
   salesPersonIds: string,
   salesPersonNames: string,
   customerSource: string,
+  type?: string,
   [field: string]: string
 }) => {
   const data = new FormData()
