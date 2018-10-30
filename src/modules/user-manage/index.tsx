@@ -31,7 +31,7 @@ class Main extends React.Component<Props, State> {
   public render () {
     const type = this.props.match.params.type === 'direct' ? 'DirectCompany' : 'Agent'
     return (
-      <div>
+      <div style={{height: '100%'}}>
         {
           this.state.visible && <Entry
             type={type}

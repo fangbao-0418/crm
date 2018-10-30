@@ -15,7 +15,7 @@ Object.assign(APP, {
       message: msg
     })
   },
-  hasPermission: (key: string) => {
+  hasPermission: (key?: string) => {
     if (key !== undefined) {
       if (APP.user.codes.indexOf(key) > -1) {
         return true
@@ -23,7 +23,7 @@ Object.assign(APP, {
         return false
       }
     } else {
-      return false
+      return true
     }
   }
 })

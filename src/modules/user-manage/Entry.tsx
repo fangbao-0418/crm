@@ -137,44 +137,42 @@ class Main extends React.Component<Props> {
   public render () {
     const { tab } = this.props
     return (
-      <div>
-        <ContentBox
-          title={this.props.type === 'DirectCompany' ? '直营账号' : '代理商账号'}
-          rightCotent={(
-            <AddButton
-              title={this.titles[tab]}
-              onClick={this.add.bind(this)}
-            />
-          )}
-        >
-          <div>
-            <Tabs
-              defaultActiveKey={this.props.tab}
-              animated={false}
-              onChange={this.callback.bind(this)}
-            >
-              <TabPane tab='部门' key='department'>
-                {
-                  this.props.tab === 'department' &&
-                  <Department type={this.type} />
-                }
-              </TabPane>
-              <TabPane tab='账号' key='account'>
-                {
-                  this.props.tab === 'account' &&
-                  <Account type={this.type} />
-                }
-              </TabPane>
-              <TabPane tab='自定义角色' key='role'>
-                {
-                  this.props.tab === 'role' &&
-                  <Role type={this.type} />
-                }
-              </TabPane>
-            </Tabs>
-          </div>
-        </ContentBox>
-      </div>
+      <ContentBox
+        title={this.props.type === 'DirectCompany' ? '直营账号' : '代理商账号'}
+        rightCotent={(
+          <AddButton
+            title={this.titles[tab]}
+            onClick={this.add.bind(this)}
+          />
+        )}
+      >
+        <div>
+          <Tabs
+            defaultActiveKey={this.props.tab}
+            animated={false}
+            onChange={this.callback.bind(this)}
+          >
+            <TabPane tab='部门' key='department'>
+              {
+                this.props.tab === 'department' &&
+                <Department type={this.type} />
+              }
+            </TabPane>
+            <TabPane tab='账号' key='account'>
+              {
+                this.props.tab === 'account' &&
+                <Account type={this.type} />
+              }
+            </TabPane>
+            <TabPane tab='自定义角色' key='role'>
+              {
+                this.props.tab === 'role' &&
+                <Role type={this.type} />
+              }
+            </TabPane>
+          </Tabs>
+        </div>
+      </ContentBox>
     )
   }
 }
