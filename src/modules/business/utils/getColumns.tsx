@@ -129,6 +129,10 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           >
             {val}
           </span>
+          {
+            record.redPoint === 1 &&
+            <span className={styles['new-point']}>新</span>
+          }
         </div>
       )
     }

@@ -11,6 +11,7 @@ import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
 import moment from 'moment'
+const styles = require('@/modules/business/style')
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Open.DetailProps
 interface States {
@@ -98,11 +99,17 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (
-        <span
-          className='href'
-          onClick={this.show.bind(this, record, index)}
-        >
-          {val}
+        <span>
+          <span
+            className='href'
+            onClick={this.show.bind(this, record, index)}
+          >
+            {val}
+          </span>
+          {
+            record.customerName &&
+            <span className={styles['new-point']}>新</span>
+          }
         </span>
       )
     }
