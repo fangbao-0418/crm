@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { withRouter, RouteComponentProps } from 'react-router'
 import { Tabs, Table, Row, Select } from 'antd'
 import { Modal } from 'pilipa'
@@ -61,15 +62,19 @@ class Main extends React.Component<Props, State> {
     dataIndex: 'startTime',
     render: (text, item) => {
       return (
-        <span>{item.startTime}</span>
+        <span>
+          {moment(item.startTime).format('YYYY/MM/DD')}
+        </span>
       )
     }
   }, {
-    title: '结束时间',
+    title: '完成时间',
     dataIndex: 'endTime',
     render: (text, item) => {
       return (
-        <span>{item.endTime}</span>
+        <span>
+          {moment(item.endTime).format('YYYY/MM/DD')}
+        </span>
       )
     }
   }, {

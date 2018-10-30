@@ -1,6 +1,6 @@
 import React from 'react'
-import monent, { Moment } from 'moment'
-import { Tabs, Table, Row, Col } from 'antd'
+import moment, { Moment } from 'moment'
+import { Tabs, Table, Row, Col, Tooltip, Icon, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import ContentBox from '@/modules/common/content'
@@ -157,7 +157,20 @@ class Main extends React.Component {
       )
     }
   }, {
-    title: '操作',
+    title: () => {
+      const text = <span>置灰：表示没有任何需要审批的任务  高亮：有需要审批的任务，需点击进行审批</span>
+      return (
+        <Tooltip
+          placement='bottomRight'
+          title={text}
+        >
+            操作
+            <span className='icon-list'>
+              <Icon type='question-circle'/>
+            </span>
+        </Tooltip>
+      )
+    },
     dataIndex: 'operation',
     render: (k: any, item: TaskItem) => {
       const { status } = item
