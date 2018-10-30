@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Modal, Divider } from 'antd'
+import { Table, Modal, Divider, Tooltip, Icon } from 'antd'
 import _ from 'lodash'
 import { ColumnProps } from 'antd/lib/table'
 import '@/modules/common/styles/base.styl'
@@ -70,7 +70,21 @@ class Main extends React.Component<any, any> {
       return data.join(',')
     }
   }, {
-    title: '操作',
+    title: () => {
+      return (
+        <Tooltip
+          placement='bottomRight'
+          title={
+            <span>
+               置灰：有公司正办理此任务不可禁用  <br /> 高亮：无公司正办理此任务可以禁用
+            </span>
+          }
+        >
+          操作
+          <Icon type='question-circle'/>
+        </Tooltip>
+      )
+    },
     dataIndex: 'operation',
     align: 'center',
     width: 140,
