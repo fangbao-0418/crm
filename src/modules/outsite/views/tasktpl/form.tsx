@@ -1,4 +1,4 @@
-import {  Form, Checkbox, Input, Select, Row, Col, Table, Button } from 'antd'
+import {  Form, Checkbox, Input, Select, Row, Col } from 'antd'
 import React from 'react'
 import { withRouter } from 'react-router'
 import ContentBox from '@/modules/common/content'
@@ -227,11 +227,31 @@ class Main extends React.Component<any, States> {
     }
     if (sync) {
       Service.taskSave2sync(item).then(() => {
+        APP.dispatch<OutSide.Props>({
+          type: 'change outside data',
+          payload: {
+            config: {
+              common: {
+                tab: item.systemFlag === '1' ? '1' : '2'
+              }
+            }
+          }
+        })
         APP.success('保存并同步成功')
         APP.history.push(`/outsite/tasktpl/list`)
       })
     } else {
       Service.addTplItem(item).then(() => {
+        APP.dispatch<OutSide.Props>({
+          type: 'change outside data',
+          payload: {
+            config: {
+              common: {
+                tab: item.systemFlag === '1' ? '1' : '2'
+              }
+            }
+          }
+        })
         APP.success('保存成功')
         APP.history.push(`/outsite/tasktpl/list`)
       })
@@ -251,103 +271,101 @@ class Main extends React.Component<any, States> {
     }
     const selectValue: any = {key: this.state.item.productId}
     return (
-      <div className={styles.container}>
-        <ContentBox title={this.titles[this.state.item.systemFlag]}>
-          <Form
-            onChange={this.onChange.bind(this)}
-          >
-            <Row>
-              <Col span={5}>
-                <FormItem label='任务名称' {...formItemLayout}>
-                  <Input
-                    name='name'
-                    value={this.state.item.name}
-                    placeholder={`任务名称`}
-                    onChange={(e) => {
-                      this.syncFormdata('name', e.target.value)
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={7} hidden={this.state.item.systemFlag !== '1'}>
-                <FormItem label='是否优先级' {...formItemLayout}>
-                  <Select
-                    placeholder={`是否优先级`}
-                    value={this.state.item.priority}
-                    onChange={(val: any) => {
-                      this.syncFormdata('priority', val)
-                    }
-                    }
-                  >
-                    {this.dict2options(Service.taskTplPriorityDict)}
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label='关联商品' {...formItemLayout}>
-                  <Select
-                    placeholder={`关联商品`}
-                    labelInValue
-                    value={selectValue}
-                    onChange={(val: any) => {
-                      this.syncFormdata('productId', val.key)
-                      this.syncFormdata('productName', val.label)
-                    }}
-                  >
-                    {
-                      this.state.goods.map((item) => {
-                        return (
-                          <Option key={item.code}>
-                            {item.name}
-                          </Option>
-                        )
-                      })
-                    }
-                  </Select>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-                <Col span={14}>
+      <ContentBox title={this.titles[this.state.item.systemFlag]} className={styles.container}>
+        <Form
+          onChange={this.onChange.bind(this)}
+        >
+          <Row>
+            <Col span={5}>
+              <FormItem label='任务名称' {...formItemLayout}>
+                <Input
+                  name='name'
+                  value={this.state.item.name}
+                  placeholder={`任务名称`}
+                  onChange={(e) => {
+                    this.syncFormdata('name', e.target.value)
+                  }}
+                />
+              </FormItem>
+            </Col>
+            <Col span={7} hidden={this.state.item.systemFlag !== '1'}>
+              <FormItem label='是否优先级' {...formItemLayout}>
+                <Select
+                  placeholder={`是否优先级`}
+                  value={this.state.item.priority}
+                  onChange={(val: any) => {
+                    this.syncFormdata('priority', val)
+                  }
+                  }
+                >
+                  {this.dict2options(Service.taskTplPriorityDict)}
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span={6}>
+              <FormItem label='关联商品' {...formItemLayout}>
+                <Select
+                  placeholder={`关联商品`}
+                  labelInValue
+                  value={selectValue}
+                  onChange={(val: any) => {
+                    this.syncFormdata('productId', val.key)
+                    this.syncFormdata('productName', val.label)
+                  }}
+                >
                   {
-                    // 遍历分类
-                    this.dict2list(Service.taskTplCateDict).map((item: any, index: number) => {
+                    this.state.goods.map((item) => {
                       return (
-                        <div key={`cate-${index}`} className={styles['page-hc']}>
-                          <div className={styles['hc-h']}>
-                            {item.val}
-                          </div>
-                          <div className={styles['hc-c']}>
-                          {
-                            this.state.subGroup[item.key] && this.state.subGroup[item.key].map((checkitem, i: number) => {
-                              return (
-                                <Checkbox
-                                  key={`checkbox-${index}-${i}`}
-                                  value={checkitem.id}
-                                  onChange={this.onCheckItem.bind(this)}
-                                  checked={!!this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
-                                >
-                                  {checkitem.name}
-                                </Checkbox>
-                              )
-                            })
-                          }
-                          </div>
-                        </div>
+                        <Option key={item.code}>
+                          {item.name}
+                        </Option>
                       )
                     })
                   }
-                </Col>
-                <Col span={10}>
-                  <TaskSort
-                    item={this.state.item}
-                    onOk={this.onSave.bind(this)}
-                  />
-                </Col>
-            </Row>
-          </Form>
-        </ContentBox>
-      </div>
+                </Select>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+              <Col span={14}>
+                {
+                  // 遍历分类
+                  this.dict2list(Service.taskTplCateDict).map((item: any, index: number) => {
+                    return (
+                      <div key={`cate-${index}`} className={styles['page-hc']}>
+                        <div className={styles['hc-h']}>
+                          {item.val}
+                        </div>
+                        <div className={styles['hc-c']}>
+                        {
+                          this.state.subGroup[item.key] && this.state.subGroup[item.key].map((checkitem, i: number) => {
+                            return (
+                              <Checkbox
+                                key={`checkbox-${index}-${i}`}
+                                value={checkitem.id}
+                                onChange={this.onCheckItem.bind(this)}
+                                checked={!!this.state.checkedIdMap[checkitem.id]} // 根据回传结果设置
+                              >
+                                {checkitem.name}
+                              </Checkbox>
+                            )
+                          })
+                        }
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </Col>
+              <Col span={10}>
+                <TaskSort
+                  item={this.state.item}
+                  onOk={this.onSave.bind(this)}
+                />
+              </Col>
+          </Row>
+        </Form>
+      </ContentBox>
     )
   }
 }

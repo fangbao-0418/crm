@@ -4,10 +4,10 @@ import ContentBox from '@/modules/common/content'
 import AddButton from '@/modules/common/content/AddButton'
 import SetAuto from '@/modules/outsite/components/SetAuto'
 import SetCapacity from '@/modules/outsite/components/SetCapacity'
-
+import { connect } from 'react-redux'
 const TabPane = Tabs.TabPane
 
-class Main extends React.Component {
+class Main extends React.Component<OutSide.Props> {
 
   /*新增自定义任务未修改，这里是方法*/
   public add () {
@@ -30,7 +30,7 @@ class Main extends React.Component {
         </div>
       )}
     >
-      <Tabs defaultActiveKey='1'>
+      <Tabs defaultActiveKey={this.props.config.common.tab}>
       <TabPane tab='系统任务' key='1'>
         <SetAuto/>
       </TabPane>
@@ -43,4 +43,6 @@ class Main extends React.Component {
   }
 }
 
-export default Main
+export default connect((state: Reducer.State) => {
+  return state.outside
+})(Main)

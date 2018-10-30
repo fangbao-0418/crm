@@ -105,4 +105,11 @@ declare namespace OutSide {
     /** 发起人机构 */
     initiatorAgent: string
   }
+  export interface Props {
+    config: {
+      common: {
+        tab: '1' | '2'
+      }
+    }
+  }
 }

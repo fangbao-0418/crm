@@ -169,7 +169,11 @@ class Main extends React.Component<Props, any> {
   // 挂父组件回调
   public hookCallback () {
     if (this.props.onSearch) {
-      this.props.onSearch(_.cloneDeep(this.state.searchData))
+      const { searchData } = this.state
+      if (searchData.status === 'PENDING') {
+        searchData.status = ''
+      }
+      this.props.onSearch(_.cloneDeep(searchData))
     }
   }
 
@@ -301,7 +305,7 @@ class Main extends React.Component<Props, any> {
                       if (status === 'PENDING') {
                         this.syncSearchData({
                           statusArray: 'CANCELPENDING,REJECTPENDING,SUBMITED',
-                          status: ''
+                          status
                         })
                       } else {
                         this.syncSearchData({
