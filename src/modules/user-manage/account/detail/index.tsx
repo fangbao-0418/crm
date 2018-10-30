@@ -331,6 +331,7 @@ class Main extends React.Component<Props, State> {
                     }
                   )(
                     <TreeSelect
+                      disabled={disabled}
                       treeData={ownAraeList}
                       showCheckedStrategy={TreeSelect.SHOW_PARENT}
                       multiple

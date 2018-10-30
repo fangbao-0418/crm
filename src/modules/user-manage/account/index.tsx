@@ -45,8 +45,8 @@ class Main extends React.Component<Props> {
       dataIndex: 'roleName'
     },
     {
-      title: '邮箱',
-      dataIndex: 'email'
+      title: '直属上级',
+      dataIndex: 'parentName'
     },
     {
       title: '部门',
