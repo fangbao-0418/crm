@@ -30,6 +30,7 @@ class Main extends React.Component<Props, any> {
       },
       DISTRIBUTED: {
         DISTRIBUTED: '已分配', // 初始
+        PENDING: '待审批',
         COLLECTING: '收集资料',
         REFUSED: '已驳回', // (外勤主管审批交付不通过)
         RUNNING: '进行中',
@@ -50,34 +51,7 @@ class Main extends React.Component<Props, any> {
       status: '',
       orgId: '',
       startTime: ''
-    },
-    areaData: [{
-      value: 'zhejiang',
-      label: 'Zhejiang',
-      children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-          value: 'xihu',
-          label: 'West Lake'
-        }, {
-          value: 'xiasha',
-          label: 'Xia Sha',
-          disabled: true
-        }]
-      }]
-    }, {
-      value: 'jiangsu',
-      label: 'Jiangsu',
-      children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-          value: 'zhonghuamen',
-          label: 'Zhong Hua men'
-        }]
-      }]
-    }]
+    }
   }
   public throttleChange = _.throttle(this.onChange.bind(this), 1000)
   public componentWillMount () {
@@ -162,7 +136,6 @@ class Main extends React.Component<Props, any> {
   // 同步搜索表单数据
   public syncSearchData (data: OutSide.SearchPayload) {
     const { searchData } = this.state
-    console.log(searchData, data)
     this.setState({
       searchData: Object.assign({}, searchData, data)
     }, () => {
@@ -325,9 +298,16 @@ class Main extends React.Component<Props, any> {
                     style={{width: '140px'}}
                     value={this.state.searchData.status}
                     onChange={(status: any) => {
-                      this.syncSearchData({
-                        status
-                      })
+                      if (status === 'PENDING') {
+                        this.syncSearchData({
+                          statusArray: 'CANCELPENDING,REJECTPENDING,SUBMITED',
+                          status: ''
+                        })
+                      } else {
+                        this.syncSearchData({
+                          status
+                        })
+                      }
                     }}
                     placeholder='请选择服务状态'
                   >

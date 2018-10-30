@@ -239,7 +239,7 @@ class Main extends React.Component {
 
   // 搜索
   public onSearch (searchData: any) {
-    if (!searchData.status) {
+    if (searchData.status === undefined) {
       searchData.status = this.state.tab
     }
     this.setState({

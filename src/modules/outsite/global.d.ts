@@ -13,6 +13,7 @@ declare namespace OutSide {
     fromTime?: string
     toTime?: string
     orgId?: number
+    statusArray?: string
   }
   /** 商品属性 */
   export interface GoodProps {
