@@ -169,7 +169,7 @@ class Main extends React.Component<Props, any> {
   // 挂父组件回调
   public hookCallback () {
     if (this.props.onSearch) {
-      const { searchData } = this.state
+      const searchData = _.cloneDeep(this.state.searchData)
       if (searchData.status === 'PENDING') {
         searchData.status = ''
       }
