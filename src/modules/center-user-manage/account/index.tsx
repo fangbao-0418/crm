@@ -139,11 +139,11 @@ class Main extends React.Component {
         render: (val: any, info: any) => {
           return (
             <div>
-              <a onClick={() => {this.showAccountModal('view', info)}}>查看</a>
+              <a hidden={!APP.hasPermission('bizbase_user_user_query')} onClick={() => {this.showAccountModal('view', info)}}>查看</a>
               <Divider type='vertical'/>
-              <a onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
+              <a hidden={!APP.hasPermission('bizbase_user_user_edit')} onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
               <Divider type='vertical'/>
-              <a onClick={() => this.delConfirm('single', info.id)}>删除</a>
+              <a hidden={!APP.hasPermission('bizbase_user_user_delete')} onClick={() => this.delConfirm('single', info.id)}>删除</a>
             </div>
           )
         }
@@ -160,6 +160,7 @@ class Main extends React.Component {
         title='账号'
         rightCotent={(
           <AddButton
+            hidden={!APP.hasPermission('bizbase_user_user_add')}
             title='添加账号'
             onClick={() => this.showAccountModal('add')}
           />
@@ -188,7 +189,7 @@ class Main extends React.Component {
               this.searchVal.organizationName = e.target.value
             }}
           />
-          <Button type='primary' onClick={() => {this.getList()}}>查询</Button>
+          <Button hidden={!APP.hasPermission('bizbase_user_user_query')} type='primary' onClick={() => {this.getList()}}>查询</Button>
         </div>
 
         <div style={styles.tableWrap}>
@@ -215,6 +216,7 @@ class Main extends React.Component {
         {
           this.state.dataSource.length === 0
           || <Button
+            hidden={!APP.hasPermission('bizbase_user_user_delete')}
             type='primary'
             disabled={!this.state.selectedRowKeys.length}
             className={styles.delBtn}

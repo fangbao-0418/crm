@@ -319,6 +319,7 @@ class Main extends React.Component {
         </Row>
         <Row hidden={this.state.dataSource.length === 0 ? true : false}>
           <Button
+            hidden={!APP.hasPermission('notification_remind_delete')}
             style={{position: 'relative', top: '-50px', marginRight: '10px'}}
             type='primary'
             onClick={this.delList.bind(this)}
@@ -326,6 +327,7 @@ class Main extends React.Component {
             批量删除
           </Button>
           <Button
+            hidden={!APP.hasPermission('notification_remind_read')}
             style={{position: 'relative', top: '-50px'}}
             type='primary'
             onClick={this.setReadedList.bind(this)}
