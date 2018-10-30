@@ -72,7 +72,7 @@ class Main extends React.Component<Common.Props> {
               <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>
 
               {/* 配置中心 */}
-              <Route path='/configure' component={modules.Configure}/>
+              <Route hidden={!APP.hasPermission('dict')} path='/configure' component={modules.Configure}/>
               {/* 操作日志 */}
               <Route path='/operate-log' component={modules.OperateLog} exact />
               <Route path='/operate-log/detail/:id' component={modules.OperateLogDetail}/>

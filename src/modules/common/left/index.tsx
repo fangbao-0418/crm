@@ -232,6 +232,7 @@ class Main extends React.Component<Props, State> {
     {
       title: '配置中心',
       path: '/configure',
+      hidden: !APP.hasPermission('dict'),
       icon: <MenuIcon type='configure' />
     },
     {
