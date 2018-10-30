@@ -1,5 +1,5 @@
 import React from 'react'
-import monent, { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 import { Modal, Icon, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { MessageList, MessageItem } from '@/modules/message/types/messge'
