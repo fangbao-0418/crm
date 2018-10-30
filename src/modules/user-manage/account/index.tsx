@@ -59,7 +59,7 @@ class Main extends React.Component<Props> {
         return (
           <div>
             <span
-              hidden={!APP.hasPermission('bizbase_user_agent_user_query') || !APP.hasPermission('bizbase_user_direct_user_query')}
+              hidden={!APP.hasPermission('bizbase_user_agent_user_info') || !APP.hasPermission('bizbase_user_direct_user_info')}
               className='href'
               onClick={() => {this.update('view', record)}}
             >

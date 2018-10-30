@@ -100,7 +100,7 @@ class Main extends React.Component<null, States> {
         title='机构管理'
         rightCotent={(
           <AddButton
-            hidden={!APP.hasPermission('direct_company_add')}
+            hidden={!APP.hasPermission('bizbase_user_direct_company_add')}
             title='添加'
             onClick={() => {
               this.add()

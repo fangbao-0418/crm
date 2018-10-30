@@ -139,7 +139,7 @@ class Main extends React.Component {
         render: (val: any, info: any) => {
           return (
             <div>
-              <a hidden={!APP.hasPermission('bizbase_user_user_query')} onClick={() => {this.showAccountModal('view', info)}}>查看</a>
+              <a hidden={!APP.hasPermission('bizbase_user_user_info')} onClick={() => {this.showAccountModal('view', info)}}>查看</a>
               <Divider type='vertical'/>
               <a hidden={!APP.hasPermission('bizbase_user_user_edit')} onClick={() => {this.showAccountModal('modify', info)}}>修改</a>
               <Divider type='vertical'/>
