@@ -62,6 +62,19 @@ class Main extends React.Component<Props, State> {
           </FormItem>
           <FormItem
             {...formItemLayout}
+            label='键值'
+          >
+            {getFieldDecorator('name', {
+              initialValue: item.name,
+              rules: [{
+                required: true, message: '键值不能为空'
+              }]
+            })(
+              <Input />
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
             label='类型'
           >
             {getFieldDecorator('typeCode', {
@@ -98,20 +111,7 @@ class Main extends React.Component<Props, State> {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label='键值'
-          >
-            {getFieldDecorator('name', {
-              initialValue: item.name,
-              rules: [{
-                required: true, message: '键值不能为空'
-              }]
-            })(
-              <Input />
-            )}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label='描述'
+            label='类型名称'
           >
             {getFieldDecorator('typeName', {
               initialValue: item.typeName
