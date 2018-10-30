@@ -76,7 +76,7 @@ class Main extends React.Component<any, any> {
           placement='bottomRight'
           title={
             <span>
-               置灰：有公司正办理此任务不可禁用  <br /> 高亮：无公司正办理此任务可以禁用
+               置灰：有公司正在办理此任务时不可禁用  <br /> 高亮：无公司正在办理此任务时可禁用
             </span>
           }
         >
