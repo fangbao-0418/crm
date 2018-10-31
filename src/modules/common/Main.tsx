@@ -60,25 +60,25 @@ class Main extends React.Component<Common.Props> {
                 <Route hidden={!APP.hasPermission('notification_remind')} path='/message/list' component={modules.MessageList}/>
 
                 {/* 工单 */}
-                <Route path='/workorder/list' component={modules.WorkorderList}/>
+                <Route hidden={!APP.hasPermission('track_work_order')} path='/workorder/list' component={modules.WorkorderList}/>
                 <Route path='/workorder/show/:id' component={modules.WorkorderShow}/>
 
                 {/* 外勤 */}
-                <Route path='/outsite/task/list' component={modules.TaskList}/>
+                <Route hidden={!APP.hasPermission('track_outside_task_list')} path='/outsite/task/list' component={modules.TaskList}/>
                 <Route path='/outsite/task/show/:id' component={modules.TaskShow}/>
-                <Route path='/outsite/task/form' component={modules.TaskForm}/>
-                <Route path='/outsite/tasktpl/list' component={modules.TasktplList}/>
+                <Route hidden={!APP.hasPermission('track_outside_task_add')} path='/outsite/task/form' component={modules.TaskForm}/>
+                <Route hidden={!APP.hasPermission('track_outside_tasktemplate_main')} path='/outsite/tasktpl/list' component={modules.TasktplList}/>
                 <Route path='/outsite/tasktpl/form/:id?' component={modules.TasktplForm}/>
-                <Route path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
+                <Route hidden={!APP.hasPermission('track_outside_tasktemplate_sub')} path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
                 <Route path='/outsite/tasktpl/subform/:id?' component={modules.TasktplSubform}/>
-                <Route path='/outsite/perform/list' component={modules.PerformList}/>
-                <Route path='/outsite/data-overview' component={modules.TaskDataOverview}/>
-                <Route path='/outsite/data-detail' component={modules.TaskDataDetail}/>
+                <Route hidden={!APP.hasPermission('track_outside_reward_config')} path='/outsite/perform/list' component={modules.PerformList}/>
+                <Route hidden={!APP.hasPermission('track_outside_data_overview')} path='/outsite/data-overview' component={modules.TaskDataOverview}/>
+                <Route hidden={!APP.hasPermission('track_outside_data_detail')} path='/outsite/data-detail' component={modules.TaskDataDetail}/>
 
                 {/* 配置中心 */}
                 <Route hidden={!APP.hasPermission('config_dict')} path='/configure' component={modules.Configure}/>
                 {/* 操作日志 */}
-                <Route path='/operate-log' component={modules.OperateLog} exact />
+                <Route hidden={!APP.hasPermission('bizbase_log')} path='/operate-log' component={modules.OperateLog} exact />
                 <Route path='/operate-log/detail/:id' component={modules.OperateLogDetail}/>
                 <Route component={modules.Unfound} />
               </Switch>
