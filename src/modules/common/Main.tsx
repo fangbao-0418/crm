@@ -32,8 +32,8 @@ class Main extends React.Component<Common.Props> {
       <Switch>
         <Route path='/menu' component={modules.Menu} />
         <Layout className={styles.container}>
-          <MenuIframe />
-          {/* <Left /> */}
+          {/* <MenuIframe /> */}
+          <Left />
           <Layout>
             <Top />
             <Content className={styles.content}>

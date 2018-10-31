@@ -27,16 +27,16 @@ class Main extends React.Component<Props, State> {
   }
   public pathInfo: {[key: string]: string} = {}
   public configs: MenuItem[] = [
-    {
-      title: '商品管理',
-      icon: <MenuIcon type='bussiness'/>,
-      path: '/shop-admin/shop'
-    },
-    {
-      title: '用户管理',
-      icon: <MenuIcon type='bussiness'/>,
-      path: '/shop-admin/user'
-    },
+    // {
+    //   title: '商品管理',
+    //   icon: <MenuIcon type='bussiness'/>,
+    //   path: '/shop-admin/shop'
+    // },
+    // {
+    //   title: '用户管理',
+    //   icon: <MenuIcon type='bussiness'/>,
+    //   path: '/shop-admin/user'
+    // },
     {
       title: '商机管理',
       icon: <MenuIcon type='bussiness'/>,

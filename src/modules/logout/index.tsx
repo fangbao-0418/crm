@@ -4,7 +4,8 @@ class Main extends React.Component {
   public componentWillMount () {
     userLogout()
     APP.user = undefined
-    APP.token = ''
+    localStorage.clear()
+    sessionStorage.clear()
     APP.history.push('/login')
   }
   public render () {
