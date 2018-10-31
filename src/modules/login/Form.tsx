@@ -57,8 +57,7 @@ class Main extends React.Component<Props> {
     }
     userLogin({
       phone: this.values.phone,
-      validCode: this.values['verify-code'],
-      phoneValidCode: this.values['sms-verify-code']
+      validCode: this.values['sms-verify-code']
     }).then((res) => {
       APP.token = res.token
       if (this.props.onOk) {
