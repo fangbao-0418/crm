@@ -19,10 +19,6 @@ interface States {
   }
 }
 
-function onShowSizeChange (current: any, pageSize: any) {
-  console.log(current, pageSize)
-}
-
 class Main extends React.Component<any, any> {
   public item: any
   public searchData: {
@@ -34,7 +30,7 @@ class Main extends React.Component<any, any> {
     priority: string,
     origId: string
   } = {
-    systemFlag: '',
+    systemFlag: '0',
     pageCurrent: 1,
     pageSize: 15,
     name: '',
