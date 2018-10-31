@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Select, Tooltip } from 'antd'
+import { Table, Button, Select, Tooltip, Divider } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
@@ -161,7 +161,11 @@ class Main extends React.Component {
     render: (record) => {
       if (APP.hasPermission('crm_sign_myself_list_principals')) {
         return (
-          <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+          <span>
+            <a onClick={this.detail.bind(this, record)}>转跟</a>
+            <Divider type='vertical'/>
+            <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+          </span>
         )
       } else {
         return (

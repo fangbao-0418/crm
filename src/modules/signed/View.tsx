@@ -6,6 +6,7 @@ import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
 import CompanyList from './CompanyList'
 import OperateList from './OperateList'
+import FlowRecord from './FlowRecord'
 import Detail from './detail'
 const styles = require('./style')
 interface Props {
@@ -46,7 +47,10 @@ class Main extends React.Component<Props> {
           <Tabs.TabPane tab='相关公司' key='4'>
             <CompanyList customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='操作记录' key='5'>
+          <Tabs.TabPane tab='跟进小记' key='5'>
+            <FlowRecord customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='操作记录' key='6'>
             <OperateList/>
           </Tabs.TabPane>
         </Tabs>
