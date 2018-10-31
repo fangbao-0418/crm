@@ -30,15 +30,17 @@ export const allotCustomer = (payload: {
     id: string
     name: string
   }>
+  type?: number
 }) => {
-  return http(`/crm-manage/v1/api/customer/allocate`, 'PUT', payload)
+  return http(`/crm-manage/v1/api/customer/allocate`, 'PUT', {data: payload})
 }
 export const getSaleCapacity = (payload: {
   agencyId?: string
   customerNum?: number
   salesPersons?: string
+  type?: number
 }) => {
-  return http(`/crm-manage/v1/api/storage_capacity/residue`, 'GET', payload)
+  return http(`/crm-manage/v1/api/storage_capacity/residue`, 'GET', {data: payload})
 }
 export const deleteCustomer = (payload: string) => {
   return http(`/crm-manage/v1/api/customer/by-ids?customerIds=${payload}`, 'DELETE')

@@ -24,11 +24,14 @@ class Main extends React.Component<Props> {
           onOk={(value) => {
             console.log(value, 'value')
             const ids: string[] = []
-            value.salesPerson.forEach((item: {id: string, name: string}) => {
-              ids.push(item.id)
-            })
+            if (value.type === 2) {
+              value.salesPerson.forEach((item: {id: string, name: string}) => {
+                ids.push(item.id)
+              })
+            }
             const saleCapacityParams = {
               agencyId: value.agencyId,
+              type: value.type,
               customerNum: this.props.selectedRowKeys.length,
               salesPersons: ids.join(',')
             }
@@ -41,7 +44,7 @@ class Main extends React.Component<Props> {
             // }
             value.customerIds = this.props.selectedRowKeys
             // console.log(saleCapacityParams, 'saleCapacityParams')
-            getSaleCapacity(saleCapacityParams).then((res1) => { // 查询销售库容是不是足够
+            getSaleCapacity(saleCapacityParams).then((res1: any) => { // 查询销售库容是不是足够
               if (res1.data.result === 1) {
                 allotCustomer(value).then((res: any) => {
                   this.setState({
@@ -55,7 +58,7 @@ class Main extends React.Component<Props> {
                   })
                 })
               } else {
-                APP.error('销售库容不足')
+                APP.error(res1.message)
               }
             })
           }}

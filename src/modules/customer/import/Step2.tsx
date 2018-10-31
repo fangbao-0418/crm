@@ -10,6 +10,7 @@ interface Props {
       customerSource?: string,
       salesPerson?: Array<{id: string, name: string}>,
       city?: {cityCode: string, cityName: string}
+      type?: string
     }
   }
   onOk?: (value?: any) => void
@@ -62,6 +63,7 @@ class Main extends React.Component<Props> {
           })
         }
         const paramsFile = {
+          type: this.props.paramsValue.step1.type,
           agencyId: this.props.paramsValue.step1.agencyId || '',
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
