@@ -146,7 +146,7 @@ class Main extends React.Component<Business.Props> {
     const { selectedTab } = this.props
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    this.params.contactPhone = undefined
+    // this.params.contactPhone = undefined
     this.params.currentSalesperson = undefined
     this.params[values.key] = values.value || undefined
     this.params.tab = selectedTab.replace('tab', '')
@@ -448,7 +448,7 @@ class Main extends React.Component<Business.Props> {
               options={[
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
+                // { value: 'contactPhone', label: '联系电话'},
                 { value: 'currentSalesperson', label: '所属销售'}
               ]}
               placeholder={''}

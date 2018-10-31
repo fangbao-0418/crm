@@ -173,13 +173,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'enterDays', // 我的商机显示
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
-  }, {
-    title: '预约时间', // 只有我的预约显示
-    dataIndex: 'appointmentTime',
+    dataIndex: 'enterDays',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }
