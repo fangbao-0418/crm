@@ -92,7 +92,7 @@ class Main extends React.Component<Props, State> {
                 {
                   <span>
                     自定义销售
-                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中，若全部库满，分与总经理'>
+                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中，若全部库满，直接转到公海'>
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>
