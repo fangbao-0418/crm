@@ -54,17 +54,23 @@ class Main extends React.Component<Customer.Props, State> {
               onClick={() => {
                 console.log(this.state.diabled, 'this.state.diabled')
                 if (!this.state.diabled) {
-                  console.log(this.state.salesPerson, 'this.state.salesPerson')
-                  if (this.state.selectRadio === 2 && !this.state.salesPerson) { // 自定义的时候销售不能为空
-                    APP.error('请选择销售')
-                    return
+                  if (this.state.selectRadio === 3) { // 公海
+                    saveGeneralCapacity(1, this.state.salesPerson).then(() => {
+                      APP.success('操作成功')
+                    })
+                  } else {
+                    console.log(this.state.salesPerson, 'this.state.salesPerson')
+                    if (this.state.selectRadio === 2 && !this.state.salesPerson) { // 自定义的时候销售不能为空
+                      APP.error('请选择销售')
+                      return
+                    }
+                    if (this.state.selectRadio === 1) {
+                      this.state.salesPerson = []
+                    }
+                    saveGeneralCapacity(0, this.state.salesPerson).then(() => {
+                      APP.success('操作成功')
+                    })
                   }
-                  if (this.state.selectRadio === 1) {
-                    this.state.salesPerson = []
-                  }
-                  saveGeneralCapacity(this.state.salesPerson).then(() => {
-                    APP.success('操作成功')
-                  })
                 }
                 this.setState({
                   diabled: !this.state.diabled

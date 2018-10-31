@@ -18,7 +18,7 @@ interface ValueProps {
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    value: 1,
+    value: 3,
     selectSales: []
   }
   public values: ValueProps = {}
@@ -61,7 +61,15 @@ class Main extends React.Component<Props, State> {
           value={this.state.value}
         >
           <Row>
-            <Col span={6}>
+            <Col span={3}>
+              <Radio
+                disabled={disabled}
+                value={3}
+              >
+                <span>转到公海</span>
+              </Radio>
+            </Col>
+            <Col span={3}>
               <Radio
                 disabled={disabled}
                 value={1}
@@ -69,7 +77,7 @@ class Main extends React.Component<Props, State> {
                 {
                   <span>
                     全部销售
-                    <Tooltip placement='top' title='勾选全部销售，系统分配资源平均分到所有销售人员库中，若全部库满，分与总经理'>
+                    <Tooltip placement='top' title='勾选全部销售，系统分配资源平均分到所有销售人员库中，若全部库满，直接转到公海'>
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>
