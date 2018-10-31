@@ -48,6 +48,7 @@ interface ModuleProps {
   OperateLogDetail: RouteComponent
   /** 404 */
   Unfound: RouteComponent
+  Menu: RouteComponent
 }
 /** 组件模块 */
 declare const modules: ModuleProps

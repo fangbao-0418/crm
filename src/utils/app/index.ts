@@ -4,7 +4,6 @@ import * as fn from './fn'
 Object.assign(APP, {
   env: process.env.NODE_ENV,
   fn,
-  homepage: '/',
   success: (msg: string) => {
     notification.success({
       message: msg
@@ -49,5 +48,16 @@ Object.defineProperty(APP, 'token', {
   },
   set (val) {
     storage.setItem('token', val)
+  }
+})
+Object.defineProperty(APP, 'homepage', {
+  get () {
+    if (!localStorage.getItem('homepage')) {
+      return ''
+    }
+    return storage.getItem('homepage') || ''
+  },
+  set (val) {
+    storage.setItem('homepage', val)
   }
 })

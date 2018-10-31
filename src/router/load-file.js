@@ -2,6 +2,7 @@
 export { default as loadLogin } from 'bundle-loader?lazy&name=[name]!@/modules/login'
 export { default as loadLogout } from 'bundle-loader?lazy&name=[name]!@/modules/logout'
 export { default as loadUnfound } from 'bundle-loader?lazy&name=[name]!@/modules/common/unfound'
+export { default as loadMenu } from 'bundle-loader?lazy&name=[name]!@/modules/common/left'
 // crm
 export { default as loadIndex } from 'bundle-loader?lazy&name=[name]!@/modules'
 export { default as loadCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/customer'

@@ -28,7 +28,7 @@ declare namespace APP {
     /** 机构管理代理商公司状态 */
     EnumOrganAgentSource?: Array<{label: string, value: string}>
   }
-  type GlobalSessionName = 'token'
+  type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {
     getItem<P> (key: GlobalSessionName): P
     setItem<P> (key: GlobalSessionName, value: P | string): void

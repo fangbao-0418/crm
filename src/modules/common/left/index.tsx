@@ -28,6 +28,16 @@ class Main extends React.Component<Props, State> {
   public pathInfo: {[key: string]: string} = {}
   public configs: MenuItem[] = [
     {
+      title: '商品管理',
+      icon: <MenuIcon type='bussiness'/>,
+      path: '/shop-admin/shop'
+    },
+    {
+      title: '用户管理',
+      icon: <MenuIcon type='bussiness'/>,
+      path: '/shop-admin/user'
+    },
+    {
       title: '商机管理',
       icon: <MenuIcon type='bussiness'/>,
       path: '',
@@ -254,8 +264,8 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public componentWillMount () {
-    if (this.props.location.pathname === '/') {
-      APP.history.push(this.getFirstUrl())
+    if (window.location.pathname === '/') {
+      this.toHome()
     }
   }
   public componentDidMount () {
@@ -297,8 +307,19 @@ class Main extends React.Component<Props, State> {
         }
       }
     })
-    APP.homepage = url || '/'
+    if (APP.env === 'production') {
+      url = window.location.origin + url
+    } else {
+      url = `#${url}`
+    }
+    APP.homepage = url
+    console.log(url, 'get first url')
     return APP.homepage
+  }
+  public toHome () {
+    console.log('to home')
+    // APP.history.push(this.getFirstUrl())
+    parent.location.href = this.getFirstUrl()
   }
   public getMenuNodes (configs = this.configs, prefKey = 'm') {
     const nodes: JSX.Element[] = []
@@ -334,7 +355,14 @@ class Main extends React.Component<Props, State> {
                   openKeys: [prefKey],
                   selectedKeys: [menuitem.key]
                 })
-                APP.history.push(path)
+                // APP.history.push(path)
+                // if (APP.env === 'development') {
+                if (APP.env === 'production') {
+                  // parent.location.href = 'https://x-b.i-counting.cn' + path
+                  parent.location.href = window.location.origin + path
+                } else {
+                  parent.location.href = `#${path}`
+                }
               }
             }}
           >
@@ -361,7 +389,7 @@ class Main extends React.Component<Props, State> {
         <div className={styles.top}>
           <div
             onClick={() => {
-              APP.history.push(this.getFirstUrl())
+              this.toHome()
             }}
             className={styles.logo}
           />
