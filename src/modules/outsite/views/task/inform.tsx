@@ -170,12 +170,21 @@ class Main extends React.Component<Props, State> {
     return (
     <ContentBox title='新增外勤任务'>
         <div style={{paddingBottom: '20px'}}>
-        <Tabs defaultActiveKey='1'>
-          <TabPane tab='通办任务' key='1'>
-            <Mission onChange={this.onTaskidChange.bind(this)} />
+        <Tabs
+          defaultActiveKey='normal'
+          onChange={(key) => {
+            const ins: any = this.refs[key]
+            if (ins) {
+              const id = ins.state.value
+              this.onTaskidChange(id)
+            }
+          }}
+        >
+          <TabPane tab='通办任务' key='normal'>
+            <Mission ref='normal' onChange={this.onTaskidChange.bind(this)} />
           </TabPane>
-          <TabPane tab='其他任务' key='2'>
-            <Other onChange={this.onTaskidChange.bind(this)} />
+          <TabPane tab='其他任务' key='other'>
+            <Other ref='other' onChange={this.onTaskidChange.bind(this)} />
           </TabPane>
         </Tabs>
         </div>

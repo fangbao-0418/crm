@@ -26,6 +26,7 @@ class Main extends React.Component<any, any> {
       if (!res) {
         return
       }
+      res = res || []
       const data = res.map((item: any) => {
         item.subContent = ''
         if (item.subList) {
@@ -36,15 +37,18 @@ class Main extends React.Component<any, any> {
         }
         return item
       })
-      this.setState({
-        value: data[0].id,
-        data
-      })
+      if (data.length > 1) {
+        this.onChange(null, data[0].id)
+        this.setState({
+          value: data[0].id,
+          data
+        })
+      }
     })
   }
 
-  public onChange = (e: any) => {
-    const value = e.target.value
+  public onChange = (e: any, value?: any) => {
+    value = e ? e.target.value : value
     this.setState({
       value
     })
@@ -60,7 +64,7 @@ class Main extends React.Component<any, any> {
     return (
       <div>
         <RadioGroup
-          onChange={this.onChange}
+          onChange={this.onChange.bind(this)}
           value={this.state.value}
         >
           {

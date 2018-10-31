@@ -28,19 +28,23 @@ class Main extends React.Component<any, any> {
   // 获取子任务列表
   public getSublist () {
     return Service.getTplSublist({}).then((data: any) => {
+      data = data || []
       data.map((item: any, i: number) => {
         data[i].subId = item.id
       })
-      this.setState({
-        value: data[0].id,
-        subList: data,
-        subGroup: Service.getTplSublistGroupByCate(data)
-      })
+      if (data.length > 1) {
+        this.onChange(null, data[0].id)
+        this.setState({
+          value: data[0].id,
+          subList: data,
+          subGroup: Service.getTplSublistGroupByCate(data)
+        })
+      }
     })
   }
 
-  public onChange = (e: any) => {
-    const value = e.target.value
+  public onChange = (e: any, value: any) => {
+    value = e ? e.target.value : value
     this.setState({
       value
     })
