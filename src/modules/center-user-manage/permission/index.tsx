@@ -208,7 +208,7 @@ class Main extends React.Component {
         title='权限'
         rightCotent={(
           <AddButton
-            hidden={!APP.hasPermission(' bizbase_user_authority_add')}
+            hidden={!APP.hasPermission('bizbase_user_authority_add')}
             title='添加页面权限'
             onClick={() => {this.setPermission('add', 0, {})}} // 添加根级权限时id传0
           />
