@@ -27,21 +27,31 @@ class Main extends React.Component<Props, State> {
   }
   public getSelectSaleList () {
     const select: Array<{key: string, label: string}> = []
-    fetchGeneralList().then((res) => { // 默认选重中
-      if (res.length) { // 证明选择的是自定义
+    fetchGeneralList().then((res) => {
+      if (String(res.isBusSea) === '1') { // 选中公海
         this.setState({
-          value: 2
+          value: 3
         })
+      } else {
+        if (res.list.length > 0) { // 证明选择的是自定义
+          this.setState({
+            value: 2
+          })
+          res.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
+            select.push({
+              key: item.salespersonName ? String(item.salespersonId) : '',
+              label: item.salespersonName
+            })
+          })
+          this.setState({
+            selectSales: select
+          })
+        } else {
+          this.setState({
+            value: 1
+          })
+        }
       }
-      res.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
-        select.push({
-          key: item.salespersonName ? String(item.salespersonId) : '',
-          label: item.salespersonName
-        })
-      })
-      this.setState({
-        selectSales: select
-      })
     })
   }
   public render () {
