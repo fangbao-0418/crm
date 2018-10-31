@@ -149,7 +149,7 @@ class Main extends React.Component<Props> {
                 value={this.state.type}
               >
                 <Radio value={3}>转到客资池</Radio>
-                <Radio value={1}>转入公海</Radio>
+                <Radio value={1}>转到公海</Radio>
                 <Radio value={2}>转给销售</Radio>
               </RadioGroup>
             </div>

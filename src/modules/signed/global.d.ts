@@ -12,13 +12,14 @@ declare namespace Signed {
     appointTime?: string
     createTime?: string
     endTime?: string
-    startTime?: string
   }
   export interface SearchProps {
     storageBeginDate?: string
     storageEndDate?: string
     createBeginDate?: string
     createEndDate?: string
+    appointBeginTime?: string
+    appointEndTime?: string
     pageSize?: number
     pageCurrent?: number
     telephoneStatus?: string

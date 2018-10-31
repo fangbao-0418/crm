@@ -45,7 +45,7 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      label: ['入库时间', '创建时间'],
+      label: ['入库时间', '创建时间', '预约时间'],
       options: [
         {
           label: '全部',
@@ -130,19 +130,6 @@ class Main extends React.Component {
       </span>
     ),
     dataIndex: 'enterStorageTime',
-    render: (val) => {
-      return (val ? moment(val).format('YYYY-MM-DD') : '')
-    }
-  }, {
-    title: (
-      <span>
-        开始账期
-        <Tooltip placement='top' title='客户开始记账服务的账期'>
-          <i className='fa fa-exclamation-circle ml5'></i>
-        </Tooltip>
-      </span>
-    ),
-    dataIndex: 'startTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
@@ -247,6 +234,9 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.paramsleft.createBeginDate = beginTime || undefined
       this.paramsleft.createEndDate = endTime || undefined
+    } else if (values.date.label === '预约时间') {
+      this.paramsleft.appointBeginTime = beginTime || undefined
+      this.paramsleft.appointEndTime = endTime || undefined
     }
     let startmonth
     let endmonth
