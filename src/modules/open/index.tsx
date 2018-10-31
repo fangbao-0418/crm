@@ -487,8 +487,8 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '250px' }}>
-          <Button type='primary' hidden={!APP.hasPermission('crm_sea_manage_grab_customer')} className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
-          <Button type='primary' hidden={!APP.hasPermission('crm_sea_manage_delete')} className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sea_manage_grab_customer')} className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sea_manage_delete')} className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>
       </ContentBox>
     )

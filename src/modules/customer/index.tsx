@@ -655,8 +655,8 @@ class Main extends React.Component<Customer.Props, States> {
         />
         <div className='btn-position'>
           {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
-          <Button type='primary' className='mr5' hidden={!APP.hasPermission('crm_customer_list_allocate')} onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
-          <Button type='primary' hidden={!APP.hasPermission('crm_customer_list_allocate_auto')} className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' hidden={!APP.hasPermission('crm_customer_list_allocate')} onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_customer_list_allocate_auto')} className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
         </div>
       </ContentBox>
     )
