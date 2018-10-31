@@ -368,14 +368,14 @@ class Main extends React.Component<Props, State> {
                   openKeys: [prefKey],
                   selectedKeys: [menuitem.key]
                 })
-                // APP.history.push(path)
-                // if (APP.env === 'development') {
-                if (APP.env === 'production') {
-                  // parent.location.href = 'https://x-b.i-counting.cn' + path
-                  parent.location.href = window.location.origin + path
-                } else {
-                  parent.location.href = `#${path}`
-                }
+                APP.history.push(path)
+                // // if (APP.env === 'development') {
+                // if (APP.env === 'production') {
+                //   // parent.location.href = 'https://x-b.i-counting.cn' + path
+                //   parent.location.href = window.location.origin + path
+                // } else {
+                //   parent.location.href = `#${path}`
+                // }
               }
             }}
           >
