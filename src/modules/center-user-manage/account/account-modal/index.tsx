@@ -410,7 +410,7 @@ class Main extends React.Component<Props, State> {
             <FormItem className={styles.item} colon wrapperCol={{span: 18}} labelCol={{span: 6}} label='核算中心'>
               {
                 getFieldDecorator('center', validation.center)(
-                  <Select disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
+                  <Select allowClear={true} disabled={mode === 'view'} size='small' placeholder='请选择核算中心' notFoundContent='暂无数据'>
                     {this.state.accountList.map((item: any) => {
                       return <Option key={item.id} value={item.id}>{item.name}</Option>
                     })}
