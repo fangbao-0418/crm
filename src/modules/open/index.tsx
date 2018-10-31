@@ -117,19 +117,10 @@ class Main extends React.Component {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '意向度',
     dataIndex: 'tagIntention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
-    }
-  }, {
-    title: '电话状态',
-    dataIndex: 'tagTelephoneStatus',
-    render: (val) => {
-      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: '空置天数',
@@ -160,12 +151,6 @@ class Main extends React.Component {
       </span>
     ),
     dataIndex: 'lastReleaseSalesperson'
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
   }, {
     title: '释放时间',
     dataIndex: 'lastReleaseTime',

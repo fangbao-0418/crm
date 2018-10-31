@@ -140,19 +140,10 @@ export default function (): ColumnProps<Business.DetailProps>[] {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '意向度',
     dataIndex: 'intention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
-    }
-  }, {
-    title: '电话状态',
-    dataIndex: 'telephoneStatus',
-    render: (val) => {
-      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: (
@@ -174,12 +165,6 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
     }
   }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
-  }, {
     title: (
       <span>
         入库时间
@@ -188,7 +173,13 @@ export default function (): ColumnProps<Business.DetailProps>[] {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'enterDays',
+    dataIndex: 'enterDays', // 我的商机显示
+    render: (val) => {
+      return (moment(val).format('YYYY-MM-DD'))
+    }
+  }, {
+    title: '预约时间', // 只有我的预约显示
+    dataIndex: 'appointmentTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
     }

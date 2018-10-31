@@ -2,13 +2,12 @@ declare namespace Business {
   export interface DetailProps {
     customerName?: string
     contactPerson?: string
-    contactPhone?: string
     intention?: string
     telephoneStatus?: string
     freeDays?: string
     source?: string
-    createTime?: string
-    enterDays: string
+    /* 入库时间 */
+    enterDays?: string
     leadingPerson?: string
     appointmentTime?: string
     id?: string

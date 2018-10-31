@@ -124,9 +124,6 @@ class Main extends React.Component<Customer.Props, States> {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: (
       <span>
         空置天数
@@ -145,9 +142,6 @@ class Main extends React.Component<Customer.Props, States> {
     render: (val) => {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
     }
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime'
   }, {
     title: (
       <span>
