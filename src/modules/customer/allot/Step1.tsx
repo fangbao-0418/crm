@@ -125,7 +125,7 @@ class Main extends React.Component<Props> {
                     APP.error('请选择机构')
                   }
                 } else if (this.state.type === 2) {
-                  if (this.values.agencyId && this.values.salesPerson) {
+                  if (this.values.agencyId && this.values.salesPerson && this.values.salesPerson.length > 0) {
                     if (this.props.onOk) {
                       this.props.onOk(this.values)
                     }
