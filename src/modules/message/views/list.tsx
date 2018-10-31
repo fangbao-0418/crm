@@ -5,7 +5,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { MessageList, MessageItem } from '@/modules/message/types/messge'
 import { Button } from 'antd'
 import SearchForm from '@/modules/message/components/SearchForm'
-import HCframe from '@/modules/common/components/HCframe'
+import ContentBox from '@/modules/common/content'
 import Msg from '@/modules/message/services/message.tsx'
 import MessageShowModal from '@/modules/message/views/show.modal'
 import MsgService from '@/modules/message/services'
@@ -116,7 +116,7 @@ class Main extends React.Component {
       return (
         <span>
           <span hidden={!APP.hasPermission('notifiction_remind_get_id')} className={`likebtn`} onClick={() => { this.onShow.bind(this)(item) }}>查看</span>|
-          {item.read ? <span className={`likebtn`} style={{color:'#999'}} >已读</span> : <span hidden={!APP.hasPermission('notification_remind_read')} className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>}
+          {item.read ? <span hidden={!APP.hasPermission('notification_remind_read')} className={`likebtn`} style={{color:'#999'}} >已读</span> : <span hidden={!APP.hasPermission('notification_remind_read')} className={`likebtn`} onClick={() => this.onRead.bind(this)(item)}>标记为已读</span>}
           <span hidden={!APP.hasPermission('notification_remind_delete')} className={`likebtn`} onClick={() => this.onDel.bind(this)(item)}>删除</span>
         </span>
       )
@@ -299,8 +299,7 @@ class Main extends React.Component {
       onChange: this.onSelectAllChange.bind(this)
     }
     return (
-    <div className={styles.container}>
-      <HCframe title='消息列表'>
+      <ContentBox title='消息列表' className={styles.container}>
         <Row>
           <Col span={20}>
             <SearchForm onDateChange={this.onDateChange.bind(this)} />
@@ -335,18 +334,17 @@ class Main extends React.Component {
             批量标记已读
           </Button>
         </Row>
-      </HCframe>
-      <Modal
-        // title={this.state.modalTitle}
-        title={`消息详情`}
-        visible={this.state.modalVisible}
-        onOk={this.modalHandleOk.bind(this)}
-        onCancel={this.modalHandleCancel.bind(this)}
-        footer={null}
-      >
-        <MessageShowModal data={this.state.showData} />
-      </Modal>
-    </div>
+        <Modal
+          // title={this.state.modalTitle}
+          title={`消息详情`}
+          visible={this.state.modalVisible}
+          onOk={this.modalHandleOk.bind(this)}
+          onCancel={this.modalHandleCancel.bind(this)}
+          footer={null}
+        >
+          <MessageShowModal data={this.state.showData} />
+        </Modal>
+      </ContentBox>
     )
   }
 }

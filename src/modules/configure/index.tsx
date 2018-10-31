@@ -57,7 +57,7 @@ class Main extends React.Component<null, States> {
         return (
           <div>
             <span
-              hidden={!APP.hasPermission('config-dict-update')}
+              hidden={!APP.hasPermission('config_dict_update')}
               className='href'
               onClick={this.showDetail.bind(this, record)}
             >
@@ -65,7 +65,7 @@ class Main extends React.Component<null, States> {
             </span>
             <Divider type='vertical'/>
             <span
-              hidden={!APP.hasPermission('config-dict-delete_id')}
+              hidden={!APP.hasPermission('config_dict_delete_id')}
               className='href'
               onClick={this.delete.bind(this, record)}
             >
@@ -150,7 +150,7 @@ class Main extends React.Component<null, States> {
         title='配置中心'
         rightCotent={(
           <AddButton
-            hidden={!APP.hasPermission('config-dict-add')}
+            hidden={!APP.hasPermission('config_dict_add')}
             title='添加键值'
             onClick={this.showDetail.bind(this)}
           />
@@ -201,7 +201,7 @@ class Main extends React.Component<null, States> {
           />
           <div className={styles.operate}>
             <Button
-              hidden={!APP.hasPermission('config-dict-delete')}
+              hidden={!APP.hasPermission('config_dict_delete')}
               type='primary'
               onClick={this.batchDelete.bind(this)}
             >

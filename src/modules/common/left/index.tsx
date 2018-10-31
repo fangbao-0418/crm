@@ -173,11 +173,13 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '工单管理',
+      hidden: !APP.hasPermission('track_work'),
       path: '',
       icon: <MenuIcon type='worker' />,
       children: [
         {
           title: '我的工单',
+          hidden: !APP.hasPermission('track_work_order'),
           path: '/workorder/list'
         }
       ]
@@ -197,56 +199,67 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '任务管理',
+      hidden: !APP.hasPermission('track_outside_task'),
       path: '',
       icon: <MenuIcon type='task' />,
       children: [
         {
           title: '外勤任务列表',
+          hidden: !APP.hasPermission('track_outside_task_list'),
           path: '/outsite/task/list'
         },
         {
           title: '添加外勤任务',
+          hidden: !APP.hasPermission('track_outside_task_add'),
           path: '/outsite/task/form'
         }
       ]
     },
     {
       title: '任务配置',
+      hidden: !APP.hasPermission('track_outside_tasktemplate'),
       path: '',
       icon: <MenuIcon type='tasktpl' />,
       children: [
         {
           title: '其他任务配置',
+          hidden: !APP.hasPermission('track_outside_tasktemplate_sub'),
           path: '/outsite/tasktpl/sublist'
         },
         {
           title: '通办任务配置',
+          hidden: !APP.hasPermission('track_outside_tasktemplate_main'),
           path: '/outsite/tasktpl/list'
         }
       ]
     },
     {
       title: '绩效配置',
+      hidden: !APP.hasPermission('track_outside_reward'),
       path: '',
       icon: <MenuIcon type='perform' />,
       children: [
         {
           title: '绩效配置',
+          hidden: !APP.hasPermission('track_outside_reward_config'),
           path: '/outsite/perform/list'
         }
       ]
     },
     {
       title: '数据统计',
+      hidden: !APP.hasPermission('track_outside_data'),
       path: '',
       icon: <MenuIcon type='data' />,
       children: [
         {
           title: '数据总览',
+          hidden: !APP.hasPermission('track_outside_data_overview'),
           path: '/outsite/data-overview'
         },
         {
           title: '数据明细',
+          hidden: !APP.hasPermission('track_outside_data_detail'),
           path: '/outsite/data-detail'
         }
       ]
@@ -260,6 +273,7 @@ class Main extends React.Component<Props, State> {
     {
       title: '操作日志',
       path: '/operate-log',
+      hidden: !APP.hasPermission('bizbase_log'),
       icon: <MenuIcon type='log' />
     }
   ]
