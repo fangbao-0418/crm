@@ -264,7 +264,7 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public componentWillMount () {
-    if (window.location.pathname === '/') {
+    if (!APP.homepage && window.location.pathname === '/') {
       this.toHome()
     }
   }
