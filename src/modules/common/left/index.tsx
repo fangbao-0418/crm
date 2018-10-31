@@ -321,19 +321,18 @@ class Main extends React.Component<Props, State> {
         }
       }
     })
-    if (APP.env === 'production') {
-      url = window.location.origin + url
-    } else {
-      url = `#${url}`
-    }
+    // if (APP.env === 'production') {
+    //   url = window.location.origin + url
+    // } else {
+    //   url = `#${url}`
+    // }
     APP.homepage = url
-    console.log(url, 'get first url')
     return APP.homepage
   }
   public toHome () {
     console.log('to home')
-    // APP.history.push(this.getFirstUrl())
-    parent.location.href = this.getFirstUrl()
+    APP.history.push(this.getFirstUrl())
+    // parent.location.href = this.getFirstUrl()
   }
   public getMenuNodes (configs = this.configs, prefKey = 'm') {
     const nodes: JSX.Element[] = []
