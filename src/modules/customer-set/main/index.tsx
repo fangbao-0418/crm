@@ -34,12 +34,18 @@ class Main extends React.Component<null, States> {
           defaultActiveKey='1'
           // onChange={this.callback}
         >
-          <Tabs.TabPane tab='自动分配设置' key='1'>
-            <SetAuto cityCodes={cityCodes} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='库容设置' key='2'>
-            <SetCapacity cityCodes={cityCodes} />
-          </Tabs.TabPane>
+          {
+            APP.hasPermission('crm_set_customer_auto_distribute_list') &&
+            <Tabs.TabPane tab='自动分配设置' key='1'>
+              <SetAuto cityCodes={cityCodes} />
+            </Tabs.TabPane>
+          }
+          {
+            APP.hasPermission('crm_set_customer_storage_list') &&
+            <Tabs.TabPane tab='库容设置' key='2'>
+              <SetCapacity cityCodes={cityCodes} />
+            </Tabs.TabPane>
+          }
         </Tabs>
       </ContentBox>
     )

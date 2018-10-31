@@ -128,14 +128,17 @@ class Main extends React.Component<Props> {
           rowKey={'customerId'}
           pagination={false}
         />
-        <div className='text-right mt10'>
-          <Button
-            type='primary'
-            onClick={this.save.bind(this)}
-          >
-            保存
-          </Button>
-        </div>
+        {
+          APP.hasPermission('crm_set_customer_save') &&
+          <div className='text-right mt10'>
+            <Button
+              type='primary'
+              onClick={this.save.bind(this)}
+            >
+              保存
+            </Button>
+          </div>
+        }
       </div>
     )
   }
