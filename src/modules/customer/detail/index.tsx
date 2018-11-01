@@ -113,47 +113,11 @@ class Main extends React.Component<Props> {
               </Card>
             </div>
             <div className={styles.right}>
-              {
-                type === 'business' &&
-                <Card title='跟进记录'>
-                  <Tags
-                    labelSpan={3}
-                    className='mb10'
-                    dataSource={this.trackRecord}
-                    parser={(value) => {
-                      return value[0] ? Number(value[0].value) : undefined
-                    }}
-                    onChange={(value) => {
-                      this.handleChange('trackRecord', value)
-                    }}
-                  />
-                  <Input.TextArea
-                    className='mt10'
-                    placeholder='请输入备注'
-                    onChange={(e) => {
-                      console.log(e.target.value, 'textarea change')
-                      this.handleChange('trackRecord.remark', e.target.value)
-                    }}
-                  />
-                  <div className='mt10' >
-                    下次跟进:&nbsp;&nbsp;
-                    <DatePicker
-                      placeholder=''
-                      disabledDate={this.disabledDate}
-                      onChange={(date) => {
-                        this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
-                      }}
-                    />
-                  </div>
-                </Card>
-              }
+              <Record
+                customerId={this.props.customerId}
+                height={260}
+              />
             </div>
-          </div>
-          <div>
-            <Record
-              customerId={this.props.customerId}
-              height={180}
-            />
           </div>
         </div>
         <div>

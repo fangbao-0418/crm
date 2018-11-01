@@ -257,110 +257,107 @@ class Main extends React.Component {
             type='open'
             onClose={() => modal.hide()}
             footer={(
-              <div className='mt10'>
-                <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
-                  <Button
-                    type='primary'
-                    hidden={!APP.hasPermission('crm_sea_manage_grab_customer')}
-                    className='mr5'
-                    onClick={() => {
-                      pickCustomer({
-                        customerIdArr: [customerId]
-                      }).then(() => {
-                        APP.success('抢客户操作成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
-                        })
+              <div className='mt10 text-right'>
+                <Button
+                  type='ghost'
+                  hidden={!APP.hasPermission('crm_sea_manage_grab_customer')}
+                  className='mr5'
+                  onClick={() => {
+                    pickCustomer({
+                      customerIdArr: [customerId]
+                    }).then(() => {
+                      APP.success('抢客户操作成功')
+                      this.fetchList().then((res) => {
+                        const data = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = data[index].id
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
                       })
-                    }}
-                  >
-                    抢客户
-                  </Button>
-                  <Button
-                    type='ghost'
-                    hidden={!APP.hasPermission('crm_sea_manage_delete')}
-                    onClick={() => {
-                      deleteCustomer(customerId).then(() => {
-                        APP.success('删除成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
-                        })
+                    })
+                  }}
+                >
+                  抢客户
+                </Button>
+                <Button
+                  type='ghost'
+                  className='mr5'
+                  hidden={!APP.hasPermission('crm_sea_manage_delete')}
+                  onClick={() => {
+                    deleteCustomer(customerId).then(() => {
+                      APP.success('删除成功')
+                      this.fetchList().then((res) => {
+                        const data = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = data[index].id
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
                       })
-                    }}
-                  >
-                    删除
-                  </Button>
-                </div>
-                <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
-                  <Button
-                    type='primary'
-                    onClick={() => {
-                      index -= 1
-                      if (index === -1) {
-                        if (searchPayload.pageCurrent === 1) {
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+                <Button
+                  type='ghost'
+                  className='mr5'
+                  onClick={() => {
+                    index -= 1
+                    if (index === -1) {
+                      if (searchPayload.pageCurrent === 1) {
+                        modal.hide()
+                        return
+                      }
+                      index = searchPayload.pageSize - 1
+                      searchPayload.pageCurrent -= 1
+                      dataSource = []
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
+                  }}
+                >
+                  上一页
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    index += 1
+                    if (index >= searchPayload.pageSize) {
+                      searchPayload.pageCurrent += 1
+                      dataSource = []
+                      index = 0
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                          searchPayload.pageCurrent -= 1
                           modal.hide()
                           return
                         }
-                        index = searchPayload.pageSize - 1
-                        searchPayload.pageCurrent -= 1
-                        dataSource = []
-                      }
-                      if (dataSource.length === 0) {
-                        this.fetchList().then((res) => {
-                          dataSource = res.data || []
-                          changeCustomerDetailAction(dataSource[index].id)
-                        })
-                      } else {
+                        dataSource = res.data || []
                         changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      if (dataSource[index] === undefined) {
+                        modal.hide()
+                        return
                       }
-                    }}
-                  >
-                    上一页
-                  </Button>
-                  <Button
-                    style={{ marginLeft: 5}}
-                    type='ghost'
-                    onClick={() => {
-                      index += 1
-                      if (index >= searchPayload.pageSize) {
-                        searchPayload.pageCurrent += 1
-                        dataSource = []
-                        index = 0
-                      }
-                      if (dataSource.length === 0) {
-                        this.fetchList().then((res) => {
-                          if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
-                            searchPayload.pageCurrent -= 1
-                            modal.hide()
-                            return
-                          }
-                          dataSource = res.data || []
-                          changeCustomerDetailAction(dataSource[index].id)
-                        })
-                      } else {
-                        if (dataSource[index] === undefined) {
-                          modal.hide()
-                          return
-                        }
-                        changeCustomerDetailAction(dataSource[index].id)
-                      }
-                    }}
-                  >
-                    下一页
-                  </Button>
-                </div>
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
+                  }}
+                >
+                  下一页
+                </Button>
               </div>
             )}
           />

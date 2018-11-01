@@ -319,7 +319,7 @@ class Main extends React.Component<Customer.Props, States> {
             footer={(
               <div className='text-right mt10'>
                 <Button
-                  type='primary'
+                  type='ghost'
                   hidden={!APP.hasPermission('crm_customer_detail_save')}
                   className='mr5'
                   onClick={() => {
@@ -335,6 +335,7 @@ class Main extends React.Component<Customer.Props, States> {
                 </Button>
                 <Button
                   type='ghost'
+                  className='mr5'
                   hidden={!APP.hasPermission('crm_customer_detail_delete')}
                   onClick={() => {
                     deleteCustomer(customerId).then(() => {
@@ -354,9 +355,15 @@ class Main extends React.Component<Customer.Props, States> {
                   删除
                 </Button>
                 <Button
-                  type='primary'
+                  type='ghost'
                   className='mr5'
                   onClick={() => {
+                    instance.save().then(() => {
+                      APP.success('保存成功')
+                      this.fetchList()
+                    }, () => {
+                      APP.error('保存失败')
+                    })
                     index -= 1
                     if (index === -1) {
                       if (searchPayload.pageCurrent === 1) {
@@ -381,6 +388,12 @@ class Main extends React.Component<Customer.Props, States> {
                 </Button>
                 <Button
                   onClick={() => {
+                    instance.save().then(() => {
+                      APP.success('保存成功')
+                      this.fetchList()
+                    }, () => {
+                      APP.error('保存失败')
+                    })
                     index += 1
                     if (index >= searchPayload.pageSize) {
                       searchPayload.pageCurrent += 1

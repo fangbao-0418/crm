@@ -87,7 +87,7 @@ export default class extends React.Component<Props> {
           />
         </div>
         <div className='text-right'>
-          <Button type='primary' onClick={this.save.bind(this)}>保存</Button>
+          <Button type='primary' className='mt10' onClick={this.save.bind(this)}>保存</Button>
         </div>
       </div>
     )
