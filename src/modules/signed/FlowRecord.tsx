@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input, DatePicker, Icon } from 'antd'
+import { Button, Input, DatePicker, Icon, Row, Col } from 'antd'
 import _ from 'lodash'
 import Tags from '@/components/tags'
 import moment from 'moment'
@@ -12,7 +12,7 @@ export default class extends React.Component<Props> {
     {
       field: 'tagFollowUpClassification',
       title: '跟进分类',
-      options: APP.keys.EnumContactStatus
+      options: APP.keys.EnumFollowWay
     }
   ]
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
@@ -29,6 +29,7 @@ export default class extends React.Component<Props> {
     return (
       <div>
         <Tags
+          labelSpan={2}
           className='mb10'
           dataSource={this.trackRecord}
           parser={(value) => {
@@ -38,31 +39,41 @@ export default class extends React.Component<Props> {
             this.handleChange('trackRecord', value)
           }}
         />
-        <Input.TextArea
-          className='mt10'
-          placeholder='请输入备注'
-          onChange={(e) => {
-            console.log(e.target.value, 'textarea change')
-            this.handleChange('trackRecord.remark', e.target.value)
-          }}
-        />
-        <div className='mt10' >
-          下次跟进&nbsp;&nbsp;
-          <DatePicker
-            placeholder=''
-            disabledDate={this.disabledDate}
-            onChange={(date) => {
-              this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
-            }}
-          />
-        </div>
+        <Row>
+          <Col span={2} className='text-right'>
+            <label>备注：</label>
+          </Col>
+          <Col span={20} style={{paddingLeft: 5}}>
+            <Input.TextArea
+              placeholder='请输入备注'
+              onChange={(e) => {
+                console.log(e.target.value, 'textarea change')
+                this.handleChange('trackRecord.remark', e.target.value)
+              }}
+            />
+          </Col>
+        </Row>
+        <Row className='mt10'>
+          <Col span={2} className='text-right' style={{height: '32px', lineHeight: '32px'}}>
+            <label>下次跟进:</label>
+          </Col>
+          <Col span={20} style={{paddingLeft: 5}}>
+            <DatePicker
+              placeholder=''
+              disabledDate={this.disabledDate}
+              onChange={(date) => {
+                this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+              }}
+            />
+          </Col>
+        </Row>
         <div>
           <Record
             customerId={this.props.customerId}
-            height={200}
+            height={180}
           />
         </div>
-        <div>
+        <div className='text-right'>
           <Button type='primary' onClick={this.save.bind(this)}>保存</Button>
         </div>
       </div>

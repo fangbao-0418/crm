@@ -12,7 +12,7 @@ class Main extends React.Component<Props> {
     console.log(this.props, 'this.props')
     const { trackRecords, clueRecords } = this.props
     return (
-      <div style={{ borderLeft: '1px solid #e5e5e5' }}>
+      <div>
         <Tabs animated={false} defaultActiveKey='1'>
           <Tabs.TabPane tab='跟进记录' key='1'>
             <div style={{overflowY: 'auto', height: this.props.height }}>
