@@ -63,7 +63,6 @@ class Main extends React.Component<Props> {
           })
         }
         const paramsFile = {
-          type: this.props.paramsValue.step1.type,
           agencyId: this.props.paramsValue.step1.agencyId || '',
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
@@ -72,7 +71,7 @@ class Main extends React.Component<Props> {
           cityName: this.props.paramsValue.step1.city.cityName
         }
         console.log(paramsFile, 'paramsFile')
-        return importFile(info.file, paramsFile).then((res) => {
+        return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
           if (this.props.onOk) {
             this.props.onOk(res.data)
           }

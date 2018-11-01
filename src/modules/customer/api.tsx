@@ -30,15 +30,13 @@ export const allotCustomer = (payload: {
     id: string
     name: string
   }>
-  type?: number
-}) => {
-  return http(`/crm-manage/v1/api/customer/allocate`, 'PUT', {data: payload})
+}, type?: number) => {
+  return http(`/crm-manage/v1/api/customer/allocate/${type}`, 'PUT', {data: payload})
 }
 export const getSaleCapacity = (payload: {
   agencyId?: string
   customerNum?: number
   salesPersons?: string
-  type?: number
 }) => {
   return http(`/crm-manage/v1/api/storage_capacity/residue`, 'GET', {data: payload})
 }
@@ -64,9 +62,8 @@ export const importFile = (file: File, query: {
   salesPersonIds: string,
   salesPersonNames: string,
   customerSource: string,
-  type?: string,
   [field: string]: string
-}) => {
+}, type: string) => {
   const data = new FormData()
   // const q = $.param(query)
   data.append('file', file)
@@ -75,7 +72,7 @@ export const importFile = (file: File, query: {
       data.append(key, query[key])
     }
   }
-  return http(`/crm-manage/v1/api/customer/upload`, 'POST', {
+  return http(`/crm-manage/v1/api/customer/upload/${type}`, 'POST', {
     dataType: 'JSON',
     contentType: false,
     raw: true,

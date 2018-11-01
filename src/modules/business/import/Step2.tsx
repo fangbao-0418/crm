@@ -65,12 +65,11 @@ class Main extends React.Component<Props> {
           customerSource: this.props.paramsValue.step1.customerSource,
           salesPersonIds: ids.join(','),
           salesPersonNames: salesNames.join(','),
-          type: this.props.paramsValue.step1.type,
           cityCode: APP.user.cityCode || undefined, // 需要从登陆信息读取
           cityName: APP.user.companyName || undefined // 需要从登陆信息读取APP.user.city
         }
         console.log(paramsFile, 'paramsFile')
-        return importFile(info.file, paramsFile).then((res) => {
+        return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
           if (res.status === 200) {
             if (this.props.onOk) {
               this.props.onOk(res.data)
