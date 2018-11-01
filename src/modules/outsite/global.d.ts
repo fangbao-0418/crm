@@ -20,6 +20,7 @@ declare namespace OutSide {
     code: string
     id: string
     name: string
+    money: number
   }
   /** 外勤人员 */
   export interface OutSiterProps {

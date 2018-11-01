@@ -80,7 +80,7 @@ class Main extends React.Component<Props> {
   }
   public getSmsVerifyCode () {
     const { error } = this.state
-    if (!/^1[3|4|5|6|7|8|9][0-9]\d{8}$/.test(this.values.phone)) {
+    if (!/^1[3456789][0-9]\d{8}$/.test(this.values.phone)) {
       error.phone = '手机号码格式不正确'
       this.setState({
         error

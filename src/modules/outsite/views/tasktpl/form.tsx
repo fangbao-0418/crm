@@ -309,8 +309,14 @@ class Main extends React.Component<any, States> {
                   labelInValue
                   value={selectValue}
                   onChange={(val: any) => {
+                    const item = this.state.goods.find((good) => {
+                      if (good.code === val.key) {
+                        return true
+                      }
+                    })
                     this.syncFormdata('productId', val.key)
                     this.syncFormdata('productName', val.label)
+                    this.syncFormdata('productPrice', item.money || 0)
                   }}
                 >
                   {

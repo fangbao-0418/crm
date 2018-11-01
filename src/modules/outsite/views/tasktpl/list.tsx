@@ -30,13 +30,27 @@ class Main extends React.Component<OutSide.Props> {
         </div>
       )}
     >
-      <Tabs defaultActiveKey={this.props.config.common.tab}>
-      <TabPane tab='系统任务' key='1'>
-        <SetAuto/>
-      </TabPane>
-      <TabPane tab='自定义任务' key='2'>
-        <SetCapacity />
-      </TabPane>
+      <Tabs
+        onChange={(key: any) => {
+          APP.dispatch<OutSide.Props>({
+            type: 'change outside data',
+            payload: {
+              config: {
+                common: {
+                  tab: key
+                }
+              }
+            }
+          })
+        }}
+        defaultActiveKey={this.props.config.common.tab}
+      >
+        <TabPane tab='系统任务' key='1'>
+          {this.props.config.common.tab === '1' && <SetAuto/>}
+        </TabPane>
+        <TabPane tab='自定义任务' key='2'>
+          {this.props.config.common.tab === '2' && <SetCapacity />}
+        </TabPane>
       </Tabs>
     </ContentBox>
     )
