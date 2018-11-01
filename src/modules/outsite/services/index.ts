@@ -4,6 +4,7 @@
 import Service from '@/modules/common/services/service'
 import _ from 'lodash'
 import http from '@/utils/http';
+import data from '../../business/utils/conditionOptions';
 type Map<T> = OutSide.Map<T>
 class ModuleService extends Service {
   // 模块名称
@@ -190,8 +191,12 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取当前登录人可操作的商品列表
-  public getProductList () {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/product/list`)
+  public getProductList (type: 'COLLECTION' | 'OTHERS') {
+    return Service.http(`/outside/v1/api/outside/task/template/product/list`, 'GET', {
+      data: {
+        type
+      }
+    })
   }
 
   // 获取外勤人员

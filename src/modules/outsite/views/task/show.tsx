@@ -63,7 +63,7 @@ class Main extends React.Component<Props, State> {
     render: (text, item) => {
       return (
         <span>
-          {text && moment(item.startTime).format('YYYY/MM/DD')}
+          {!!text && moment(item.startTime).format('YYYY/MM/DD')}
         </span>
       )
     }
@@ -74,7 +74,7 @@ class Main extends React.Component<Props, State> {
       console.log(item)
       return (
         <span>
-          {text && moment(item.endTime).format('YYYY/MM/DD')}
+          {!!text && moment(item.endTime).format('YYYY/MM/DD')}
         </span>
       )
     }

@@ -41,7 +41,7 @@ class Main extends React.Component<Props, State> {
   }
   // 获取商品列表
   public getProductList () {
-    Service.getProductList().then((res) => {
+    Service.getProductList('OTHERS').then((res) => {
       console.log(res)
       this.setState({
         goods: res || []
