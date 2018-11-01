@@ -25,7 +25,8 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
-    periodType: 'DAY'
+    periodType: 'DAY',
+    dataType: 'PERSON'
   }
   public state: State = {
     type: 'day',
@@ -157,6 +158,13 @@ class Main extends React.Component<Props, State> {
               </span>
             )
           }
+        </div>
+        <div style={{paddingBottom:'20px'}}>
+          <RadioGroup name='radiogroup' defaultValue={1}>
+            <span>类别：</span>
+            <Radio value={1}>区域</Radio>
+            <Radio value={2}>任务分类</Radio>
+          </RadioGroup>
         </div>
       </div>
     )

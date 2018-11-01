@@ -14,7 +14,7 @@ class Main extends React.Component {
             <Personal/>
           </TabPane>
           <TabPane tab='外勤任务' key='2'>
-            <Task/>
+            <Task />
           </TabPane>
         </Tabs>
       </ContentBox>

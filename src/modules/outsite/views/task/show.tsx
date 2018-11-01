@@ -391,7 +391,7 @@ class Main extends React.Component<Props, State> {
                     }
                     </div>
                   )
-                  : <div className="text-center">暂无数据</div>
+                  : <div className='text-center'>暂无数据</div>
                 }
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>

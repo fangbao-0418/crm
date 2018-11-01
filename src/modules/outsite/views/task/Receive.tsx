@@ -18,7 +18,8 @@ interface State {
 class Main extends React.Component<Props, State> {
   public payload: OutSide.ReceivePayload = {
     pageCurrent: 1,
-    pageSize: 15
+    pageSize: 15,
+    taskId: this.props.id
   }
   public state: State = {
     dataSource: [],

@@ -1,16 +1,11 @@
 import React from 'react'
-import { Radio, DatePicker, Select, Tabs } from 'antd'
-import moment from 'moment'
+import { Radio, Tabs } from 'antd'
 import Rate from '@/modules/data-detail/views/model.rate'
 import Perform from '@/modules/data-detail/views/model.perform'
 import { connect } from 'react-redux'
-import { findDOMNode } from 'react-dom'
+import Search from '../Search'
 const styles = require('@/modules/data-detail/styles/task.styl')
 const RadioGroup = Radio.Group
-const { MonthPicker, RangePicker } = DatePicker
-const dateFormat = 'YYYY/MM/DD'
-const monthFormat = 'YYYY/MM'
-const Option = Select.Option
 const TabPane = Tabs.TabPane
 interface States {
   cities: any,
@@ -50,55 +45,15 @@ class Main extends React.Component<any, any> {
     const { cities } = this.state
     return (
     <div>
-      <RadioGroup name='radiogroup' defaultValue={1}>
-        <span>日期：</span>
-        <Radio value={1}>日</Radio>
-        <Radio value={2}>周</Radio>
-        <Radio value={3}>月</Radio>
-      </RadioGroup>
-      <div>
-        <div className={styles.frameDate}>
-          <span>选择日期:</span>
-          <DatePicker defaultValue={moment('2015/01/01', dateFormat)} format={dateFormat} />
-          <span>省份: </span>
-          <Select
-            defaultValue={provinceData[0]}
-            style={{ width: 120 }}
-            onChange={this.handleProvinceChange}
-          >
-            {provinceData.map((province: any) => <Option key={province}>{province}</Option>)}
-          </Select>
-          <span>城市：</span>
-          <Select
-            style={{ width: 120 }}
-            value={this.state.secondCity}
-            onChange={this.onSecondCityChange}
-          >
-            {cities.map((city: any) => <Option key={city}>{city}</Option>)}
-          </Select>
-          <span>代理商：</span>
-          <Select defaultValue='河北' style={{ width: 120 }} onChange={this.handleChange}>
-            <Option value='河北'>河北</Option>
-            <Option value='安徽'>安徽</Option>
-            <Option value='河南'>河南</Option>
-          </Select>
-        </div>
-        <div style={{paddingBottom:'20px'}}>
-          <RadioGroup name='radiogroup' defaultValue={1}>
-            <span>类别：</span>
-            <Radio value={1}>区域</Radio>
-            <Radio value={2}>任务分类</Radio>
-          </RadioGroup>
-        </div>
-        <Tabs onChange={this.callback} type='card'>
-          <TabPane tab='任务完成率' key='1'>
-            <Rate/>
-          </TabPane>
-          <TabPane tab='绩效' key='2'>
-            <Perform/>
-          </TabPane>
-       </Tabs>
-      </div>
+      <Search type='2' />
+      <Tabs onChange={this.callback} type='card'>
+        <TabPane tab='任务完成率' key='1'>
+          <Rate/>
+        </TabPane>
+        <TabPane tab='绩效' key='2'>
+          <Perform/>
+        </TabPane>
+      </Tabs>
     </div>
     )
   }

@@ -2,7 +2,6 @@ import React from 'react'
 import { DatePicker, Input, Form, Select, Row, Col } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import classNames from 'classnames'
-import moment from 'moment'
 import Area from './Area'
 import Service from '@/modules/outsite/services'
 import _ from 'lodash'
@@ -309,6 +308,7 @@ class Main extends React.Component<Props, any> {
                         })
                       } else {
                         this.syncSearchData({
+                          statusArray: undefined,
                           status
                         })
                       }

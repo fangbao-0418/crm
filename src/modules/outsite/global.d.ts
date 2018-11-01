@@ -85,6 +85,7 @@ declare namespace OutSide {
   export interface ReceivePayload {
     pageCurrent: number
     pageSize: number
+    taskId: any
   }
   /** 领用详情item */
   export interface ReceiveItemProps {
