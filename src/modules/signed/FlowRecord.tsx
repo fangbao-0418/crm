@@ -75,7 +75,7 @@ export default class extends React.Component<Props> {
               placeholder=''
               disabledDate={this.disabledDate}
               onChange={(date) => {
-                this.records.appointTime = date.format('YYYY-MM-DD HH:mm:ss')
+                this.records.appointTime = date ? date.format('YYYY-MM-DD HH:mm:ss') : ''
               }}
             />
           </Col>
