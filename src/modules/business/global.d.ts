@@ -13,6 +13,8 @@ declare namespace Business {
     id?: string
     redPoint?: number
     current_salesperson?: string
+    /* 最后跟进时间 */
+    lastTrackTime?: string
   }
   export interface SearchProps {
     appointStartTime?: string

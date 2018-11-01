@@ -3,6 +3,7 @@ import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
+const styles = require('./style')
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
@@ -39,7 +40,10 @@ class Main extends React.Component<Props> {
               ]
             })(
               this.props.disabled ?
-                <span>{text}</span>
+                <div>
+                  <span>{text}</span>
+                  <span className={styles.signed}>签约</span>
+                </div>
               :
                 <Input
                   onChange={this.onChange.bind(this, index, 'contactPerson')}
