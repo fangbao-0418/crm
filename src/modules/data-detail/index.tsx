@@ -8,7 +8,6 @@ const styles = require('./styles/index.styl')
 class Main extends React.Component {
   public render () {
     return (
-    <div>
       <ContentBox title='数据明细'>
         <Tabs defaultActiveKey='1'>
           <TabPane tab='外勤人员' key='1'>
@@ -19,7 +18,6 @@ class Main extends React.Component {
           </TabPane>
         </Tabs>
       </ContentBox>
-    </div>
     )
   }
 }

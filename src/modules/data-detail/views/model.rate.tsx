@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
-type RateProps = Statistics.HistogramTaskDataListProps
+type RateProps = any
 class Main extends React.Component<Statistics.Props, any> {
   public chart: echarts.ECharts
   public componentDidMount () {
@@ -9,7 +9,7 @@ class Main extends React.Component<Statistics.Props, any> {
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.histogramTaskDataList)
+    // this.renderChart(this.props.histogramTaskDataList)
   }
   public renderChart (histogramTaskDataList: RateProps[]) {
     const option = {
@@ -53,12 +53,12 @@ class Main extends React.Component<Statistics.Props, any> {
   }
 
   public render () {
-    const { detail: { personRate } } = this.props
+    const { detail } = this.props
     return (
     <div>
       <div>
-        <span>已完成任务数：{personRate.finishedTotal}家</span>
-        <span style={{marginLeft:'20px'}}>绩效涨幅：{personRate.rewardIncrease}% <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
+        <span>已接任务数：{detail.acceptCount}</span>
+        <span style={{marginLeft:'20px'}}>已完成任务数：{detail.completeCount}</span>
       </div>
       <div ref='rate' style={{width: '100%', height: '400px'}}></div>
     </div>

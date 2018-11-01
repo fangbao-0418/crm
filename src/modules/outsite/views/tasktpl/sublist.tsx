@@ -160,7 +160,7 @@ class Main extends React.Component<any, State> {
       ),
       onOk: () => {
         ins.submit().then((values: any) => {
-          Service.addTplSubItem(values).then(() => {
+          Service.editTplSubItem(values).then(() => {
             this.getList()
             modal.hide()
           })
@@ -191,7 +191,7 @@ class Main extends React.Component<any, State> {
         </Row>
       ),
       onOk: () => {
-        Service.addTplSubItem(subItem).then(() => {
+        Service.changeTplSubItemStatus(subItem).then(() => {
           this.getList()
           modal.hide()
         })

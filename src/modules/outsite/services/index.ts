@@ -376,8 +376,8 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
     return Service.http(`/${this.moduleName}/v1/api/outside/subtask/template/get/${id}`) // ?pageCurrent=当前页码&pageSize=每页显示条数&name=注册公司&status=&priority=OPEN&orgId=1`
   }
 
-  // 添加子任务
-  public addTplSubItem (data: {
+  // 改变其他任务配置状态
+  public changeTplSubItemStatus (data: {
     id?: string,
     name?: string,
     category?: string,
@@ -397,7 +397,29 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
       )
     }
   }
-
+  // 新增修改其他任务配置
+  public editTplSubItem (data: {
+    id?: string,
+    name?: string,
+    category?: string,
+    status?: string,
+    productId?: any,
+    productName: string
+  }) {
+    if (data.id !== undefined) {
+      return Service.http(
+        '/outside/v1/api/outside/subtask/template/update',
+        'PUT',
+        data
+      )
+    } else {
+      return Service.http(
+        `/${this.moduleName}/v1/api/outside/subtask/template/add`,
+        'POST',
+        data
+      )
+    }
+  }
 }
 
 export default new ModuleService()

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import Rate from '@/modules/data-detail/views/model.rate'
 import Perform from '@/modules/data-detail/views/model.perform'
 import Search from '../Search'
-import { fetchPersonDataAction } from '../action'
 const TabPane = Tabs.TabPane
 
 class Main extends React.Component {
@@ -15,16 +14,13 @@ class Main extends React.Component {
   public handleChange (value: any) {
     console.log(`selected ${value}`)
   }
-  public fechData () {
-    fetchPersonDataAction(this.payload)
-  }
   public render () {
     return (
       <div>
         <Search
+          type='1'
           onChange={(values) => {
             this.payload = values
-            this.fechData()
           }}
         />
         <Tabs onChange={this.callback} type='card'>

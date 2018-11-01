@@ -1,10 +1,10 @@
 import http from '@/utils/http'
 // 获取外勤人员-绩效柱状图
 export const fetchPersonPerformance = (payload: Statistics.DetailSearchPayload) => {
-  return http(`/outside/v1/api/outside/data/statistics/company/personnel/reward/histogram`, 'GET', payload)
+  return http(`/outside/v1/api/outside/data/detail/overview`, 'GET', payload)
 }
 // 获取外勤人员-任务完成率
-export const fetchPersonFinishRate = (payload: Statistics.SearchPayload) => {
+export const fetchPersonFinishRate = (payload: Statistics.DetailSearchPayload) => {
   return http(`/outside/v1/api/outside/data/statistics/company/personnel/task/rate/histogram`, 'GET', payload)
 }
 // 获取外勤任务-绩效柱状图

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-type OverViewProps = Statistics.ItemPieProps
-class Main extends React.Component<Statistics.Props, any> {
+class Main extends React.Component<Statistics.Props> {
   public chart: echarts.ECharts
   public componentDidMount () {
     const dom: any = this.refs.container

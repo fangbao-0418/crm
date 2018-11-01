@@ -41,26 +41,17 @@ const defaultVal: Statistics.Props = {
     }
   },
   detail: {
-    personPerf: {
-      rewardTotal: 0,
-      rewardIncrease: 0,
-      histogramRewardDataList: []
-    },
-    personRate: {
-      finishedTotal: 0,
-      rewardIncrease: 0,
-      histogramTaskDataList: []
-    },
-    taskPerf: {
-      rewardTotal: 0,
-      rewardIncrease: 0,
-      histogramRewardDataList: []
-    },
-    taskRate: {
-      finishedTotal: 0,
-      rewardIncrease: 0,
-      histogramTaskDataList: []
-    }
+    /** 预期绩效 */
+    expectReward: 0,
+    /** 实际绩效 */
+    actualReward: 0,
+    /** 绩效数据 */
+    ewardDataList: [],
+    /** 已接受任务 */
+    acceptCount: 0,
+    /** 已完成任务数 */
+    completeCount: 0,
+    taskDataList: []
   }
 }
 export default handleActions<Statistics.Props>({

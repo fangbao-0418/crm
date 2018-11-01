@@ -2,8 +2,8 @@ import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { Icon } from 'antd'
 import { connect } from 'react-redux'
-type PerformProps = Statistics.HistogramTaskDataListProps
-type P = Statistics.NumberProps
+type PerformProps = any
+type P = any
 class Main extends React.Component<Statistics.Props, any> {
   public chart: echarts.ECharts
   public componentDidMount () {
@@ -11,8 +11,8 @@ class Main extends React.Component<Statistics.Props, any> {
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.histogramRewardDataList)
-    console.log(this.props.histogramRewardDataList)
+    // this.renderChart(this.props.histogramRewardDataList)
+    // console.log(this.props.histogramRewardDataList)
   }
   public renderChart (histogramRewardDataList: PerformProps[]) {
     const option = {

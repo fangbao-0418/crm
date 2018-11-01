@@ -1,7 +1,8 @@
 declare namespace Statistics {
   interface DetailSearchPayload {
-    customerId?: any
-    dateFlag?: 'DAY' | 'WEEK' | 'MONTH'
+    companyId?: any
+    periodType?: 'DAY' | 'WEEK' | 'MONTH'
+    dataType?: 'PERSON' | 'AREA' | 'TASKTYPE'
     date?: string
   }
   interface OverViewSearchPayload {
@@ -95,14 +96,30 @@ declare namespace Statistics {
     }>
   }
   export interface DetailProps {
-    /** 人员绩效 */
-    personPerf: DetailPerfProps
-    /** 人员完成率 */
-    personRate: DetailRateProps
-    /** 任务绩效 */
-    taskPerf: DetailPerfProps
-    /** 任务完成率 */
-    taskRate: DetailRateProps
+    /** 预期绩效 */
+    expectReward: number
+    /** 实际绩效 */
+    actualReward: number
+    /** 绩效数据 */
+    ewardDataList: Array<{
+      /** 预期绩效 */
+      expectReward: number,
+      /** 实际绩效 */
+      actualReward: number,
+      name: string,
+      id: any
+    }>,
+    /** 已接受任务 */
+    acceptCount: number
+    /** 已完成任务数 */
+    completeCount: number
+    taskDataList: Array<{
+      /** 已接受任务 */
+      acceptCount: number,
+      /** 已完成任务数 */
+      completeCount: number,
+      name: string
+    }>
   }
   export interface Props {
     overView?: OverViewProps

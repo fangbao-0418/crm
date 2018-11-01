@@ -2,6 +2,7 @@ import React from 'react'
 import { Radio, Select, DatePicker } from 'antd'
 import { fetchOwnRegion } from '@/modules/common/api'
 import { fetchAgentList } from '@/modules/data-overview/api'
+import { fetchCompleteRateDataAction, fetchRewardDataAction } from '@/modules/data-detail/action'
 const styles = require('@/modules/data-detail/styles/personal')
 const RadioGroup = Radio.Group
 const dateFormat = 'YYYY/MM/DD'
@@ -13,6 +14,7 @@ const DateComponents: any = {
   month: MonthPicker
 }
 interface Props {
+  type?: '1' | '2'
   onChange?: (values?: Statistics.DetailSearchPayload) => void
 }
 interface State {
@@ -23,7 +25,7 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
-    dateFlag: 'DAY'
+    periodType: 'DAY'
   }
   public state: State = {
     type: 'day',
@@ -34,7 +36,7 @@ class Main extends React.Component<Props, State> {
   public componentWillMount () {
     fetchOwnRegion().then((res) => {
       if (res.length === 0) {
-        this.payload.customerId = APP.user.companyId
+        this.payload.companyId = APP.user.companyId
         this.fetchData()
       }
       this.setState({
@@ -43,9 +45,8 @@ class Main extends React.Component<Props, State> {
     })
   }
   public fetchData () {
-    if (this.payload.customerId !== undefined) {
-      // fetchOverViewAction(this.payload)
-      // fetchOverViewTotalAction(this.payload.customerId)
+    if (this.payload.companyId !== undefined) {
+      fetchCompleteRateDataAction(this.payload)
     }
   }
   public onProvinceChange (index?: number) {
@@ -64,10 +65,11 @@ class Main extends React.Component<Props, State> {
     })
   }
   public onChange () {
-    console.log(this.payload, 'search change')
-    if (this.props.onChange) {
-      this.props.onChange(this.payload)
-    }
+    // console.log(this.payload, 'search change')
+    this.fetchData()
+    // if (this.props.onChange) {
+    //   this.props.onChange(this.payload)
+    // }
   }
   public render () {
     const { type, provinceList, cityList, agentList } = this.state
@@ -81,7 +83,7 @@ class Main extends React.Component<Props, State> {
             this.setState({
               type: e.target.value
             })
-            this.payload.dateFlag = e.target.value.toUppercase()
+            this.payload.periodType = e.target.value.toUppercase()
           }}
         >
           <span style={{lineHeight:'24px'}}>日期：</span>
@@ -93,6 +95,7 @@ class Main extends React.Component<Props, State> {
           <span>选择日期:</span>
           <DateComponent
             onChange={(current: any) => {
+              console.log(current)
               if (type === 'day') {
 
               }
@@ -139,7 +142,7 @@ class Main extends React.Component<Props, State> {
                   placeholder='请选择代理商'
                   className={styles.selected}
                   onChange={(id: number) => {
-                    this.payload.customerId = id
+                    this.payload.companyId = id
                     this.onChange()
                   }}
                 >
