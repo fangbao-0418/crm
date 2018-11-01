@@ -12,6 +12,14 @@ export const toOther = (payload: {
 }) => {
   return http(`/crm-manage/v1/api/batch-principals`, 'PUT', payload)
 }
+export const addRecord = (payload: {
+  customerId?: string
+  remark?: string
+  appointTime?: string
+  tagFollowUpClassification?: number
+}) => {
+  return http(`/crm-manage/v1/api/track-record`, 'POST', payload)
+}
 // export const uploadCredentials = () => {
 //   return http(``)
 // }

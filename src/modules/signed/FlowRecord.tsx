@@ -4,6 +4,8 @@ import _ from 'lodash'
 import Tags from '@/components/tags'
 import moment from 'moment'
 import Record from '@/modules/customer/Record'
+import { addRecord } from './api'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
 interface Props {
   customerId: string
 }
@@ -12,18 +14,26 @@ export default class extends React.Component<Props> {
     {
       field: 'tagFollowUpClassification',
       title: '跟进分类',
-      options: APP.keys.EnumFollowWay
+      options: APP.keys.EnumFollowUpClassification
     }
   ]
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
+  public records: {
+    customerId?: string
+    remark?: string
+    appointTime?: string
+    tagFollowUpClassification?: number
+  } = {}
   public disabledDate (current: any) {
     return current && current < moment().subtract(1, 'days').endOf('day')
   }
-  public handleChange (field: string, value: any) {
-    console.log(field, value, '111111')
-  }
   public save () {
-    console.log('保存')
+    console.log(this.records, 'records')
+    this.records.customerId = this.props.customerId
+    addRecord(this.records).then(() => {
+      APP.success('操作成功！')
+      changeCustomerDetailAction(this.props.customerId)
+    })
   }
   public render () {
     return (
@@ -36,7 +46,7 @@ export default class extends React.Component<Props> {
             return value[0] ? Number(value[0].value) : undefined
           }}
           onChange={(value) => {
-            this.handleChange('trackRecord', value)
+            this.records.tagFollowUpClassification = value.tagFollowUpClassification
           }}
         />
         <Row>
@@ -47,8 +57,7 @@ export default class extends React.Component<Props> {
             <Input.TextArea
               placeholder='请输入备注'
               onChange={(e) => {
-                console.log(e.target.value, 'textarea change')
-                this.handleChange('trackRecord.remark', e.target.value)
+                this.records.remark = e.target.value
               }}
             />
           </Col>
@@ -62,7 +71,7 @@ export default class extends React.Component<Props> {
               placeholder=''
               disabledDate={this.disabledDate}
               onChange={(date) => {
-                this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+                this.records.appointTime = date.format('YYYY-MM-DD HH:mm:ss')
               }}
             />
           </Col>

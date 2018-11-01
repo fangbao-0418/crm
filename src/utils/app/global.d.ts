@@ -27,6 +27,7 @@ declare namespace APP {
     EnumFollowWay?: Array<{label: string, value: string}>
     /** 机构管理代理商公司状态 */
     EnumOrganAgentSource?: Array<{label: string, value: string}>
+    EnumFollowUpClassification?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {

@@ -102,7 +102,7 @@ class Main extends React.Component {
       return (
         <span
           className='href'
-          onClick={this.detail.bind(this, record)}
+          onClick={this.detail.bind(this, record, '1')}
         >
           {val}
         </span>
@@ -162,7 +162,7 @@ class Main extends React.Component {
       if (APP.hasPermission('crm_sign_myself_list_principals')) {
         return (
           <span>
-            <a onClick={this.detail.bind(this, record)}>转跟</a>
+            <a onClick={this.detail.bind(this, record, '5')}>转跟</a>
             <Divider type='vertical'/>
             <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
           </span>
@@ -266,7 +266,7 @@ class Main extends React.Component {
     this.paramsright.contactPerson = undefined
     this.paramsright.customerSource = undefined
     this.paramsright.signSalesperson = undefined
-    this.paramsright.contactPhone = undefined
+    // this.paramsright.contactPhone = undefined
     this.paramsright.operatingAccouting = undefined
     this.paramsright.areaName = undefined
     this.paramsright.currentSalesperson = undefined
@@ -321,11 +321,13 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public detail (record: Signed.DetailProps) {
+  public detail (record: Signed.DetailProps, defaultKey?: string) {
+    console.log(defaultKey)
     const modal = new Modal({
       content: (
         <Provider>
           <View
+            defaultKey={defaultKey}
             customerId={record.id}
             customerName={record.customerName}
             onClose={() => {
@@ -373,7 +375,7 @@ class Main extends React.Component {
                 { value: 'contactPerson', label: '联系人'},
                 { value: 'customerSource', label: '客户来源'},
                 { value: 'signSalesperson', label: '签单销售'},
-                { value: 'contactPhone', label: '联系电话'},
+                // { value: 'contactPhone', label: '联系电话'},
                 { value: 'operatingAccouting', label: '运营会计'},
                 { value: 'areaName', label: '地区'},
                 { value: 'currentSalesperson', label: '跟进人'},
