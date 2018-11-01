@@ -305,7 +305,7 @@ class Main extends React.Component<Props, State> {
         ]
       },
       center: {
-        initialValue: info.adjustAccountId
+        initialValue: info.adjustAccountId === -1 ? undefined : info.adjustAccountId
       },
       region: {
         rules: [{}]
