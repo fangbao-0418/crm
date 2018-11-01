@@ -44,6 +44,19 @@ class Main extends React.Component<any, State> {
       return item.status === 'NORMAL' ? '启用' : '禁用' // Service.task[item.category]
     }
   }, {
+    title:'关联商品',
+    dataIndex: 'productName',
+    render: (k: any, item: TasktplItem) => {
+      return item.productName
+    }
+  }, {
+    title:'最后操作',
+    dataIndex: 'updateUser',
+    render: (k: any, item: TasktplItem) => {
+      return item.updateUser
+    }
+  },
+  {
     title: '操作',
     width: 160,
     align: 'center',
