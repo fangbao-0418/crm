@@ -37,7 +37,7 @@ export default class extends React.Component<Props> {
       })
     } else {
       APP.error('请至少填写一项跟进记录')
-    } 
+    }
   }
   public render () {
     return (

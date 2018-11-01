@@ -563,7 +563,8 @@ class Main extends React.Component<Props> {
             </FormItemLayout>
           </Col>
           {
-            this.props.type !== 'customer' && <Col span={12}>
+            this.props.type !== 'customer' &&
+            <Col span={12}>
               <FormItemLayout
                 label='地区'
               >
@@ -627,7 +628,7 @@ class Main extends React.Component<Props> {
               </FormItemLayout>
             </Col>
           </Row>
-        } 
+        }
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <Input

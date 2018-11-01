@@ -590,7 +590,7 @@ class Main extends React.Component<Customer.Props, States> {
       onChange: this.onSelectAllChange.bind(this)
     }
     const { pagination } = this.state
-    console.log(this.state.data, 'render')
+    // console.log(this.state.data, 'render')
     return (
       <ContentBox
         title='我的客资'

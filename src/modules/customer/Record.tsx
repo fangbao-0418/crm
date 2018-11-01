@@ -8,9 +8,12 @@ interface Props extends Customer.Props {
   height?: number
 }
 class Main extends React.Component<Props> {
+  public relatedCompany: string[] = []
   public render () {
-    console.log(this.props, 'this.props')
     const { trackRecords, clueRecords } = this.props
+    if (this.props.detail.relatedCompany) {
+      this.relatedCompany = this.props.detail.relatedCompany.split(',')
+    }
     return (
       <div>
         <Tabs animated={false} defaultActiveKey='1'>
@@ -107,6 +110,17 @@ class Main extends React.Component<Props> {
                         }
                       </div>
                     </div>
+                  )
+                })
+              }
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='相关公司记录' key='3'>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+              {
+                this.relatedCompany.map((item, index) => {
+                  return (
+                    <li key={index}>{item}</li>
                   )
                 })
               }
