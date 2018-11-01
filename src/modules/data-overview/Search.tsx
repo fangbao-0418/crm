@@ -85,6 +85,7 @@ class Main extends React.Component<{}, State> {
           className={styles.selected}
           style={{width: 120}}
           onChange={(value: any) => {
+            console.log(value)
             this.payload.dateType = value
             APP.dispatch<Statistics.Props>({
               type: 'change screen data',
@@ -98,13 +99,13 @@ class Main extends React.Component<{}, State> {
               type: value
             })
             this.payload.dateType = value
-            // this.fetchData()
+            this.fetchData()
           }}
         >
-          <Option key='MONTH'>
+          <Option key='month'>
             按月查询
           </Option>
-          <Option key='YEAR'>
+          <Option key='year'>
             按年查询
           </Option>
         </Select>
@@ -114,6 +115,7 @@ class Main extends React.Component<{}, State> {
               placeholder='请选择月份'
               className={styles.selected}
               format={monthFormat}
+              defaultValue={moment(moment().format('YYYY-MM-DD'))}
               onChange={(current) => {
                 APP.dispatch<Statistics.Props>({
                   type: 'change screen data',
@@ -131,6 +133,7 @@ class Main extends React.Component<{}, State> {
             <Select
               style={{width: '100px'}}
               className={styles.selected}
+              defaultValue={years[0].value}
               onChange={(value: string) => {
                 APP.dispatch<Statistics.Props>({
                   type: 'change screen data',
