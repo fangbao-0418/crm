@@ -685,7 +685,7 @@
 "@types/ali-oss@^1.0.2":
   version "1.0.2"
   resolved "https://nexus.i-counting.cn/repository/accounting/@types/ali-oss/-/ali-oss-1.0.2.tgz#3f81e6d42df611939305f10752f4e5160bd3f055"
-  integrity sha1-/FoFk2a7Ci+CYeq/j6QkLtsBYuE=
+  integrity sha512-vkDPYD67L6jo+LnZX7aFRohhEDu/PP3riSmN/eSYXu6C403dj74JrHcBbEyXsl/XKzW4Cl+OvFfGA9CARIALuA==
 
 "@types/classnames@^2.2.6":
   version "2.2.6"
