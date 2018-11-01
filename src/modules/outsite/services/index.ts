@@ -263,7 +263,9 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
 
   // 获取全部任务列表
   public getTplList (systemFlag?: string) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&priority=&sytemFlag=${systemFlag}`)
+    const opt = {status:'NORMAL'}
+    // return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&sytemFlag=${systemFlag}`)
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all`, 'GET', opt)
   }
 
   // 获取任务模板列表
@@ -318,9 +320,8 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   // 获取全部子任务列表
   public getTplSublist (conf: Map<string> = {}) {
     const cond = {
-      name: '',
       status: 'NORMAL',
-      priority: ''
+      sytemFlag:'0'
     }
     conf = _.extend(cond, conf)
     return Service.http(
