@@ -3,9 +3,9 @@ import { Radio, Select, DatePicker } from 'antd'
 import { fetchOwnRegion } from '@/modules/common/api'
 import { fetchAgentList } from '@/modules/data-overview/api'
 import { fetchCompleteRateDataAction, fetchRewardDataAction } from '@/modules/data-detail/action'
+import moment from 'moment'
 const styles = require('@/modules/data-detail/styles/personal')
 const RadioGroup = Radio.Group
-const dateFormat = 'YYYY/MM/DD'
 const Option = Select.Option
 const { MonthPicker, WeekPicker } = DatePicker
 const DateComponents: any = {
@@ -26,7 +26,8 @@ interface State {
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
     periodType: 'DAY',
-    dataType: 'PERSON'
+    dataType: 'PERSON',
+    date: moment().format('YYYY-MM-DD')
   }
   public state: State = {
     type: 'day',

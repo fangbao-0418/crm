@@ -1,15 +1,18 @@
 import React from 'react'
-import { Table, Radio, Input } from 'antd'
+import { Radio } from 'antd'
 import Service from '@/modules/outsite/services'
 
 const RadioGroup = Radio.Group
+interface Props {
+  onChange: (value?: any) => void
+}
 interface States {
   value: any,
   color: string,
   data: Array<OutSide.TaskItem>
 }
 
-class Main extends React.Component<any, any> {
+class Main extends React.Component<Props, States> {
   public state: States = {
     value: '',
     color: 'blue',
@@ -22,7 +25,10 @@ class Main extends React.Component<any, any> {
 
   // 获取任务列表
   public getTplList () {
-    Service.getTplList().then((res: any) => {
+    Service.getTplList({
+      status: 'NORMAL',
+      systemFlag: '0'
+    }).then((res: any) => {
       if (!res) {
         return
       }
@@ -37,6 +43,7 @@ class Main extends React.Component<any, any> {
         }
         return item
       })
+      console.log(data, 'data')
       if (data.length > 1) {
         this.onChange(null, data[0].id)
         this.setState({
@@ -63,12 +70,13 @@ class Main extends React.Component<any, any> {
     const { data } = this.state
     return (
       <div>
-        <RadioGroup
+        {data.length > 0 && <RadioGroup
           onChange={this.onChange.bind(this)}
           value={this.state.value}
         >
           {
-            data && this.state.data.map((item, i) => {
+            data.map((item, i) => {
+              console.log(item, 'state')
               return (
                 <Radio
                   style={radioStyle}
@@ -80,7 +88,7 @@ class Main extends React.Component<any, any> {
               )
             })
           }
-        </RadioGroup>
+        </RadioGroup>}
       </div>
     )
   }

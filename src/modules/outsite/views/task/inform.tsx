@@ -1,6 +1,6 @@
 import React from 'react'
-import moment, { Moment } from 'moment'
-import { AutoComplete, Tabs, Form, Row, Col, Input, Button, Icon, Select, DatePicker } from 'antd'
+import moment from 'moment'
+import { AutoComplete, Tabs, Form, Row, Col, Input, Button, Select, DatePicker } from 'antd'
 import ContentBox from '@/modules/common/content'
 import Mission from '@/modules/outsite/views/task/mission'
 import Other from '@/modules/outsite/views/task/other'
@@ -128,9 +128,16 @@ class Main extends React.Component<Props, State> {
       })
       return
     }
+    if (formdata.templateId === undefined) {
+      APP.error('请选择任务')
+      return
+    }
     this.props.form.validateFields((err: any, values: any) => {
       const data = Object.assign({}, formdata, values)
       if (err) { return }
+      data.userId = data.user.key
+      data.userName = data.user.label
+      delete data.user
       // 格式化时间
       data.startTime = moment(data.startTime).format('YYYY-MM-DD hh:mm:ss')
       Service.addTaskItem(data).then(() => {
@@ -225,13 +232,16 @@ class Main extends React.Component<Props, State> {
               </Row>
               <Row>
                 <FormItem {...formItemLayout} label='选择外勤'>
-                  {getFieldDecorator('userId', {
+                  {getFieldDecorator('user', {
                     rules: [{
                       required: true,
                       message: '请选择外勤'
                     }]
                   })(
-                    <Select placeholder='请选择外勤人员' value={this.state.item.userId}>
+                    <Select
+                      labelInValue
+                      placeholder='请选择外勤人员'
+                    >
                     {
                       this.state.workerList.map((worker: any, i: number) => {
                         return <Option key={`worker-${i}`} value={worker.id}>{worker.name}</Option>

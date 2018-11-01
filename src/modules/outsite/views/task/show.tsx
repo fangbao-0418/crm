@@ -369,7 +369,14 @@ class Main extends React.Component<Props, State> {
                   rowKey={'id'}
                 />
                 <div className={styles['bottom-btns']}>
-                  <Button type='primary' onClick={this.showAllotModal.bind(this)}>批量分配</Button>
+                  <Button
+                    className='mt5'
+                    hidden={['FINISHED', 'CANCELLED', 'COMMITED'].indexOf(detail.status) > -1}
+                    type='primary'
+                    onClick={this.showAllotModal.bind(this)}
+                  >
+                    批量分配
+                  </Button>
                 </div>
               </Tabs.TabPane>
               <Tabs.TabPane key={`receive`} tab={'领用详情'}>

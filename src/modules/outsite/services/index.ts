@@ -205,8 +205,8 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 添加外勤任务
-  public addTaskItem (data: any = {}) {
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/add`, 'POST', data)
+  public addTaskItem (payload: any = {}) {
+    return Service.http(`/${this.moduleName}/v1/api/outside/task/add`, 'POST', payload)
   }
 
   // 批量删除
@@ -262,10 +262,11 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
 
   // 获取全部任务列表
-  public getTplList (systemFlag?: string) {
-    const opt = {status:'NORMAL'}
-    // return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all?status=NORMAL&sytemFlag=${systemFlag}`)
-    return Service.http(`/${this.moduleName}/v1/api/outside/task/template/all`, 'GET', opt)
+  public getTplList (payload?: {
+    status?: 'NORMAL',
+    systemFlag?: string
+  }) {
+    return Service.http(`/outside/v1/api/outside/task/template/all`, 'GET', payload)
   }
 
   // 获取任务模板列表

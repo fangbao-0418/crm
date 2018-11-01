@@ -163,7 +163,6 @@ class Main extends React.Component<Props, State> {
         {(values.isrelative === '1' && this.state.goods.length > 0) && <FormItem
           {...formLayout}
           label='关联商品'
-          required
         >
           {
             getFieldDecorator(

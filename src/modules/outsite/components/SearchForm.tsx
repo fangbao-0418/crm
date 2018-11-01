@@ -48,7 +48,7 @@ class Main extends React.Component<Props, any> {
       subTemplateId: '',
       userName: '', // 外勤人员
       status: '',
-      orgId: '',
+      areaId: '',
       startTime: ''
     }
   }
@@ -316,8 +316,6 @@ class Main extends React.Component<Props, any> {
                     placeholder='请选择服务状态'
                   >
                     {
-                      // _.map(Service.taskStatusDict, (val: string, key: string) => {
-                      // 待分配、已分配、已完成三个页面，可筛选状态不同
                       _.map(this.state.statusDict, (val: string, key: string) => {
                         return <Select.Option key={`option-${key}`} value={key}>{val}</Select.Option>
                       })
@@ -330,17 +328,17 @@ class Main extends React.Component<Props, any> {
             <Row>
               <Col span={12}>
                 <FormItem>
-                  {getFieldDecorator(`orgId`, {})(
+                  {getFieldDecorator(`areaId`, {})(
                     <Area
                       style={{width: '148px'}}
                       placeholder='选择所属区县'
                       onChange={(value) => {
-                        let orgId: any
+                        let areaId: any
                         if (value.key !== 'all') {
-                          orgId = value.key
+                          areaId = value.key
                         }
                         this.syncSearchData({
-                          orgId
+                          areaId
                         })
                       }}
                     />
