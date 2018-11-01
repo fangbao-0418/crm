@@ -162,7 +162,7 @@ class Main extends React.Component<Props, State> {
         </FormItem>
         {(values.isrelative === '1' && this.state.goods.length > 0) && <FormItem
           {...formLayout}
-          label='任务分类'
+          label='关联商品'
           required
         >
           {
