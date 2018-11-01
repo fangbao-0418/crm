@@ -107,7 +107,7 @@ class Main extends React.Component {
             {val}
           </span>
           {
-            record.customerName &&
+            !record.lastTrackTime &&
             <span className={styles['new-point']}>新</span>
           }
         </span>
