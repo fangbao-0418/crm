@@ -630,7 +630,7 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        {
+        {/* {
           this.props.customerId &&
           <Row gutter={8} className='mt10'>
             <Col span={24}>
@@ -642,27 +642,7 @@ class Main extends React.Component<Props> {
               />
             </Col>
           </Row>
-        }
-        {/* <div className='text-right mt10'>
-          <Button
-            className='mr5'
-            type='primary'
-            onClick={this.save.bind(this)}
-          >
-            保存
-          </Button>
-          {
-            this.props.isBussiness &&
-            <Button
-              type='primary'
-              onClick={() => {
-                this.props.flowNow()
-              }}
-            >
-              现在跟进
-            </Button>
-          }
-        </div> */}
+        } */}
       </Form>
     )
   }

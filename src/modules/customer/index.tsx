@@ -334,7 +334,6 @@ class Main extends React.Component<Customer.Props, States> {
                   保存
                 </Button>
                 <Button
-                  style={{marginRight: '172px'}}
                   type='ghost'
                   hidden={!APP.hasPermission('crm_customer_detail_delete')}
                   onClick={() => {

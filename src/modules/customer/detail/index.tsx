@@ -94,58 +94,65 @@ class Main extends React.Component<Props> {
           <Icon type='close' theme='outlined' />
         </span>
         <div className={styles.container}>
-          <div className={styles.left}>
+          <div>
             <Profile
               type={type}
             />
-            <Card
-              title='基本信息'
-              showFold
-            >
-              <BaseInfo
-                ref='baseinfo'
-                customerId={this.props.customerId}
-                type={type}
-              />
-            </Card>
-            {
-              type === 'business' &&
-              <Card title='跟进记录'>
-                <Tags
-                  className='mb10'
-                  dataSource={this.trackRecord}
-                  parser={(value) => {
-                    return value[0] ? Number(value[0].value) : undefined
-                  }}
-                  onChange={(value) => {
-                    this.handleChange('trackRecord', value)
-                  }}
+          </div>
+          <div className='clear'>
+            <div className={styles.left}>
+              <Card
+                title='基本信息'
+                showFold
+              >
+                <BaseInfo
+                  ref='baseinfo'
+                  customerId={this.props.customerId}
+                  type={type}
                 />
-                <Input.TextArea
-                  className='mt10'
-                  placeholder='请输入备注'
-                  onChange={(e) => {
-                    console.log(e.target.value, 'textarea change')
-                    this.handleChange('trackRecord.remark', e.target.value)
-                  }}
-                />
-                <div className='mt10' >
-                  预约下次拜访日期&nbsp;&nbsp;
-                  <DatePicker
-                    placeholder=''
-                    disabledDate={this.disabledDate}
-                    onChange={(date) => {
-                      this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+              </Card>
+            </div>
+            <div className={styles.right}>
+              {
+                type === 'business' &&
+                <Card title='跟进记录'>
+                  <Tags
+                    labelSpan={3}
+                    className='mb10'
+                    dataSource={this.trackRecord}
+                    parser={(value) => {
+                      return value[0] ? Number(value[0].value) : undefined
+                    }}
+                    onChange={(value) => {
+                      this.handleChange('trackRecord', value)
                     }}
                   />
-                </div>
-              </Card>
-            }
+                  <Input.TextArea
+                    className='mt10'
+                    placeholder='请输入备注'
+                    onChange={(e) => {
+                      console.log(e.target.value, 'textarea change')
+                      this.handleChange('trackRecord.remark', e.target.value)
+                    }}
+                  />
+                  <div className='mt10' >
+                    下次跟进:&nbsp;&nbsp;
+                    <DatePicker
+                      placeholder=''
+                      disabledDate={this.disabledDate}
+                      onChange={(date) => {
+                        this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+                      }}
+                    />
+                  </div>
+                </Card>
+              }
+            </div>
           </div>
-          <div className={styles.right}>
+          <div>
             <Record
               customerId={this.props.customerId}
-              height={this.props.type === 'business' ? 710 : 395}
+              height={180}
             />
           </div>
         </div>
