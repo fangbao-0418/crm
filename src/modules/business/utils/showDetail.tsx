@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import Modal from 'pilipa/libs/modal'
-import Detail from '@/modules/customer/detail'
+import Detail from '@/modules/business/detail'
 import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
