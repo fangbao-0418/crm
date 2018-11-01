@@ -376,7 +376,7 @@ class Main extends React.Component<Props, State> {
               </Tabs.TabPane>
               <Tabs.TabPane key={`tracklog`} tab={'跟进小计'}>
                 {
-                  trackdata.length > 0 && (
+                  !!trackdata.length ? (
                     <div className={styles.trackbox}>
                     {
                       trackdata.map((item, index) => {
@@ -390,6 +390,7 @@ class Main extends React.Component<Props, State> {
                     }
                     </div>
                   )
+                  : <div className="text-center">暂无数据</div>
                 }
               </Tabs.TabPane>
               <Tabs.TabPane key={`workorder`} tab={'工单详情'}>
