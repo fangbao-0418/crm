@@ -144,7 +144,7 @@ class Main extends React.Component {
     dataIndex: 'startTime',
     render: (k: any, item: TaskItem) => {
       return (
-        <span>{item.startTime}</span>
+        <span>{k && moment(item.createTime).format('YYYY/MM/DD')}</span>
       )
     }
   }, {
