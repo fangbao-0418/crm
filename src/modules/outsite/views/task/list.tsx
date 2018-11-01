@@ -88,15 +88,6 @@ class Main extends React.Component {
       </>)
     }
   }, {
-    title: '联系人',
-    dataIndex: 'userName',
-    render: (k, item) => {
-      return (
-      <>
-        <span>{item.userName}</span>
-      </>)
-    }
-  }, {
     title: '所属区域',
     dataIndex: 'areaName',
     render: (k, item) => {
