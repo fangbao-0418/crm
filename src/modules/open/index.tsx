@@ -236,7 +236,7 @@ class Main extends React.Component {
     console.log(values, 'values')
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    this.params.contactPhone = undefined
+    // this.params.contactPhone = undefined
     this.params.lastReleaseSalesperson = undefined
     this.params.busSeaMemo = undefined
     this.params[values.key] = values.value || undefined
@@ -445,7 +445,7 @@ class Main extends React.Component {
               options={[
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
+                // { value: 'contactPhone', label: '联系电话'},
                 { value: 'lastReleaseSalesperson', label: '释放销售'},
                 { value: 'busSeaMemo', label: '释放原因'}
               ]}
