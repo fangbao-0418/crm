@@ -265,6 +265,7 @@ class Main extends React.Component {
   // tab切换
   public onTabChange (key: string) {
     const { searchData } = this.state
+    searchData.statusArray = undefined
     searchData.status = key
     this.setState({
       tab: key,

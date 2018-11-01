@@ -104,9 +104,12 @@ class Show extends React.Component<Props, any> {
                     <div className={styles.node}>
                       {item.name && (<p className={styles.title}>{item.name}</p>)}
                       {item.labelOwner && (<p className={styles.des}>{item.labelOwner}:
-                          <a  onClick={() => { this.onShow.bind(this)(item) }}>
+                          <span
+                            className='href'
+                            onClick={() => { this.onShow(item) }}
+                          >
                             {item.ownerName}
-                          </a>
+                          </span>
                         </p>)}
                       {item.labelSupervisor && (<p className={styles.des}>{item.labelSupervisor}:
                         <a  onClick={() => { this.onSupervisorShow.bind(this)(item) }}>
