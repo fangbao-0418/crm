@@ -32,7 +32,7 @@ class Main extends React.Component<any, any> {
       data.map((item: any, i: number) => {
         data[i].subId = item.id
       })
-      if (data.length > 1) {
+      if (data.length > 0) {
         this.onChange(null, data[0].id)
         this.setState({
           value: data[0].id,

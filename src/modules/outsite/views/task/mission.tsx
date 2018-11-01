@@ -43,12 +43,12 @@ class Main extends React.Component<Props, States> {
         }
         return item
       })
-      console.log(data, 'data')
-      if (data.length > 1) {
+      console.log(data.length, data, 'data')
+      if (data.length > 0) {
         this.onChange(null, data[0].id)
         this.setState({
-          value: data[0].id,
-          data
+          data,
+          value: data[0].id
         })
       }
     })
@@ -68,6 +68,7 @@ class Main extends React.Component<Props, States> {
       height: '40px'
     }
     const { data } = this.state
+    console.log(data, data.length, 'data')
     return (
       <div>
         {data.length > 0 && <RadioGroup
