@@ -15,7 +15,7 @@ class Main extends React.Component<Props> {
       <div>
         <Tabs animated={false} defaultActiveKey='1'>
           <Tabs.TabPane tab='跟进记录' key='1'>
-            <div style={{overflowY: 'auto', height: this.props.height }}>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
             {
               trackRecords.length > 0 && trackRecords.map((item, index) => {
                 return (

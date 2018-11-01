@@ -29,11 +29,15 @@ export default class extends React.Component<Props> {
   }
   public save () {
     console.log(this.records, 'records')
-    this.records.customerId = this.props.customerId
-    addRecord(this.records).then(() => {
-      APP.success('操作成功！')
-      changeCustomerDetailAction(this.props.customerId)
-    })
+    if (this.records.appointTime || this.records.remark || this.records.tagFollowUpClassification >= 0) {
+      this.records.customerId = this.props.customerId
+      addRecord(this.records).then(() => {
+        APP.success('操作成功！')
+        changeCustomerDetailAction(this.props.customerId)
+      })
+    } else {
+      APP.error('请至少填写一项跟进记录')
+    } 
   }
   public render () {
     return (
