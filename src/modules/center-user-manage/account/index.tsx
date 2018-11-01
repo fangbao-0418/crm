@@ -50,7 +50,7 @@ class Main extends React.Component {
       email,
       organizationId: department,
       roleId: role,
-      adjustAccountId: center === undefined ? '' : center,
+      adjustAccountId: center,
       acceptType: resource,
       identity,
       regionList: region,
