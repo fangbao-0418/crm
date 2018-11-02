@@ -37,7 +37,7 @@ class Main extends React.Component<Props, State> {
           this.setState({
             value: 2
           })
-          res.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
+          res.list.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
             select.push({
               key: item.salespersonName ? String(item.salespersonId) : '',
               label: item.salespersonName
