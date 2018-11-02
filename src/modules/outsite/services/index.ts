@@ -187,7 +187,8 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
   }
   */
   public getOrderItemByOrderNO (orderCode: string = '') {
-    return Service.http(`/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`)
+    // return Service.http(`/shop-order/v1/api/shop/order/orders/like?orderCode=${orderCode}`)
+    return Service.http(`/outside/v1/api/outside/task/order?orderNo=${orderCode}`)
   }
 
   // 获取当前登录人可操作的商品列表
@@ -206,6 +207,7 @@ SUBMITUNAPPROVE	提交审批不通过	已提交
 
   // 添加外勤任务
   public addTaskItem (payload: any = {}) {
+    console.log(payload)
     return Service.http(`/${this.moduleName}/v1/api/outside/task/add`, 'POST', payload)
   }
 
