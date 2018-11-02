@@ -72,13 +72,15 @@ class Main extends React.Component<Props, State> {
     formdata.customerName = ''
     formdata.areaId = undefined
     formdata.areaName = ''
+    
+
     this.setState({
       formdata
     })
     Service.getOrderItemByOrderNO(orderNo).then((res: any) => {
       let orders: OutSide.OrderProps[] = []
-      if (res.data && res.data.records instanceof Array) {
-        orders = res.data.records
+      if (res.data && res.data instanceof Array) {
+        orders = res.data
       }
       this.orderMap = {}
       const orderNOList = orders.map((order) => {
@@ -99,7 +101,11 @@ class Main extends React.Component<Props, State> {
       customerId: order.customerOrgId,
       customerName: order.customerOrgName,
       areaId: order.countyCode,
-      areaName: order.countyName
+      areaName: order.countyName,
+      salerName: order.salerName,
+      linkMan: order.customerName,
+      linkManPhone: order.customerPhone,
+      salerId: order.salerId
     })
   }
 
@@ -155,7 +161,11 @@ class Main extends React.Component<Props, State> {
       areaId: '',
       areaName: '',
       customerId: undefined,
-      customerName: undefined
+      customerName: undefined,
+      salerName: '',
+      linkMan: '',
+      linkManPhone: '',
+      salerId: ''
     })
   }
 

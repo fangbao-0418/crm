@@ -43,6 +43,14 @@ declare namespace OutSide {
     customerOrgName: string
     /** 订单号 */
     orderCode: string
+    /** 订单号 */
+    salerName: string
+    /** 订单号 */
+    customerName: string
+    /** 订单号 */
+    customerPhone: string
+    /** 订单号 */
+    salerId: string
   }
   export type Map<T = any> = {[index: string]: T}
   /** 任务类型 */
