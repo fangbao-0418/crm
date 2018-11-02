@@ -315,12 +315,10 @@ class Main extends React.Component<Props, State> {
     return APP.homepage
   }
   public toHome () {
-    console.log(this.getFirstUrl(), 'to home')
     APP.history.push(this.getFirstUrl())
     // parent.location.href = this.getFirstUrl()
   }
   public getMenuNodes (configs = this.configs, prefKey = 'm') {
-    console.log(this.configs, 'get menu nodes')
     const nodes: JSX.Element[] = []
     configs.forEach((item, index) => {
       const key = [prefKey, index].join('-')
