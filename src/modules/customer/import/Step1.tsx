@@ -252,26 +252,6 @@ class Main extends React.Component<Props> {
                   APP.error('请选择客户来源／城市／机构／销售')
                 }
               }
-              // console.log(this.values, 'values 导入')
-              // if (this.values.city && this.values.customerSource) {
-              //   if (this.state.isChecked) {
-              //     if (this.values.agencyId && this.values.salesPerson) {
-              //       if (this.props.onOk) {
-              //         this.props.onOk(this.values)
-              //       }
-              //     } else {
-              //       APP.error('请选择机构和销售')
-              //     }
-              //   } else {
-              //     this.values.salesPerson = []
-              //     this.values.agencyId = ''
-              //     if (this.props.onOk) {
-              //       this.props.onOk(this.values)
-              //     }
-              //   }
-              // } else {
-              //   APP.error('请选择客户来源和城市')
-              // }
             }}
           >
             下一步

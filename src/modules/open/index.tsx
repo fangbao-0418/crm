@@ -81,22 +81,6 @@ class Main extends React.Component {
       options: all.concat(APP.keys.EnumContactStatus)
     }
   ]
-  public searchData: ConditionOptionProps[] = [
-    {
-      label: ['纳税类别'],
-      value: '',
-      field: 'payTaxesNature',
-      type: 'select',
-      options: all.concat(APP.keys.EnumPayTaxesNature)
-    },
-    {
-      label: ['客户来源'],
-      value: '',
-      field: 'customerSource',
-      type: 'select',
-      options: all.concat(APP.keys.EnumCustomerSource)
-    }
-  ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
@@ -229,10 +213,13 @@ class Main extends React.Component {
       this.params.lastTrackTimeBegin = beginTime
       this.params.lastTrackTimeEnd = endTime
     }
-    this.params.payTaxesNature = values.payTaxesNature.value || undefined
-    this.params.customerSource = values.customerSource.value || undefined
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
+    this.fetchList()
+  }
+  public handleSelectType (values: any) {
+    this.params.payTaxesNature = values.payTaxesNature || undefined
+    this.params.customerSource = values.customerSource || undefined
     this.fetchList()
   }
   public handleSearchType (values: any) {
@@ -441,7 +428,7 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <div style={{display: 'inline-block', width: 290}}>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
@@ -464,8 +451,10 @@ class Main extends React.Component {
               />
             </div>
             <SelectSearch
-              dataSource={this.searchData}
-              onChange={this.handleSearch.bind(this)}
+              onChange={(values) => {
+                console.log(values, 'values')
+                this.handleSelectType(values)
+              }}
             />
           </div>
         </div>

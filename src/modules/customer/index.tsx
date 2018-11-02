@@ -4,6 +4,7 @@ import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import ContentBox from '@/modules/common/content'
 import SearchName from '@/modules/common/search/SearchName'
 import AddButton from '@/modules/common/content/AddButton'
@@ -38,7 +39,7 @@ interface ParamsProps {
   createEndDate?: string
   customerName?: string
   contactPerson?: string
-  contactPhone?: string
+  // contactPhone?: string
   customerSource?: string
   /** 纳税类型 */
   payTaxesNature?: string
@@ -79,20 +80,6 @@ const data: ConditionOptionProps[] = [
     field: 'cityCode',
     type: 'select',
     options: []
-  },
-  {
-    label: ['纳税类别'],
-    value: '',
-    field: 'payTaxesNature',
-    type: 'select',
-    options: all.concat(APP.keys.EnumPayTaxesNature)
-  },
-  {
-    label: ['客户来源'],
-    value: '',
-    field: 'customerSource',
-    type: 'select',
-    options: all.concat(APP.keys.EnumCustomerSource)
   }
 ]
 class Main extends React.Component<Customer.Props, States> {
@@ -228,14 +215,17 @@ class Main extends React.Component<Customer.Props, States> {
       this.params.createEndDate = createEndDate
     }
     this.params.cityCode = values.cityCode.value || undefined
-    this.params.payTaxesNature = values.payTaxesNature.value || undefined
-    this.params.customerSource = values.customerSource.value || undefined
+    this.fetchList()
+  }
+  public handleSelectType (values: any) {
+    this.params.payTaxesNature = values.payTaxesNature || undefined
+    this.params.customerSource = values.customerSource || undefined
     this.fetchList()
   }
   public handleSearchType (value: {value?: string, key: string}) {
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    this.params.contactPhone = undefined
+    // this.params.contactPhone = undefined
     this.params.customerSource = undefined
     this.params.payTaxesNature = undefined
     this.params[value.key] = value.value
@@ -614,32 +604,36 @@ class Main extends React.Component<Customer.Props, States> {
           </div>
         )}
       >
-        <div className='mb10 clear'>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.state.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'}
-                // { value: 'customerSource', label: '客户来源'},
-                // { value: 'payTaxesNature', label: '纳税类别'}
-              ]}
-              placeholder={''}
-              // onChange={this.handleSearchType.bind(this)}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
+        <div className='mb12'>
+          <Condition
+            dataSource={this.state.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'}
+                  // { value: 'contactPhone', label: '联系电话'}
+                ]}
+                placeholder={''}
+                // onChange={this.handleSearchType.bind(this)}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              onChange={(values) => {
+                console.log(values, 'values')
+                this.handleSelectType(values)
               }}
             />
           </div>

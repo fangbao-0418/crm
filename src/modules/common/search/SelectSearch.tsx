@@ -1,178 +1,62 @@
 import React from 'react'
-import { Tag, Menu, Dropdown, Icon } from 'antd'
-import DropDown from 'pilipa/libs/dropdown'
-import classNames from 'classnames'
-const { CheckableTag } = Tag
+import { Select } from 'antd'
 const styles = require('./style')
-export interface ConditionOptionProps {
-  label: string[]
-  options: Array<{label: string, value: string}>
-  field: string
-  value?: string
-  type?: 'date' | 'select' | 'month'
+const Option = Select.Option
+interface Props {
+  onChange?: (value: ValueProps) => void
 }
 interface ValueProps {
-  [field: string]: {label: string, value: string}
-}
-interface Props {
-  dataSource?: ConditionOptionProps[]
-  onChange?: (values?: {[field: string]: any}) => void
-  style?: React.CSSProperties
-  className?: string
-}
-interface States {
-  dataSource: ConditionOptionProps[]
-  labels: {[field: string]: string}
-  values: ValueProps
+  customerSource?: string
+  payTaxesNature?: string
 }
 class Main extends React.Component<Props> {
-  public state: States = {
-    dataSource: this.props.dataSource,
-    labels: this.getLabels(),
-    values: this.getValues()
-  }
-  public componentWillReceiveProps (props: Props) {
-    this.setState({
-      dataSource: props.dataSource,
-      values: this.getValues(props.dataSource),
-      labels: this.getLabels(props.dataSource)
-    })
-  }
-  public getValues (dataSource: ConditionOptionProps[] = this.props.dataSource) {
-    const values: ValueProps = {}
-    const sourceValues = (this.state ? this.state.values : {}) || {}
-    dataSource.forEach((item) => {
-      const { field, options } = item
-      values[field] = sourceValues[field] || options[0]
-    })
-    return values
-  }
-  public getLabels (dataSource = this.props.dataSource): {[field: string]: string} {
-    const labels: {[field: string]: string} = this.state ? this.state.labels || {} : {}
-    dataSource.forEach((item) => {
-      labels[item.field] = labels[item.field] || item.label[0]
-    })
-    // console.log(labels, 'labels')
-    return labels
-  }
-  public handleChange (index: number, value: string) {
-    const { dataSource, labels } = this.state
-    dataSource[index].value = value
-    this.setState({
-      dataSource
-    })
-    const values: {[field: string]: any} = {}
-    dataSource.forEach((item, index2) => {
-      values[item.field] = {
-        value: item.value,
-        label: labels[item.field]
-      }
-    })
-    if (this.props.onChange) {
-      this.props.onChange(values)
-    }
-  }
-  public getMenuNodes (index: number) {
-    const { dataSource, labels } = this.state
-    const options = dataSource[index].label
-    const nodes: JSX.Element[] = []
-    options.forEach((item, key) => {
-      nodes.push(
-        <Menu.Item
-          onClick={() => {
-            labels[dataSource[index].field] = item
-            this.setState({
-              labels
-            })
-            // this.props.onChange() 修改时间选择时候请求接口
-          }}
-          key={`condition-label-menu-${key}`}
-        >
-          <span>{item}</span>
-        </Menu.Item>
-      )
-    })
-    return (
-      <Menu>{nodes}</Menu>
-    )
-  }
-  public getChildNodes () {
-    const nodes: JSX.Element[] = []
-    const { dataSource, labels } = this.state
-    dataSource.forEach((item, index) => {
-      const options = item.options
-      const tagNodes: JSX.Element[] = []
-      const type = item.type
-      switch (type) {
-      case 'select':
-        tagNodes.push(
-          <div className={styles.tag}>
-            <DropDown
-              setFields={{
-                key: 'value',
-                title: 'label'
-              }}
-              defaultValue={{
-                label: this.state.values[item.field] ? this.state.values[item.field].label : ''
-              }}
-              data={options}
-              onChange={(value) => {
-                const values = this.state.values
-                values[item.field] = {
-                  label: value.title,
-                  value: value.key
-                }
-                this.setState({
-                  values
-                })
-                this.handleChange(index, value.key)
-              }}
-            />
-          </div>
-        )
-        break
-      }
-      const menu = this.getMenuNodes(index)
-      const label = labels[item.field]
-      nodes.push(
-        <li className={styles.item}>
-          <label
-            className={styles.label}
-            // style={{cursor: 'pointer'}}
-          >
-            {
-              item.label.length > 1 ? (
-                <Dropdown
-                  overlay={menu}
-                  trigger={['click']}
-                >
-                  <span>{label}</span>
-                </Dropdown>
-              ) : label
-            }
-            {
-              item.field === 'date' &&
-              <Icon type='down' theme='outlined' />
-            }
-          </label>
-          <div className={styles.options}>
-            {tagNodes}
-          </div>
-        </li>
-      )
-    })
-    return nodes
-  }
+  public values: ValueProps = {}
   public render () {
-    // console.log(this.state.labels, 'labels')
     return (
-      <div
-        style={this.props.style}
-        className={classNames(styles.container, this.props.className)}
-      >
-        <ul>
-          {this.getChildNodes()}
-        </ul>
+      <div className={styles.select}>
+        <Select
+          allowClear={true}
+          style={{width:'150px'}}
+          className='mr5'
+          placeholder='请选择客户来源'
+          onChange={(val: string) => {
+            this.values.customerSource = val
+            this.props.onChange(this.values)
+          }}
+        >
+          {
+            APP.keys.EnumCustomerSource.map((item) => {
+              return (
+                <Option
+                  key={item.value}
+                >
+                  {item.label}
+                </Option>
+              )
+            })
+          }
+        </Select>
+        <Select
+          allowClear={true}
+          style={{width:'150px'}}
+          placeholder='请选择纳税类别'
+          onChange={(val: string) => {
+            this.values.payTaxesNature = val
+            this.props.onChange(this.values)
+          }}
+        >
+          {
+            APP.keys.EnumPayTaxesNature.map((item) => {
+              return (
+                <Option
+                  key={item.value}
+                >
+                  {item.label}
+                </Option>
+              )
+            })
+          }
+        </Select>
       </div>
     )
   }
