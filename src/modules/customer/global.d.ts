@@ -82,6 +82,7 @@ declare namespace Customer {
     allocatedNum: number
     repeatCustomers: Array<{name?: string, id?: string}>
     total: number
+    successCustomers?: {[key: string]: any}
   }
   export interface TrackRecord {
     customerId?: string

@@ -10,9 +10,21 @@ class Main extends React.Component<Props> {
   public render () {
     console.log(this.props)
     const result = this.props.assignResult
+    const successCustomers = APP.fn.objectToArray(result.successCustomers)
+    // console.log(APP.fn.objectToArray(successCustomers), 'APP.fn.objectToArray')
     return (
       <div className={styles.content}>
-        <div>应分配{result.total}条，已分配{result.allocatedNum}条，{result.repeatCustomers.length}条公司信息已经存在</div>
+        <div>应分配{result.total}条，已分配{result.allocatedNum}条，</div>
+        {
+          result.successCustomers && successCustomers.map((item, index) => {
+            return (
+              <div key={item.key}>
+                <span>{item.key}分配{item.value}条；</span>
+              </div>
+            )
+          })
+        }
+        <div>{result.repeatCustomers.length}条公司信息已经存在</div>
         {
           result.repeatCustomers.map((item, index) => {
             if (index > 7) {

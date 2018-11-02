@@ -17,7 +17,8 @@ const defaultVal: Customer.Props = {
   assignResult: {
     allocatedNum: 0,
     repeatCustomers: [],
-    total: 0
+    total: 0,
+    successCustomers: {}
   },
   capacity:[],
   /** 特殊资源列表 */

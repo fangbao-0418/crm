@@ -43,6 +43,7 @@ declare namespace APP {
     getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
     ossUpload: (file: File) => any
     generateKey: <T>(arr: T[]) => T[]
+    objectToArray: (sourceObject: {[key: string]: any}) => {key: string, value: any}[]
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory
