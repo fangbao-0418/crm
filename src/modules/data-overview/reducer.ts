@@ -1,7 +1,7 @@
 // 数据概览
 import _ from 'lodash'
 import { handleActions } from 'redux-actions'
-const defaultVal: Statistics.Props = {
+export const defaultVal: Statistics.Props = {
   overView: {
     type: 'month',
     total: {
@@ -57,10 +57,19 @@ const defaultVal: Statistics.Props = {
 export default handleActions<Statistics.Props>({
   'change screen data': (state, { payload }) => {
     payload = _.merge({}, _.cloneDeep(defaultVal), state, payload)
-    console.log(payload, 'payload1111')
     return {
       ...state,
       ...payload
     }
+
+    // if(!payload.overView.data) {
+    //   return defaultVal
+    // }else {
+    //   payload = _.merge({}, _.cloneDeep(defaultVal), state, payload)
+    //   return {
+    //     ...state,
+    //     ...payload
+    //   }
+    // }
   }
 }, _.cloneDeep(defaultVal))

@@ -1,4 +1,6 @@
 import { fetchOverView } from './api'
+import { defaultVal } from './reducer'
+console.log(defaultVal)
 export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = {}) => {
   fetchOverView(payload).then((res) => {
     console.log(!!res)
@@ -6,9 +8,10 @@ export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = 
       type: 'change screen data',
       payload: {
         overView: {
-          data: !!res ? res : {}
+          data: !!res ? res : defaultVal.overView.data
         }
       }
+
     })
   })
 }
