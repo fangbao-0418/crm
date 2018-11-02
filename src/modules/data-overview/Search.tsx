@@ -26,7 +26,7 @@ while (currentYear >= 2014) {
 class Main extends React.Component<{}, State> {
   public payload: Statistics.OverViewSearchPayload = {
     dateType: 'month',
-    date: moment().format('YYYY-MM-DD')
+    date: moment().format('YYYY-MM')
   }
   public state: State = {
     type: 'month',
@@ -57,6 +57,7 @@ class Main extends React.Component<{}, State> {
   }
   public fetchData () {
     if (this.payload.companyId !== undefined) {
+      console.log(this.payload)
       fetchOverViewAction(this.payload)
     }
   }
@@ -99,6 +100,7 @@ class Main extends React.Component<{}, State> {
               type: value
             })
             this.payload.dateType = value
+            this.payload.date = value === 'year' ? moment().format('YYYY') : moment().format('YYYY-MM')
             this.fetchData()
           }}
         >
@@ -115,7 +117,7 @@ class Main extends React.Component<{}, State> {
               placeholder='请选择月份'
               className={styles.selected}
               format={monthFormat}
-              defaultValue={moment(moment().format('YYYY-MM-DD'))}
+              defaultValue={moment(moment().format('YYYY-MM'))}
               onChange={(current) => {
                 APP.dispatch<Statistics.Props>({
                   type: 'change screen data',
@@ -125,7 +127,7 @@ class Main extends React.Component<{}, State> {
                     }
                   }
                 })
-                this.payload.date = current.format('YYYY-MM-DD')
+                this.payload.date = current.format('YYYY-MM')
                 this.fetchData()
               }}
             />
@@ -135,6 +137,7 @@ class Main extends React.Component<{}, State> {
               className={styles.selected}
               defaultValue={years[0].value}
               onChange={(value: string) => {
+                console.log(value)
                 APP.dispatch<Statistics.Props>({
                   type: 'change screen data',
                   payload: {
@@ -143,7 +146,7 @@ class Main extends React.Component<{}, State> {
                     }
                   }
                 })
-                this.payload.date = value
+                this.payload.date = moment(value).format('YYYY')
                 this.fetchData()
               }}
             >
