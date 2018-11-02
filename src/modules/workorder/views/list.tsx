@@ -118,8 +118,8 @@ class Main extends React.Component<any, any> {
       // onSelection: this.onSelection
     }
     return (
-      <div className={styles.container}>
       <ContentBox
+        className={styles.container}
         title='我的工单'
         rightCotent={(
           // <span className={styles.acts}>
@@ -127,15 +127,14 @@ class Main extends React.Component<any, any> {
             // </span>
         )}
       >
-      <SearchForm onChange={this.onChange.bind(this)} />
-      <Table
-        className={styles.table}
-        onChange={this.pageChange}
-        columns={this.columns}
-        dataSource={this.state.dataSource}
-      />
+        <SearchForm onChange={this.onChange.bind(this)} />
+        <Table
+          className={styles.table}
+          onChange={this.pageChange}
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+        />
       </ContentBox>
-    </div>
     )
   }
   // 表单改变
