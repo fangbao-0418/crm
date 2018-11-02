@@ -45,8 +45,8 @@ class Main extends React.Component<Props> {
           <div>
             <div className={styles.info}>是否删除已重复客户?</div>
             <div className='fr'>
-              <Button type='primary' className='mr5' onClick={this.props.deleteCus}>删除</Button>
               <Button onClick={this.props.onCancel}>取消</Button>
+              <Button type='primary' className='mr5' onClick={this.props.deleteCus}>删除</Button>
             </div>
           </div>
         }
