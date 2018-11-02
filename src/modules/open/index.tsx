@@ -3,6 +3,7 @@ import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import { fetchList, pickCustomer } from './api'
@@ -78,7 +79,9 @@ class Main extends React.Component {
       value: '',
       label: ['电话状态'],
       options: all.concat(APP.keys.EnumContactStatus)
-    },
+    }
+  ]
+  public searchData: ConditionOptionProps[] = [
     {
       label: ['纳税类别'],
       value: '',
@@ -432,33 +435,37 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='公海管理'>
-        <div className='mb12 clear'>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                // { value: 'contactPhone', label: '联系电话'},
-                { value: 'lastReleaseSalesperson', label: '释放销售'},
-                { value: 'busSeaMemo', label: '释放原因'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'lastReleaseSalesperson', label: '释放销售'},
+                  { value: 'busSeaMemo', label: '释放原因'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    console.log(val, 'onKeyDown')
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
-              }}
+                }}
+              />
+            </div>
+            <SelectSearch
+              dataSource={this.searchData}
+              onChange={this.handleSearch.bind(this)}
             />
           </div>
         </div>
