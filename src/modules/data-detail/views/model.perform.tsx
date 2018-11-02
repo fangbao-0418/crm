@@ -15,7 +15,7 @@ class Main extends React.Component<Statistics.Props, any> {
     this.renderChart()
   }
   public renderChart () {
-    const data = this.props.detail.ewardDataList
+    const data = this.props.detail.rewardDataList
     const actualData: number[] = []
     const expectData: number[] = []
     const personData: string[] = []

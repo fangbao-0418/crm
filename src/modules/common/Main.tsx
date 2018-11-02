@@ -9,7 +9,6 @@ import {
 } from 'react-router-dom'
 import Route from '@/components/Route'
 import Left from '@/modules/common/left'
-import MenuIframe from '@/modules/common/left/Iframe'
 import modules from '@/router/modules'
 import { fetchUserInfo } from './api'
 const styles = require('@/stylus/main')
@@ -30,9 +29,7 @@ class Main extends React.Component<Common.Props> {
     }
     return (
       <Switch>
-        <Route path='/menu' component={modules.Menu} />
         <Layout className={styles.container}>
-          {/* <MenuIframe /> */}
           <Left />
           <Layout>
             <Top />

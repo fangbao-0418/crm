@@ -66,42 +66,14 @@ declare namespace Statistics {
       }>
     }
   }
-  /** 数据明细绩效属性 */
-  export interface DetailPerfProps {
-    /** 绩效总数 */
-    rewardTotal: number
-    /** 绩效涨幅 */
-    rewardIncrease: number
-    /** 柱状图数据 */
-    histogramRewardDataList: Array<{
-      reward: number,
-      name: string
-    }>
-  }
-  /** 数据明细任务完成率属性 */
-  export interface DetailRateProps {
-    /** 完成总数 */
-    finishedTotal: number
-    /** 绩效涨幅 */
-    rewardIncrease: number
-    histogramTaskDataList: Array<{
-      /** 总客户数 */
-      customerTotal: number
-      /** 完成数 */
-      finishedCount: number
-      /** 完成率 */
-      finishRate: number
-      /** 名称 */
-      name: string
-    }>
-  }
+
   export interface DetailProps {
     /** 预期绩效 */
     expectReward: number
     /** 实际绩效 */
     actualReward: number
     /** 绩效数据 */
-    ewardDataList: Array<{
+    rewardDataList: Array<{
       /** 预期绩效 */
       expectReward: number,
       /** 实际绩效 */

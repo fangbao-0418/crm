@@ -47,6 +47,8 @@ class Main extends React.Component<{}, State> {
       token: APP.token,
       companyId: code
     }).then(() => {
+      APP.homepage = ''
+      APP.user = undefined
       APP.dispatch<Common.Props>({
         type: 'change main display status',
         payload: {

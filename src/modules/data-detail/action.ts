@@ -10,14 +10,3 @@ export const fetchCompleteRateDataAction = (payload: Statistics.DetailSearchPayl
     })
   })
 }
-export const fetchRewardDataAction = (payload: Statistics.DetailSearchPayload) => {
-  // fetchPersonPerformance(payload).then((res) => {
-  //   // APP.dispatch<Statistics.Props>({
-  //   //   type: 'change screen data',
-  //   //   payload: {
-  //   //     detail: {
-  //   //     }
-  //   //   }
-  //   // })
-  // })
-}
