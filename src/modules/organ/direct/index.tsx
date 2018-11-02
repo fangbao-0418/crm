@@ -1,7 +1,7 @@
 import React from 'react'
-import { Table, Divider, Input, Select } from 'antd'
+import { Table, Divider, Input, Select, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail, delDirect } from '../api'
+import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail, delDirect, checkDependence } from '../api'
 import { Modal } from 'pilipa'
 import Detail from './detail'
 import Area from './Area'
@@ -76,7 +76,7 @@ class Main extends React.Component<Props, State> {
             <span
               hidden={!APP.hasPermission('bizbase_user_direct_company_delete')}
               className='href'
-              onClick={() => {this.delDirect(record.id)}}
+              onClick={() => {this.delDirect(record.id, record.delType)}}
             >
               删除
             </span>
@@ -136,7 +136,7 @@ class Main extends React.Component<Props, State> {
     }
   }
   // 确认删除
-  public delDirect = (id: number) => {
+  public delDirect = (id: number, delType: number) => {
     const modal = new Modal({
       content: (
         <div>确认要删除吗？</div>
@@ -144,10 +144,40 @@ class Main extends React.Component<Props, State> {
       title: '删除机构',
       mask: true,
       onOk: () => {
-        delDirect(id).then(() => {
-          modal.hide()
-          this.fetchList()
+        checkDependence(id).then((res) => {
+          if (res.flag === false) {
+            const modal1 = new Modal({
+              content: (
+                <div>{res.message},是否继续</div>
+              ),
+              title: '是否继续删除',
+              mask: true,
+              onOk:() => {
+                delDirect(id, delType = 1).then(() => {
+                  modal1.hide()
+                  this.fetchList()
+                })
+              }
+            })
+            modal1.show()
+          } else {
+            const modal2 = new Modal({
+              content: (
+                <div>机构无账号关联,确认删除吗</div>
+              ),
+              title: '是否继续删除',
+              mask: true,
+              onOk:() => {
+                delDirect(id, delType = 0).then(() => {
+                  modal2.hide()
+                  this.fetchList()
+                })
+              }
+            })
+            modal2.show()
+          }
         })
+        modal.hide()
       }
     })
     modal.show()
