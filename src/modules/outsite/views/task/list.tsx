@@ -36,7 +36,7 @@ class Main extends React.Component {
       pageSize: 10
     },
     searchData: {
-      total: 0,
+      // total: 0,
       pageSize: 10,
       currentPage: 1,
       customerName: '',
@@ -201,14 +201,14 @@ class Main extends React.Component {
         dataSource: d.records,
         pageConf: {
           pageSize,
-          total,
+          total:pageTotal,
           pageCurrent
         },
         searchData: {
           ...searchData,
           pageSize,
           pageCurrent,
-          total:pageTotal
+          // total:pageTotal
         }
       })
     })
@@ -334,7 +334,7 @@ class Main extends React.Component {
 
   }
   public render () {
-    const {total} = this.state.searchData
+    const {total} = this.state.pageConf
     return (
       <ContentBox
         title='外勤任务'
@@ -362,7 +362,6 @@ class Main extends React.Component {
                       this.onChangeCurrent(current)
                     }
                   }}
-                  // pagination={{total:12}}
                   rowKey={'key'}
                 />
               </Tabs.TabPane>)

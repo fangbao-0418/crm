@@ -61,7 +61,7 @@ class Main extends React.Component<any, any> {
     this.state = {
       selectedRowKeys: [],
       dataSource:[],
-      pageSize: 10, // 一页多少条
+      pageSize: 20, // 一页多少条
       pageTotal: 1,  // 总数
       pageCurrent: 1, // 当前页数
       searchStr:'',  // 搜索条件
@@ -74,8 +74,19 @@ class Main extends React.Component<any, any> {
   public componentWillMount () {
     this.getList()
   }
+
+  //分页
+  public onChangeCurrent (current: number) {
+    this.setState({
+      searchData:{
+        pageCurrent:current
+      }
+    }, () => {
+      this.getList()
+    })
+  }
   public render () {
-    const { selectedRowKeys } = this.state
+    const { selectedRowKeys, pageTotal } = this.state
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -133,6 +144,12 @@ class Main extends React.Component<any, any> {
         onChange={this.pageChange}
         columns={this.columns}
         dataSource={this.state.dataSource}
+        pagination={{
+          total: pageTotal,
+          onChange:(current, size)=>{
+            this.onChangeCurrent(current)
+          }
+        }}
       />
       </ContentBox>
     </div>

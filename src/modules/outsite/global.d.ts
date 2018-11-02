@@ -43,13 +43,13 @@ declare namespace OutSide {
     customerOrgName: string
     /** 订单号 */
     orderCode: string
-    /** 订单号 */
+    /** 销售名称 */
     salerName: string
-    /** 订单号 */
+    /** 联系人名称 */
     customerName: string
-    /** 订单号 */
+    /** 联系人电话 */
     customerPhone: string
-    /** 订单号 */
+    /** 销售ID */
     salerId: string
   }
   export type Map<T = any> = {[index: string]: T}
