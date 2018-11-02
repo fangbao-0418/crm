@@ -36,6 +36,9 @@ class Main extends React.Component<Props, State> {
     agentList: []
   }
   public componentWillMount () {
+    if (this.props.type === '2') {
+      this.payload.dataType = 'AREA'
+    }
     fetchOwnRegion().then((res) => {
       if (res.length === 0) {
         this.payload.companyId = APP.user.companyId
@@ -160,13 +163,24 @@ class Main extends React.Component<Props, State> {
             )
           }
         </div>
-        <div style={{paddingBottom:'20px'}}>
-          <RadioGroup name='radiogroup' defaultValue={1}>
-            <span>类别：</span>
-            <Radio value={1}>区域</Radio>
-            <Radio value={2}>任务分类</Radio>
-          </RadioGroup>
-        </div>
+        {
+          this.props.type === '2' && (
+            <div style={{paddingBottom:'20px'}}>
+              <RadioGroup
+                name='radiogroup'
+                defaultValue='AREA'
+                onChange={(e: any) => {
+                  this.payload.dataType = e.target.value
+                  this.fetchData()
+                }}
+              >
+                <span>类别：</span>
+                <Radio value='AREA'>区域</Radio>
+                <Radio value='TASKTYPE'>任务分类</Radio>
+              </RadioGroup>
+            </div>
+          )
+        }
       </div>
     )
   }
