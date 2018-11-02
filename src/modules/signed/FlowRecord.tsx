@@ -82,6 +82,7 @@ export default class extends React.Component<Props> {
         </Row>
         <div>
           <Record
+            type='signed'
             customerId={this.props.customerId}
             height={180}
           />

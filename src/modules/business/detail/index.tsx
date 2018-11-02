@@ -151,6 +151,7 @@ class Main extends React.Component<Props> {
           </div>
           <div>
             <Record
+              type='business'
               customerId={this.props.customerId}
               height={180}
             />

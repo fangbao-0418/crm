@@ -6,6 +6,7 @@ const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
   height?: number
+  type?: 'business' | 'signed'
 }
 class Main extends React.Component<Props> {
   public relatedCompany: string[] = []
@@ -115,17 +116,20 @@ class Main extends React.Component<Props> {
               }
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='相关公司记录' key='3'>
-            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
-              {
-                this.relatedCompany.map((item, index) => {
-                  return (
-                    <li key={index}>{item}</li>
-                  )
-                })
-              }
-            </div>
-          </Tabs.TabPane>
+          {
+            this.props.type === 'business' &&
+            <Tabs.TabPane tab='相关公司记录' key='3'>
+              <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+                {
+                  this.relatedCompany.map((item, index) => {
+                    return (
+                      <li key={index}>{item}</li>
+                    )
+                  })
+                }
+              </div>
+            </Tabs.TabPane>
+          }
         </Tabs>
       </div>
     )

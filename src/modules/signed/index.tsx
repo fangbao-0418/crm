@@ -416,7 +416,7 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>
       </ContentBox>
     )
