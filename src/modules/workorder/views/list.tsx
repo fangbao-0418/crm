@@ -61,7 +61,7 @@ class Main extends React.Component<any, any> {
     this.state = {
       selectedRowKeys: [],
       dataSource:[],
-      pageSize: 20, // 一页多少条
+      pageSize: 10, // 一页多少条
       pageTotal: 1,  // 总数
       pageCurrent: 1, // 当前页数
       searchStr:'',  // 搜索条件
@@ -76,11 +76,10 @@ class Main extends React.Component<any, any> {
   }
 
   //分页
-  public onChangeCurrent (current: number) {
+  public onChangeCurrent (page: number) {
+    console.log(page)
     this.setState({
-      searchData:{
-        pageCurrent:current
-      }
+      pageCurrent:page
     }, () => {
       this.getList()
     })
@@ -141,13 +140,22 @@ class Main extends React.Component<any, any> {
       <SearchForm onChange={this.onChange.bind(this)} />
       <Table
         className={styles.table}
-        onChange={this.pageChange}
+        // onChange={this.pageChange}
         columns={this.columns}
         dataSource={this.state.dataSource}
         pagination={{
           total: pageTotal,
-          onChange:(current, size)=>{
-            this.onChangeCurrent(current)
+          showSizeChanger: true,
+          pageSizeOptions: ['10','30','50','80','100','200'],
+          onShowSizeChange:(current, size)=>{
+            console.log(current, size)
+            this.setState({
+              pageCurrent: current,
+              pageSize: size
+            },()=>this.getList())
+          },
+          onChange:(page, pageSize)=>{
+            this.onChangeCurrent(page)
           }
         }}
       />
