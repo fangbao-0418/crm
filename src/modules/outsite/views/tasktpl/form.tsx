@@ -44,8 +44,9 @@ class Main extends React.Component<any, States> {
   public componentWillMount () {
     this.params = this.props.match.params
     this.getSublist()
-    this.getItem()
-    this.getProductList()
+    this.getItem().then((item) => {
+      this.getProductList(item)
+    })
   }
   // 初始化数据
   public initDecoratorData (data: any) {
@@ -58,9 +59,15 @@ class Main extends React.Component<any, States> {
   }
 
   // 获取商品列表
-  public getProductList () {
+  public getProductList (item: OutSide.TaskItem) {
     Service.getProductList('OTHERS').then((res) => {
-      console.log(res)
+      if (item.productId) {
+        res = res.concat([{
+          code: item.productId,
+          name: item.productName,
+          money: item.productPrice
+        }])
+      }
       this.setState({
         goods: res || []
       })
@@ -75,10 +82,10 @@ class Main extends React.Component<any, States> {
       this.setState({
         item
       })
-      return
+      return Promise.resolve({})
     }
     let checkedIdMap: Map<OutSide.SubTaskItem> = {}
-    Service.getTplItemById(this.params.id).then((item: OutSide.TaskItem) => {
+    return Service.getTplItemById(this.params.id).then((item: OutSide.TaskItem) => {
       item.subList.map((subitem, index) => {
         subitem.sort = index + 1
       })
@@ -87,6 +94,7 @@ class Main extends React.Component<any, States> {
         item,
         checkedIdMap
       })
+      return item
     })
   }
 
