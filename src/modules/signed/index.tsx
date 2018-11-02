@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Provider from '@/components/Provider'
 import View from './View'
@@ -261,10 +262,13 @@ class Main extends React.Component {
     this.paramsleft.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchList()
   }
+  public handleSelectType (values: any) {
+    this.paramsright.customerSource = values.customerSource || undefined
+    this.fetchList()
+  }
   public handleSearchType (value: {key: string, value?: string}) {
     this.paramsright.customerName = undefined
     this.paramsright.contactPerson = undefined
-    this.paramsright.customerSource = undefined
     this.paramsright.signSalesperson = undefined
     // this.paramsright.contactPhone = undefined
     this.paramsright.operatingAccouting = undefined
@@ -360,36 +364,42 @@ class Main extends React.Component {
       <ContentBox
         title='签约客户'
       >
-        <div className='mb12' style={{ overflow: 'hidden' }}>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'signSalesperson', label: '签单销售'},
-                // { value: 'contactPhone', label: '联系电话'},
-                { value: 'operatingAccouting', label: '运营会计'},
-                { value: 'areaName', label: '地区'},
-                { value: 'currentSalesperson', label: '跟进人'},
-                { value: 'contractCode', label: '合同号'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'customerSource', label: '客户来源'},
+                  { value: 'signSalesperson', label: '签单销售'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'operatingAccouting', label: '运营会计'},
+                  { value: 'areaName', label: '地区'},
+                  { value: 'currentSalesperson', label: '跟进人'},
+                  { value: 'contractCode', label: '合同号'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    console.log(val, 'onKeyDown')
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              type='signed'
+              onChange={(values) => {
+                this.handleSelectType(values)
               }}
             />
           </div>

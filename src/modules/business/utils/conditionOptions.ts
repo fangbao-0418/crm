@@ -39,20 +39,6 @@ const data: ConditionOptionProps[] = [
     value: '',
     label: ['电话状态'],
     options: all.concat(APP.keys.EnumContactStatus)
-  },
-  {
-    label: ['纳税类别'],
-    value: '',
-    field: 'payTaxesNature',
-    type: 'select',
-    options: all.concat(APP.keys.EnumPayTaxesNature)
-  },
-  {
-    label: ['客户来源'],
-    value: '',
-    field: 'customerSource',
-    type: 'select',
-    options: all.concat(APP.keys.EnumCustomerSource)
   }
 ]
 export default data

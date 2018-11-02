@@ -4,6 +4,7 @@ import ContentBox from '@/modules/common/content'
 import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
@@ -128,8 +129,21 @@ class Main extends React.Component<Business.Props> {
     }
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
-    this.params.customerSource = values.customerSource.value || undefined
-    this.params.payTaxesNature = values.payTaxesNature.value || undefined
+    const { selectedTab } = this.props
+    APP.dispatch<Business.Props>({
+      type: 'change business data',
+      payload: {
+        [`${selectedTab}`]: {
+          searchPayload: this.params
+        }
+      }
+    })
+    this.fetchCount()
+    this.fetchList()
+  }
+  public handleSelectType (values: any) {
+    this.params.payTaxesNature = values.payTaxesNature || undefined
+    this.params.customerSource = values.customerSource || undefined
     const { selectedTab } = this.props
     APP.dispatch<Business.Props>({
       type: 'change business data',
@@ -435,30 +449,36 @@ class Main extends React.Component<Business.Props> {
             }
           </div>
         }
-        <div className='mb12 clear'>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                // { value: 'contactPhone', label: '联系电话'},
-                { value: 'currentSalesperson', label: '所属销售'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'currentSalesperson', label: '所属销售'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              onChange={(values) => {
+                console.log(values, 'values')
+                this.handleSelectType(values)
               }}
             />
           </div>

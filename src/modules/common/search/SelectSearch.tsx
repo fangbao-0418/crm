@@ -3,6 +3,7 @@ import { Select } from 'antd'
 const styles = require('./style')
 const Option = Select.Option
 interface Props {
+  type?: 'signed'
   onChange?: (value: ValueProps) => void
 }
 interface ValueProps {
@@ -36,27 +37,30 @@ class Main extends React.Component<Props> {
             })
           }
         </Select>
-        <Select
-          allowClear={true}
-          style={{width:'150px'}}
-          placeholder='请选择纳税类别'
-          onChange={(val: string) => {
-            this.values.payTaxesNature = val
-            this.props.onChange(this.values)
-          }}
-        >
-          {
-            APP.keys.EnumPayTaxesNature.map((item) => {
-              return (
-                <Option
-                  key={item.value}
-                >
-                  {item.label}
-                </Option>
-              )
-            })
-          }
-        </Select>
+        {
+          this.props.type !== 'signed' &&
+          <Select
+            allowClear={true}
+            style={{width:'150px'}}
+            placeholder='请选择纳税类别'
+            onChange={(val: string) => {
+              this.values.payTaxesNature = val
+              this.props.onChange(this.values)
+            }}
+          >
+            {
+              APP.keys.EnumPayTaxesNature.map((item) => {
+                return (
+                  <Option
+                    key={item.value}
+                  >
+                    {item.label}
+                  </Option>
+                )
+              })
+            }
+          </Select>
+        }
       </div>
     )
   }
