@@ -6,18 +6,14 @@ class Main extends React.Component<Statistics.Props, any> {
   public componentDidMount () {
     const dom: any = this.refs.line
     this.chart = echarts.init(dom)
-    this.renderChart(this.props.overView.data.taskMonthDataList || [])
+    this.renderChart()
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.overView.data.taskMonthDataList || [])
+    this.renderChart()
   }
-  public renderChart (data: Array<{
-    month: string
-    /** 任务总数 */
-    total: number,
-    /** 已完成任务数 */
-    completeCount: number
-  }>) {
+  public renderChart () {
+    const data = this.props.overView.data.taskMonthDataList || []
+    // data = data.concat(data)
     const option: echarts.EChartOption = {
       tooltip: {
         show:true,
@@ -80,11 +76,11 @@ class Main extends React.Component<Statistics.Props, any> {
     }
   }
   public render () {
-    const { overView: { data } } = this.props
+    const { overView: { data, date } } = this.props
     return (
     <div className={styles.card}>
       <div className={styles['card-header']}>
-        <p className='fl'>2018年任务分布</p>
+        <p className='fl'>{date}任务分布</p>
         <p className='fr'>
           <span style={{display:'inline-block', marginRight:'10px'}}>任务总数：{data.taskTotal}</span>
           <span style={{display:'inline-block', marginRight:'10px'}}>已完成：{data.taskTotal}</span>

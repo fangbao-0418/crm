@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'antd'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import ContentBox from '@/modules/common/content'
 import Pie from '@/modules/data-overview/views/pie'
 import Line from '@/modules/data-overview/views/line'
@@ -9,6 +10,17 @@ import Search from './Search'
 const styles = require('./style')
 // 列表
 class Main extends React.Component<Statistics.Props> {
+  public componentWillMount () {
+    APP.dispatch<Statistics.Props>({
+      type: 'change screen data',
+      payload: {
+        overView: {
+          type: 'month',
+          date: moment().format('YYYY年MM月')
+        }
+      }
+    })
+  }
   public render () {
     const { overView } = this.props
     const { type, date, data } = overView
