@@ -37,6 +37,7 @@ class Main extends React.Component<{}, State> {
   public componentWillMount () {
     // this.fetchData()
     fetchOwnRegion().then((res) => {
+      console.log(res)
       if (res.length === 0) {
         this.payload.companyId = APP.user.companyId
         this.fetchData()
@@ -57,7 +58,6 @@ class Main extends React.Component<{}, State> {
   }
   public fetchData () {
     if (this.payload.companyId !== undefined) {
-      console.log(this.payload)
       fetchOverViewAction(this.payload)
     }
   }

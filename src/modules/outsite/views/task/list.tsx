@@ -36,6 +36,7 @@ class Main extends React.Component {
       pageSize: 10
     },
     searchData: {
+      total: 0,
       pageSize: 10,
       currentPage: 1,
       customerName: '',
@@ -195,7 +196,7 @@ class Main extends React.Component {
   public getList () {
     const { searchData } = this.state
     Service.getListByCond(searchData).then((d: any) => {
-      const { pageSize, total, pageCurrent } = d
+      const { pageSize, total, pageCurrent, pageTotal } = d
       this.setState({
         dataSource: d.records,
         pageConf: {
@@ -206,12 +207,23 @@ class Main extends React.Component {
         searchData: {
           ...searchData,
           pageSize,
-          pageCurrent
+          pageCurrent,
+          total:pageTotal
         }
       })
     })
   }
-
+  //分页
+  public onChangeCurrent (current: number) {
+    this.setState({
+      searchData:{
+        ...this.state.searchData,
+        pageCurrent:current
+      }
+    }, () => {
+      this.getList()
+    })
+  }
   // 查看
   public onShow (item: TaskItem) {
     console.log('show::', item)
@@ -322,6 +334,7 @@ class Main extends React.Component {
 
   }
   public render () {
+    const {total} = this.state.searchData
     return (
       <ContentBox
         title='外勤任务'
@@ -343,7 +356,13 @@ class Main extends React.Component {
                   dataSource={this.state.dataSource}
                   // rowSelection={rowSelection}
                   bordered
-                  pagination={this.state.searchData}
+                  pagination={{
+                    total: total,
+                    onChange:(current, size)=>{
+                      this.onChangeCurrent(current)
+                    }
+                  }}
+                  // pagination={{total:12}}
                   rowKey={'key'}
                 />
               </Tabs.TabPane>)
