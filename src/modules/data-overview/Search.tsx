@@ -86,21 +86,21 @@ class Main extends React.Component<{}, State> {
           className={styles.selected}
           style={{width: 120}}
           onChange={(value: any) => {
-            console.log(value)
             this.payload.dateType = value
-            APP.dispatch<Statistics.Props>({
-              type: 'change screen data',
-              payload: {
-                overView: {
-                  type: value
-                }
-              }
-            })
             this.setState({
               type: value
             })
             this.payload.dateType = value
             this.payload.date = value === 'year' ? moment().format('YYYY') : moment().format('YYYY-MM')
+            APP.dispatch<Statistics.Props>({
+              type: 'change screen data',
+              payload: {
+                overView: {
+                  type: value,
+                  date: value === 'year' ? moment().format('YYYY年') : moment().format('YYYY年MM月')
+                }
+              }
+            })
             this.fetchData()
           }}
         >
