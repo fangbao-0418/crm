@@ -12,7 +12,7 @@ class Main extends React.Component<Statistics.Props> {
   public render () {
     const { overView } = this.props
     const { type, date, data } = overView
-    console.log(data)
+    console.log(overView)
     return (
       <ContentBox title='数据总览' className={styles.container}>
         <Row className={styles.tab}>

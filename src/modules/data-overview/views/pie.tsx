@@ -9,7 +9,7 @@ class Main extends React.Component<Statistics.Props> {
   }
   public componentDidUpdate () {
     this.renderChart()
-    console.log('pie')
+    // console.log('pie')
   }
   public renderChart () {
     const data = [
@@ -21,7 +21,7 @@ class Main extends React.Component<Statistics.Props> {
     data.map((item) => {
       item.name = `${item.name}: ${item.value}`
     })
-    console.log(data, 'pie')
+    // console.log(data, 'pie')
     const option = {
       tooltip: {
         trigger: 'item',
