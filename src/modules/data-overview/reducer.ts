@@ -46,7 +46,7 @@ export const defaultVal: Statistics.Props = {
     /** 实际绩效 */
     actualReward: 0,
     /** 绩效数据 */
-    ewardDataList: [],
+    rewardDataList: [],
     /** 已接受任务 */
     acceptCount: 0,
     /** 已完成任务数 */
@@ -54,28 +54,17 @@ export const defaultVal: Statistics.Props = {
     taskDataList: []
   }
 }
+function customizer (objValue: any, srcValue: any) {
+  if (_.isArray(objValue)) {
+    return srcValue
+  }
+}
 export default handleActions<Statistics.Props>({
   'change screen data': (state, { payload }) => {
-    // payload = _.merge({}, _.cloneDeep(defaultVal),  _.assign({}, state, payload))
-    payload = _.merge({}, _.cloneDeep(defaultVal), state, payload)
-    console.log(payload)
-    console.log({
-      ...state,
-      ...payload
-    })
+    payload = _.mergeWith({}, _.cloneDeep(defaultVal), state, payload, customizer)
     return {
       ...state,
       ...payload
     }
-
-    // if(!payload.overView.data) {
-    //   return defaultVal
-    // }else {
-    //   payload = _.merge({}, _.cloneDeep(defaultVal), state, payload)
-    //   return {
-    //     ...state,
-    //     ...payload
-    //   }
-    // }
   }
 }, _.cloneDeep(defaultVal))

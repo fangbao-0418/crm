@@ -1,5 +1,4 @@
 import React from 'react'
-import { Icon } from 'antd'
 import { connect } from 'react-redux'
 type RateProps = any
 class Main extends React.Component<Statistics.Props, any> {

@@ -27,16 +27,6 @@ class Main extends React.Component<Props, State> {
   }
   public pathInfo: {[key: string]: string} = {}
   public configs: MenuItem[] = [
-    // {
-    //   title: '商品管理',
-    //   icon: <MenuIcon type='bussiness'/>,
-    //   path: '/shop-admin/shop'
-    // },
-    // {
-    //   title: '用户管理',
-    //   icon: <MenuIcon type='bussiness'/>,
-    //   path: '/shop-admin/user'
-    // },
     {
       title: '商机管理',
       icon: <MenuIcon type='bussiness'/>,
@@ -321,20 +311,16 @@ class Main extends React.Component<Props, State> {
         }
       }
     })
-    // if (APP.env === 'production') {
-    //   url = window.location.origin + url
-    // } else {
-    //   url = `#${url}`
-    // }
     APP.homepage = url
     return APP.homepage
   }
   public toHome () {
-    console.log('to home')
+    console.log(this.getFirstUrl(), 'to home')
     APP.history.push(this.getFirstUrl())
     // parent.location.href = this.getFirstUrl()
   }
   public getMenuNodes (configs = this.configs, prefKey = 'm') {
+    console.log(this.configs, 'get menu nodes')
     const nodes: JSX.Element[] = []
     configs.forEach((item, index) => {
       const key = [prefKey, index].join('-')
