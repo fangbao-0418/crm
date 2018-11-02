@@ -128,8 +128,8 @@ class Main extends React.Component<any, any> {
       // onSelection: this.onSelection
     }
     return (
-      <div className={styles.container}>
       <ContentBox
+        className={styles.container}
         title='我的工单'
         rightCotent={(
           // <span className={styles.acts}>
@@ -137,30 +137,28 @@ class Main extends React.Component<any, any> {
             // </span>
         )}
       >
-      <SearchForm onChange={this.onChange.bind(this)} />
-      <Table
-        className={styles.table}
-        // onChange={this.pageChange}
-        columns={this.columns}
-        dataSource={this.state.dataSource}
-        pagination={{
-          total: pageTotal,
-          showSizeChanger: true,
-          pageSizeOptions: ['10','30','50','80','100','200'],
-          onShowSizeChange:(current, size)=>{
-            console.log(current, size)
-            this.setState({
-              pageCurrent: current,
-              pageSize: size
-            },()=>this.getList())
-          },
-          onChange:(page, pageSize)=>{
-            this.onChangeCurrent(page)
-          }
-        }}
-      />
+        <SearchForm onChange={this.onChange.bind(this)} />
+        <Table
+          className={styles.table}
+          // onChange={this.pageChange}
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+          pagination={{
+            total: pageTotal,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '30', '50', '80', '100', '200'],
+            onShowSizeChange:(current, size) => {
+              this.setState({
+                pageCurrent: current,
+                pageSize: size
+              }, () => this.getList())
+            },
+            onChange:(page, pageSize) => {
+              this.onChangeCurrent(page)
+            }
+          }}
+        />
       </ContentBox>
-    </div>
     )
   }
   // 表单改变
