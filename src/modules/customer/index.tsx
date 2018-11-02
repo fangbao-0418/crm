@@ -377,6 +377,7 @@ class Main extends React.Component<Customer.Props, States> {
                   上一页
                 </Button>
                 <Button
+                  type='ghost'
                   onClick={() => {
                     instance.save().then(() => {
                       APP.success('保存成功')

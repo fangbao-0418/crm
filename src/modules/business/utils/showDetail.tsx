@@ -7,6 +7,7 @@ import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+const styles = require('../style')
 export default function (record: Business.DetailProps, index?: number,
   operate: {
     onOk?: () => void
@@ -96,7 +97,7 @@ export default function (record: Business.DetailProps, index?: number,
                 上一条
               </Button>
               <Button
-                type='primary'
+                type='ghost'
                 onClick={() => {
                   that.ins.save().then(() => {
                     // APP.success('保存成功')
@@ -120,7 +121,9 @@ export default function (record: Business.DetailProps, index?: number,
     maskClosable: false,
     onCancel: () => {
       modal.hide()
-      this.fetchCount()
+      if (this.fetchCount) {
+        this.fetchCount()
+      }
       this.fetchList()
     }
   })
