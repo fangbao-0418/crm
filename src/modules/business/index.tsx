@@ -503,14 +503,22 @@ class Main extends React.Component<Business.Props> {
             <Tabs.TabPane tab={<span>已有沟通({count[1]})</span>} key='tab2'>
               {
                 (
-                  <Tab2 columns={this.columns} params={this.params}/>
+                  <Tab2
+                    columns={this.columns}
+                    params={this.params}
+                    handleSelectAll={this.handleSelectAll.bind(this)}
+                  />
                 )
               }
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>新客资({count[2]})</span>} key='tab3'>
               {
                 (
-                  <Tab3 columns={this.columns} params={this.params}/>
+                  <Tab3
+                    columns={this.columns}
+                    params={this.params}
+                    handleSelectAll={this.handleSelectAll.bind(this)}
+                  />
                 )
               }
             </Tabs.TabPane>
@@ -530,7 +538,11 @@ class Main extends React.Component<Business.Props> {
             >
               {
                 (
-                  <Tab4 columns={this.columns} params={this.params}/>
+                  <Tab4
+                    columns={this.columns}
+                    params={this.params}
+                    handleSelectAll={this.handleSelectAll.bind(this)}
+                  />
                 )
               }
             </Tabs.TabPane>
