@@ -6,10 +6,10 @@ class Main extends React.Component<Statistics.Props, any> {
   public componentDidMount () {
     const dom: any = this.refs.line
     this.chart = echarts.init(dom)
-    this.renderChart(this.props.overView.data.taskMonthDataList)
+    this.renderChart(this.props.overView.data.taskMonthDataList || [])
   }
   public componentDidUpdate () {
-    this.renderChart(this.props.overView.data.taskMonthDataList)
+    this.renderChart(this.props.overView.data.taskMonthDataList || [])
   }
   public renderChart (data: Array<{
     month: string

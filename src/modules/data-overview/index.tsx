@@ -12,6 +12,7 @@ class Main extends React.Component<Statistics.Props> {
   public render () {
     const { overView } = this.props
     const { type, date, data } = overView
+    console.log(data)
     return (
       <ContentBox title='数据总览' className={styles.container}>
         <Row className={styles.tab}>
@@ -36,7 +37,7 @@ class Main extends React.Component<Statistics.Props> {
             <div className={styles.reward}>
               <ul className={styles['reward-task']}>
                 {
-                  (data.taskRewardList.length > 0) ? (
+                  (!!data.taskRewardList && data.taskRewardList.length > 0) ? (
                     data.taskRewardList.map((item, index) => {
                       const { name, reward } = item
                       return  <li key={index}>{name}：￥{reward}</li>
@@ -58,7 +59,7 @@ class Main extends React.Component<Statistics.Props> {
           </Col>
         </Row>
         {
-          type === 'YEAR' && (
+          type === 'year' && (
           <Row>
             <Col span={23}>
               <Line />

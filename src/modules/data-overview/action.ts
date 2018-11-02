@@ -1,11 +1,12 @@
 import { fetchOverView } from './api'
 export const fetchOverViewAction = (payload: Statistics.OverViewSearchPayload = {}) => {
   fetchOverView(payload).then((res) => {
+    console.log(!!res)
     APP.dispatch<Statistics.Props>({
       type: 'change screen data',
       payload: {
         overView: {
-          data: res || {}
+          data: !!res ? res : {}
         }
       }
     })

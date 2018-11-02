@@ -30,7 +30,7 @@ declare namespace Statistics {
   }
   export interface OverViewProps {
     total?: OverViewTotalProps
-    type?: 'MONTH' | 'YEAR'
+    type?: 'month' | 'year'
     date?: string
     data?: {
       /** 总绩效 */
