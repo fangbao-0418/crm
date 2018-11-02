@@ -9,29 +9,52 @@ class Main extends React.Component<Statistics.Props, any> {
   public componentDidMount () {
     const dom: any = this.refs.perPerform
     this.chart = echarts.init(dom)
+    this.renderChart()
   }
   public componentDidUpdate () {
-    // this.renderChart(this.props.histogramRewardDataList)
-    // console.log(this.props.histogramRewardDataList)
+    this.renderChart()
   }
-  public renderChart (histogramRewardDataList: PerformProps[]) {
+  public renderChart () {
+    const data = this.props.detail.ewardDataList
+    const actualData: number[] = []
+    const expectData: number[] = []
+    const personData: string[] = []
+    data.map((item) => {
+      personData.push(item.name)
+      actualData.push(item.actualReward)
+      expectData.push(item.expectReward)
+    })
+    console.log(data, 'data')
     const option = {
       tooltip: {},
       legend: {
-        x:'left',
-        data: ['金额/千元']
+        x: 'left',
+        data: ['预期绩效', '实际绩效']
       },
       xAxis: {
-        data: ['王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟', '王小伟']
+        data: personData
       },
       yAxis: {},
       series: [
         {
-          name: '金额/千元',
+          name: '预期绩效',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20, 40, 32, 54, 21, 23, 34],
+          stack:'one',
+          barGap: 0,
+          barWidth: '20px',
+          data: expectData,
           itemStyle:{
-            color:'#b2e0ff'
+            color: '#b2e0ff'
+          }
+        },
+        {
+          name: '实际绩效',
+          type: 'bar',
+          stack:'two',
+          barWidth: '20px',
+          data: actualData,
+          itemStyle:{
+            color: '#d9f0ff'
           }
         }
       ]
@@ -43,8 +66,8 @@ class Main extends React.Component<Statistics.Props, any> {
     return (
     <div>
       <div>
-        <span>绩效总额：￥600.00</span>
-        <span style={{marginLeft:'20px'}}>绩效涨幅：12%  <Icon type='caret-up' theme='outlined' style={{color:'#e84845'}} /></span>
+        <span>预期绩效：{this.props.detail.expectReward}</span>
+        <span style={{marginLeft:'20px'}}>实际绩效：{this.props.detail.actualReward}</span>
       </div>
       <div ref='perPerform' style={{width: '100%', height: '400px'}}></div>
     </div>

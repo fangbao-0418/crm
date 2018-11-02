@@ -370,7 +370,7 @@ class Main extends React.Component<Props, State> {
                 />
                 <div className={styles['bottom-btns']}>
                   <Button
-                    className='mt5'
+                    className='mt10'
                     hidden={['FINISHED', 'CANCELLED', 'COMMITED'].indexOf(detail.status) > -1}
                     type='primary'
                     onClick={this.showAllotModal.bind(this)}

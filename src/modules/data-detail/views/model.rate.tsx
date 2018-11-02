@@ -9,9 +9,19 @@ class Main extends React.Component<Statistics.Props, any> {
     this.chart = echarts.init(dom)
   }
   public componentDidUpdate () {
-    // this.renderChart(this.props.histogramTaskDataList)
+    this.renderChart()
   }
-  public renderChart (histogramTaskDataList: RateProps[]) {
+  public renderChart () {
+    const data = this.props.detail.taskDataList
+    const acceptData: number[] = []
+    const completeData: number[] = []
+    const personData: string[] = []
+    data.map((item) => {
+      acceptData.push(item.acceptCount)
+      completeData.push(item.completeCount)
+      personData.push(item.name)
+    })
+    console.log(data, 'rate')
     const option = {
       tooltip: {},
       legend: {
@@ -20,7 +30,7 @@ class Main extends React.Component<Statistics.Props, any> {
       },
       xAxis: {
         type: 'category',
-        data:['王小二', '阿萨德', '奥迪', '阿大', '大额']
+        data: personData
       },
       yAxis: {
         type: 'value'
@@ -32,7 +42,7 @@ class Main extends React.Component<Statistics.Props, any> {
           stack:'one',
           barGap: 0,
           barWidth: '20px',
-          data: ['2', '4', 6, 6, 6],
+          data: acceptData,
           itemStyle:{
             color: '#b2e0ff'
           }
@@ -42,7 +52,7 @@ class Main extends React.Component<Statistics.Props, any> {
           type: 'bar',
           stack:'two',
           barWidth: '20px',
-          data: ['23', 44, 5, 6, 7],
+          data: completeData,
           itemStyle:{
             color: '#d9f0ff'
           }
