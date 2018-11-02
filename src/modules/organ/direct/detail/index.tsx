@@ -145,7 +145,7 @@ class Main extends React.Component<Props> {
                 >
                   {getFieldDecorator('openingBank', {
                     rules: [{
-                      required: true, message: '请输入开户行'
+                      message: '请输入开户行'
                     }],
                     initialValue: item.openingBank
                   })(
@@ -176,7 +176,7 @@ class Main extends React.Component<Props> {
                   {getFieldDecorator('openingName', {
                     initialValue: item.openingName,
                     rules: [{
-                      required: true, message: '请输入开户名'
+                      message: '请输入开户名'
                     }]
                   })(
                     <Input placeholder='请输入开户名' disabled={disabled} />
