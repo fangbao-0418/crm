@@ -13,9 +13,24 @@ type TaskItem = OutSide.TaskItem
 interface States {
   dataSource: OutSide.TaskItem[],
   selectedRowKeys: string[],
-  showData?: any, // 弹出层的数据
-  pageConf?: any,
-  searchData?: any,
+  pageConf?: {
+    currentPage: number,
+    total: number,
+    pageSize: number
+  },
+  searchData?: {
+    pageSize?: number,
+    currentPage?: number,
+    customerName?: string,
+    name?: string,
+    templeteId?: string,
+    subId?: any,
+    userId?: any,
+    status?: string, // 待分配
+    startTime?: string,
+    orgId?: any,
+    statusArray?: string
+  },
   currentItem?: any,
   tab?: string // 当前tab标签
 }
@@ -28,12 +43,11 @@ class Main extends React.Component {
     selectedRowKeys: [],
     pageConf: {
       currentPage: 1,
-      total: 1,
-      pageSize: 10
+      total: 0,
+      pageSize: 15
     },
     searchData: {
-      // total: 0,
-      pageSize: 10,
+      pageSize: 15,
       currentPage: 1,
       customerName: '',
       name: '',
@@ -56,7 +70,7 @@ class Main extends React.Component {
       text: '消',
       className: 'xiao'
     },
-    xxx: {
+    remindTime: {
       text: '催',
       className: 'cui'
     },
@@ -76,13 +90,14 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (k, item) => {
       const { status } = item
-      let icoConf = this.taskIcoMap[status]
-      icoConf = icoConf ? icoConf : { text: '', className: styles.icohide}
       return (
-      <>
-        <span className={`${styles.taskico} ${icoConf.className}`}><i>{icoConf.text}</i></span>
-        <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
-      </>)
+        <div>
+          {status === 'REJECTPENDING' && <span className={classNames(styles.taskico, styles.bo, 'mr5')}><i>驳</i></span>}
+          {status === 'CANCELPENDING' && <span className={classNames(styles.taskico, styles.xiao, 'mr5')}><i>消</i></span>}
+          {item.remindTime && <span className={classNames(styles.taskico, styles.cui, 'mr5')}><i>催</i></span>}
+          <span className={`likebtn`} onClick={this.onShow.bind(this, item)}>{item.customerName}</span>
+        </div>
+      )
     }
   }, {
     title: '所属区域',
@@ -190,31 +205,33 @@ class Main extends React.Component {
 
   // 获取列表数据
   public getList () {
-    const { searchData } = this.state
+    const { searchData, pageConf } = this.state
     Service.getListByCond(searchData).then((d: any) => {
-      const { pageSize, total, pageCurrent, pageTotal } = d
+      const { pageSize, pageCurrent, pageTotal } = d
+      pageConf.currentPage = pageCurrent
+      pageConf.total = pageTotal
+      pageConf.pageSize = pageSize
       this.setState({
         dataSource: d.records,
-        pageConf: {
-          pageSize,
-          total:pageTotal,
-          pageCurrent
-        },
+        pageConf,
         searchData: {
           ...searchData,
           pageSize,
           pageCurrent
-          // total:pageTotal
         }
       })
     })
   }
   // 分页
-  public onChangeCurrent (current: number) {
+  public onChangeCurrent (current: number, size: number = 15) {
+    const { pageConf } = this.state
+    pageConf.currentPage = current
     this.setState({
+      pageConf,
       searchData:{
         ...this.state.searchData,
-        pageCurrent:current
+        pageCurrent: current,
+        pageSize: size
       }
     }, () => {
       this.getList()
@@ -330,9 +347,10 @@ class Main extends React.Component {
 
   }
   public render () {
-    const {total} = this.state.pageConf
+    const { pageConf } = this.state
     return (
       <ContentBox
+        className={styles.container}
         title='外勤任务'
         rightCotent={<div>
           <span onClick={this.export.bind(this)} className={classNames('href', styles.btn)} ><i></i> 导出</span>
@@ -353,7 +371,18 @@ class Main extends React.Component {
                   // rowSelection={rowSelection}
                   bordered
                   pagination={{
-                    total,
+                    total: pageConf.total,
+                    current: pageConf.currentPage,
+                    pageSize: pageConf.pageSize,
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['15', '30', '50', '80', '100', '200'],
+                    onShowSizeChange: (current, size) => {
+                      this.onChangeCurrent(1, size)
+                    },
+                    showTotal: (num: number) => {
+                      return `共计 ${num} 条`
+                    },
                     onChange:(current, size) => {
                       this.onChangeCurrent(current)
                     }

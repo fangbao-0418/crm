@@ -60,6 +60,8 @@ declare namespace OutSide {
     productId?: number
     productName?: string
     subList?: SubTaskItem[]
+    /** 是否催办 */
+    remindTime?: any
     /** 是否优先级 */
     priority?: any
     status?: string
