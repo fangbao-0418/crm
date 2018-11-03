@@ -13,6 +13,7 @@ interface State {
   provinceList: Common.RegionProps[]
   cityList: Common.RegionProps[]
   agentList: Common.AgentProps[]
+  cityCode: string
 }
 const years: {label: string, value: string}[] = []
 let currentYear = Number(new Date().getFullYear())
@@ -32,18 +33,17 @@ class Main extends React.Component<{}, State> {
     type: 'month',
     provinceList: [],
     cityList: [],
-    agentList: []
+    agentList: [],
+    cityCode: undefined
   }
   public componentWillMount () {
-    // this.fetchData()
     fetchOwnRegion().then((res) => {
-      console.log(res)
       if (res.length === 0) {
         this.payload.companyId = APP.user.companyId
         this.fetchData()
       } else {
         if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
-          this.onCityChange(res[0].regionLevelResponseList[0].id).then((res2) => {
+          this.onCityChange(res[0].regionLevelResponseList[0].id, true).then((res2) => {
             if (res2 instanceof Array && res2.length > 0) {
               this.payload.companyId = res2[0].id
               this.fetchData()
@@ -52,7 +52,8 @@ class Main extends React.Component<{}, State> {
         }
       }
       this.setState({
-        provinceList: res
+        provinceList: res,
+        cityCode: undefined
       })
     })
   }
@@ -65,11 +66,15 @@ class Main extends React.Component<{}, State> {
     if (this.state.provinceList[index]) {
       const res = this.state.provinceList[index].regionLevelResponseList
       this.setState({
-        cityList: res || []
+        cityList: res || [],
+        cityCode: undefined
       })
     }
   }
-  public onCityChange (code?: string) {
+  public onCityChange (code?: string, first = false) {
+    this.setState({
+      cityCode: first ? undefined : code
+    })
     return fetchAgentList(code).then((res) => {
       this.setState({
         agentList: res
@@ -178,10 +183,11 @@ class Main extends React.Component<{}, State> {
                 }
               </Select>
               <Select
+                value={this.state.cityCode}
                 style={{width: '100px'}}
                 placeholder='请选择城市'
                 className={styles.selected}
-                onChange={this.onCityChange.bind(this)}
+                onChange={(code: string) => {this.onCityChange(code, false)}}
               >
                 {
                   cityList.map((item) => {
