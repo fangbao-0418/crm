@@ -167,12 +167,19 @@ class Main extends React.Component<Props, State> {
         {values.isrelative === '1' && <FormItem
           {...formLayout}
           label='选择商品'
+          required
         >
           {
             getFieldDecorator(
               'product',
               {
-                initialValue: defaultSelect
+                initialValue: defaultSelect,
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择商品'
+                  }
+                ]
               }
             )(
               <Select
