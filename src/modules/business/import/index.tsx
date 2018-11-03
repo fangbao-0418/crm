@@ -38,6 +38,11 @@ class Main extends React.Component<Props> {
               step: 3
             })
           }}
+          onPre={() => {
+            this.setState({
+              step: 1
+            })
+          }}
         />
       )
     },
