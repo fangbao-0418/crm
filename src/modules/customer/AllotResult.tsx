@@ -11,7 +11,7 @@ class Main extends React.Component<Props> {
     console.log(this.props)
     const result = this.props.assignResult
     const successCustomers = APP.fn.objectToArray(result.successCustomers)
-    // console.log(APP.fn.objectToArray(successCustomers), 'APP.fn.objectToArray')
+    console.log(successCustomers, 'APP.fn.objectToArray')
     return (
       <div className={styles.content}>
         <div>应分配{result.total}条，已分配{result.allocatedNum}条，</div>
@@ -24,7 +24,7 @@ class Main extends React.Component<Props> {
             )
           })
         }
-        <div>{result.repeatCustomers.length}条公司信息已经存在</div>
+        <div className='mt10'>{result.repeatCustomers.length}条公司信息已经存在</div>
         {
           result.repeatCustomers.map((item, index) => {
             if (index > 7) {

@@ -26,23 +26,9 @@ class Main extends React.Component<Props> {
       name: 'file',
       multiple: false,
       showUploadList: false,
-      // action: '/crm-manage/v1/api/customer/upload',
-      // data: {
-      //   cityCode: '110000',
-      //   cityName: '北京',
-      //   customerSource: 1
-      // },
       beforeUpload: () => {
         return false
       },
-      // customRequest: (file: any) => {
-      //   console.log(file)
-      //   return importFile(file, {
-      //     cityCode: '110000',
-      //     cityName: '北京',
-      //     customerSource: 1
-      //   })
-      // },
       onChange: (info: any) => {
         console.log(info)
         const name = info.file.name
@@ -79,15 +65,6 @@ class Main extends React.Component<Props> {
           }
         })
         console.log(info)
-        // const status = info.file.status;
-        // if (status !== 'uploading') {
-        //   console.log(info.file, info.fileList);
-        // }
-        // if (status === 'done') {
-        //   message.success(`${info.file.name} file uploaded successfully.`);
-        // } else if (status === 'error') {
-        //   message.error(`${info.file.name} file upload failed.`);
-        // }
       }
     }
     return (

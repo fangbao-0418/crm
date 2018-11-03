@@ -79,9 +79,10 @@ export const objectToArray = (sourceObject: {[key: string]: any}): {key: string,
   const data: {key: string, value: any}[] = []
   for (const key in sourceObject) {
     if (sourceObject.hasOwnProperty(key)) {
+      console.log(sourceObject, 'sourceObject')
       data.push({
         key,
-        value: sourceObject.key
+        value: sourceObject[key]
       })
     }
   }
