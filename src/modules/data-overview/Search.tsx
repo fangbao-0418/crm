@@ -14,6 +14,7 @@ interface State {
   cityList: Common.RegionProps[]
   agentList: Common.AgentProps[]
   cityCode: string
+  companyId: any
 }
 const years: {label: string, value: string}[] = []
 let currentYear = Number(new Date().getFullYear())
@@ -34,7 +35,8 @@ class Main extends React.Component<{}, State> {
     provinceList: [],
     cityList: [],
     agentList: [],
-    cityCode: undefined
+    cityCode: undefined,
+    companyId: undefined
   }
   public componentWillMount () {
     fetchOwnRegion().then((res) => {
@@ -67,13 +69,15 @@ class Main extends React.Component<{}, State> {
       const res = this.state.provinceList[index].regionLevelResponseList
       this.setState({
         cityList: res || [],
-        cityCode: undefined
+        cityCode: undefined,
+        companyId: undefined
       })
     }
   }
   public onCityChange (code?: string, first = false) {
     this.setState({
-      cityCode: first ? undefined : code
+      cityCode: first ? undefined : code,
+      companyId: undefined
     })
     return fetchAgentList(code).then((res) => {
       this.setState({
@@ -201,7 +205,11 @@ class Main extends React.Component<{}, State> {
                 style={{width: '100px'}}
                 placeholder='请选择代理商'
                 className={styles.selected}
+                value={this.state.companyId}
                 onChange={(id: number) => {
+                  this.setState({
+                    companyId: id
+                  })
                   this.payload.companyId = id
                   this.fetchData()
                 }}

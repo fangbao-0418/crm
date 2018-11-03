@@ -23,6 +23,7 @@ interface State {
   cityList: Common.RegionProps[]
   agentList: Common.AgentProps[]
   cityCode: string
+  companyId: any
 }
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
@@ -35,7 +36,8 @@ class Main extends React.Component<Props, State> {
     provinceList: [],
     cityList: [],
     agentList: [],
-    cityCode: undefined
+    cityCode: undefined,
+    companyId: undefined
   }
   public componentWillMount () {
     if (this.props.type === '2') {
@@ -70,13 +72,15 @@ class Main extends React.Component<Props, State> {
       const res = this.state.provinceList[index].regionLevelResponseList
       this.setState({
         cityList: res || [],
-        cityCode: undefined
+        cityCode: undefined,
+        companyId: undefined
       })
     }
   }
   public onCityChange (code?: string, first: boolean = false) {
     this.setState({
-      cityCode: first ? undefined : code
+      cityCode: first ? undefined : code,
+      companyId: undefined
     })
     return fetchAgentList(code).then((res) => {
       this.setState({
@@ -176,8 +180,12 @@ class Main extends React.Component<Props, State> {
                   style={{width: '120px'}}
                   placeholder='请选择代理商'
                   className={styles.selected}
+                  value={this.state.companyId}
                   onChange={(id: number) => {
                     this.payload.companyId = id
+                    this.setState({
+                      companyId: id
+                    })
                     this.onChange()
                   }}
                 >
