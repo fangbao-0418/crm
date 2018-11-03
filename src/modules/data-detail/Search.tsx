@@ -1,8 +1,8 @@
 import React from 'react'
 import { Radio, Select, DatePicker } from 'antd'
 import { fetchOwnRegion } from '@/modules/common/api'
-import { fetchAgentList } from '@/modules/data-overview/api'
-import { fetchCompleteRateDataAction } from '@/modules/data-detail/action'
+import { fetchAgentList, fetchDirectList } from '@/modules/data-overview/api'
+import { fetchDataAction } from '@/modules/data-detail/action'
 import moment from 'moment'
 const styles = require('@/modules/data-detail/styles/personal')
 const RadioGroup = Radio.Group
@@ -45,8 +45,20 @@ class Main extends React.Component<Props, State> {
     }
     fetchOwnRegion().then((res) => {
       if (res.length === 0) {
-        this.payload.companyId = APP.user.companyId
-        this.fetchData()
+        fetchDirectList().then((res2) => {
+          if (res2.length > 0) {
+            this.setState({
+              agentList: res2
+            })
+            this.payload.companyId = res2[0].id
+            this.fetchData()
+          } else {
+            return Promise.reject()
+          }
+        }).catch(() => {
+          this.payload.companyId = APP.user.companyId
+          this.fetchData()
+        })
       } else {
         if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
           this.onCityChange(res[0].regionLevelResponseList[0].id, true).then((res2) => {
@@ -64,7 +76,7 @@ class Main extends React.Component<Props, State> {
   }
   public fetchData () {
     if (this.payload.companyId !== undefined) {
-      fetchCompleteRateDataAction(this.payload)
+      fetchDataAction(this.payload)
     }
   }
   public onProvinceChange (index?: number) {
@@ -175,30 +187,34 @@ class Main extends React.Component<Props, State> {
                     })
                   }
                 </Select>
-                <span>代理商：</span>
-                <Select
-                  style={{width: '120px'}}
-                  placeholder='请选择代理商'
-                  className={styles.selected}
-                  value={this.state.companyId}
-                  onChange={(id: number) => {
-                    this.payload.companyId = id
-                    this.setState({
-                      companyId: id
-                    })
-                    this.onChange()
-                  }}
-                >
-                  {
-                    agentList.map((item) => {
-                      return (
-                        <Option key={item.id}>{item.name}</Option>
-                      )
-                    })
-                  }
-                </Select>
               </span>
             )
+          }
+          {
+            agentList.length > 0 && <span>
+              <span>代理商：</span>
+              <Select
+                style={{width: '120px'}}
+                placeholder='请选择代理商'
+                className={styles.selected}
+                value={this.state.companyId}
+                onChange={(id: number) => {
+                  this.payload.companyId = id
+                  this.setState({
+                    companyId: id
+                  })
+                  this.onChange()
+                }}
+              >
+                {
+                  agentList.map((item) => {
+                    return (
+                      <Option key={item.id}>{item.name}</Option>
+                    )
+                  })
+                }
+              </Select>
+            </span>
           }
         </div>
         {

@@ -3,7 +3,7 @@ import { Select, DatePicker } from 'antd'
 import moment from 'moment'
 import { fetchOverViewAction } from './action'
 import { fetchOwnRegion } from '@/modules/common/api'
-import { fetchAgentList } from './api'
+import { fetchAgentList, fetchDirectList } from './api'
 const styles = require('./style')
 const { MonthPicker } = DatePicker
 const Option = Select.Option
@@ -42,7 +42,19 @@ class Main extends React.Component<{}, State> {
     fetchOwnRegion().then((res) => {
       if (res.length === 0) {
         this.payload.companyId = APP.user.companyId
-        this.fetchData()
+        fetchDirectList().then((res2) => {
+          if (res2.length > 0) {
+            this.setState({
+              agentList: res2
+            })
+            this.payload.companyId = res2[0].id
+            this.fetchData()
+          } else {
+            return Promise.reject()
+          }
+        }).catch(() => {
+          this.fetchData()
+        })
       } else {
         if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
           this.onCityChange(res[0].regionLevelResponseList[0].id, true).then((res2) => {
@@ -88,6 +100,7 @@ class Main extends React.Component<{}, State> {
   }
   public render () {
     const { type, provinceList, cityList, agentList } = this.state
+    console.log(agentList, 'agentList')
     return (
       <div className={styles['overview-search']}>
         <Select
@@ -201,28 +214,32 @@ class Main extends React.Component<{}, State> {
                   })
                 }
               </Select>
-              <Select
-                style={{width: '100px'}}
-                placeholder='请选择代理商'
-                className={styles.selected}
-                value={this.state.companyId}
-                onChange={(id: number) => {
-                  this.setState({
-                    companyId: id
-                  })
-                  this.payload.companyId = id
-                  this.fetchData()
-                }}
-              >
-                {
-                  agentList.map((item) => {
-                    return (
-                      <Option key={item.id}>{item.name}</Option>
-                    )
-                  })
-                }
-              </Select>
             </span>
+          )
+        }
+        {
+          agentList.length > 0 && (
+            <Select
+              style={{width: '100px'}}
+              placeholder='请选择代理商'
+              className={styles.selected}
+              value={this.state.companyId}
+              onChange={(id: number) => {
+                this.setState({
+                  companyId: id
+                })
+                this.payload.companyId = id
+                this.fetchData()
+              }}
+            >
+              {
+                agentList.map((item) => {
+                  return (
+                    <Option key={item.id}>{item.name}</Option>
+                  )
+                })
+              }
+            </Select>
           )
         }
       </div>
