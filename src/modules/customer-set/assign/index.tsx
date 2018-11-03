@@ -55,7 +55,7 @@ class Main extends React.Component<Customer.Props, State> {
                 console.log(this.state.selectRadio, 'this.state.selectRadio')
                 if (!this.state.diabled) {
                   if (this.state.selectRadio === 3) { // 公海
-                    saveGeneralCapacity(1, this.state.salesPerson).then(() => {
+                    saveGeneralCapacity(1, []).then(() => {
                       APP.success('操作成功')
                     })
                   } else {
