@@ -72,8 +72,6 @@ class Main extends React.Component<Props, State> {
     formdata.customerName = ''
     formdata.areaId = undefined
     formdata.areaName = ''
-    
-
     this.setState({
       formdata
     })

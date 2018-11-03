@@ -1,6 +1,6 @@
 import React from 'react'
 import moment, { Moment } from 'moment'
-import { Tabs, Table, Row, Col, Tooltip, Icon, Button } from 'antd'
+import { Tabs, Table, Row, Col, Tooltip, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import ContentBox from '@/modules/common/content'
@@ -18,10 +18,6 @@ interface States {
   searchData?: any,
   currentItem?: any,
   tab?: string // 当前tab标签
-}
-interface ColProps extends TaskItem {
-  dataIndex: string
-  title: string
 }
 
 // 列表
@@ -207,13 +203,13 @@ class Main extends React.Component {
         searchData: {
           ...searchData,
           pageSize,
-          pageCurrent,
+          pageCurrent
           // total:pageTotal
         }
       })
     })
   }
-  //分页
+  // 分页
   public onChangeCurrent (current: number) {
     this.setState({
       searchData:{
@@ -357,8 +353,8 @@ class Main extends React.Component {
                   // rowSelection={rowSelection}
                   bordered
                   pagination={{
-                    total: total,
-                    onChange:(current, size)=>{
+                    total,
+                    onChange:(current, size) => {
                       this.onChangeCurrent(current)
                     }
                   }}

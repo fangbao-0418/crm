@@ -75,9 +75,8 @@ class Main extends React.Component<any, any> {
     this.getList()
   }
 
-  //分页
+  // 分页
   public onChangeCurrent (page: number) {
-    console.log(page)
     this.setState({
       pageCurrent:page
     }, () => {
