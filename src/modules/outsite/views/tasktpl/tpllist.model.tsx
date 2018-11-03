@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Row, Col, Input, Form, Radio } from 'antd'
+import { Select, Input, Form, Radio } from 'antd'
 import _ from 'lodash'
 import { FormComponentProps } from 'antd/lib/form'
 import Service from '@/modules/outsite/services'
@@ -43,9 +43,9 @@ class Main extends React.Component<Props, State> {
   public getProductList () {
     Service.getProductList('COLLECTION').then((res) => {
       const item = this.props.item || {}
-      if (item.productId) {
-        res = [{code: item.productId, name: item.productName}].concat(res)
-      }
+      // if (item.productId) {
+      //   res = [{code: item.productId, name: item.productName}].concat(res)
+      // }
       this.setState({
         goods: res || []
       })
@@ -86,7 +86,6 @@ class Main extends React.Component<Props, State> {
     const { getFieldDecorator } = this.props.form
     const formLayout: any = { wrapperCol: {span: 18}, labelCol: {span: 6} }
     const defaultSelect: any = values.productId ? {key: values.productId} : undefined
-    console.log(defaultSelect, this.state.goods, 'defaultSelect')
     return (
       <Form
         onChange={() => {
