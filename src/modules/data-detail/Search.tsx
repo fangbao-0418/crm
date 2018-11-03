@@ -95,10 +95,19 @@ class Main extends React.Component<Props, State> {
           name='radiogroup'
           defaultValue='day'
           onChange={(e: any) => {
+            const value = e.target.value
             this.setState({
-              type: e.target.value
+              type: value
             })
-            this.payload.periodType = e.target.value.toUpperCase()
+            this.payload.periodType = value.toUpperCase()
+            if (value === 'day') {
+              this.payload.date = moment().format('YYYY-MM-DD')
+            } else if (value === 'week') {
+              this.payload.date = moment().format('YYYYWW')
+            } else if (value === 'month') {
+              this.payload.date = moment().format('YYYY-MM')
+            }
+            this.fetchData()
           }}
         >
           <span style={{lineHeight:'24px'}}>日期：</span>

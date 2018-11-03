@@ -64,7 +64,17 @@ class Main extends React.Component<any, State> {
     render: (k: any, item: TasktplItem) => {
       return (
         <span>
-          <span className='href mr5' onClick={() => { this.onShow.bind(this)(item) }}>编辑</span>
+          <span
+            className={`mr5 ${item.status === 'NORMAL' ? 'href' : 'disabled'}`}
+            onClick={() => {
+              if (item.status !== 'NORMAL') {
+                return
+              }
+              this.onShow.bind(this)(item)
+            }}
+          >
+            编辑
+          </span>
           <Divider type='vertical' style={{color: '#979797'}}/>
           <span className='href' onClick={() => { this.onBegin.bind(this)(item) }}>{item.status === 'NORMAL' ? '禁用' : '启用'}</span>
         </span>

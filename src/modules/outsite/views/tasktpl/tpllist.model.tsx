@@ -42,7 +42,10 @@ class Main extends React.Component<Props, State> {
   // 获取商品列表
   public getProductList () {
     Service.getProductList('COLLECTION').then((res) => {
-      console.log(res)
+      const item = this.props.item || {}
+      if (item.productId) {
+        res = [{code: item.productId, name: item.productName}].concat(res)
+      }
       this.setState({
         goods: res || []
       })
@@ -82,6 +85,8 @@ class Main extends React.Component<Props, State> {
     const { values } = state
     const { getFieldDecorator } = this.props.form
     const formLayout: any = { wrapperCol: {span: 18}, labelCol: {span: 6} }
+    const defaultSelect: any = values.productId ? {key: values.productId} : undefined
+    console.log(defaultSelect, this.state.goods, 'defaultSelect')
     return (
       <Form
         onChange={() => {
@@ -160,18 +165,19 @@ class Main extends React.Component<Props, State> {
             )
           }
         </FormItem>
-        {(values.isrelative === '1' && this.state.goods.length > 0) && <FormItem
+        {values.isrelative === '1' && <FormItem
           {...formLayout}
-          label='关联商品'
+          label='选择商品'
         >
           {
             getFieldDecorator(
               'product',
               {
-                initialValue: {key: values.productId}
+                initialValue: defaultSelect
               }
             )(
               <Select
+                value={defaultSelect}
                 labelInValue
                 onChange={(value: any) => {
                   values.productId = value.key
@@ -183,7 +189,7 @@ class Main extends React.Component<Props, State> {
               >
               {
                 _.map(this.state.goods, (item) => {
-                  return <Option value={item.code}>{item.name}</Option>
+                  return <Option key={item.code}>{item.name}</Option>
                 })
               }
               </Select>
