@@ -22,6 +22,7 @@ interface State {
   provinceList: Common.RegionProps[]
   cityList: Common.RegionProps[]
   agentList: Common.AgentProps[]
+  cityCode: string
 }
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
@@ -33,7 +34,8 @@ class Main extends React.Component<Props, State> {
     type: 'day',
     provinceList: [],
     cityList: [],
-    agentList: []
+    agentList: [],
+    cityCode: undefined
   }
   public componentWillMount () {
     if (this.props.type === '2') {
@@ -45,7 +47,7 @@ class Main extends React.Component<Props, State> {
         this.fetchData()
       } else {
         if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
-          this.onCityChange(res[0].regionLevelResponseList[0].id).then((res2) => {
+          this.onCityChange(res[0].regionLevelResponseList[0].id, true).then((res2) => {
             if (res2 instanceof Array && res2.length > 0) {
               this.payload.companyId = res2[0].id
               this.fetchData()
@@ -67,11 +69,15 @@ class Main extends React.Component<Props, State> {
     if (this.state.provinceList[index]) {
       const res = this.state.provinceList[index].regionLevelResponseList
       this.setState({
-        cityList: res || []
+        cityList: res || [],
+        cityCode: undefined
       })
     }
   }
-  public onCityChange (code?: string) {
+  public onCityChange (code?: string, first: boolean = false) {
+    this.setState({
+      cityCode: first ? undefined : code
+    })
     return fetchAgentList(code).then((res) => {
       this.setState({
         agentList: res
@@ -151,10 +157,11 @@ class Main extends React.Component<Props, State> {
                 </Select>
                 <span>城市：</span>
                 <Select
+                  value={this.state.cityCode}
                   style={{width: '120px'}}
                   placeholder='请选择城市'
                   className={styles.selected}
-                  onChange={this.onCityChange.bind(this)}
+                  onChange={(code: string) => this.onCityChange(code, false)}
                 >
                   {
                     cityList.map((item) => {
