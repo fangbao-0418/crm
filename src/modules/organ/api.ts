@@ -38,12 +38,14 @@ export const fetchAccountingProvince = () => {
 }
 
 // 删除直营中心
-export const delDirect = (id: number, delType: number) => {
-  return http(`/user/v1/api/company/deleteCompany/${id}/${delType}`)
+export const delDirect = (id: number) => {
+  return http(`/user/v1/api/company/deleteCompany?id=${id}`)
 }
+// export const delDirect = (id: number, delType: number) => {
+//   return http(`/user/v1/api/company/deleteCompany/${id}/${delType}`)
+// }
 
-// 根据机构id检查是否存在依赖
-export const checkDependence = (id: number) => {
-  return http(`/user/v1/api/company/deleteCompany/check/${id}`)
-}
-
+// // 根据机构id检查是否存在依赖
+// export const checkDependence = (id: number) => {
+//   return http(`/user/v1/api/company/deleteCompany/check/${id}`)
+// }
