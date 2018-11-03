@@ -1,6 +1,6 @@
 import React from 'react'
 import moment, { Moment } from 'moment'
-import { Tabs, Table, Row, Col, Tooltip, Icon, Button } from 'antd'
+import { Tabs, Table, Row, Col, Tooltip, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import SearchForm from '@/modules/outsite/components/SearchForm'
 import ContentBox from '@/modules/common/content'
@@ -19,10 +19,6 @@ interface States {
   currentItem?: any,
   tab?: string // 当前tab标签
 }
-interface ColProps extends TaskItem {
-  dataIndex: string
-  title: string
-}
 
 // 列表
 class Main extends React.Component {
@@ -36,7 +32,7 @@ class Main extends React.Component {
       pageSize: 10
     },
     searchData: {
-      total: 0,
+      // total: 0,
       pageSize: 10,
       currentPage: 1,
       customerName: '',
@@ -201,19 +197,19 @@ class Main extends React.Component {
         dataSource: d.records,
         pageConf: {
           pageSize,
-          total,
+          total:pageTotal,
           pageCurrent
         },
         searchData: {
           ...searchData,
           pageSize,
-          pageCurrent,
-          total:pageTotal
+          pageCurrent
+          // total:pageTotal
         }
       })
     })
   }
-  //分页
+  // 分页
   public onChangeCurrent (current: number) {
     this.setState({
       searchData:{
@@ -334,7 +330,7 @@ class Main extends React.Component {
 
   }
   public render () {
-    const {total} = this.state.searchData
+    const {total} = this.state.pageConf
     return (
       <ContentBox
         title='外勤任务'
@@ -357,12 +353,11 @@ class Main extends React.Component {
                   // rowSelection={rowSelection}
                   bordered
                   pagination={{
-                    total: total,
-                    onChange:(current, size)=>{
+                    total,
+                    onChange:(current, size) => {
                       this.onChangeCurrent(current)
                     }
                   }}
-                  // pagination={{total:12}}
                   rowKey={'key'}
                 />
               </Tabs.TabPane>)
