@@ -131,7 +131,7 @@ class Main extends React.Component {
     dataIndex: 'subtask',
     render: (k, item) => {
       return (
-        <span>{item.subList.length && item.subList[0].name}</span>
+        <span>{item.subList.length > 0 && item.subList[0].name}</span>
       )
     }
   }, {
@@ -139,7 +139,7 @@ class Main extends React.Component {
     dataIndex: 'subtaskStatus',
     render: (k, item) => {
       return (
-        <span>{item.subList.length && Service.subStatusDict[item.subList[0].status]}</span>
+        <span>{item.subList.length > 0 && Service.subStatusDict[item.subList[0].status]}</span>
       )
     }
   }, {
@@ -147,7 +147,7 @@ class Main extends React.Component {
     dataIndex: 'sublistUsername',
     render: (k, item) => {
       return (
-        <span>{item.subList.length && item.subList[0].userName}</span>
+        <span>{item.subList.length > 0 && item.subList[0].userName}</span>
       )
     }
   }, {
