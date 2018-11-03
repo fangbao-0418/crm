@@ -98,13 +98,16 @@ class Main extends React.Component<Props> {
             <Button disabled={this.state.disabled} type='primary' className='mr10'>上传文件</Button>
           </Dragger>
           <Button className={styles.down} type='ghost' onClick={this.downFile.bind(this)}>下载客户模版</Button>
-          {/* <p className='text-center'>
-            导入说明：导入文件仅支持excel格式
-          </p> */}
+          {
+            !this.state.disabled &&
+            <p className='text-center'>
+              导入说明：导入文件仅支持excel格式
+            </p>
+          }
         </div>
         <div className='text-right'>
           {/* <Button className='mr5' type='ghost' onClick={() => {this.props.onPre()}}>上一步</Button> */}
-          <Button type='primary' onClick={this.uploadFile.bind(this)}>导入</Button>
+          <Button disabled={!this.state.disabled} type='primary' onClick={this.uploadFile.bind(this)}>导入</Button>
         </div>
       </div>
     )
