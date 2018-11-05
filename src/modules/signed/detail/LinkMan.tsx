@@ -70,7 +70,7 @@ class Main extends React.Component<Props> {
                 :
                   <Input
                     onChange={this.onChange.bind(this, index, 'contactPerson')}
-                    value={text.trim()}
+                    value={text}
                   />
               )}
             </FormItem>
