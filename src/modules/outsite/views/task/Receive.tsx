@@ -44,7 +44,7 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '申请时间',
-      dataIndex: 'createTime'
+      dataIndex: 'applyTime'
     },
     {
       title: '主管审核时间',
