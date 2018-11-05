@@ -86,15 +86,15 @@ class Show extends React.Component<Props, any> {
     return (
       <div className={styles.container}>
         <Row  className={styles['order-list']}>
-        <div className={styles.topTitle}>
-        <Col span={4}>工单号:{this.state.dataSource.workNo}</Col>
-        </div>
-        <div className={styles.topTitle}>
-        <Col span={7}>企业名称:{this.state.dataSource.customerName}</Col>
-        </div>
-        <div className={styles.topTitle}>
-        <Col span={4}>开始日期:{this.state.dataSource.startTime}</Col>
-        </div>
+          <div className={styles.topTitle}>
+            <Col span={8}>工单号: {this.state.dataSource.workNo}</Col>
+          </div>
+          <div className={styles.topTitle}>
+            <Col span={8}>企业名称: {this.state.dataSource.customerName}</Col>
+          </div>
+          <div className={styles.topTitle}>
+            <Col span={8}>创建日期: {this.state.dataSource.createTime}</Col>
+          </div>
         </Row>
         <Row >{
             this.state.dataSource.nodeList.map((item: any, index: any) => {
