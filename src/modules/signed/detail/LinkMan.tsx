@@ -47,19 +47,6 @@ class Main extends React.Component<Props> {
                     <span className={styles.signed}>签约</span>
                   }
                 </div>
-                // this.props.disabled ?
-                //   <div>
-                //     <span>{text}</span>
-                //     {
-                //       record.isSignPerson === 1 &&
-                //       <span className={styles.signed}>签约</span>
-                //     }
-                //   </div>
-                // :
-                //   <Input
-                //     onChange={this.onChange.bind(this, index, 'contactPerson')}
-                //     value={text}
-                //   />
               )}
             </FormItem>
           )
@@ -83,7 +70,7 @@ class Main extends React.Component<Props> {
                 :
                   <Input
                     onChange={this.onChange.bind(this, index, 'contactPerson')}
-                    value={text}
+                    value={text.trim()}
                   />
               )}
             </FormItem>
@@ -96,31 +83,18 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
+        console.log(text, 'lianxidianhua')
         if (this.props.disabled) {
           return (
             <FormItem>
-              {getFieldDecorator(`contactPhone-${record.key}`, {
-                initialValue: text,
-                rules: [
-                  {
-                    required: true,
-                    message: '联系电话不能为空'
-                  },
-                  {
-                    max: 11,
-                    message: '电话最多11位'
-                  }
-                ]
-              })(
-                <span>{text}</span>
-              )}
+              <span>{text.trim()}</span>
             </FormItem>
           )
         } else {
           return (
             <FormItem>
               {getFieldDecorator(`contactPhone-${record.key}`, {
-                initialValue: text,
+                initialValue: text.trim(),
                 rules: [
                   {
                     required: true,
@@ -129,11 +103,11 @@ class Main extends React.Component<Props> {
                   {
                     max: 11,
                     message: '电话最多11位'
-                  }
+                  },
                 ]
               })(
                 record.isSignPerson === 1 ?
-                  <span>{text}</span>
+                  <span>{text.trim()}</span>
                 :
                   <Input
                     type='number'
