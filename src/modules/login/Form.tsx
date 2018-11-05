@@ -119,10 +119,10 @@ class Main extends React.Component<Props> {
     return (
       <div className={styles.box}>
         <div className={styles.title}>噼里啪管理系统</div>
-        <div className={styles.switch}>
+        {/* <div className={styles.switch}>
           <span className={classNames({[styles.active]: this.state.type === 1})} onClick={this.changeType.bind(this, 1)}>短信登录</span>
           <span className={classNames({[styles.active]: this.state.type === 2})} onClick={this.changeType.bind(this, 2)}>微信登录</span>
-        </div>
+        </div> */}
         <div className={styles.sms} ref='sms'>
           <ul>
             <li className={classNames({[styles['has-error']]: !!error.phone})}>
@@ -135,7 +135,11 @@ class Main extends React.Component<Props> {
             </li>
             <li className={classNames({[styles['has-error']]: !!error['verify-code']})}>
               <div className={styles['verify-text']}>
-                <input maxLength={4} onChange={this.handleChange.bind(this, 'verify-code')}/>
+                <input
+                  maxLength={4}
+                  onChange={this.handleChange.bind(this, 'verify-code')}
+                  placeholder='请输入图文验证码'
+                />
               </div>
               <div id='verify' className={styles['verify-image']} style={{width: '110px', height: '42px'}}></div>
               <span className={styles.error}>
@@ -144,7 +148,11 @@ class Main extends React.Component<Props> {
             </li>
             <li className={classNames({[styles['has-error']]: !!error['sms-verify-code']})}>
               <div className={styles['sms-verify-text']}>
-                <input maxLength={6} onChange={this.handleChange.bind(this, 'sms-verify-code')}/>
+                <input
+                  maxLength={6}
+                  onChange={this.handleChange.bind(this, 'sms-verify-code')}
+                  placeholder='请输入短信验证码'
+                />
                 <span
                   style={{color: message === '获取验证码' ? null : '#cccccc'}}
                   onClick={this.getSmsVerifyCode.bind(this)}
