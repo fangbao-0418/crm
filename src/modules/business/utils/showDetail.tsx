@@ -76,7 +76,6 @@ export default function (record: Business.DetailProps, index?: number,
                   that.ins.save().then(() => {
                     // APP.success('保存成功')
                     operate.onOk()
-                    
                   })
                 }}
               >
