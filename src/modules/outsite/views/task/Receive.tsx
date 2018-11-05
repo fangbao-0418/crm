@@ -38,10 +38,10 @@ class Main extends React.Component<Props, State> {
       title: '费用',
       dataIndex: 'charge'
     },
-    {
-      title: '已领金额',
-      dataIndex: 'charge'
-    },
+    // {
+    //   title: '已领金额',
+    //   dataIndex: 'charge'
+    // },
     {
       title: '申请时间',
       dataIndex: 'applyTime'
