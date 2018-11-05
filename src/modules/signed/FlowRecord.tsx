@@ -88,7 +88,7 @@ export default class extends React.Component<Props> {
           />
         </div>
         <div className='text-right'>
-          <Button type='primary' className='mt10' onClick={this.save.bind(this)}>保存</Button>
+          <Button hidden={!APP.hasPermission('crm_sign_myself_detail_follow_up_save')} type='primary' className='mt10' onClick={this.save.bind(this)}>保存</Button>
         </div>
       </div>
     )

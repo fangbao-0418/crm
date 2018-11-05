@@ -160,19 +160,16 @@ class Main extends React.Component {
   }, {
     title: '操作',
     render: (record) => {
-      if (APP.hasPermission('crm_sign_myself_list_principals')) {
-        return (
-          <span>
-            <a onClick={this.detail.bind(this, record, '5')}>转跟</a>
+      return (
+        <span>
+          <a hidden={!APP.hasPermission('crm_sign_myself_follow_up')} onClick={this.detail.bind(this, record, '5')}>转跟</a>
+          {
+            APP.hasPermission('crm_sign_myself_follow_up') && APP.hasPermission('crm_sign_myself_list_principals') &&
             <Divider type='vertical'/>
-            <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
-          </span>
-        )
-      } else {
-        return (
-          <span></span>
-        )
-      }
+          }
+          <a hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+        </span>
+      )
     }
   }]
   public componentWillMount () {

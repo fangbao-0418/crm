@@ -28,30 +28,67 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPerson',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        return (
-          <FormItem>
-            {getFieldDecorator(`contactPerson-${record.key}`, {
-              initialValue: text,
-              rules: [
-                {
-                  required: true,
-                  message: '联系人不能为空'
-                }
-              ]
-            })(
-              this.props.disabled ?
+        if (this.props.disabled) {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPerson-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系人不能为空'
+                  }
+                ]
+              })(
                 <div>
                   <span>{text}</span>
-                  <span className={styles.signed}>签约</span>
+                  {
+                    record.isSignPerson === 1 &&
+                    <span className={styles.signed}>签约</span>
+                  }
                 </div>
-              :
-                <Input
-                  onChange={this.onChange.bind(this, index, 'contactPerson')}
-                  value={text}
-                />
-            )}
-          </FormItem>
-        )
+                // this.props.disabled ?
+                //   <div>
+                //     <span>{text}</span>
+                //     {
+                //       record.isSignPerson === 1 &&
+                //       <span className={styles.signed}>签约</span>
+                //     }
+                //   </div>
+                // :
+                //   <Input
+                //     onChange={this.onChange.bind(this, index, 'contactPerson')}
+                //     value={text}
+                //   />
+              )}
+            </FormItem>
+          )
+        } else {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPerson-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系人不能为空'
+                  }
+                ]
+              })(
+                record.isSignPerson === 1 ?
+                  <div>
+                    <span>{text}</span>
+                    <span className={styles.signed}>签约</span>
+                  </div>
+                :
+                  <Input
+                    onChange={this.onChange.bind(this, index, 'contactPerson')}
+                    value={text}
+                  />
+              )}
+            </FormItem>
+          )
+        }
       }
     },
     {
@@ -59,32 +96,54 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        return (
-          <FormItem>
-            {getFieldDecorator(`contactPhone-${record.key}`, {
-              initialValue: text,
-              rules: [
-                {
-                  required: true,
-                  message: '联系电话不能为空'
-                },
-                {
-                  max: 11,
-                  message: '电话最多11位'
-                }
-              ]
-            })(
-              this.props.disabled ?
+        if (this.props.disabled) {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPhone-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系电话不能为空'
+                  },
+                  {
+                    max: 11,
+                    message: '电话最多11位'
+                  }
+                ]
+              })(
                 <span>{text}</span>
-              :
-                <Input
-                  type='number'
-                  onChange={this.onChange.bind(this, index, 'contactPhone')}
-                  value={text}
-                />
-            )}
-          </FormItem>
-        )
+              )}
+            </FormItem>
+          )
+        } else {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPhone-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系电话不能为空'
+                  },
+                  {
+                    max: 11,
+                    message: '电话最多11位'
+                  }
+                ]
+              })(
+                record.isSignPerson === 1 ?
+                  <span>{text}</span>
+                :
+                  <Input
+                    type='number'
+                    onChange={this.onChange.bind(this, index, 'contactPhone')}
+                    value={text}
+                  />
+              )}
+            </FormItem>
+          )
+        }
       }
     },
     {
