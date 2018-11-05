@@ -229,10 +229,10 @@ class Main extends React.Component<any, States> {
       APP.error('任务名不能为空')
       return
     }
-    if (item.subList.length === 0) {
-      APP.error('请选择子任务')
-      return
-    }
+    // if (item.subList.length === 0) {
+    //   APP.error('请选择子任务')
+    //   return
+    // }
     if (sync) {
       Service.taskSave2sync(item).then(() => {
         APP.dispatch<OutSide.Props>({

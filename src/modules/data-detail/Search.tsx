@@ -24,6 +24,7 @@ interface State {
   agentList: Common.AgentProps[]
   cityCode: string
   companyId: any
+  label: string
 }
 class Main extends React.Component<Props, State> {
   public payload: Statistics.DetailSearchPayload = {
@@ -37,7 +38,8 @@ class Main extends React.Component<Props, State> {
     cityList: [],
     agentList: [],
     cityCode: undefined,
-    companyId: undefined
+    companyId: undefined,
+    label: ''
   }
   public componentWillMount () {
     if (this.props.type === '2') {
@@ -48,7 +50,8 @@ class Main extends React.Component<Props, State> {
         fetchDirectList().then((res2) => {
           if (res2.length > 0) {
             this.setState({
-              agentList: res2
+              agentList: res2,
+              label: '直营'
             })
             this.payload.companyId = res2[0].id
             this.fetchData()
@@ -60,6 +63,9 @@ class Main extends React.Component<Props, State> {
           this.fetchData()
         })
       } else {
+        this.setState({
+          label: '代理商'
+        })
         if (res[0].regionLevelResponseList instanceof Array && res[0].regionLevelResponseList.length > 0) {
           this.onCityChange(res[0].regionLevelResponseList[0].id, true).then((res2) => {
             if (res2 instanceof Array && res2.length > 0) {
@@ -192,10 +198,10 @@ class Main extends React.Component<Props, State> {
           }
           {
             agentList.length > 0 && <span>
-              <span>代理商：</span>
+              <span>{this.state.label}：</span>
               <Select
                 style={{width: '120px'}}
-                placeholder='请选择代理商'
+                placeholder={`请选择${this.state.label}`}
                 className={styles.selected}
                 value={this.state.companyId}
                 onChange={(id: number) => {
