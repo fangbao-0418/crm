@@ -255,7 +255,7 @@ class Main extends React.Component<any, States> {
           payload: {
             config: {
               common: {
-                tab: item.systemFlag === '1' ? '1' : '2'
+                tab: item.productId ? '1' : '2'
               }
             }
           }

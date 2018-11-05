@@ -120,7 +120,7 @@ class Main extends React.Component<Props, State> {
           >
             保存
           </Button>
-          <Button
+          {/* <Button
             hidden={['0', '-1'].indexOf(this.state.item.systemFlag) === -1}
             onClick={() => {
               if (this.props.onOk) {
@@ -130,7 +130,7 @@ class Main extends React.Component<Props, State> {
             type={`primary`}
           >
             保存并同步
-          </Button>
+          </Button> */}
         </div>
       </div>
     )
