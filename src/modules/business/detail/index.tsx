@@ -18,6 +18,9 @@ interface Props {
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
+  public state = {
+    visible: true
+  }
   public defaultTrackRecord = [
     {
       field: 'tagTelephoneStatus',
@@ -60,6 +63,19 @@ class Main extends React.Component<Props> {
     if (this.props.getWrappedInstance) {
       console.log('detail did mouiunt')
       this.props.getWrappedInstance(this)
+    }
+  }
+  public componentWillReceiveProps (props: Customer.Props) {
+    console.log(this.props.detail.id !== props.detail.id, '1111')
+    if (this.props.detail.id !== props.detail.id) {
+      this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+      this.setState({
+        visible: false
+      }, () => {
+        this.setState({
+          visible: true
+        })
+      })
     }
   }
   public save () {
@@ -114,7 +130,7 @@ class Main extends React.Component<Props> {
             </div>
             <div className={styles.right}>
               {
-                type === 'business' &&
+                this.state.visible &&
                 <Card title='跟进记录'>
                   <Tags
                     labelSpan={3}
