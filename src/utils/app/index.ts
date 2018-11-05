@@ -31,6 +31,7 @@ APP.keys = {
   EnumCustomerNameType: [],
   EnumCustomerSearchType: [],
   EnumCustomerSource: [],
+  EnumCustomerOfflineSource: [],
   EnumCustomerStatus: [],
   EnumCustomerType: [],
   EnumIsValid: [],

@@ -26,7 +26,6 @@ class Main extends React.Component<Props> {
   public values: ValueProps = {
     type: 3
   }
-  public customerSourceList: Array<{label: string, value: string}> = []
   public state: State = {
     type: 3,
     citys: [],
@@ -38,14 +37,6 @@ class Main extends React.Component<Props> {
       this.setState({
         citys: res
       })
-    })
-    this.handleCustomerSource()
-  }
-  public handleCustomerSource () {
-    APP.keys.EnumCustomerSource.forEach((item) => {
-      if (item.label !== 'M站') {
-        this.customerSourceList.push(item)
-      }
     })
   }
   public getCompany (citycode: string) {
@@ -106,7 +97,7 @@ class Main extends React.Component<Props> {
             }}
           >
             {
-              this.customerSourceList.map((item) => {
+              APP.keys.EnumCustomerOfflineSource.map((item) => {
                 return (
                   <Option
                     key={item.value}

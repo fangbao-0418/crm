@@ -18,6 +18,7 @@ declare namespace APP {
     EnumCustomerNameType?: Array<{label: string, value: string}>
     EnumCustomerSearchType?: Array<{label: string, value: string}>
     EnumCustomerSource?: Array<{label: string, value: string}>
+    EnumCustomerOfflineSource?:  Array<{label: string, value: string}>
     EnumCustomerStatus?: Array<{label: string, value: string}>
     EnumCustomerType?: Array<{label: string, value: string}>
     EnumIsValid?: Array<{label: string, value: string}>

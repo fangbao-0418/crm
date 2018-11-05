@@ -162,7 +162,7 @@ class Main extends React.Component {
     render: (record) => {
       return (
         <span>
-          <a hidden={!APP.hasPermission('crm_sign_myself_follow_up')} onClick={this.detail.bind(this, record, '5')}>转跟</a>
+          <a hidden={!APP.hasPermission('crm_sign_myself_follow_up')} onClick={this.detail.bind(this, record, '5')}>跟进</a>
           {
             APP.hasPermission('crm_sign_myself_follow_up') && APP.hasPermission('crm_sign_myself_list_principals') &&
             <Divider type='vertical'/>

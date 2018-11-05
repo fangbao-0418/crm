@@ -21,7 +21,6 @@ class Main extends React.Component<Props> {
   public values: ValueProps = {
     type: 1
   }
-  public customerSourceList: Array<{label: string, value: string}> = []
   public state: State = {
     sales: [],
     type: 1
@@ -31,14 +30,6 @@ class Main extends React.Component<Props> {
       this.setState({
         sales: res
       })
-    })
-    this.handleCustomerSource()
-  }
-  public handleCustomerSource () {
-    APP.keys.EnumCustomerSource.forEach((item) => {
-      if (item.label !== 'M站') {
-        this.customerSourceList.push(item)
-      }
     })
   }
   public downFile () {
@@ -69,7 +60,7 @@ class Main extends React.Component<Props> {
             }}
           >
             {
-              this.customerSourceList.map((item) => {
+              APP.keys.EnumCustomerOfflineSource.map((item) => {
                 return (
                   <Option
                     key={item.value}

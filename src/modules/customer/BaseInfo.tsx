@@ -38,7 +38,6 @@ class Main extends React.Component<Props> {
     cityList: [],
     areaList: []
   }
-  public customerSourceList: Array<{label: string, value: string}> = []
   public componentWillMount () {
     if (this.props.type === 'customer') {
       fetchRegion({
@@ -80,7 +79,6 @@ class Main extends React.Component<Props> {
         })
       })
     }
-    this.handleCustomerSource()
   }
   public editLinkMan () {
     if (this.props.type === 'open') {
@@ -266,14 +264,6 @@ class Main extends React.Component<Props> {
       }
     })
   }
-  public handleCustomerSource () {
-    console.log(APP.keys.EnumCustomerSource)
-    APP.keys.EnumCustomerSource.forEach((item) => {
-      if (item.label !== 'M站') {
-        this.customerSourceList.push(item)
-      }
-    })
-  }
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.type === 'open'
@@ -441,7 +431,7 @@ class Main extends React.Component<Props> {
                       }}
                     >
                       {
-                        this.customerSourceList.map((item) => {
+                        APP.keys.EnumCustomerOfflineSource.map((item) => {
                           return (
                             <Option
                               key={item.value}
