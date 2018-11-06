@@ -15,7 +15,7 @@ declare namespace Organ {
   }
   export interface AgentItemProps {}
   export interface DirectItemProps {
-    // delType?: number
+    delType?: number
     id?: number
     name?: string
     regionProvince?: number

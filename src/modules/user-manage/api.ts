@@ -71,8 +71,11 @@ export const fetchRole = (type: UserManage.TypeProps) => {
   return http(`/user/v1/api/role/list/${type}`)
 }
 /** 获取上级直属 */
+// export const fetchSuperior = (id?: string) => { // 接口修改为下面
+//   return http(`/user/v1/api/user/list/organization/${id}`)
+// }
 export const fetchSuperior = (id?: string) => {
-  return http(`/user/v1/api/user/list/organization/${id}`)
+  return http(`/user/v1/api/user/list/parent/organization/${id}`)
 }
 /** 获取身份列表 */
 export const fetchIdentity = (type: UserManage.TypeProps) => {

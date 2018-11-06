@@ -103,7 +103,7 @@ class Main extends React.Component<Props> {
                   {
                     max: 11,
                     message: '电话最多11位'
-                  },
+                  }
                 ]
               })(
                 record.isSignPerson === 1 ?
