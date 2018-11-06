@@ -2,6 +2,9 @@ import notification from 'pilipa/libs/notification'
 import storage from '../storage'
 import * as fn from './fn'
 Object.assign(APP, {
+  user: {
+    codes: []
+  },
   env: process.env.NODE_ENV,
   fn,
   success: (msg: string) => {
