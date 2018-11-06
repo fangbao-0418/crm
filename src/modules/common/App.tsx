@@ -18,6 +18,7 @@ class App extends React.Component<Props> {
         <Switch>
           <Route path='/login' component={modules.Login} />
           <Route path='/logout' component={modules.Logout} />
+          <Route path='/check' />
           {
             this.props.visible && <Main></Main>
           }
