@@ -94,7 +94,7 @@ declare namespace Customer {
     tagTelephoneStatus?: number
     remark?: string
     createTime?: string
-    trackRecordType?: string
+    trackRecordType?: number
     /** 预约时间 */
     appointTime?: string
   }
