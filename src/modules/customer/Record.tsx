@@ -48,16 +48,11 @@ class Main extends React.Component<Props> {
                           {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
                         </span>
                       }
+                      <span>{item.trackRecordType}</span>
                       {
                         item.trackRecordType > -1 &&
                         <span className={styles.tag}>
                           {APP.dictionary[`EnumFollowUpClassification-${item.trackRecordType}`]}
-                        </span>
-                      }
-                      {
-                        item.tagIntention > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
                         </span>
                       }
                       {
