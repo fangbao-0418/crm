@@ -37,7 +37,9 @@ class Main extends React.Component<Props> {
       dataIndex: 'phone'
     },
     {
-      title: '代理商',
+      title: (
+        <span>{this.props.type === 'Agent' ? '代理商' : '直营公司'}</span>
+      ),
       dataIndex: 'companyName'
     },
     {
