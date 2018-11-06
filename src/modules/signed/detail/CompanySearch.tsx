@@ -27,7 +27,7 @@ class Main extends React.Component<Props, State> {
     }
     fetchTianYanCompanyList(value).then((res) => {
       this.setState({
-        tianyanDataSource: res.body,
+        tianyanDataSource: res,
         visible: true
       })
     })

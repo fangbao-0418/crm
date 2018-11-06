@@ -8,6 +8,7 @@ declare namespace Customer {
     isMainContact?: string
     source?: number
     key?: number
+    isSignPerson?: number
   }
   export type ActionPayload = Props
   export interface DetailProps {
@@ -82,6 +83,7 @@ declare namespace Customer {
     allocatedNum: number
     repeatCustomers: Array<{name?: string, id?: string}>
     total: number
+    successCustomers?: {[key: string]: any}
   }
   export interface TrackRecord {
     customerId?: string

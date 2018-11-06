@@ -6,15 +6,20 @@ declare namespace Signed {
     area?: string
     currentSalesperson?: string
     operatingAccouting?: string
+    /* 入库时间 */
+    enterStorageTime?: string
+    /* 预约时间 */
+    appointTime?: string
     createTime?: string
-    EndTime?: string
-    startTime?: string
+    endTime?: string
   }
   export interface SearchProps {
     storageBeginDate?: string
     storageEndDate?: string
     createBeginDate?: string
     createEndDate?: string
+    appointBeginTime?: string
+    appointEndTime?: string
     pageSize?: number
     pageCurrent?: number
     telephoneStatus?: string

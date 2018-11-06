@@ -18,6 +18,7 @@ declare namespace APP {
     EnumCustomerNameType?: Array<{label: string, value: string}>
     EnumCustomerSearchType?: Array<{label: string, value: string}>
     EnumCustomerSource?: Array<{label: string, value: string}>
+    EnumCustomerOfflineSource?:  Array<{label: string, value: string}>
     EnumCustomerStatus?: Array<{label: string, value: string}>
     EnumCustomerType?: Array<{label: string, value: string}>
     EnumIsValid?: Array<{label: string, value: string}>
@@ -27,6 +28,7 @@ declare namespace APP {
     EnumFollowWay?: Array<{label: string, value: string}>
     /** 机构管理代理商公司状态 */
     EnumOrganAgentSource?: Array<{label: string, value: string}>
+    EnumFollowUpClassification?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {
@@ -42,6 +44,7 @@ declare namespace APP {
     getDateSection (day: number, refer?: Date, format?: string): {startDate: string, endDate: string}
     ossUpload: (file: File) => any
     generateKey: <T>(arr: T[]) => T[]
+    objectToArray: (sourceObject: {[key: string]: any}) => {key: string, value: any}[]
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory

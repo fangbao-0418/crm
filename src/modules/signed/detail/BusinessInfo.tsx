@@ -69,12 +69,12 @@ class Main extends React.Component<Props, State> {
           <Row >
             {
               disabled &&
-              <Col span={6}>
+              <Col span={10}>
                 <FormItem
                   style={{marginLeft: '-4px'}}
-                  labelCol={{span: 9}}
+                  labelCol={{span: 7}}
                   wrapperCol={{span: 12}}
-                  label='信息来源：'
+                  label='信息认证方式：'
                 >
                   <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
                 </FormItem>

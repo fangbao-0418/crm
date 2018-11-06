@@ -18,6 +18,9 @@ interface Props {
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
+  public state = {
+    visible: true
+  }
   public defaultTrackRecord = [
     {
       field: 'tagTelephoneStatus',
@@ -60,6 +63,19 @@ class Main extends React.Component<Props> {
     if (this.props.getWrappedInstance) {
       console.log('detail did mouiunt')
       this.props.getWrappedInstance(this)
+    }
+  }
+  public componentWillReceiveProps (props: Customer.Props) {
+    console.log(this.props.detail.id !== props.detail.id, '1111')
+    if (this.props.detail.id !== props.detail.id) {
+      this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+      this.setState({
+        visible: false
+      }, () => {
+        this.setState({
+          visible: true
+        })
+      })
     }
   }
   public save () {
@@ -113,11 +129,48 @@ class Main extends React.Component<Props> {
               </Card>
             </div>
             <div className={styles.right}>
-              <Record
-                customerId={this.props.customerId}
-                height={260}
-              />
+              {
+                this.state.visible &&
+                <Card title='跟进记录'>
+                  <Tags
+                    labelSpan={3}
+                    className='mb10'
+                    dataSource={this.trackRecord}
+                    parser={(value) => {
+                      return value[0] ? Number(value[0].value) : undefined
+                    }}
+                    onChange={(value) => {
+                      this.handleChange('trackRecord', value)
+                    }}
+                  />
+                  <Input.TextArea
+                    className='mt10'
+                    placeholder='请输入备注'
+                    onChange={(e) => {
+                      console.log(e.target.value, 'textarea change')
+                      this.handleChange('trackRecord.remark', e.target.value)
+                    }}
+                  />
+                  <div className='mt10' >
+                    下次跟进:&nbsp;&nbsp;
+                    <DatePicker
+                      placeholder=''
+                      disabledDate={this.disabledDate}
+                      onChange={(date) => {
+                        this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+                      }}
+                    />
+                  </div>
+                </Card>
+              }
             </div>
+          </div>
+          <div>
+            <Record
+              type='business'
+              customerId={this.props.customerId}
+              height={180}
+            />
           </div>
         </div>
         <div>

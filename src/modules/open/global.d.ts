@@ -12,6 +12,8 @@ declare namespace Open {
     lastReleaseSalesperson?: string
     lastReleaseTime?: string
     id?: string
+    /* 最后跟进时间 */
+    lastTrackTime?: string
   }
   export interface SearchProps {
     lastReleaseTimeBegin?: string

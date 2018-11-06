@@ -3,6 +3,7 @@ import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
 import { fetchList, pickCustomer } from './api'
@@ -11,6 +12,7 @@ import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
 import _ from 'lodash'
 import moment from 'moment'
+const styles = require('@/modules/business/style')
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Open.DetailProps
 interface States {
@@ -77,20 +79,6 @@ class Main extends React.Component {
       value: '',
       label: ['电话状态'],
       options: all.concat(APP.keys.EnumContactStatus)
-    },
-    {
-      label: ['纳税类别'],
-      value: '',
-      field: 'payTaxesNature',
-      type: 'select',
-      options: all.concat(APP.keys.EnumPayTaxesNature)
-    },
-    {
-      label: ['客户来源'],
-      value: '',
-      field: 'customerSource',
-      type: 'select',
-      options: all.concat(APP.keys.EnumCustomerSource)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
@@ -98,11 +86,17 @@ class Main extends React.Component {
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (
-        <span
-          className='href'
-          onClick={this.show.bind(this, record, index)}
-        >
-          {val}
+        <span>
+          <span
+            className='href'
+            onClick={this.show.bind(this, record, index)}
+          >
+            {val}
+          </span>
+          {
+            !record.lastTrackTime &&
+            <span className={styles['new-point']}>新</span>
+          }
         </span>
       )
     }
@@ -110,19 +104,10 @@ class Main extends React.Component {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '意向度',
     dataIndex: 'tagIntention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
-    }
-  }, {
-    title: '电话状态',
-    dataIndex: 'tagTelephoneStatus',
-    render: (val) => {
-      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: '空置天数',
@@ -153,12 +138,6 @@ class Main extends React.Component {
       </span>
     ),
     dataIndex: 'lastReleaseSalesperson'
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
   }, {
     title: '释放时间',
     dataIndex: 'lastReleaseTime',
@@ -234,17 +213,20 @@ class Main extends React.Component {
       this.params.lastTrackTimeBegin = beginTime
       this.params.lastTrackTimeEnd = endTime
     }
-    this.params.payTaxesNature = values.payTaxesNature.value || undefined
-    this.params.customerSource = values.customerSource.value || undefined
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
+    this.fetchList()
+  }
+  public handleSelectType (values: any) {
+    this.params.payTaxesNature = values.payTaxesNature || undefined
+    this.params.customerSource = values.customerSource || undefined
     this.fetchList()
   }
   public handleSearchType (values: any) {
     console.log(values, 'values')
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    this.params.contactPhone = undefined
+    // this.params.contactPhone = undefined
     this.params.lastReleaseSalesperson = undefined
     this.params.busSeaMemo = undefined
     this.params[values.key] = values.value || undefined
@@ -265,110 +247,107 @@ class Main extends React.Component {
             type='open'
             onClose={() => modal.hide()}
             footer={(
-              <div className='mt10'>
-                <div style={{ display: 'inline-block', width: 160, marginLeft: 450}}>
-                  <Button
-                    type='primary'
-                    hidden={!APP.hasPermission('crm_sea_manage_grab_customer')}
-                    className='mr5'
-                    onClick={() => {
-                      pickCustomer({
-                        customerIdArr: [customerId]
-                      }).then(() => {
-                        APP.success('抢客户操作成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
-                        })
+              <div className='mt10 text-right'>
+                <Button
+                  type='ghost'
+                  hidden={!APP.hasPermission('crm_sea_manage_grab_customer')}
+                  className='mr5'
+                  onClick={() => {
+                    pickCustomer({
+                      customerIdArr: [customerId]
+                    }).then(() => {
+                      APP.success('抢客户操作成功')
+                      this.fetchList().then((res) => {
+                        const data = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = data[index].id
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
                       })
-                    }}
-                  >
-                    抢客户
-                  </Button>
-                  <Button
-                    type='ghost'
-                    hidden={!APP.hasPermission('crm_sea_manage_delete')}
-                    onClick={() => {
-                      deleteCustomer(customerId).then(() => {
-                        APP.success('删除成功')
-                        this.fetchList().then((res) => {
-                          const data = res.data
-                          if (data instanceof Array && data[index]) {
-                            customerId = data[index].id
-                            changeCustomerDetailAction(customerId)
-                          } else {
-                            modal.hide()
-                          }
-                        })
+                    })
+                  }}
+                >
+                  抢客户
+                </Button>
+                <Button
+                  type='ghost'
+                  className='mr5'
+                  hidden={!APP.hasPermission('crm_sea_manage_delete')}
+                  onClick={() => {
+                    deleteCustomer(customerId).then(() => {
+                      APP.success('删除成功')
+                      this.fetchList().then((res) => {
+                        const data = res.data
+                        if (data instanceof Array && data[index]) {
+                          customerId = data[index].id
+                          changeCustomerDetailAction(customerId)
+                        } else {
+                          modal.hide()
+                        }
                       })
-                    }}
-                  >
-                    删除
-                  </Button>
-                </div>
-                <div style={{ display: 'inline-block', width: 160, marginLeft: 100}}>
-                  <Button
-                    type='primary'
-                    onClick={() => {
-                      index -= 1
-                      if (index === -1) {
-                        if (searchPayload.pageCurrent === 1) {
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+                <Button
+                  type='ghost'
+                  className='mr5'
+                  onClick={() => {
+                    index -= 1
+                    if (index === -1) {
+                      if (searchPayload.pageCurrent === 1) {
+                        modal.hide()
+                        return
+                      }
+                      index = searchPayload.pageSize - 1
+                      searchPayload.pageCurrent -= 1
+                      dataSource = []
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        dataSource = res.data || []
+                        changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
+                  }}
+                >
+                  上一页
+                </Button>
+                <Button
+                  type='ghost'
+                  onClick={() => {
+                    index += 1
+                    if (index >= searchPayload.pageSize) {
+                      searchPayload.pageCurrent += 1
+                      dataSource = []
+                      index = 0
+                    }
+                    if (dataSource.length === 0) {
+                      this.fetchList().then((res) => {
+                        if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                          searchPayload.pageCurrent -= 1
                           modal.hide()
                           return
                         }
-                        index = searchPayload.pageSize - 1
-                        searchPayload.pageCurrent -= 1
-                        dataSource = []
-                      }
-                      if (dataSource.length === 0) {
-                        this.fetchList().then((res) => {
-                          dataSource = res.data || []
-                          changeCustomerDetailAction(dataSource[index].id)
-                        })
-                      } else {
+                        dataSource = res.data || []
                         changeCustomerDetailAction(dataSource[index].id)
+                      })
+                    } else {
+                      if (dataSource[index] === undefined) {
+                        modal.hide()
+                        return
                       }
-                    }}
-                  >
-                    上一页
-                  </Button>
-                  <Button
-                    style={{ marginLeft: 5}}
-                    type='ghost'
-                    onClick={() => {
-                      index += 1
-                      if (index >= searchPayload.pageSize) {
-                        searchPayload.pageCurrent += 1
-                        dataSource = []
-                        index = 0
-                      }
-                      if (dataSource.length === 0) {
-                        this.fetchList().then((res) => {
-                          if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
-                            searchPayload.pageCurrent -= 1
-                            modal.hide()
-                            return
-                          }
-                          dataSource = res.data || []
-                          changeCustomerDetailAction(dataSource[index].id)
-                        })
-                      } else {
-                        if (dataSource[index] === undefined) {
-                          modal.hide()
-                          return
-                        }
-                        changeCustomerDetailAction(dataSource[index].id)
-                      }
-                    }}
-                  >
-                    下一页
-                  </Button>
-                </div>
+                      changeCustomerDetailAction(dataSource[index].id)
+                    }
+                  }}
+                >
+                  下一页
+                </Button>
               </div>
             )}
           />
@@ -443,32 +422,38 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='公海管理'>
-        <div className='mb12 clear'>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
-                { value: 'lastReleaseSalesperson', label: '释放销售'},
-                { value: 'busSeaMemo', label: '释放原因'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'lastReleaseSalesperson', label: '释放销售'},
+                  { value: 'busSeaMemo', label: '释放原因'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    console.log(val, 'onKeyDown')
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              onChange={(values) => {
+                console.log(values, 'values')
+                this.handleSelectType(values)
               }}
             />
           </div>
@@ -495,8 +480,8 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '250px' }}>
-          <Button type='primary' hidden={!APP.hasPermission('crm_sea_manage_grab_customer')} className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
-          <Button type='primary' hidden={!APP.hasPermission('crm_sea_manage_delete')} className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sea_manage_grab_customer')} className='mr10' onClick={this.pickCustomer.bind(this)}>批量抢客户</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sea_manage_delete')} className='mr10' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>
       </ContentBox>
     )

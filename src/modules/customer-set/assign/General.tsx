@@ -18,7 +18,7 @@ interface ValueProps {
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    value: 1,
+    value: 3,
     selectSales: []
   }
   public values: ValueProps = {}
@@ -27,21 +27,31 @@ class Main extends React.Component<Props, State> {
   }
   public getSelectSaleList () {
     const select: Array<{key: string, label: string}> = []
-    fetchGeneralList().then((res) => { // 默认选重中
-      if (res.length) { // 证明选择的是自定义
+    fetchGeneralList().then((res) => {
+      if (String(res.isBusSea) === '1') { // 选中公海
         this.setState({
-          value: 2
+          value: 3
         })
+      } else {
+        if (res.list.length > 0) { // 证明选择的是自定义
+          this.setState({
+            value: 2
+          })
+          res.list.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
+            select.push({
+              key: item.salespersonName ? String(item.salespersonId) : '',
+              label: item.salespersonName
+            })
+          })
+          this.setState({
+            selectSales: select
+          })
+        } else {
+          this.setState({
+            value: 1
+          })
+        }
       }
-      res.forEach((item: {salespersonId?: string, salespersonName?: string}) => {
-        select.push({
-          key: item.salespersonName ? String(item.salespersonId) : '',
-          label: item.salespersonName
-        })
-      })
-      this.setState({
-        selectSales: select
-      })
     })
   }
   public render () {
@@ -61,7 +71,15 @@ class Main extends React.Component<Props, State> {
           value={this.state.value}
         >
           <Row>
-            <Col span={6}>
+            <Col span={3}>
+              <Radio
+                disabled={disabled}
+                value={3}
+              >
+                <span>转到公海</span>
+              </Radio>
+            </Col>
+            <Col span={3}>
               <Radio
                 disabled={disabled}
                 value={1}
@@ -69,7 +87,7 @@ class Main extends React.Component<Props, State> {
                 {
                   <span>
                     全部销售
-                    <Tooltip placement='top' title='勾选全部销售，系统分配资源平均分到所有销售人员库中，若全部库满，分与总经理'>
+                    <Tooltip placement='top' title='勾选全部销售，系统分配资源平均分到所有销售人员库中，若全部库满，直接转到公海'>
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>
@@ -84,7 +102,7 @@ class Main extends React.Component<Props, State> {
                 {
                   <span>
                     自定义销售
-                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中，若全部库满，分与总经理'>
+                    <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中，若全部库满，直接转到公海'>
                       <i className='fa fa-exclamation-circle ml5'></i>
                     </Tooltip>
                   </span>

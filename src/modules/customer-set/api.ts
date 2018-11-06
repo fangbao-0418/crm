@@ -24,8 +24,8 @@ export const fetchSpicalList = () => {
 export const fetchGeneralList = () => {
   return http(`/crm-manage/v1/api/diversion_customer/listGeneral`)
 }
-export const saveGeneralCapacity = (payload: Array<{salespersonId: string, salespersonName: string}>) => {
-  return http(`/crm-manage/v1/api/diversion_customer/entryGeneral`, 'POST', payload)
+export const saveGeneralCapacity = (type: number, payload: Array<{salespersonId: string, salespersonName: string}>) => {
+  return http(`/crm-manage/v1/api/diversion_customer/entryGeneral/${type}`, 'POST', payload)
 }
 export const saveSpecialCapacity = (payload: CustomerSet.SpecialAssetsProps) => {
   return http(`/crm-manage/v1/api/diversion_customer/entrySpecial`, 'POST', payload)

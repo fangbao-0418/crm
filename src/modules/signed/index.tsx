@@ -1,9 +1,10 @@
 import React from 'react'
-import { Table, Button, Select, Tooltip } from 'antd'
+import { Table, Button, Select, Tooltip, Divider } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Provider from '@/components/Provider'
 import View from './View'
@@ -45,7 +46,7 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      label: ['入库时间', '创建时间'],
+      label: ['入库时间', '创建时间', '预约时间'],
       options: [
         {
           label: '全部',
@@ -102,7 +103,7 @@ class Main extends React.Component {
       return (
         <span
           className='href'
-          onClick={this.detail.bind(this, record)}
+          onClick={this.detail.bind(this, record, '1')}
         >
           {val}
         </span>
@@ -129,22 +130,9 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'createTime',
+    dataIndex: 'enterStorageTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
-    }
-  }, {
-    title: (
-      <span>
-        开始账期
-        <Tooltip placement='top' title='客户开始记账服务的账期'>
-          <i className='fa fa-exclamation-circle ml5'></i>
-        </Tooltip>
-      </span>
-    ),
-    dataIndex: 'startTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: (
@@ -155,22 +143,33 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
-    dataIndex: 'EndTime',
+    dataIndex: 'endTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
+    }
+  }, {
+    title: (
+      <span>
+        预约时间
+      </span>
+    ),
+    dataIndex: 'appointTime',
+    render: (val) => {
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: '操作',
     render: (record) => {
-      if (APP.hasPermission('crm_sign_myself_list_principals')) {
-        return (
-          <a onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
-        )
-      } else {
-        return (
-          <span></span>
-        )
-      }
+      return (
+        <span>
+          <a hidden={!APP.hasPermission('crm_sign_myself_follow_up')} onClick={this.detail.bind(this, record, '5')}>跟进</a>
+          {
+            APP.hasPermission('crm_sign_myself_follow_up') && APP.hasPermission('crm_sign_myself_list_principals') &&
+            <Divider type='vertical'/>
+          }
+          <a hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+        </span>
+      )
     }
   }]
   public componentWillMount () {
@@ -237,6 +236,9 @@ class Main extends React.Component {
     } else if (values.date.label === '创建时间') {
       this.paramsleft.createBeginDate = beginTime || undefined
       this.paramsleft.createEndDate = endTime || undefined
+    } else if (values.date.label === '预约时间') {
+      this.paramsleft.appointBeginTime = beginTime || undefined
+      this.paramsleft.appointEndTime = endTime || undefined
     }
     let startmonth
     let endmonth
@@ -257,12 +259,15 @@ class Main extends React.Component {
     this.paramsleft.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchList()
   }
+  public handleSelectType (values: any) {
+    this.paramsright.customerSource = values.customerSource || undefined
+    this.fetchList()
+  }
   public handleSearchType (value: {key: string, value?: string}) {
     this.paramsright.customerName = undefined
     this.paramsright.contactPerson = undefined
-    this.paramsright.customerSource = undefined
     this.paramsright.signSalesperson = undefined
-    this.paramsright.contactPhone = undefined
+    // this.paramsright.contactPhone = undefined
     this.paramsright.operatingAccouting = undefined
     this.paramsright.areaName = undefined
     this.paramsright.currentSalesperson = undefined
@@ -317,11 +322,13 @@ class Main extends React.Component {
     })
     modal.show()
   }
-  public detail (record: Signed.DetailProps) {
+  public detail (record: Signed.DetailProps, defaultKey?: string) {
+    console.log(defaultKey)
     const modal = new Modal({
       content: (
         <Provider>
           <View
+            defaultKey={defaultKey}
             customerId={record.id}
             customerName={record.customerName}
             onClose={() => {
@@ -354,36 +361,42 @@ class Main extends React.Component {
       <ContentBox
         title='签约客户'
       >
-        <div className='mb12' style={{ overflow: 'hidden' }}>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                { value: 'customerSource', label: '客户来源'},
-                { value: 'signSalesperson', label: '签单销售'},
-                { value: 'contactPhone', label: '联系电话'},
-                { value: 'operatingAccouting', label: '运营会计'},
-                { value: 'areaName', label: '地区'},
-                { value: 'currentSalesperson', label: '跟进人'},
-                { value: 'contractCode', label: '合同号'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'customerSource', label: '客户来源'},
+                  { value: 'signSalesperson', label: '签单销售'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'operatingAccouting', label: '运营会计'},
+                  { value: 'areaName', label: '地区'},
+                  { value: 'currentSalesperson', label: '跟进人'},
+                  { value: 'contractCode', label: '合同号'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    console.log(val, 'onKeyDown')
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              type='signed'
+              onChange={(values) => {
+                this.handleSelectType(values)
               }}
             />
           </div>
@@ -410,7 +423,7 @@ class Main extends React.Component {
           }}
         />
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          <Button type='primary' hidden={APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>
       </ContentBox>
     )

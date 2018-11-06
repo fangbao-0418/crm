@@ -54,6 +54,13 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
+                // console.log(this.state.disabled, 'on click')
+                if (this.state.disabled === true) {
+                  this.setState({
+                    disabled: false
+                  })
+                  return
+                }
                 Promise.all([
                   new Promise((resolve, reject) => {
                     this.businessInfo.props.form.validateFields((errs: any) => {
@@ -102,7 +109,9 @@ class Main extends React.Component<Props> {
                     this.save()
                   })
                 }, () => {
-                  APP.error('请检查输入项')
+                  if (!this.state.disabled) {
+                    APP.error('请检查输入项')
+                  }
                 })
               }}
             />

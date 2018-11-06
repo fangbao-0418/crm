@@ -3,6 +3,7 @@ import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import moment from 'moment'
 import { fetchListappoint } from '@/modules/business/api'
@@ -73,20 +74,6 @@ class Main extends React.Component {
       value: '',
       label: ['电话状态'],
       options: all.concat(APP.keys.EnumContactStatus)
-    },
-    {
-      label: ['纳税类别'],
-      value: '',
-      field: 'payTaxesNature',
-      type: 'select',
-      options: all.concat(APP.keys.EnumPayTaxesNature)
-    },
-    {
-      label: ['客户来源'],
-      value: '',
-      field: 'customerSource',
-      type: 'select',
-      options: all.concat(APP.keys.EnumCustomerSource)
     }
   ]
   public columns: ColumnProps<DetailProps>[] = [{
@@ -106,19 +93,10 @@ class Main extends React.Component {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '意向度',
     dataIndex: 'intention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
-    }
-  }, {
-    title: '电话状态',
-    dataIndex: 'telephoneStatus',
-    render: (val) => {
-      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: '空置天数',
@@ -131,12 +109,6 @@ class Main extends React.Component {
     dataIndex: 'source',
     render: (val) => {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
-    }
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
     title: '预约时间',
@@ -209,8 +181,11 @@ class Main extends React.Component {
     }
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
-    this.params.payTaxesNature = values.payTaxesNature.value || undefined
-    this.params.customerSource = values.customerSource.value || undefined
+    this.fetchList()
+  }
+  public handleSelectType (values: any) {
+    this.params.payTaxesNature = values.payTaxesNature || undefined
+    this.params.customerSource = values.customerSource || undefined
     this.fetchList()
   }
   public handleSearchType (values: any) {
@@ -293,33 +268,37 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='我的预约'>
-        <div className='mb12 clear'>
-          <div className='fl' style={{ width: 740 }}>
-            <Condition
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-          </div>
-          <div className='fr' style={{ width: 290 }}>
-            <SearchName
-              style={{paddingTop: '5px'}}
-              options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
-                { value: 'contactPhone', label: '联系电话'},
-                { value: 'currentSalesperson', label: '所属销售'}
-                // { value: 'customerSource', label: '客户来源'},
-                // { value: 'payTaxesNature', label: '纳税类别'}
-              ]}
-              placeholder={''}
-              onKeyDown={(e, val) => {
-                if (e.keyCode === 13) {
-                  console.log(val, 'onKeyDown')
+        <div className='mb12'>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
+          <div>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+              <SearchName
+                style={{paddingTop: '5px'}}
+                options={[
+                  { value: 'customerName', label: '客户名称'},
+                  { value: 'contactPerson', label: '联系人'},
+                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'currentSalesperson', label: '所属销售'}
+                ]}
+                placeholder={''}
+                onKeyDown={(e, val) => {
+                  if (e.keyCode === 13) {
+                    console.log(val, 'onKeyDown')
+                    this.handleSearchType(val)
+                  }
+                }}
+                onSearch={(val) => {
                   this.handleSearchType(val)
-                }
-              }}
-              onSearch={(val) => {
-                this.handleSearchType(val)
+                }}
+              />
+            </div>
+            <SelectSearch
+              onChange={(values) => {
+                console.log(values, 'values')
+                this.handleSelectType(values)
               }}
             />
           </div>

@@ -8,13 +8,11 @@ export interface DetailProps {
   opetareContent: string
 }
 interface States {
-  data: DetailProps[],
-  current: number
+  data: DetailProps[]
 }
 export default class extends React.Component {
   public state: States = {
-    data: [],
-    current: 1
+    data: []
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '操作人',
@@ -28,20 +26,9 @@ export default class extends React.Component {
     title: '操作内容',
     dataIndex: 'opetareContent'
   }]
-  public onChange (e: any) {
-    this.setState({
-      current: e.target.value
-    })
-  }
   public render () {
     return (
       <div>
-        <div style={{float: 'right', marginBottom: 5 }}>
-          <RadioGroup onChange={this.onChange.bind(this)} value={this.state.current}>
-            <Radio value={1}>操作记录</Radio>
-            <Radio value={2}>线索记录</Radio>
-          </RadioGroup>
-        </div>
         <Table
           columns={this.columns}
           dataSource={this.state.data}

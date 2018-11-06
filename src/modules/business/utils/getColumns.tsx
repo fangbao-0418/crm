@@ -129,6 +129,10 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           >
             {val}
           </span>
+          {
+            !record.lastTrackTime &&
+            <span className={styles['new-point']}>新</span>
+          }
         </div>
       )
     }
@@ -136,19 +140,10 @@ export default function (): ColumnProps<Business.DetailProps>[] {
     title: '联系人',
     dataIndex: 'contactPerson'
   }, {
-    title: '联系电话',
-    dataIndex: 'contactPhone'
-  }, {
     title: '意向度',
     dataIndex: 'intention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
-    }
-  }, {
-    title: '电话状态',
-    dataIndex: 'telephoneStatus',
-    render: (val) => {
-      return (APP.dictionary[`EnumContactStatus-${val}`])
     }
   }, {
     title: (
@@ -168,12 +163,6 @@ export default function (): ColumnProps<Business.DetailProps>[] {
     dataIndex: 'source',
     render: (val) => {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
-    }
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
     }
   }, {
     title: (

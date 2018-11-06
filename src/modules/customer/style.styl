@@ -10,7 +10,7 @@
   margin-top 24px
   color #1890FF
 .record
-  padding 12px
+  padding-left 12px
   border-bottom 1px solid #e5e5e5
   div
     padding 5px 0 0
@@ -70,9 +70,19 @@
       margin-bottom: 0
     .ant-form-item-control
       line-height: 0
+    .ant-input-group-addon
+      padding 0 5px
 :global
   .btn-position
     position relative
     bottom 48px
     width 50%
     display: inline-block
+.before-required:before
+  content: '*'
+  color red
+:global
+  .ant-btn-ghost
+    color #40a9ff
+    background-color transparent
+    border-color #40a9ff

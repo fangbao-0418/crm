@@ -74,3 +74,17 @@ export const generateKey = <T extends {key?: number}>(arr: T[]): T[] => {
   })
   return arr
 }
+
+export const objectToArray = (sourceObject: {[key: string]: any}): {key: string, value: any}[] => {
+  const data: {key: string, value: any}[] = []
+  for (const key in sourceObject) {
+    if (sourceObject.hasOwnProperty(key)) {
+      console.log(sourceObject, 'sourceObject')
+      data.push({
+        key,
+        value: sourceObject[key]
+      })
+    }
+  }
+  return data
+}

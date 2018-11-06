@@ -36,6 +36,7 @@ class Main extends React.Component<Props> {
 
   }
   public handleCityChange (values: {key: string, label: string}[]) {
+    console.log(values, 'aaaaa')
     const labels: string[] = []
     const p: Promise<any>[] = []
     values.forEach((item) => {
@@ -94,11 +95,14 @@ class Main extends React.Component<Props> {
       <div className={styles.region}>
         <label>省份</label>
         <Select
+          showSearch
           className='mr10'
           mode='tags'
           labelInValue
           maxTagCount={0}
           // showArrow={true}
+          optionFilterProp='children'
+          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           placeholder='全部'
           maxTagPlaceholder={(
             <span title={this.state.cityName} className={styles['tag-placeholder']}>{this.state.cityName}</span>
@@ -124,6 +128,8 @@ class Main extends React.Component<Props> {
           labelInValue
           maxTagCount={0}
           // showArrow={true}
+          optionFilterProp='children'
+          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           placeholder='全部'
           value={this.state.showareaValues}
           maxTagPlaceholder={(

@@ -6,9 +6,11 @@ import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
 import CompanyList from './CompanyList'
 import OperateList from './OperateList'
+import FlowRecord from './FlowRecord'
 import Detail from './detail'
 const styles = require('./style')
 interface Props {
+  defaultKey?: string
   customerId?: string
   customerName?: string
   onClose?: () => void
@@ -24,6 +26,7 @@ class Main extends React.Component<Props> {
     console.log('11')
   }
   public render () {
+    console.log(this.props.defaultKey, 'this.props.defaultKey')
     return (
       <div style={{ width: '800px'}}>
         <span
@@ -33,7 +36,7 @@ class Main extends React.Component<Props> {
           <Icon type='close' theme='outlined' />
         </span>
         <Profile isShowAgent={true} customerName={this.props.customerName}/>
-        <Tabs defaultActiveKey='1' onChange={this.callback}>
+        <Tabs defaultActiveKey={this.props.defaultKey} onChange={this.callback}>
           <Tabs.TabPane tab='客户信息' key='1'>
             <Detail/>
           </Tabs.TabPane>
@@ -46,7 +49,10 @@ class Main extends React.Component<Props> {
           <Tabs.TabPane tab='相关公司' key='4'>
             <CompanyList customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='操作记录' key='5'>
+          <Tabs.TabPane tab='跟进小记' key='5'>
+            <FlowRecord customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='操作记录' key='6'>
             <OperateList/>
           </Tabs.TabPane>
         </Tabs>

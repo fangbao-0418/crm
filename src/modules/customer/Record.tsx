@@ -6,16 +6,20 @@ const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
   height?: number
+  type?: 'business' | 'signed'
 }
 class Main extends React.Component<Props> {
+  public relatedCompany: string[] = []
   public render () {
-    console.log(this.props, 'this.props')
     const { trackRecords, clueRecords } = this.props
+    if (this.props.detail.relatedCompany) {
+      this.relatedCompany = this.props.detail.relatedCompany.split(',')
+    }
     return (
-      <div style={{ borderLeft: '1px solid #e5e5e5' }}>
+      <div>
         <Tabs animated={false} defaultActiveKey='1'>
           <Tabs.TabPane tab='跟进记录' key='1'>
-            <div style={{overflowY: 'auto', height: this.props.height }}>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
             {
               trackRecords.length > 0 && trackRecords.map((item, index) => {
                 return (
@@ -112,6 +116,20 @@ class Main extends React.Component<Props> {
               }
             </div>
           </Tabs.TabPane>
+          {
+            this.props.type === 'business' &&
+            <Tabs.TabPane tab='相关公司记录' key='3'>
+              <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+                {
+                  this.relatedCompany.map((item, index) => {
+                    return (
+                      <li key={index}>{item}</li>
+                    )
+                  })
+                }
+              </div>
+            </Tabs.TabPane>
+          }
         </Tabs>
       </div>
     )

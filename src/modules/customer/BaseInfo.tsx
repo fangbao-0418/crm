@@ -431,7 +431,7 @@ class Main extends React.Component<Props> {
                       }}
                     >
                       {
-                        APP.keys.EnumCustomerSource.map((item) => {
+                        APP.keys.EnumCustomerOfflineSource.map((item) => {
                           return (
                             <Option
                               key={item.value}
@@ -514,7 +514,7 @@ class Main extends React.Component<Props> {
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
-          <Col span={12}>
+          {/* <Col span={12}>
             <Input
               field='legalPerson'
               label='法人'
@@ -522,7 +522,7 @@ class Main extends React.Component<Props> {
               value={this.props.detail.legalPerson}
               disabled={disabled}
             />
-          </Col>
+          </Col> */}
           <Col span={12}>
             <FormItemLayout
               label='纳税类别'
@@ -552,11 +552,33 @@ class Main extends React.Component<Props> {
               </Select>
             </FormItemLayout>
           </Col>
+          {
+            this.props.type !== 'customer' &&
+            <Col span={12}>
+              <FormItemLayout
+                label='地区'
+              >
+                <AutoComplete
+                  className={styles['auto-complete']}
+                  disabled={disabled}
+                  defaultValue={{
+                    name: detail.areaName
+                  }}
+                  data={this.state.areaList}
+                  onChange={this.handleAreaChange.bind(this)}
+                  setFields={{
+                    title: 'name',
+                    key: 'code'
+                  }}
+                />
+              </FormItemLayout>
+            </Col>
+          }
         </Row>
         {/* <Row>{detail.cityName ? 'true' : 'false'}</Row> */}
-        <Row gutter={8} className='mt10'>
-          {
-            this.props.type === 'customer' &&
+        {
+          this.props.type === 'customer' &&
+          <Row gutter={8} className='mt10'>
             <Col span={12}>
               <FormItemLayout
                 label='城市'
@@ -576,27 +598,27 @@ class Main extends React.Component<Props> {
                 />
               </FormItemLayout>
             </Col>
-          }
-          <Col span={12}>
-            <FormItemLayout
-              label='地区'
-            >
-              <AutoComplete
-                className={styles['auto-complete']}
-                disabled={disabled}
-                defaultValue={{
-                  name: detail.areaName
-                }}
-                data={this.state.areaList}
-                onChange={this.handleAreaChange.bind(this)}
-                setFields={{
-                  title: 'name',
-                  key: 'code'
-                }}
-              />
-            </FormItemLayout>
-          </Col>
-        </Row>
+            <Col span={12}>
+              <FormItemLayout
+                label='地区'
+              >
+                <AutoComplete
+                  className={styles['auto-complete']}
+                  disabled={disabled}
+                  defaultValue={{
+                    name: detail.areaName
+                  }}
+                  data={this.state.areaList}
+                  onChange={this.handleAreaChange.bind(this)}
+                  setFields={{
+                    title: 'name',
+                    key: 'code'
+                  }}
+                />
+              </FormItemLayout>
+            </Col>
+          </Row>
+        }
         <Row gutter={8} className='mt10'>
           <Col span={24}>
             <Input
@@ -620,7 +642,7 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        {
+        {/* {
           this.props.customerId &&
           <Row gutter={8} className='mt10'>
             <Col span={24}>
@@ -632,27 +654,7 @@ class Main extends React.Component<Props> {
               />
             </Col>
           </Row>
-        }
-        {/* <div className='text-right mt10'>
-          <Button
-            className='mr5'
-            type='primary'
-            onClick={this.save.bind(this)}
-          >
-            保存
-          </Button>
-          {
-            this.props.isBussiness &&
-            <Button
-              type='primary'
-              onClick={() => {
-                this.props.flowNow()
-              }}
-            >
-              现在跟进
-            </Button>
-          }
-        </div> */}
+        } */}
       </Form>
     )
   }

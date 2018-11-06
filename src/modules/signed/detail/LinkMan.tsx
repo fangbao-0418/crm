@@ -3,6 +3,7 @@ import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
+const styles = require('./style')
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
@@ -27,27 +28,54 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPerson',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        return (
-          <FormItem>
-            {getFieldDecorator(`contactPerson-${record.key}`, {
-              initialValue: text,
-              rules: [
-                {
-                  required: true,
-                  message: '联系人不能为空'
-                }
-              ]
-            })(
-              this.props.disabled ?
-                <span>{text}</span>
-              :
-                <Input
-                  onChange={this.onChange.bind(this, index, 'contactPerson')}
-                  value={text}
-                />
-            )}
-          </FormItem>
-        )
+        if (this.props.disabled) {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPerson-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系人不能为空'
+                  }
+                ]
+              })(
+                <div>
+                  <span>{text}</span>
+                  {
+                    record.isSignPerson === 1 &&
+                    <span className={styles.signed}>签约</span>
+                  }
+                </div>
+              )}
+            </FormItem>
+          )
+        } else {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPerson-${record.key}`, {
+                initialValue: text,
+                rules: [
+                  {
+                    required: true,
+                    message: '联系人不能为空'
+                  }
+                ]
+              })(
+                record.isSignPerson === 1 ?
+                  <div>
+                    <span>{text}</span>
+                    <span className={styles.signed}>签约</span>
+                  </div>
+                :
+                  <Input
+                    onChange={this.onChange.bind(this, index, 'contactPerson')}
+                    value={text}
+                  />
+              )}
+            </FormItem>
+          )
+        }
       }
     },
     {
@@ -55,32 +83,41 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        return (
-          <FormItem>
-            {getFieldDecorator(`contactPhone-${record.key}`, {
-              initialValue: text,
-              rules: [
-                {
-                  required: true,
-                  message: '联系电话不能为空'
-                },
-                {
-                  max: 11,
-                  message: '电话最多11位'
-                }
-              ]
-            })(
-              this.props.disabled ?
-                <span>{text}</span>
-              :
-                <Input
-                  type='number'
-                  onChange={this.onChange.bind(this, index, 'contactPhone')}
-                  value={text}
-                />
-            )}
-          </FormItem>
-        )
+        console.log(text, 'lianxidianhua')
+        if (this.props.disabled) {
+          return (
+            <FormItem>
+              <span>{text.trim()}</span>
+            </FormItem>
+          )
+        } else {
+          return (
+            <FormItem>
+              {getFieldDecorator(`contactPhone-${record.key}`, {
+                initialValue: text.trim(),
+                rules: [
+                  {
+                    required: true,
+                    message: '联系电话不能为空'
+                  },
+                  {
+                    max: 11,
+                    message: '电话最多11位'
+                  },
+                ]
+              })(
+                record.isSignPerson === 1 ?
+                  <span>{text.trim()}</span>
+                :
+                  <Input
+                    type='number'
+                    onChange={this.onChange.bind(this, index, 'contactPhone')}
+                    value={text}
+                  />
+              )}
+            </FormItem>
+          )
+        }
       }
     },
     {
