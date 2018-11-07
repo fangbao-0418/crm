@@ -13,8 +13,13 @@ class Main extends React.Component<Common.Props> {
           APP.user = user
         }}
       >
-        <Route hidden={!APP.hasPermission('bizbase_log')} path='/' component={modules.OperateLog} exact />
-        <Route path='/detail/:id' component={modules.OperateLogDetail}/>
+        <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
+        <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
+        <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />
+        <Route hidden={!APP.hasPermission('crm_sign_myself')} path='/signed' component={modules.Signed} />
+        <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />
+        <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />
+        <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />
       </Iframe>
     )
   }
