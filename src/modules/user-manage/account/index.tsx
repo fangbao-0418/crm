@@ -255,6 +255,8 @@ class Main extends React.Component<Props> {
             className={styles.searchcondition}
             showArrow={false}
             labelInValue
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onSelect={(value: {key: string, label: any}) => {
               this.searchPayload.companyId = value.key
               this.searchPayload.companyName = value.label

@@ -237,6 +237,8 @@ class Main extends React.Component<Props, any> {
             className={styles.searchcondition}
             showArrow={false}
             labelInValue
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onSelect={(value: {key: string, label: any}) => {
               console.log(value, 'company change')
               APP.dispatch<UserManage.Props>({
