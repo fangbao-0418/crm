@@ -13,16 +13,12 @@ class Main extends React.Component<Common.Props> {
           APP.user = user
         }}
       >
-        <Route hidden={!APP.hasPermission('track_outside_task_list')} path='/outsite/task/list' component={modules.TaskList}/>
-        <Route path='/outsite/task/show/:id' component={modules.TaskShow}/>
-        <Route hidden={!APP.hasPermission('track_outside_task_add')} path='/outsite/task/form' component={modules.TaskForm}/>
-        <Route hidden={!APP.hasPermission('track_outside_tasktemplate_main')} path='/outsite/tasktpl/list' component={modules.TasktplList}/>
-        <Route path='/outsite/tasktpl/form/:id?' component={modules.TasktplForm}/>
-        <Route hidden={!APP.hasPermission('track_outside_tasktemplate_sub')} path='/outsite/tasktpl/sublist' component={modules.TasktplSublist}/>
-        <Route path='/outsite/tasktpl/subform/:id?' component={modules.TasktplSubform}/>
-        <Route hidden={!APP.hasPermission('track_outside_reward_config')} path='/outsite/perform/list' component={modules.PerformList}/>
-        <Route hidden={!APP.hasPermission('track_outside_data_overview')} path='/outsite/data-overview' component={modules.TaskDataOverview}/>
-        <Route hidden={!APP.hasPermission('track_outside_data_detail')} path='/outsite/data-detail' component={modules.TaskDataDetail}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_user_list')} path='/center-account' component={modules.CenterAccount}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_organization')} path='/center-department' component={modules.CenterDepartment}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_authority')} path='/center-permission' component={modules.CenterPermission}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_role')} path='/center-role' component={modules.CenterRole}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_company')} path='/organ' component={modules.Organ}/>
+        <Route hidden={!APP.hasPermission('bizbase_user_customer')} path='/user-manage/:type' component={modules.UserManage}/>
       </Iframe>
     )
   }
