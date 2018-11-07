@@ -7,7 +7,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const extractCommon = new MiniCssExtractPlugin({
   filename: 'css/[name].[contenthash:8].css'
 })
-const publicPath = '/operate-log'
+const publicPath = '/legwork'
 var plugins = [
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, '../src/index.html'),
