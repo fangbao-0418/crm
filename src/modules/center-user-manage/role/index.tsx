@@ -160,7 +160,15 @@ class Main extends React.Component {
     const columns = [
       {
         title: '角色名称',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        render: (val: any, record: any) => {
+          const {id, name, roleType, status} = record
+          return (
+            status === 0 ?
+            <a onClick={() => {this.setRole('view', id)}}>{val}</a>
+            : <span className={styles.disable}>{val}</span>
+          )
+        }
       },
       {
         title: '操作',
@@ -171,8 +179,8 @@ class Main extends React.Component {
               {
                 status === 0
                   ? <div>
-                      <a hidden={!APP.hasPermission('bizbase_user_role_info')} onClick={() => {this.setRole('view', id)}}>查看</a>
-                      <Divider type='vertical'/>
+                      {/* <a hidden={!APP.hasPermission('bizbase_user_role_info')} onClick={() => {this.setRole('view', id)}}>查看</a>
+                      <Divider type='vertical'/> */}
                       <a hidden={!APP.hasPermission('bizbase_user_role_edit')} onClick={() => {this.setRole('modify', id)}}>修改</a>
                       <Divider type='vertical'/>
                       <a hidden={!APP.hasPermission('bizbase_user_role_update_status')} onClick={() => {this.forbidConfirm(id)}}>禁用</a>
@@ -180,8 +188,8 @@ class Main extends React.Component {
                       <a hidden={!APP.hasPermission('bizbase_user_role_delete')} onClick={() => {this.delConfirm('single', id)}}>删除</a>
                     </div>
                   : <div>
-                      <span hidden={!APP.hasPermission('bizbase_user_role_info')} className={styles.disable}>查看</span>
-                      <Divider type='vertical'/>
+                      {/* <span hidden={!APP.hasPermission('bizbase_user_role_info')} className={styles.disable}>查看</span>
+                      <Divider type='vertical'/> */}
                       <span hidden={!APP.hasPermission('bizbase_user_role_edit')} className={styles.disable}>修改</span>
                       <Divider type='vertical'/>
                       <a hidden={!APP.hasPermission('bizbase_user_role_update_status')} onClick={() => {this.unforbidRole(id)}}>已禁用</a>

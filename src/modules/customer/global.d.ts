@@ -95,6 +95,7 @@ declare namespace Customer {
     remark?: string
     createTime?: string
     trackRecordType?: string
+    tagFollowUpClassification?: number
     /** 预约时间 */
     appointTime?: string
   }

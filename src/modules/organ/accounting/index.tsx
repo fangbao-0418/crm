@@ -9,6 +9,7 @@ const Search = Input.Search
 interface State {
   pageTotal: number // 列表总数
   dataSource: Organ.AccountingItemProps[] // 数据源
+  companyList?: UserManage.CompanyProps[]
 }
 
 class Main extends React.Component<any, State> {
@@ -55,13 +56,13 @@ class Main extends React.Component<any, State> {
 
   public state: State = {
     pageTotal: 0,
-    dataSource: []
+    dataSource: [],
+    companyList: []
   }
 
   public componentWillMount () {
     this.getList()
   }
-
   // public componentWillReceiveProps (nextProps: any) {
   //   if (nextProps.showAccountingModal - this.props.showAccountingModal === 1) { // 该条件代表点击添加
   //     this.setAccounting('add')

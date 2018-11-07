@@ -49,9 +49,9 @@ class Main extends React.Component<Props> {
                         </span>
                       }
                       {
-                        item.tagTelephoneStatus > -1 &&
+                        item.tagFollowUpClassification > -1 &&
                         <span className={styles.tag}>
-                          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                          {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
                         </span>
                       }
                       {

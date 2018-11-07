@@ -23,13 +23,13 @@ class Main extends React.Component<Props> {
     info: {},
     disabled: false
   }
-  public downFile () {
-    const fileUrl = require('@/assets/files/客资导入模板.xlsx')
-    const el = document.createElement('a')
-    el.setAttribute('href', fileUrl)
-    el.setAttribute('download', '客资导入模版')
-    el.click()
-  }
+  // public downFile () {
+  //   const fileUrl = require('@/assets/files/客资导入模板.xlsx')
+  //   const el = document.createElement('a')
+  //   el.setAttribute('href', fileUrl)
+  //   el.setAttribute('download', '客资导入模版')
+  //   el.click()
+  // }
   public uploadFile () {
     const info = this.state.info
     const name = info.file.name
@@ -97,13 +97,13 @@ class Main extends React.Component<Props> {
           <Dragger {...props}>
             <Button disabled={this.state.disabled} type='primary' className='mr10'>上传文件</Button>
           </Dragger>
-          <Button className={styles.down} type='ghost' onClick={this.downFile.bind(this)}>下载客户模版</Button>
+          {/* <Button className={styles.down} type='ghost' onClick={this.downFile.bind(this)}>下载客户模版</Button>
           {
             !this.state.disabled &&
             <p className='text-center'>
               导入说明：导入文件仅支持excel格式
             </p>
-          }
+          } */}
         </div>
         <div className='text-right'>
           {/* <Button className='mr5' type='ghost' onClick={() => {this.props.onPre()}}>上一步</Button> */}

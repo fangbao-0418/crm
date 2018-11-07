@@ -37,7 +37,9 @@ class Main extends React.Component<Props> {
       dataIndex: 'phone'
     },
     {
-      title: '代理商',
+      title: (
+        <span>{this.props.type === 'Agent' ? '代理商' : '直营公司'}</span>
+      ),
       dataIndex: 'companyName'
     },
     {
@@ -253,6 +255,8 @@ class Main extends React.Component<Props> {
             className={styles.searchcondition}
             showArrow={false}
             labelInValue
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onSelect={(value: {key: string, label: any}) => {
               this.searchPayload.companyId = value.key
               this.searchPayload.companyName = value.label
