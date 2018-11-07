@@ -7,6 +7,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const extractCommon = new MiniCssExtractPlugin({
   filename: 'css/[name].[contenthash:8].css'
 })
+const publicPath = '/permission'
 var plugins = [
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, '../src/index.html'),
@@ -26,6 +27,9 @@ var plugins = [
     // necessary to consistently work with multiple chunks via CommonsChunkPlugin
     // chunksSortMode: 'dependency'
     // hash:true
+  }),
+  new webpack.DefinePlugin({
+    PUBLIC_PATH: JSON.stringify(publicPath)
   }),
   new webpack.ProvidePlugin({
     $: 'jquery',
@@ -54,7 +58,7 @@ module.exports = {
     path: path.resolve(__dirname, '../deploy/dist'),
     filename: 'js/[name].[chunkhash:8].js',
     chunkFilename: 'js/[name].[chunkhash:8].js',
-    publicPath: '/'
+    publicPath
   },
   module: {
     rules: [

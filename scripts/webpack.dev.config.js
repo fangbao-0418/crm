@@ -14,6 +14,9 @@ var plugins = [
     inject: true,
     favicon: path.resolve(__dirname, '..', 'src/favicon.ico')
   }),
+  new webpack.DefinePlugin({
+    PUBLIC_PATH: JSON.stringify('/')
+  }),
   new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
