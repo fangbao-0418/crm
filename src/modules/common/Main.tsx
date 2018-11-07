@@ -13,7 +13,7 @@ class Main extends React.Component<Common.Props> {
           APP.user = user
         }}
       >
-        <Route hidden={!APP.hasPermission('notification_remind')} path='/list' component={modules.MessageList}/>
+        <Route hidden={!APP.hasPermission('config_dict')} path='/' component={modules.Configure}/>{modules.MessageList}/>
       </Iframe>
     )
   }
