@@ -44,7 +44,7 @@ class Main extends React.Component<null, State> {
             <span
               className='href'
               onClick={() => {
-                APP.history.push(`/operate-log/detail/${record.operatorId}`)
+                APP.history.push(`/detail/${record.operatorId}`)
               }}
             >
               查看
