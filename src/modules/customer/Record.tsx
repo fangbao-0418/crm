@@ -49,9 +49,9 @@ class Main extends React.Component<Props> {
                         </span>
                       }
                       {
-                        item.trackRecordType > -1 &&
+                        item.tagFollowUpClassification > -1 &&
                         <span className={styles.tag}>
-                          {APP.dictionary[`EnumFollowUpClassification-${item.trackRecordType}`]}
+                          {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
                         </span>
                       }
                       {
