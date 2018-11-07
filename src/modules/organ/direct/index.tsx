@@ -5,7 +5,7 @@ import { fetchDirectList, changeCompanyInfo, fetchCompanyDetail, delDirect, chec
 import { Modal } from 'pilipa'
 import Detail from './detail'
 import Area from './Area'
-const Search = Input.Search
+import { fetchCompanyList } from '@/modules/user-manage/api'
 interface Props {
   type?: 'DirectCompany' | 'Agent'
   columns?: ColumnProps<any>[]
@@ -13,11 +13,13 @@ interface Props {
 interface State {
   pagination?: Common.PaginationProps
   dataSource?: Organ.DirectItemProps[]
+  companyList?: UserManage.CompanyProps[]
 }
 class Main extends React.Component<Props, State> {
   public type = this.props.type !== undefined ? this.props.type : 'DirectCompany'
   public state: State = {
     dataSource: [],
+    companyList: [],
     pagination: {
       total: 0,
       current: 1,
@@ -87,6 +89,20 @@ class Main extends React.Component<Props, State> {
   ]
   public componentWillMount () {
     this.fetchList()
+    if (this.props.type === 'Agent') {
+      this.fetchCompanyList('Agent')
+    } else {
+      this.fetchCompanyList('DirectCompany')
+    }
+    this.fetchCompanyList('DirectCompany')
+  }
+  public fetchCompanyList (type: UserManage.TypeProps) {
+    // 'DirectCompany' | 'Agent' | 'System'
+    fetchCompanyList(type).then((res) => {
+      this.setState({
+        companyList: res
+      })
+    })
   }
   public fetchList () {
     this.payload.name = this.payload.name || undefined
@@ -184,19 +200,35 @@ class Main extends React.Component<Props, State> {
   }
   public render () {
     const { dataSource, pagination } = this.state
+    console.log(this.state.companyList, 'companylist')
     return (
       <div>
         <div className='mb10'>
-          <Search
-            className='inline-block middle mr5'
+          <Select
+            style={{ width: 200 }}
+            showSearch
+            allowClear={true}
             placeholder={`请输入${this.type === 'Agent' ? '代理商' : '直营'}名称`}
-            onSearch={(value) => {
+            className='inline-block middle mr5'
+            showArrow={false}
+            labelInValue
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            onChange={(value: {key: string, label: any}) => {
+              console.log(value, 'value')
               this.payload.pageCurrent = 1
-              this.payload.name = value
+              this.payload.name = value ? value.label : ''
               this.fetchList()
             }}
-            style={{ width: 200 }}
-          />
+          >
+            {
+              this.state.companyList.map((item) => {
+                return (
+                  <Select.Option key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
+          </Select>
           <Area
             style={{
               verticalAlign: 'middle'
