@@ -135,7 +135,7 @@ class Main extends React.Component<any, State> {
   public render () {
     return (
       <div>
-        <div className='mb10'> */}
+        <div className='mb10'>
           <Search
             className='inline-block middle mr5'
             placeholder='请输入机构名称'
