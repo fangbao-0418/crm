@@ -16,12 +16,8 @@ class App extends React.Component<Props> {
     return (
       <LocaleProvider locale={zhCN}>
         <Switch>
-          <Route path='/login' component={modules.Login} />
-          <Route path='/logout' component={modules.Logout} />
           <Route path='/check' />
-          {
-            this.props.visible && <Main></Main>
-          }
+          <Main></Main>
         </Switch>
       </LocaleProvider>
     )
