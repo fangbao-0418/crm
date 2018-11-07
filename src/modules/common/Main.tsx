@@ -13,7 +13,6 @@ class Main extends React.Component<Common.Props> {
           APP.user = user
         }}
       >
-        {/* <Route path='/' component={modules.Index} exact/> */}
         {/*权限管理*/}
         <Route hidden={!APP.hasPermission('bizbase_user_user_list')} path='/center-account' component={modules.CenterAccount}/>
         <Route hidden={!APP.hasPermission('bizbase_user_organization')} path='/center-department' component={modules.CenterDepartment}/>

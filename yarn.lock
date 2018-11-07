@@ -5063,9 +5063,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/pify/download/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-pilipa-terrace@^1.0.0-alpha.11:
-  version "1.0.0-alpha.11"
-  resolved "http://registry.npm.taobao.org/pilipa-terrace/download/pilipa-terrace-1.0.0-alpha.11.tgz#0361c8ae75c39ecbcce338c5792db9d787767148"
+pilipa-terrace@^1.0.0-alpha.12:
+  version "1.0.0-alpha.12"
+  resolved "http://registry.npm.taobao.org/pilipa-terrace/download/pilipa-terrace-1.0.0-alpha.12.tgz#f13bedaaa6ba513a95bb54314e4f2fcf8b51a8bb"
   dependencies:
     antd "3.10.1"
     babel-polyfill "^6.26.0"
