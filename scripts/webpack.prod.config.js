@@ -58,7 +58,7 @@ module.exports = {
     path: path.resolve(__dirname, '../deploy/dist'),
     filename: 'js/[name].[chunkhash:8].js',
     chunkFilename: 'js/[name].[chunkhash:8].js',
-    publicPath
+    publicPath: publicPath + '/'
   },
   module: {
     rules: [

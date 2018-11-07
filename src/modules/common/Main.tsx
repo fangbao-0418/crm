@@ -7,6 +7,7 @@ class Main extends React.Component<Common.Props> {
   public render () {
     return (
       <Iframe
+        env={APP.env}
         token={APP.token}
         onChange={(user) => {
           APP.user = user
