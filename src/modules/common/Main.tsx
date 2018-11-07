@@ -13,7 +13,8 @@ class Main extends React.Component<Common.Props> {
           APP.user = user
         }}
       >
-        <Route hidden={!APP.hasPermission('config_dict')} path='/' component={modules.Configure}/>{modules.MessageList}/>
+        <Route hidden={!APP.hasPermission('track_work_order')} path='/workorder/list' component={modules.WorkorderList}/>
+        <Route path='/workorder/show/:id' component={modules.WorkorderShow}/>
       </Iframe>
     )
   }
