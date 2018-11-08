@@ -3,11 +3,19 @@ import { connect } from 'react-redux'
 import Route from '@/components/Route'
 import Iframe from 'pilipa-terrace/libs/iframe'
 import modules from '@/router/modules'
+import { fetchEnum } from './api'
 class Main extends React.Component<Common.Props> {
+  public componentWillMount () {
+    fetchEnum().then(() => {
+      this.forceUpdate()
+    })
+
+  }
   public render () {
     return (
       <Iframe
         env={APP.env}
+        type='crm'
         token={APP.token}
         onChange={(user) => {
           APP.user = user
