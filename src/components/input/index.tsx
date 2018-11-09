@@ -78,7 +78,7 @@ class Main extends React.Component<Props> {
               style={{width: labelWidth}}
             >
               {this.props.required && <span style={{color: 'red'}}>* </span>}
-              {this.props.addonBefore || this.getLabel()}
+              {this.props.addonBefore || this.getLabel()}:
             </div>
           }
           addonAfter={this.props.addonAfter}

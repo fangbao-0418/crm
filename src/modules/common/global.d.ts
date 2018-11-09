@@ -21,13 +21,6 @@ declare namespace Common {
     children?: RegionProps[]
     regionLevelResponseList?: RegionProps[]
   }
-  export interface AgentProps {
-    areaCode?: number
-    areaName?: string
-    name?: string
-    id?: string
-    companyType?: UserManage.TypeProps
-  }
   export interface Props {
     ajaxCount?: number
     user?: UserProps

@@ -3,6 +3,7 @@ import classNames from 'classnames'
 const styles = require('./style')
 interface Props {
   label?: string
+  labelStyle?: React.CSSProperties
   required?: boolean
   labelWidth?: string
 }
@@ -15,15 +16,20 @@ class Main extends React.Component<Props> {
           <span className='ant-input-wrapper ant-input-group'>
             {
               !!this.props.label && (
-                <span className='ant-input-group-addon'>
+                <span
+                  style={this.props.labelStyle}
+                  className={classNames('ant-input-group-addon', styles['no-border'])}
+                >
                   <div style={{width: labelWidth}}>
                     {this.props.required && <span style={{color: 'red'}}>* </span>}
-                    {this.props.label}
+                    {this.props.label}:
                   </div>
                 </span>
               )
             }
-            <span className='ant-input-affix-wrapper'>
+            <span
+              // className='ant-input-affix-wrapper'
+            >
               {this.props.children}
             </span>
           </span>

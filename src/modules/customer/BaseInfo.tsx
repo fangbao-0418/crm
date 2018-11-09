@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import { addCustomer, addBusinessCustomer, updateCustomer } from './api'
 import { fetchRegion } from '@/modules/common/api'
 import CompanySearch from '@/modules/signed/detail/CompanySearch'
+import LinkMan from './linkman'
 const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
@@ -449,6 +450,11 @@ class Main extends React.Component<Props> {
           </Row>
         }
         <Row gutter={8} className='mt10' >
+          <Col>
+            <LinkMan />
+          </Col>
+        </Row>
+        {/* <Row gutter={8} className='mt10' >
           <Col span={12}>
             <FormItem
             >
@@ -512,7 +518,7 @@ class Main extends React.Component<Props> {
               )}
             </FormItem>
           </Col>
-        </Row>
+        </Row> */}
         <Row gutter={8} className='mt10'>
           {/* <Col span={12}>
             <Input
