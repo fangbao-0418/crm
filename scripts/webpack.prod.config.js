@@ -195,7 +195,8 @@ module.exports = {
     moment: 'moment',
     antd: 'antd',
     'ali-oss': 'OSS',
-    echarts: 'echarts'
+    echarts: 'echarts',
+    'tq': 'browserfly'
   },
   devtool: ''
 }

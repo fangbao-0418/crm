@@ -29,6 +29,8 @@ declare namespace APP {
     /** 机构管理代理商公司状态 */
     EnumOrganAgentSource?: Array<{label: string, value: string}>
     EnumFollowUpClassification?: Array<{label: string, value: string}>
+    EnumCallConnectStatus?: Array<{label: string, value: string}>
+    EnumCallType?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {
@@ -45,6 +47,7 @@ declare namespace APP {
     ossUpload: (file: File) => any
     generateKey: <T>(arr: T[]) => T[]
     objectToArray: (sourceObject: {[key: string]: any}) => {key: string, value: any}[]
+    makecall: (phone: string) => void
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory
@@ -59,5 +62,5 @@ declare namespace APP {
   export let user: Common.UserProps
   export let homepage: string
   export const hasPermission: (code?: string) => boolean
+  export const tq: any
 }
-

@@ -100,3 +100,12 @@ export const allocateAuto = (payload: Array<{id: string, customerName: string, c
 export const getCompanyByCitycode = (citycode: string) => {
   return http(`/user/v1/api/company/list/region/region_city/${citycode}`)
 }
+export const makeCall = (payload: {
+  customerId: any
+  customerName: string
+  contactPhone: string
+  contactName: string
+}) => {
+  const query = $.param(payload)
+  return http(`/crm-manage/v1/api/makecall?${query}`, 'POST')
+}

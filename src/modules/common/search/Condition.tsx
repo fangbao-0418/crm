@@ -205,7 +205,7 @@ class Main extends React.Component<Props> {
               ) : label
             }
             {
-              item.field === 'date' &&
+              (item.field === 'date' && item.label.length > 1) &&
               <Icon type='down' theme='outlined' />
             }
           </label>

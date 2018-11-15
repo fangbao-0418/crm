@@ -14,7 +14,8 @@ function handleError (err: JQuery.jqXHR) {
 $(document).ajaxSend((event, response, options) => {
   const disableUrls = [
     '/notification/v1/api/remind/prompt/last/(\\w)+',
-    '/notification/v1/api/remind/unread/(\\w)+'
+    '/notification/v1/api/remind/unread/(\\w)+',
+    '/v1/api/makecall\\?customerId='
   ]
   const { url } = options
   const index = disableUrls.findIndex((test) => {

@@ -33,6 +33,7 @@ interface State {
   areaList: Common.RegionProps[]
 }
 class Main extends React.Component<Props> {
+  public linkman: any
   public state: State = {
     cityName: '',
     areaName: '',
@@ -144,7 +145,6 @@ class Main extends React.Component<Props> {
     })
   }
   public handleChange (e: React.SyntheticEvent, value: {key: string, value: any}) {
-    console.log(value)
     if (/linkMan\[0\]/.test(value.key)) {
       const linkMan: any = this.props.linkMan
       const field = value.key.replace('linkMan[0].', '')
@@ -187,38 +187,44 @@ class Main extends React.Component<Props> {
         if (errs) {
           return
         }
-        const params = this.props.detail
-        if (this.props.type === 'customer' && !params.cityCode) {
-          APP.error('请选择城市！')
-          return
-        }
-        params.customerNameType = '1' // 后端不需要改代码所以加上
-        const person = _.cloneDeep(this.props.linkMan)
-        person.forEach((item) => {
-          delete item.key
-        })
-        params.contactPersons = person
-        if (this.props.detail.id) {
-          updateCustomer(this.props.detail.id, params).then(() => {
-            resolve()
-          }, () => {
+        this.linkman.props.form.validateFields((errs2: any) => {
+          if (errs2) {
             reject()
-          })
-        } else {
-          if (this.props.type === 'business') { // 商机新增接口
-            addBusinessCustomer(params).then((res) => {
-              resolve(res)
-            }, () => {
-              reject()
-            })
           } else {
-            addCustomer(params).then(() => { // 客资新增接口
-              resolve()
-            }, () => {
-              reject()
+            const params = this.props.detail
+            if (this.props.type === 'customer' && !params.cityCode) {
+              APP.error('请选择城市！')
+              return
+            }
+            params.customerNameType = '1' // 后端不需要改代码所以加上
+            const person = _.cloneDeep(this.props.linkMan)
+            person.forEach((item) => {
+              delete item.key
             })
+            params.contactPersons = person
+            if (this.props.detail.id) {
+              updateCustomer(this.props.detail.id, params).then(() => {
+                resolve()
+              }, () => {
+                reject()
+              })
+            } else {
+              if (this.props.type === 'business') { // 商机新增接口
+                addBusinessCustomer(params).then((res) => {
+                  resolve(res)
+                }, () => {
+                  reject()
+                })
+              } else {
+                addCustomer(params).then(() => { // 客资新增接口
+                  resolve()
+                }, () => {
+                  reject()
+                })
+              }
+            }
           }
-        }
+        })
       })
     })
   }
@@ -451,7 +457,14 @@ class Main extends React.Component<Props> {
         }
         <Row gutter={8} className='mt10' >
           <Col>
-            <LinkMan />
+            <LinkMan
+              disabled={disabled}
+              showTel={this.props.type === 'business'}
+              getInstance={(ref) => {
+                console.log(ref)
+                this.linkman = ref
+              }}
+            />
           </Col>
         </Row>
         {/* <Row gutter={8} className='mt10' >

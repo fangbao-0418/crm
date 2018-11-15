@@ -75,7 +75,9 @@ export default function (record: Business.DetailProps, index?: number,
                 onClick={() => {
                   that.ins.save().then(() => {
                     // APP.success('保存成功')
-                    operate.onOk()
+                    if (operate.onOk) {
+                      operate.onOk()
+                    }
                   })
                 }}
               >
@@ -86,12 +88,13 @@ export default function (record: Business.DetailProps, index?: number,
                 className='mr5'
                 onClick={() => {
                   that.ins.save().then(() => {
-                    // APP.success('保存成功')
-                    operate.onOk()
+                    if (operate.onOk) {
+                      operate.onOk()
+                    }
+                    if (operate.onPrev) {
+                      operate.onPrev()
+                    }
                   })
-                  if (operate.onPrev) {
-                    operate.onPrev()
-                  }
                 }}
               >
                 上一条
@@ -100,12 +103,13 @@ export default function (record: Business.DetailProps, index?: number,
                 type='ghost'
                 onClick={() => {
                   that.ins.save().then(() => {
-                    // APP.success('保存成功')
-                    operate.onOk()
+                    if (operate.onOk) {
+                      operate.onOk()
+                    }
+                    if (operate.onNext) {
+                      operate.onNext()
+                    }
                   })
-                  if (operate.onNext) {
-                    operate.onNext()
-                  }
                 }}
               >
                 下一条

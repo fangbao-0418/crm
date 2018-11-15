@@ -26,10 +26,16 @@ const defaultVal: Customer.Props = {
   trackRecords: [],
   clueRecords: []
 }
+function customizer (objValue: any, srcValue: any) {
+  if (_.isArray(objValue)) {
+    return srcValue
+  }
+}
+
 export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
     payload = Object.assign({}, state, _.cloneDeep(payload))
-    payload = _.merge(_.cloneDeep(defaultVal), payload)
+    payload = _.mergeWith(_.cloneDeep(defaultVal), payload, customizer)
     const linkMan: any = APP.fn.generateKey(payload.linkMan)
     linkMan[0].isMainContact = 1
     return {

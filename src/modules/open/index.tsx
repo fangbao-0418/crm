@@ -279,6 +279,11 @@ class Main extends React.Component {
                     deleteCustomer(customerId).then(() => {
                       APP.success('删除成功')
                       this.fetchList().then((res) => {
+                        const page = Math.ceil(res.pageTotal / res.pageSize)
+                        if (page < this.params.pageCurrent) {
+                          modal.hide()
+                          return
+                        }
                         const data = res.data
                         if (data instanceof Array && data[index]) {
                           customerId = data[index].id

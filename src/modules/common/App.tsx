@@ -23,5 +23,5 @@ class App extends React.Component<Props> {
   }
 }
 export default withRouter(connect((state: Reducer.State) => {
-  return state.common
+  return {}
 })(App))

@@ -304,7 +304,10 @@ class Main extends React.Component<Customer.Props, States> {
             getWrappedInstance={(ins) => {
               instance = ins
             }}
-            onClose={() => modal.hide()}
+            onClose={() => {
+              modal.hide()
+              this.fetchList()
+            }}
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
@@ -331,8 +334,13 @@ class Main extends React.Component<Customer.Props, States> {
                     deleteCustomer(customerId).then(() => {
                       APP.success('删除成功')
                       this.fetchList().then((res) => {
+                        const page = Math.ceil(res.pageTotal / res.pageSize)
+                        if (page < this.params.pageCurrent) {
+                          modal.hide()
+                          return
+                        }
                         dataSource = res.data
-                        if (data instanceof Array && data[index]) {
+                        if (dataSource instanceof Array && dataSource[index]) {
                           customerId = dataSource[index].customerId
                           changeCustomerDetailAction(customerId)
                         } else {
@@ -350,28 +358,27 @@ class Main extends React.Component<Customer.Props, States> {
                   onClick={() => {
                     instance.save().then(() => {
                       APP.success('保存成功')
-                      this.fetchList()
+                      index -= 1
+                      if (index === -1) {
+                        if (searchPayload.pageCurrent === 1) {
+                          modal.hide()
+                          return
+                        }
+                        index = searchPayload.pageSize - 1
+                        searchPayload.pageCurrent -= 1
+                        dataSource = []
+                      }
+                      if (dataSource.length === 0) {
+                        this.fetchList().then((res) => {
+                          dataSource = res.data || []
+                          changeCustomerDetailAction(dataSource[index].customerId)
+                        })
+                      } else {
+                        changeCustomerDetailAction(dataSource[index].customerId)
+                      }
                     }, () => {
                       APP.error('保存失败')
                     })
-                    index -= 1
-                    if (index === -1) {
-                      if (searchPayload.pageCurrent === 1) {
-                        modal.hide()
-                        return
-                      }
-                      index = searchPayload.pageSize - 1
-                      searchPayload.pageCurrent -= 1
-                      dataSource = []
-                    }
-                    if (dataSource.length === 0) {
-                      this.fetchList().then((res) => {
-                        dataSource = res.data || []
-                        changeCustomerDetailAction(dataSource[index].customerId)
-                      })
-                    } else {
-                      changeCustomerDetailAction(dataSource[index].customerId)
-                    }
                   }}
                 >
                   上一页
@@ -381,33 +388,32 @@ class Main extends React.Component<Customer.Props, States> {
                   onClick={() => {
                     instance.save().then(() => {
                       APP.success('保存成功')
-                      this.fetchList()
-                    }, () => {
-                      APP.error('保存失败')
-                    })
-                    index += 1
-                    if (index >= searchPayload.pageSize) {
-                      searchPayload.pageCurrent += 1
-                      dataSource = []
-                      index = 0
-                    }
-                    if (dataSource.length === 0) {
-                      this.fetchList().then((res) => {
-                        if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
-                          searchPayload.pageCurrent -= 1
+                      index += 1
+                      if (index >= searchPayload.pageSize) {
+                        searchPayload.pageCurrent += 1
+                        dataSource = []
+                        index = 0
+                      }
+                      if (dataSource.length === 0) {
+                        this.fetchList().then((res) => {
+                          if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                            searchPayload.pageCurrent -= 1
+                            modal.hide()
+                            return
+                          }
+                          dataSource = res.data || []
+                          changeCustomerDetailAction(dataSource[index].customerId)
+                        })
+                      } else {
+                        if (dataSource[index] === undefined) {
                           modal.hide()
                           return
                         }
-                        dataSource = res.data || []
                         changeCustomerDetailAction(dataSource[index].customerId)
-                      })
-                    } else {
-                      if (dataSource[index] === undefined) {
-                        modal.hide()
-                        return
                       }
-                      changeCustomerDetailAction(dataSource[index].customerId)
-                    }
+                    }, () => {
+                      APP.error('保存失败')
+                    })
                   }}
                 >
                   下一页
@@ -421,6 +427,7 @@ class Main extends React.Component<Customer.Props, States> {
       header: null,
       mask: true,
       onCancel: () => {
+        this.fetchList()
         modal.hide()
       }
     })

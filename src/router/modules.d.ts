@@ -11,6 +11,8 @@ interface ModuleProps {
   Signed: RouteComponent
   /** 公海 */
   Open: RouteComponent
+  /** 呼叫统计 */
+  Shout: RouteComponent
   /** 客户设置 */
   CustomerSet: RouteComponent
   /** 分客设置 */
