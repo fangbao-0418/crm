@@ -5000,9 +5000,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/pify/download/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-pilipa-terrace@^1.0.0-alpha.18:
-  version "1.0.0-alpha.18"
-  resolved "http://registry.npm.taobao.org/pilipa-terrace/download/pilipa-terrace-1.0.0-alpha.18.tgz#73679084e3c059968722b6bde773ec7574a0337d"
+pilipa-terrace@^1.0.0-alpha.25:
+  version "1.0.0-alpha.25"
+  resolved "http://registry.npm.taobao.org/pilipa-terrace/download/pilipa-terrace-1.0.0-alpha.25.tgz#95fd0954743976cfcf1a552d19e71a6dbd54c62c"
   dependencies:
     antd "3.10.1"
     babel-polyfill "^6.26.0"

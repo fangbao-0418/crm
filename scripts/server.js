@@ -16,8 +16,8 @@ const options = {
       changeOrigin: true,
       secure: false
     },
-    '/work': {
-      target: 'https://x-sys.i-counting.cn',
+    '/json': {
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     },
