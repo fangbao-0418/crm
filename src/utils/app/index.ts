@@ -1,7 +1,7 @@
 import notification from 'pilipa/libs/notification'
 import storage from '../storage'
 import * as fn from './fn'
-import tq from 'tq'
+// import tq from 'tq'
 Object.assign(APP, {
   user: undefined,
   env: process.env.NODE_ENV,
@@ -11,7 +11,7 @@ Object.assign(APP, {
       message: msg
     })
   },
-  tq: tq.noConflict(),
+  // tq: tq.noConflict(),
   error: (msg: string) => {
     notification.warning({
       message: msg
