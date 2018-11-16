@@ -90,36 +90,48 @@ export const objectToArray = (sourceObject: {[key: string]: any}): {key: string,
   }
   return data
 }
-
-export const makecall = (phone: string) => {
-  // APP.tq.destroy()
+export const jsmcInit = () => {
+  APP.jsmc.destroy()
   const initOptions = {
     debug: true, // default:false 是否开启调试模式
     // strid: '9817482', // 用户名；与uin其中一个必填
     uin: '9817482', // tq号 ；与strid其中一个必填
     admin_uin: '9786987', // 管理员TQ号;必填
     appid: '42714805-dd53-4cf3-a470-8e7963971d60', // 开发者id；必填
-    access_token: '0DC65C7C455DF6936A08A0A22444659D0E7310B45AEBFE6890BAE13CF3B86F9941AF409433A36367F6FC2A2BB3AF3F44', // 秘钥，需从服务器获取；必填
-    server_url: 'http://vip.sh.tq.cn', // ip:port //服务器地址；必填
-    reconnectPeriod: 1000 * 60
+    access_token: '5EDBA8BE9A7AA6C36C4ECDD59BC4EF7A212C72F46B0D84C7673249CD9CF88A7DAAB73A818287148043BA46394BDBA2F0', // 秘钥，需从服务器获取；必填
+    server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
+    // reconnectPeriod: 1000 * 60
   }
   APP.jsmc.init(initOptions)
-  const makeCallOption = {
-    phone, // 外呼电话号码
-    error (ret: any) {
-      console.log(ret, 'error')
-    },
-    success (ret: any) {
-      console.log(ret, 'success')
-      // 参数ret ：{"errcode":"0","errmsg":" 操作成功! "}
+  // APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
+  //   // call_state agent_hangup/caller_hangup：座席/客户挂机
+  //   console.log(message, jsonObject, 'call event')
+  //   if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+  //     APP.error('呼叫终止')
+  //   }
+  // })
+}
+export const makecall = (phone: string) => {
+  return new Promise((resolve, reject) => {
+    const makeCallOption = {
+      phone, // 外呼电话号码
+      error (ret: any) {
+        console.log(ret, 'error')
+        reject(ret)
+      },
+      success (ret: any) {
+        console.log(ret, 'success')
+        resolve(ret)
+        // 参数ret ：{"errcode":"0","errmsg":" 操作成功! "}
+      }
     }
-  }
-  const makeCallCallBack = (ret: any, jsonObject: any) => {
-    console.log(ret, 'make call back')
-    // 返回值ret示例：
-    // {"call_id":"7f9d0fac-28c0-11e7-9b0b-a7bde87e7c89","errcode":0,"errmsg":"OK"}};
-    // jsonObject对象示例：
-    // {"strid":"seat01","uin":8000001,"admin_uin":8000000,"phone":"13711110000"}
-  }
-  APP.jsmc.invokeEvent('makecall', makeCallOption, makeCallCallBack)
+    const makeCallCallBack = (ret: any, jsonObject: any) => {
+      console.log(ret, jsonObject, 'make call back')
+      if (String(ret.errcode) !== '0') {
+        APP.error(ret.errmsg)
+        reject(ret)
+      }
+    }
+    APP.jsmc.invokeEvent('makecall', makeCallOption, makeCallCallBack)
+  })
 }

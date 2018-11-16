@@ -8,7 +8,16 @@ interface Props {
   detail: Customer.DetailProps
   style?: React.CSSProperties
 }
+let init = false
 class Main extends React.Component<Props> {
+  public constructor (props: Props) {
+    super(props)
+    if (init === false) {
+      console.log('init')
+      APP.fn.jsmcInit()
+      init = true
+    }
+  }
   public makeCall () {
     const payload = {
       customerId: this.props.detail.id,
@@ -22,17 +31,20 @@ class Main extends React.Component<Props> {
     return (
       <div
         style={this.props.style}
-        className={classNames(styles.tel)}
+        className={classNames(styles.tel, styles.disabled)}
         onClick={(e) => {
-          // this.makeCall()
-          // APP.success('拨打成功')
           const el: any = e.target
-          if (el.className.split(' ').indexOf(styles.disabled) > -1) {
+          APP.fn.makecall(this.props.phone).then(() => {
             el.setAttribute('class', `${styles.tel}`)
-            APP.fn.makecall(this.props.phone)
-          } else {
-            el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
-          }
+            APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
+              // call_state agent_hangup/caller_hangup：座席/客户挂机
+              console.log(message, jsonObject, 'call event')
+              if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+                APP.error('呼叫终止')
+                el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
+              }
+            })
+          })
         }}
       >
       </div>
