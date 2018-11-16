@@ -6,6 +6,7 @@ interface Props {
   phone: string
   name: string
   detail: Customer.DetailProps
+  style?: React.CSSProperties
 }
 class Main extends React.Component<Props> {
   public makeCall () {
@@ -20,17 +21,18 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div
+        style={this.props.style}
         className={classNames(styles.tel)}
         onClick={(e) => {
-          this.makeCall()
-          APP.success('拨打成功')
-          // const el: any = e.target
-          // if (el.className.split(' ').indexOf(styles.disabled) > -1) {
-          //   el.setAttribute('class', `${styles.tel}`)
-          //   APP.fn.makecall(this.props.phone)
-          // } else {
-          //   el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
-          // }
+          // this.makeCall()
+          // APP.success('拨打成功')
+          const el: any = e.target
+          if (el.className.split(' ').indexOf(styles.disabled) > -1) {
+            el.setAttribute('class', `${styles.tel}`)
+            APP.fn.makecall(this.props.phone)
+          } else {
+            el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
+          }
         }}
       >
       </div>

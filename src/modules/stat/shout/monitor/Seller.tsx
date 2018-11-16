@@ -39,7 +39,7 @@ class Main extends React.Component<Props, State> {
           </Tooltip>
         </span>
       ),
-      dataIndex: 'salespersonGroupName'
+      dataIndex: 'siteNumber'
     },
     {
       title: '呼入量',
@@ -69,7 +69,7 @@ class Main extends React.Component<Props, State> {
     },
     {
       title: '小组',
-      dataIndex: 'salesGroupNums'
+      dataIndex: 'salespersonGroupName'
     }
   ]
   public componentDidMount () {

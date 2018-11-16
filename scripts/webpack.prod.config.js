@@ -196,7 +196,6 @@ module.exports = {
     antd: 'antd',
     'ali-oss': 'OSS',
     echarts: 'echarts'
-    // 'tq': 'browserfly'
   },
   devtool: ''
 }

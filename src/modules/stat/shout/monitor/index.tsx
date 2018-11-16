@@ -89,7 +89,7 @@ class Main extends React.Component<{}, State> {
             })
           }}
         >
-          切换到{this.state.type === 'group' ? '小组' : '销售'}统计
+          切换到{this.state.type === 'seller' ? '小组' : '销售'}统计
         </span>
         <div>
           {

@@ -185,7 +185,6 @@ module.exports = {
     antd: 'antd',
     'ali-oss': 'OSS',
     echarts: 'echarts'
-    // 'tq': 'browserfly'
   },
   devtool: 'source-map'
   // eval： 生成代码 每个模块都被eval执行，并且存在@sourceURL

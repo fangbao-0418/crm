@@ -95,15 +95,15 @@ export const makecall = (phone: string) => {
   // APP.tq.destroy()
   const initOptions = {
     debug: true, // default:false 是否开启调试模式
-    strid: '9817482', // 用户名；与uin其中一个必填
-    // uin: '9817482', // tq号 ；与strid其中一个必填
+    // strid: '9817482', // 用户名；与uin其中一个必填
+    uin: '9817482', // tq号 ；与strid其中一个必填
     admin_uin: '9786987', // 管理员TQ号;必填
     appid: '42714805-dd53-4cf3-a470-8e7963971d60', // 开发者id；必填
-    access_token: '649EEB3D1C87337F48C251FD73783B61CDF10E9EC5024142E3DB231C92263214779A95275F87ABB31193CF7321A25EC4', // 秘钥，需从服务器获取；必填
+    access_token: '0DC65C7C455DF6936A08A0A22444659D0E7310B45AEBFE6890BAE13CF3B86F9941AF409433A36367F6FC2A2BB3AF3F44', // 秘钥，需从服务器获取；必填
     server_url: 'http://vip.sh.tq.cn', // ip:port //服务器地址；必填
     reconnectPeriod: 1000 * 60
   }
-  APP.tq.init(initOptions)
+  APP.jsmc.init(initOptions)
   const makeCallOption = {
     phone, // 外呼电话号码
     error (ret: any) {
@@ -121,5 +121,5 @@ export const makecall = (phone: string) => {
     // jsonObject对象示例：
     // {"strid":"seat01","uin":8000001,"admin_uin":8000000,"phone":"13711110000"}
   }
-  APP.tq.invokeEvent('makecall', makeCallOption, makeCallCallBack)
+  APP.jsmc.invokeEvent('makecall', makeCallOption, makeCallCallBack)
 }

@@ -25,6 +25,7 @@ interface Props extends Customer.Props, FormComponentProps {
   flowNow?: () => void
   reset?: boolean
   type?: 'business' | 'open' | 'customer'
+  showTel?: boolean
 }
 interface State {
   cityName: string
@@ -459,7 +460,7 @@ class Main extends React.Component<Props> {
           <Col>
             <LinkMan
               disabled={disabled}
-              showTel={this.props.type === 'business'}
+              showTel={this.props.showTel}
               getInstance={(ref) => {
                 console.log(ref)
                 this.linkman = ref

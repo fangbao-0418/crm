@@ -122,6 +122,7 @@ class Main extends React.Component<Props> {
                 showFold
               >
                 <BaseInfo
+                  showTel={true}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}

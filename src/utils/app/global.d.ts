@@ -62,5 +62,5 @@ declare namespace APP {
   export let user: Common.UserProps
   export let homepage: string
   export const hasPermission: (code?: string) => boolean
-  export const tq: any
+  export const jsmc: any
 }

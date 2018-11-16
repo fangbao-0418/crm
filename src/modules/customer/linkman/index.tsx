@@ -3,7 +3,7 @@ import { Input, Row, Col, Form } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import FormItemLayout from '@/components/form/Item1'
 import { connect } from 'react-redux'
-import Call from './Call'
+import Call from './ToCall'
 const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends Customer.Props, FormComponentProps {
@@ -165,6 +165,11 @@ class Main extends React.Component<Props> {
                   </Col>
                   {this.props.showTel && (
                     <Call
+                      style={{
+                        position: 'absolute',
+                        right: '-20px',
+                        top: '9px'
+                      }}
                       phone={item.contactPhone}
                       name={item.contactPerson}
                       detail={this.props.detail}

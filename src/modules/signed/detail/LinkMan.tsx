@@ -3,11 +3,13 @@ import { Table, Input, Form } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
+import ToCall from '@/modules/customer/linkman/ToCall'
 const styles = require('./style')
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
   linkMan: LinkManProps[]
   disabled?: boolean
+  detail?: Customer.DetailProps
   getWrappedInstance?: (ref?: any) => any
 }
 interface States {
@@ -41,7 +43,9 @@ class Main extends React.Component<Props> {
                 ]
               })(
                 <div>
-                  <span>{text}</span>
+                  <span>
+                    {text}
+                  </span>
                   {
                     record.isSignPerson === 1 &&
                     <span className={styles.signed}>签约</span>
@@ -64,7 +68,9 @@ class Main extends React.Component<Props> {
               })(
                 record.isSignPerson === 1 ?
                   <div>
-                    <span>{text}</span>
+                    <span>
+                      {text}
+                    </span>
                     <span className={styles.signed}>签约</span>
                   </div>
                 :
@@ -83,11 +89,20 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        console.log(text, 'lianxidianhua')
+        console.log(this.props.disabled, 'lianxidianhua')
         if (this.props.disabled) {
           return (
             <FormItem>
               <span>{text.trim()}</span>
+              <ToCall
+                style={{
+                  verticalAlign: 'sub',
+                  marginLeft: '4px'
+                }}
+                phone={text}
+                name={record.contactPerson}
+                detail={this.props.detail}
+              />
             </FormItem>
           )
         } else {
