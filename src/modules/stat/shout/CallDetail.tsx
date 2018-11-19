@@ -77,11 +77,17 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '呼叫类型',
-      dataIndex: 'callType'
+      dataIndex: 'callType',
+      render: (text) => {
+        return APP.dictionary[`EnumCallType-${text}`]
+      }
     },
     {
       title: '电话状态',
-      dataIndex: 'callSuccessNums'
+      dataIndex: 'callConnectStatus',
+      render: (text) => {
+        return APP.dictionary[`EnumCallConnectStatus-${text}`]
+      }
     },
     {
       title: '联系人',
@@ -101,7 +107,7 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '小组',
-      dataIndex: 'salespersonGroupName'
+      dataIndex: 'salepersonGroupName'
     },
     {
       title: '操作',

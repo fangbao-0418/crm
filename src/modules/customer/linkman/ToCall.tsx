@@ -11,6 +11,13 @@ interface Props {
 let init = false
 let el: Element
 let hangup = true
+let params = {
+  callerId: '',
+  customerId: '',
+  customerName: '',
+  contactPhone: '',
+  contactName: ''
+}
 class Main extends React.Component<Props> {
   public el: Element
   public constructor (props: Props) {
@@ -26,12 +33,18 @@ class Main extends React.Component<Props> {
       })
       APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
         // call_state agent_hangup/caller_hangup：座席/客户挂机
-        console.log(message, this.props, 'call event')
-        if (['caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+        console.log(message, 'message')
+        if (['agent_hangup'].indexOf(message.call_event.call_state) > -1) {
+          calledCallBack({
+            callerId: message.call_event.call_id,
+            customerId: params.customerId,
+            customerName: params.customerName,
+            contactPhone: params.contactPhone,
+            contactName: params.contactName
+          })
           APP.error('呼叫终止')
         }
         if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
-          // calledCallBack()
           hangup = true
           el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
         }
@@ -54,11 +67,19 @@ class Main extends React.Component<Props> {
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
+          // this.makeCall()
           if (hangup === false) {
             APP.error('忙线中')
             return
           }
           el = e.target
+          params = {
+            callerId: '',
+            customerId: this.props.detail.id,
+            customerName: this.props.detail.customerName,
+            contactPhone: this.props.phone,
+            contactName: this.props.name
+          }
           APP.fn.makecall(this.props.phone).then(() => {
             hangup = false
             console.log(e.target, el, 'ok')
