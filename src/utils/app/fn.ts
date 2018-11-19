@@ -91,8 +91,8 @@ export const objectToArray = (sourceObject: {[key: string]: any}): {key: string,
   }
   return data
 }
-export const jsmcInit = () => {
-  APP.jsmc.destroy()
+export const jsmcInit = (reinit = false) => {
+  // APP.jsmc.destroy()
   return fetchTQconfig().then((res) => {
     const data = res.data
     const initOptions = {
@@ -104,7 +104,11 @@ export const jsmcInit = () => {
       server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
       // reconnectPeriod: 1000 * 60
     }
-    APP.jsmc.init(initOptions)
+    if (reinit) {
+      APP.jsmc.reinit(initOptions)
+    } else {
+      APP.jsmc.init(initOptions)
+    }
     return res
   })
 }
@@ -113,20 +117,21 @@ export const makecall = (phone: string) => {
     const makeCallOption = {
       phone, // 外呼电话号码
       error (ret: any) {
-        console.log(ret, 'error')
         APP.error(ret.errmsg)
         reject(ret)
       },
       success (ret: any) {
-        console.log(ret, 'success')
         resolve(ret)
-        // 参数ret ：{"errcode":"0","errmsg":" 操作成功! "}
       }
     }
     const makeCallCallBack = (ret: any, jsonObject: any) => {
       console.log(ret, jsonObject, 'make call back')
       if (String(ret.errcode) !== '0') {
-        APP.error(ret.errmsg)
+        if (ret.errmsg === 'USER_BUSY') {
+          APP.error('用户繁忙')
+        } else {
+          APP.error(ret.errmsg)
+        }
         reject(ret)
       }
     }

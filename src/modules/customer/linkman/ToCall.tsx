@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { makeCall } from '../api'
+import { makeCall, fetchTQconfig } from '../api'
 const styles = require('./style')
 interface Props {
   phone: string
@@ -16,6 +16,11 @@ class Main extends React.Component<Props> {
   public constructor (props: Props) {
     super(props)
     if (init === false) {
+      setInterval(() => {
+        APP.fn.jsmcInit(true).catch(() => {
+          //
+        })
+      }, 1000 * 60 * 60 * 2 - 10 * 1000)
       APP.fn.jsmcInit().catch(() => {
         //
       })
@@ -49,6 +54,7 @@ class Main extends React.Component<Props> {
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
           if (hangup === false) {
+            APP.error('忙线中')
             return
           }
           el = e.target
