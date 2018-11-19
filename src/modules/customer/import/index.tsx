@@ -34,7 +34,6 @@ class Main extends React.Component<Props> {
           paramsValue={this.value}
           onOk={(value) => {
             this.value.step2 = value
-            console.log(this.value, 'on ok')
             this.setState({
               step: 3
             })

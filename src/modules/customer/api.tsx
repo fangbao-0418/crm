@@ -130,3 +130,14 @@ export const fetchTQconfig = (): JQuery._Promise<{
     return err
   })
 }
+
+// TQ通话结束后回调
+export const calledCallBack = (payload: {
+  callerId: string
+  customerId: string
+  customerName: string
+  contactPhone: string
+  contactName: string
+}) => {
+  return http(`/crm-manage/v1/api/phone/callback`, 'GET', payload)
+}

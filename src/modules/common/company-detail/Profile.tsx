@@ -4,7 +4,7 @@ import moment from 'moment'
 const styles = require('./style')
 interface Props extends Customer.Props {
   isShowAgent?: boolean
-  type?: 'business' | 'open' | 'customer',
+  type?: 'business' | 'open' | 'customer' | 'signed'
   customerName?: string
 }
 class Main extends React.Component<Props> {

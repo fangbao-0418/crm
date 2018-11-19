@@ -24,7 +24,7 @@ interface Props extends Customer.Props, FormComponentProps {
   onClose?: () => void
   flowNow?: () => void
   reset?: boolean
-  type?: 'business' | 'open' | 'customer'
+  type?: 'business' | 'open' | 'customer' | 'signed'
   showTel?: boolean
 }
 interface State {

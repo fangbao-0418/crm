@@ -6,7 +6,7 @@ const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
   height?: number
-  type?: 'business' | 'signed'
+  type?: 'business' | 'open' | 'customer' | 'signed'
 }
 class Main extends React.Component<Props> {
   public relatedCompany: string[] = []
@@ -15,6 +15,7 @@ class Main extends React.Component<Props> {
     if (this.props.detail.relatedCompany) {
       this.relatedCompany = this.props.detail.relatedCompany.split(',')
     }
+    console.log(this.props.type, 'type')
     return (
       <div>
         <Tabs animated={false} defaultActiveKey='1'>
@@ -117,7 +118,7 @@ class Main extends React.Component<Props> {
             </div>
           </Tabs.TabPane>
           {
-            this.props.type === 'business' &&
+            ['business', 'open', 'customer'].indexOf(this.props.type) > -1 &&
             <Tabs.TabPane tab='相关公司记录' key='3'>
               <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
                 {

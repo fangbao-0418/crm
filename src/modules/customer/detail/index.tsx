@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
   customerId: string
-  type?: 'business' | 'open' | 'customer'
+  type?: 'business' | 'open' | 'customer' | 'signed'
   detail?: Customer.DetailProps
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
@@ -56,9 +56,7 @@ class Main extends React.Component<Props> {
   )
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
   public componentDidMount () {
-    console.log('detail did mouiunt')
     if (this.props.getWrappedInstance) {
-      console.log('detail did mouiunt')
       this.props.getWrappedInstance(this)
     }
   }
@@ -114,6 +112,7 @@ class Main extends React.Component<Props> {
             </div>
             <div className={styles.right}>
               <Record
+                type={type}
                 customerId={this.props.customerId}
                 height={260}
               />

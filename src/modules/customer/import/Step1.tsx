@@ -40,19 +40,11 @@ class Main extends React.Component<Props> {
     })
   }
   public getCompany (citycode: string) {
-    // citycode = '300171' // 先默认这个值有数据
     getCompanyByCitycode(citycode).then((res) => {
       this.setState({
         companys: res
       })
     })
-    // if (this.state.type !== 3) {
-    //   getCompanyByCitycode(citycode).then((res) => {
-    //     this.setState({
-    //       companys: res
-    //     })
-    //   })
-    // }
   }
   public getSales (companyId: string) {
     getSalesByCompany(companyId).then((res) => {
@@ -215,7 +207,6 @@ class Main extends React.Component<Props> {
           <Button
             type='primary'
             onClick={() => {
-              console.log(this.values, 'values')
               if (this.state.type === 3) { // 转客资池
                 if (this.values.city && this.values.customerSource) {
                   this.values.salesPerson = []

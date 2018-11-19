@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { makeCall, fetchTQconfig } from '../api'
+import { makeCall, calledCallBack } from '../api'
 const styles = require('./style')
 interface Props {
   phone: string
@@ -31,6 +31,7 @@ class Main extends React.Component<Props> {
           APP.error('呼叫终止')
         }
         if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+          // calledCallBack()
           hangup = true
           el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
         }

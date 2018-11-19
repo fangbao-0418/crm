@@ -1,5 +1,5 @@
 import React from 'react'
-import { Upload, Icon, message, Button } from 'antd'
+import { Upload, Button } from 'antd'
 import { importFile } from '../api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
@@ -25,13 +25,6 @@ class Main extends React.Component<Props> {
     info: {},
     disabled: false
   }
-  // public downFile () {
-  //   const fileUrl = require('@/assets/files/客资导入模板.xlsx')
-  //   const el = document.createElement('a')
-  //   el.setAttribute('href', fileUrl)
-  //   el.setAttribute('download', '客资导入模版')
-  //   el.click()
-  // }
   public uploadFile () {
     const info = this.state.info
     const name = info.file.name
@@ -40,7 +33,6 @@ class Main extends React.Component<Props> {
       APP.error('请导入excel格式文件')
       return
     }
-    console.log(this.props.paramsValue, 'paramsValue')
     const ids: string[] = []
     const salesNames: string[] = []
     if (this.props.paramsValue.step1.salesPerson instanceof Array) {
@@ -54,10 +46,9 @@ class Main extends React.Component<Props> {
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
-      cityCode: APP.user.cityCode || undefined, // 需要从登陆信息读取
-      cityName: APP.user.companyName || undefined // 需要从登陆信息读取APP.user.city
+      cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
+      cityName: this.props.paramsValue.step1.city.cityName || undefined
     }
-    console.log(paramsFile, 'paramsFile')
     return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
       if (res.status === 200) {
         if (this.props.onOk) {
@@ -67,7 +58,6 @@ class Main extends React.Component<Props> {
         APP.error(res.message)
       }
     })
-    console.log(info)
   }
   public render () {
     const props = {
