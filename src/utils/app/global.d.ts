@@ -47,7 +47,7 @@ declare namespace APP {
     ossUpload: (file: File) => any
     generateKey: <T>(arr: T[]) => T[]
     objectToArray: (sourceObject: {[key: string]: any}) => {key: string, value: any}[]
-    jsmcInit: () => void
+    jsmcInit: () => Promise<any>
     makecall: (phone: string) => Promise<any>
   }
   export const fn: GlobalFnProps

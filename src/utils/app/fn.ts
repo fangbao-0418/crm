@@ -2,6 +2,7 @@ import moment from 'moment'
 import { md5 } from 'pilipa'
 import { Wrapper as OSS } from 'ali-oss'
 import { fetchOssToken } from '@/modules/common/api'
+import { fetchTQconfig } from '@/modules/customer/api'
 // 获取时间区间
 export const getDateSection = (str: string, refer: Date = new Date(), format: string = 'YYYY-MM-DD') => {
   const res = String(str).match((/^(\d+)(day|month)?$/))
@@ -92,24 +93,20 @@ export const objectToArray = (sourceObject: {[key: string]: any}): {key: string,
 }
 export const jsmcInit = () => {
   APP.jsmc.destroy()
-  const initOptions = {
-    debug: true, // default:false 是否开启调试模式
-    // strid: '9817482', // 用户名；与uin其中一个必填
-    uin: '9817482', // tq号 ；与strid其中一个必填
-    admin_uin: '9786987', // 管理员TQ号;必填
-    appid: '42714805-dd53-4cf3-a470-8e7963971d60', // 开发者id；必填
-    access_token: '5EDBA8BE9A7AA6C36C4ECDD59BC4EF7A212C72F46B0D84C7673249CD9CF88A7DAAB73A818287148043BA46394BDBA2F0', // 秘钥，需从服务器获取；必填
-    server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
-    // reconnectPeriod: 1000 * 60
-  }
-  APP.jsmc.init(initOptions)
-  // APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
-  //   // call_state agent_hangup/caller_hangup：座席/客户挂机
-  //   console.log(message, jsonObject, 'call event')
-  //   if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
-  //     APP.error('呼叫终止')
-  //   }
-  // })
+  return fetchTQconfig().then((res) => {
+    const data = res.data
+    const initOptions = {
+      debug: APP.env === 'development',
+      uin: data.uin, // tq号 ；与strid其中一个必填
+      admin_uin: data.admin_uin, // 管理员TQ号;必填
+      appid: '42714805-dd53-4cf3-a470-8e7963971d60', // 开发者id；必填
+      access_token: data.access_token, // 秘钥，需从服务器获取；必填
+      server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
+      // reconnectPeriod: 1000 * 60
+    }
+    APP.jsmc.init(initOptions)
+    return res
+  })
 }
 export const makecall = (phone: string) => {
   return new Promise((resolve, reject) => {
@@ -117,6 +114,7 @@ export const makecall = (phone: string) => {
       phone, // 外呼电话号码
       error (ret: any) {
         console.log(ret, 'error')
+        APP.error(ret.errmsg)
         reject(ret)
       },
       success (ret: any) {

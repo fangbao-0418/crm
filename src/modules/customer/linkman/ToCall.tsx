@@ -9,12 +9,27 @@ interface Props {
   style?: React.CSSProperties
 }
 let init = false
+let el: Element
+let hangup = true
 class Main extends React.Component<Props> {
+  public el: Element
   public constructor (props: Props) {
     super(props)
     if (init === false) {
-      console.log('init')
-      APP.fn.jsmcInit()
+      APP.fn.jsmcInit().catch(() => {
+        //
+      })
+      APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
+        // call_state agent_hangup/caller_hangup：座席/客户挂机
+        console.log(message, this.props, 'call event')
+        if (['caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+          APP.error('呼叫终止')
+        }
+        if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
+          hangup = true
+          el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
+        }
+      })
       init = true
     }
   }
@@ -32,18 +47,15 @@ class Main extends React.Component<Props> {
       <div
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
-        onClick={(e) => {
-          const el: any = e.target
+        onClick={(e: any) => {
+          if (hangup === false) {
+            return
+          }
+          el = e.target
           APP.fn.makecall(this.props.phone).then(() => {
+            hangup = false
+            console.log(e.target, el, 'ok')
             el.setAttribute('class', `${styles.tel}`)
-            APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
-              // call_state agent_hangup/caller_hangup：座席/客户挂机
-              console.log(message, jsonObject, 'call event')
-              if (['agent_hangup', 'caller_hangup'].indexOf(message.call_event.call_state) > -1) {
-                APP.error('呼叫终止')
-                el.setAttribute('class', `${styles.tel} ${styles.disabled}`)
-              }
-            })
           })
         }}
       >

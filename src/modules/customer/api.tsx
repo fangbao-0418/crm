@@ -109,3 +109,24 @@ export const makeCall = (payload: {
   const query = $.param(payload)
   return http(`/crm-manage/v1/api/makecall?${query}`, 'POST')
 }
+
+// 获取TQ配置信息
+export const fetchTQconfig = (): JQuery._Promise<{
+  status: number,
+  message: string,
+  data: {
+    access_token: string
+    uin: string
+    strid: string
+    admin_uin: string
+    version: number
+    errcode: any
+  }
+}> => {
+  return http(`/crm-manage/v1/api/jssdk-token`).then((res) => {
+    res.data = JSON.parse(res.data)
+    return res
+  }, (err) => {
+    return err
+  })
+}
