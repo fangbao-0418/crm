@@ -16,7 +16,7 @@ interface State {
   saller: Array<{id: string, name: string}>
 }
 class Main extends React.Component<{}, State> {
-  public telStatusArray = APP.keys.EnumCallConnectStatus.concat(APP.keys.EnumCallType)
+  public telStatusArray = APP.keys.EnumCallConnectStatus
   public payload: {
     keyword?: string,
     hangUpStatus?: number,
@@ -99,7 +99,10 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '通话时长',
-      dataIndex: 'callDuration'
+      dataIndex: 'callDuration',
+      render: (text) => {
+        return APP.fn.formatDuration(text)
+      }
     },
     {
       title: '坐席',

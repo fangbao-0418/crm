@@ -49,6 +49,10 @@ declare namespace APP {
     objectToArray: (sourceObject: {[key: string]: any}) => {key: string, value: any}[]
     jsmcInit: (reinit?: boolean) => Promise<any>
     makecall: (phone: string) => Promise<any>
+    /** 格式化时长 */
+    formatDuration: (second: number) => string
+    /** 四舍五入 */
+    round: (num: number, float?: number) => number
   }
   export const fn: GlobalFnProps
   export let history: CustomHistory

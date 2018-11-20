@@ -56,16 +56,23 @@ class Main extends React.Component<Props, State> {
     {
       title: '接通率',
       render: (text, record) => {
-        return ((Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) / 100) || 0) + '%'
+        return ((Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100)) || 0) + '%'
       }
     },
     {
       title: '通话时长',
-      dataIndex: 'totalCallDuration'
+      dataIndex: 'totalCallDuration',
+      render: (text) => {
+        // return APP.fn.formatDuration(text)
+        return APP.fn.formatDuration(4003000422)
+      }
     },
     {
       title: '平均通话时长',
-      dataIndex: 'averageCallDuration'
+      dataIndex: 'averageCallDuration',
+      render: (text) => {
+        return APP.fn.formatDuration(text)
+      }
     },
     {
       title: '小组',

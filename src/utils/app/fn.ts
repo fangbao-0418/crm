@@ -139,3 +139,37 @@ export const makecall = (phone: string) => {
     APP.jsmc.invokeEvent('makecall', makeCallOption, makeCallCallBack)
   })
 }
+
+export const round = (num: number, float: number = 2) => {
+  const base = Math.pow(10, float)
+  return Math.round(num * base) / base
+}
+
+export const formatDuration = (second: number, arr: any[] = []): string => {
+  const m = 60 * 1000
+  const h = m * 60
+  const d = h * 24
+  let day = 0
+  let dif = 0
+  let hours = 0
+  let minute = 0
+  if (second / d >= 1) {
+    day = Math.floor(second / d)
+    arr.push(`${day}d`)
+    dif = second - day * d
+    formatDuration(dif, arr)
+  } else if (second / h >= 1) {
+    hours = Math.floor(second / h)
+    arr.push(`${hours}h`)
+    dif = second - hours * h
+    formatDuration(dif, arr)
+  } else if (second / m >= 1) {
+    minute = Math.floor(second / m)
+    arr.push(`${minute}m`)
+    dif = second - minute * m
+    formatDuration(dif, arr)
+  } else {
+    arr.push(`${APP.fn.round((second / 1000), 0)}s`)
+  }
+  return arr.join(':').replace(/(:0+[dhms])/g, '')
+}

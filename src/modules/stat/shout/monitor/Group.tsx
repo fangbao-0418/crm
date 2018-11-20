@@ -40,16 +40,22 @@ class Main extends React.Component<Props, State> {
           callInTotalNums: 0,
           callOutTotalNums: 0
         }, record.totalRecord)
-        return ((Math.round((totalRecord.callSuccessNums / (totalRecord.callInTotalNums + totalRecord.callOutTotalNums)) * 100) / 100) || 0) + '%'
+        return ((Math.round((totalRecord.callSuccessNums / (totalRecord.callInTotalNums + totalRecord.callOutTotalNums)) * 100)) || 0) + '%'
       }
     },
     {
       title: '通话时长',
-      dataIndex: 'totalRecord.totalCallDuration'
+      dataIndex: 'totalRecord.totalCallDuration',
+      render: (text) => {
+        return APP.fn.formatDuration(text)
+      }
     },
     {
       title: '平均通话时长',
-      dataIndex: 'totalRecord.averageCallDuration'
+      dataIndex: 'totalRecord.averageCallDuration',
+      render: (text) => {
+        return APP.fn.formatDuration(text)
+      }
     },
     {
       title: '组内人数',
