@@ -106,7 +106,7 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '坐席',
-      dataIndex: 'siteNumber'
+      dataIndex: 'salespersonName'
     },
     {
       title: '小组',
@@ -118,7 +118,7 @@ class Main extends React.Component<{}, State> {
         return (
           <span>
             <i
-              className='fa fa-headphones mr10'
+              className='fa fa-headphones mr10 href'
               onClick={() => {
                 this.setState({
                   expandedRowKeys: [record.id]
@@ -126,7 +126,7 @@ class Main extends React.Component<{}, State> {
               }}
             />
             <i
-              className='fa fa-download'
+              className='fa fa-download href'
               onClick={() => {
                 window.open(record.mediaUrl)
               }}
