@@ -40,13 +40,15 @@ class Main extends React.Component<Props> {
     const labels: string[] = []
     const p: Promise<any>[] = []
     values.forEach((item) => {
-      labels.push(item.label)
-      p.push(
-        fetchRegion({
-          parentId: item.key,
-          level: 2
-        })
-      )
+      if (/\d+/.test(item.key)) {
+        labels.push(item.label)
+        p.push(
+          fetchRegion({
+            parentId: item.key,
+            level: 2
+          })
+        )
+      }
     })
     Promise.all(p).then((res) => {
       let arr: Common.RegionProps[] = []
@@ -91,13 +93,14 @@ class Main extends React.Component<Props> {
     }
   }
   public render () {
+    console.log(this.state.cityList, 'render')
     return (
       <div className={styles.region}>
         <label>省份</label>
         <Select
           showSearch
           className='mr10'
-          mode='tags'
+          mode='multiple'
           labelInValue
           maxTagCount={0}
           // showArrow={true}
@@ -124,7 +127,7 @@ class Main extends React.Component<Props> {
         </Select>
         <label>城市</label>
         <Select
-          mode='tags'
+          mode='multiple'
           labelInValue
           maxTagCount={0}
           // showArrow={true}
