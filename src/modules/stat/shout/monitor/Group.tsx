@@ -1,8 +1,7 @@
 import React from 'react'
-import { Table, Tooltip } from 'antd'
+import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getGroupCallMonitors } from '@/modules/stat/api'
-import moment from 'moment'
 import { PayloadProps } from './index'
 interface Props {
   payload: PayloadProps
@@ -71,16 +70,6 @@ class Main extends React.Component<Props, State> {
         dataSource: res
       })
     })
-  }
-  public onChange (value: {[field: string]: {label: string, value: string}}) {
-    if (value.date.value.split('至').length === 2) {
-      this.payload.callTimeBeginDate = value.date.value.split('至')[0]
-      this.payload.callTimeEndDate = value.date.value.split('至')[1]
-    } else {
-      this.payload.callTimeBeginDate = moment().add(value.date.value, 'day').format('YYYY-MM-DD')
-      this.payload.callTimeEndDate = moment().format('YYYY-MM-DD')
-    }
-    this.fetchList()
   }
   public render () {
     console.log(this.state.dataSource, 'xxx')

@@ -87,8 +87,13 @@ class Main extends React.Component<{}, State> {
     {
       title: '电话状态',
       dataIndex: 'callConnectStatus',
-      render: (text) => {
-        return APP.dictionary[`EnumCallConnectStatus-${text}`]
+      render: (text, record) => {
+        return (
+          <span>
+            {APP.dictionary[`EnumCallConnectStatus-${text}`]}
+            ({APP.dictionary[`EnumHangUpStatus-${record.hangUpStatus}`]})
+          </span>
+        )
       }
     },
     {
@@ -164,7 +169,11 @@ class Main extends React.Component<{}, State> {
       this.payload.callTimeEndDate = value.date.value.split('至')[1]
     } else {
       this.payload.callTimeBeginDate = moment().add(value.date.value, 'day').format('YYYY-MM-DD')
-      this.payload.callTimeEndDate = moment().format('YYYY-MM-DD')
+      if (value.date.value === '-1') {
+        this.payload.callTimeEndDate = this.payload.callTimeBeginDate
+      } else {
+        this.payload.callTimeEndDate = moment().format('YYYY-MM-DD')
+      }
     }
     this.fetchList()
   }

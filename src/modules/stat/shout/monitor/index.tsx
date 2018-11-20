@@ -43,7 +43,7 @@ class Main extends React.Component<{}, State> {
     }
   ]
   public componentDidMount () {
-    this.fetchList()
+    // this.fetchList()
   }
   public fetchList () {
     let ins: any
@@ -61,7 +61,11 @@ class Main extends React.Component<{}, State> {
       this.payload.callTimeEndDate = value.date.value.split('至')[1]
     } else {
       this.payload.callTimeBeginDate = moment().add(value.date.value, 'day').format('YYYY-MM-DD')
-      this.payload.callTimeEndDate = moment().format('YYYY-MM-DD')
+      if (value.date.value === '-1') {
+        this.payload.callTimeEndDate = this.payload.callTimeBeginDate
+      } else {
+        this.payload.callTimeEndDate = moment().format('YYYY-MM-DD')
+      }
     }
     this.fetchList()
   }

@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
-image: registry.i-counting.cn/pilipa/karma
+image: registry-vpc.cn-beijing.aliyuncs.com/i-counting/karma:latest
 
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 # stages:
