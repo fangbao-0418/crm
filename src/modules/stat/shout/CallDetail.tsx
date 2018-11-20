@@ -16,8 +16,10 @@ interface State {
   saller: Array<{id: string, name: string}>
 }
 class Main extends React.Component<{}, State> {
-  public telStatusArray = APP.keys.EnumCallConnectStatus
+  public CallConnectStatus = APP.keys.EnumCallConnectStatus
+  public HangUpStatus = APP.keys.EnumHangUpStatus
   public payload: {
+    callConnectStatus?: number,
     keyword?: string,
     hangUpStatus?: number,
     salespersonId?: number
@@ -205,16 +207,33 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
+            className='inline-block mr8'
+            style={{width: 120}}
+            placeholder='请选择接通状态'
+            onChange={(value: number) => {
+              this.payload.callConnectStatus = value
+              this.fetchList()
+            }}
+          >
+            {
+              this.CallConnectStatus.map((item) => {
+                return (
+                  <Select.Option key={item.value}>{item.label}</Select.Option>
+                )
+              })
+            }
+          </Select>
+          <Select
             className='inline-block'
             style={{width: 120}}
-            placeholder='请选择电话状态'
+            placeholder='请选择挂断状态'
             onChange={(value: number) => {
               this.payload.hangUpStatus = value
               this.fetchList()
             }}
           >
             {
-              this.telStatusArray.map((item) => {
+              this.HangUpStatus.map((item) => {
                 return (
                   <Select.Option key={item.value}>{item.label}</Select.Option>
                 )

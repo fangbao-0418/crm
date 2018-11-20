@@ -17,7 +17,10 @@ export const getGroupCallMonitors = (query: {
 }
 /** 座席监控列表 */
 export const getCallDetail = (query: {
+  /** 接通状态 */
+  callConnectStatus?: number,
   keyword?: string,
+  /** 挂断类型 */
   hangUpStatus?: number
   salespersonId?: number,
   callTimeBeginDate?: string,

@@ -29,8 +29,11 @@ declare namespace APP {
     /** 机构管理代理商公司状态 */
     EnumOrganAgentSource?: Array<{label: string, value: string}>
     EnumFollowUpClassification?: Array<{label: string, value: string}>
+    /** 电话接通状态 */
     EnumCallConnectStatus?: Array<{label: string, value: string}>
     EnumCallType?: Array<{label: string, value: string}>
+    /** 电话挂断状态 */
+    EnumHangUpStatus?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {
