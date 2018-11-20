@@ -146,7 +146,7 @@ export const round = (num: number, float: number = 2) => {
 }
 
 export const formatDuration = (second: number, arr: any[] = []): string => {
-  const m = 60 * 1000
+  const m = 60
   const h = m * 60
   const d = h * 24
   let day = 0
@@ -169,7 +169,7 @@ export const formatDuration = (second: number, arr: any[] = []): string => {
     dif = second - minute * m
     formatDuration(dif, arr)
   } else {
-    arr.push(`${APP.fn.round((second / 1000), 0)}s`)
+    arr.push(`${APP.fn.round((second), 0)}s`)
   }
   return arr.join(':').replace(/(:0+[dhms])/g, '')
 }
