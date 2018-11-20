@@ -101,8 +101,8 @@ export const jsmcInit = (reinit = false) => {
       admin_uin: data.admin_uin, // 管理员TQ号;必填
       appid: '42714805-dd53-4cf3-a470-8e7963971d60', // 开发者id；必填
       access_token: data.access_token, // 秘钥，需从服务器获取；必填
-      // server_url: '/sys/crm-manage/v1/api/jsmc'
-      server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
+      server_url: '/sys/crm-manage/v1/api/jsmc'
+      // server_url: 'http://vip.sh.tq.cn' // ip:port //服务器地址；必填
       // reconnectPeriod: 1000 * 60
     }
     if (reinit) {
