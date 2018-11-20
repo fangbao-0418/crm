@@ -24,6 +24,17 @@ class Main extends React.Component<{}, State> {
                 visible: true
               })
             })
+            APP.user = user
+            if (APP.user.enableTq !== false) {
+              setInterval(() => {
+                APP.fn.jsmcInit(true).catch(() => {
+                  //
+                })
+              }, 1000 * 60 * 60 * 2 - 10 * 1000)
+              APP.fn.jsmcInit().catch(() => {
+                //
+              })
+            }
           }
           APP.user = user
         }}

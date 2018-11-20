@@ -22,18 +22,9 @@ class Main extends React.Component<Props> {
   public el: Element
   public constructor (props: Props) {
     super(props)
-    if (init === false) {
-      setInterval(() => {
-        APP.fn.jsmcInit(true).catch(() => {
-          //
-        })
-      }, 1000 * 60 * 60 * 2 - 10 * 1000)
-      APP.fn.jsmcInit().catch(() => {
-        //
-      })
+    if (init === false && APP.user.enableTq) {
       APP.jsmc.monitorEvent('callEvent', (message: any, jsonObject: any) => {
         // call_state agent_hangup/caller_hangup：座席/客户挂机
-        console.log(message, 'message')
         if (['agent_hangup'].indexOf(message.call_event.call_state) > -1) {
           calledCallBack({
             callerId: message.call_event.call_id,
@@ -62,6 +53,9 @@ class Main extends React.Component<Props> {
     makeCall(payload)
   }
   public render () {
+    if (APP.user.enableTq === false) {
+      return null
+    }
     return (
       <div
         style={this.props.style}
