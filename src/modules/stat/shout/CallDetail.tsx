@@ -66,7 +66,7 @@ class Main extends React.Component<{}, State> {
       title: '时间',
       dataIndex: 'callTime',
       render: (text) => {
-        return moment(text).format('YYYY-MM-DD')
+        return moment(text).format('YYYY-MM-DD hh:mm:ss')
       }
     },
     {
