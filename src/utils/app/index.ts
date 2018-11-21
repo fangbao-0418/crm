@@ -3,6 +3,7 @@ import storage from '../storage'
 import * as fn from './fn'
 import jsmc from '@/utils/jsmc.min'
 Object.assign(APP, {
+  isConfigTQ: false,
   user: undefined,
   env: process.env.NODE_ENV,
   fn,

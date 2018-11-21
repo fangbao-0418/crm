@@ -71,4 +71,5 @@ declare namespace APP {
   export let homepage: string
   export const hasPermission: (code?: string) => boolean
   export const jsmc: any
+  export let isConfigTQ: boolean
 }

@@ -124,9 +124,11 @@ export const fetchTQconfig = (): JQuery._Promise<{
   }
 }> => {
   return http(`/crm-manage/v1/api/jssdk-token`).then((res) => {
+    APP.isConfigTQ = true
     res.data = JSON.parse(res.data)
     return res
   }, (err) => {
+    APP.isConfigTQ = false
     return err
   })
 }

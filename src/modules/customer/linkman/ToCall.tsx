@@ -62,7 +62,14 @@ class Main extends React.Component<Props> {
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
-          // this.makeCall()
+          if (!/[\d-]{5,11}/.test(this.props.phone)) {
+            APP.error('手机号不存在')
+            return
+          }
+          if (!APP.isConfigTQ) {
+            APP.error('呼叫账号配置不存在')
+            return
+          }
           if (hangup === false) {
             APP.error('忙线中')
             return
