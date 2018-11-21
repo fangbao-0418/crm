@@ -145,6 +145,15 @@ export const round = (num: number, float: number = 2) => {
   return Math.round(num * base) / base
 }
 
+export const autocomplete = (str: string, num: number, complement: string = '') => {
+  const dif = num - str.length
+  if (dif > 0) {
+    str = complement.repeat(dif) + str
+  }
+  return str
+}
+
+/** 格式化时长 */
 export const formatDuration = (second: number, arr: any[] = []): string => {
   const m = 60
   const h = m * 60
@@ -155,21 +164,26 @@ export const formatDuration = (second: number, arr: any[] = []): string => {
   let minute = 0
   if (second / d >= 1) {
     day = Math.floor(second / d)
-    arr.push(`${day}d`)
+    arr.push(`${autocomplete(String(day), 2, '0')}`)
     dif = second - day * d
     formatDuration(dif, arr)
   } else if (second / h >= 1) {
     hours = Math.floor(second / h)
-    arr.push(`${hours}h`)
+    arr.push(`${autocomplete(String(hours), 2, '0')}`)
     dif = second - hours * h
     formatDuration(dif, arr)
   } else if (second / m >= 1) {
     minute = Math.floor(second / m)
-    arr.push(`${minute}m`)
+    arr.push(`${autocomplete(String(minute), 2, '0')}`)
     dif = second - minute * m
     formatDuration(dif, arr)
   } else {
-    arr.push(`${APP.fn.round((second), 0)}s`)
+    arr.push(`${autocomplete(String(APP.fn.round((second), 0)), 2, '0')}`)
   }
-  return arr.join(':').replace(/(:0+[dhms])/g, '')
+  if (arr.length < 3) {
+    while (3 - arr.length > 0) {
+      arr.unshift('00')
+    }
+  }
+  return arr.join(':')
 }
