@@ -90,8 +90,8 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            {APP.dictionary[`EnumCallConnectStatus-${text}`]}
-            ({APP.dictionary[`EnumHangUpStatus-${record.hangUpStatus}`]})
+            {text === 1 && (<img className='mr5' src={require('@/assets/images/call-icon.png')} />)}
+            {APP.dictionary[`EnumHangUpStatus-${record.hangUpStatus}`]}
           </span>
         )
       }
