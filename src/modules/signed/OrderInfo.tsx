@@ -26,28 +26,14 @@ interface States {
 }
 class Main extends React.Component<Props> {
   public state: States = {
-    OrderData: [{
-      orderCode: 'D00120180102001',
-      createTime: '2018-10-11',
-      salerName: '张三三',
-      status: 1,
-      startDate: '2018-09-10',
-      endDate: '2018-11-12',
-      amount: 2000,
-      remark: '11111',
-      products: [{
-        productName: '小规模记账',
-        quantity: 12,
-        productSalePrice: '4800.00'
-      }]
-    }]
+    OrderData: []
   }
   public componentWillMount () {
-    // fetchOrders(this.props.customerId).then((res) => {
-    //   this.setState({
-    //     OrderData: res.data.records
-    //   })
-    // })
+    fetchOrders(this.props.customerId).then((res) => {
+      this.setState({
+        OrderData: res.data.records
+      })
+    })
   }
   public render () {
     return (
