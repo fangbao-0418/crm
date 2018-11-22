@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch } from 'react-router-dom'
 import Route from '@/components/Route'
-import Iframe from 'pilipa-terrace/libs/iframe'
+import { Iframe } from 'pilipa-terrace'
 import modules from '@/router/modules'
 import { fetchEnum } from './api'
 interface State {
