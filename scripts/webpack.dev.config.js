@@ -9,6 +9,7 @@ const extractCommon = new MiniCssExtractPlugin({
 var plugins = [
   extractCommon,
   new HtmlWebpackPlugin({
+    host: 'https://x-b.i-counting.cn',
     template: path.resolve(__dirname, '../src/index.html'),
     // 要把<script>标签插入到页面哪个标签里(body|true|head|false)
     inject: true,
@@ -184,7 +185,8 @@ module.exports = {
     moment: 'moment',
     antd: 'antd',
     'ali-oss': 'OSS',
-    echarts: 'echarts'
+    echarts: 'echarts',
+    'pilipa-terrace': 'terrace'
   },
   devtool: 'source-map'
   // eval： 生成代码 每个模块都被eval执行，并且存在@sourceURL
