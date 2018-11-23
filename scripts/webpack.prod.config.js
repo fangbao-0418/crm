@@ -10,6 +10,7 @@ const extractCommon = new MiniCssExtractPlugin({
 const publicPath = '/crm'
 var plugins = [
   new HtmlWebpackPlugin({
+    unix: new Date().getTime(),
     host: '',
     template: path.resolve(__dirname, '../src/index.html'),
     // 要把<script>标签插入到页面哪个标签里(body|true|head|false)
