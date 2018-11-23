@@ -8,6 +8,8 @@ interface Props {
   customerId: string
 }
 interface States {
+  length: any[]
+  number: any[]
   OrderData: Array<{
     orderCode: string
     createTime: string
@@ -26,16 +28,48 @@ interface States {
 }
 class Main extends React.Component<Props> {
   public state: States = {
+    length: [],
+    number: [],
     OrderData: []
   }
-  public componentWillMount () {
+  public componentDidMount () {
     fetchOrders(this.props.customerId).then((res) => {
       this.setState({
         OrderData: res.data.records
+      },()=>{
+        const {OrderData}=this.state
+        let len: any=[]
+        let num: any=[]
+        OrderData.map((value,index)=>{
+             len.push(Math.ceil(value.products.length/4));
+             num.push(1)         
+        })
+        this.setState({
+          length:len,
+          number:num
+        })
       })
     })
   }
+
+  // componentDidMount(){
+  //   const {OrderData}=this.state
+  //   let len: any=[]
+  //   let num: any=[]
+  //   OrderData.map((value,index)=>{
+  //        len.push(Math.ceil(value.products.length/4));
+  //        num.push(1)
+              
+  //   })
+  //   this.setState({
+  //     length:len,
+  //     number:num
+  //   })
+  // }
+  
   public render () {
+    const {number,length} = this.state
+
     return (
       <div>
         {
@@ -70,12 +104,24 @@ class Main extends React.Component<Props> {
                   </div>
                 </div>
                 <div className={styles.marg}>
-                  <div className={styles.left}>
+                  <div 
+                    className={styles.left}
+                    onClick={() => {
+                      let i=number[index]-1
+                      if(i<=0){
+                        i=length[index]
+                      }
+                      number[index]=i
+                      this.setState({
+                        number
+                      })
+                  }}>
                     <Icon type='left' theme='outlined' />
                   </div>
                   <div className={styles['order-con']}>
                     {
-                      item.products.map((children, index1) => {
+                      item.products.filter((children, index1) => {return index1>((number[index]-1)*4) && index1<=(number[index]*4)}).map((children, index1) => {
+                        // this.state.length = Math.ceil(index1/4)
                         return (
                           <div className={styles.con} key={index1}>
                             <div>{children.productName}*{children.quantity}</div>
@@ -88,8 +134,19 @@ class Main extends React.Component<Props> {
                       })
                     }
                   </div>
-                  <div className={styles.right}>
-                    <Icon type='right' theme='outlined' />
+                  <div 
+                    className={styles.right}
+                    onClick={() => {
+                      let i=number[index]+1
+                      if(i>length){
+                        i=1
+                      }
+                      number[index]=i
+                      this.setState({
+                        number
+                      })
+                    }}>
+                    <Icon type='right' theme='outlined'/>
                   </div>
                 </div>
                 <div className={styles['order-bottom']}>

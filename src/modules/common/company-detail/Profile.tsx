@@ -58,10 +58,10 @@ class Main extends React.Component<Props> {
                 </span>
                </span>
             }
-            <label style={{marginLeft: '10px'}}>意向度:</label>
+            {/* <label style={{marginLeft: '10px'}}>意向度:</label>
             <span>
               {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
-            </span>
+            </span> */}
             <label style={{marginLeft: '10px'}}>来源:</label>
             <label>
               {APP.dictionary[`EnumCustomerSource-${this.props.detail.customerSource}`]}
