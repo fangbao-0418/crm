@@ -24,15 +24,19 @@ export default class extends React.Component<Props> {
   public columns: ColumnProps<DetailProps>[] = [{
     title: '工单号',
     dataIndex: 'workNo',
-    render: (val) => {
+    render: (val, record) => {
       return (
-        <a
+        <span
+          className={APP.hasPermission('track_work_order') ? 'href' : ''}
           onClick={() => {
-            window.open(`${window.location.origin}/#/workorder/list`)
+            if (!APP.hasPermission('track_work_order')) {
+              return
+            }
+            window.open(`/workorder/show/${record.id}`)
           }}
         >
           {val}
-        </a>
+        </span>
       )
     }
   }, {
@@ -58,9 +62,9 @@ export default class extends React.Component<Props> {
   public render () {
     return (
       <Table
+        pagination={false}
         columns={this.columns}
         dataSource={this.state.data}
-        bordered
         rowKey={'id'}
       />
     )
