@@ -306,7 +306,6 @@ class Main extends React.Component {
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

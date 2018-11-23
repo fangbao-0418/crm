@@ -126,7 +126,7 @@ class Main extends React.Component {
       <span>
         入库时间
         <Tooltip placement='top' title='成为签约客户的时间'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -139,7 +139,7 @@ class Main extends React.Component {
       <span>
         预计截至账期
         <Tooltip placement='top' title='合同到期截至服务的账期'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -405,7 +405,6 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

@@ -123,7 +123,7 @@ class Main extends React.Component {
       <span>
         释放次数
         <Tooltip placement='top' title='客户被释放到公海的总次数'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -133,7 +133,7 @@ class Main extends React.Component {
       <span>
         释放销售
         <Tooltip placement='top' title='客户最后一次被释放到公海时的销售'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -467,7 +467,6 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

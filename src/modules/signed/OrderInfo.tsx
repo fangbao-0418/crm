@@ -9,7 +9,7 @@ interface Props {
 }
 interface States {
   length: any[]
-  number: any[]
+  numb: any[]
   OrderData: Array<{
     orderCode: string
     createTime: string
@@ -29,24 +29,24 @@ interface States {
 class Main extends React.Component<Props> {
   public state: States = {
     length: [],
-    number: [],
+    numb: [],
     OrderData: []
   }
   public componentDidMount () {
     fetchOrders(this.props.customerId).then((res) => {
       this.setState({
         OrderData: res.data.records
-      },()=>{
-        const {OrderData}=this.state
-        let len: any=[]
-        let num: any=[]
-        OrderData.map((value,index)=>{
-             len.push(Math.ceil(value.products.length/4));
-             num.push(1)         
+      }, () => {
+        const { OrderData } = this.state
+        const len: any = []
+        const num: any = []
+        OrderData.map((value, index) => {
+          len.push(Math.ceil(value.products.length / 4))
+          num.push(1)
         })
         this.setState({
           length:len,
-          number:num
+          numb:num
         })
       })
     })
@@ -57,18 +57,16 @@ class Main extends React.Component<Props> {
   //   let len: any=[]
   //   let num: any=[]
   //   OrderData.map((value,index)=>{
-  //        len.push(Math.ceil(value.products.length/4));
-  //        num.push(1)
-              
+  //     len.push(Math.ceil(value.products.length/4));
+  //     num.push(1)
   //   })
   //   this.setState({
   //     length:len,
   //     number:num
   //   })
   // }
-  
   public render () {
-    const {number,length} = this.state
+    const {numb, length} = this.state
 
     return (
       <div>
@@ -104,48 +102,48 @@ class Main extends React.Component<Props> {
                   </div>
                 </div>
                 <div className={styles.marg}>
-                  <div 
+                  <div
                     className={styles.left}
                     onClick={() => {
-                      let i=number[index]-1
-                      if(i<=0){
-                        i=length[index]
+                      let i = numb[index] - 1
+                      if (i <= 0) {
+                        i = length[index]
                       }
-                      number[index]=i
+                      numb[index] = i
                       this.setState({
-                        number
+                        numb
                       })
-                  }}>
+                    }}
+                  >
                     <Icon type='left' theme='outlined' />
                   </div>
                   <div className={styles['order-con']}>
                     {
-                      item.products.filter((children, index1) => {return index1>((number[index]-1)*4) && index1<=(number[index]*4)}).map((children, index1) => {
-                        // this.state.length = Math.ceil(index1/4)
+                      item.products.filter((children, index1) => index1 > ((numb[index] - 1) * 4) && index1 <= (numb[index] * 4)).map((children, index1) => {
                         return (
                           <div className={styles.con} key={index1}>
                             <div>{children.productName}*{children.quantity}</div>
                             <div>
-                              <span className={classNames(styles.small, styles.black)}>¥</span>
+                              <span className={classNames(styles.black)}>¥</span>
                               <span className={classNames(styles.big, styles.black)}>{children.productSalePrice}</span>
                             </div>
                           </div>
                         )
-                      })
-                    }
+                      })}
                   </div>
-                  <div 
+                  <div
                     className={styles.right}
                     onClick={() => {
-                      let i=number[index]+1
-                      if(i>length){
-                        i=1
+                      let i = numb[ index ] + 1
+                      if (i > length) {
+                        i = 1
                       }
-                      number[index]=i
+                      numb[ index ] = i
                       this.setState({
-                        number
+                        numb
                       })
-                    }}>
+                    }}
+                  >
                     <Icon type='right' theme='outlined'/>
                   </div>
                 </div>

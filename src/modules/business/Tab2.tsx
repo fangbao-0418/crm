@@ -87,7 +87,6 @@ class Main extends React.Component<Props> {
           columns={this.props.columns}
           dataSource={dataSource}
           rowSelection={rowSelection}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

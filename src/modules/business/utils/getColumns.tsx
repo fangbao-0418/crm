@@ -1,6 +1,6 @@
 import React from 'react'
 import { ColumnProps } from 'antd/lib/table'
-import { Tooltip } from 'antd'
+import { Tooltip, Icon } from 'antd'
 import moment from 'moment'
 import showDetail from './showDetail'
 import { fetchList } from '../api'
@@ -150,10 +150,11 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       <span>
         空置天数
         <Tooltip placement='top' title='客户未被跟进的天数'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
-    ),
+    )
+    ,
     dataIndex: 'freeDays'
   }, {
     title: '当前销售',
@@ -169,7 +170,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       <span>
         入库时间
         <Tooltip placement='top' title='客户掉入销售库的时间'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),

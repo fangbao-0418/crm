@@ -206,7 +206,7 @@ class Main extends React.Component<Props> {
             }
             {
               (item.field === 'date' && item.label.length > 1) &&
-              <Icon type='down' theme='outlined' />
+              <Icon type='down' theme='outlined' style={{color: '#BFBFBF'}}/>
             }
           </label>
           <div className={styles.options}>
