@@ -27,6 +27,7 @@ class Main extends React.Component<{}, State> {
       field: 'date',
       label: ['时间'],
       type: 'date',
+      value: '0',
       options: [{
         label: '今日',
         value: '0'
