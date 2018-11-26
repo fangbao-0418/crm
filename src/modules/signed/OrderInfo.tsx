@@ -118,7 +118,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles['order-con']}>
                     {
-                      item.products.filter((children, index1) => index1 > ((numb[index] - 1) * 4) && index1 <= (numb[index] * 4)).map((children, index1) => {
+                      item.products.filter((children, index1) => index1 >= ((numb[index] - 1) * 4) && index1 < (numb[index] * 4)).map((children, index1) => {
                         return (
                           <div className={styles.con} key={index1}>
                             <div>{children.productName}*{children.quantity}</div>
@@ -148,7 +148,7 @@ class Main extends React.Component<Props> {
                 </div>
                 <div className={styles['order-bottom']}>
                   <div className={styles.col}>
-                    <span>共{item.products.length-1}个服务</span>
+                    <span>共{item.products.length}个服务</span>
                   </div>
                   <div className={styles.col}>
                     <label>订单金额：</label>
