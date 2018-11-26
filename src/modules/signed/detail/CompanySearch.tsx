@@ -3,6 +3,7 @@ import { Input } from 'antd'
 import { fetchTianYanCompanyList } from '@/modules/common/api'
 import { SearchProps } from 'antd/lib/input/Search'
 import classNames from 'classnames'
+import _ from 'lodash'
 const styles = require('./style')
 interface Props extends SearchProps {
   style?: React.CSSProperties
@@ -18,6 +19,7 @@ class Main extends React.Component<Props, State> {
     tianyanDataSource: [],
     visible: false
   }
+  public throttleCompanySearch = _.throttle(this.onCompanySearch.bind(this), 1000)
   public onCompanySearch (value: string) {
     if (this.props.disabled) {
       return
@@ -26,10 +28,12 @@ class Main extends React.Component<Props, State> {
       return false
     }
     fetchTianYanCompanyList(value).then((res) => {
-      this.setState({
-        tianyanDataSource: res,
-        visible: true
-      })
+      if (value === res.name) {
+        this.setState({
+          tianyanDataSource: res.data,
+          visible: true
+        })
+      }
     })
   }
   public handleItemClick (item: Customer.TianYanDataProps) {
@@ -56,6 +60,12 @@ class Main extends React.Component<Props, State> {
           }}
           value={this.props.value}
           {...this.props}
+          onChange={(e) => {
+            this.throttleCompanySearch(e.target.value)
+            if (this.props.onChange) {
+              this.props.onChange(e)
+            }
+          }}
         />
         {
           tianyanDataSource.length > 0 &&

@@ -94,7 +94,12 @@ export const fetchOwnRegion = () => {
   return http(`/user/v1/api/user/list/login/province/city`)
 }
 export const fetchTianYanCompanyList = (name: string) => {
-  return http(`/crm-manage/v1/api/tianyan/list?name=${name}`)
+  return http(`/crm-manage/v1/api/tianyan/list?name=${name}`).then((res) => {
+    return {
+      data: res,
+      name
+    }
+  })
 }
 export const fetchTianYanDetail = (id: string) => {
   return http(`/crm-manage/v1/api/tianyan/${id}`)
