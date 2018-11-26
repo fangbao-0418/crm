@@ -1,6 +1,7 @@
 import { fetchStorageCapacity, fetchAutoAssign, fetchSpecialList } from './api'
-export const changeCapacityAction = (cityCodeArr?: string) => {
-  fetchStorageCapacity(cityCodeArr).then((res) => {
+export const changeCapacityAction = (cityCodeArr?: string, agencyId?: string
+  ) => {
+  fetchStorageCapacity(cityCodeArr, agencyId).then((res) => {
     APP.dispatch({
       type: 'change customer data',
       payload: {

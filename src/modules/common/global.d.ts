@@ -14,6 +14,7 @@ declare namespace Common {
   }
   export type ActionPayload = Props
   export interface RegionProps {
+    agencyName: string
     code: string
     name: string
     level?: number
