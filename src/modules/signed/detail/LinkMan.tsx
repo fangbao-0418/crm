@@ -32,7 +32,7 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         if (this.props.disabled) {
           return (
-            <FormItem>
+            <FormItem style={{height: 30}}>
               {getFieldDecorator(`contactPerson-${record.key}`, {
                 initialValue: text,
                 rules: [
@@ -56,7 +56,7 @@ class Main extends React.Component<Props> {
           )
         } else {
           return (
-            <FormItem>
+            <FormItem style={{height: 30}}>
               {getFieldDecorator(`contactPerson-${record.key}`, {
                 initialValue: text,
                 rules: [
@@ -92,7 +92,7 @@ class Main extends React.Component<Props> {
         console.log(this.props.disabled, 'lianxidianhua')
         if (this.props.disabled) {
           return (
-            <FormItem>
+            <FormItem style={{height: 30}}>
               <span>{text.trim()}</span>
               <ToCall
                 style={{
@@ -107,7 +107,7 @@ class Main extends React.Component<Props> {
           )
         } else {
           return (
-            <FormItem>
+            <FormItem style={{height: 30}}>
               {getFieldDecorator(`contactPhone-${record.key}`, {
                 initialValue: text.trim(),
                 rules: [
@@ -238,7 +238,6 @@ class Main extends React.Component<Props> {
             dataSource={this.props.linkMan}
             columns={this.columns}
             pagination={false}
-            bordered
           />
         </Form>
       </div>

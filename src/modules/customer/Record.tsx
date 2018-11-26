@@ -26,7 +26,7 @@ class Main extends React.Component<Props> {
                 return (
                   <div className={styles.record} key={index}>
                     <div className={styles['line-height']}>
-                      <span>{item.salesperson}</span>
+                      <span style={{marginRight: 10}}>{item.salesperson}</span>
                       <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
                     <div>{item.remark}</div>
@@ -75,7 +75,7 @@ class Main extends React.Component<Props> {
                   return (
                     <div className={styles.record} key={index}>
                       <div className={styles['line-height']}>
-                        <span>{item.salesperson}</span>
+                        <span style={{marginRight: 10}}>{item.salesperson}</span>
                         <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
                       </div>
                       <div>{item.remark}</div>
@@ -120,7 +120,7 @@ class Main extends React.Component<Props> {
           {
             ['business', 'open', 'customer'].indexOf(this.props.type) > -1 &&
             <Tabs.TabPane tab='相关公司记录' key='3'>
-              <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+              <div style={{overflowY: 'auto', maxHeight: this.props.height }} className={styles.record}>
                 {
                   this.relatedCompany.map((item, index) => {
                     return (

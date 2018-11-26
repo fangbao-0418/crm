@@ -204,11 +204,10 @@ class Main extends React.Component<Props> {
                 </Dropdown>
               ) : label
             }
-            {
-              (item.field === 'date' && item.label.length > 1) &&
-              <Icon type='down' theme='outlined' />
-            }
           </label>
+          <span style={{paddingRight: 5}}>
+            {(item.field === 'date' && item.label.length > 1) ? <Icon type='down' theme='outlined' style={{color: '#BFBFBF'}}/> : <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>}
+          </span>
           <div className={styles.options}>
             {tagNodes}
           </div>
