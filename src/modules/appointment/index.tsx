@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'antd'
+import { Table, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -12,6 +12,7 @@ import { showDetail } from '@/modules/business/utils'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Business.DetailProps
 interface States {
+  extshow: boolean
   dataSource: DetailProps[]
   pagination: {
     total: number
@@ -29,6 +30,7 @@ class Main extends React.Component {
     pageCurrent: 1
   }
   public state: States = {
+    extshow: false,
     dataSource: [],
     pagination: {
       total: 0,
@@ -264,6 +266,12 @@ class Main extends React.Component {
       }
     })
   }
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
   public render () {
     const { pagination } = this.state
     return (
@@ -274,6 +282,9 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
+            <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
+          </div>
+          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
               <SearchName
                 style={{paddingTop: '5px'}}

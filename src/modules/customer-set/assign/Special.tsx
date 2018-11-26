@@ -195,7 +195,6 @@ class Main extends React.Component<Props, State> {
     return (
       <Table
         rowKey='key'
-        bordered
         dataSource={this.props.spicalAssetsList}
         columns={this.columns}
       />
