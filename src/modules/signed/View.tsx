@@ -37,22 +37,22 @@ class Main extends React.Component<Props> {
         </span>
         <Profile isShowAgent={true} customerName={this.props.customerName}/>
         <Tabs defaultActiveKey={this.props.defaultKey} onChange={this.callback}>
-          <Tabs.TabPane tab='客户信息' key='1'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>客户信息</span>} key='1'>
             <Detail/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='订单信息' key='2'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>订单信息</span>} key='2'>
             <OrderInfo customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='工单信息' key='3'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>工单信息</span>} key='3'>
             <WorkList customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='相关公司' key='4'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>相关公司</span>} key='4'>
             <CompanyList customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='跟进小记' key='5'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>跟进小计</span>} key='5'>
             <FlowRecord customerId={this.props.customerId}/>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='操作记录' key='6'>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>操作记录</span>} key='6'>
             <OperateList/>
           </Tabs.TabPane>
         </Tabs>

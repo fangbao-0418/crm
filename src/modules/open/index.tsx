@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Tooltip } from 'antd'
+import { Table, Button, Tooltip, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -16,6 +16,7 @@ const styles = require('@/modules/business/style')
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 type DetailProps = Open.DetailProps
 interface States {
+  extshow: boolean
   dataSource: DetailProps[]
   selectedRowKeys: string[]
   pagination: {
@@ -34,6 +35,7 @@ class Main extends React.Component {
     pageSize: 15
   }
   public state: States = {
+    extshow: false,
     dataSource: [],
     selectedRowKeys: [],
     pagination: {
@@ -123,7 +125,7 @@ class Main extends React.Component {
       <span>
         释放次数
         <Tooltip placement='top' title='客户被释放到公海的总次数'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -133,7 +135,7 @@ class Main extends React.Component {
       <span>
         释放销售
         <Tooltip placement='top' title='客户最后一次被释放到公海时的销售'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -419,6 +421,12 @@ class Main extends React.Component {
     })
     modal.show()
   }
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -433,6 +441,9 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
+            <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
+          </div>
+          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
@@ -467,7 +478,6 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Select, Tooltip, Divider } from 'antd'
+import { Table, Button, Select, Tooltip, Divider, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
@@ -18,6 +18,7 @@ const all: any = [{
   value: undefined
 }]
 interface States {
+  extshow: boolean
   dataSource: DetailProps[]
   selectedRowKeys: string[]
   pagination: {
@@ -29,6 +30,7 @@ interface States {
 }
 class Main extends React.Component {
   public state: States = {
+    extshow: false,
     dataSource: [],
     selectedRowKeys: [],
     pagination: {
@@ -126,7 +128,7 @@ class Main extends React.Component {
       <span>
         入库时间
         <Tooltip placement='top' title='成为签约客户的时间'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -139,7 +141,7 @@ class Main extends React.Component {
       <span>
         预计截至账期
         <Tooltip placement='top' title='合同到期截至服务的账期'>
-          <i className='fa fa-exclamation-circle ml5'></i>
+          <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
     ),
@@ -351,6 +353,12 @@ class Main extends React.Component {
   public onSelectAllChange (selectedRowKeys: string[]) {
     this.setState({ selectedRowKeys })
   }
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
   public render () {
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -367,6 +375,9 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
+            <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
+          </div>
+          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
@@ -405,7 +416,6 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
-          bordered
           rowKey={'id'}
           pagination={{
             onChange: this.handlePageChange.bind(this),

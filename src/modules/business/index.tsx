@@ -1,5 +1,5 @@
 import React from 'react'
-import { DatePicker, Select, Tabs } from 'antd'
+import { DatePicker, Select, Tabs, Icon } from 'antd'
 import ContentBox from '@/modules/common/content'
 import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -26,11 +26,13 @@ import { fetchCountAction } from './action'
 import { connect } from 'react-redux'
 const styles = require('./style')
 interface States {
+  extshow: boolean
   citys: Common.RegionProps[],
   sales: Array<{id: string, name: string}>
 }
 class Main extends React.Component<Business.Props> {
   public state: States = {
+    extshow: false,
     citys: [],
     sales: []
   }
@@ -404,6 +406,12 @@ class Main extends React.Component<Business.Props> {
       this.toCustomersCity(selectedRowKeys)
     }
   }
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
   public render () {
     const { count } = this.props
     // console.log(count, 'count')
@@ -455,6 +463,9 @@ class Main extends React.Component<Business.Props> {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
+            <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
+          </div>
+          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
