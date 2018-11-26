@@ -51,7 +51,6 @@ class Main extends React.Component<Props> {
       })
     })
   }
-
   // componentDidMount(){
   //   const {OrderData}=this.state
   //   let len: any=[]
@@ -149,7 +148,7 @@ class Main extends React.Component<Props> {
                 </div>
                 <div className={styles['order-bottom']}>
                   <div className={styles.col}>
-                    <span>共{item.products.length}个服务</span>
+                    <span>共{item.products.length-1}个服务</span>
                   </div>
                   <div className={styles.col}>
                     <label>订单金额：</label>
