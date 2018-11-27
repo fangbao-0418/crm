@@ -121,9 +121,9 @@ class Main extends React.Component<Props> {
     const {infomation} = this.state
     return (
       <div>
-        <div style={!infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
+        <div style={infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
           <div style={{textAlign: 'center', color: 'red'}}>
-            {infomation.message}
+            哈哈哈{infomation.message}
           </div>
         </div>
         <div>
@@ -146,7 +146,7 @@ class Main extends React.Component<Props> {
                 showFold
               >
                 <BaseInfo
-                  showTel={!!infomation.isOtherTrack}
+                  showTel={!infomation.isOtherTrack}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
