@@ -30,6 +30,7 @@ declare namespace Business {
     telephoneStatus?: string
     intention?: string
     customerName?: string
+    customerId?: string
     contactPerson?: string
     contactPhone?: string
     customerSource?: string

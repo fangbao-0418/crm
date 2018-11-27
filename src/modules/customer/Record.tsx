@@ -50,6 +50,12 @@ class Main extends React.Component<Props> {
                         </span>
                       }
                       {
+                        item.tagTelephoneStatus > -1 &&
+                        <span className={styles.tag}>
+                          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                        </span>
+                        }
+                      {
                         item.tagFollowUpClassification > -1 &&
                         <span className={styles.tag}>
                           {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
@@ -102,6 +108,12 @@ class Main extends React.Component<Props> {
                           item.tagTelephoneStatus > -1 &&
                           <span className={styles.tag}>
                             {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+                          </span>
+                        }
+                        {
+                          item.tagFollowUpClassification > -1 &&
+                          <span className={styles.tag}>
+                            {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
                           </span>
                         }
                         {
