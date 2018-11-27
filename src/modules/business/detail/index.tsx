@@ -147,15 +147,8 @@ class Main extends React.Component<Props> {
                 title='基本信息'
                 showFold
               >
-              {!infomation.isOtherTrack ?
                 <BaseInfo
-                  showTel={false}
-                  ref='baseinfo'
-                  customerId={this.props.customerId}
-                  type={type}
-                /> :
-                <BaseInfo
-                  showTel={false}
+                  showTel={!!infomation.isOtherTrack}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
