@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { getCallDetail, getSaller } from '@/modules/stat/api'
 import moment from 'moment'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
+import fileSaver from '@/utils/fileSave'
 const styles = require('./style')
 interface State {
   expandedRowKeys: string[]
@@ -155,13 +156,12 @@ class Main extends React.Component<{}, State> {
   public download (record: CrmStat.CallDetailItemProps) {
     const res = record.mediaUrl.match(/\.\w+$/)
     if (res === null) {
+      APP.error('文件不存在')
       return
     }
-    const el = document.createElement('a')
     const filename = record.customerName + res[0]
-    el.setAttribute('href', record.mediaUrl)
-    el.setAttribute('download', filename)
-    el.click()
+    console.log(fileSaver, 'click')
+    fileSaver(record.mediaUrl, filename)
   }
   public fetchList () {
     const { pagination } = this.state
