@@ -7,10 +7,10 @@ import showDetail from './showDetail'
 import { fetchList } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
-import { changeVisibleAction } from '../action'
+// import { changeVisibleAction } from '../action'
 export default function () {
   let ins: any
-  const modal = new Modal({
+  let modal = new Modal({
     style: 'width: 600px',
     content: (
       <Provider>
@@ -31,8 +31,8 @@ export default function () {
           onClick={() => {
             console.log(ins.refs.wrappedComponent)
             ins.refs.wrappedComponent.save().then(() => {
-              changeVisibleAction(false)
-              changeVisibleAction(true)
+              // changeVisibleAction(false)
+              // changeVisibleAction(true)
               APP.success('保存成功')
               modal.hide()
               this.fetchList()
@@ -46,6 +46,8 @@ export default function () {
           type='primary'
           onClick={() => {
             ins.refs.wrappedComponent.save().then((res: any) => {
+              this.fetchList()
+              this.fetchCount()
               APP.success('保存成功') // 保存成功后跳转到详情页
               modal.hide()
               const business: Business.Props = store.getState().business
@@ -53,11 +55,9 @@ export default function () {
               let dataSource: Business.DetailProps[] = []
               const { searchPayload, pagination } = business[tab]
               let index = 0
-              showDetail.call(this, {id: res.data}, index,
+              modal = showDetail.call(this, {id: res.data}, index,
                 {
                   onOk: () => {
-                    changeVisibleAction(false)
-                    changeVisibleAction(true)
                     APP.success('操作成功')
                     fetchList(searchPayload).then((res1) => {
                       pagination.total = res1.pageTotal
@@ -66,7 +66,8 @@ export default function () {
                         payload: {
                           [tab]: {
                             dataSource: res1.data,
-                            pagination
+                            pagination,
+                            searchPayload
                           }
                         }
                       })
@@ -90,7 +91,7 @@ export default function () {
                   onPrev: () => {
                     index -= 1
                     if (index < 0) {
-                      if (searchPayload.pageCurrent === 1) {
+                      if (searchPayload.pageCurrent <= 1) {
                         modal.hide()
                         return
                       }
@@ -100,6 +101,11 @@ export default function () {
                     }
                     if (dataSource.length === 0) {
                       fetchList(searchPayload).then((res2) => {
+                        dataSource = res2.data || []
+                        if (dataSource[index] === undefined) {
+                          modal.hide()
+                          return
+                        }
                         pagination.current = res2.pageCurrent
                         APP.dispatch<Business.Props>({
                           type: 'change business data',
@@ -111,7 +117,6 @@ export default function () {
                             }
                           }
                         })
-                        dataSource = res2.data || []
                         changeCustomerDetailAction(dataSource[index].id)
                       })
                     } else {
@@ -127,7 +132,11 @@ export default function () {
                     }
                     if (dataSource.length === 0) {
                       fetchList(searchPayload).then((res3) => {
-                        // if (res.data)
+                        dataSource = res3.data || []
+                        if (dataSource[index] === undefined) {
+                          modal.hide()
+                          return
+                        }
                         pagination.current = res3.pageCurrent
                         APP.dispatch<Business.Props>({
                           type: 'change business data',
@@ -139,7 +148,6 @@ export default function () {
                             }
                           }
                         })
-                        dataSource = res3.data || []
                         changeCustomerDetailAction(dataSource[index].id)
                       })
                     } else {

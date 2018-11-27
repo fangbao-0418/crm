@@ -359,7 +359,6 @@ class Main extends React.Component<Customer.Props, States> {
                   className='mr5'
                   onClick={() => {
                     instance.save().then(() => {
-                      APP.success('保存成功')
                       index -= 1
                       if (index === -1) {
                         if (searchPayload.pageCurrent === 1) {
@@ -389,7 +388,6 @@ class Main extends React.Component<Customer.Props, States> {
                   type='ghost'
                   onClick={() => {
                     instance.save().then(() => {
-                      APP.success('保存成功')
                       index += 1
                       if (index >= searchPayload.pageSize) {
                         searchPayload.pageCurrent += 1

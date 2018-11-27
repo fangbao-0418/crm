@@ -21,7 +21,7 @@ import {
   conditionOptions
 } from './utils'
 import _ from 'lodash'
-import { appointment, toSales, toOpen, toCity, fetchList, fetchListRecycle } from './api'
+import { appointment, toSales, toOpen, toCity, fetchList } from './api'
 import { fetchCountAction } from './action'
 import { connect } from 'react-redux'
 const styles = require('./style')
@@ -57,34 +57,20 @@ class Main extends React.Component<Business.Props> {
     const { pagination } = data
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
-    console.log(selectedTab, 'selectedTab')
-    if (selectedTab === 'tab4') {
-      fetchListRecycle(this.params).then((res) => {
-        pagination.total = res.pageTotal
-        APP.dispatch<Business.Props>({
-          type: 'change business data',
-          payload: {
-            tab4: {
-              dataSource: res.data,
-              pagination
-            }
+    return fetchList(this.params).then((res) => {
+      pagination.total = res.pageTotal
+      APP.dispatch<Business.Props>({
+        type: 'change business data',
+        payload: {
+          [selectedTab]: {
+            dataSource: res.data,
+            pagination,
+            searchPayload: this.params
           }
-        })
+        }
       })
-    } else {
-      fetchList(this.params).then((res) => {
-        pagination.total = res.pageTotal
-        APP.dispatch<Business.Props>({
-          type: 'change business data',
-          payload: {
-            [selectedTab]: {
-              dataSource: res.data,
-              pagination
-            }
-          }
-        })
-      })
-    }
+      return res
+    })
   }
   public fetchCitys () {
     fetchRegion({level: 2}).then((res) => {
@@ -179,7 +165,6 @@ class Main extends React.Component<Business.Props> {
   }
   public callback (value?: 'tab1' | 'tab2' | 'tab3' | 'tab4') {
     this.params.tab = value.replace('tab', '')
-    console.log(this.params.tab, 'params')
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {

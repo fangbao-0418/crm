@@ -1,7 +1,13 @@
 import http from '@/utils/http'
 type SearchProps = Business.SearchProps
 export const fetchList = (payload: SearchProps) => {
-  return http(`/crm-manage/v1/api/customer-opportunity`, 'GET', {
+  let url = ''
+  if (payload.tab !== '4') {
+    url = `/crm-manage/v1/api/customer-opportunity`
+  } else {
+    url = '/crm-manage/v1/api/business-opportunity/forthcoming-recycle'
+  }
+  return http(url, 'GET', {
     data: payload
   })
 }
@@ -17,11 +23,6 @@ export const getCustomerNum = (payload: SearchProps) => {
 }
 export const fetchListappoint = (payload: SearchProps) => {
   return http(`/crm-manage/v1/api/customer-appointment`, 'GET', {
-    data: payload
-  })
-}
-export const fetchListRecycle = (payload: SearchProps) => {
-  return http(`/crm-manage/v1/api/business-opportunity/forthcoming-recycle`, 'GET', {
     data: payload
   })
 }

@@ -6,13 +6,12 @@ import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
-import { changeCustomerDetailAction } from '@/modules/customer/action'
-const styles = require('../style')
 export default function (record: Business.DetailProps, index?: number,
   operate: {
     onOk?: () => void
     onPrev?: () => void
     onNext?: () => void
+    refresh?: () => void
   } = {}) {
   let customerId = record.id
   const that = this
@@ -53,8 +52,8 @@ export default function (record: Business.DetailProps, index?: number,
                         bus_sea_memo: reason.label
                       }
                       toOpen(openparams).then(() => {
-                        if (operate.onOk) {
-                          operate.onOk()
+                        if (operate.refresh) {
+                          operate.refresh()
                         }
                       })
                       modal1.hide()
@@ -88,9 +87,6 @@ export default function (record: Business.DetailProps, index?: number,
                 className='mr5'
                 onClick={() => {
                   that.ins.save().then(() => {
-                    if (operate.onOk) {
-                      operate.onOk()
-                    }
                     if (operate.onPrev) {
                       operate.onPrev()
                     }
@@ -103,9 +99,6 @@ export default function (record: Business.DetailProps, index?: number,
                 type='ghost'
                 onClick={() => {
                   that.ins.save().then(() => {
-                    if (operate.onOk) {
-                      operate.onOk()
-                    }
                     if (operate.onNext) {
                       operate.onNext()
                     }

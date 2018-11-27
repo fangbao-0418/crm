@@ -1,4 +1,5 @@
 import { viewCustomer, fetchTrackRecords, fetchClueRecords } from './api'
+/** 改变详情信息，包含基本信息、跟进记录、线索记录、相关公司记录 */
 export const changeCustomerDetailAction = (id: string) => {
   viewCustomer(id).then((res: any) => {
     APP.dispatch<Customer.Props>({

@@ -66,7 +66,6 @@ class Main extends React.Component<Props> {
     }
   }
   public componentWillReceiveProps (props: Customer.Props) {
-    console.log(this.props.detail.id !== props.detail.id, '1111')
     if (this.props.detail.id !== props.detail.id) {
       this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
       this.setState({

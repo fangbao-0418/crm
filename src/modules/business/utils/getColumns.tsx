@@ -1,13 +1,12 @@
 import React from 'react'
 import { ColumnProps } from 'antd/lib/table'
-import { Tooltip, Icon } from 'antd'
+import { Tooltip } from 'antd'
 import moment from 'moment'
 import showDetail from './showDetail'
 import { fetchList } from '../api'
 import store from '@/store'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('../style')
-import { changeVisibleAction } from '../action'
 export default function (): ColumnProps<Business.DetailProps>[] {
   return [{
     title: '客户名称',
@@ -29,41 +28,13 @@ export default function (): ColumnProps<Business.DetailProps>[] {
               const modal = showDetail.call(this, record, index,
                 {
                   onOk: () => {
-                    changeVisibleAction(false)
-                    changeVisibleAction(true)
                     APP.success('操作成功')
-                    fetchList(searchPayload).then((res) => {
-                      pagination.total = res.pageTotal
-                      APP.dispatch<Business.Props>({
-                        type: 'change business data',
-                        payload: {
-                          [tab]: {
-                            dataSource: res.data,
-                            pagination
-                          }
-                        }
-                      })
-                      if (res.data[index]) {
-                        const customerId = res.data[index].id
-                        changeCustomerDetailAction(customerId)
-                        APP.dispatch<Customer.Props>({
-                          type: 'change customer data',
-                          payload: {
-                            detail: {
-                              id: customerId
-                            }
-                          }
-                        })
-                      } else {
-                        modal.hide()
-                      }
-                    })
                     return
                   },
                   onPrev: () => {
                     index -= 1
                     if (index === -1) {
-                      if (searchPayload.pageCurrent === 1) {
+                      if (searchPayload.pageCurrent <= 1) {
                         modal.hide()
                         return
                       }
@@ -100,7 +71,11 @@ export default function (): ColumnProps<Business.DetailProps>[] {
                     }
                     if (dataSource.length === 0) {
                       fetchList(searchPayload).then((res) => {
-                        // if (res.data)
+                        dataSource = res.data || []
+                        if (dataSource[index] === undefined) {
+                          modal.hide()
+                          return
+                        }
                         pagination.current = res.pageCurrent
                         APP.dispatch<Business.Props>({
                           type: 'change business data',
@@ -112,7 +87,6 @@ export default function (): ColumnProps<Business.DetailProps>[] {
                             }
                           }
                         })
-                        dataSource = res.data || []
                         changeCustomerDetailAction(dataSource[index].id)
                       })
                     } else {
@@ -122,6 +96,34 @@ export default function (): ColumnProps<Business.DetailProps>[] {
                       }
                       changeCustomerDetailAction(dataSource[index].id)
                     }
+                  },
+                  refresh: () => {
+                    fetchList(searchPayload).then((res) => {
+                      pagination.total = res.pageTotal
+                      APP.dispatch<Business.Props>({
+                        type: 'change business data',
+                        payload: {
+                          [tab]: {
+                            dataSource: res.data,
+                            pagination
+                          }
+                        }
+                      })
+                      if (res.data[index]) {
+                        const customerId = res.data[index].id
+                        changeCustomerDetailAction(customerId)
+                        APP.dispatch<Customer.Props>({
+                          type: 'change customer data',
+                          payload: {
+                            detail: {
+                              id: customerId
+                            }
+                          }
+                        })
+                      } else {
+                        modal.hide()
+                      }
+                    })
                   }
                 }
               )

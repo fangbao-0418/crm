@@ -136,7 +136,7 @@ class Main extends React.Component<{}, State> {
             <i
               className='fa fa-download href'
               onClick={() => {
-                window.open(record.mediaUrl)
+                this.download(record)
               }}
             />
           </span>
@@ -151,6 +151,17 @@ class Main extends React.Component<{}, State> {
       })
     })
     this.fetchList()
+  }
+  public download (record: CrmStat.CallDetailItemProps) {
+    const res = record.mediaUrl.match(/\.\w+$/)
+    if (res === null) {
+      return
+    }
+    const el = document.createElement('a')
+    const filename = record.customerName + res[0]
+    el.setAttribute('href', record.mediaUrl)
+    el.setAttribute('download', filename)
+    el.click()
   }
   public fetchList () {
     const { pagination } = this.state

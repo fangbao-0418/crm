@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchListRecycle } from './api'
+import { fetchList } from './api'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 type DetailProps = Business.DetailProps
@@ -26,7 +26,7 @@ class Main extends React.Component<Props, States> {
     const pagination = this.props.tab4.pagination
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
-    fetchListRecycle(params).then((res) => {
+    fetchList(params).then((res) => {
       pagination.total = res.pageTotal
       APP.dispatch<Business.Props>({
         type: 'change business data',

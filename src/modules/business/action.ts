@@ -18,11 +18,11 @@ export const fetchCountAction = (payload: Business.SearchProps) => {
     })
   })
 }
-export const changeVisibleAction = (visibled: boolean = true) => {
-  APP.dispatch<Business.Props>({
-    type: 'change business data',
-    payload: {
-      visibled
-    }
-  })
-}
+// export const changeVisibleAction = (visibled: boolean = true) => {
+//   APP.dispatch<Business.Props>({
+//     type: 'change business data',
+//     payload: {
+//       visibled
+//     }
+//   })
+// }

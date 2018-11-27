@@ -201,28 +201,28 @@ class Main extends React.Component {
     this.fetchList()
   }
   public show (record: DetailProps, index: number) {
-    let dataSource: Business.DetailProps[] = []
+    let dataSource: Business.DetailProps[] = this.state.dataSource
     const searchPayload = this.params
-    let id = record.id
+    // let id = record.id
     const modal = showDetail.call(this, record, index, {
       onOk: () => {
         APP.success('操作成功')
-        this.fetchList().then((res) => {
-          const data = res.data
-          if (data instanceof Array && data[index]) {
-            id = data[index].id
-            changeCustomerDetailAction(id)
-          } else {
-            modal.hide()
-          }
-        }, () => {
-          modal.hide()
-        })
+        // this.fetchList().then((res) => {
+        //   const data = res.data
+        //   if (data instanceof Array && data[index]) {
+        //     id = data[index].id
+        //     changeCustomerDetailAction(id)
+        //   } else {
+        //     modal.hide()
+        //   }
+        // }, () => {
+        //   modal.hide()
+        // })
       },
       onPrev: () => {
         index -= 1
         if (index === -1) {
-          if (searchPayload.pageCurrent === 1) {
+          if (searchPayload.pageCurrent <= 1) {
             modal.hide()
             return
           }
