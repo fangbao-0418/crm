@@ -147,14 +147,20 @@ class Main extends React.Component<Props> {
                 title='基本信息'
                 showFold
               >
-              <div style={!infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
+              {!infomation.isOtherTrack ?
                 <BaseInfo
-                  showTel={true}
+                  showTel={false}
+                  ref='baseinfo'
+                  customerId={this.props.customerId}
+                  type={type}
+                /> :
+                <BaseInfo
+                  showTel={false}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
                 />
-              </div>
+              }
               </Card>
             </div>
             <div className={styles.right}>
