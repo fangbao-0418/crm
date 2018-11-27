@@ -560,6 +560,32 @@ class Main extends React.Component<Customer.Props, States> {
     })
     modal.show()
   }
+  // 批量删除
+  public deleteAll () {
+    if (!this.state.selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
+    const modal = new Modal({
+      content: (
+        <div>你确定要删除这些客户吗？</div>
+      ),
+      title: '删除客户',
+      mask: true,
+      onOk: () => {
+        const payload = this.state.selectedRowKeys.join(',')
+        deleteCustomer(payload).then(() => {
+          APP.success('操作成功')
+          this.fetchList()
+          modal.hide()
+        })
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public handlePageChange (page: number) {
     const { pagination } = this.state
     pagination.current = page
@@ -679,6 +705,7 @@ class Main extends React.Component<Customer.Props, States> {
           {/* <Button type='primary' onClick={this.SelectAll.bind(this)} className='mr5'>全选</Button> */}
           <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' hidden={!APP.hasPermission('crm_customer_list_allocate')} onClick={this.toOrganizationByHand.bind(this)}>手工分配</Button>
           <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_customer_list_allocate_auto')} className='mr5' onClick={this.toOrganizationAuto.bind(this)}>应用自动分配</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.deleteAll.bind(this)}>批量删除</Button>
         </div>
       </ContentBox>
     )

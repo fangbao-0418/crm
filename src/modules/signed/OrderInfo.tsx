@@ -51,19 +51,6 @@ class Main extends React.Component<Props> {
       })
     })
   }
-  // componentDidMount(){
-  //   const {OrderData}=this.state
-  //   let len: any=[]
-  //   let num: any=[]
-  //   OrderData.map((value,index)=>{
-  //     len.push(Math.ceil(value.products.length/4));
-  //     num.push(1)
-  //   })
-  //   this.setState({
-  //     length:len,
-  //     number:num
-  //   })
-  // }
   public render () {
     const {numb, length} = this.state
 
@@ -81,7 +68,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>订单号：</label>
-                    <span>{item.orderCode}</span>
+                    <span onClick={() => {window.open(`/shop-order/orders/service/detail/${item.orderCode}`)}}>{item.orderCode}</span>
                   </div>
                   <div className={styles.col}>
                     <label>签单时间：</label>
@@ -101,21 +88,24 @@ class Main extends React.Component<Props> {
                   </div>
                 </div>
                 <div className={styles.marg}>
-                  <div
-                    className={styles.left}
-                    onClick={() => {
-                      let i = numb[index] - 1
-                      if (i <= 0) {
-                        i = length[index]
-                      }
-                      numb[index] = i
-                      this.setState({
-                        numb
-                      })
-                    }}
-                  >
+                  {
+                    length[ index ] > 1 ?
+                    <div
+                      className={styles.left}
+                      onClick={() => {
+                        let i = numb[index] - 1
+                        if (i <= 0) {
+                          i = length[index]
+                        }
+                        numb[index] = i
+                        this.setState({
+                          numb
+                        })
+                      }}
+                    >
                     <Icon type='left' theme='outlined' />
-                  </div>
+                    </div> : null
+                  }
                   <div className={styles['order-con']}>
                     {
                       item.products.filter((children, index1) => index1 >= ((numb[index] - 1) * 4) && index1 < (numb[index] * 4)).map((children, index1) => {
@@ -130,21 +120,24 @@ class Main extends React.Component<Props> {
                         )
                       })}
                   </div>
-                  <div
-                    className={styles.right}
-                    onClick={() => {
-                      let i = numb[ index ] + 1
-                      if (i > length) {
-                        i = 1
-                      }
-                      numb[ index ] = i
-                      this.setState({
-                        numb
-                      })
-                    }}
-                  >
+                  {
+                    length[ index ] > 1 ?
+                    <div
+                      className={styles.right}
+                      onClick={() => {
+                        let i = numb[ index ] + 1
+                        if (i > length[index]) {
+                          i = 1
+                        }
+                        numb[ index ] = i
+                        this.setState({
+                          numb
+                        })
+                      }}
+                    >
                     <Icon type='right' theme='outlined'/>
-                  </div>
+                    </div> : null
+                  }
                 </div>
                 <div className={styles['order-bottom']}>
                   <div className={styles.col}>

@@ -4,9 +4,9 @@ export const fetchAutoAssign = (cityCodeArr?: string) => {
   url = cityCodeArr ? url + `?cityCodeArr=${cityCodeArr}` : url
   return http(url)
 }
-export const fetchStorageCapacity = (cityCodeArr?: string) => {
+export const fetchStorageCapacity = (cityCodeArr?: string, agencyName?: string) => {
   let url = '/crm-manage/v1/api/storage_capacity/list'
-  url = cityCodeArr ? url + `?cityCodeArr=${cityCodeArr}` : url
+  url = cityCodeArr ? url + `?cityCodeArr=${cityCodeArr}&agencyName=${agencyName}` : url
   return http(url)
 }
 export const fetchCity = () => {
