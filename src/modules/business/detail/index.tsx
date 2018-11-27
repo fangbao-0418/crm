@@ -8,8 +8,10 @@ import _ from 'lodash'
 import moment from 'moment'
 import { Button, Input, DatePicker, Icon } from 'antd'
 import { connect } from 'react-redux'
+import { verifyMessage } from '../api'
 const styles = require('./style')
 interface Props {
+  customerName: string
   customerId: string
   type?: 'business' | 'open' | 'customer'
   detail?: Customer.DetailProps
@@ -19,7 +21,16 @@ interface Props {
 }
 class Main extends React.Component<Props> {
   public state = {
-    visible: true
+    track: '',
+    visible: true,
+    infomation: {
+      isOtherTrack: '',
+      message: ''
+    }
+  }
+  public payload = {
+    customerName: this.props.customerName,
+    customerId: this.props.customerId
   }
   public defaultTrackRecord = [
     {
@@ -58,6 +69,14 @@ class Main extends React.Component<Props> {
     </div>
   )
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
+  public componentWillMount () {
+    verifyMessage(this.payload).then((res) => {
+      this.setState({
+        infomation: res,
+        track: res.isOtherTrack
+      })
+    })
+  }
   public componentDidMount () {
     console.log('detail did mouiunt')
     if (this.props.getWrappedInstance) {
@@ -101,8 +120,15 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const type = this.props.type || 'customer'
+    const {infomation} = this.state
     return (
       <div>
+        <div style={!infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
+          <div style={{textAlign: 'center', color: 'red'}}>
+            {this.props.customerName}-{infomation.message}
+          </div>
+        </div>
+        <div>
         <span
           className={styles['colse-icon']}
           onClick={() => this.props.onClose()}
@@ -121,12 +147,14 @@ class Main extends React.Component<Props> {
                 title='基本信息'
                 showFold
               >
+              <div style={!infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
                 <BaseInfo
                   showTel={true}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
                 />
+              </div>
               </Card>
             </div>
             <div className={styles.right}>
@@ -164,6 +192,7 @@ class Main extends React.Component<Props> {
                   </div>
                 </Card>
               }
+            </div>
             </div>
           </div>
           <div>

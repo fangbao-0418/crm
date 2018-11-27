@@ -51,19 +51,6 @@ class Main extends React.Component<Props> {
       })
     })
   }
-  // componentDidMount(){
-  //   const {OrderData}=this.state
-  //   let len: any=[]
-  //   let num: any=[]
-  //   OrderData.map((value,index)=>{
-  //     len.push(Math.ceil(value.products.length/4));
-  //     num.push(1)
-  //   })
-  //   this.setState({
-  //     length:len,
-  //     number:num
-  //   })
-  // }
   public render () {
     const {numb, length} = this.state
 
@@ -81,7 +68,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>订单号：</label>
-                    <span>{item.orderCode}</span>
+                    <span onClick={() => {window.open(`/shop-order/orders/service/detail/${item.orderCode}`)}}>{item.orderCode}</span>
                   </div>
                   <div className={styles.col}>
                     <label>签单时间：</label>

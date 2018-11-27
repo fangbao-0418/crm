@@ -51,3 +51,9 @@ export const toCity = (payload: {
 export const getcapacityNum = () => {
   return http(`/crm-manage/v1/api/storage-capacity`)
 }
+export const verifyMessage = (payload: {
+  customerId?: string
+  customerName?: string
+}) => {
+  return http(`/crm-manage/v1/api/get-customer-track-status`, 'GET', payload)
+}
