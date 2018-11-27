@@ -100,6 +100,7 @@ class Main extends React.Component {
   ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
+    width: 350,
     dataIndex: 'customerName',
     render: (val, record) => {
       return (
@@ -113,15 +114,19 @@ class Main extends React.Component {
     }
   }, {
     title: '联系人',
+    width: 180,
     dataIndex: 'contactPerson'
   }, {
     title: '地区',
+    width: 180,
     dataIndex: 'area'
   }, {
     title: '跟进人',
+    width: 180,
     dataIndex: 'currentSalesperson'
   }, {
     title: '运营会计',
+    width: 180,
     dataIndex: 'operatingAccouting'
   }, {
     title: (
@@ -132,6 +137,7 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
+    width: 180,
     dataIndex: 'enterStorageTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
@@ -145,6 +151,7 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
+    width: 180,
     dataIndex: 'endTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
@@ -155,12 +162,14 @@ class Main extends React.Component {
         预约时间
       </span>
     ),
+    width: 180,
     dataIndex: 'appointTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }, {
     title: '操作',
+    width: 200,
     render: (record) => {
       return (
         <span>
@@ -378,7 +387,7 @@ class Main extends React.Component {
             <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[

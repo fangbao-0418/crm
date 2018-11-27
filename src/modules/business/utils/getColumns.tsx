@@ -11,6 +11,7 @@ import { changeVisibleAction } from '../action'
 export default function (): ColumnProps<Business.DetailProps>[] {
   return [{
     title: '客户名称',
+    width: 350,
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (
@@ -138,9 +139,11 @@ export default function (): ColumnProps<Business.DetailProps>[] {
     }
   }, {
     title: '联系人',
+    width: 180,
     dataIndex: 'contactPerson'
   }, {
     title: '意向度',
+    width: 180,
     dataIndex: 'intention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
@@ -153,14 +156,16 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           <i className='fa fa-info-circle ml5'></i>
         </Tooltip>
       </span>
-    )
-    ,
+    ),
+    width: 180,
     dataIndex: 'freeDays'
   }, {
     title: '当前销售',
+    width: 180,
     dataIndex: 'leadingPerson'
   }, {
     title: '客户来源',
+    width: 180,
     dataIndex: 'source',
     render: (val) => {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
@@ -174,6 +179,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
         </Tooltip>
       </span>
     ),
+    width: 180,
     dataIndex: 'enterDays',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))

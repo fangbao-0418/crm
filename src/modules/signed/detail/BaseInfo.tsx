@@ -5,6 +5,7 @@ import Uploader from './Uploader'
 import { connect } from 'react-redux'
 import { fetchRegion } from '@/modules/common/api'
 import Dropdown from 'pilipa/libs/dropdown'
+const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
 interface State {
@@ -32,6 +33,7 @@ class Main extends React.Component<Props, State> {
     const disabled = this.props.disabled
     const detail = this.props.detail
     return (
+      <div className={styles.label}>
       <Form>
         <Row>
           <Col span={7}>
@@ -39,7 +41,7 @@ class Main extends React.Component<Props, State> {
               style={{marginLeft: '-41px'}}
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label={<span style={{fontSize: 12}}>区域</span>}
+              label='区域'
             >
               {!disabled ? getFieldDecorator(
                 'area'
@@ -66,7 +68,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
-              label={<span style={{fontSize: 12}}>纳税人类别</span>}
+              label='纳税人类别'
             >
               {!disabled ? getFieldDecorator(
                 'payTaxesNature',
@@ -94,7 +96,7 @@ class Main extends React.Component<Props, State> {
           <FormItem
             labelCol={{span: 8}}
             wrapperCol={{span: 16}}
-            label={<span style={{fontSize: 12}}>法人身份证号</span>}
+            label='法人身份证号'
           >
             {!disabled ? getFieldDecorator(
               'legalPersonCard',
@@ -113,7 +115,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label={<span style={{fontSize: 12}}>证件照片</span>}
+              label='证件照片'
             >
               {getFieldDecorator(
                 'idUrl1',
@@ -156,7 +158,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
-              label={<span style={{fontSize: 12}}>营业执照</span>}
+              label='营业执照'
             >
             {getFieldDecorator(
               'businessLicenseUrl',
@@ -179,6 +181,7 @@ class Main extends React.Component<Props, State> {
           </Col>
         </Row>
       </Form>
+      </div>
     )
   }
 }

@@ -75,7 +75,7 @@ class Main extends React.Component<Props, State> {
                   style={{marginLeft: '-4px'}}
                   labelCol={{span: 7}}
                   wrapperCol={{span: 12}}
-                  label={<span style={{fontSize: 12}}>信息认证方式</span>}
+                  label='信息认证方式'
                 >
                   <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
                 </FormItem>
@@ -88,7 +88,7 @@ class Main extends React.Component<Props, State> {
                   style={{marginLeft: '-4px'}}
                   labelCol={{span: 3}}
                   wrapperCol={{span: 21}}
-                  label={<span style={{fontSize: 12}}>公司名称</span>}
+                  label='公司名称'
                 >
                   {!disabled ? getFieldDecorator(
                     'customerName',
@@ -157,7 +157,7 @@ class Main extends React.Component<Props, State> {
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
-                label={<span style={{fontSize: 12}}>法人姓名</span>}
+                label='法人姓名'
               >
                 {!disabled ? getFieldDecorator(
                   'legalPerson',
@@ -176,7 +176,7 @@ class Main extends React.Component<Props, State> {
                 style={{marginLeft: '-18px'}}
                 labelCol={{span: 10}}
                 wrapperCol={{span: 14}}
-                label={<span style={{fontSize: 12}}>统一社会信用代码</span>}
+                label='统一社会信用代码'
                 required
               >
                 {!disabled ? getFieldDecorator(
@@ -216,7 +216,7 @@ class Main extends React.Component<Props, State> {
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
-                label={<span style={{fontSize: 12}}>注册资金</span>}
+                label='注册资金'
               >
                 {!disabled ? getFieldDecorator(
                   'registeredCapital',
@@ -237,7 +237,7 @@ class Main extends React.Component<Props, State> {
                     className='inline-block'
                     labelCol={{span: 7}}
                     wrapperCol={{span: 17}}
-                    label={<span style={{fontSize: 12}}>营业期限</span>}
+                    label='营业期限'
                   >
                     {getFieldDecorator(
                       'businessHoursBegin',
@@ -287,7 +287,7 @@ class Main extends React.Component<Props, State> {
                   style={{width: '100%'}}
                   labelCol={{span: 2}}
                   wrapperCol={{span: 22}}
-                  label={<span style={{fontSize: 12}}>营业期限</span>}
+                  label='营业期限'
                 >
                   <span>
                     {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
@@ -309,7 +309,7 @@ class Main extends React.Component<Props, State> {
                 // className='inline-block'
                 labelCol={{span: 4}}
                 wrapperCol={{span: 20}}
-                label={<span style={{fontSize: 12}}>公司地址</span>}
+                label='公司地址'
               >
                 {!disabled ? getFieldDecorator(
                   'address',
@@ -328,7 +328,7 @@ class Main extends React.Component<Props, State> {
                 labelCol={{span: 2}}
                 wrapperCol={{span: 22}}
                 style={{width: '100%'}}
-                label={<span style={{fontSize: 12}}>经营范围</span>}
+                label='经营范围'
               >
                 {!disabled ? getFieldDecorator(
                   'businessScope',

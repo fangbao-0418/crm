@@ -68,7 +68,16 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>订单号：</label>
-                    <span onClick={() => {window.open(`/shop-order/orders/service/detail/${item.orderCode}`)}}>{item.orderCode}</span>
+                    <span
+                      onClick={() => {
+                        if (!APP.hasPermission('order_orders_service')) {
+                          return
+                        }
+                        window.open(`/orders/service/detail/${item.orderCode}`)
+                      }}
+                    >
+                      {item.orderCode}
+                    </span>
                   </div>
                   <div className={styles.col}>
                     <label>签单时间：</label>
