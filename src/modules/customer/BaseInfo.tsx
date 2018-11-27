@@ -640,7 +640,7 @@ class Main extends React.Component<Props> {
           </Row>
         }
         <Row gutter={8} className='mt10'>
-          <Col span={24}>
+          <Col span={24} className={styles['form-item-1']}>
             <Input
               maxlength='100'
               field='address'
@@ -652,7 +652,7 @@ class Main extends React.Component<Props> {
           </Col>
         </Row>
         <Row gutter={8} className='mt10'>
-          <Col span={24}>
+          <Col span={24} className={styles['form-item-1']}>
             <TextArea
               field='remark'
               onChange={this.handleChange.bind(this)}

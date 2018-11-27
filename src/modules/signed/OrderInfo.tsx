@@ -89,14 +89,11 @@ class Main extends React.Component<Props> {
                 </div>
                 <div className={styles.marg}>
                   {
-                    length[ index ] > 1 ?
+                    !(numb[index] === 1) ?
                     <div
                       className={styles.left}
                       onClick={() => {
-                        let i = numb[index] - 1
-                        if (i <= 0) {
-                          i = length[index]
-                        }
+                        const i = numb[index] - 1
                         numb[index] = i
                         this.setState({
                           numb
@@ -121,14 +118,11 @@ class Main extends React.Component<Props> {
                       })}
                   </div>
                   {
-                    length[ index ] > 1 ?
+                    !(numb[index] === length[index]) ?
                     <div
                       className={styles.right}
                       onClick={() => {
-                        let i = numb[ index ] + 1
-                        if (i > length[index]) {
-                          i = 1
-                        }
+                        const i = numb[ index ] + 1
                         numb[ index ] = i
                         this.setState({
                           numb

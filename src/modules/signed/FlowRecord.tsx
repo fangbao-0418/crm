@@ -41,7 +41,7 @@ export default class extends React.Component<Props> {
   }
   public render () {
     return (
-      <div>
+      <div style={{fontSize: 12}}>
         <Tags
           labelSpan={2}
           className='mb10'

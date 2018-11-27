@@ -39,7 +39,7 @@ class Main extends React.Component<Props, State> {
               style={{marginLeft: '-41px'}}
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label='区域'
+              label={<span style={{fontSize: 12}}>区域</span>}
             >
               {!disabled ? getFieldDecorator(
                 'area'
@@ -66,7 +66,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
-              label='纳税人类别'
+              label={<span style={{fontSize: 12}}>纳税人类别</span>}
             >
               {!disabled ? getFieldDecorator(
                 'payTaxesNature',
@@ -94,7 +94,7 @@ class Main extends React.Component<Props, State> {
           <FormItem
             labelCol={{span: 8}}
             wrapperCol={{span: 16}}
-            label='法人身份证号'
+            label={<span style={{fontSize: 12}}>法人身份证号</span>}
           >
             {!disabled ? getFieldDecorator(
               'legalPersonCard',
@@ -113,7 +113,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label='证件照片'
+              label={<span style={{fontSize: 12}}>证件照片</span>}
             >
               {getFieldDecorator(
                 'idUrl1',
@@ -156,7 +156,7 @@ class Main extends React.Component<Props, State> {
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
-              label='营业执照'
+              label={<span style={{fontSize: 12}}>营业执照</span>}
             >
             {getFieldDecorator(
               'businessLicenseUrl',

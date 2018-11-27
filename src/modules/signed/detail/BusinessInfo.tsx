@@ -6,6 +6,7 @@ import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import CompanySearch from './CompanySearch'
 import { fetchGovInfo, fetchTianYanDetail } from '@/modules/common/api'
+const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
@@ -62,11 +63,11 @@ class Main extends React.Component<Props, State> {
     }
     console.log(detail, 'detail')
     return (
-      <div style={{width: '790px', marginLeft: '10px'}}>
+      <div style={{width: '790px', marginLeft: '10px'}} className={styles.label}>
         <Form
           // onSubmit={this.handleSubmit}
         >
-          <Row >
+          <Row>
             {
               disabled &&
               <Col span={10}>
@@ -74,7 +75,7 @@ class Main extends React.Component<Props, State> {
                   style={{marginLeft: '-4px'}}
                   labelCol={{span: 7}}
                   wrapperCol={{span: 12}}
-                  label='信息认证方式：'
+                  label={<span style={{fontSize: 12}}>信息认证方式</span>}
                 >
                   <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
                 </FormItem>
@@ -87,7 +88,7 @@ class Main extends React.Component<Props, State> {
                   style={{marginLeft: '-4px'}}
                   labelCol={{span: 3}}
                   wrapperCol={{span: 21}}
-                  label='公司名称'
+                  label={<span style={{fontSize: 12}}>公司名称</span>}
                 >
                   {!disabled ? getFieldDecorator(
                     'customerName',
@@ -104,7 +105,7 @@ class Main extends React.Component<Props, State> {
                     <div>
                       <CompanySearch
                         className='inline-block'
-                        enterButton='查询'
+                        enterButton={<span style={{fontSize: 12}}>查询</span>}
                         style={{width: '322px'}}
                         value={detail.customerName}
                         onSelectCompany={(item) => {
@@ -127,6 +128,7 @@ class Main extends React.Component<Props, State> {
                         }}
                       />
                       <Button
+                        style={{fontSize: 12}}
                         className='ml5 mr5'
                         type='primary'
                         onClick={this.searchUrl.bind(this)}
@@ -134,6 +136,7 @@ class Main extends React.Component<Props, State> {
                         网址
                       </Button>
                       <Button
+                        style={{fontSize: 12}}
                         type='primary'
                         onClick={() => {
                           detail.isConfirmed = 0
@@ -154,7 +157,7 @@ class Main extends React.Component<Props, State> {
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
-                label='法人姓名'
+                label={<span style={{fontSize: 12}}>法人姓名</span>}
               >
                 {!disabled ? getFieldDecorator(
                   'legalPerson',
@@ -173,7 +176,7 @@ class Main extends React.Component<Props, State> {
                 style={{marginLeft: '-18px'}}
                 labelCol={{span: 10}}
                 wrapperCol={{span: 14}}
-                label='统一社会信用代码'
+                label={<span style={{fontSize: 12}}>统一社会信用代码</span>}
                 required
               >
                 {!disabled ? getFieldDecorator(
@@ -213,7 +216,7 @@ class Main extends React.Component<Props, State> {
               <FormItem
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
-                label='注册资金'
+                label={<span style={{fontSize: 12}}>注册资金</span>}
               >
                 {!disabled ? getFieldDecorator(
                   'registeredCapital',
@@ -234,7 +237,7 @@ class Main extends React.Component<Props, State> {
                     className='inline-block'
                     labelCol={{span: 7}}
                     wrapperCol={{span: 17}}
-                    label='营业期限'
+                    label={<span style={{fontSize: 12}}>营业期限</span>}
                   >
                     {getFieldDecorator(
                       'businessHoursBegin',
@@ -284,7 +287,7 @@ class Main extends React.Component<Props, State> {
                   style={{width: '100%'}}
                   labelCol={{span: 2}}
                   wrapperCol={{span: 22}}
-                  label='营业期限'
+                  label={<span style={{fontSize: 12}}>营业期限</span>}
                 >
                   <span>
                     {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
@@ -306,7 +309,7 @@ class Main extends React.Component<Props, State> {
                 // className='inline-block'
                 labelCol={{span: 4}}
                 wrapperCol={{span: 20}}
-                label='公司地址'
+                label={<span style={{fontSize: 12}}>公司地址</span>}
               >
                 {!disabled ? getFieldDecorator(
                   'address',
@@ -325,7 +328,7 @@ class Main extends React.Component<Props, State> {
                 labelCol={{span: 2}}
                 wrapperCol={{span: 22}}
                 style={{width: '100%'}}
-                label='经营范围'
+                label={<span style={{fontSize: 12}}>经营范围</span>}
               >
                 {!disabled ? getFieldDecorator(
                   'businessScope',

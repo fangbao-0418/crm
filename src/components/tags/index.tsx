@@ -59,7 +59,7 @@ class Main extends React.Component<Props, State> {
                   <Col span={labelSpan} className='text-right'>
                     <label className={styles.title}>{item.title}:</label>
                   </Col>
-                  <Col span={24 - labelSpan}>
+                  <Col span={24 - labelSpan} className={styles.title}>
                     <ul>
                       {
                         item.options.map((item2, index2) => {
