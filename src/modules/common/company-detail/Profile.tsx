@@ -22,16 +22,14 @@ class Main extends React.Component<Props> {
                 String(this.props.detail.isConfirmed) === '1' &&
                 <span>
                   <span className={styles.verified} />
-                  <span className='mr20 ml10'>认证</span>
                 </span>
               }
               {/* <span className={styles.telphone} />
               <span className='mr20 ml10'>电话</span> */}
               <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
-              <span className='mr20 ml10'>天眼查</span>
             </span>
           </div>
-          <p>
+          <p style={{marginTop: 4}}>
             {
               this.props.type === 'open' &&
               <span>
