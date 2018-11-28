@@ -75,13 +75,6 @@ class Main extends React.Component<Props> {
       })
     })
   }
-  public componentDidMount () {
-    console.log('detail did mouiunt')
-    if (this.props.getWrappedInstance) {
-      console.log('detail did mouiunt')
-      this.props.getWrappedInstance(this)
-    }
-  }
   public componentWillReceiveProps (props: Customer.Props) {
     if (this.props.detail.id !== props.detail.id) {
       this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
@@ -94,10 +87,37 @@ class Main extends React.Component<Props> {
       })
     }
   }
+  public componentDidMount () {
+    console.log('detail did mouiunt')
+    if (this.props.getWrappedInstance) {
+      console.log('detail did mouiunt')
+      this.props.getWrappedInstance(this)
+    }
+  }
   public save () {
     const sourceBaseinfo: any = this.refs.baseinfo
     const baseinfo = sourceBaseinfo.getWrappedInstance()
-    return baseinfo.refs.wrappedComponent.save()
+    const p = baseinfo.refs.wrappedComponent.save()
+    p.then((res: any) => {
+      const detail = this.props.detail
+      detail.trackRecord = undefined
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          detail
+        }
+      })
+      this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+      this.setState({
+        visible: false
+      }, () => {
+        this.setState({
+          visible: true
+        })
+      })
+      return res
+    })
+    return p
   }
   public disabledDate (current: any) {
     return current && current < moment().subtract(1, 'days').endOf('day')
@@ -118,6 +138,7 @@ class Main extends React.Component<Props> {
   public render () {
     const type = this.props.type || 'customer'
     const {infomation} = this.state
+    console.log(this.state.visible, 'render')
     return (
       <div>
         <div style={infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
