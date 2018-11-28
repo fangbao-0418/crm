@@ -25,7 +25,7 @@ class Main extends React.Component<Props> {
               trackRecords.length > 0 && trackRecords.map((item, index) => {
                 return (
                   <div className={styles.record} key={index}>
-                    <div className={styles['line-height']}>
+                    <div className={styles['line-height']} style={{color: 'black'}}>
                       <span style={{marginRight: 10}}>{item.salesperson}</span>
                       <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
@@ -80,7 +80,7 @@ class Main extends React.Component<Props> {
                 clueRecords.length > 0 && clueRecords.map((item, index) => {
                   return (
                     <div className={styles.record} key={index}>
-                      <div className={styles['line-height']}>
+                      <div className={styles['line-height']} style={{color: 'black'}}>
                         <span style={{marginRight: 10}}>{item.salesperson}</span>
                         <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
                       </div>

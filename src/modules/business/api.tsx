@@ -52,5 +52,5 @@ export const getcapacityNum = () => {
   return http(`/crm-manage/v1/api/storage-capacity`)
 }
 export const verifyMessage = (customerId?: string) => {
-  return http(`/crm-manage/v1/api/get-customer-track-status/${customerId}`)
+  return http(`/crm-manage/v1/api/get-customer-track-status?customerId=${customerId}`)
 }
