@@ -18,8 +18,8 @@ interface States {
 const FormItem = Form.Item
 class Main extends React.Component<Props> {
   public dataSource = [{
-    contactPerson: '22',
-    contactPhone: '222'
+    contactPerson: '',
+    contactPhone: ''
   }]
   public state: States = {
     dataSource: []
@@ -116,8 +116,8 @@ class Main extends React.Component<Props> {
                     message: '联系电话不能为空'
                   },
                   {
-                    max: 11,
-                    message: '电话最多11位'
+                    max: 13,
+                    message: '电话最多13位'
                   }
                 ]
               })(

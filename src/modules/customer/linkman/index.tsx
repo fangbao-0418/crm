@@ -150,8 +150,7 @@ class Main extends React.Component<Props> {
                           <Input
                             // type='number'
                             disabled={disabled}
-                            max={11}
-                            maxLength={11}
+                            maxLength={13}
                             placeholder='请输入联系电话'
                             onChange={(e) => {
                               const value = e.target.value
