@@ -82,7 +82,7 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
-    const type = this.props.type || 'customer' || 'business'
+    const type = this.props.type || 'customer'
     return (
       <div>
         <span
