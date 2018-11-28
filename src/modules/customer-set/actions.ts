@@ -1,7 +1,5 @@
 import { fetchStorageCapacity, fetchAutoAssign, fetchSpecialList } from './api'
-export const changeCapacityAction = (cityCodeArr?: string, agencyName?: string
-  ) => {
-    console.log(agencyName, '和v点零分十八v')
+export const changeCapacityAction = (cityCodeArr?: string, agencyName?: string) => {
   fetchStorageCapacity(cityCodeArr, agencyName).then((res) => {
     APP.dispatch({
       type: 'change customer data',

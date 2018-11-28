@@ -14,7 +14,6 @@ export default function (record: Business.DetailProps, index?: number,
     refresh?: () => void
   } = {}) {
   let customerId = record.id
-  const customerName = record.customerName
   const that = this
   let reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
@@ -29,7 +28,6 @@ export default function (record: Business.DetailProps, index?: number,
             modal.onCancel()
           }
           customerId={customerId}
-          customerName={customerName}
           footer={(
             <div className='mt10 text-right'>
               <Button
