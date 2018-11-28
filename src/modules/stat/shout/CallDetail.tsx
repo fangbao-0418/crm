@@ -123,6 +123,9 @@ class Main extends React.Component<{}, State> {
     {
       title: '操作',
       render: (text, record) => {
+        if (!record.mediaUrl) {
+          return null
+        }
         return (
           <span>
             <i
