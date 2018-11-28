@@ -20,6 +20,7 @@ const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
 interface Props extends Customer.Props, FormComponentProps {
+  track?: string
   customerId?: string
   onClose?: () => void
   flowNow?: () => void
