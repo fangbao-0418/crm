@@ -79,11 +79,12 @@ class Main extends React.Component<Props> {
                   <div className={styles.col}>
                     <label>订单号：</label>
                     <span
+                      className={APP.hasPermission('order_orders_service') ? 'href' : ''}
                       onClick={() => {
                         if (!APP.hasPermission('order_orders_service')) {
                           return
                         }
-                        window.open(`/orders/service/detail/${item.orderCode}`)
+                        window.open(`/shop-order/orders/service/detail/${item.orderCode}`)
                       }}
                     >
                       {item.orderCode}

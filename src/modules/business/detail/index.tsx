@@ -11,7 +11,6 @@ import { connect } from 'react-redux'
 import { verifyMessage } from '../api'
 const styles = require('./style')
 interface Props {
-  customerName: string
   customerId: string
   type?: 'business' | 'open' | 'customer'
   detail?: Customer.DetailProps
@@ -26,10 +25,6 @@ class Main extends React.Component<Props> {
       isOtherTrack: '',
       message: ''
     }
-  }
-  public payload = {
-    customerName: this.props.customerName,
-    customerId: this.props.customerId
   }
   public defaultTrackRecord = [
     {
@@ -69,7 +64,7 @@ class Main extends React.Component<Props> {
   )
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
   public componentWillMount () {
-    verifyMessage(this.payload).then((res) => {
+    verifyMessage(this.props.customerId).then((res) => {
       this.setState({
         infomation: res
       })
