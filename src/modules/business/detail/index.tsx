@@ -151,7 +151,6 @@ class Main extends React.Component<Props> {
                   customerId={this.props.customerId}
                   type={type}
                 />
-              }
               </Card>
             </div>
             <div className={styles.right}>

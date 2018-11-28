@@ -59,16 +59,16 @@ class Main extends React.Component<null, States> {
           defaultActiveKey='1'
           onChange={this.callBack.bind(this)}
         >
-        <Row>
-          <Col span={6}>
-          <Region onChange={this.handleRegionChange.bind(this)} />
-          </Col>
-          <Col span={4} style={{marginLeft: 8}}>
-          <span style={tab === '2' ? {display: 'block'} : {display: 'none'}}>
-            <label>机构</label>
-            <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
-          </span>
-          </Col>
+          <Row style={{marginBottom: 10}}>
+            <Col span={6}>
+              <Region onChange={this.handleRegionChange.bind(this)} />
+            </Col>
+            <Col span={4} style={{marginLeft: 8}}>
+              <span style={tab === '2' ? {display: 'block'} : {display: 'none'}}>
+                <label>机构</label>
+                <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
+              </span>
+            </Col>
           </Row>
           {
             APP.hasPermission('crm_set_customer_auto_distribute_list') &&
@@ -76,34 +76,12 @@ class Main extends React.Component<null, States> {
               {tab === '1' && <SetAuto cityCodes={cityCodes} />}
             </Tabs.TabPane>
           }
-          {/* {
-            APP.hasPermission('crm_set_customer_auto_distribute_list') &&
-            <Tabs.TabPane tab='自动分配设置' key='1'>
-              <Region onChange={this.handleRegionChange.bind(this)} />
-              <SetAuto cityCodes={cityCodes} />
-            </Tabs.TabPane>
-          } */}
           {
             APP.hasPermission('crm_set_customer_storage_list') &&
             <Tabs.TabPane tab='库容设置' key='2'>
               {tab === '2' && <SetCapacity cityCodes={cityCodes} agencyName={agencyName}/>}
             </Tabs.TabPane>
           }
-          {/* {
-            APP.hasPermission('crm_set_customer_storage_list') &&
-            <Tabs.TabPane tab='库容设置' key='2'>
-              <Row>
-                <Col span={7}>
-                  <Region onChange={this.handleRegionChange.bind(this)} />
-                </Col>
-                <Col span={7} style={{marginLeft: -30}}>
-                  <label>机构</label>
-                  <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
-                </Col>
-              </Row>
-              <SetCapacity cityCodes={cityCodes} agencyName={agencyName}/>
-            </Tabs.TabPane>
-          } */}
         </Tabs>
       </ContentBox>
     )
