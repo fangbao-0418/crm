@@ -26,6 +26,16 @@ interface States {
     }>
   }>
 }
+const stat: any = {
+  1: '待支付',
+  2: '支付中',
+  3: '已支付',
+  4: '服务中',
+  5: '服务完成',
+  6: '待审核',
+  7: '已取消',
+  8: '已关闭'
+}
 class Main extends React.Component<Props> {
   public state: States = {
     length: [],
@@ -68,7 +78,16 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>订单号：</label>
-                    <span onClick={() => {window.open(`/shop-order/orders/service/detail/${item.orderCode}`)}}>{item.orderCode}</span>
+                    <span
+                      onClick={() => {
+                        if (!APP.hasPermission('order_orders_service')) {
+                          return
+                        }
+                        window.open(`/orders/service/detail/${item.orderCode}`)
+                      }}
+                    >
+                      {item.orderCode}
+                    </span>
                   </div>
                   <div className={styles.col}>
                     <label>签单时间：</label>
@@ -80,7 +99,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>状态：</label>
-                    <span>{item.status}</span>
+                    <span>{stat[item.status]}</span>
                   </div>
                   <div className={styles.col}>
                     <label>服务账期：</label>
@@ -89,14 +108,11 @@ class Main extends React.Component<Props> {
                 </div>
                 <div className={styles.marg}>
                   {
-                    length[ index ] > 1 ?
+                    !(numb[index] === 1) ?
                     <div
                       className={styles.left}
                       onClick={() => {
-                        let i = numb[index] - 1
-                        if (i <= 0) {
-                          i = length[index]
-                        }
+                        const i = numb[index] - 1
                         numb[index] = i
                         this.setState({
                           numb
@@ -121,14 +137,11 @@ class Main extends React.Component<Props> {
                       })}
                   </div>
                   {
-                    length[ index ] > 1 ?
+                    !(numb[index] === length[index]) ?
                     <div
                       className={styles.right}
                       onClick={() => {
-                        let i = numb[ index ] + 1
-                        if (i > length[index]) {
-                          i = 1
-                        }
+                        const i = numb[ index ] + 1
                         numb[ index ] = i
                         this.setState({
                           numb

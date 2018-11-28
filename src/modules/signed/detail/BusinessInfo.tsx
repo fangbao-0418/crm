@@ -6,6 +6,7 @@ import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import CompanySearch from './CompanySearch'
 import { fetchGovInfo, fetchTianYanDetail } from '@/modules/common/api'
+const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   disabled?: boolean
@@ -62,11 +63,11 @@ class Main extends React.Component<Props, State> {
     }
     console.log(detail, 'detail')
     return (
-      <div style={{width: '790px', marginLeft: '10px'}}>
+      <div style={{width: '790px', marginLeft: '10px'}} className={styles.label}>
         <Form
           // onSubmit={this.handleSubmit}
         >
-          <Row >
+          <Row>
             {
               disabled &&
               <Col span={10}>
@@ -74,7 +75,7 @@ class Main extends React.Component<Props, State> {
                   style={{marginLeft: '-4px'}}
                   labelCol={{span: 7}}
                   wrapperCol={{span: 12}}
-                  label='信息认证方式：'
+                  label='信息认证方式'
                 >
                   <span>{APP.dictionary[`EnumCompanyInfoSource-${detail.companyInfoSource}`]}</span>
                 </FormItem>
@@ -104,7 +105,7 @@ class Main extends React.Component<Props, State> {
                     <div>
                       <CompanySearch
                         className='inline-block'
-                        enterButton='查询'
+                        enterButton={<span style={{fontSize: 12}}>查询</span>}
                         style={{width: '322px'}}
                         value={detail.customerName}
                         onSelectCompany={(item) => {
@@ -127,6 +128,7 @@ class Main extends React.Component<Props, State> {
                         }}
                       />
                       <Button
+                        style={{fontSize: 12}}
                         className='ml5 mr5'
                         type='primary'
                         onClick={this.searchUrl.bind(this)}
@@ -134,6 +136,7 @@ class Main extends React.Component<Props, State> {
                         网址
                       </Button>
                       <Button
+                        style={{fontSize: 12}}
                         type='primary'
                         onClick={() => {
                           detail.isConfirmed = 0

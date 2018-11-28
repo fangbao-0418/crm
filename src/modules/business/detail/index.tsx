@@ -21,7 +21,6 @@ interface Props {
 }
 class Main extends React.Component<Props> {
   public state = {
-    track: '',
     visible: true,
     infomation: {
       isOtherTrack: '',
@@ -72,8 +71,7 @@ class Main extends React.Component<Props> {
   public componentWillMount () {
     verifyMessage(this.payload).then((res) => {
       this.setState({
-        infomation: res,
-        track: res.isOtherTrack
+        infomation: res
       })
     })
   }
@@ -122,9 +120,9 @@ class Main extends React.Component<Props> {
     const {infomation} = this.state
     return (
       <div>
-        <div style={!infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
+        <div style={infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
           <div style={{textAlign: 'center', color: 'red'}}>
-            {this.props.customerName}-{infomation.message}
+            {infomation.message}
           </div>
         </div>
         <div>
@@ -147,7 +145,7 @@ class Main extends React.Component<Props> {
                 showFold
               >
                 <BaseInfo
-                  showTel={!!infomation.isOtherTrack}
+                  showTel={!infomation.isOtherTrack}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}

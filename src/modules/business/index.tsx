@@ -451,7 +451,7 @@ class Main extends React.Component<Business.Props> {
             <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[

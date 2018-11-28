@@ -8,23 +8,28 @@ import { changeCapacityAction } from '../actions'
 import { fetchStorageCapacity } from '../api'
 interface States {
   cityCodes: {key: string, label: string}[]
+  agencyName: string
 }
 const styles = require('./style')
 class Main extends React.Component<null, States> {
   public res: any = []
   public state: States = {
-    cityCodes: []
+    cityCodes: [],
+    agencyName: ''
   }
   public handleRegionChange (value: any) {
     this.setState({
       cityCodes: value
     })
   }
-  public handleAgencyChange () {
-    changeCapacityAction()
+  public handleAgencyChange (res: string) {
+    this.setState({
+      agencyName: res
+    })
+    changeCapacityAction('', res)
   }
   public render () {
-    const cityCodes = this.state.cityCodes
+    const {cityCodes, agencyName} = this.state
     console.log(cityCodes, 'index')
     return (
       <ContentBox
@@ -52,10 +57,10 @@ class Main extends React.Component<null, States> {
                 </Col>
                 <Col span={7} style={{marginLeft: -30}}>
                   <label>机构</label>
-                  <Input style={{width: 160}} onChange={this.handleAgencyChange.bind(this)}/>
+                  <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
                 </Col>
               </Row>
-              <SetCapacity cityCodes={cityCodes} />
+              <SetCapacity cityCodes={cityCodes} agencyName={agencyName}/>
             </Tabs.TabPane>
           }
         </Tabs>

@@ -85,6 +85,7 @@ class Main extends React.Component {
   ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
+    width: 350,
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (
@@ -104,18 +105,22 @@ class Main extends React.Component {
     }
   }, {
     title: '联系人',
+    width: 180,
     dataIndex: 'contactPerson'
   }, {
     title: '意向度',
+    width: 180,
     dataIndex: 'tagIntention',
     render: (val) => {
       return (APP.dictionary[`EnumIntentionality-${val}`])
     }
   }, {
     title: '空置天数',
+    width: 180,
     dataIndex: 'freeDays'
   }, {
     title: '客户来源',
+    width: 180,
     dataIndex: 'customerSource',
     render: (val) => {
       return (APP.dictionary[`EnumCustomerSource-${val}`])
@@ -129,6 +134,7 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
+    width: 180,
     dataIndex: 'releaseNums'
   }, {
     title: (
@@ -139,9 +145,11 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
+    width: 180,
     dataIndex: 'lastReleaseSalesperson'
   }, {
     title: '释放时间',
+    width: 180,
     dataIndex: 'lastReleaseTime',
     render: (val) => {
       return (moment(val).format('YYYY-MM-DD'))
@@ -443,7 +451,7 @@ class Main extends React.Component {
             <Icon type='down' theme='outlined' style={{color: '#BFBFBF', float: 'right'}} onClick={this.handleSwitch.bind(this)}/>
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom'}}>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[

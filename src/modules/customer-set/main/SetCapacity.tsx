@@ -12,6 +12,7 @@ interface States {
 }
 interface Props extends Customer.Props, FormComponentProps {
   cityCodes?: {key: string, label: string}[]
+  agencyName?: string
 }
 class Main extends React.Component<Props> {
   public cityCodeArr = ''
@@ -123,6 +124,7 @@ class Main extends React.Component<Props> {
   }
   public componentWillReceiveProps (props: Props) {
     const cityCodes = props.cityCodes
+    const agencyName = props.agencyName
     const codes: string[] = []
     cityCodes.forEach((item) => {
       codes.push(item.key)
@@ -130,7 +132,7 @@ class Main extends React.Component<Props> {
     const cityCodeArr = codes.join(',')
     if (cityCodeArr !== this.cityCodeArr) {
       this.cityCodeArr = cityCodeArr
-      changeCapacityAction(cityCodeArr)
+      changeCapacityAction(cityCodeArr, agencyName)
     }
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {

@@ -5,6 +5,7 @@ import Uploader from './Uploader'
 import { connect } from 'react-redux'
 import { fetchRegion } from '@/modules/common/api'
 import Dropdown from 'pilipa/libs/dropdown'
+const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
 interface State {
@@ -32,6 +33,7 @@ class Main extends React.Component<Props, State> {
     const disabled = this.props.disabled
     const detail = this.props.detail
     return (
+      <div className={styles.label}>
       <Form>
         <Row>
           <Col span={7}>
@@ -179,6 +181,7 @@ class Main extends React.Component<Props, State> {
           </Col>
         </Row>
       </Form>
+      </div>
     )
   }
 }
