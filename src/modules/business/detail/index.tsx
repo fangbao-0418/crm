@@ -9,6 +9,7 @@ import moment from 'moment'
 import { Button, Input, DatePicker, Icon } from 'antd'
 import { connect } from 'react-redux'
 import { verifyMessage } from '../api'
+import { fetchTrackRecords } from '@/modules/customer/api'
 const styles = require('./style')
 interface Props {
   customerName: string
@@ -100,7 +101,21 @@ class Main extends React.Component<Props> {
     const p = baseinfo.refs.wrappedComponent.save()
     p.then((res: any) => {
       const detail = this.props.detail
-      detail.trackRecord = undefined
+      if (detail.trackRecord) {
+        const payload = {
+          pageNum: 1,
+          pageSize: 999
+        }
+        fetchTrackRecords(detail.id, payload).then((res2) => {
+          APP.dispatch<Customer.Props>({
+            type: 'change customer data',
+            payload: {
+              trackRecords: res2.data
+            }
+          })
+        })
+        detail.trackRecord = undefined
+      }
       APP.dispatch({
         type: 'change customer data',
         payload: {
@@ -171,7 +186,6 @@ class Main extends React.Component<Props> {
                   customerId={this.props.customerId}
                   type={type}
                 />
-              }
               </Card>
             </div>
             <div className={styles.right}>
