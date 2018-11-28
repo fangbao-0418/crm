@@ -186,7 +186,6 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    console.log(values, 'values')
     this.params.lastReleaseTimeBegin = undefined
     this.params.lastReleaseTimeEnd = undefined
     this.params.createBeginDate = undefined
@@ -336,7 +335,7 @@ class Main extends React.Component {
                     }
                     if (dataSource.length === 0) {
                       this.fetchList().then((res) => {
-                        if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                        if (res.pageCurrent > Math.ceil(res.pageTotal / res.pageSize)) {
                           searchPayload.pageCurrent -= 1
                           modal.hide()
                           return

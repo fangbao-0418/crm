@@ -396,7 +396,7 @@ class Main extends React.Component<Customer.Props, States> {
                       }
                       if (dataSource.length === 0) {
                         this.fetchList().then((res) => {
-                          if (res.pageCurrent > Math.round(res.pageTotal / res.pageSize)) {
+                          if (res.pageCurrent > Math.ceil(res.pageTotal / res.pageSize)) {
                             searchPayload.pageCurrent -= 1
                             modal.hide()
                             return
