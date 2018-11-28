@@ -123,7 +123,7 @@ class Main extends React.Component<Props> {
       <div>
         <div style={infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
           <div style={{textAlign: 'center', color: 'red'}}>
-            哈哈哈{infomation.message}
+            {infomation.message}
           </div>
         </div>
         <div>
