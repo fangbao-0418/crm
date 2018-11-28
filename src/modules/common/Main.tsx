@@ -16,7 +16,6 @@ class Main extends React.Component<{}, State> {
       <Iframe
         env={APP.env}
         type='crm'
-        token={APP.token}
         onChange={(user) => {
           if (user && APP.user === undefined) {
             fetchEnum().then(() => {

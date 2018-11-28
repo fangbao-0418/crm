@@ -2,6 +2,7 @@ import notification from 'pilipa/libs/notification'
 import storage from '../storage'
 import * as fn from './fn'
 import jsmc from '@/utils/jsmc.min'
+import { cookie } from 'pilipa-terrace'
 Object.assign(APP, {
   isConfigTQ: false,
   user: undefined,
@@ -46,13 +47,15 @@ APP.dictionary = {}
 
 Object.defineProperty(APP, 'token', {
   get () {
-    if (!localStorage.getItem('token')) {
-      return ''
-    }
-    return storage.getItem('token') || ''
+    return storage.getItem('token') || cookie.get('token') || ''
   },
   set (val) {
     storage.setItem('token', val)
+    cookie.set({
+      token: val
+    }, {
+      expires: 30 * 24 * 3600
+    })
   }
 })
 Object.defineProperty(APP, 'homepage', {
