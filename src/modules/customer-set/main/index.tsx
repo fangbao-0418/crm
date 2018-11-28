@@ -9,13 +9,21 @@ import { fetchStorageCapacity } from '../api'
 interface States {
   cityCodes: {key: string, label: string}[]
   agencyName: string
+  tab: '1' | '2'
 }
 const styles = require('./style')
 class Main extends React.Component<null, States> {
   public res: any = []
+  public cityCodeArr = ''
   public state: States = {
     cityCodes: [],
-    agencyName: ''
+    agencyName: '',
+    tab: '1'
+  }
+  public callBack (value: any) {
+    this.setState({
+      tab: value
+    })
   }
   public handleRegionChange (value: any) {
     this.setState({
@@ -26,10 +34,20 @@ class Main extends React.Component<null, States> {
     this.setState({
       agencyName: res
     })
-    changeCapacityAction('', res)
+    const cityCodes = this.state.cityCodes
+    const codes: string[] = []
+    cityCodes.forEach((item) => {
+      codes.push(item.key)
+    })
+    const cityCodeArr = codes.join(',')
+    if (cityCodeArr !== this.cityCodeArr) {
+      this.cityCodeArr = cityCodeArr
+      changeCapacityAction(cityCodeArr, res)
+    }
+    changeCapacityAction(cityCodeArr, res)
   }
   public render () {
-    const {cityCodes, agencyName} = this.state
+    const {cityCodes, agencyName, tab } = this.state
     console.log(cityCodes, 'index')
     return (
       <ContentBox
@@ -39,16 +57,39 @@ class Main extends React.Component<null, States> {
         <Tabs
           animated={false}
           defaultActiveKey='1'
-          // onChange={this.callback}
+          onChange={this.callBack.bind(this)}
         >
+        <Row>
+          <Col span={6}>
+          <Region onChange={this.handleRegionChange.bind(this)} />
+          </Col>
+          <Col span={4} style={{marginLeft: 8}}>
+          <span style={tab === '2' ? {display: 'block'} : {display: 'none'}}>
+            <label>机构</label>
+            <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
+          </span>
+          </Col>
+          </Row>
           {
+            APP.hasPermission('crm_set_customer_auto_distribute_list') &&
+            <Tabs.TabPane tab='自动分配设置' key='1'>
+              {tab === '1' && <SetAuto cityCodes={cityCodes} />}
+            </Tabs.TabPane>
+          }
+          {/* {
             APP.hasPermission('crm_set_customer_auto_distribute_list') &&
             <Tabs.TabPane tab='自动分配设置' key='1'>
               <Region onChange={this.handleRegionChange.bind(this)} />
               <SetAuto cityCodes={cityCodes} />
             </Tabs.TabPane>
-          }
+          } */}
           {
+            APP.hasPermission('crm_set_customer_storage_list') &&
+            <Tabs.TabPane tab='库容设置' key='2'>
+              {tab === '2' && <SetCapacity cityCodes={cityCodes} agencyName={agencyName}/>}
+            </Tabs.TabPane>
+          }
+          {/* {
             APP.hasPermission('crm_set_customer_storage_list') &&
             <Tabs.TabPane tab='库容设置' key='2'>
               <Row>
@@ -62,7 +103,7 @@ class Main extends React.Component<null, States> {
               </Row>
               <SetCapacity cityCodes={cityCodes} agencyName={agencyName}/>
             </Tabs.TabPane>
-          }
+          } */}
         </Tabs>
       </ContentBox>
     )
