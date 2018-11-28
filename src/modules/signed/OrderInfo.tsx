@@ -69,7 +69,16 @@ class Main extends React.Component<Props> {
         {
           this.state.OrderData.map((item, index) => {
             return (
-              <div className={classNames(styles.order, 'clear')} key={index}>
+              <div
+                className={classNames(styles.order, 'clear')}
+                key={index}
+                onClick={() => {
+                  if (!APP.hasPermission('order_orders_service')) {
+                    return
+                  }
+                  window.open(`/shop-order/orders/service/detail/${item.orderCode}`)
+                }}
+              >
                 <div className={classNames(styles['order-info'])}>
                   <div className={classNames(styles.col, styles.note)}>
                     <Tooltip placement='top' title={item.remark}>
@@ -78,15 +87,7 @@ class Main extends React.Component<Props> {
                   </div>
                   <div className={styles.col}>
                     <label>订单号：</label>
-                    <span
-                      className={APP.hasPermission('order_orders_service') ? 'href' : ''}
-                      onClick={() => {
-                        if (!APP.hasPermission('order_orders_service')) {
-                          return
-                        }
-                        window.open(`/shop-order/orders/service/detail/${item.orderCode}`)
-                      }}
-                    >
+                    <span>
                       {item.orderCode}
                     </span>
                   </div>

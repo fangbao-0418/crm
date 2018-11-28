@@ -169,7 +169,7 @@ class Main extends React.Component<Props> {
               type={type}
             />
           </div>
-          <div className='clear'>
+          <div className='clear' style={{marginTop: 20}}>
             <div className={styles.left}>
               <Card
                 title='基本信息'

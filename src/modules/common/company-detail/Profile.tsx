@@ -17,20 +17,20 @@ class Main extends React.Component<Props> {
         <div className={styles.right}>
           <div className={styles.title}>
             {this.props.detail.customerName}
+            <span style={{marginLeft: 10}}>
+              {
+                String(this.props.detail.isConfirmed) === '1' &&
+                <span>
+                  <span className={styles.verified} />
+                  <span className='mr20 ml10'>认证</span>
+                </span>
+              }
+              {/* <span className={styles.telphone} />
+              <span className='mr20 ml10'>电话</span> */}
+              <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
+              <span className='mr20 ml10'>天眼查</span>
+            </span>
           </div>
-          <p>
-            {
-              String(this.props.detail.isConfirmed) === '1' &&
-              <span>
-                <span className={styles.verified} />
-                <span className='mr20 ml10'>认证</span>
-              </span>
-            }
-            {/* <span className={styles.telphone} />
-            <span className='mr20 ml10'>电话</span> */}
-            <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
-            <span className='mr20 ml10'>天眼查</span>
-          </p>
           <p>
             {
               this.props.type === 'open' &&
@@ -62,11 +62,11 @@ class Main extends React.Component<Props> {
             <span>
               {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
             </span> */}
-            <label style={{marginLeft: '10px'}}>来源:</label>
+            <label style={{marginLeft: '50px'}}>来源:</label>
             <label>
               {APP.dictionary[`EnumCustomerSource-${this.props.detail.customerSource}`]}
             </label>
-            <label style={{marginLeft: '10px'}}>创建时间:</label>
+            <label style={{marginLeft: '50px'}}>创建时间:</label>
             <span>
               {moment(this.props.detail.createTime).format('YYYY-MM-DD')}
             </span>
@@ -75,10 +75,10 @@ class Main extends React.Component<Props> {
             this.props.isShowAgent &&
             <p>
               <label>记账状态:</label><span>正常做账</span>
-              <label style={{marginLeft: '10px'}}>运营会计:</label><span>张飞飞</span>
-              <label style={{marginLeft: '10px'}}>核算会计:</label><span>张飞</span>
-              <label style={{marginLeft: '10px'}}>当前账期:</label><span>2018-09</span>
-              <label style={{marginLeft: '10px'}}>服务期止:</label><span>2019-10</span>
+              <label style={{marginLeft: '20px'}}>运营会计:</label><span>张飞飞</span>
+              <label style={{marginLeft: '20px'}}>核算会计:</label><span>张飞</span>
+              <label style={{marginLeft: '20px'}}>当前账期:</label><span>2018-09</span>
+              <label style={{marginLeft: '20px'}}>服务期止:</label><span>2019-10</span>
             </p>
           }
         </div>

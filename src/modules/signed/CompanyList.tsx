@@ -25,6 +25,7 @@ export default class extends React.Component<Props> {
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '公司名称',
+    width: 300,
     dataIndex: 'customerName'
   }, {
     title: '所属机构',
