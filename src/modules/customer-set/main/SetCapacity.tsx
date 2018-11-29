@@ -33,7 +33,7 @@ class Main extends React.Component<Props> {
       <span>
         销售库容/个
         <Tooltip placement='top' title='销售库容设置对该机构全部销售有效，且每人上限值一样；销售主管和总经理不受此限制，输入值范围（0-999999）'>
-          <i className='fa fa-info-circle ml5 ml5'></i>
+          <i className='fa fa-info-circle ml5 ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
@@ -63,7 +63,7 @@ class Main extends React.Component<Props> {
       <span>
         最大跟进期/天
         <Tooltip placement='top' title='若销售在规定天数内没有写跟进记录，则客户自动分予组内其他销售，输入值范围（0-9999）'>
-          <i className='fa fa-info-circle ml5 ml5'></i>
+          <i className='fa fa-info-circle ml5 ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
@@ -93,7 +93,7 @@ class Main extends React.Component<Props> {
       <span>
         最大保护期/天
         <Tooltip placement='top' title='若销售在规定天数内没有完成签单，则客户自动分予组内其他销售 ，输入值范围（0-9999）'>
-          <i className='fa fa-info-circle ml5 ml5'></i>
+          <i className='fa fa-info-circle ml5 ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),

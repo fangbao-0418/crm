@@ -155,7 +155,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       <span>
         空置天数
         <Tooltip placement='top' title='客户未被跟进的天数'>
-        <i className='fa fa-info-circle ml5'></i>
+        <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
@@ -177,7 +177,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
       <span>
         入库时间
         <Tooltip placement='top' title='客户掉入销售库的时间'>
-        <i className='fa fa-info-circle ml5'></i>
+        <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
