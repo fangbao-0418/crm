@@ -10,6 +10,9 @@ interface Props {
   customerId: string
 }
 export default class extends React.Component<Props> {
+  public state = {
+    visible: true
+  }
   public defaultTrackRecord = [
     {
       field: 'tagFollowUpClassification',
@@ -28,11 +31,18 @@ export default class extends React.Component<Props> {
     return current && current < moment().subtract(1, 'days').endOf('day')
   }
   public save () {
-    console.log(this.records, 'records')
     if (this.records.appointTime || this.records.remark || this.records.tagFollowUpClassification >= 0) {
       this.records.customerId = this.props.customerId
       addRecord(this.records).then(() => {
         APP.success('操作成功！')
+        this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+        this.setState({
+          visible: false
+        }, () => {
+          this.setState({
+            visible: true
+          })
+        })
         changeCustomerDetailAction(this.props.customerId)
       })
     } else {
@@ -42,44 +52,46 @@ export default class extends React.Component<Props> {
   public render () {
     return (
       <div style={{fontSize: 12}}>
-        <Tags
-          labelSpan={2}
-          className='mb10'
-          dataSource={this.trackRecord}
-          parser={(value) => {
-            return value[0] ? Number(value[0].value) : undefined
-          }}
-          onChange={(value) => {
-            this.records.tagFollowUpClassification = value.tagFollowUpClassification
-          }}
-        />
-        <Row>
-          <Col span={2} className='text-right'>
-            <label>备注：</label>
-          </Col>
-          <Col span={20} style={{paddingLeft: 5}}>
-            <Input.TextArea
-              placeholder='请输入备注'
-              onChange={(e) => {
-                this.records.remark = e.target.value
-              }}
-            />
-          </Col>
-        </Row>
-        <Row className='mt10'>
-          <Col span={2} className='text-right' style={{height: '32px', lineHeight: '32px'}}>
-            <label>下次跟进:</label>
-          </Col>
-          <Col span={20} style={{paddingLeft: 5}}>
-            <DatePicker
-              placeholder=''
-              disabledDate={this.disabledDate}
-              onChange={(date) => {
-                this.records.appointTime = date ? date.format('YYYY-MM-DD HH:mm:ss') : ''
-              }}
-            />
-          </Col>
-        </Row>
+        {this.state.visible && <div>
+          <Tags
+            labelSpan={2}
+            className='mb10'
+            dataSource={this.trackRecord}
+            parser={(value) => {
+              return value[0] ? Number(value[0].value) : undefined
+            }}
+            onChange={(value) => {
+              this.records.tagFollowUpClassification = value.tagFollowUpClassification
+            }}
+          />
+          <Row>
+            <Col span={2} className='text-right'>
+              <label>备注：</label>
+            </Col>
+            <Col span={20} style={{paddingLeft: 5}}>
+              <Input.TextArea
+                placeholder='请输入备注'
+                onChange={(e) => {
+                  this.records.remark = e.target.value
+                }}
+              />
+            </Col>
+          </Row>
+          <Row className='mt10'>
+            <Col span={2} className='text-right' style={{height: '32px', lineHeight: '32px'}}>
+              <label>下次跟进:</label>
+            </Col>
+            <Col span={20} style={{paddingLeft: 5}}>
+              <DatePicker
+                placeholder=''
+                disabledDate={this.disabledDate}
+                onChange={(date) => {
+                  this.records.appointTime = date ? date.format('YYYY-MM-DD HH:mm:ss') : ''
+                }}
+              />
+            </Col>
+          </Row>
+        </div>}
         <div>
           <Record
             type='signed'
