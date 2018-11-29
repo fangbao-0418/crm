@@ -60,10 +60,10 @@ class Main extends React.Component<null, States> {
           onChange={this.callBack.bind(this)}
         >
           <Row style={{marginBottom: 10}}>
-            <Col span={6}>
+            <Col span={7}>
               <Region onChange={this.handleRegionChange.bind(this)} />
             </Col>
-            <Col span={4} style={{marginLeft: 8}}>
+            <Col span={4} style={{marginLeft: -30}}>
               <span style={tab === '2' ? {display: 'block'} : {display: 'none'}}>
                 <label>机构</label>
                 <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>

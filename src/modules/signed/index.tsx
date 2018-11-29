@@ -339,6 +339,7 @@ class Main extends React.Component {
       content: (
         <Provider>
           <View
+            type='signed'
             defaultKey={defaultKey}
             customerId={record.id}
             customerName={record.customerName}

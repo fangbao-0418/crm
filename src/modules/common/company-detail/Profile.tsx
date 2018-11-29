@@ -56,15 +56,20 @@ class Main extends React.Component<Props> {
                 </span>
                </span>
             }
-            {/* <label style={{marginLeft: '10px'}}>意向度:</label>
-            <span>
-              {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
-            </span> */}
-            <label style={{marginLeft: '50px'}}>来源:</label>
+            {
+              this.props.type === 'signed' ?
+              null : <span>
+               <label style={{marginLeft: '30px'}}>意向度:</label>
+               <span>
+                 {APP.dictionary[`EnumIntentionality-${this.props.detail.tagIntention}`]}
+               </span>
+             </span>
+            }
+            <label style={{marginLeft: '30px'}}>来源:</label>
             <label>
               {APP.dictionary[`EnumCustomerSource-${this.props.detail.customerSource}`]}
             </label>
-            <label style={{marginLeft: '50px'}}>创建时间:</label>
+            <label style={{marginLeft: '30px'}}>创建时间:</label>
             <span>
               {moment(this.props.detail.createTime).format('YYYY-MM-DD')}
             </span>
