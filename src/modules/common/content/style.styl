@@ -24,7 +24,11 @@
     padding: 20px
 .add
   cursor: pointer
-  display: inline-block
+  float left
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   &:hover
     color: #1890ff
   .add-icon
@@ -34,6 +38,5 @@
     background: url('@/assets/images/add.png') 0 0 / 100% 100% no-repeat
     cursor: pointer
     position: relative
-    top: 4px
   .text
     margin-left: 5px

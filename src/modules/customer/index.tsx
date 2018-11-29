@@ -627,6 +627,7 @@ class Main extends React.Component<Customer.Props, States> {
         rightCotent={(
           <div>
             <AddButton
+              icon={<img src={require('@/assets/images/add2.png')} width='14px' height='14px'/>}
               hidden={!APP.hasPermission('crm_customer_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
@@ -635,7 +636,7 @@ class Main extends React.Component<Customer.Props, States> {
               }}
             />
             <AddButton
-              // icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
+              icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
               hidden={!APP.hasPermission('crm_customer_list_upload')}
               title='导入'
               onClick={() => {

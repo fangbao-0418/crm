@@ -406,6 +406,7 @@ class Main extends React.Component<Business.Props> {
         rightCotent={(
           <div>
             <AddButton
+              icon={<img src={require('@/assets/images/add2.png')} width='14px' height='14px'/>}
               hidden={!APP.hasPermission('crm_business_mine_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
@@ -414,6 +415,7 @@ class Main extends React.Component<Business.Props> {
               }}
             />
             <AddButton
+              icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
               hidden={!APP.hasPermission('crm_business_mine_list_upload')}
               title='导入'
               onClick={() => {
