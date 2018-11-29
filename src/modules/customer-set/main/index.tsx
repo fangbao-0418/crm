@@ -60,17 +60,15 @@ class Main extends React.Component<null, States> {
           defaultActiveKey='1'
           onChange={this.callBack.bind(this)}
         >
-          <Row style={{marginBottom: 10}}>
-            <Col span={7}>
+          <div style={{overflow: 'hidden', marginBottom: 10}}>
+            <span style={{float: 'left'}}>
               <Region onChange={this.handleRegionChange.bind(this)} />
-            </Col>
-            <Col span={4} style={{marginLeft: -30}}>
-              <span style={tab === '2' ? {display: 'block'} : {display: 'none'}}>
-                <label>机构</label>
-                <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
-              </span>
-            </Col>
-          </Row>
+            </span>
+            <span style={tab === '2' ? {display: 'block', float: 'left'} : {display: 'none'}}>
+              <label style={{paddingLeft: 10}}>机构</label>
+              <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
+            </span>
+          </div>
           {
             APP.hasPermission('crm_set_customer_auto_distribute_list') &&
             <Tabs.TabPane tab='自动分配设置' key='1'>
