@@ -55,6 +55,7 @@ class Main extends React.Component<null, States> {
         title='客户设置'
       >
         <Tabs
+          className={styles.lab}
           animated={false}
           defaultActiveKey='1'
           onChange={this.callBack.bind(this)}
