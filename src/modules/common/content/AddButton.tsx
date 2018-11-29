@@ -5,6 +5,7 @@ interface Props {
   title?: string
   style?: React.CSSProperties
   hidden?: boolean
+  icon?: React.ReactNode
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -21,8 +22,12 @@ class Main extends React.Component<Props> {
           }
         }}
       >
-        <span className={styles['add-icon']}></span>
-        <span>{this.props.title}</span>
+        {this.props.icon ? (
+          this.props.icon
+        ) : (
+          <span className={styles['add-icon']}></span>
+        )}
+        <span className={styles.text}>{this.props.title}</span>
       </div>
     )
   }

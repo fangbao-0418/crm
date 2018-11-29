@@ -635,6 +635,7 @@ class Main extends React.Component<Customer.Props, States> {
               }}
             />
             <AddButton
+              // icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
               hidden={!APP.hasPermission('crm_customer_list_upload')}
               title='导入'
               onClick={() => {
