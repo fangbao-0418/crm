@@ -138,7 +138,15 @@ class Main extends React.Component<Props> {
                         getFieldDecorator(
                           `phone-${item.key}`,
                           {
-                            initialValue: item.contactPhone,
+                            initialValue: (() => {
+                              if (disabled) {
+                                let str = item.contactPhone
+                                str = '' + str
+                                const ary = str.split('')
+                                ary.splice(3, 4, '****')
+                                return ary.join('')
+                              } return item.contactPhone
+                            })(),
                             rules: index === 0 ? [
                               {
                                 required: true,

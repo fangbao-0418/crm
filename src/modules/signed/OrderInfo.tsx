@@ -69,6 +69,7 @@ class Main extends React.Component<Props> {
         {
           this.state.OrderData.map((item, index) => {
             return (
+              <div key={index} style={APP.hasPermission('order_orders_service') ? {cursor: 'pointer'} : {}}>
               <div
                 className={classNames(styles.order, 'clear')}
                 key={index}
@@ -163,6 +164,7 @@ class Main extends React.Component<Props> {
                     <span>{item.amount}</span>
                   </div>
                 </div>
+              </div>
               </div>
             )
           })

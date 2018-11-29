@@ -10,6 +10,7 @@ import FlowRecord from './FlowRecord'
 import Detail from './detail'
 const styles = require('./style')
 interface Props {
+  type?: 'business' | 'open' | 'customer' | 'signed'
   defaultKey?: string
   customerId?: string
   customerName?: string
@@ -26,6 +27,7 @@ class Main extends React.Component<Props> {
     console.log('11')
   }
   public render () {
+    const type = this.props.type
     console.log(this.props.defaultKey, 'this.props.defaultKey')
     return (
       <div style={{ width: '800px'}}>
@@ -35,7 +37,7 @@ class Main extends React.Component<Props> {
         >
           <Icon type='close' theme='outlined' />
         </span>
-        <Profile isShowAgent={true} customerName={this.props.customerName}/>
+        <Profile type={type} isShowAgent={true} customerName={this.props.customerName}/>
         <Tabs defaultActiveKey={this.props.defaultKey} onChange={this.callback}>
           <Tabs.TabPane tab={<span style={{color: 'black'}}>客户信息</span>} key='1'>
             <Detail/>

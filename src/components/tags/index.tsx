@@ -9,6 +9,7 @@ interface ItemProps {
   options: Array<{label: string, value: string, active?: boolean}>
 }
 interface Props {
+  track?: boolean
   style?: React.CSSProperties
   className?: string
   dataSource?: ItemProps[]
@@ -44,6 +45,7 @@ class Main extends React.Component<Props, State> {
     return value
   }
   public render () {
+    const track = this.props.track
     const dataSource = this.state.dataSource
     const labelSpan = this.props.labelSpan || 4
     return (
@@ -68,7 +70,7 @@ class Main extends React.Component<Props, State> {
                               <Tag
                                 title={item2.label}
                                 active={item2.active}
-                                onClick={() => {
+                                onClick={!this.props.track ? () => {
                                   if (item2.active) {
                                     item2.active = false
                                   } else {
@@ -84,7 +86,7 @@ class Main extends React.Component<Props, State> {
                                       this.props.onChange(this.getValue())
                                     }
                                   })
-                                }}
+                                } : null}
                               />
                             </li>
                           )

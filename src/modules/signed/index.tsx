@@ -151,7 +151,7 @@ class Main extends React.Component {
         </Tooltip>
       </span>
     ),
-    width: 180,
+    width: 200,
     dataIndex: 'endTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
@@ -339,6 +339,7 @@ class Main extends React.Component {
       content: (
         <Provider>
           <View
+            type='signed'
             defaultKey={defaultKey}
             customerId={record.id}
             customerName={record.customerName}

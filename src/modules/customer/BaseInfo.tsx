@@ -20,7 +20,7 @@ const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
 interface Props extends Customer.Props, FormComponentProps {
-  track?: string
+  track?: boolean
   customerId?: string
   onClose?: () => void
   flowNow?: () => void
@@ -275,7 +275,9 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { getFieldDecorator } = this.props.form
-    const disabled = this.props.type === 'open'
+    const { track } = this.props
+    const disabled = this.props.type === 'open' || track
+    console.log('12345678', track)
     const detail = this.props.detail
     return (
       <Form className={styles['base-info']}>

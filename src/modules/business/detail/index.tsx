@@ -12,8 +12,9 @@ import { verifyMessage } from '../api'
 import { fetchTrackRecords } from '@/modules/customer/api'
 const styles = require('./style')
 interface Props {
+  track?: boolean
   customerId: string
-  type?: 'business' | 'open' | 'customer'
+  type?: 'business' | 'open' | 'customer' | 'signed'
   detail?: Customer.DetailProps
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
@@ -23,7 +24,7 @@ class Main extends React.Component<Props> {
   public state = {
     visible: true,
     infomation: {
-      isOtherTrack: '',
+      isOtherTrack: false,
       message: ''
     }
   }
@@ -180,6 +181,7 @@ class Main extends React.Component<Props> {
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
+                  track={infomation.isOtherTrack}
                 />
               </Card>
             </div>
@@ -188,6 +190,7 @@ class Main extends React.Component<Props> {
                 this.state.visible &&
                 <Card title='跟进记录'>
                   <Tags
+                    track={infomation.isOtherTrack}
                     labelSpan={3}
                     className='mb10'
                     dataSource={this.trackRecord}
@@ -199,6 +202,7 @@ class Main extends React.Component<Props> {
                     }}
                   />
                   <Input.TextArea
+                    disabled={infomation.isOtherTrack}
                     className='mt10'
                     placeholder='请输入备注'
                     onChange={(e) => {
@@ -209,6 +213,7 @@ class Main extends React.Component<Props> {
                   <div className='mt10' >
                     下次跟进:&nbsp;&nbsp;
                     <DatePicker
+                      disabled={infomation.isOtherTrack}
                       placeholder=''
                       disabledDate={this.disabledDate}
                       onChange={(date) => {
