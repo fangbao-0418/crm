@@ -117,7 +117,7 @@ class Main extends React.Component<Customer.Props, States> {
       <span>
         空置天数
         <Tooltip placement='top' title='客户未被跟进的天数'>
-          <i className='fa fa-info-circle ml5 ml5'></i>
+          <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
@@ -136,7 +136,7 @@ class Main extends React.Component<Customer.Props, States> {
       <span>
         入库时间
         <Tooltip placement='top' title='客户进入客资池的时间'>
-          <i className='fa fa-info-circle ml5 ml5'></i>
+          <i className='fa fa-info-circle ml5 ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
