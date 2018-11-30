@@ -62,8 +62,8 @@ class Main extends React.Component<Props> {
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
-          if (!/[\d-]{5,11}/.test(this.props.phone)) {
-            APP.error('手机号不存在')
+          if (!/[\d-]{5, 13}/.test(this.props.phone)) {
+            APP.error('无效电话号码!')
             return
           }
           if (!APP.isConfigTQ) {
@@ -74,6 +74,10 @@ class Main extends React.Component<Props> {
             APP.error('忙线中')
             return
           }
+          let phone = this.props.phone
+          if (phone.length <= 8) {
+            phone = APP.user.tqAreaCode + phone
+          }
           el = e.target
           params = {
             callerId: '',
@@ -82,9 +86,8 @@ class Main extends React.Component<Props> {
             contactPhone: this.props.phone,
             contactName: this.props.name
           }
-          APP.fn.makecall(this.props.phone).then(() => {
+          APP.fn.makecall(phone).then(() => {
             hangup = false
-            console.log(e.target, el, 'ok')
             el.setAttribute('class', `${styles.tel}`)
           })
         }}

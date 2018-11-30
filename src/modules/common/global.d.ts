@@ -11,6 +11,8 @@ declare namespace Common {
     codes?: string[]
     /** 是否支持TQ */
     enableTq?: boolean
+    /** 座机区号 */
+    tqAreaCode: string
   }
   export type ActionPayload = Props
   export interface RegionProps {
