@@ -28,7 +28,9 @@ export default class extends React.Component<Props>  {
     width: 150,
     dataIndex: 'operationTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (
+        <span>{!!val && moment(val).format('YYYY-MM-DD')}</span>
+      )
     }
   }, {
     title: '操作内容',
