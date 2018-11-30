@@ -55,7 +55,7 @@ class Main extends React.Component<Props> {
             <FlowRecord customerId={this.props.customerId}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab={<span style={{color: 'black'}}>操作记录</span>} key='6'>
-            <OperateList/>
+            <OperateList customerId={this.props.customerId}/>
           </Tabs.TabPane>
         </Tabs>
       </div>

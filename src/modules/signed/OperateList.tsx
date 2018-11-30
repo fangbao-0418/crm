@@ -1,6 +1,8 @@
 import React from 'react'
 import { Table, Radio } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { fetchOperateList } from './api'
+import moment from 'moment'
 const RadioGroup = Radio.Group
 export interface DetailProps {
   opetarePerson: string
@@ -10,22 +12,38 @@ export interface DetailProps {
 interface States {
   data: DetailProps[]
 }
-export default class extends React.Component {
+interface Props {
+  customerId: string
+}
+export default class extends React.Component<Props>  {
   public state: States = {
     data: []
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '操作人',
     width: 100,
-    dataIndex: 'opetarePerson'
+    dataIndex: 'operatorName'
   }, {
     title: '操作时间',
     width: 150,
-    dataIndex: 'opetareTime'
+    dataIndex: 'operationTime',
+    render: (val) => {
+      return (
+        <span>{!!val && moment(val).format('YYYY-MM-DD')}</span>
+      )
+    }
   }, {
     title: '操作内容',
-    dataIndex: 'opetareContent'
+    dataIndex: 'dataMode.description'
   }]
+  public componentWillMount () {
+    const customerId = this.props.customerId
+    fetchOperateList(customerId).then((res) => {
+      this.setState({
+        data: res
+      })
+    })
+  }
   public render () {
     return (
       <div>
