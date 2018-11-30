@@ -69,9 +69,8 @@ class Main extends React.Component<Props> {
         {
           this.state.OrderData.map((item, index) => {
             return (
-              <div key={index} style={APP.hasPermission('order_orders_service') ? {cursor: 'pointer'} : {}}>
               <div
-                className={classNames(styles.order, 'clear')}
+                className={!!APP.hasPermission('order_orders_service') ? classNames(styles.order, 'clear') : classNames(styles.ord, 'clear')}
                 key={index}
                 onClick={() => {
                   if (!APP.hasPermission('order_orders_service')) {
@@ -164,7 +163,6 @@ class Main extends React.Component<Props> {
                     <span>{item.amount}</span>
                   </div>
                 </div>
-              </div>
               </div>
             )
           })

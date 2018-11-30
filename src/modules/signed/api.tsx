@@ -37,5 +37,5 @@ export const fetchOrders = (customerId: string) => { // 服务调什么
 }
 // 操作记录
 export const fetchOperateList = (customerId: string) => {
-  return http(`/log/v1/api/operationProcess/list/data-flag/CUSTOMER_LIFE_CYCLE?key=22`)
+  return http(`/log/v1/api/operationProcess/list/data-flag/CUSTOMER_LIFE_CYCLE?key=${customerId}`)
 }
