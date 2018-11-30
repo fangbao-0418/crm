@@ -127,17 +127,18 @@ class Main extends React.Component<Props, State> {
                           })
                         }}
                       />
-                      <Button
+                      {/* <Button
                         style={{fontSize: 12}}
                         className='ml5 mr5'
                         type='primary'
                         onClick={this.searchUrl.bind(this)}
                       >
                         网址
-                      </Button>
+                      </Button> */}
                       <Button
                         style={{fontSize: 12}}
                         type='primary'
+                        className='ml5 mr5'
                         onClick={() => {
                           detail.isConfirmed = 0
                           detail.companyInfoSource = 3
