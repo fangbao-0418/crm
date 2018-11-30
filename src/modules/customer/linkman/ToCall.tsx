@@ -62,7 +62,7 @@ class Main extends React.Component<Props> {
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
-          if (!/[\d-]{5, 13}/.test(this.props.phone)) {
+          if (!/[\d-]{5,13}/.test(this.props.phone)) {
             APP.error('无效电话号码!')
             return
           }
