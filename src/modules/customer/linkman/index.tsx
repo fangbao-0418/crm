@@ -53,6 +53,7 @@ class Main extends React.Component<Props> {
     const linkMan = this.getLinkMan(disabled)
     return (
       <FormItemLayout
+        required
         label='主联系人'
         labelStyle={{
           verticalAlign: 'top',
