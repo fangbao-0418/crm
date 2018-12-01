@@ -188,7 +188,7 @@ class Main extends React.Component<Props> {
             <div className={styles.right}>
               {
                 this.state.visible &&
-                <Card title='跟进记录'>
+                <Card title='跟进小记'>
                   <Tags
                     track={infomation.isOtherTrack}
                     labelSpan={3}
