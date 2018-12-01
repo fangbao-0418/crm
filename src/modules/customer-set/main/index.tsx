@@ -5,7 +5,6 @@ import SetAuto from '@/modules/customer-set/main/SetAuto'
 import SetCapacity from '@/modules/customer-set/main/SetCapacity'
 import Region from './Region'
 import { changeCapacityAction } from '../actions'
-import { fetchStorageCapacity } from '../api'
 interface States {
   cityCodes: {key: string, label: string}[]
   agencyName: string
@@ -48,7 +47,6 @@ class Main extends React.Component<null, States> {
   }
   public render () {
     const {cityCodes, agencyName, tab } = this.state
-    console.log(cityCodes, 'index')
     return (
       <ContentBox
         className={styles.container}
@@ -82,6 +80,7 @@ class Main extends React.Component<null, States> {
             </Tabs.TabPane>
           }
         </Tabs>
+        <div className={styles.slot}></div>
       </ContentBox>
     )
   }

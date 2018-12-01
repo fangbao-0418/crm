@@ -5,6 +5,8 @@ import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { changeCapacityAction } from '@/modules/customer-set/actions'
 import { saveStorageCapacity } from '@/modules/customer-set/api'
+import classNames from 'classnames'
+const styles = require('./style')
 const FormItem = Form.Item
 type DetailProps = Customer.CapacityProps
 interface States {
@@ -165,7 +167,7 @@ class Main extends React.Component<Props> {
         />
         {
           APP.hasPermission('crm_set_customer_storage_entry') &&
-          <div className='text-right mt10'>
+          <div className={classNames(styles.operate, 'text-right mt10')}>
             <Button
               type='primary'
               onClick={this.save.bind(this)}

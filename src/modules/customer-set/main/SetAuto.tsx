@@ -5,7 +5,9 @@ import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import { saveAutoAssign } from '@/modules/customer-set/api'
 import { changeAutoAssignAction } from '@/modules/customer-set/actions'
+import classNames from 'classnames'
 const FormItem = Form.Item
+const styles = require('./style')
 type DetailProps = Customer.AutoAssignProps
 interface Props extends Customer.Props, FormComponentProps {
   cityCodes?: {key: string, label: string}[]
@@ -120,7 +122,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     return (
-      <div>
+      <div className={styles.container}>
         <Table
           columns={this.columns}
           dataSource={this.props.autoAssign}
@@ -129,7 +131,7 @@ class Main extends React.Component<Props> {
         />
         {
           APP.hasPermission('crm_set_customer_save') &&
-          <div className='text-right mt10'>
+          <div className={classNames(styles.operate, 'text-right mt10')}>
             <Button
               type='primary'
               onClick={this.save.bind(this)}
