@@ -6,5 +6,6 @@ export { default as loadOpen } from 'bundle-loader?lazy&name=[name]!@/modules/op
 export { default as loadSigned } from 'bundle-loader?lazy&name=[name]!@/modules/signed'
 /** 呼叫统计 */
 export { default as loadShout } from 'bundle-loader?lazy&name=[name]!@/modules/stat/shout'
+export { default as loadWorkpanelSales } from 'bundle-loader?lazy&name=[name]!@/modules/stat/workpanel-sales'
 export { default as loadCustomerSet } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/main'
 export { default as loadCustomerSetAssign } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/assign'

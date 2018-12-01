@@ -17,6 +17,8 @@ interface ModuleProps {
   CustomerSet: RouteComponent
   /** 分客设置 */
   CustomerSetAssign: RouteComponent
+  /** 工作仪表盘 */
+  WorkpanelSales: RouteComponent
   /** 404 */
   Unfound: RouteComponent
 }
