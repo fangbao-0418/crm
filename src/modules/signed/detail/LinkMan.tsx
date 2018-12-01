@@ -44,7 +44,7 @@ class Main extends React.Component<Props> {
               })(
                 <div>
                   <span>
-                    {text}
+                    {text || '暂无'}
                   </span>
                   {
                     record.isSignPerson === 1 &&
@@ -89,12 +89,11 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
-        console.log(this.props.disabled, 'lianxidianhua')
         if (this.props.disabled) {
           return (
             <FormItem style={{height: 30}}>
               <span>{text.trim()}</span>
-              <ToCall
+              {!!text && <ToCall
                 style={{
                   verticalAlign: 'sub',
                   marginLeft: '4px'
@@ -102,7 +101,7 @@ class Main extends React.Component<Props> {
                 phone={text}
                 name={record.contactPerson}
                 detail={this.props.detail}
-              />
+              />}
             </FormItem>
           )
         } else {
