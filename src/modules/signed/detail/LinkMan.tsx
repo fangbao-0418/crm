@@ -32,7 +32,7 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         if (this.props.disabled) {
           return (
-            <FormItem style={{height: 30}}>
+            <FormItem>
               {getFieldDecorator(`contactPerson-${record.key}`, {
                 initialValue: text,
                 rules: [
@@ -56,7 +56,7 @@ class Main extends React.Component<Props> {
           )
         } else {
           return (
-            <FormItem style={{height: 30}}>
+            <FormItem>
               {getFieldDecorator(`contactPerson-${record.key}`, {
                 initialValue: text,
                 rules: [
@@ -91,7 +91,7 @@ class Main extends React.Component<Props> {
         const { getFieldDecorator } = this.props.form
         if (this.props.disabled) {
           return (
-            <FormItem style={{height: 30}}>
+            <FormItem>
               <span>{text.trim()}</span>
               {!!text && <ToCall
                 style={{
@@ -106,7 +106,7 @@ class Main extends React.Component<Props> {
           )
         } else {
           return (
-            <FormItem style={{height: 30}}>
+            <FormItem>
               {getFieldDecorator(`contactPhone-${record.key}`, {
                 initialValue: text.trim(),
                 rules: [

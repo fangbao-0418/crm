@@ -9,6 +9,7 @@ interface Props extends Customer.Props {
 }
 class Main extends React.Component<Props> {
   public render () {
+    const { detail } = this.props
     return (
       <div className={styles.profile}>
         <div className={styles.left}>
@@ -17,17 +18,12 @@ class Main extends React.Component<Props> {
         <div className={styles.right}>
           <div className={styles.title}>
             {this.props.detail.customerName}
-            <span style={{marginLeft: 10}}>
-              {
-                String(this.props.detail.isConfirmed) === '1' &&
-                <span>
-                  <span className={styles.verified} />
-                </span>
-              }
-              {/* <span className={styles.telphone} />
-              <span className='mr20 ml10'>电话</span> */}
-              <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
-            </span>
+            {
+              String(this.props.detail.isConfirmed) === '1' &&
+              <span className={styles.verified} />}
+            {/* <span className={styles.telphone} />
+            <span className='mr20 ml10'>电话</span> */}
+            <span className={styles.tyc} onClick={() => {window.open(`https://www.tianyancha.com/search?key=${this.props.detail.customerName}`)}}/>
           </div>
           <p style={{marginTop: 4}}>
             {
@@ -77,11 +73,11 @@ class Main extends React.Component<Props> {
           {
             this.props.isShowAgent &&
             <p>
-              <label>记账状态:</label><span>正常做账</span>
-              <label style={{marginLeft: '20px'}}>运营会计:</label><span>张飞飞</span>
-              <label style={{marginLeft: '20px'}}>核算会计:</label><span>张飞</span>
-              <label style={{marginLeft: '20px'}}>当前账期:</label><span>2018-09</span>
-              <label style={{marginLeft: '20px'}}>服务期止:</label><span>2019-10</span>
+              <label>记账状态:</label><span>{detail.accountStatus}</span>
+              <label style={{marginLeft: '20px'}}>运营会计:</label><span>{detail.accountOpsUsers}</span>
+              <label style={{marginLeft: '20px'}}>核算会计:</label><span>{detail.accountAuditUsers}</span>
+              <label style={{marginLeft: '20px'}}>当前账期:</label><span>{detail.accountPeriod}</span>
+              <label style={{marginLeft: '20px'}}>截止账期:</label><span>{detail.serveTimeEnd}</span>
             </p>
           }
         </div>

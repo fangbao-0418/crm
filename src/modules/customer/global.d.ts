@@ -63,6 +63,16 @@ declare namespace Customer {
     lastReleaseSalesperson?: string
     /** 信息来源 */
     companyInfoSource?: number
+    /** 当前账期 */
+    accountPeriod?: string
+    /** 做账状态 */
+    accountStatus?: string
+    /** 运营会计 */
+    accountOpsUsers?: string
+    /** 核算会计 */
+    accountAuditUsers?: string
+    /** 截止账期 */
+    serveTimeEnd?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string

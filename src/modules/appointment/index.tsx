@@ -277,7 +277,13 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <Icon type={this.state.extshow ? 'up' : 'down'} theme='outlined' style={{color: '#BFBFBF', float: 'right', marginTop: -20}} onClick={this.handleSwitch.bind(this)}/>
+            <img
+              src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
+              style={{cursor: 'pointer', float: 'right', marginTop: -8}}
+              width='14'
+              height='14'
+              onClick={this.handleSwitch.bind(this)}
+            />
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
