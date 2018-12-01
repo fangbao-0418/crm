@@ -230,6 +230,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div
+        className={styles.linkman}
         style={{width: '100%'}}
       >
         <Form>
