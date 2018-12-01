@@ -45,7 +45,7 @@ class Main extends React.Component<Props> {
   public componentDidMount () {
     fetchOrders(this.props.customerId).then((res) => {
       this.setState({
-        OrderData: res.data.records
+        OrderData: res.data ? res.data.records : []
       }, () => {
         const { OrderData } = this.state
         const len: any = []

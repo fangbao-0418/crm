@@ -75,7 +75,7 @@ class Main extends React.Component<{}, State> {
     return (
       <div>
         <Condition
-          style={{marginLeft: -36}}
+          style={{marginLeft: -30}}
           onChange={this.onChange.bind(this)}
           dataSource={this.condition}
         />

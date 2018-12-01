@@ -1,7 +1,8 @@
 import React from 'react'
 import { Table, Input, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getCallDetail, getSaller } from '@/modules/stat/api'
+import { getCallDetail } from '@/modules/stat/api'
+import { getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import fileSaver from '@/utils/fileSave'
@@ -149,7 +150,7 @@ class Main extends React.Component<{}, State> {
     }
   ]
   public componentDidMount () {
-    getSaller().then((res) => {
+    getSalesByCompany().then((res) => {
       this.setState({
         saller: res
       })
@@ -197,7 +198,7 @@ class Main extends React.Component<{}, State> {
     return (
       <div className={styles['call-detail']}>
         <Condition
-          style={{marginLeft: -36}}
+          style={{marginLeft: -30}}
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />

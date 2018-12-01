@@ -30,7 +30,3 @@ export const getCallDetail = (query: {
 }) => {
   return http(`/crm-manage/v1/api/call-details`, 'GET', query)
 }
-/** 获取销售列表 */
-export const getSaller = () => {
-  return http(`/user/v1/api/user/list/company/identity/${APP.user.companyId}/sale`)
-}

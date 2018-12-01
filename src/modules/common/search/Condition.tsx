@@ -192,7 +192,6 @@ class Main extends React.Component<Props> {
         <li>
           <label
             className={styles.label}
-            // style={{cursor: 'pointer'}}
           >
             {
               item.label.length > 1 ? (
@@ -200,14 +199,23 @@ class Main extends React.Component<Props> {
                   overlay={menu}
                   trigger={['click']}
                 >
-                  <span>{label}</span>
+                  <span style={{cursor: 'pointer'}}>
+                    {label}
+                    <span style={{paddingRight: 5}}>
+                      <Icon type='down' theme='outlined' style={{color: '#BFBFBF'}}/>
+                    </span>
+                  </span>
                 </Dropdown>
-              ) : label
+              ) : (
+                <span>
+                  {label}
+                  <span style={{paddingRight: 5}}>
+                    <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>
+                  </span>
+                </span>
+              )
             }
           </label>
-          <span style={{paddingRight: 5}}>
-            {(item.field === 'date' && item.label.length > 1) ? <Icon type='down' theme='outlined' style={{color: '#BFBFBF'}}/> : <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>}
-          </span>
           <div className={styles.options}>
             {tagNodes}
           </div>

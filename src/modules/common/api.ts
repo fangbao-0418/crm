@@ -115,10 +115,11 @@ export const fetchOssToken = () => {
 export const getSalesList = () => {
   return http(`/user/v1/api/user/list/sale`)
 }
-// 根据机构获取销售列表
-export const getSalesByCompany = (companyid: string) => {
-  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
+/** 根据机构获取销售列表 */
+export const getSalesByCompany = (companyId: string = APP.user.companyId) => {
+  return http(`/user/v1/api/user/list/company/identity/${companyId}/saleAll`)
 }
+/** 绑定公司 */
 export const bindCompany = (payload: {token: string, companyId: string}) => {
   return http(`/user/v1/api/user/company/bind`, 'POST', payload)
 }

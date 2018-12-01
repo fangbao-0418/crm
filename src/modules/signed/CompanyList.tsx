@@ -56,8 +56,8 @@ export default class extends React.Component<Props> {
       <Table
         columns={this.columns}
         dataSource={this.state.data}
-        bordered
         rowKey={'name'}
+        pagination={false}
       />
     )
   }
