@@ -82,6 +82,7 @@ class Main extends React.Component<Props> {
       node = (
         <div className={styles.after}>
           <RangePicker
+            size='small'
             format={'YYYY-MM-DD'}
             onChange={(current) => {
               // console.log(current)
@@ -96,6 +97,7 @@ class Main extends React.Component<Props> {
       node = (
         <div className={styles.after}>
           <RangePicker
+            size='small'
             format={'YYYY-MM'}
             onChange={(current) => {
               console.log(current)

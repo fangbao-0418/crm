@@ -203,7 +203,7 @@ class Main extends React.Component<{}, State> {
           dataSource={this.condition}
         />
         <div
-          className='mb10'
+          className='mb10 mt10'
         >
           <Input.Search
             style={{width: 200}}

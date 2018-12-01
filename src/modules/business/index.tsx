@@ -433,15 +433,12 @@ class Main extends React.Component<Business.Props> {
           </div>
         }
         {
-          count[4] > 0 &&
+          (count[4] > 0 && count[4] < 11) &&
           <div className={styles.note}>
-            {
-              count[4] < 11 &&
-              <span>
-                <span className={styles['note-icon1']} />
-                <span className='mr10'>库容剩余不足{count[4]}个，即将达到上限！</span>
-              </span>
-            }
+            <span>
+              <span className={styles['note-icon1']} />
+              <span className='mr10'>库容剩余不足{count[4]}个，即将达到上限！</span>
+            </span>
           </div>
         }
         <div className='mb12'>
