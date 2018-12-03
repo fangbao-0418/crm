@@ -47,6 +47,7 @@ APP.dictionary = {}
 
 Object.defineProperty(APP, 'token', {
   get () {
+    console.log(storage.getItem('token') || cookie.get('token'), 'token')
     return storage.getItem('token') || cookie.get('token') || ''
   },
   set (val) {

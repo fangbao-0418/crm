@@ -21,6 +21,7 @@ class Main extends React.Component<Props, State> {
   }
   public componentWillMount () {
     fetchRegion({
+      parentId: APP.user.cityCode,
       level: 3
     }).then((res) => {
       this.setState({
@@ -41,26 +42,32 @@ class Main extends React.Component<Props, State> {
               style={{marginLeft: '-41px'}}
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
-              label='区域'
+              label='地区'
             >
               {!disabled ? getFieldDecorator(
-                'area'
-                )(
-                <Dropdown
-                  style={{
-                    width: '100px',
-                    display: 'inline-block',
-                    verticalAlign: 'middle'
-                  }}
-                  defaultValue={{
-                    name: detail.areaName
-                  }}
-                  data={this.state.areaList}
-                  setFields={{
-                    title: 'name',
-                    key: 'code'
-                  }}
-                />
+                'area',
+                {
+                  initialValue: detail.areaCode !== undefined ? {
+                    key: detail.areaCode,
+                    label: detail.areaName
+                  } : undefined
+                }
+              )(
+                <Select
+                  labelInValue
+                >
+                  {
+                    this.state.areaList.map((item) => {
+                      return (
+                        <Select.Option
+                          key={item.code}
+                        >
+                          {item.name}
+                        </Select.Option>
+                      )
+                    })
+                  }
+                </Select>
               ) : <span>{detail.areaName}</span>}
             </FormItem>
           </Col>
@@ -194,7 +201,7 @@ export default connect((state: Reducer.State) => {
     const area = detail.area || {}
     delete detail.area
     detail.areaCode = area.key
-    detail.areaName = area.title
+    detail.areaName = area.label
     detail.legalPersonCardUrl = [detail.idUrl1, detail.idUrl2].join(',')
     delete detail.idUrl1
     delete detail.idUrl2

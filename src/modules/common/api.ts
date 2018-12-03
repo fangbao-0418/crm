@@ -82,7 +82,6 @@ export const fetchRegion = (payload: {
   level: number,
   /** 父级id */
   parentId?: string,
-  code?: string,
   id?: number
 } = {
   level: 1
