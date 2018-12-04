@@ -154,7 +154,7 @@ class Main extends React.Component {
     width: 200,
     dataIndex: 'endTime',
     render: (val) => {
-      return (val ? moment(val).format('YYYY-MM-DD') : '')
+      return (val ? moment(val).format('YYYY-MM') : '')
     }
   }, {
     title: (
