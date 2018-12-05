@@ -51,11 +51,11 @@ export const fetchOrganStatus = () => {
 }
 export const fetchEnum = () => {
   return Promise.all([
-    http(`/crm-manage/v1/api/code-text/list`),
-    fetchOrganStatus()
+    http(`/crm-manage/v1/api/code-text/list`)
+    // fetchOrganStatus()
   ]).then(([res, res2]) => {
     const data: any = {}
-    res.data.EnumOrganAgentSource = res2
+    // res.data.EnumOrganAgentSource = res2
     for (const key in res.data) {
       if (res.data.hasOwnProperty(key)) {
         data[key] = []
