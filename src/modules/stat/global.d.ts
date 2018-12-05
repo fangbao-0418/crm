@@ -73,4 +73,31 @@ declare namespace CrmStat {
     /** 坐席 */
     siteNumber: string
   }
+  // 工作仪表盘
+  export interface SalesRankItemProps {
+    /** 销售组名称 */
+    salespersonName: string
+    /** 呼入量 */
+    callInTotalNums: string
+    /** 呼出量 */
+    callOutTotalNums: string
+    /** 通话量 */
+    callTotalNums: string
+    /** 接通量 */
+    callSuccessNums: string
+    /** 接通时长 */
+    totalCallDuration: string
+    /** 接通率 */
+    averageCallSuccessPercent: string
+    /** 小于等于30秒接通量 */
+    callSuccessLte30SecondNums: string
+    /** 小于等于60秒接通量 */
+    callSuccessLte60SecondNums: string
+    /** 大于60秒接通量 */
+    callSuccessGt60SecondNums: string
+    /**销售排名 */
+    callDetailInfos: string
+    /**客户趋势图 */
+    ReportByDays: string
+  }
 }

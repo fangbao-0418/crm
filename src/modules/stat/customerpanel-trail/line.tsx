@@ -11,11 +11,10 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const char = this.props.char
     // const month = new Date().getMonth()
     const option: echarts.EChartOption = {
       title: {
-        text: '新增客户趋势图'
+        text: '每日趋势图'
       },
       tooltip: {
         show: true,
@@ -39,8 +38,7 @@ class Main extends React.Component<any> {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        // data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        data: char.totalDate
+        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
       },
       yAxis: {
         type: 'value'
@@ -49,8 +47,7 @@ class Main extends React.Component<any> {
         name: '通话量',
         type: 'line',
         stack: '总量',
-        // data: [1, 40, 20, 40, 10, 70],
-        data: char.callTotalNums,
+        data: [1, 40, 20, 40, 10, 70],
         itemStyle: {
           color: '#FAD440'
         },
@@ -73,8 +70,7 @@ class Main extends React.Component<any> {
         name: '接通量',
         type: 'line',
         stack: '总量',
-        // data: [5, 20, 36, 10, 10, 20],
-        data: char.callSuccessNums,
+        data: [5, 20, 36, 10, 10, 20],
         itemStyle: {
           color: '#4ECB73'
         },
@@ -101,8 +97,8 @@ class Main extends React.Component<any> {
   }
   public render () {
     return (
-      <div>
-        <div ref='line' style={{height: '350px', marginBottom:'10px'}}></div>
+      <div style={{float: 'left'}}>
+        <div ref='line' style={{height: '350px',  width: 750, marginBottom:'10px'}}></div>
       </div>
     )
   }
