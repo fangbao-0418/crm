@@ -127,7 +127,7 @@ class Main extends React.Component {
   }, {
     title: '运营会计',
     width: 180,
-    dataIndex: 'operatingAccouting'
+    dataIndex: 'accountOpsUsers'
   }, {
     title: (
       <span>
