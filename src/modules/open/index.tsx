@@ -448,12 +448,10 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <img
-              src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-              style={{cursor: 'pointer', float: 'right', marginTop: -8}}
-              width='14'
-              height='14'
+            <APP.Icon
+              style={{float: 'right', marginTop: -8}}
               onClick={this.handleSwitch.bind(this)}
+              type={this.state.extshow ? 'up' : 'down'}
             />
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>

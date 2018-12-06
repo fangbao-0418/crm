@@ -406,7 +406,7 @@ class Main extends React.Component<Business.Props> {
         rightCotent={(
           <div>
             <AddButton
-              icon={<img src={require('@/assets/images/add2.png')} width='14px' height='14px'/>}
+              icon={<APP.Icon type='add' />}
               hidden={!APP.hasPermission('crm_business_mine_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
@@ -415,7 +415,7 @@ class Main extends React.Component<Business.Props> {
               }}
             />
             <AddButton
-              icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
+              icon={<APP.Icon type='import' />}
               hidden={!APP.hasPermission('crm_business_mine_list_upload')}
               title='导入'
               onClick={() => {
@@ -447,12 +447,10 @@ class Main extends React.Component<Business.Props> {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <img
-              src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-              style={{cursor: 'pointer', float: 'right'}}
-              width='14'
-              height='14'
+            <APP.Icon
+              style={{float: 'right'}}
               onClick={this.handleSwitch.bind(this)}
+              type={this.state.extshow ? 'up' : 'down'}
             />
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>

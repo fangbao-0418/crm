@@ -620,14 +620,13 @@ class Main extends React.Component<Customer.Props, States> {
       onChange: this.onSelectAllChange.bind(this)
     }
     const { pagination } = this.state
-    // console.log(this.state.data, 'render')
     return (
       <ContentBox
         title='我的客资'
         rightCotent={(
           <div>
             <AddButton
-              icon={<img src={require('@/assets/images/add2.png')} width='14px' height='14px'/>}
+              icon={<APP.Icon type='add' />}
               hidden={!APP.hasPermission('crm_customer_list_add')}
               style={{marginRight: '10px'}}
               title='新增'
@@ -636,7 +635,7 @@ class Main extends React.Component<Customer.Props, States> {
               }}
             />
             <AddButton
-              icon={<img src={require('@/assets/images/import.png')} width='14px' height='14px'/>}
+              icon={<APP.Icon type='import' size={15} />}
               hidden={!APP.hasPermission('crm_customer_list_upload')}
               title='导入'
               onClick={() => {
@@ -652,7 +651,11 @@ class Main extends React.Component<Customer.Props, States> {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <Icon type={this.state.extshow ? 'up' : 'down'} theme='outlined' style={{color: '#BFBFBF', float: 'right', marginTop: -20}} onClick={this.handleSwitch.bind(this)}/>
+            <APP.Icon
+              style={{float: 'right', marginTop: -20}}
+              onClick={this.handleSwitch.bind(this)}
+              type={this.state.extshow ? 'up' : 'down'}
+            />
           </div>
           <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>

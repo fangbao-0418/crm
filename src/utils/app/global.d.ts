@@ -57,6 +57,7 @@ declare namespace APP {
     /** 四舍五入 */
     round: (num: number, float?: number) => number
   }
+  export const Icon: React.ComponentType<Icon.Props>
   export const fn: GlobalFnProps
   export let history: CustomHistory
   export let dispatch: <T>(action: DispatchAction<T>) => DispatchAction<T>

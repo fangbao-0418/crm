@@ -3,11 +3,13 @@ import storage from '../storage'
 import * as fn from './fn'
 import jsmc from '@/utils/jsmc.min'
 import { cookie } from 'pilipa-terrace'
+import Icon from '@/components/icon'
 Object.assign(APP, {
   isConfigTQ: false,
   user: undefined,
   env: process.env.NODE_ENV,
   fn,
+  Icon,
   success: (msg: string) => {
     notification.success({
       message: msg
@@ -47,7 +49,6 @@ APP.dictionary = {}
 
 Object.defineProperty(APP, 'token', {
   get () {
-    console.log(storage.getItem('token') || cookie.get('token'), 'token')
     return storage.getItem('token') || cookie.get('token') || ''
   },
   set (val) {
