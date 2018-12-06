@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchWorks } from './api'
+import { fetchWorks } from '../api'
 export interface DetailProps {
   id: string
   workNo: string

@@ -1,11 +1,14 @@
 import React from 'react'
 import Main from '@/modules/common/Main'
-import { LocaleProvider } from 'antd'
+import { LocaleProvider, Table } from 'antd'
 import { Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { connect, DispatchProp } from 'react-redux'
 interface Props extends RouteComponentProps<any>, DispatchProp<any>, Common.Props {}
+Table.defaultProps.locale = {
+  emptyText: '暂无数据'
+}
 class App extends React.Component<Props> {
   public componentWillMount () {
     APP.history = this.props.history

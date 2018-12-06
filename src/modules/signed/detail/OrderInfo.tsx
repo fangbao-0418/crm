@@ -1,8 +1,8 @@
 import React from 'react'
-import { Row, Col, Tooltip, Icon } from 'antd'
+import { Tooltip, Icon } from 'antd'
 import Modal from 'pilipa/libs/modal'
 import classNames from 'classnames'
-import { fetchOrders } from './api'
+import { fetchOrders } from '../api'
 const styles = require('./style')
 interface Props {
   customerId: string

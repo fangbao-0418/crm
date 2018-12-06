@@ -4,7 +4,7 @@ import _ from 'lodash'
 import Tags from '@/components/tags'
 import moment from 'moment'
 import Record from '@/modules/customer/Record'
-import { addRecord } from './api'
+import { addRecord } from '../api'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 interface Props {
   customerId: string

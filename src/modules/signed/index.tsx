@@ -7,7 +7,7 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import SelectSearch from '@/modules/common/search/SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Provider from '@/components/Provider'
-import View from './View'
+import View from './detail'
 import { fetchList, toOther, fetchWorkers } from './api'
 import _ from 'lodash'
 import moment from 'moment'

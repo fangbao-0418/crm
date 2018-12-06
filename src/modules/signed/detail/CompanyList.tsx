@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchRelatedCompanyListy } from './api'
+import { fetchRelatedCompanyListy } from '../api'
 import moment from 'moment'
 export interface DetailProps {
   id: string

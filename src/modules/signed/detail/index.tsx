@@ -1,155 +1,65 @@
 import React from 'react'
-import BusinessInfo from './BusinessInfo'
-import BaseInfo from './BaseInfo'
-import LinkMan from './LinkMan'
-import Card from '@/components/Card'
-import AddButton from '@/modules/common/content/AddButton'
-import { Icon } from 'antd'
-import { connect } from 'react-redux'
-import { updateCustomer } from '@/modules/customer/api'
-import _ from 'lodash'
+import Profile from '@/modules/common/company-detail/Profile'
+import { Tabs, Icon } from 'antd'
+import { changeCustomerDetailAction } from '@/modules/customer/action'
+import OrderInfo from './OrderInfo'
+import WorkList from './WorkList'
+import CompanyList from './CompanyList'
+import OperateList from './OperateList'
+import FlowRecord from './FlowRecord'
+import Detail from './Customer'
 const styles = require('./style')
 interface Props {
-  linkMan: Customer.LinkManProps[]
-  detail: Customer.DetailProps
+  type?: 'business' | 'open' | 'customer' | 'signed'
+  defaultKey?: string
+  customerId?: string
+  customerName?: string
+  onClose?: () => void
 }
 class Main extends React.Component<Props> {
-  public state = {
-    disabled: true
+  public componentWillMount () {
+    this.fetchData()
   }
-  public linkMan: any = {}
-  public businessInfo: any = {}
-  public addLinkMan () {
-    const linkMan = this.props.linkMan
-    linkMan.push({
-      contactPerson: '',
-      contactPhone: '',
-      source: 1
-    })
-    APP.dispatch({
-      type: 'change customer data',
-      payload: {
-        linkMan
-      }
-    })
+  public fetchData () {
+    changeCustomerDetailAction(this.props.customerId)
   }
-  public save () {
-    const id = this.props.detail.id
-    if (this.state.disabled === false) {
-      return
-    }
-    updateCustomer(id, this.props.detail).then(() => {
-      APP.success('保存成功')
-    })
+  public callback () {
+    console.log('11')
   }
   public render () {
+    const type = this.props.type
+    console.log(this.props.defaultKey, 'this.props.defaultKey')
     return (
-      <div className={styles.container}>
-        <Card
-          title='工商信息'
-          rightContent={
-            APP.hasPermission('crm_sign_myself_detail_save') && (
-            <Icon
-              className='href'
-              type={!this.state.disabled ? 'save' : 'edit'}
-              theme='outlined'
-              onClick={() => {
-                // console.log(this.state.disabled, 'on click')
-                if (this.state.disabled === true) {
-                  this.setState({
-                    disabled: false
-                  })
-                  return
-                }
-                Promise.all([
-                  new Promise((resolve, reject) => {
-                    this.businessInfo.props.form.validateFields((errs: any) => {
-                      if (errs) {
-                        reject()
-                      } else {
-                        const linkMan = _.cloneDeep(this.props.linkMan)
-                        const detail = this.props.detail
-                        linkMan.map((item) => {
-                          delete item.key
-                        })
-                        detail.contactPersons = linkMan
-                        APP.dispatch<Customer.Props>({
-                          type: 'change customer data',
-                          payload: {
-                            detail
-                          }
-                        })
-                        resolve()
-                      }
-                    })
-                  }),
-                  new Promise((resolve, reject) => {
-                    this.linkMan.props.form.validateFields((errs: any) => {
-                      if (errs) {
-                        reject()
-                      } else {
-                        resolve()
-                      }
-                    })
-                  })
-                ]).then(() => {
-                  if (!this.state.disabled) {
-                    if (!this.props.detail.unifiedCreditCode && this.props.detail.companyInfoSource !== 0) {
-                      APP.error('请输入社会统一信用代码！')
-                      return
-                    }
-                    if (this.props.detail.companyInfoSource !== 0 && this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
-                      APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
-                      return
-                    }
-                  }
-                  this.setState({
-                    disabled: !this.state.disabled
-                  }, () => {
-                    this.save()
-                  })
-                }, () => {
-                  if (!this.state.disabled) {
-                    APP.error('请检查输入项')
-                  }
-                })
-              }}
-            />
-          )}
+      <div style={{ width: '800px'}}>
+        <span
+          className={styles['colse-icon']}
+          onClick={() => this.props.onClose()}
         >
-          <BusinessInfo
-            getWrappedInstance={(ref) => {
-              this.businessInfo = ref
-            }}
-            disabled={this.state.disabled}
-          />
-        </Card>
-        <Card
-          title='基本信息'
-        >
-          <BaseInfo
-            disabled={this.state.disabled}
-          />
-        </Card>
-        <Card
-          title='联系方式'
-          rightContent={!this.state.disabled && (
-            <AddButton
-              onClick={this.addLinkMan.bind(this)}
-            />
-          )}
-        >
-          <LinkMan
-            getWrappedInstance={(ref) => {
-              this.linkMan = ref
-            }}
-            disabled={this.state.disabled}
-          />
-        </Card>
+          <Icon type='close' theme='outlined' />
+        </span>
+        <Profile type={type} isShowAgent={true} customerName={this.props.customerName}/>
+        <Tabs defaultActiveKey={this.props.defaultKey} onChange={this.callback}>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>客户信息</span>} key='1'>
+            <Detail/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>订单信息</span>} key='2'>
+            <OrderInfo customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>工单信息</span>} key='3'>
+            <WorkList customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>相关公司</span>} key='4'>
+            <CompanyList customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>跟进小记</span>} key='5'>
+            <FlowRecord customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={<span style={{color: 'black'}}>操作记录</span>} key='6'>
+            <OperateList customerId={this.props.customerId}/>
+          </Tabs.TabPane>
+        </Tabs>
       </div>
     )
   }
 }
-export default connect((state: Reducer.State) => {
-  return state.customer
-})(Main)
+export default Main

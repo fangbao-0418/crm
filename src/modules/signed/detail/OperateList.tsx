@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Radio } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { fetchOperateList } from './api'
+import { fetchOperateList } from '../api'
 import moment from 'moment'
 const RadioGroup = Radio.Group
 export interface DetailProps {
