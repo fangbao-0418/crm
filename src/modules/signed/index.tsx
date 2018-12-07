@@ -404,7 +404,7 @@ class Main extends React.Component {
                   { value: 'customerName', label: '客户名称'},
                   { value: 'contactPerson', label: '联系人'},
                   // { value: 'customerSource', label: '客户来源'},
-                  { value: 'signSalesperson', label: '签单销售'},
+                  { value: 'signSalesperson', label: '签约人'},
                   // { value: 'contactPhone', label: '联系电话'},
                   { value: 'operatingAccouting', label: '运营会计'},
                   { value: 'areaName', label: '地区'},
