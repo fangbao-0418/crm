@@ -40,7 +40,7 @@ export default class extends React.Component<Props> {
     title: '开始账期',
     dataIndex: 'serveTimeBegin',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
   }]
   public componentWillMount () {
