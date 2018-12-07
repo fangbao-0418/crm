@@ -122,6 +122,10 @@ class Main extends React.Component {
     width: 180,
     dataIndex: 'area'
   }, {
+    title: '签约人',
+    width: 180,
+    dataIndex: 'signSalesperson'
+  }, {
     title: '跟进人',
     width: 180,
     dataIndex: 'currentSalesperson'
