@@ -208,12 +208,10 @@ class Main extends React.Component<{}, State> {
 
   public fetchList () {
     getTrailRank(this.payload).then((res: any) => {
-      console.log(res.data.reportTrackCustomerByDate, 'char')
-      console.log(res.data.reportByTrackCustomerSource, 'pi')
       this.setState({
         dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
         char: res.data.reportTrackCustomerByDate,
-        pi: res.data.reportByTrackCustomerSource
+        pi: res.data.reportCustomerSource
       })
     })
   }
@@ -293,10 +291,10 @@ class Main extends React.Component<{}, State> {
         </div>
         <div style={{marginTop: 10}}>
           <Row>
-            <Col span={16}>
+            <Col span={15}>
               <Line char={this.state.char}/>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Pie pi={this.state.pi}/>
             </Col>
           </Row>

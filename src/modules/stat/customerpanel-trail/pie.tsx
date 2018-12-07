@@ -12,10 +12,10 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    const data = pi.length > 0 && pi.map((item: any) => {
+    const data = pi && pi.length > 0 && pi.map((item: any) => {
       return {
-        value: item.CustomerSourceNums,
-        name: item.CustomerSourceName
+        value: item.customerSourceNums,
+        name: item.customerSourceName
       }
     })
     const option = {
