@@ -121,19 +121,19 @@ class Main extends React.Component<Props> {
             getWrappedInstance={(ref) => {
               this.businessInfo = ref
             }}
-            disabled={this.state.disabled}
+            disabled={!APP.hasPermission('crm_sign_myself_detail_business_save') || this.state.disabled}
           />
         </Card>
         <Card
           title='基本信息'
         >
           <BaseInfo
-            disabled={this.state.disabled}
+            disabled={!APP.hasPermission('crm_sign_myself_detail_baseinfo_save') || this.state.disabled}
           />
         </Card>
         <Card
           title='联系方式'
-          rightContent={!this.state.disabled && (
+          rightContent={(APP.hasPermission('crm_sign_myself_detail_contact_save') && !this.state.disabled) && (
             <AddButton
               onClick={this.addLinkMan.bind(this)}
             />
@@ -143,7 +143,7 @@ class Main extends React.Component<Props> {
             getWrappedInstance={(ref) => {
               this.linkMan = ref
             }}
-            disabled={this.state.disabled}
+            disabled={!APP.hasPermission('crm_sign_myself_detail_contact_save') || this.state.disabled}
           />
         </Card>
       </div>

@@ -25,7 +25,7 @@ class Main extends React.Component<Props> {
         {this.props.icon ? (
           this.props.icon
         ) : (
-          <span className={styles['add-icon']}></span>
+          <APP.Icon type='add' />
         )}
         <span className={styles.text}>{this.props.title}</span>
       </div>

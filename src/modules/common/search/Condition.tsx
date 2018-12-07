@@ -11,6 +11,7 @@ export interface ConditionOptionProps {
   field: string
   value?: string
   type?: 'date' | 'select' | 'month'
+  placeholder?: string | [string, string]
 }
 interface ValueProps {
   [field: string]: {label: string, value: string}
@@ -82,11 +83,15 @@ class Main extends React.Component<Props> {
       node = (
         <div className={styles.after}>
           <RangePicker
+            placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
             size='small'
             format={'YYYY-MM-DD'}
             onChange={(current) => {
-              // console.log(current)
-              item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
+              if (current.length === 2) {
+                item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
+              } else {
+                item.value = item.options[0].value
+              }
               this.handleChange(index, item.value)
             }}
           />
@@ -97,11 +102,17 @@ class Main extends React.Component<Props> {
       node = (
         <div className={styles.after}>
           <RangePicker
+            placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
             size='small'
             format={'YYYY-MM'}
             onChange={(current) => {
               console.log(current)
-              item.value = [current[0].format('YYYY-MM'), current[1].format('YYYY-MM')].join('至')
+              if (current.length === 2) {
+                item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
+              } else {
+                item.value = item.options[0].value
+              }
+              // item.value = [current[0].format('YYYY-MM'), current[1].format('YYYY-MM')].join('至')
               this.handleChange(index, item.value)
             }}
           />

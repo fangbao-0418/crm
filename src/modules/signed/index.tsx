@@ -72,6 +72,7 @@ class Main extends React.Component {
     {
       field: 'serviceExpire',
       label: ['即将到期'],
+      placeholder: ['开始账期', '结束账期'],
       options: [
         {
           label: '全部',

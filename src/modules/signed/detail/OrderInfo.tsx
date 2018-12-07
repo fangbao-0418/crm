@@ -103,10 +103,10 @@ class Main extends React.Component<Props> {
                     <label>状态：</label>
                     <span>{stat[item.status]}</span>
                   </div>
-                  <div className={styles.col}>
+                  {/* <div className={styles.col}>
                     <label>服务账期：</label>
                     <span>{item.startDate}-{item.endDate}</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className={styles.marg}>
                   {
