@@ -75,29 +75,86 @@ declare namespace CrmStat {
   }
   // 工作仪表盘
   export interface SalesRankItemProps {
+    /** 呼出量 */
+    callOutTotalNums: number
+    /** 通话量 */
+    callTotalNums: number
+    /** 接通量 */
+    callSuccessNums: number
+    /** 接通时长 */
+    totalCallDuration: number
+    /** 接通率 */
+    averageCallSuccessPercent: number
+    /**销售排名 */
+    callDetailInfos: CrmStat.CallDetailInfos[]
+    /**客户趋势图 */
+    ReportByDays: CrmStat.ReportByDays
+  }
+  export interface CallDetailInfos {
+    key: number
     /** 销售组名称 */
     salespersonName: string
     /** 呼入量 */
-    callInTotalNums: string
+    callInTotalNums: number
     /** 呼出量 */
-    callOutTotalNums: string
-    /** 通话量 */
-    callTotalNums: string
+    callOutTotalNums: number
     /** 接通量 */
-    callSuccessNums: string
+    callSuccessNums: number
     /** 接通时长 */
-    totalCallDuration: string
-    /** 接通率 */
-    averageCallSuccessPercent: string
+    totalCallDuration: number
     /** 小于等于30秒接通量 */
-    callSuccessLte30SecondNums: string
+    callSuccessLte30SecondNums: number
     /** 小于等于60秒接通量 */
-    callSuccessLte60SecondNums: string
+    callSuccessLte60SecondNums: number
     /** 大于60秒接通量 */
-    callSuccessGt60SecondNums: string
-    /**销售排名 */
-    callDetailInfos: string
-    /**客户趋势图 */
-    ReportByDays: string
+    callSuccessGt60SecondNums: number
+  }
+  export interface ReportByDays {
+    /** 通话量 */
+    callTotalNums: number
+    /** 接通量 */
+    callSuccessNums: number
+    /** 日期 */
+    totalDate: string
+  }
+  /** 客户仪表盘 */
+  export interface CustomerTrailItemProps {
+    /** 跟进客户的每日趋势图 */
+    reportTrackCustomerByDate: CrmStat.ReportTrackCustomerByDate,
+    /** 跟进的客户分布图 */
+    reportCustomerSource: CrmStat.ReportCustomerSource
+    /** 销售排名 */
+    salesDetails: CrmStat.SalesDetails[]
+  }
+  export interface ReportTrackCustomerByDate {
+    /** 日期 */
+    totalDate: string
+    /** 统计数量 */
+    customerNums: number
+  }
+  export interface ReportCustomerSource {
+    /** 来源 */
+    customerSourceName: string
+    /** 统计数量 */
+    customerSourceNums: number
+  }
+  export interface SalesDetails {
+    key: number
+    /** 销售名称 */
+    salesperson: string
+    /** 跟进数 */
+    trackContactNums: number
+    /** 30%客户 */
+    percentThirtyCustomerNums: number
+    /** 60%客户 */
+    percentSixtyCustomerNums: number
+    /** 80%客户 */
+    percentEightyCustomerNums: number
+    /** 100客户 */
+    percentHundredCustomerNums: number,
+    /** 新增客资数 */
+    newCustomerNums: number
+    /** 签约客户数 */
+    signCustomerNums: number
   }
 }

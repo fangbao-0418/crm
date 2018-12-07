@@ -11,26 +11,27 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const data = [
-      {value: 1, name: '官网'},
-      {value: 2, name: 'app'},
-      {value: 3, name: '公司分配'},
-      {value: 4, name: '开发'},
-      {value: 5, name: '其他'},
-      {value: 6, name: '其他颜色'}
-    ]
-    data.map((item) => {
-      item.name = `${item.name}: ${item.value}`
+    const pi = this.props.pi
+    const data = pi.length > 0 && pi.map((item: any) => {
+      return {
+        value: item.CustomerSourceNums,
+        name: item.CustomerSourceName
+      }
     })
     const option = {
       title: {
-        text: '客户来源分布'
+        left: '80',
+        text: '客户来源分布',
+        textStyle: {
+          fontSize: 16
+        }
       },
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} ({d}%)'
       },
       legend: {
+        type: 'scroll',
         orient: 'vertical',
         x: 'right'
       },
@@ -58,6 +59,10 @@ class Main extends React.Component<any> {
               show: true
             }
           },
+          itemStyle: {
+            borderWidth: 3,
+            borderColor: '#fff'
+          },
           data
         }
       ]
@@ -68,8 +73,8 @@ class Main extends React.Component<any> {
   }
   public render () {
     return (
-      <div style={{float: 'left'}}>
-        <div ref='line' style={{height: '350px', width: 450, marginBottom:'10px'}}></div>
+      <div>
+        <div ref='line' style={{height: '250px', width: 400, marginBottom:'10px'}}></div>
       </div>
     )
   }

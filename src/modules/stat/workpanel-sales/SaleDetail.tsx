@@ -15,13 +15,15 @@ export interface PayloadProps {
 }
 
 interface State {
-  dataSource: CrmStat.SalesRankItemProps[]
+  dataSource: CrmStat.CallDetailInfos[]
   firms: Array<{id: string, name: string}>
   sallers: Array<{id: string, name: string}>
   organ: string
   sale: string
+  sal: string
   strip: any
   char: any
+  extshow: boolean
 }
 
 interface ValueProps {
@@ -46,8 +48,10 @@ class Main extends React.Component<{}, State> {
     sallers: [],
     organ: '',
     sale: '',
+    sal: '',
     strip: {},
-    char: []
+    char: [],
+    extshow: false
   }
 
   public condition: ConditionOptionProps[] = [
@@ -72,38 +76,82 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public columns: ColumnProps<CrmStat.SalesRankItemProps>[] = [
+  public columns: ColumnProps<CrmStat.CallDetailInfos>[] = [
     {
       title: '销售',
-      dataIndex: 'callDetailInfos.salespersonName'
+      dataIndex: 'callDetailInfos.salespersonName',
+      align: 'center',
+      render: (text, record) => {
+        return (
+          <span>
+            <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
+            <span>{record.salespersonName}</span>
+          </span>
+        )
+      }
     },
     {
       title: '通话量',
-      dataIndex: 'callTotalNums'
+      dataIndex: 'callTotalNums',
+      render: (text, record) => {
+        return (
+          record.callInTotalNums + record.callOutTotalNums
+        )
+      }
     },
     {
       title: '接通量',
-      dataIndex: 'callDetailInfos.callSuccessNums'
+      dataIndex: 'callDetailInfos.callSuccessNums',
+      render: (text, record) => {
+        return (
+          record.callSuccessNums
+        )
+      }
     },
     {
       title: '接通率',
-      dataIndex: 'averageCallSuccessPercent'
+      dataIndex: 'averageCallSuccessPercent',
+      render: (text, record) => {
+        return (
+          record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)
+        )
+      }
     },
     {
       title: '通话时长',
-      dataIndex: 'callDetailInfos.totalCallDuration'
+      dataIndex: 'callDetailInfos.totalCallDuration',
+      render: (text, record) => {
+        return (
+          record.totalCallDuration
+        )
+      }
     },
     {
       title: '30s接通量',
-      dataIndex: 'callDetailInfos.callSuccessLte30SecondNums'
+      dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
+      render: (text, record) => {
+        return (
+          record.callSuccessLte30SecondNums
+        )
+      }
     },
     {
       title: '60s接通量',
-      dataIndex: 'callDetailInfos.callSuccessLte60SecondNums'
+      dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
+      render: (text, record) => {
+        return (
+          record.callSuccessLte60SecondNums
+        )
+      }
     },
     {
       title: '60s以上接通量',
-      dataIndex: 'callDetailInfos.callSuccessGt60SecondNums'
+      dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
+      render: (text, record) => {
+        return (
+          record.callSuccessGt60SecondNums
+        )
+      }
     }
   ]
 
@@ -116,23 +164,29 @@ class Main extends React.Component<{}, State> {
       this.setState({
         firms: res,
         organ: res[0].id
+      }, () => {
+        this.getSales(res[0].id)
       }
-      // , () => {
-      //   this.getSales(res[0].id)
-      // }
       )
     })
   }
 
   public getSales (companyId: string) {
     getSalesByCompany(companyId).then((res) => {
-      console.log(res, '1111111111哈哈哈啊哈哈哈哈哈')
-      // const sale = res.length > 0 ? res[0].id : ''
+      const sales = res.map((item: any) => {
+        return item.id
+      })
+      const sal = ''
+      const sale = res.length > 0 ? sales.join(',') : ''
+      this.payload.salespersonId = sale
       this.setState({
-        sallers: res
-        // sale: res[0].id
+        sallers: res,
+        sale,
+        sal
       }, () => {
-        this.fetchList()
+        if (sales.length > 0) {
+          this.fetchList()
+        }
       })
     })
   }
@@ -140,9 +194,9 @@ class Main extends React.Component<{}, State> {
   public fetchList () {
     return getSalesRank(this.payload).then((res: any) => {
       this.setState({
-        dataSource: res.data.callDetailInfos,
+        dataSource: res.data.callDetailInfos.map((v: any, i: any) => {v.key = i + 1; return v}),
         strip: res.data,
-        char: res.reportByDays
+        char: res.data.reportByDays
       })
     })
   }
@@ -163,7 +217,15 @@ class Main extends React.Component<{}, State> {
   }
 
   // 导出
-  public export () {
+  public export (exports: any) {
+    window.open(`http://192.168.170.30:9008/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+  }
+
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
   }
   public render () {
     const {firms, dataSource, strip, char } = this.state
@@ -174,8 +236,16 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-
         <div>
+          <img
+            src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
+            style={{cursor: 'pointer', float: 'right', marginTop: -5}}
+            width='14'
+            height='14'
+            onClick={this.handleSwitch.bind(this)}
+          />
+        </div>
+        <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -187,24 +257,26 @@ class Main extends React.Component<{}, State> {
               this.setState({organ: value})
             }}
           >
-          {
+            {
               this.state.firms.length > 0 &&
               this.state.firms.map((item) => {
-                const name = item.name
                 return (
                   <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                 )
               })
-          }
+            }
           </Select>
           <Select
-            // value={this.state.sale}
+            value={this.state.sal}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择销售'
             onChange={(value: string) => {
               this.payload.salespersonId = value
-              // this.setState({sale: value})
+              this.setState({
+                sal: value,
+                dataSource: []
+              })
               this.fetchList()
             }}
           >
@@ -222,48 +294,49 @@ class Main extends React.Component<{}, State> {
           <div className={styles.con}>
             <div className={styles.small}>通话量</div>
             <div className={styles.big}>{strip.callTotalNums}</div>
-            <div className={styles.small}>
+            {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div>
+            </div> */}
           </div>
           <div className={styles.con}>
             <div className={styles.small}>呼出量</div>
             <div className={styles.big}>{strip.callOutTotalNums}</div>
-            <div className={styles.small}>
+            {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div>
+            </div> */}
           </div>
           <div className={styles.con}>
             <div className={styles.small}>接通量</div>
             <div className={styles.big}>{strip.callSuccessNums}</div>
-            <div className={styles.small}>
+            {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div>
+            </div> */}
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话率</div>
             <div className={styles.big}>{strip.averageCallSuccessPercent}</div>
-            <div className={styles.small}>
+            {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div>
+            </div> */}
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话时长</div>
             <div className={styles.big}>{strip.totalCallDuration}</div>
-            <div className={styles.small}>
+            {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div>
+            </div> */}
           </div>
         </div>
 
         <div style={{marginTop: 20}}>
           <Line char={char}/>
         </div>
+
         <div>
           <span>排名</span>
           <AddButton
@@ -271,10 +344,11 @@ class Main extends React.Component<{}, State> {
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
             title='导出'
             onClick={() => {
-              this.export()
+              this.export(this.payload)
             }}
           />
         </div>
+
         <div>
           <Table
             columns={this.columns}

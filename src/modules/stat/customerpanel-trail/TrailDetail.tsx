@@ -1,12 +1,13 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Icon, Table } from 'antd'
+import { Select, Row, Col, Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getSalesByCompany, getTrailRank } from '@/modules/stat/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './line'
 import Pie from './pie'
 import AddButton from '@/modules/common/content/AddButton'
+const styles = require('./style')
 
 export interface PayloadProps {
   totalBeginDate: string
@@ -15,11 +16,15 @@ export interface PayloadProps {
 }
 
 interface State {
-  dataSource: CrmStat.SalesRankItemProps[]
+  dataSource: CrmStat.SalesDetails[]
   firms: Array<{id: string, name: string}>
   sallers: Array<{id: string, name: string}>
   organ: string
   sale: string
+  sal: string
+  char: any
+  pi: any
+  extshow: boolean
 }
 
 interface ValueProps {
@@ -44,7 +49,11 @@ class Main extends React.Component<{}, State> {
     firms: [],
     sallers: [],
     organ: '',
-    sale: ''
+    sale: '',
+    sal: '',
+    char: [],
+    pi: [],
+    extshow: false
   }
   public condition: ConditionOptionProps[] = [
     {
@@ -68,58 +77,82 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public columns: ColumnProps<CrmStat.SalesRankItemProps>[] = [
+  public columns: ColumnProps<CrmStat.SalesDetails>[] = [
     {
       title: '销售',
-      dataIndex: 'callDetailInfos.salespersonName'
+      dataIndex: 'salesDetails.salesperson',
+      align: 'center',
+      render: (text, record) => {
+        return (
+          <span>
+            <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
+            <span>{record.salesperson}</span>
+            </span>
+        )
+      }
     },
     {
       title: '跟进客户',
-      dataIndex: 'ReportByDays.callTotalNums',
+      dataIndex: 'salesDetails.trackContactNums',
       render : (text, record) => {
         return (
-          record.callTotalNums
+          record.trackContactNums
         )
       }
     },
     {
       title: '30%意向度',
-      dataIndex: 'ReportByDays.callSuccessNums',
+      dataIndex: 'salesDetails.percentThirtyCustomerNums',
       render : (text, record) => {
         return (
-          record.callSuccessNums
+          record.percentThirtyCustomerNums
         )
       }
     },
     {
       title: '60%意向度',
-      dataIndex: 'averageCallSuccessPercent',
+      dataIndex: 'salesDetails.percentSixtyCustomerNums',
       render : (text, record) => {
         return (
-          record.averageCallSuccessPercent
+          record.percentSixtyCustomerNums
         )
       }
     },
     {
       title: '80%意向度',
-      dataIndex: 'callDetailInfos.totalCallDuration',
+      dataIndex: 'salesDetails.percentEightyCustomerNums',
       render : (text, record) => {
         return (
-          record.totalCallDuration
+          record.percentEightyCustomerNums
         )
       }
     },
     {
       title: '100%意向度',
-      dataIndex: 'callDetailInfos.callSuccessLte30SecondNums'
+      dataIndex: 'salesDetails.percentHundredCustomerNums',
+      render : (text, record) => {
+        return (
+          record.percentHundredCustomerNums
+        )
+      }
     },
     {
       title: '新签客户',
-      dataIndex: 'callDetailInfos.callSuccessLte60SecondNums'
+      dataIndex: 'salesDetails.newCustomerNums',
+      render : (text, record) => {
+        return (
+          record.newCustomerNums
+        )
+      }
     },
     {
       title: '转换率',
-      dataIndex: 'callDetailInfos.callSuccessGt60SecondNums'
+      dataIndex: 'salesDetails.signCustomerNums',
+      render : (text, record) => {
+        return (
+          record.signCustomerNums
+        )
+      }
     }
   ]
 
@@ -155,23 +188,46 @@ class Main extends React.Component<{}, State> {
 
   public getSales (companyId: string) {
     getSalesByCompany(companyId).then((res) => {
-      const sale = res.length > 0 ? res[0].id : ''
+      const sales = res.map((item: any) => {
+        return item.id
+      })
+      const sale = sales.join(',')
+      this.payload.salespersonId = sale
+      const sal = ''
       this.setState({
         sallers: res,
-        sale
+        sale,
+        sal
+      }, () => {
+        if (sales.length > 0) {
+          this.fetchList()
+        }
       })
     })
   }
 
   public fetchList () {
     getTrailRank(this.payload).then((res: any) => {
+      console.log(res.data.reportTrackCustomerByDate, 'char')
+      console.log(res.data.reportByTrackCustomerSource, 'pi')
       this.setState({
-        dataSource: res.data
+        dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
+        char: res.data.reportTrackCustomerByDate,
+        pi: res.data.reportByTrackCustomerSource
       })
     })
   }
 
-  public export () {}
+  public export (exports: any) {
+    window.open(`http://192.168.170.30:9008/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+  }
+
+  // 搜索框折叠
+  public handleSwitch () {
+    this.setState({
+      extshow: !this.state.extshow
+    })
+  }
   public render () {
     return (
       <div>
@@ -180,8 +236,16 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-
         <div>
+          <img
+            src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
+            style={{cursor: 'pointer', float: 'right'}}
+            width='14'
+            height='14'
+            onClick={this.handleSwitch.bind(this)}
+          />
+        </div>
+        <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -205,7 +269,7 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
-            value={this.state.sale}
+            value={this.state.sal}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择销售'
@@ -213,7 +277,8 @@ class Main extends React.Component<{}, State> {
               this.payload.salespersonId = value
               this.fetchList()
               this.setState({
-                sale: value
+                sal: value,
+                dataSource: []
               })
             }}
           >
@@ -226,9 +291,15 @@ class Main extends React.Component<{}, State> {
           }
           </Select>
         </div>
-        <div style={{overflow: 'hidden', marginTop: 10}}>
-          <Line />
-          <Pie />
+        <div style={{marginTop: 10}}>
+          <Row>
+            <Col span={16}>
+              <Line char={this.state.char}/>
+            </Col>
+            <Col span={8}>
+              <Pie pi={this.state.pi}/>
+            </Col>
+          </Row>
         </div>
         <div>
           <span>销售明细表</span>
@@ -237,7 +308,7 @@ class Main extends React.Component<{}, State> {
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
             title='导出'
             onClick={() => {
-              this.export()
+              this.export(this.payload)
             }}
           />
         </div>

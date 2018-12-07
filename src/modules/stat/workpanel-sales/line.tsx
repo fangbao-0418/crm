@@ -12,10 +12,12 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const char = this.props.char
-    // const month = new Date().getMonth()
     const option: echarts.EChartOption = {
       title: {
-        text: '新增客户趋势图'
+        text: '每日呼叫趋势图',
+        textStyle: {
+          fontSize: 16
+        }
       },
       tooltip: {
         show: true,
@@ -26,21 +28,20 @@ class Main extends React.Component<any> {
             backgroundColor: '#6a7985'
           }
         }
-        // 划入提示的文字自定义
-        // formatter: (params: any) => {
-        //   const index = params[0].dataIndex
-        //   const rate = Math.round((data[index].completeCount / (data[index].total || 1)) * 100)
-        //   return `已完成: ${params[0].value}<br>完成率: ${rate}%`
-        // }
       },
       legend: {
         data:['通话量', '接通量']
       },
+      grid: {
+        left: '3%',
+        right: '6%'
+      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        // data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        data: char.totalDate
+        data: char.map((item: any) => {
+          return item.totalDate
+        })
       },
       yAxis: {
         type: 'value'
@@ -48,9 +49,9 @@ class Main extends React.Component<any> {
       series: [{
         name: '通话量',
         type: 'line',
-        stack: '总量',
-        // data: [1, 40, 20, 40, 10, 70],
-        data: char.callTotalNums,
+        data: char.map((item: any) => {
+          return item.callTotalNums
+        }),
         itemStyle: {
           color: '#FAD440'
         },
@@ -62,9 +63,13 @@ class Main extends React.Component<any> {
             x2: 0,
             y2: 1,
             colorStops: [{
-              offset: 0, color: '#DCDCDC ' // 0% 处的颜色
+              offset: 0, color: 'rgba(251,211,55,0.4)' // 0% 处的颜色
             }, {
-              offset: 1, color: 'rgba(251,211,55,0.3)' // 100% 处的颜色
+              offset: 0.4, color: 'rgba(251,211,55,0.3)'
+            }, {
+              offset: 0.6, color: 'rgba(251,211,55,0.2)'
+            }, {
+              offset: 1, color: 'rgba(251,211,55,0.1)' // 100% 处的颜色
             }],
             globalCoord: false // 缺省为 false
           }
@@ -72,9 +77,9 @@ class Main extends React.Component<any> {
       }, {
         name: '接通量',
         type: 'line',
-        stack: '总量',
-        // data: [5, 20, 36, 10, 10, 20],
-        data: char.callSuccessNums,
+        data: char.map((item: any) => {
+          return item.callSuccessNums
+        }),
         itemStyle: {
           color: '#4ECB73'
         },
@@ -86,9 +91,13 @@ class Main extends React.Component<any> {
             x2: 0,
             y2: 1,
             colorStops: [{
-              offset: 0, color: '#DCDCDC ' // 0% 处的颜色
+              offset: 0, color: 'rgba(251,211,55,0.4)' // 0% 处的颜色
             }, {
-              offset: 1, color: 'rgba(251,211,55,0.3  )' // 100% 处的颜色
+              offset: 0.4, color: 'rgba(251,211,55,0.3)'
+            }, {
+              offset: 0.6, color: 'rgba(251,211,55,0.2)'
+            }, {
+              offset: 1, color: 'rgba(251,211,55,0.1)' // 100% 处的颜色
             }],
             globalCoord: false // 缺省为 false
           }
@@ -102,7 +111,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '350px', marginBottom:'10px'}}></div>
+        <div ref='line' style={{height: '300px', marginBottom:'10px'}}></div>
       </div>
     )
   }
