@@ -35,7 +35,7 @@ class Main extends React.Component<Props> {
                 </span>
                 <span>
                   {/* 所属机构过滤 */}
-                  {this.props.detail.lastReleaseSalesperson ? '(' + APP.user.companyName + ')' : ''}
+                  {this.props.detail.lastReleaseSalesperson ? '(' + this.props.detail.agencyName + ')' : ''}
                 </span>
               </span>
             }
@@ -48,7 +48,7 @@ class Main extends React.Component<Props> {
                 </span>
                 <span>
                   {/* 所属机构过滤 */}
-                  {this.props.detail.currentSalesperson ? '(' + APP.user.companyName + ')' : ''}
+                  {this.props.detail.currentSalesperson ? '(' + this.props.detail.agencyName + ')' : ''}
                 </span>
                </span>
             }
