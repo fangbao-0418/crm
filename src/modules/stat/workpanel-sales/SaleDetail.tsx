@@ -80,7 +80,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '销售',
       dataIndex: 'callDetailInfos.salespersonName',
-      align: 'center',
+      align: 'left',
       render: (text, record) => {
         return (
           <span>
@@ -353,6 +353,7 @@ class Main extends React.Component<{}, State> {
           <Table
             columns={this.columns}
             dataSource={dataSource}
+            pagination={false}
           />
         </div>
       </div>
