@@ -63,7 +63,7 @@ class Main extends React.Component<null, States> {
               <Region onChange={this.handleRegionChange.bind(this)} />
             </span>
             <span style={tab === '2' ? {display: 'block', float: 'left'} : {display: 'none'}}>
-              <label style={{paddingLeft: 10, paddingRight: 3}}>机构</label>
+              <label style={{paddingLeft: 10, marginRight: 2}}>机构:</label>
               <Input style={{width: 160}} onChange={(e) => this.handleAgencyChange(e.target.value)}/>
             </span>
           </div>

@@ -24,10 +24,10 @@ export const fetchSpecialListAction = (cb?: (res: CustomerSet.SpecialAssetsProps
   fetchSpecialList().then((res: any[]) => {
     res.map((item, index) => {
       item.key = index
+      item.oldSourceId = item.sourceId
     })
     const spicalAssetsList = res
     if (cb) {
-      console.log(spicalAssetsList, 'caocaocao')
       cb(spicalAssetsList)
     }
     APP.dispatch<CustomerSet.Props>({

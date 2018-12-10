@@ -107,6 +107,7 @@ class Main extends React.Component<Customer.Props, State> {
                 key += 1
                 spicalAssetsList.push({
                   key,
+                  disabled: false,
                   salesperson: []
                 })
                 APP.dispatch({

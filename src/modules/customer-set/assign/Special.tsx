@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { connect } from 'react-redux'
 import { saveSpecialCapacity, deleteSpecialCapacity } from '../api'
 import { fetchSpecialListAction } from '../actions'
+import _ from 'lodash'
 const Option = Select.Option
 interface Props extends Customer.Props {
   disabled?: boolean
@@ -102,6 +103,10 @@ class Main extends React.Component<Props, State> {
               className='href mr5'
               onClick={() => {
                 spicalAssetsList[index].disabled = !disabled
+                if (!disabled && spicalAssetsList[index].salesperson.length === 0) {
+                  APP.error('请分配销售')
+                  return
+                }
                 APP.dispatch({
                   type: 'change customer data',
                   payload: {
@@ -119,7 +124,17 @@ class Main extends React.Component<Props, State> {
               className='href'
               onClick={() => {
                 const { sourceList } = this.state
-                if (record.sourceId) {
+                if (record.sourceId === undefined) {
+                  spicalAssetsList.splice(index, 1)
+                  APP.dispatch({
+                    type: 'change customer data',
+                    payload: {
+                      spicalAssetsList
+                    }
+                  })
+                  return
+                }
+                deleteSpecialCapacity(record.sourceId).then(() => {
                   sourceList.push({
                     label: record.sourceName,
                     value: record.sourceId
@@ -127,16 +142,13 @@ class Main extends React.Component<Props, State> {
                   this.setState({
                     sourceList
                   })
-                  deleteSpecialCapacity(record.sourceId).then(() => {
+                  spicalAssetsList.splice(index, 1)
+                  APP.dispatch({
+                    type: 'change customer data',
+                    payload: {
+                      spicalAssetsList
+                    }
                   })
-                }
-                spicalAssetsList.splice(index, 1)
-                console.log(spicalAssetsList, 'spicalAssetsList')
-                APP.dispatch({
-                  type: 'change customer data',
-                  payload: {
-                    spicalAssetsList
-                  }
                 })
               }}
             >
@@ -151,11 +163,9 @@ class Main extends React.Component<Props, State> {
     fetchSpecialListAction((res) => {
       const sourceList = this.sourceList.filter((item) => {
         return res.findIndex((item2) => {
-          console.log(item2.sourceId, item.value, 'sssss')
           return String(item2.sourceId) === String(item.value)
         }) === -1
       })
-      console.log(res, sourceList, 'sourceList')
       this.setState({
         sourceList
       })
@@ -184,10 +194,18 @@ class Main extends React.Component<Props, State> {
     return [{key: sourceName ? String(sourceName) : '', label: sourceName}]
   }
   public onSave (index: number) {
-    const params = this.props.spicalAssetsList[index]
+    const spicalAssetsList = this.props.spicalAssetsList
+    const params = _.cloneDeep(spicalAssetsList[index])
     delete params.disabled
     delete params.key
     saveSpecialCapacity(params).then(() => {
+      spicalAssetsList[index].oldSourceId = params.sourceId
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          spicalAssetsList
+        }
+      })
       APP.success('操作成功')
     })
   }
@@ -197,6 +215,7 @@ class Main extends React.Component<Props, State> {
         rowKey='key'
         dataSource={this.props.spicalAssetsList}
         columns={this.columns}
+        pagination={false}
       />
     )
   }

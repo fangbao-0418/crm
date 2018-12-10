@@ -96,7 +96,7 @@ class Main extends React.Component<Props> {
     console.log(this.state.cityList, 'render')
     return (
       <div className={styles.region}>
-        <label>省份</label>
+        <label>省份:</label>
         <Select
           showSearch
           className='mr10'
@@ -125,7 +125,7 @@ class Main extends React.Component<Props> {
             })
           }
         </Select>
-        <label>城市</label>
+        <label>城市:</label>
         <Select
           mode='multiple'
           labelInValue
