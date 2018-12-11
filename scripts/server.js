@@ -17,6 +17,12 @@ const options = {
         '^/sys/crm-manage/v1': '/v1'
       }
     },
+    // '/sys/user': {
+    //   target: 'http://192.168.170.30:9011',
+    //   pathRewrite: {
+    //     '^/sys/user/v1': '/v1'
+    //   }
+    // },
     '/sys': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,

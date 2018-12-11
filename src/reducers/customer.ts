@@ -24,7 +24,8 @@ const defaultVal: Customer.Props = {
   /** 特殊资源列表 */
   spicalAssetsList: [],
   trackRecords: [],
-  clueRecords: []
+  clueRecords: [],
+  callRecords: []
 }
 function customizer (objValue: any, srcValue: any) {
   if (_.isArray(objValue)) {

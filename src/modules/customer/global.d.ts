@@ -110,6 +110,13 @@ declare namespace Customer {
     tagFollowUpClassification?: number
     /** 预约时间 */
     appointTime?: string
+    telephone?: string
+    callTimeBeginDate: string
+    callDuration?: number
+    callType?: number
+    callConnectStatus?: number
+    mediaUrl?: string
+    phoneAddress?: string
   }
   export interface TianYanDataProps {
     apiName: string
@@ -128,5 +135,7 @@ declare namespace Customer {
     trackRecords?: TrackRecord[]
     /** 线索记录 */
     clueRecords?: TrackRecord[]
+    /** 通话记录 */
+    callRecords?: TrackRecord[]
   }
 }
