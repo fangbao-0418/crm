@@ -218,7 +218,7 @@ class Main extends React.Component<{}, State> {
 
   // 导出
   public export (exports: any) {
-    window.open(`http://192.168.170.30:9008/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
   }
 
   // 搜索框折叠
