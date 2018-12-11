@@ -22,12 +22,14 @@ class Main extends React.Component<Props> {
           }
         }}
       >
-        {this.props.icon ? (
-          this.props.icon
-        ) : (
-          <APP.Icon type='add' />
-        )}
-        <span className={styles.text}>{this.props.title}</span>
+        <div>
+          {this.props.icon ? (
+            this.props.icon
+          ) : (
+            <APP.Icon type='add' />
+          )}
+          <span className={styles.text}>{this.props.title}</span>
+        </div>
       </div>
     )
   }
