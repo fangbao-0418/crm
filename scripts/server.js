@@ -11,12 +11,12 @@ const options = {
     errors: true
   },
   proxy: {
-    '/sys/crm-manage': {
-      target: 'http://192.168.170.30:9008',
-      pathRewrite: {
-        '^/sys/crm-manage/v1': '/v1'
-      }
-    },
+    // '/sys/crm-manage': {
+    //   target: 'http://192.168.170.30:9008',
+    //   pathRewrite: {
+    //     '^/sys/crm-manage/v1': '/v1'
+    //   }
+    // },
     // '/sys/user': {
     //   target: 'http://192.168.170.30:9011',
     //   pathRewrite: {

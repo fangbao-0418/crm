@@ -113,7 +113,7 @@ class Main extends React.Component<{}, State> {
       dataIndex: 'averageCallSuccessPercent',
       render: (text, record) => {
         return (
-          record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)
+          (Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) || 0) + '%'
         )
       }
     },
