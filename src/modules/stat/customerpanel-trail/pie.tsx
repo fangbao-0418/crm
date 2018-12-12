@@ -27,7 +27,9 @@ class Main extends React.Component<any> {
         left: '80',
         text: '客户来源分布',
         textStyle: {
-          fontSize: 16
+          fontSize: 14,
+          fontWeight: 'normal',
+          color: '#333333'
         }
       },
       tooltip: {

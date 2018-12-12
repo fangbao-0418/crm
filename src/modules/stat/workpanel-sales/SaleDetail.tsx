@@ -68,10 +68,18 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '本周',
-        value: '-7'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDay() - 1
+          return '-' + D
+        })()
       }, {
         label: '本月',
-        value: '-30'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDate() - 1
+          return '-' + D
+        })()
       }]
     }
   ]
@@ -218,7 +226,28 @@ class Main extends React.Component<{}, State> {
 
   // 导出
   public export (exports: any) {
-    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    const accessToken: any = localStorage.getItem('token')
+    fetch(
+      `sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'token': accessToken,
+          'from': '4'
+        }
+      }
+    )
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.download = '排名.xlsx'
+      a.href = url
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    })
   }
 
   // 搜索框折叠
@@ -245,7 +274,7 @@ class Main extends React.Component<{}, State> {
             onClick={this.handleSwitch.bind(this)}
           />
         </div>
-        <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
+        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -337,8 +366,8 @@ class Main extends React.Component<{}, State> {
           <Line char={char}/>
         </div>
 
-        <div>
-          <span>排名</span>
+        <div style={{marginBottom: 15}}>
+          <span style={{fontSize: 14, color: '#333333'}}>排名</span>
           <AddButton
             style={{float: 'right'}}
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
@@ -354,6 +383,7 @@ class Main extends React.Component<{}, State> {
             columns={this.columns}
             dataSource={dataSource}
             pagination={false}
+            scroll={{ y: 240 }}
           />
         </div>
       </div>

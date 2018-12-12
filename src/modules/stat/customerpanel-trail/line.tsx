@@ -16,7 +16,9 @@ class Main extends React.Component<any> {
       title: {
         text: '每日趋势图',
         textStyle: {
-          fontSize: 16
+          fontSize: 14,
+          fontWeight: 'normal',
+          color: '#333333'
         }
       },
       tooltip: {
@@ -79,7 +81,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '300px',  width: 700, marginBottom:'10px'}}></div>
+        <div ref='line' style={{height: '300px',  width: 850, marginBottom:'10px'}}></div>
       </div>
     )
   }

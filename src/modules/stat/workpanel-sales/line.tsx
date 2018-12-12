@@ -16,7 +16,9 @@ class Main extends React.Component<any> {
       title: {
         text: '每日呼叫趋势图',
         textStyle: {
-          fontSize: 16
+          fontSize: 14,
+          fontWeight: 'normal',
+          color: '#333333'
         }
       },
       tooltip: {

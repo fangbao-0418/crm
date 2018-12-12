@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Row, Col, Table } from 'antd'
+import { Select, Row, Col, Table, Tabs } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getSalesByCompany, getTrailRank } from '@/modules/stat/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
@@ -69,10 +69,18 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '本周',
-        value: '-7'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDay() - 1
+          return '-' + D
+        })()
       }, {
         label: '本月',
-        value: '-30'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDate() - 1
+          return '-' + D
+        })()
       }]
     }
   ]
@@ -146,7 +154,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '转换率',
+      title: '转化率',
       dataIndex: 'salesDetails.signCustomerNums',
       render : (text, record) => {
         return (
@@ -217,7 +225,28 @@ class Main extends React.Component<{}, State> {
   }
 
   public export (exports: any) {
-    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    const accessToken: any = localStorage.getItem('token')
+    fetch(
+      `sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'token': accessToken,
+          'from': '4'
+        }
+      }
+    )
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.download = '销售明细表.xlsx'
+      a.href = url
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    })
   }
 
   // 搜索框折叠
@@ -243,7 +272,7 @@ class Main extends React.Component<{}, State> {
             onClick={this.handleSwitch.bind(this)}
           />
         </div>
-        <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
+        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -289,18 +318,22 @@ class Main extends React.Component<{}, State> {
           }
           </Select>
         </div>
-        <div style={{marginTop: 10}}>
-          <Row>
-            <Col span={15}>
-              <Line char={this.state.char}/>
-            </Col>
-            <Col span={6}>
-              <Pie pi={this.state.pi}/>
-            </Col>
-          </Row>
-        </div>
         <div>
-          <span>销售明细表</span>
+        <Tabs animated={false} defaultActiveKey='1'>
+          <Tabs.TabPane tab='跟进客户' key='1'>
+            <Row>
+              <Col span={15}>
+                <Line char={this.state.char}/>
+              </Col>
+              <Col span={6}>
+                <Pie pi={this.state.pi}/>
+              </Col>
+            </Row>
+          </Tabs.TabPane>
+        </Tabs>
+        </div>
+        <div style={{marginBottom: 15}}>
+          <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
             style={{float: 'right'}}
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
@@ -315,6 +348,7 @@ class Main extends React.Component<{}, State> {
             columns={this.columns}
             dataSource={this.state.dataSource}
             pagination={false}
+            scroll={{ y: 240 }}
           />
         </div>
       </div>
