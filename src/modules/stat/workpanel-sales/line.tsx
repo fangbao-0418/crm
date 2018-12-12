@@ -41,6 +41,11 @@ class Main extends React.Component<any> {
       xAxis: {
         type: 'category',
         boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: 'rgba(30,130,190,0.7)'
+          }
+        },
         data: char.map((item: any) => {
           return item.totalDate
         })

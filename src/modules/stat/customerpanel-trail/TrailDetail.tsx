@@ -89,6 +89,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '销售',
       dataIndex: 'salesDetails.salesperson',
+      width: 130,
       align: 'left',
       render: (text, record) => {
         return (
@@ -102,6 +103,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '跟进客户',
       dataIndex: 'salesDetails.trackContactNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.trackContactNums
@@ -111,6 +113,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '30%意向度',
       dataIndex: 'salesDetails.percentThirtyCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.percentThirtyCustomerNums
@@ -120,6 +123,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '60%意向度',
       dataIndex: 'salesDetails.percentSixtyCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.percentSixtyCustomerNums
@@ -129,6 +133,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '80%意向度',
       dataIndex: 'salesDetails.percentEightyCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.percentEightyCustomerNums
@@ -138,6 +143,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '100%意向度',
       dataIndex: 'salesDetails.percentHundredCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.percentHundredCustomerNums
@@ -147,6 +153,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '新签客户',
       dataIndex: 'salesDetails.newCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.newCustomerNums
@@ -156,6 +163,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '转化率',
       dataIndex: 'salesDetails.signCustomerNums',
+      width: 130,
       render : (text, record) => {
         return (
           record.signCustomerNums

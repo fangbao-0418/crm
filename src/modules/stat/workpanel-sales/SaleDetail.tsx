@@ -89,6 +89,7 @@ class Main extends React.Component<{}, State> {
       title: '销售',
       dataIndex: 'callDetailInfos.salespersonName',
       align: 'left',
+      width: 130,
       render: (text, record) => {
         return (
           <span>
@@ -101,6 +102,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '通话量',
       dataIndex: 'callTotalNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callInTotalNums + record.callOutTotalNums
@@ -110,6 +112,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '接通量',
       dataIndex: 'callDetailInfos.callSuccessNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessNums
@@ -119,6 +122,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '接通率',
       dataIndex: 'averageCallSuccessPercent',
+      width: 130,
       render: (text, record) => {
         return (
           (Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) || 0) + '%'
@@ -128,15 +132,17 @@ class Main extends React.Component<{}, State> {
     {
       title: '通话时长',
       dataIndex: 'callDetailInfos.totalCallDuration',
+      width: 130,
       render: (text, record) => {
         return (
-          record.totalCallDuration
+          APP.fn.formatDuration(record.totalCallDuration)
         )
       }
     },
     {
-      title: '30s接通量',
+      title: '1"-30"',
       dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessLte30SecondNums
@@ -144,8 +150,9 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '60s接通量',
+      title: '30"-60"',
       dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessLte60SecondNums
@@ -153,8 +160,9 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '60s以上接通量',
+      title: '>60"',
       dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessGt60SecondNums
@@ -346,7 +354,9 @@ class Main extends React.Component<{}, State> {
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话率</div>
-            <div className={styles.big}>{strip.averageCallSuccessPercent}</div>
+            <div className={styles.big}>
+              {Math.round(strip.averageCallSuccessPercent) + '%'}
+            </div>
             {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
@@ -354,7 +364,7 @@ class Main extends React.Component<{}, State> {
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话时长</div>
-            <div className={styles.big}>{strip.totalCallDuration}</div>
+            <div className={styles.big}>{APP.fn.formatDuration(strip.totalCallDuration)}</div>
             {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
