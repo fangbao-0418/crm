@@ -1,10 +1,11 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Icon, Table } from 'antd'
+import { Select, Row, Col, Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getFirms, getSalesByCompany, getSalesRank } from '@/modules/stat/api'
+import { getFirms, getSalesByCompany, getTrailRank } from '@/modules/stat/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './line'
+import Pie from './pie'
 import AddButton from '@/modules/common/content/AddButton'
 const styles = require('./style')
 
@@ -15,14 +16,14 @@ export interface PayloadProps {
 }
 
 interface State {
-  dataSource: CrmStat.CallDetailInfos[]
+  dataSource: CrmStat.SalesDetails[]
   firms: Array<{id: string, name: string}>
   sallers: Array<{id: string, name: string}>
   organ: string
   sale: string
   sal: string
-  strip: any
   char: any
+  pi: any
   extshow: boolean
 }
 
@@ -34,6 +35,7 @@ interface ValueProps {
 class Main extends React.Component<{}, State> {
   public values: ValueProps = {
   }
+
   public SalespersonId = APP.keys.EnumSalespersonId
 
   public payload: PayloadProps = {
@@ -49,11 +51,10 @@ class Main extends React.Component<{}, State> {
     organ: '',
     sale: '',
     sal: '',
-    strip: {},
     char: [],
+    pi: [],
     extshow: false
   }
-
   public condition: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -76,130 +77,84 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public columns: ColumnProps<CrmStat.CallDetailInfos>[] = [
+  public columns: ColumnProps<CrmStat.SalesDetails>[] = [
     {
       title: '销售',
-      dataIndex: 'callDetailInfos.salespersonName',
+      dataIndex: 'salesDetails.salesperson',
       align: 'left',
       render: (text, record) => {
         return (
           <span>
             <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
-            <span>{record.salespersonName}</span>
-          </span>
+            <span>{record.salesperson}</span>
+            </span>
         )
       }
     },
     {
-      title: '通话量',
-      dataIndex: 'callTotalNums',
-      render: (text, record) => {
+      title: '跟进客户',
+      dataIndex: 'salesDetails.trackContactNums',
+      render : (text, record) => {
         return (
-          record.callInTotalNums + record.callOutTotalNums
+          record.trackContactNums
         )
       }
     },
     {
-      title: '接通量',
-      dataIndex: 'callDetailInfos.callSuccessNums',
-      render: (text, record) => {
+      title: '30%意向度',
+      dataIndex: 'salesDetails.percentThirtyCustomerNums',
+      render : (text, record) => {
         return (
-          record.callSuccessNums
+          record.percentThirtyCustomerNums
         )
       }
     },
     {
-      title: '接通率',
-      dataIndex: 'averageCallSuccessPercent',
-      render: (text, record) => {
+      title: '60%意向度',
+      dataIndex: 'salesDetails.percentSixtyCustomerNums',
+      render : (text, record) => {
         return (
-          record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)
+          record.percentSixtyCustomerNums
         )
       }
     },
     {
-      title: '通话时长',
-      dataIndex: 'callDetailInfos.totalCallDuration',
-      render: (text, record) => {
+      title: '80%意向度',
+      dataIndex: 'salesDetails.percentEightyCustomerNums',
+      render : (text, record) => {
         return (
-          record.totalCallDuration
+          record.percentEightyCustomerNums
         )
       }
     },
     {
-      title: '30s接通量',
-      dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
-      render: (text, record) => {
+      title: '100%意向度',
+      dataIndex: 'salesDetails.percentHundredCustomerNums',
+      render : (text, record) => {
         return (
-          record.callSuccessLte30SecondNums
+          record.percentHundredCustomerNums
         )
       }
     },
     {
-      title: '60s接通量',
-      dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
-      render: (text, record) => {
+      title: '新签客户',
+      dataIndex: 'salesDetails.newCustomerNums',
+      render : (text, record) => {
         return (
-          record.callSuccessLte60SecondNums
+          record.newCustomerNums
         )
       }
     },
     {
-      title: '60s以上接通量',
-      dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
-      render: (text, record) => {
+      title: '转换率',
+      dataIndex: 'salesDetails.signCustomerNums',
+      render : (text, record) => {
         return (
-          record.callSuccessGt60SecondNums
+          record.signCustomerNums
         )
       }
     }
   ]
-
-  public componentWillMount () {
-    this.getFirms()
-  }
-
-  public getFirms () {
-    getFirms().then((res) => {
-      this.setState({
-        firms: res,
-        organ: res[0].id
-      }, () => {
-        this.getSales(res[0].id)
-      }
-      )
-    })
-  }
-
-  public getSales (companyId: string) {
-    getSalesByCompany(companyId).then((res) => {
-      const sales = res.map((item: any) => {
-        return item.id
-      })
-      const sal = ''
-      const sale = res.length > 0 ? sales.join(',') : ''
-      this.payload.salespersonId = sale
-      this.setState({
-        sallers: res,
-        sale,
-        sal
-      }, () => {
-        if (sales.length > 0) {
-          this.fetchList()
-        }
-      })
-    })
-  }
-
-  public fetchList () {
-    return getSalesRank(this.payload).then((res: any) => {
-      this.setState({
-        dataSource: res.data.callDetailInfos.map((v: any, i: any) => {v.key = i + 1; return v}),
-        strip: res.data,
-        char: res.data.reportByDays
-      })
-    })
-  }
 
   public onDateChange (value: {[field: string]: {label: string, value: string}}) {
     if (value.date.value.split('至').length === 2) {
@@ -216,9 +171,53 @@ class Main extends React.Component<{}, State> {
     this.fetchList()
   }
 
-  // 导出
+  public componentWillMount () {
+    this.getFirms()
+  }
+
+  public getFirms () {
+    getFirms().then((res) => {
+      this.setState({
+        firms: res,
+        organ: res[0].id
+      }, () => {
+        this.getSales(res[0].id)
+      })
+    })
+  }
+
+  public getSales (companyId: string) {
+    getSalesByCompany(companyId).then((res) => {
+      const sales = res.map((item: any) => {
+        return item.id
+      })
+      const sale = sales.join(',')
+      this.payload.salespersonId = sale
+      const sal = ''
+      this.setState({
+        sallers: res,
+        sale,
+        sal
+      }, () => {
+        if (sales.length > 0) {
+          this.fetchList()
+        }
+      })
+    })
+  }
+
+  public fetchList () {
+    getTrailRank(this.payload).then((res: any) => {
+      this.setState({
+        dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
+        char: res.data.reportTrackCustomerByDate,
+        pi: res.data.reportCustomerSource
+      })
+    })
+  }
+
   public export (exports: any) {
-    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
   }
 
   // 搜索框折叠
@@ -228,7 +227,6 @@ class Main extends React.Component<{}, State> {
     })
   }
   public render () {
-    const {firms, dataSource, strip, char } = this.state
     return (
       <div>
         <Condition
@@ -239,7 +237,7 @@ class Main extends React.Component<{}, State> {
         <div>
           <img
             src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-            style={{cursor: 'pointer', float: 'right', marginTop: -5}}
+            style={{cursor: 'pointer', float: 'right'}}
             width='14'
             height='14'
             onClick={this.handleSwitch.bind(this)}
@@ -252,9 +250,11 @@ class Main extends React.Component<{}, State> {
             style={{width: 200}}
             placeholder='请选择机构'
             onChange={(value: string) => {
-              this.values.agencyId = value
+              // this.values.agencyId = value
               this.getSales(value)
-              this.setState({organ: value})
+              this.setState({
+                organ: value
+              })
             }}
           >
             {
@@ -273,72 +273,34 @@ class Main extends React.Component<{}, State> {
             placeholder='请选择销售'
             onChange={(value: string) => {
               this.payload.salespersonId = value
+              this.fetchList()
               this.setState({
                 sal: value,
                 dataSource: []
               })
-              this.fetchList()
             }}
           >
           {
             this.state.sallers.length > 0 && this.state.sallers.map((item) => {
               return (
-                <Select.Option key={item.id}>{item.name}</Select.Option>
+                <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
               )
             })
           }
           </Select>
         </div>
-
-        <div className={styles.pane}>
-          <div className={styles.con}>
-            <div className={styles.small}>通话量</div>
-            <div className={styles.big}>{strip.callTotalNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
-          <div className={styles.con}>
-            <div className={styles.small}>呼出量</div>
-            <div className={styles.big}>{strip.callOutTotalNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
-          <div className={styles.con}>
-            <div className={styles.small}>接通量</div>
-            <div className={styles.big}>{strip.callSuccessNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
-          <div className={styles.con}>
-            <div className={styles.small}>通话率</div>
-            <div className={styles.big}>{strip.averageCallSuccessPercent}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
-          <div className={styles.con}>
-            <div className={styles.small}>通话时长</div>
-            <div className={styles.big}>{strip.totalCallDuration}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
+        <div style={{marginTop: 10}}>
+          <Row>
+            <Col span={15}>
+              <Line char={this.state.char}/>
+            </Col>
+            <Col span={6}>
+              <Pie pi={this.state.pi}/>
+            </Col>
+          </Row>
         </div>
-
-        <div style={{marginTop: 20}}>
-          <Line char={char}/>
-        </div>
-
         <div>
-          <span>排名</span>
+          <span>销售明细表</span>
           <AddButton
             style={{float: 'right'}}
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
@@ -348,11 +310,10 @@ class Main extends React.Component<{}, State> {
             }}
           />
         </div>
-
         <div>
           <Table
             columns={this.columns}
-            dataSource={dataSource}
+            dataSource={this.state.dataSource}
             pagination={false}
           />
         </div>

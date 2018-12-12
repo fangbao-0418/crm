@@ -8,9 +8,15 @@ interface Props extends Customer.Props {
   height?: number
   type?: 'business' | 'open' | 'customer' | 'signed'
 }
+interface State {
+  img: boolean
+}
 class Main extends React.Component<Props> {
+  public state: State = {
+    img: false
+  }
   public render () {
-    const { trackRecords, clueRecords } = this.props
+    const { trackRecords, clueRecords, callRecords } = this.props
     const relatedCompany = (this.props.detail.relatedCompany || '').split(',')
     return (
       <div>
@@ -70,7 +76,52 @@ class Main extends React.Component<Props> {
             }
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='线索记录' key='2'>
+          <Tabs.TabPane tab='通话记录' key='2'>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+            {
+              trackRecords.length > 0 && trackRecords.map((item, index) => {
+                return (
+                  <div className={styles.record} key={index}>
+                    <div className={styles['line-height']} style={{color: 'black'}}>
+                      <span style={{marginRight: 10}}>{item.salesperson}</span>
+                      <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+                    </div>
+                    {
+                      callRecords.length > 0 && callRecords.map((item2, index2) => {
+                        const time = () => {
+                          const t = item2.callDuration
+                          const hours = Math.floor(t / 3600) < 10 ? '0' + Math.floor(t / 3600).toString() : Math.floor(t / 3600).toString()
+                          const minutes = Math.floor(t % 3600 / 60) < 10 ? '0' + Math.floor(t % 3600 / 60).toString() : Math.floor(t % 3600 / 60).toString()
+                          const seconds = Math.floor(t % 60) < 10 ? '0' + Math.floor(t % 60).toString() : Math.floor(t % 60).toString()
+                          return hours + ':' + minutes + ':' + seconds
+                        }
+                        return (
+                          <div key={index2}>
+                            <span>{item2.telephone}</span>
+                            <span>{item2.phoneAddress}</span>
+                            <span>
+                              ({time()})
+                            </span>
+                            <span
+                              onClick={() => {
+                                this.setState({
+                                  img: !this.state.img
+                                })
+                              }}
+                            >
+                              {item2.mediaUrl && this.state.img ? <img className='mr5' src={require('@/assets/images/record1.png')}/> : <img className='mr5' src={require('@/assets/images/record2.png')}/>}
+                            </span>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                )
+              })
+            }
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='线索记录' key='3'>
             <div style={{overflowY: 'auto', height: this.props.height }}>
               {
                 clueRecords.length > 0 && clueRecords.map((item, index) => {
@@ -127,7 +178,7 @@ class Main extends React.Component<Props> {
           </Tabs.TabPane>
           {
             ['business', 'open', 'customer'].indexOf(this.props.type) > -1 &&
-            <Tabs.TabPane tab='相关公司记录' key='3'>
+            <Tabs.TabPane tab='相关公司记录' key='4'>
               <div style={{overflowY: 'auto', maxHeight: this.props.height }} className={styles.record}>
                 {
                   relatedCompany.map((item, index) => {

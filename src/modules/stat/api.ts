@@ -30,3 +30,31 @@ export const getCallDetail = (query: {
 }) => {
   return http(`/crm-manage/v1/api/call-details`, 'GET', query)
 }
+/** 获取销售列表 */
+export const getSaller = () => {
+  return http(`/user/v1/api/user/list/company/identity/${APP.user.companyId}/sale`)
+}
+/** 根据城市获取机构列表 */
+export const getFirms = () => {
+  return http(`/user/v1/api/company/list/region/region_city/${APP.user.cityCode}`)
+}
+/** 根据机构获取销售列表 */
+export const getSalesByCompany = (companyid: string) => {
+  return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
+}
+/**工作仪表盘 */
+export const getSalesRank = (payload: {
+  totalBeginDate: string,
+  totalEndDate: string,
+  salespersonId: string,
+}) => {
+  return http(`/crm-manage/v1/api/report/sales`, 'GET', payload)
+}
+/**客户仪表盘-跟进客户 */
+export const getTrailRank = (payload: {
+  totalBeginDate: string,
+  totalEndDate: string,
+  salespersonId: string,
+}) => {
+  return http(`/crm-manage/v1/api/report/customer`, 'GET', payload)
+}

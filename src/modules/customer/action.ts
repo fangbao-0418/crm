@@ -1,4 +1,4 @@
-import { viewCustomer, fetchTrackRecords, fetchClueRecords } from './api'
+import { viewCustomer, fetchTrackRecords, fetchClueRecords, fetchCallRecords } from './api'
 /** 改变详情信息，包含基本信息、跟进记录、线索记录、相关公司记录 */
 export const changeCustomerDetailAction = (id: string) => {
   viewCustomer(id).then((res: any) => {
@@ -27,6 +27,14 @@ export const changeCustomerDetailAction = (id: string) => {
       type: 'change customer data',
       payload: {
         clueRecords: res.data
+      }
+    })
+  })
+  fetchCallRecords(id, payload).then((res) => {
+    APP.dispatch<Customer.Props>({
+      type: 'change customer data',
+      payload: {
+        callRecords: res.data
       }
     })
   })

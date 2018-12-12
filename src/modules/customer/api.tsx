@@ -92,6 +92,13 @@ export const fetchClueRecords = (id: string, payload: {
 }) => {
   return http(`/crm-manage/v1/api/clue-records/${id}`, 'GET', payload)
 }
+// 通话记录
+export const fetchCallRecords = (id: string, payload: {
+  pageNum?: number
+  pageSize?: number
+}) => {
+  return http(`/crm-manage/v1/api/call-details/${id}`, 'GET', payload)
+}
 export const allocateAuto = (payload: Array<{id: string, customerName: string, cityCode: string, customerSource: string}>
 ) => {
   return http(`/crm-manage/v1/api/customer/allocate-auto`, 'PUT', payload)

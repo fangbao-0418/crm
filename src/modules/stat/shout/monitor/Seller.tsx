@@ -35,7 +35,7 @@ class Main extends React.Component<Props, State> {
         <span>
           坐席账号
           <Tooltip title='座席账号修改、绑定请至账号管理中心设置'>
-            <i className='fa fa-info-circle ml5 ml5'></i>
+            <i className='fa fa-info-circle ml5 ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
       ),
