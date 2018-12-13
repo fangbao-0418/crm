@@ -94,7 +94,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
+            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
             <span>{record.salespersonName}</span>
           </span>
         )
@@ -195,8 +195,10 @@ class Main extends React.Component<{}, State> {
       })
       const sal = ''
       const sale = res.length > 0 ? sales.join(',') : ''
+      const dataSource = res.length > 0 ? this.state.dataSource : []
       this.payload.salespersonId = sale
       this.setState({
+        dataSource,
         sallers: res,
         sale,
         sal
@@ -305,7 +307,7 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
-            value={this.state.sal}
+            value={this.state.sal || undefined}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择销售'

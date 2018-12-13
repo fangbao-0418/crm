@@ -95,7 +95,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
+            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
             <span>{record.salesperson}</span>
             </span>
         )
@@ -305,7 +305,7 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
-            value={this.state.sal}
+            value={this.state.sal || undefined}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择销售'
