@@ -237,7 +237,7 @@ class Main extends React.Component<{}, State> {
     // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = '销售明细表.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '销售统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -345,7 +345,7 @@ class Main extends React.Component<{}, State> {
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
             style={{float: 'right'}}
-            icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
+            icon={<APP.Icon type='export' />}
             title='导出'
             onClick={() => {
               this.export(this.payload)
@@ -357,7 +357,7 @@ class Main extends React.Component<{}, State> {
             columns={this.columns}
             dataSource={this.state.dataSource}
             pagination={false}
-            scroll={{ y: 240 }}
+            scroll={{ y: 400 }}
           />
         </div>
       </div>

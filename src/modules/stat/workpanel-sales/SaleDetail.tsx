@@ -141,7 +141,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '1"-30"',
+      title: '1"- 30"',
       dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
       width: 130,
       render: (text, record) => {
@@ -151,7 +151,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '30"-60"',
+      title: '30"- 60"',
       dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
       width: 130,
       render: (text, record) => {
@@ -161,7 +161,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '>60"',
+      title: '> 60"',
       dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
       width: 130,
       render: (text, record) => {
@@ -238,7 +238,7 @@ class Main extends React.Component<{}, State> {
     // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = '排名.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '工作统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -381,7 +381,7 @@ class Main extends React.Component<{}, State> {
           <span style={{fontSize: 14, color: '#333333'}}>排名</span>
           <AddButton
             style={{float: 'right'}}
-            icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
+            icon={<APP.Icon type='export' />}
             title='导出'
             onClick={() => {
               this.export(this.payload)
@@ -394,7 +394,7 @@ class Main extends React.Component<{}, State> {
             columns={this.columns}
             dataSource={dataSource}
             pagination={false}
-            scroll={{ y: 240 }}
+            scroll={{ y: 400 }}
           />
         </div>
       </div>
