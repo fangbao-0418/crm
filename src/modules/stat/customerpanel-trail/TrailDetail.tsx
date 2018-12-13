@@ -211,7 +211,9 @@ class Main extends React.Component<{}, State> {
       const sale = sales.join(',')
       this.payload.salespersonId = sale
       const sal = ''
+      const dataSource = res.length > 0 ? this.state.dataSource : []
       this.setState({
+        dataSource,
         sallers: res,
         sale,
         sal
