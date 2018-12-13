@@ -305,7 +305,7 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
-            value={this.state.sal}
+            value={this.state.sal || undefined}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择销售'
