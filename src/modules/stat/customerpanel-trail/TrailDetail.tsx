@@ -212,6 +212,12 @@ class Main extends React.Component<{}, State> {
       this.payload.salespersonId = sale
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
+      if (res.length === 0) {
+        this.setState({
+          char: [],
+          pi: []
+        })
+      }
       this.setState({
         dataSource,
         sallers: res,
@@ -236,7 +242,6 @@ class Main extends React.Component<{}, State> {
   }
 
   public export (exports: any) {
-    // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
     const accessToken: any = localStorage.getItem('token')
     fetch(
       `/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
