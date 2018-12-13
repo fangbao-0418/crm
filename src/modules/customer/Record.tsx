@@ -92,7 +92,7 @@ class Main extends React.Component<Props> {
                       <span style={{paddingLeft: 20}}>
                         ({APP.fn.formatDuration(item.callDuration)})
                       </span>
-                      <span
+                      {/* <span
                         onClick={() => {
                           this.setState({
                             img: !this.state.img
@@ -100,7 +100,16 @@ class Main extends React.Component<Props> {
                         }}
                       >
                         {item.mediaUrl && this.state.img ? <img className='mr5' src={require('@/assets/images/record1.png')}/> : <img className='mr5' src={require('@/assets/images/record2.png')}/>}
-                      </span>
+                      </span> */}
+
+                      {/* <span
+                        onClick={(e) => {
+                          let img = e.target.getElementsByTagName('img')[0]
+                          img.src === require('@/assets/images/record1.png') ? img.src = require('@/assets/images/record2.png') : img.src=require('@/assets/images/record1.png')
+                        }}
+                      >
+                      {item.mediaUrl &&  <img className='mr5' src={require('@/assets/images/record1.png')}/> }
+                      </span> */}
                     </div>
                   </div>
                 )
@@ -109,7 +118,7 @@ class Main extends React.Component<Props> {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab='线索记录' key='3'>
-            <div style={{overflowY: 'auto', height: this.props.height }}>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
               {
                 clueRecords.length > 0 && clueRecords.map((item, index) => {
                   return (
@@ -170,7 +179,7 @@ class Main extends React.Component<Props> {
                 {
                   relatedCompany.map((item, index) => {
                     return (
-                      <li key={index}>{item}</li>
+                      <li key={index} style={{marginBottom: 5}}>{item}</li>
                     )
                   })
                 }
