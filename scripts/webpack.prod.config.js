@@ -122,7 +122,7 @@ module.exports = {
           'stylus-loader'
         ]
       }, {
-        test: /\.(png|jpe?g|git)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 1000,

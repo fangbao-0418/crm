@@ -58,6 +58,8 @@ declare namespace CrmStat {
     salespersonId: number
     /** 销售 */
     salespersonName: string
+    /** 呼叫时间 */
+    callTime: string
     callTimeBeginDate: string
     callTimeEndDate: string
     /** 通话时长（秒） */

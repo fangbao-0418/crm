@@ -2,7 +2,7 @@ import React from 'react'
 import { Tabs } from 'antd'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { node } from 'prop-types';
+import Sound from './Sound'
 const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
@@ -10,12 +10,10 @@ interface Props extends Customer.Props {
   type?: 'business' | 'open' | 'customer' | 'signed'
 }
 interface State {
-  img: boolean
+  playId?: any
 }
-class Main extends React.Component<Props> {
-  public state: State = {
-    img: false
-  }
+class Main extends React.Component<Props, State> {
+  public state: State = {}
   public getTags (item: Customer.TrackRecord) {
     const nodes: React.ReactNode[] = []
     if (item.tagIntention > -1) {
@@ -100,7 +98,7 @@ class Main extends React.Component<Props> {
                   <div className={styles.record} key={index}>
                     <div className={styles['line-height']} style={{color: 'black'}}>
                       <span style={{marginRight: 10}}>{item.salespersonName}</span>
-                      <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+                      <span>{moment(item.callTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
                     <div>
                       <span>{item.telephone}</span>
@@ -108,24 +106,17 @@ class Main extends React.Component<Props> {
                       <span style={{paddingLeft: 20}}>
                         ({APP.fn.formatDuration(item.callDuration)})
                       </span>
-                      {/* <span
-                        onClick={() => {
-                          this.setState({
-                            img: !this.state.img
-                          })
-                        }}
-                      >
-                        {item.mediaUrl && this.state.img ? <img className='mr5' src={require('@/assets/images/record1.png')}/> : <img className='mr5' src={require('@/assets/images/record2.png')}/>}
-                      </span> */}
-
-                      {/* <span
-                        onClick={(e) => {
-                          let img = e.target.getElementsByTagName('img')[0]
-                          img.src === require('@/assets/images/record1.png') ? img.src = require('@/assets/images/record2.png') : img.src=require('@/assets/images/record1.png')
-                        }}
-                      >
-                      {item.mediaUrl &&  <img className='mr5' src={require('@/assets/images/record1.png')}/> }
-                      </span> */}
+                      {item.mediaUrl && (
+                        <Sound
+                          playing={item.id === this.state.playId}
+                          onClick={() => {
+                            this.setState({
+                              playId: item.id
+                            })
+                          }}
+                          url={item.mediaUrl}
+                        />
+                      )}
                     </div>
                   </div>
                 )

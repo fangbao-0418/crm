@@ -137,6 +137,6 @@ declare namespace Customer {
     /** 线索记录 */
     clueRecords?: TrackRecord[]
     /** 通话记录 */
-    callRecords?: TrackRecord[]
+    callRecords?: CrmStat.CallDetailItemProps[]
   }
 }

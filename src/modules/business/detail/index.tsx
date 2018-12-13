@@ -149,7 +149,6 @@ class Main extends React.Component<Props> {
   public render () {
     const type = this.props.type || 'customer'
     const {infomation} = this.state
-    console.log(this.state.visible, 'render')
     return (
       <div>
         <div style={infomation.isOtherTrack ? {display: 'block'} : {display: 'none'}}>
