@@ -29,6 +29,10 @@ class Main extends React.Component<Props> {
       this.el.pause()
     }
   }
+  public componentWillUnmount () {
+    this.el.pause()
+    this.el.remove()
+  }
   public render () {
     return (
       <span
