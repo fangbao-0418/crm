@@ -35,29 +35,44 @@ class Main extends React.Component<any> {
         data:['通话量', '接通量']
       },
       grid: {
-        left: '3%',
-        right: '6%'
+        left: '2%',
+        right: '5%'
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
         data: char.map((item: any) => {
           return item.totalDate
-        })
+        }),
+        axisLine:{
+          lineStyle:{
+            color:'#F2F2F2'
+          }
+        },
+        axisLabel: {
+          color: '#595959'
+        }
       },
       yAxis: {
         type: 'value',
         splitLine: {
           show: true,
           lineStyle: {
-            color: '#E8E8E8',
+            color: '#F2F2F2',
             width: 1,
             type: 'solid'
           }
+        },
+        axisLine:{
+          show: false
+        },
+        axisTick: {
+          show: false
         }
       },
       series: [{
         name: '通话量',
+        color: 'red',
         type: 'line',
         data: char.map((item: any) => {
           return item.callTotalNums
