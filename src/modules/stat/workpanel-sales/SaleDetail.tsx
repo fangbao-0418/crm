@@ -141,7 +141,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '1"-30"',
+      title: '1"- 30"',
       dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
       width: 130,
       render: (text, record) => {
@@ -151,7 +151,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '30"-60"',
+      title: '30"- 60"',
       dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
       width: 130,
       render: (text, record) => {
@@ -161,7 +161,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '>60"',
+      title: '> 60"',
       dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
       width: 130,
       render: (text, record) => {
@@ -251,7 +251,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = '排名.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '工作统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
