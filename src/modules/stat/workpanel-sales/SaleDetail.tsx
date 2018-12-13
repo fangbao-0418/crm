@@ -5,7 +5,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getSalesRank } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import Line from './line'
+import Line from './Line'
 import AddButton from '@/modules/common/content/AddButton'
 const styles = require('./style')
 
