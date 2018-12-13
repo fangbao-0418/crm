@@ -205,7 +205,8 @@ class Main extends React.Component<{}, State> {
             totalCallDuration: 0,
             callOutTotalNums: 0,
             averageCallSuccessPercent: 0
-          }
+          },
+          char: []
         })
       }
       this.setState({
