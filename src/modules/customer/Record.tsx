@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs } from 'antd'
 import moment from 'moment'
 import { connect } from 'react-redux'
+import { node } from 'prop-types';
 const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
@@ -14,6 +15,52 @@ interface State {
 class Main extends React.Component<Props> {
   public state: State = {
     img: false
+  }
+  public getTags (item: Customer.TrackRecord) {
+    const nodes: React.ReactNode[] = []
+    if (item.tagIntention > -1) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
+        </span>
+      )
+    }
+    if (item.tagCustomerStatus > -1) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumNeedStatus-${item.tagCustomerStatus}`]}
+        </span>
+      )
+    }
+    if (item.tagFollowupStatus > -1) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
+        </span>
+      )
+    }
+    if (item.tagTelephoneStatus > -1) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
+        </span>
+      )
+    }
+    if (item.tagFollowUpClassification > -1) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
+        </span>
+      )
+    }
+    if (item.appointTime) {
+      nodes.push(
+        <span className={styles.tag}>
+          {moment(item.appointTime).format('YYYY-MM-DD')}
+        </span>
+      )
+    }
+    return nodes
   }
   public render () {
     const { trackRecords, clueRecords, callRecords } = this.props
@@ -32,44 +79,13 @@ class Main extends React.Component<Props> {
                       <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
                     <div>{item.remark}</div>
-                    <div>
-                      {
-                        item.tagIntention > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
-                        </span>
-                      }
-                      {
-                        item.tagCustomerStatus > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumNeedStatus-${item.tagCustomerStatus}`]}
-                        </span>
-                      }
-                      {
-                        item.tagFollowupStatus > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
-                        </span>
-                      }
-                      {
-                        item.tagTelephoneStatus > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
-                        </span>
-                        }
-                      {
-                        item.tagFollowUpClassification > -1 &&
-                        <span className={styles.tag}>
-                          {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
-                        </span>
-                      }
-                      {
-                        item.appointTime &&
-                        <span className={styles.tag}>
-                          {moment(item.appointTime).format('YYYY-MM-DD')}
-                        </span>
-                      }
-                    </div>
+                    {
+                      this.getTags(item).length > 0 && (
+                        <div>
+                          {this.getTags(item)}
+                        </div>
+                      )
+                    }
                   </div>
                 )
               })
@@ -128,44 +144,6 @@ class Main extends React.Component<Props> {
                         <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
                       </div>
                       <div>{item.remark}</div>
-                      <div>
-                        {
-                          item.tagIntention > -1 &&
-                          <span className={styles.tag}>
-                            {APP.dictionary[`EnumIntentionality-${item.tagIntention}`]}
-                          </span>
-                        }
-                        {
-                          item.tagCustomerStatus > -1 &&
-                          <span className={styles.tag}>
-                            {APP.dictionary[`EnumNeedStatus-${item.tagCustomerStatus}`]}
-                          </span>
-                        }
-                        {
-                          item.tagFollowupStatus > -1 &&
-                          <span className={styles.tag}>
-                            {APP.dictionary[`EnumFollowWay-${item.tagFollowupStatus}`]}
-                          </span>
-                        }
-                        {
-                          item.tagTelephoneStatus > -1 &&
-                          <span className={styles.tag}>
-                            {APP.dictionary[`EnumContactStatus-${item.tagTelephoneStatus}`]}
-                          </span>
-                        }
-                        {
-                          item.tagFollowUpClassification > -1 &&
-                          <span className={styles.tag}>
-                            {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
-                          </span>
-                        }
-                        {
-                          item.appointTime &&
-                          <span className={styles.tag}>
-                            {moment(item.appointTime).format('YYYY-MM-DD')}
-                          </span>
-                        }
-                      </div>
                     </div>
                   )
                 })
