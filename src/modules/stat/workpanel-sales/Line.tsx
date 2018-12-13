@@ -35,7 +35,7 @@ class Main extends React.Component<any> {
         data:['通话量', '接通量']
       },
       grid: {
-        left: '2%',
+        left: '3%',
         right: '5%'
       },
       xAxis: {
