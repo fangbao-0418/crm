@@ -36,7 +36,7 @@ export const getSaller = () => {
 }
 /** 根据登陆用户获取机构列表 */
 export const getFirms = () => {
-  return http(`/user/v1/api/company/list/login}`)
+  return http(`/user/v1/api/company/list/login`)
 }
 /** 根据机构获取销售列表 */
 export const getSalesByCompany = (companyid: string) => {
