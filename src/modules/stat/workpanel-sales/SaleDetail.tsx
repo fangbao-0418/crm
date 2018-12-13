@@ -197,6 +197,18 @@ class Main extends React.Component<{}, State> {
       const sale = res.length > 0 ? sales.join(',') : ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
       this.payload.salespersonId = sale
+      if (res.length === 0) {
+        this.setState({
+          strip: {
+            callTotalNums: 0,
+            callSuccessNums: 0,
+            totalCallDuration: 0,
+            callOutTotalNums: 0,
+            averageCallSuccessPercent: 0
+          },
+          char: []
+        })
+      }
       this.setState({
         dataSource,
         sallers: res,
