@@ -42,19 +42,19 @@ export const getFirms = () => {
 export const getSalesByCompany = (companyid: string) => {
   return http(`/user/v1/api/user/list/company/identity/${companyid}/sale`)
 }
-/**工作仪表盘 */
+/** 工作仪表盘 */
 export const getSalesRank = (payload: {
   totalBeginDate: string,
   totalEndDate: string,
-  salespersonId: string,
+  salespersonId: string
 }) => {
   return http(`/crm-manage/v1/api/report/sales`, 'GET', payload)
 }
-/**客户仪表盘-跟进客户 */
+/** 客户仪表盘-跟进客户 */
 export const getTrailRank = (payload: {
   totalBeginDate: string,
   totalEndDate: string,
-  salespersonId: string,
+  salespersonId: string
 }) => {
   return http(`/crm-manage/v1/api/report/customer`, 'GET', payload)
 }
