@@ -68,10 +68,18 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '本周',
-        value: '-7'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDay() - 1
+          return '-' + D
+        })()
       }, {
         label: '本月',
-        value: '-30'
+        value: (() => {
+          const date = new Date()
+          const D = date.getDate() - 1
+          return '-' + D
+        })()
       }]
     }
   ]
@@ -81,6 +89,7 @@ class Main extends React.Component<{}, State> {
       title: '销售',
       dataIndex: 'callDetailInfos.salespersonName',
       align: 'left',
+      width: 130,
       render: (text, record) => {
         return (
           <span>
@@ -93,6 +102,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '通话量',
       dataIndex: 'callTotalNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callInTotalNums + record.callOutTotalNums
@@ -102,6 +112,7 @@ class Main extends React.Component<{}, State> {
     {
       title: '接通量',
       dataIndex: 'callDetailInfos.callSuccessNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessNums
@@ -111,24 +122,27 @@ class Main extends React.Component<{}, State> {
     {
       title: '接通率',
       dataIndex: 'averageCallSuccessPercent',
+      width: 130,
       render: (text, record) => {
         return (
-          record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)
+          (Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) || 0) + '%'
         )
       }
     },
     {
       title: '通话时长',
       dataIndex: 'callDetailInfos.totalCallDuration',
+      width: 130,
       render: (text, record) => {
         return (
-          record.totalCallDuration
+          APP.fn.formatDuration(record.totalCallDuration)
         )
       }
     },
     {
-      title: '30s接通量',
+      title: '1"-30"',
       dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessLte30SecondNums
@@ -136,8 +150,9 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '60s接通量',
+      title: '30"-60"',
       dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessLte60SecondNums
@@ -145,8 +160,9 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '60s以上接通量',
+      title: '>60"',
       dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
+      width: 130,
       render: (text, record) => {
         return (
           record.callSuccessGt60SecondNums
@@ -218,7 +234,28 @@ class Main extends React.Component<{}, State> {
 
   // 导出
   public export (exports: any) {
-    window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    // window.open(`https://x-sys.i-counting.cn/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`)
+    const accessToken: any = localStorage.getItem('token')
+    fetch(
+      `sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'token': accessToken,
+          'from': '4'
+        }
+      }
+    )
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.download = '排名.xlsx'
+      a.href = url
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    })
   }
 
   // 搜索框折叠
@@ -245,7 +282,7 @@ class Main extends React.Component<{}, State> {
             onClick={this.handleSwitch.bind(this)}
           />
         </div>
-        <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
+        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -317,7 +354,9 @@ class Main extends React.Component<{}, State> {
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话率</div>
-            <div className={styles.big}>{strip.averageCallSuccessPercent}</div>
+            <div className={styles.big}>
+              {Math.round(strip.averageCallSuccessPercent) + '%'}
+            </div>
             {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
@@ -325,7 +364,7 @@ class Main extends React.Component<{}, State> {
           </div>
           <div className={styles.con}>
             <div className={styles.small}>通话时长</div>
-            <div className={styles.big}>{strip.totalCallDuration}</div>
+            <div className={styles.big}>{APP.fn.formatDuration(strip.totalCallDuration)}</div>
             {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
@@ -337,8 +376,8 @@ class Main extends React.Component<{}, State> {
           <Line char={char}/>
         </div>
 
-        <div>
-          <span>排名</span>
+        <div style={{marginBottom: 15}}>
+          <span style={{fontSize: 14, color: '#333333'}}>排名</span>
           <AddButton
             style={{float: 'right'}}
             icon={<img src={require('@/assets/images/export.png')} width='14px' height='14px'/>}
@@ -354,6 +393,7 @@ class Main extends React.Component<{}, State> {
             columns={this.columns}
             dataSource={dataSource}
             pagination={false}
+            scroll={{ y: 240 }}
           />
         </div>
       </div>

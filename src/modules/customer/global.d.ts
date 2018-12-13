@@ -117,6 +117,7 @@ declare namespace Customer {
     callConnectStatus?: number
     mediaUrl?: string
     phoneAddress?: string
+    salespersonName?: string
   }
   export interface TianYanDataProps {
     apiName: string

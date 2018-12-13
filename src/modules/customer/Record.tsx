@@ -79,42 +79,38 @@ class Main extends React.Component<Props> {
           <Tabs.TabPane tab='通话记录' key='2'>
             <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
             {
-              trackRecords.length > 0 && trackRecords.map((item, index) => {
+              callRecords.length > 0 && callRecords.map((item, index) => {
                 return (
                   <div className={styles.record} key={index}>
                     <div className={styles['line-height']} style={{color: 'black'}}>
-                      <span style={{marginRight: 10}}>{item.salesperson}</span>
+                      <span style={{marginRight: 10}}>{item.salespersonName}</span>
                       <span>{moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
-                    {
-                      callRecords.length > 0 && callRecords.map((item2, index2) => {
-                        const time = () => {
-                          const t = item2.callDuration
-                          const hours = Math.floor(t / 3600) < 10 ? '0' + Math.floor(t / 3600).toString() : Math.floor(t / 3600).toString()
-                          const minutes = Math.floor(t % 3600 / 60) < 10 ? '0' + Math.floor(t % 3600 / 60).toString() : Math.floor(t % 3600 / 60).toString()
-                          const seconds = Math.floor(t % 60) < 10 ? '0' + Math.floor(t % 60).toString() : Math.floor(t % 60).toString()
-                          return hours + ':' + minutes + ':' + seconds
-                        }
-                        return (
-                          <div key={index2}>
-                            <span>{item2.telephone}</span>
-                            <span>{item2.phoneAddress}</span>
-                            <span>
-                              ({time()})
-                            </span>
-                            <span
-                              onClick={() => {
-                                this.setState({
-                                  img: !this.state.img
-                                })
-                              }}
-                            >
-                              {item2.mediaUrl && this.state.img ? <img className='mr5' src={require('@/assets/images/record1.png')}/> : <img className='mr5' src={require('@/assets/images/record2.png')}/>}
-                            </span>
-                          </div>
-                        )
-                      })
-                    }
+                    <div>
+                      <span>{item.telephone}</span>
+                      <span>{item.phoneAddress}</span>
+                      <span style={{paddingLeft: 20}}>
+                        ({APP.fn.formatDuration(item.callDuration)})
+                      </span>
+                      {/* <span
+                        onClick={() => {
+                          this.setState({
+                            img: !this.state.img
+                          })
+                        }}
+                      >
+                        {item.mediaUrl && this.state.img ? <img className='mr5' src={require('@/assets/images/record1.png')}/> : <img className='mr5' src={require('@/assets/images/record2.png')}/>}
+                      </span> */}
+
+                      {/* <span
+                        onClick={(e) => {
+                          let img = e.target.getElementsByTagName('img')[0]
+                          img.src === require('@/assets/images/record1.png') ? img.src = require('@/assets/images/record2.png') : img.src=require('@/assets/images/record1.png')
+                        }}
+                      >
+                      {item.mediaUrl &&  <img className='mr5' src={require('@/assets/images/record1.png')}/> }
+                      </span> */}
+                    </div>
                   </div>
                 )
               })
@@ -122,7 +118,7 @@ class Main extends React.Component<Props> {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab='线索记录' key='3'>
-            <div style={{overflowY: 'auto', height: this.props.height }}>
+            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
               {
                 clueRecords.length > 0 && clueRecords.map((item, index) => {
                   return (
@@ -183,7 +179,7 @@ class Main extends React.Component<Props> {
                 {
                   relatedCompany.map((item, index) => {
                     return (
-                      <li key={index}>{item}</li>
+                      <li key={index} style={{marginBottom: 5}}>{item}</li>
                     )
                   })
                 }

@@ -34,9 +34,13 @@ export const getCallDetail = (query: {
 export const getSaller = () => {
   return http(`/user/v1/api/user/list/company/identity/${APP.user.companyId}/sale`)
 }
-/** 根据城市获取机构列表 */
+// /** 根据城市获取机构列表 */
+// export const getFirm = () => {
+//   return http(`/user/v1/api/company/list/region/region_city/${APP.user.cityCode}`)
+// }
+/** 根据登陆用户获取机构列表 */
 export const getFirms = () => {
-  return http(`/user/v1/api/company/list/region/region_city/${APP.user.cityCode}`)
+  return http(`/user/v1/api/company/list/login}`)
 }
 /** 根据机构获取销售列表 */
 export const getSalesByCompany = (companyid: string) => {
