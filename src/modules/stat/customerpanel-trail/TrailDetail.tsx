@@ -95,7 +95,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            <span className={styles.rank} style={record.key > 3 ? {background: '#C9C9C9'} : {background: '#e84845'}}>{record.key}</span>
+            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
             <span>{record.salesperson}</span>
             </span>
         )
