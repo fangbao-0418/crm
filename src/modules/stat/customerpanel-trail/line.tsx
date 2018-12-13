@@ -42,7 +42,15 @@ class Main extends React.Component<any> {
         })
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#E8E8E8',
+            width: 1,
+            type: 'solid'
+          }
+        }
       },
       series: [{
         name: '客户数量',
