@@ -6,7 +6,7 @@ import { getFirms, getTrailRank } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './Line'
-import Pie from './pie'
+import Pie from './Pie'
 import AddButton from '@/modules/common/content/AddButton'
 const styles = require('./style')
 
