@@ -195,12 +195,11 @@ class Main extends React.Component<{}, State> {
       })
       const sal = ''
       const sale = res.length > 0 ? sales.join(',') : ''
-      const sallers = res.length > 0 ? res : []
       const dataSource = res.length > 0 ? this.state.dataSource : []
       this.payload.salespersonId = sale
       this.setState({
         dataSource,
-        sallers,
+        sallers: res,
         sale,
         sal
       }, () => {
