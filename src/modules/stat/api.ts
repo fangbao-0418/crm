@@ -38,10 +38,6 @@ export const getSaller = () => {
 export const getFirms = () => {
   return http(`/user/v1/api/company/list/login`)
 }
-/** 根据机构获取销售列表 */
-export const getSalesByCompany = (companyId: string) => {
-  return http(`/user/v1/api/user/list/company/identity/${companyId}/saleAll`)
-}
 /** 工作仪表盘 */
 export const getSalesRank = (payload: {
   totalBeginDate: string,
