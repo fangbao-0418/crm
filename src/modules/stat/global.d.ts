@@ -151,7 +151,7 @@ declare namespace CrmStat {
     /** 80%客户 */
     percentEightyCustomerNums: number
     /** 100客户 */
-    percentHundredCustomerNums: number,
+    percentHundredCustomerNums: number
     /** 新增客资数 */
     newCustomerNums: number
     /** 签约客户数 */
