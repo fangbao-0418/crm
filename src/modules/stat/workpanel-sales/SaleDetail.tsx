@@ -7,7 +7,6 @@ import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './Line'
 import AddButton from '@/modules/common/content/AddButton'
-import { string } from 'prop-types';
 const styles = require('./style')
 
 export interface PayloadProps {
