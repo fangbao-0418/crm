@@ -194,7 +194,6 @@ class Main extends React.Component<{}, State> {
 
   public getFirms () {
     getFirms(this.companyTypeList).then((res) => {
-      console.log(res, 'redredrerdred')
       this.setState({
         firms: res,
         organ: res[0].id
