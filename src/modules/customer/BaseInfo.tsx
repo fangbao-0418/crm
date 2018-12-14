@@ -585,7 +585,7 @@ class Main extends React.Component<Props> {
                   className={styles['auto-complete']}
                   disabled={disabled}
                   defaultValue={{
-                    name: detail.areaName
+                    name: detail.areaName || ''
                   }}
                   data={this.state.areaList}
                   onChange={this.handleAreaChange.bind(this)}
