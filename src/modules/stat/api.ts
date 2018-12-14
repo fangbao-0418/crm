@@ -35,8 +35,8 @@ export const getSaller = () => {
   return http(`/user/v1/api/user/list/company/identity/${APP.user.companyId}/sale`)
 }
 /** 根据登陆用户获取机构列表 */
-export const getFirms = () => {
-  return http(`/user/v1/api/company/list/login`)
+export const getFirms = (companyTypeList: string[] = []) => {
+  return http(`/user/v1/api/company/login/region`, 'POST', {companyTypeList})
 }
 /** 工作仪表盘 */
 export const getSalesRank = (payload: {

@@ -7,6 +7,7 @@ import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './Line'
 import AddButton from '@/modules/common/content/AddButton'
+import { string } from 'prop-types';
 const styles = require('./style')
 
 export interface PayloadProps {
@@ -44,6 +45,8 @@ class Main extends React.Component<{}, State> {
   public values: ValueProps = {
   }
   public SalespersonId = APP.keys.EnumSalespersonId
+
+  public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
     totalBeginDate: moment().format('YYYY-MM-DD'),
@@ -191,7 +194,7 @@ class Main extends React.Component<{}, State> {
   }
 
   public getFirms () {
-    getFirms().then((res) => {
+    getFirms(this.companyTypeList).then((res) => {
       this.setState({
         firms: res,
         organ: res[0].id
