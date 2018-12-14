@@ -29,7 +29,7 @@ interface State {
   sal: string
   /** 圆角矩形数据 */
   strip: any
-  /** 折线图 */
+  /** 每日呼叫趋势图 */
   char: CrmStat.ReportByDays[]
   /** 折叠是否隐藏 */
   extshow: boolean
@@ -44,6 +44,8 @@ class Main extends React.Component<{}, State> {
   public values: ValueProps = {
   }
   public SalespersonId = APP.keys.EnumSalespersonId
+
+  public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
     totalBeginDate: moment().format('YYYY-MM-DD'),
@@ -191,7 +193,8 @@ class Main extends React.Component<{}, State> {
   }
 
   public getFirms () {
-    getFirms().then((res) => {
+    getFirms(this.companyTypeList).then((res) => {
+      console.log(res, 'redredrerdred')
       this.setState({
         firms: res,
         organ: res[0].id
