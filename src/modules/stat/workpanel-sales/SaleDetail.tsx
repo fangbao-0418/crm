@@ -29,7 +29,7 @@ interface State {
   sal: string
   /** 圆角矩形数据 */
   strip: any
-  /** 折线图 */
+  /** 每日呼叫趋势图 */
   char: CrmStat.ReportByDays[]
   /** 折叠是否隐藏 */
   extshow: boolean

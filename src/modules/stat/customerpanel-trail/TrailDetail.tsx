@@ -28,9 +28,9 @@ interface State {
   sale: string
   /** 销售人员初始值 */
   sal: string
-  /** 折线图 */
+  /** 跟进客户的每日趋势图 */
   char: CrmStat.ReportTrackCustomerByDate[]
-  /** 饼形图 */
+  /** 跟进的客户分布图 */
   pi: CrmStat.ReportCustomerSource[]
   /** 折叠是否隐藏 */
   extshow: boolean
