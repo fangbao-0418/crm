@@ -89,8 +89,6 @@ declare namespace CrmStat {
     averageCallSuccessPercent: number
     /**销售排名 */
     callDetailInfos: CrmStat.CallDetailInfos[]
-    /**客户趋势图 */
-    ReportByDays: CrmStat.ReportByDays[]
   }
   export interface CallDetailInfos {
     key: number
