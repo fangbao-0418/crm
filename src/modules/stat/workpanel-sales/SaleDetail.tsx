@@ -17,13 +17,21 @@ export interface PayloadProps {
 
 interface State {
   dataSource: CrmStat.CallDetailInfos[]
+  /** 机构列表 */
   firms: Array<{id: string, name: string}>
+  /** 销售列表 */
   sallers: Array<{id: string, name: string}>
+  /** 机构初始值 */
   organ: string
+  /** 传入的销售人员 */
   sale: string
+  /** 销售人员初始值 */
   sal: string
+  /** 圆角矩形数据 */
   strip: any
-  char: any
+  /** 折线图 */
+  char: CrmStat.ReportByDays[]
+  /** 折叠是否隐藏 */
   extshow: boolean
 }
 
@@ -50,7 +58,13 @@ class Main extends React.Component<{}, State> {
     organ: '',
     sale: '',
     sal: '',
-    strip: {},
+    strip: {
+      callTotalNums: 0,
+      callSuccessNums: 0,
+      totalCallDuration: 0,
+      callOutTotalNums: 0,
+      averageCallSuccessPercent: 0
+    },
     char: [],
     extshow: false
   }

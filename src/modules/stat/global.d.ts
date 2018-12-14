@@ -89,8 +89,6 @@ declare namespace CrmStat {
     averageCallSuccessPercent: number
     /**销售排名 */
     callDetailInfos: CrmStat.CallDetailInfos[]
-    /**客户趋势图 */
-    ReportByDays: CrmStat.ReportByDays
   }
   export interface CallDetailInfos {
     key: number
@@ -122,9 +120,9 @@ declare namespace CrmStat {
   /** 客户仪表盘 */
   export interface CustomerTrailItemProps {
     /** 跟进客户的每日趋势图 */
-    reportTrackCustomerByDate: CrmStat.ReportTrackCustomerByDate,
+    reportTrackCustomerByDate: CrmStat.ReportTrackCustomerByDate[]
     /** 跟进的客户分布图 */
-    reportCustomerSource: CrmStat.ReportCustomerSource
+    reportCustomerSource: CrmStat.ReportCustomerSource[]
     /** 销售排名 */
     salesDetails: CrmStat.SalesDetails[]
   }

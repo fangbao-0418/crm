@@ -18,13 +18,21 @@ export interface PayloadProps {
 
 interface State {
   dataSource: CrmStat.SalesDetails[]
+  /** 机构列表 */
   firms: Array<{id: string, name: string}>
+  /** 销售列表 */
   sallers: Array<{id: string, name: string}>
+  /** 机构初始值 */
   organ: string
+  /** 传入的销售人员 */
   sale: string
+  /** 销售人员初始值 */
   sal: string
-  char: any
-  pi: any
+  /** 折线图 */
+  char: CrmStat.ReportTrackCustomerByDate[]
+  /** 饼形图 */
+  pi: CrmStat.ReportCustomerSource[]
+  /** 折叠是否隐藏 */
   extshow: boolean
 }
 
