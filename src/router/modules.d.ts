@@ -19,8 +19,8 @@ interface ModuleProps {
   CustomerSetAssign: RouteComponent
   /** 工作仪表盘 */
   WorkpanelSales: RouteComponent
-  /** 客户仪表盘-跟进客户 */
-  CustomerpanelTrail: RouteComponent
+  /** 商机分析 */
+  BusinessAnalysis: RouteComponent
   /** 404 */
   Unfound: RouteComponent
 }

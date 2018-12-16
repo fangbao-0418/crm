@@ -33,7 +33,6 @@ class Main extends React.Component<any> {
         }
       },
       grid: {
-        y: 10,
         left: '3%',
         right: '4%',
         bottom: '3%',
@@ -41,11 +40,10 @@ class Main extends React.Component<any> {
       },
       xAxis: {
         type: 'category',
-        boundaryGap: false,
-        // data: char.map((item: any) => {
-        //   return item.totalDate
-        // }),
-        data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        boundaryGap: true,
+        data: char.map((item: any) => {
+          return item.statusName
+        }),
         axisLine:{
           lineStyle:{
             color:'#F2F2F2'
@@ -79,10 +77,9 @@ class Main extends React.Component<any> {
         name: '客户数量',
         type: 'bar',
         barWidth: '50%',
-        // data: char.map((item: any) => {
-        //   return item.customerNums
-        // }),
-        data:[10, 52, 200, 334, 390, 330, 220]
+        data: char.map((item: any) => {
+          return item.statusNums
+        })
       }]
     }
     if (option && typeof option === 'object') {

@@ -117,33 +117,43 @@ declare namespace CrmStat {
     /** 日期 */
     totalDate: string
   }
-  /** 客户仪表盘 */
-  export interface CustomerTrailItemProps {
-    /** 跟进客户的每日趋势图 */
-    reportTrackCustomerByDate: CrmStat.ReportTrackCustomerByDate[]
-    /** 跟进的客户分布图 */
-    reportCustomerSource: CrmStat.ReportCustomerSource[]
-    /** 销售排名 */
+   /** 商机仪表盘 */
+   export interface BusinessAnalysisItemProps {
+    /** 空置天数趋势图 */
+    reportFreeDays: CrmStat.ReportFreeDays,
+    /** 电话状态分布图 */
+    reportPhoneStatus: CrmStat.ReportPhoneStatus
+    /** 销售明细表 */
     salesDetails: CrmStat.SalesDetails[]
   }
-  export interface ReportTrackCustomerByDate {
-    /** 日期 */
-    totalDate: string
+  export interface ReportFreeDays {
     /** 统计数量 */
     customerNums: number
+    /** 0天 */
+    step1: number
+    /** 1-3天 */
+    step2: number
+    /** 4-7天 */
+    step3: number
+    /** 7-15天 */
+    step4: number
+    /** 15以上天 */
+    step5: number
   }
-  export interface ReportCustomerSource {
-    /** 来源 */
-    customerSourceName: string
-    /** 统计数量 */
-    customerSourceNums: number
+  export interface ReportPhoneStatus {
+    /** 状态名称 */
+    statusName: string
+    /** 状态数值 */
+    statusNums: number
   }
   export interface SalesDetails {
     key: number
     /** 销售名称 */
     salesperson: string
-    /** 跟进数 */
-    trackContactNums: number
+    /** 当前客户数 */
+    customerNums: number
+    /** 0%客户 */
+    percentZeroCustomerNums: number
     /** 30%客户 */
     percentThirtyCustomerNums: number
     /** 60%客户 */
@@ -152,9 +162,7 @@ declare namespace CrmStat {
     percentEightyCustomerNums: number
     /** 100客户 */
     percentHundredCustomerNums: number
-    /** 新增客资数 */
-    newCustomerNums: number
-    /** 签约客户数 */
+    /** 本月签约客户数 */
     signCustomerNums: number
   }
 }

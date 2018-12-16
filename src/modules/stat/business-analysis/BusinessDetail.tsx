@@ -2,28 +2,35 @@ import React from 'react'
 import moment from 'moment'
 import { Select, Row, Col, Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getFirms, getTrailRank } from '@/modules/stat/api'
+import { getFirms, getBusiness } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
 import Bar from './Bar'
 import Pie from './Pie'
 import AddButton from '@/modules/common/content/AddButton'
+
 const styles = require('./style')
 
 export interface PayloadProps {
-  totalBeginDate: string
-  totalEndDate: string
+  agencyId: string
   salespersonId: string
 }
 
 interface State {
   dataSource: CrmStat.SalesDetails[]
+  /** 机构列表 */
   firms: Array<{id: string, name: string}>
+  /** 销售列表 */
   sallers: Array<{id: string, name: string}>
+  /** 机构初始值 */
   organ: string
+   /** 传入的销售人员 */
   sale: string
+  /** 销售人员初始值 */
   sal: string
-  char: any
+  /** 空置天数趋势图 */
   pi: any
+  /** 电话状态分布图 */
+  char: any
 }
 
 interface ValueProps {
@@ -35,11 +42,10 @@ class Main extends React.Component<{}, State> {
   public values: ValueProps = {
   }
 
-  public SalespersonId = APP.keys.EnumSalespersonId
+  public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
-    totalBeginDate: moment().format('YYYY-MM-DD'),
-    totalEndDate: moment().format('YYYY-MM-DD'),
+    agencyId: '',
     salespersonId: ''
   }
 
@@ -73,7 +79,7 @@ class Main extends React.Component<{}, State> {
       title: '当前客户',
       dataIndex: 'salesDetails.customerNums',
       width: 130,
-      render : (text, record) => {
+      render: (text, record) => {
         return (
           record.customerNums
         )
@@ -120,16 +126,6 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '100%意向度',
-      dataIndex: 'salesDetails.percentHundredCustomerNums',
-      width: 130,
-      render : (text, record) => {
-        return (
-          record.percentHundredCustomerNums
-        )
-      }
-    },
-    {
       title: '本月签单累计',
       dataIndex: 'salesDetails.signCustomerNums',
       width: 130,
@@ -146,7 +142,12 @@ class Main extends React.Component<{}, State> {
   }
 
   public getFirms () {
-    getFirms().then((res) => {
+    getFirms(this.companyTypeList).then((res) => {
+      // this.payload.agencyId = res.map((item: any) => {
+      //   return item.id
+      // })
+      this.payload.agencyId = res[0].id
+      console.log(this.payload.agencyId, '机构')
       this.setState({
         firms: res,
         organ: res[0].id
@@ -161,8 +162,8 @@ class Main extends React.Component<{}, State> {
       const sales = res.map((item: any) => {
         return item.id
       })
-      const sale = sales.join(',')
-      this.payload.salespersonId = sale
+      // const sale = sales.join(',')
+      // this.payload.salespersonId = sale
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
       if (res.length === 0) {
@@ -174,7 +175,7 @@ class Main extends React.Component<{}, State> {
       this.setState({
         dataSource,
         sallers: res,
-        sale,
+        // sale,
         sal
       }, () => {
         if (sales.length > 0) {
@@ -185,11 +186,11 @@ class Main extends React.Component<{}, State> {
   }
 
   public fetchList () {
-    getTrailRank(this.payload).then((res: any) => {
+    getBusiness(this.payload).then((res: any) => {
       this.setState({
         dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
-        char: res.data.reportTrackCustomerByDate,
-        pi: res.data.reportCustomerSource
+        pi: res.data.reportFreeDays,
+        char: res.data.reportPhoneStatus
       })
     })
   }
@@ -228,7 +229,7 @@ class Main extends React.Component<{}, State> {
             style={{width: 200}}
             placeholder='请选择机构'
             onChange={(value: string) => {
-              this.values.agencyId = value
+              this.payload.agencyId = value
               this.getSales(value)
               this.setState({
                 organ: value
@@ -279,6 +280,7 @@ class Main extends React.Component<{}, State> {
             </Row>
           </div>
         </div>
+          <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
