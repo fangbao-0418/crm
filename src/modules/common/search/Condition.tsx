@@ -2,7 +2,8 @@ import React from 'react'
 import { Tag, DatePicker, Menu, Dropdown, Icon } from 'antd'
 import DropDown from 'pilipa/libs/dropdown'
 import classNames from 'classnames'
-const { RangePicker } = DatePicker
+import moment from 'moment'
+const { RangePicker, MonthPicker } = DatePicker
 const { CheckableTag } = Tag
 const styles = require('./style')
 export interface ConditionOptionProps {
@@ -11,6 +12,8 @@ export interface ConditionOptionProps {
   field: string
   value?: string
   type?: 'date' | 'select' | 'month'
+  /** 时间是否是区间 */
+  range?: boolean
   placeholder?: string | [string, string]
 }
 interface ValueProps {
@@ -26,13 +29,18 @@ interface States {
   dataSource: ConditionOptionProps[]
   labels: {[field: string]: string}
   values: ValueProps
+  /** 月份选择器是否打开 */
+  open: boolean
 }
 class Main extends React.Component<Props> {
   public state: States = {
     dataSource: this.props.dataSource,
     labels: this.getLabels(),
-    values: this.getValues()
+    values: this.getValues(),
+    open: false
   }
+  /** 月份选择器点击数 */
+  public monthPickerClickNum = 0
   public componentWillReceiveProps (props: Props) {
     this.setState({
       dataSource: props.dataSource,
@@ -78,46 +86,97 @@ class Main extends React.Component<Props> {
     const { dataSource } = this.state
     const item = dataSource[index]
     let node: JSX.Element = null
-    // console.log(item.type, 'getAgerNodes')
+    const range = item.range !== undefined ? item.range : true
     if (item.type === 'date') {
-      node = (
-        <div className={styles.after}>
-          <RangePicker
-            placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
-            size='small'
-            format={'YYYY-MM-DD'}
-            onChange={(current) => {
-              if (current.length === 2) {
-                item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
-              } else {
-                item.value = item.options[0].value
-              }
-              this.handleChange(index, item.value)
-            }}
-          />
-        </div>
-      )
+      if (range) {
+        node = (
+          <div className={styles.after}>
+            <RangePicker
+              placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
+              size='small'
+              format={'YYYY-MM-DD'}
+              onChange={(current) => {
+                if (current.length === 2) {
+                  item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
+                } else {
+                  item.value = item.options[0].value
+                }
+                this.handleChange(index, item.value)
+              }}
+            />
+          </div>
+        )
+      } else {
+        node = (
+          <div className={styles.after}>
+            <DatePicker
+              style={{width: 110}}
+              placeholder={typeof(item.placeholder) === 'string' ? item.placeholder : '请选择日期'}
+              size='small'
+              format={'YYYY-MM-DD'}
+              onChange={(current) => {
+                item.value = current.format('YYYY-MM-DD')
+                this.handleChange(index, item.value)
+              }}
+            />
+          </div>
+        )
+      }
     }
     if (item.type === 'month') {
-      node = (
-        <div className={styles.after}>
-          <RangePicker
-            placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
-            size='small'
-            format={'YYYY-MM'}
-            onChange={(current) => {
-              console.log(current)
-              if (current.length === 2) {
-                item.value = [current[0].format('YYYY-MM-DD'), current[1].format('YYYY-MM-DD')].join('至')
-              } else {
-                item.value = item.options[0].value
-              }
-              // item.value = [current[0].format('YYYY-MM'), current[1].format('YYYY-MM')].join('至')
-              this.handleChange(index, item.value)
-            }}
-          />
-        </div>
-      )
+      if (range) {
+        const arr = item.value ? item.value.split('至') : []
+        const value: any = arr.length === 2 ? [moment(arr[0]), moment(arr[1])] : undefined
+        console.log(value, 'month')
+        node = (
+          <div className={styles.after}>
+            <RangePicker
+              mode={['month', 'month']}
+              placeholder={item.placeholder instanceof Array ? item.placeholder : ['开始日期', '结束日期']}
+              size='small'
+              format={'YYYY-MM'}
+              value={value}
+              open={this.state.open}
+              onPanelChange={(current) => {
+                this.monthPickerClickNum += 1
+                if (current.length === 2) {
+                  item.value = [current[0].format('YYYY-MM'), current[1].format('YYYY-MM')].join('至')
+                } else {
+                  item.value = item.options[0].value
+                }
+                if (this.monthPickerClickNum === 2) {
+                  this.handleChange(index, item.value)
+                  this.monthPickerClickNum = 0
+                  this.setState({
+                    open: false
+                  })
+                }
+              }}
+              onOpenChange={(status) => {
+                this.setState({
+                  open: status
+                })
+                this.monthPickerClickNum = 0
+              }}
+            />
+          </div>
+        )
+      } else {
+        node = (
+          <div className={styles.after}>
+            <MonthPicker
+              style={{width: 100}}
+              placeholder={typeof(item.placeholder) === 'string' ? item.placeholder : '请选择日期'}
+              size='small'
+              format={'YYYY-MM'}
+              onChange={(current) => {
+                item.value = current.format('YYYY-MM')
+                this.handleChange(index, item.value)
+              }}
+            />
+          </div>
+        )
+      }
     }
     return node
   }
@@ -238,7 +297,6 @@ class Main extends React.Component<Props> {
     return nodes
   }
   public render () {
-    // console.log(this.state.labels, 'labels')
     return (
       <div
         style={this.props.style}
