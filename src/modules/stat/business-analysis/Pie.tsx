@@ -20,7 +20,7 @@ class Main extends React.Component<any> {
     })
     const option = {
       title: {
-        left: '90',
+        left: '100',
         text: '商机客户空置天数',
         textStyle: {
           fontSize: 14,
@@ -35,12 +35,11 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        // data: figure,
-        bottom: 35
+        bottom: 100
       },
       series: [
         {
-          name: '总客户',
+          name: '',
           type: 'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,

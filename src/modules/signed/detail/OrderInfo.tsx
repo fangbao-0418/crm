@@ -69,7 +69,7 @@ class Main extends React.Component<Props> {
     const {numb, length} = this.state
 
     return (
-      <div style={{overflowY: 'auto', maxHeight: 100}}>
+      <div style={{overflowY: 'auto', maxHeight: 600}}>
         {
           this.state.OrderData.map((item, index) => {
             return (

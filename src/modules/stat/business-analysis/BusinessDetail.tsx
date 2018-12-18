@@ -198,7 +198,7 @@ class Main extends React.Component<{}, State> {
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/customer/export?agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '销售统计表.xlsx'
+      a.download = '销售统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()

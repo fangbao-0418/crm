@@ -270,7 +270,7 @@ class Main extends React.Component<{}, State> {
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/sales/export?agencyId=${exports.agencyId}&totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',

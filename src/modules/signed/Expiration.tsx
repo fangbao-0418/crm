@@ -40,7 +40,7 @@ class Main extends React.Component {
       pageSize: 15
     },
     worders: [],
-    tab: '2'
+    tab: '3'
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
@@ -51,12 +51,10 @@ class Main extends React.Component {
     {
       field: 'serviceExpire',
       label: ['即将到期'],
-      placeholder: ['开始账期', '结束账期'],
+      range: false,
+      value: '3month',
+      placeholder: '结束账期',
       options: [
-        {
-          label: '全部',
-          value: undefined
-        },
         {
           label: '一个月',
           value: '1month'
