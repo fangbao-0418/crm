@@ -61,11 +61,15 @@ class Main extends React.Component<Props> {
       })
     })
   }
+  // 发起续约
+  public renewal () {
+
+  }
   public render () {
     const {numb, length} = this.state
 
     return (
-      <div>
+      <div style={{overflowY: 'auto', maxHeight: 100}}>
         {
           this.state.OrderData.map((item, index) => {
             return (
@@ -80,9 +84,17 @@ class Main extends React.Component<Props> {
                 }}
               >
                 <div className={classNames(styles['order-info'])}>
-                  <div className={classNames(styles.col, styles.note)}>
-                    <Tooltip placement='top' title={item.remark}>
-                      注
+                  <div className={classNames(styles.com)}>
+                    <Tooltip
+                      placement='top'
+                      title={
+                        <span>
+                          <span style={{display: 'block'}}>订单备注：</span>
+                          <span>{item.remark}</span>
+                        </span>
+                      }
+                    >
+                      <i className='fa fa-info-circle ml10' style={{color: '#C9C9C9'}}></i>
                     </Tooltip>
                   </div>
                   <div className={styles.col}>
@@ -131,8 +143,8 @@ class Main extends React.Component<Props> {
                           <div className={styles.con} key={index1}>
                             <div>{children.productName}*{children.quantity}</div>
                             <div>
-                              <span className={classNames(styles.black)}>¥</span>
-                              <span className={classNames(styles.big, styles.black)}>{children.productSalePrice}</span>
+                              <span>¥</span>
+                              <span className={classNames(styles.big)}>{children.productSalePrice}</span>
                             </div>
                           </div>
                         )
@@ -162,6 +174,9 @@ class Main extends React.Component<Props> {
                     <label>订单金额：</label>
                     <span>{item.amount}</span>
                   </div>
+                </div>
+                <div className={styles['order-footer']}>
+                  <span onClick={this.renewal.bind(this)}>发起续签</span>
                 </div>
               </div>
             )

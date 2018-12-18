@@ -120,27 +120,19 @@ declare namespace CrmStat {
    /** 商机仪表盘 */
    export interface BusinessAnalysisItemProps {
     /** 空置天数趋势图 */
-    reportFreeDays: CrmStat.ReportFreeDays,
+    reportFreeDays: CrmStat.ReportFreeDays[]
     /** 电话状态分布图 */
-    reportPhoneStatus: CrmStat.ReportPhoneStatus
+    reportPhoneStatuses: CrmStat.ReportPhoneStatuses[]
     /** 销售明细表 */
     salesDetails: CrmStat.SalesDetails[]
   }
   export interface ReportFreeDays {
-    /** 统计数量 */
-    customerNums: number
-    /** 0天 */
-    step1: number
-    /** 1-3天 */
-    step2: number
-    /** 4-7天 */
-    step3: number
-    /** 7-15天 */
-    step4: number
-    /** 15以上天 */
-    step5: number
+    /** 级别名称 */
+    levelName: number
+    /** 级别数量 */
+    levelNums: number
   }
-  export interface ReportPhoneStatus {
+  export interface ReportPhoneStatuses {
     /** 状态名称 */
     statusName: string
     /** 状态数值 */

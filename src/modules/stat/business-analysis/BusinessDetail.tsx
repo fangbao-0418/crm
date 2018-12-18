@@ -33,14 +33,14 @@ interface State {
   char: any
 }
 
-interface ValueProps {
-  agencyId?: string,
-  salesPerson?: Array<{id: string, name: string}>
-}
+// interface ValueProps {
+//   agencyId?: string,
+//   salesPerson?: Array<{id: string, name: string}>
+// }
 
 class Main extends React.Component<{}, State> {
-  public values: ValueProps = {
-  }
+  // public values: ValueProps = {
+  // }
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
@@ -190,7 +190,7 @@ class Main extends React.Component<{}, State> {
       this.setState({
         dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
         pi: res.data.reportFreeDays,
-        char: res.data.reportPhoneStatus
+        char: res.data.reportPhoneStatuses
       })
     })
   }

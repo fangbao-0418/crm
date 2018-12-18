@@ -40,6 +40,7 @@ export const getFirms = (companyTypeList: string[] = []) => {
 }
 /** 工作仪表盘 */
 export const getSalesRank = (payload: {
+  agencyId: string,
   totalBeginDate: string,
   totalEndDate: string,
   salespersonId: string

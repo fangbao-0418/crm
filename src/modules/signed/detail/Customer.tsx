@@ -131,8 +131,9 @@ class Main extends React.Component<Props> {
             disabled={!APP.hasPermission('crm_sign_myself_detail_baseinfo_save') || this.state.disabled}
           />
         </Card>
+        <div style={{marginTop: -25}}>
         <Card
-          title='联系方式'
+          title=''
           rightContent={(APP.hasPermission('crm_sign_myself_detail_contact_save') && !this.state.disabled) && (
             <AddButton
               onClick={this.addLinkMan.bind(this)}
@@ -146,6 +147,7 @@ class Main extends React.Component<Props> {
             disabled={!APP.hasPermission('crm_sign_myself_detail_contact_save') || this.state.disabled}
           />
         </Card>
+        </div>
       </div>
     )
   }

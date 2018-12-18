@@ -11,10 +11,6 @@ import View from './detail'
 import { fetchList, toOther, fetchWorkers } from './api'
 import _ from 'lodash'
 import moment from 'moment'
-import Appointment from './Appointment'
-import Expiration from './Expiration'
-
-const styles = require('./style')
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
 const all: any = [{
@@ -30,17 +26,9 @@ interface States {
     current: number
     pageSize: number
   },
-  worders: Array<{id: string, name: string}>,
-  tab: '1' | '2' | '3'
+  worders: Array<{id: string, name: string}>
 }
-
-interface ValueProps {
-  agencyId?: string
-}
-
 class Main extends React.Component {
-  public values: ValueProps = {}
-
   public state: States = {
     extshow: false,
     dataSource: [],
@@ -50,8 +38,7 @@ class Main extends React.Component {
       current: 1,
       pageSize: 15
     },
-    worders: [],
-    tab: '1'
+    worders: []
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
@@ -61,7 +48,7 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      label: ['入库时间'],
+      label: ['入库时间', '创建时间', '预约时间'],
       options: [
         {
           label: '全部',
@@ -81,8 +68,37 @@ class Main extends React.Component {
         }
       ],
       type: 'date'
-    }]
-
+    },
+    {
+      field: 'serviceExpire',
+      label: ['即将到期'],
+      placeholder: ['开始账期', '结束账期'],
+      options: [
+        {
+          label: '全部',
+          value: undefined
+        },
+        {
+          label: '一个月',
+          value: '1month'
+        },
+        {
+          label: '二个月',
+          value: '2month'
+        },
+        {
+          label: '三个月',
+          value: '3month'
+        }
+      ],
+      type: 'month'
+    },
+    {
+      label: ['纳税类别'],
+      field: 'payTaxesNature',
+      options: all.concat(APP.keys.EnumPayTaxesNature)
+    }
+  ]
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
     width: 450,
@@ -96,20 +112,18 @@ class Main extends React.Component {
             {val}
           </span>
           <span>
-            <span>
-              <img
-                src={require(`@/assets/images/follow.svg`)}
-                style={{marginLeft: 10}}
-                hidden={!APP.hasPermission('crm_sign_myself_follow_up')}
-                onClick={this.detail.bind(this, record, '5')}
-              />
-              <img
-                src={require(`@/assets/images/follow-turn.svg`)}
-                style={{marginLeft: 5}}
-                hidden={!APP.hasPermission('crm_sign_myself_list_principals')}
-                onClick={this.toSale.bind(this, record.id)}
-              />
-            </span>
+            <img
+              src={require(`@/assets/images/follow.svg`)}
+              style={{marginLeft: 10}}
+              hidden={!APP.hasPermission('crm_sign_myself_follow_up')}
+              onClick={this.detail.bind(this, record, '5')}
+            />
+            <img
+              src={require(`@/assets/images/follow-turn.svg`)}
+              style={{marginLeft: 5}}
+              hidden={!APP.hasPermission('crm_sign_myself_list_principals')}
+              onClick={this.toSale.bind(this, record.id)}
+            />
           </span>
         </span>
       )
@@ -121,8 +135,18 @@ class Main extends React.Component {
   }, {
     title: '服务账期',
     width: 200,
-    dataIndex: 'servePeriod'
-  }, {
+    dataIndex: ''
+  },
+  // {
+  //   title: '地区',
+  //   width: 180,
+  //   dataIndex: 'area'
+  // }, {
+  //   title: '签约人',
+  //   width: 180,
+  //   dataIndex: 'signSalesperson'
+  // },
+  {
     title: '跟进人',
     width: 200,
     dataIndex: 'currentSalesperson'
@@ -137,7 +161,7 @@ class Main extends React.Component {
   }, {
     title: (
       <span>
-        {this.state.tab === '1' ? '入库时间' : '预约时间'}
+        入库时间
         <Tooltip placement='top' title='成为签约客户的时间'>
           <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
@@ -155,9 +179,50 @@ class Main extends React.Component {
   }, {
     title: '所属机构',
     width: 200,
-    dataIndex: 'agencyName'
-  }]
-
+    dataIndex: ''
+  }
+  // ,{
+  //   title: (
+  //     <span>
+  //       截至账期
+  //       <Tooltip placement='top' title='合同到期截至服务的账期'>
+  //         <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+  //       </Tooltip>
+  //     </span>
+  //   ),
+  //   width: 200,
+  //   dataIndex: 'endTime',
+  //   render: (val) => {
+  //     return (val ? moment(val).format('YYYY-MM') : '')
+  //   }
+  // }, {
+  //   title: (
+  //     <span>
+  //       预约时间
+  //     </span>
+  //   ),
+  //   width: 180,
+  //   dataIndex: 'appointTime',
+  //   render: (val) => {
+  //     return (val ? moment(val).format('YYYY-MM-DD') : '')
+  //   }
+  // }, {
+  //   title: '操作',
+  //   width: 200,
+  //   render: (record) => {
+  //     return (
+  //       <span>
+  //         <a hidden={!APP.hasPermission('crm_sign_myself_follow_up')} onClick={this.detail.bind(this, record, '5')}>跟进</a>
+  //         {
+  //           APP.hasPermission('crm_sign_myself_follow_up') && APP.hasPermission('crm_sign_myself_list_principals') &&
+  //           <Divider type='vertical'/>
+  //         }
+  //         <a hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, record.id)}>转跟进人</a>
+  //       </span>
+  //     )
+  //   }
+  // }
+  ]
   public componentWillMount () {
     this.fetchList()
     this.fetchAllWorker()
@@ -207,24 +272,44 @@ class Main extends React.Component {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (this.state.tab === '1') {
-      if (values.date.value) {
-        if (values.date.value.indexOf('至') > -1) {
-          beginTime = values.date.value.split('至')[0]
-          endTime = values.date.value.split('至')[1]
-        } else {
-          endTime = moment().format('YYYY-MM-DD')
-          beginTime = moment().startOf('day').subtract(values.date.value, 'day').format('YYYY-MM-DD')
-        }
-      }
-      if (values.date.label === '入库时间') {
-        this.paramsleft.storageBeginDate = beginTime || undefined
-        this.paramsleft.storageEndDate = endTime || undefined
+    if (values.date.value) {
+      if (values.date.value.indexOf('至') > -1) {
+        beginTime = values.date.value.split('至')[0]
+        endTime = values.date.value.split('至')[1]
+      } else {
+        endTime = moment().format('YYYY-MM-DD')
+        beginTime = moment().startOf('day').subtract(values.date.value, 'day').format('YYYY-MM-DD')
       }
     }
+    if (values.date.label === '入库时间') {
+      this.paramsleft.storageBeginDate = beginTime || undefined
+      this.paramsleft.storageEndDate = endTime || undefined
+    } else if (values.date.label === '创建时间') {
+      this.paramsleft.createBeginDate = beginTime || undefined
+      this.paramsleft.createEndDate = endTime || undefined
+    } else if (values.date.label === '预约时间') {
+      this.paramsleft.appointBeginTime = beginTime || undefined
+      this.paramsleft.appointEndTime = endTime || undefined
+    }
+    let startmonth
+    let endmonth
+    if (values.serviceExpire.value) {
+      if (values.serviceExpire.value.indexOf('至') > -1) {
+        startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
+        endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
+      } else {
+        const val = String(values.serviceExpire.value).slice(0, 1)
+        startmonth = moment().startOf('month').format('YYYY-MM-DD')
+        endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+      }
+    }
+    if (values.serviceExpire.label === '即将到期') {
+      this.paramsleft.serviceExpireBeginMonth = startmonth || undefined
+      this.paramsleft.serviceExpireEndMonth = endmonth || undefined
+    }
+    this.paramsleft.payTaxesNature = values.payTaxesNature.value || undefined
     this.fetchList()
   }
-
   public handleSelectType (values: any) {
     this.paramsright.customerSource = values.customerSource || undefined
     this.fetchList()
@@ -325,11 +410,8 @@ class Main extends React.Component {
     })
   }
 
-  public callBack (value: any) {
-    console.log(typeof(value), 'admafaefs')
-    this.setState({
-      tab: value
-    })
+  public callback () {
+
   }
 
   public render () {
@@ -340,29 +422,32 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox
-        className={styles.container}
         title='签约客户'
       >
         <div className='mb12'>
-        <Tabs
-          // className={styles.lab}
-          animated={false}
-          defaultActiveKey='1'
-          onChange={this.callBack.bind(this)}
-        >
+        <Tabs defaultActiveKey='1' onChange={this.callback}>
           <Tabs.TabPane tab='全部客户' key='1'>
+
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='预约回访' key='2'>
+
+          </Tabs.TabPane>
+          <Tabs.TabPane tab='到期续费' key='3'>
+
+          </Tabs.TabPane>
+        </Tabs>
+          <Condition
+            dataSource={this.data}
+            onChange={this.handleSearch.bind(this)}
+          />
           <div>
-            <Condition
-              className='mb10'
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
             <APP.Icon
-              style={{float: 'right', marginTop: 10}}
+              style={{float: 'right', marginTop: -8}}
               onClick={this.handleSwitch.bind(this)}
               type={this.state.extshow ? 'up' : 'down'}
             />
-            <div style={this.state.extshow ? {display:'block', marginTop: -5, marginBottom: 18} : {display: 'none'}}>
+          </div>
+          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
               <SearchName
                 style={{paddingTop: '5px'}}
@@ -395,43 +480,28 @@ class Main extends React.Component {
                 this.handleSelectType(values)
               }}
             />
-            </div>
-            </div>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              rowKey={'id'}
-              pagination={{
-                onChange: this.handlePageChange.bind(this),
-                onShowSizeChange: this.onShowSizeChange.bind(this),
-                total: pagination.total,
-                current: pagination.current,
-                pageSize: pagination.pageSize,
-                showQuickJumper: true,
-                showSizeChanger: true,
-                pageSizeOptions: this.pageSizeOptions,
-                size: 'small',
-                showTotal (total) {
-                  return `共计 ${total} 条`
-                }
-              }}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='预约回访' key='2'>
-            {
-              this.state.tab === '2' &&
-              <Appointment />
-            }
-          </Tabs.TabPane>
-          <Tabs.TabPane tab='到期续费' key='3'>
-            {
-              this.state.tab === '3' &&
-              <Expiration />
-            }
-          </Tabs.TabPane>
-        </Tabs>
+          </div>
         </div>
+        <Table
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+          rowSelection={rowSelection}
+          rowKey={'id'}
+          pagination={{
+            onChange: this.handlePageChange.bind(this),
+            onShowSizeChange: this.onShowSizeChange.bind(this),
+            total: pagination.total,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: this.pageSizeOptions,
+            size: 'small',
+            showTotal (total) {
+              return `共计 ${total} 条`
+            }
+          }}
+        />
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
           <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
         </div>

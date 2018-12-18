@@ -12,16 +12,11 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    // const figure: any [] = []
     const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
-      // if (index < 8) {
-      //   figure.push(item.customerSourceName)
-      // }
-      // return {
-      //   value: item.customerSourceNums,
-      //   name: item.customerSourceName
-      // }
-      return item.customerNums
+      return {
+        name: item.levelName,
+        value: item.levelNums
+      }
     })
     const option = {
       title: {
