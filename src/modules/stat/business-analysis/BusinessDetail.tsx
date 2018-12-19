@@ -33,14 +33,7 @@ interface State {
   char: any
 }
 
-// interface ValueProps {
-//   agencyId?: string,
-//   salesPerson?: Array<{id: string, name: string}>
-// }
-
 class Main extends React.Component<{}, State> {
-  // public values: ValueProps = {
-  // }
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
@@ -128,6 +121,80 @@ class Main extends React.Component<{}, State> {
     {
       title: '本月签单累计',
       dataIndex: 'salesDetails.signCustomerNums',
+      width: 130,
+      render : (text, record) => {
+        return (
+          record.signCustomerNums
+        )
+      }
+    }
+  ]
+
+  public columns2: ColumnProps<CrmStat.TotalSalesDetails>[] = [
+    {
+      title: '销售',
+      dataIndex: 'totalSalesDetails.salesperson',
+      width: 130,
+      align: 'left',
+      render: (text, record) => {
+        return (
+          record.salesperson
+        )
+      }
+    },
+    {
+      title: '当前客户',
+      dataIndex: 'totalSalesDetails.customerNums',
+      width: 130,
+      render: (text, record) => {
+        return (
+          record.customerNums
+        )
+      }
+    },
+    {
+      title: '0%意向度',
+      dataIndex: 'totalSalesDetails.percentZeroCustomerNums',
+      width: 130,
+      render : (text, record) => {
+        return (
+          record.percentZeroCustomerNums
+        )
+      }
+    },
+    {
+      title: '30%意向度',
+      dataIndex: 'totalSalesDetails.percentThirtyCustomerNums',
+      width: 130,
+      render : (text, record) => {
+        return (
+          record.percentThirtyCustomerNums
+        )
+      }
+    },
+    {
+      title: '60%意向度',
+      dataIndex: 'totalSalesDetails.percentSixtyCustomerNums',
+      width: 130,
+      render : (text, record) => {
+        return (
+          record.percentSixtyCustomerNums
+        )
+      }
+    },
+    {
+      title: '80%意向度',
+      dataIndex: 'totalSalesDetails.percentEightyCustomerNums',
+      width: 130,
+      render : (text, record) => {
+        return (
+          record.percentEightyCustomerNums
+        )
+      }
+    },
+    {
+      title: '本月签单累计',
+      dataIndex: 'totalSalesDetails.signCustomerNums',
       width: 130,
       render : (text, record) => {
         return (
@@ -299,6 +366,12 @@ class Main extends React.Component<{}, State> {
             pagination={false}
             scroll={{ y: 400 }}
           />
+          {/* <Table
+            columns={this.columns2}
+            dataSource={this.state.dataSource}
+            pagination={false}
+            scroll={{ y: 400 }}
+          /> */}
         </div>
       </div>
     )

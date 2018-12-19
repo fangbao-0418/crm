@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import { Table, Tooltip, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'

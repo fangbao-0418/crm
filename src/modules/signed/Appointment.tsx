@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import { Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
