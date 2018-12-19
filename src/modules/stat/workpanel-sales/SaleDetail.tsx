@@ -95,7 +95,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
+            {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
             <span>{record.salespersonName}</span>
           </span>
         )
@@ -226,8 +226,13 @@ class Main extends React.Component<{}, State> {
 
   public fetchList () {
     return getSalesRank(this.payload).then((res: any) => {
+      const a = res.data.callDetailInfos
+      const b = res.data.totalCallDetailInfos
+      b.salespersonName = '合计'
+      a.push(b)
+      const dataSource = a
       this.setState({
-        dataSource: res.data.callDetailInfos.map((v: any, i: any) => {v.key = i + 1; return v}),
+        dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
         strip: res.data,
         char: res.data.reportByDays
       })

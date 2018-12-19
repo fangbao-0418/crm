@@ -62,7 +62,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
+            {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
             <span>{record.salesperson}</span>
             </span>
         )
@@ -180,9 +180,14 @@ class Main extends React.Component<{}, State> {
 
   public fetchList () {
     getBusiness(this.payload).then((res: any) => {
-      console.log( res.data.salesDetails, '拼接 ')
+      const a = res.data.salesDetails
+      const b = res.data.totalSalesDetails
+      b.salespersonName = '合计'
+      a.push(b)
+      const dataSource = a
+      console.log(dataSource, '合计')
       this.setState({
-        dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
+        dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
         pi: res.data.reportFreeDays,
         char: res.data.reportPhoneStatuses
       })
