@@ -292,7 +292,7 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-        <div style={{marginTop: 8}}>
+        <div style={{marginTop: 15}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
