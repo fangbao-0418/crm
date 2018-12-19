@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Icon, Table } from 'antd'
+import { Select, Icon, Table, Row, Col } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getSalesRank } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
@@ -10,6 +10,7 @@ import AddButton from '@/modules/common/content/AddButton'
 const styles = require('./style')
 
 export interface PayloadProps {
+  agencyId: string
   totalBeginDate: string
   totalEndDate: string
   salespersonId: string
@@ -35,19 +36,20 @@ interface State {
   extshow: boolean
 }
 
-interface ValueProps {
-  agencyId?: string,
-  salesPerson?: Array<{id: string, name: string}>
-}
+// interface ValueProps {
+//   agencyId?: string,
+//   salesPerson?: Array<{id: string, name: string}>
+// }
 
 class Main extends React.Component<{}, State> {
-  public values: ValueProps = {
-  }
+  // public values: ValueProps = {
+  // }
   public SalespersonId = APP.keys.EnumSalespersonId
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
+    agencyId: '',
     totalBeginDate: moment().format('YYYY-MM-DD'),
     totalEndDate: moment().format('YYYY-MM-DD'),
     salespersonId: ''
@@ -194,7 +196,7 @@ class Main extends React.Component<{}, State> {
 
   public getFirms () {
     getFirms(this.companyTypeList).then((res) => {
-      console.log(res, 'redredrerdred')
+      this.payload.agencyId = res[0].id
       this.setState({
         firms: res,
         organ: res[0].id
@@ -211,9 +213,9 @@ class Main extends React.Component<{}, State> {
         return item.id
       })
       const sal = ''
-      const sale = res.length > 0 ? sales.join(',') : ''
+      // const sale = res.length > 0 ? sales.join(',') : ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
-      this.payload.salespersonId = sale
+      // this.payload.salespersonId = sale
       if (res.length === 0) {
         this.setState({
           strip: {
@@ -229,7 +231,7 @@ class Main extends React.Component<{}, State> {
       this.setState({
         dataSource,
         sallers: res,
-        sale,
+        // sale,
         sal
       }, () => {
         if (sales.length > 0) {
@@ -268,7 +270,7 @@ class Main extends React.Component<{}, State> {
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `/sys/crm-manage/v1/api/report/sales/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/sales/export?agencyId=${exports.agencyId}&totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +322,7 @@ class Main extends React.Component<{}, State> {
             style={{width: 200}}
             placeholder='请选择机构'
             onChange={(value: string) => {
-              this.values.agencyId = value
+              this.payload.agencyId = value
               this.getSales(value)
               this.setState({organ: value})
             }}
@@ -403,9 +405,11 @@ class Main extends React.Component<{}, State> {
           </div>
         </div>
 
-        <div style={{marginTop: 20}}>
-          <Line char={char}/>
-        </div>
+        <Row style={{marginTop: 20}}>
+          <Col span={24}>
+            <Line char={char}/>
+          </Col>
+        </Row>
 
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>排名</span>

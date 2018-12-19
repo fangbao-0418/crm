@@ -13,8 +13,9 @@ class Main extends React.Component<any> {
   public renderChart () {
     const char = this.props.char
     const option: echarts.EChartOption = {
+      color: ['#3398DB'],
       title: {
-        text: '每日趋势图',
+        text: '商机客户电话状态分布',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -32,13 +33,16 @@ class Main extends React.Component<any> {
         }
       },
       grid: {
-        left: '4%'
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
       },
       xAxis: {
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: true,
         data: char.map((item: any) => {
-          return item.totalDate
+          return item.statusName
         }),
         axisLine:{
           lineStyle:{
@@ -47,6 +51,9 @@ class Main extends React.Component<any> {
         },
         axisLabel: {
           color: '#595959'
+        },
+        axisTick: {
+          alignWithLabel: true
         }
       },
       yAxis: {
@@ -68,32 +75,11 @@ class Main extends React.Component<any> {
       },
       series: [{
         name: '客户数量',
-        type: 'line',
+        type: 'bar',
+        barWidth: '50%',
         data: char.map((item: any) => {
-          return item.customerNums
-        }),
-        itemStyle: {
-          color: '#FAD440'
-        },
-        areaStyle:{
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [{
-              offset: 0, color: 'rgba(251,211,55,0.4)' // 0% 处的颜色
-            }, {
-              offset: 0.4, color: 'rgba(251,211,55,0.3)'
-            }, {
-              offset: 0.6, color: 'rgba(251,211,55,0.2)'
-            }, {
-              offset: 1, color: 'rgba(251,211,55,0.1)' // 100% 处的颜色
-            }],
-            globalCoord: false // 缺省为 false
-          }
-        }
+          return item.statusNums
+        })
       }]
     }
     if (option && typeof option === 'object') {
@@ -103,7 +89,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '300px',  width: 850, marginBottom:'10px'}}></div>
+        <div ref='line' style={{height: 300,  width: 600, marginBottom:'10px'}}></div>
       </div>
     )
   }

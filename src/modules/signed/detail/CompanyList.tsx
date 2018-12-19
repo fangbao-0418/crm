@@ -58,6 +58,7 @@ export default class extends React.Component<Props> {
         dataSource={this.state.data}
         rowKey={'name'}
         pagination={false}
+        scroll={{ y: 400 }}
       />
     )
   }

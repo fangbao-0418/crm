@@ -46,7 +46,7 @@ class Main extends React.Component<{}, State> {
           <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />
           <Route path='/shout' hidden={!APP.hasPermission('crm_data_call')} component={modules.Shout} />
           <Route path='/workpanel-sales' hidden={!APP.hasPermission('crm_data_work')} component={modules.WorkpanelSales} />
-          <Route path='/customerpanel-trail' hidden={!APP.hasPermission('crm_data_customer')} component={modules.CustomerpanelTrail} />
+          <Route path='/business-analysis' component={modules.BusinessAnalysis} />
           <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />
           <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />
         </Switch>}

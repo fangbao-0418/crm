@@ -1,6 +1,6 @@
 import React from 'react'
 import ContentBox from '@/modules/common/content'
-import TrailDetail from './TrailDetail'
+import BusinessDetail from './BusinessDetail'
 
 class Main extends React.Component {
   public render () {
@@ -8,7 +8,7 @@ class Main extends React.Component {
       <ContentBox
         title='客户仪表盘'
       >
-        <TrailDetail />
+        <BusinessDetail />
       </ContentBox>
     )
   }

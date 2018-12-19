@@ -15,7 +15,7 @@ class Main extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div className={styles.top}>
-          <span className={styles.title}>{this.props.title}</span>
+          {this.props.title === '' ? '' : <span className={styles.title}>{this.props.title}</span>}
           {
             this.props.showFold && (
               <Icon

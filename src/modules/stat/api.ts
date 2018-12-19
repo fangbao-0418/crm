@@ -40,16 +40,16 @@ export const getFirms = (companyTypeList: string[] = []) => {
 }
 /** 工作仪表盘 */
 export const getSalesRank = (payload: {
+  agencyId: string,
   totalBeginDate: string,
   totalEndDate: string,
   salespersonId: string
 }) => {
   return http(`/crm-manage/v1/api/report/sales`, 'GET', payload)
 }
-/** 客户仪表盘-跟进客户 */
-export const getTrailRank = (payload: {
-  totalBeginDate: string,
-  totalEndDate: string,
+/** 商机仪表盘 */
+export const getBusiness = (payload: {
+  agencyId: string
   salespersonId: string
 }) => {
   return http(`/crm-manage/v1/api/report/customer`, 'GET', payload)

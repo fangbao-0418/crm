@@ -1,18 +1,17 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Row, Col, Table, Tabs } from 'antd'
+import { Select, Row, Col, Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getFirms, getTrailRank } from '@/modules/stat/api'
+import { getFirms, getBusiness } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
-import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import Line from './Line'
+import Bar from './Bar'
 import Pie from './Pie'
 import AddButton from '@/modules/common/content/AddButton'
+
 const styles = require('./style')
 
 export interface PayloadProps {
-  totalBeginDate: string
-  totalEndDate: string
+  agencyId: string
   salespersonId: string
 }
 
@@ -24,32 +23,29 @@ interface State {
   sallers: Array<{id: string, name: string}>
   /** 机构初始值 */
   organ: string
-  /** 传入的销售人员 */
+   /** 传入的销售人员 */
   sale: string
   /** 销售人员初始值 */
   sal: string
-  /** 跟进客户的每日趋势图 */
-  char: CrmStat.ReportTrackCustomerByDate[]
-  /** 跟进的客户分布图 */
-  pi: CrmStat.ReportCustomerSource[]
-  /** 折叠是否隐藏 */
-  extshow: boolean
+  /** 空置天数趋势图 */
+  pi: any
+  /** 电话状态分布图 */
+  char: any
 }
 
-interface ValueProps {
-  agencyId?: string,
-  salesPerson?: Array<{id: string, name: string}>
-}
+// interface ValueProps {
+//   agencyId?: string,
+//   salesPerson?: Array<{id: string, name: string}>
+// }
 
 class Main extends React.Component<{}, State> {
-  public values: ValueProps = {
-  }
+  // public values: ValueProps = {
+  // }
 
-  public SalespersonId = APP.keys.EnumSalespersonId
+  public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
-    totalBeginDate: moment().format('YYYY-MM-DD'),
-    totalEndDate: moment().format('YYYY-MM-DD'),
+    agencyId: '',
     salespersonId: ''
   }
 
@@ -61,38 +57,8 @@ class Main extends React.Component<{}, State> {
     sale: '',
     sal: '',
     char: [],
-    pi: [],
-    extshow: false
+    pi: []
   }
-  public condition: ConditionOptionProps[] = [
-    {
-      field: 'date',
-      label: ['时间'],
-      type: 'date',
-      value: '0',
-      options: [{
-        label: '今天',
-        value: '0'
-      }, {
-        label: '昨天',
-        value: '-1'
-      }, {
-        label: '本周',
-        value: (() => {
-          const date = new Date()
-          const D = date.getDay() - 1
-          return '-' + D
-        })()
-      }, {
-        label: '本月',
-        value: (() => {
-          const date = new Date()
-          const D = date.getDate() - 1
-          return '-' + D
-        })()
-      }]
-    }
-  ]
 
   public columns: ColumnProps<CrmStat.SalesDetails>[] = [
     {
@@ -110,12 +76,22 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '跟进客户',
-      dataIndex: 'salesDetails.trackContactNums',
+      title: '当前客户',
+      dataIndex: 'salesDetails.customerNums',
+      width: 130,
+      render: (text, record) => {
+        return (
+          record.customerNums
+        )
+      }
+    },
+    {
+      title: '0%意向度',
+      dataIndex: 'salesDetails.percentZeroCustomerNums',
       width: 130,
       render : (text, record) => {
         return (
-          record.trackContactNums
+          record.percentZeroCustomerNums
         )
       }
     },
@@ -150,27 +126,7 @@ class Main extends React.Component<{}, State> {
       }
     },
     {
-      title: '100%意向度',
-      dataIndex: 'salesDetails.percentHundredCustomerNums',
-      width: 130,
-      render : (text, record) => {
-        return (
-          record.percentHundredCustomerNums
-        )
-      }
-    },
-    {
-      title: '新签客户',
-      dataIndex: 'salesDetails.newCustomerNums',
-      width: 130,
-      render : (text, record) => {
-        return (
-          record.newCustomerNums
-        )
-      }
-    },
-    {
-      title: '转化率',
+      title: '本月签单累计',
       dataIndex: 'salesDetails.signCustomerNums',
       width: 130,
       render : (text, record) => {
@@ -181,27 +137,17 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public onDateChange (value: {[field: string]: {label: string, value: string}}) {
-    if (value.date.value.split('至').length === 2) {
-      this.payload.totalBeginDate = value.date.value.split('至')[0]
-      this.payload.totalEndDate = value.date.value.split('至')[1]
-    } else {
-      this.payload.totalBeginDate = moment().add(value.date.value, 'day').format('YYYY-MM-DD')
-      if (value.date.value === '-1') {
-        this.payload.totalEndDate = this.payload.totalBeginDate
-      } else {
-        this.payload.totalEndDate = moment().format('YYYY-MM-DD')
-      }
-    }
-    this.fetchList()
-  }
-
   public componentWillMount () {
     this.getFirms()
   }
 
   public getFirms () {
-    getFirms().then((res) => {
+    getFirms(this.companyTypeList).then((res) => {
+      // this.payload.agencyId = res.map((item: any) => {
+      //   return item.id
+      // })
+      this.payload.agencyId = res[0].id
+      console.log(this.payload.agencyId, '机构')
       this.setState({
         firms: res,
         organ: res[0].id
@@ -216,8 +162,8 @@ class Main extends React.Component<{}, State> {
       const sales = res.map((item: any) => {
         return item.id
       })
-      const sale = sales.join(',')
-      this.payload.salespersonId = sale
+      // const sale = sales.join(',')
+      // this.payload.salespersonId = sale
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
       if (res.length === 0) {
@@ -229,7 +175,7 @@ class Main extends React.Component<{}, State> {
       this.setState({
         dataSource,
         sallers: res,
-        sale,
+        // sale,
         sal
       }, () => {
         if (sales.length > 0) {
@@ -240,11 +186,11 @@ class Main extends React.Component<{}, State> {
   }
 
   public fetchList () {
-    getTrailRank(this.payload).then((res: any) => {
+    getBusiness(this.payload).then((res: any) => {
       this.setState({
         dataSource: res.data.salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
-        char: res.data.reportTrackCustomerByDate,
-        pi: res.data.reportCustomerSource
+        pi: res.data.reportFreeDays,
+        char: res.data.reportPhoneStatuses
       })
     })
   }
@@ -252,7 +198,7 @@ class Main extends React.Component<{}, State> {
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `/sys/crm-manage/v1/api/report/customer/export?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/customer/export?agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -265,7 +211,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '销售统计表.xlsx'
+      a.download = '销售统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -273,37 +219,17 @@ class Main extends React.Component<{}, State> {
     })
   }
 
-  // 搜索框折叠
-  public handleSwitch () {
-    this.setState({
-      extshow: !this.state.extshow
-    })
-  }
   public render () {
     return (
       <div>
-        <Condition
-          style={{marginLeft: -36}}
-          onChange={this.onDateChange.bind(this)}
-          dataSource={this.condition}
-        />
-        <div>
-          <img
-            src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-            style={{cursor: 'pointer', float: 'right'}}
-            width='14'
-            height='14'
-            onClick={this.handleSwitch.bind(this)}
-          />
-        </div>
-        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
+        <div style={{marginTop: 8}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请选择机构'
             onChange={(value: string) => {
-              // this.values.agencyId = value
+              this.payload.agencyId = value
               this.getSales(value)
               this.setState({
                 organ: value
@@ -343,19 +269,18 @@ class Main extends React.Component<{}, State> {
           </Select>
         </div>
         <div>
-        <Tabs animated={false} defaultActiveKey='1'>
-          <Tabs.TabPane tab='跟进客户' key='1'>
+          <div style={{marginTop: 25}}>
             <Row>
-              <Col span={15}>
-                <Line char={this.state.char}/>
-              </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <Pie pi={this.state.pi}/>
               </Col>
+              <Col span={12} offset={4}>
+                <Bar char={this.state.char}/>
+              </Col>
             </Row>
-          </Tabs.TabPane>
-        </Tabs>
+          </div>
         </div>
+          <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton

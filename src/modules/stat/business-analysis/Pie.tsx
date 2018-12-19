@@ -12,20 +12,16 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    const figure: any [] = []
     const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
-      if (index < 8) {
-        figure.push(item.customerSourceName)
-      }
       return {
-        value: item.customerSourceNums,
-        name: item.customerSourceName
+        name: item.levelName,
+        value: item.levelNums
       }
     })
     const option = {
       title: {
-        left: '80',
-        text: '客户来源分布',
+        left: '100',
+        text: '商机客户空置天数',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -37,15 +33,13 @@ class Main extends React.Component<any> {
         formatter: '{a} <br/>{b} ({d}%)'
       },
       legend: {
-        // type: 'scroll',
         orient: 'vertical',
         x: 'right',
-        data: figure,
-        bottom: 35
+        bottom: 100
       },
       series: [
         {
-          name: '客户来源',
+          name: '',
           type: 'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,
@@ -83,7 +77,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '250px', width: 400, marginBottom:'10px'}}></div>
+        <div ref='line' style={{height: '250px', width: 400, marginBottom: 10, marginLeft: -100}}></div>
       </div>
     )
   }
