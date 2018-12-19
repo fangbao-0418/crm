@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Select } from 'antd'
+import { Select } from 'antd'
 import { getFirms } from '@/modules/stat/api'
 const styles = require('./style')
 const Option = Select.Option
