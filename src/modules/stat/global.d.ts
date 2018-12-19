@@ -89,8 +89,29 @@ declare namespace CrmStat {
     averageCallSuccessPercent: number
     /**销售排名 */
     callDetailInfos: CrmStat.CallDetailInfos[]
+    /**销售排名求和 */
+    totalCallDetailInfos: CrmStat.TotalCallDetailInfos[]
   }
   export interface CallDetailInfos {
+    key: number
+    /** 销售组名称 */
+    salespersonName: string
+    /** 呼入量 */
+    callInTotalNums: number
+    /** 呼出量 */
+    callOutTotalNums: number
+    /** 接通量 */
+    callSuccessNums: number
+    /** 接通时长 */
+    totalCallDuration: number
+    /** 小于等于30秒接通量 */
+    callSuccessLte30SecondNums: number
+    /** 小于等于60秒接通量 */
+    callSuccessLte60SecondNums: number
+    /** 大于60秒接通量 */
+    callSuccessGt60SecondNums: number
+  }
+  export interface TotalCallDetailInfos {
     key: number
     /** 销售组名称 */
     salespersonName: string
@@ -125,6 +146,8 @@ declare namespace CrmStat {
     reportPhoneStatuses: CrmStat.ReportPhoneStatuses[]
     /** 销售明细表 */
     salesDetails: CrmStat.SalesDetails[]
+    /** 对象求和 */
+    totalSalesDetails: CrmStat.TotalSalesDetails[]
   }
   export interface ReportFreeDays {
     /** 级别名称 */
@@ -139,6 +162,25 @@ declare namespace CrmStat {
     statusNums: number
   }
   export interface SalesDetails {
+    key: number
+    /** 销售名称 */
+    salesperson: string
+    /** 当前客户数 */
+    customerNums: number
+    /** 0%客户 */
+    percentZeroCustomerNums: number
+    /** 30%客户 */
+    percentThirtyCustomerNums: number
+    /** 60%客户 */
+    percentSixtyCustomerNums: number
+    /** 80%客户 */
+    percentEightyCustomerNums: number
+    /** 100客户 */
+    percentHundredCustomerNums: number
+    /** 本月签约客户数 */
+    signCustomerNums: number
+  }
+  export interface TotalSalesDetails {
     key: number
     /** 销售名称 */
     salesperson: string
