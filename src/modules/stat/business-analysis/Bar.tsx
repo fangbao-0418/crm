@@ -57,7 +57,8 @@ class Main extends React.Component<any> {
         }
       },
       yAxis: {
-        type: 'value',
+        logBase: 10,
+        type: 'log',
         splitLine: {
           show: true,
           lineStyle: {
@@ -71,6 +72,11 @@ class Main extends React.Component<any> {
         },
         axisTick: {
           show: false
+        },
+        axisLabel: {
+          textStyle: {
+            color: '#2f4554'
+          }
         }
       },
       series: [{
