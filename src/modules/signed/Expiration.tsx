@@ -26,7 +26,6 @@ interface States {
     pageSize: number
   },
   worders: Array<{id: string, name: string}>
-  tab: '1' | '2' | '3'
 }
 class Main extends React.Component {
 
@@ -39,12 +38,13 @@ class Main extends React.Component {
       current: 1,
       pageSize: 15
     },
-    worders: [],
-    tab: '3'
+    worders: []
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
-  public paramsleft: Signed.SearchProps = {}
+  public paramsleft: Signed.SearchProps = {
+    serviceExpireEndMonth: moment().startOf('month').add(3, 'months').format('YYYY-MM-DD')
+  }
   public paramsright: Signed.SearchProps = {}
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public data: ConditionOptionProps[] = [
@@ -188,23 +188,14 @@ class Main extends React.Component {
   public handleSearch (values: any) {
     console.log(values, 'values')
     this.paramsleft = {}
-    let startmonth
     let endmonth
-    if (this.state.tab === '3') {
-      if (values.serviceExpire.value) {
-        if (values.serviceExpire.value.indexOf('至') > -1) {
-          startmonth = moment(values.serviceExpire.value.split('至')[0]).startOf('month').format('YYYY-MM-DD')
-          endmonth = moment(values.serviceExpire.value.split('至')[1]).startOf('month').format('YYYY-MM-DD')
-        } else {
-          const val = String(values.serviceExpire.value).slice(0, 1)
-          startmonth = moment().startOf('month').format('YYYY-MM-DD')
-          endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
-        }
-      }
-      if (values.serviceExpire.label === '即将到期') {
-        this.paramsleft.serviceExpireEndMonth = endmonth || undefined
-      }
+    if (/month$/.test(values.serviceExpire.value)) {
+      const val = String(values.serviceExpire.value).slice(0, 1)
+      endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
+    } else {
+      endmonth = values.serviceExpire.value
     }
+    this.paramsleft.serviceExpireEndMonth = endmonth || undefined
     this.fetchList()
   }
 

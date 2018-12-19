@@ -26,8 +26,7 @@ interface States {
     current: number
     pageSize: number
   },
-  worders: Array<{id: string, name: string}>,
-  tab: '1' | '2' | '3'
+  worders: Array<{id: string, name: string}>
 }
 class Main extends React.Component {
 
@@ -40,8 +39,7 @@ class Main extends React.Component {
       current: 1,
       pageSize: 15
     },
-    worders: [],
-    tab: '2'
+    worders: []
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
@@ -191,21 +189,17 @@ class Main extends React.Component {
     this.paramsleft = {}
     let beginTime
     let endTime
-    if (this.state.tab === '2') {
-      if (values.appointTime.value) {
-        if (values.appointTime.value.indexOf('至') > -1) {
-          beginTime = values.appointTime.value.split('至')[0]
-          endTime = values.appointTime.value.split('至')[1]
-        } else {
-          endTime = moment().format('YYYY-MM-DD')
-          beginTime = moment().startOf('day').subtract(values.appointTime.value, 'day').format('YYYY-MM-DD')
-        }
-      }
-      if (values.appointTime.label === '预约时间') {
-        this.paramsleft.appointBeginTime = beginTime || undefined
-        this.paramsleft.appointEndTime = endTime || undefined
+    if (values.appointTime.value) {
+      if (values.appointTime.value.indexOf('至') > -1) {
+        beginTime = values.appointTime.value.split('至')[0]
+        endTime = values.appointTime.value.split('至')[1]
+      } else {
+        endTime = moment().format('YYYY-MM-DD')
+        beginTime = moment().startOf('day').subtract(values.appointTime.value, 'day').format('YYYY-MM-DD')
       }
     }
+    this.paramsleft.appointBeginTime = beginTime || undefined
+    this.paramsleft.appointEndTime = endTime || undefined
     this.fetchList()
   }
 
