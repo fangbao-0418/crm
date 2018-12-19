@@ -205,6 +205,8 @@ class Main extends React.Component {
 
   public handleSelectType (values: any) {
     this.paramsright.customerSource = values.customerSource || undefined
+    this.paramsright.payTaxesNature = values.payTaxesNature || undefined
+    this.paramsright.agencyId = values.agencyId || undefined
     this.fetchList()
   }
   public handleSearchType (value: {key: string, value?: string}) {
