@@ -194,8 +194,8 @@ class Main extends React.Component {
         beginTime = values.appointTime.value.split('至')[0]
         endTime = values.appointTime.value.split('至')[1]
       } else {
-        endTime = moment().format('YYYY-MM-DD')
-        beginTime = moment().startOf('day').subtract(values.appointTime.value, 'day').format('YYYY-MM-DD')
+        beginTime = moment().format('YYYY-MM-DD')
+        endTime = moment().startOf('day').add(values.appointTime.value, 'day').format('YYYY-MM-DD')
       }
     }
     this.paramsleft.appointBeginTime = beginTime || undefined
