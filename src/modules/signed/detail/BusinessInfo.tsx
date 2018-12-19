@@ -331,21 +331,15 @@ class Main extends React.Component<Props, State> {
                 style={{width: '100%'}}
                 label='经营范围'
               >
-                {!disabled ? getFieldDecorator(
-                  'businessScope',
-                  {
-                    initialValue: detail.businessScope
-                  }
-                )(
-                  <Input.TextArea disabled={this.state.disabled} />
-                ) : getFieldDecorator(
-                  'businessScope',
-                  {
-                    initialValue: detail.businessScope
-                  }
-                )(
-                  <Input.TextArea disabled={disabled} />
-                )
+                {
+                  getFieldDecorator(
+                    'businessScope',
+                    {
+                      initialValue: detail.businessScope
+                    }
+                  )(
+                    <Input.TextArea disabled={disabled} />
+                  )
                 }
               </FormItem>
             </Col>

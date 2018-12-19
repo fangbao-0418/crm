@@ -32,18 +32,10 @@ interface State {
   strip: any
   /** 每日呼叫趋势图 */
   char: CrmStat.ReportByDays[]
-  /** 折叠是否隐藏 */
-  extshow: boolean
 }
 
-// interface ValueProps {
-//   agencyId?: string,
-//   salesPerson?: Array<{id: string, name: string}>
-// }
-
 class Main extends React.Component<{}, State> {
-  // public values: ValueProps = {
-  // }
+
   public SalespersonId = APP.keys.EnumSalespersonId
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
@@ -69,8 +61,7 @@ class Main extends React.Component<{}, State> {
       callOutTotalNums: 0,
       averageCallSuccessPercent: 0
     },
-    char: [],
-    extshow: false
+    char: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -87,18 +78,10 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '本周',
-        value: (() => {
-          const date = new Date()
-          const D = date.getDay() - 1
-          return '-' + D
-        })()
+        value: 'week'
       }, {
         label: '本月',
-        value: (() => {
-          const date = new Date()
-          const D = date.getDate() - 1
-          return '-' + D
-        })()
+        value: 'month'
       }]
     }
   ]
@@ -251,7 +234,7 @@ class Main extends React.Component<{}, State> {
     })
   }
 
-  public onDateChange (value: {[field: string]: {label: string, value: string}}) {
+  public onDateChange (value: {[field: string]: { label: string, value: string }}) {
     if (value.date.value.split('至').length === 2) {
       this.payload.totalBeginDate = value.date.value.split('至')[0]
       this.payload.totalEndDate = value.date.value.split('至')[1]
@@ -263,9 +246,18 @@ class Main extends React.Component<{}, State> {
         this.payload.totalEndDate = moment().format('YYYY-MM-DD')
       }
     }
+    if (value.date.value === 'week') {
+      const date = new Date()
+      const val = date.getDay() === 0 ? -'6' : '-' + (date.getDay() - 1)
+      this.payload.totalBeginDate = moment().add(val, 'day').format('YYYY-MM-DD')
+    }
+    if (value.date.value === 'month') {
+      const date = new Date()
+      const val = '-' + (date.getDate() - 1)
+      this.payload.totalBeginDate = moment().add(val, 'day').format('YYYY-MM-DD')
+    }
     this.fetchList()
   }
-
   // 导出
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
@@ -291,12 +283,6 @@ class Main extends React.Component<{}, State> {
     })
   }
 
-  // 搜索框折叠
-  public handleSwitch () {
-    this.setState({
-      extshow: !this.state.extshow
-    })
-  }
   public render () {
     const {firms, dataSource, strip, char } = this.state
     return (
@@ -306,16 +292,7 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-        <div>
-          <img
-            src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-            style={{cursor: 'pointer', float: 'right', marginTop: -5}}
-            width='14'
-            height='14'
-            onClick={this.handleSwitch.bind(this)}
-          />
-        </div>
-        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
+        <div style={{marginTop: 15}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
@@ -405,11 +382,9 @@ class Main extends React.Component<{}, State> {
           </div>
         </div>
 
-        <Row style={{marginTop: 20}}>
-          <Col span={24}>
-            <Line char={char}/>
-          </Col>
-        </Row>
+        <div>
+          <Line char={char}/>
+        </div>
 
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>排名</span>

@@ -1,5 +1,51 @@
-.lab
-  margin-bottom: 60px
+.container
+  display: inline-block
+  ul
+    li
+      padding: 3px 5px 3px
+      .label
+        text-align: right
+        font-size: 12px
+        width: 80px
+        display: inline-block
+        padding-right: 5px
+      .options
+        display: inline-block
+        height: 28px
+        line-height: 28px
+        .tag
+          display: inline-block
+          min-width: 80px
+          :global
+            .ant-tag
+              padding: 0 7px
+              min-width: 50px
+              text-align: center
+        .after
+          display: inline-block
+          span:first-child
+            margin-right: 8px
+          :global
+            .ant-calendar-picker-input
+              border none
+              &::placeholder
+                color: rgba(0,0,0,.65)
+              &:focus
+                box-shadow: none
+              input
+                &::placeholder
+                  color: rgba(0,0,0,.65)
+                &:focus
+                  box-shadow: none
   :global
-    .ant-tabs-nav
-      margin-left: -63px
+    .ant-calendar-picker
+      width: 200px
+    .ant-calendar-picker-icon
+      font-size 12px
+    .ant-calendar-range-picker-input
+      font-size 12px
+.icon
+  cursor pointer
+.select
+  display inline-block
+  margin-left -35px

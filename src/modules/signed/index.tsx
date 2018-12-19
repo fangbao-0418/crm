@@ -4,7 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import SelectSearch from '@/modules/common/search/SelectSearch'
+import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import Provider from '@/components/Provider'
 import View from './detail'
@@ -14,7 +14,6 @@ import moment from 'moment'
 import Appointment from './Appointment'
 import Expiration from './Expiration'
 
-const styles = require('./style')
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
 const all: any = [{
@@ -340,12 +339,10 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox
-        className={styles.container}
         title='签约客户'
       >
         <div className='mb12'>
         <Tabs
-          // className={styles.lab}
           animated={false}
           defaultActiveKey='1'
           onChange={this.callBack.bind(this)}
