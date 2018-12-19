@@ -56,10 +56,10 @@ class Main extends React.Component<Props> {
             }
             if (this.value === undefined) {
               this.value = {
-                key: options[0].value
+                key: options[0].value.trim()
               }
             }
-            this.value.value = e.target.value
+            this.value.value = e.target.value.trim()
             if (this.props.onChange) {
               this.props.onChange(_.cloneDeep(this.value))
             }
@@ -70,11 +70,11 @@ class Main extends React.Component<Props> {
             }
             if (this.value === undefined) {
               this.value = {
-                key: options[0].value
+                key: options[0].value.trim()
               }
             }
             const target: any = e.target
-            this.value.value = target.value
+            this.value.value = target.value.trim()
             if (this.props.onKeyDown) {
               this.props.onKeyDown(e, _.cloneDeep(this.value))
             }
