@@ -181,11 +181,9 @@ class Main extends React.Component<{}, State> {
   public fetchList () {
     getBusiness(this.payload).then((res: any) => {
       const a = res.data.salesDetails
-      const b = res.data.totalSalesDetails
-      b.salespersonName = '合计'
-      a.push(b)
+      res.data.totalSalesDetails.salespersonName = '合计'
+      a.push(res.data.totalSalesDetails)
       const dataSource = a
-      console.log(dataSource, '合计')
       this.setState({
         dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
         pi: res.data.reportFreeDays,

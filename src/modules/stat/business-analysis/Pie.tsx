@@ -35,7 +35,7 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        bottom: 100
+        bottom: 60
       },
       series: [
         {

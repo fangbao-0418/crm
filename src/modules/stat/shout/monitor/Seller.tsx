@@ -85,9 +85,7 @@ class Main extends React.Component<Props, State> {
     const { pagination } = this.state
     return getCallMonitors(this.payload).then((res) => {
       const a = res.data.data
-      const b = res.totalData
-      console.log(b, 'Group')
-      b.salespersonName = '合计'
+      res.totalData.salespersonName = '合计'
       a.push(res.totalData)
       const dataSource = a
       pagination.total = res.totalCount

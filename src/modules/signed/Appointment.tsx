@@ -194,8 +194,8 @@ class Main extends React.Component {
         beginTime = values.appointTime.value.split('至')[0]
         endTime = values.appointTime.value.split('至')[1]
       } else {
-        endTime = moment().format('YYYY-MM-DD')
-        beginTime = moment().startOf('day').subtract(values.appointTime.value, 'day').format('YYYY-MM-DD')
+        beginTime = moment().format('YYYY-MM-DD')
+        endTime = moment().startOf('day').add(values.appointTime.value, 'day').format('YYYY-MM-DD')
       }
     }
     this.paramsleft.appointBeginTime = beginTime || undefined
@@ -205,6 +205,8 @@ class Main extends React.Component {
 
   public handleSelectType (values: any) {
     this.paramsright.customerSource = values.customerSource || undefined
+    this.paramsright.payTaxesNature = values.payTaxesNature || undefined
+    this.paramsright.agencyId = values.agencyId || undefined
     this.fetchList()
   }
   public handleSearchType (value: {key: string, value?: string}) {

@@ -11,6 +11,7 @@ interface States {
   length: any[]
   numb: any[]
   OrderData: Array<{
+    isRenewalAble: boolean
     orderCode: string
     createTime: string
     salerName: string
@@ -61,10 +62,7 @@ class Main extends React.Component<Props> {
       })
     })
   }
-  // 发起续约
-  public renewal () {
 
-  }
   public render () {
     const {numb, length} = this.state
 
@@ -175,8 +173,8 @@ class Main extends React.Component<Props> {
                     <span>{item.amount}</span>
                   </div>
                 </div>
-                <div className={styles['order-footer']}>
-                  <span onClick={this.renewal.bind(this)}>发起续签</span>
+                <div className={styles['order-footer']} style={!!item.isRenewalAble ? {display: 'block'} : {display: 'none'}}>
+                  <span onClick={() => {window.open(`/shop-order/orders/continue/${item.orderCode}`)}}>发起续签</span>
                 </div>
               </div>
             )
