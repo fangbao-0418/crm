@@ -95,7 +95,7 @@ class Main extends React.Component<{}, State> {
       render: (text, record) => {
         return (
           <span>
-            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
+            {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
             <span>{record.salespersonName}</span>
           </span>
         )
@@ -173,89 +173,6 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public columns2: ColumnProps<CrmStat.TotalCallDetailInfos>[] = [
-    {
-      title: '销售',
-      dataIndex: 'totalCallDetailInfos.salespersonName',
-      align: 'left',
-      width: 130,
-      render: (text, record) => {
-        return (
-         record.salespersonName
-        )
-      }
-    },
-    {
-      title: '通话量',
-      dataIndex: 'callTotalNums',
-      width: 130,
-      render: (text, record) => {
-        return (
-          record.callInTotalNums + record.callOutTotalNums
-        )
-      }
-    },
-    {
-      title: '接通量',
-      dataIndex: 'totalCallDetailInfos.callSuccessNums',
-      width: 130,
-      render: (text, record) => {
-        return (
-          record.callSuccessNums
-        )
-      }
-    },
-    {
-      title: '接通率',
-      dataIndex: 'averageCallSuccessPercent',
-      width: 130,
-      render: (text, record) => {
-        return (
-          (Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) || 0) + '%'
-        )
-      }
-    },
-    {
-      title: '通话时长',
-      dataIndex: 'totalCallDetailInfos.totalCallDuration',
-      width: 130,
-      render: (text, record) => {
-        return (
-          APP.fn.formatDuration(record.totalCallDuration)
-        )
-      }
-    },
-    {
-      title: '1"- 30"',
-      dataIndex: 'totalCallDetailInfos.callSuccessLte30SecondNums',
-      width: 130,
-      render: (text, record) => {
-        return (
-          record.callSuccessLte30SecondNums
-        )
-      }
-    },
-    {
-      title: '30"- 60"',
-      dataIndex: 'totalCallDetailInfos.callSuccessLte60SecondNums',
-      width: 130,
-      render: (text, record) => {
-        return (
-          record.callSuccessLte60SecondNums
-        )
-      }
-    },
-    {
-      title: '> 60"',
-      dataIndex: 'totalCallDetailInfos.callSuccessGt60SecondNums',
-      width: 130,
-      render: (text, record) => {
-        return (
-          record.callSuccessGt60SecondNums
-        )
-      }
-    }
-  ]
   public componentWillMount () {
     this.getFirms()
   }
@@ -309,8 +226,13 @@ class Main extends React.Component<{}, State> {
 
   public fetchList () {
     return getSalesRank(this.payload).then((res: any) => {
+      const a = res.data.callDetailInfos
+      const b = res.data.totalCallDetailInfos
+      b.salespersonName = '合计'
+      a.push(b)
+      const dataSource = a
       this.setState({
-        dataSource: res.data.callDetailInfos.map((v: any, i: any) => {v.key = i + 1; return v}),
+        dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
         strip: res.data,
         char: res.data.reportByDays
       })
@@ -489,12 +411,6 @@ class Main extends React.Component<{}, State> {
             pagination={false}
             scroll={{ y: 400 }}
           />
-          {/* <Table
-            columns={this.columns2}
-            dataSource={dataSource}
-            pagination={false}
-            scroll={{ y: 400 }}
-          /> */}
         </div>
       </div>
     )
