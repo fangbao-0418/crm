@@ -43,7 +43,7 @@ class Main extends React.Component {
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
   public paramsleft: Signed.SearchProps = {
-    serviceExpireEndMonth: moment().startOf('month').add(3, 'months').format('YYYY-MM-DD')
+    serviceExpireEndMonth: moment().startOf('month').add(1, 'months').format('YYYY-MM-DD')
   }
   public paramsright: Signed.SearchProps = {}
   public curSale: {key: string, label: string} = { key: '', label: ''}
@@ -52,7 +52,7 @@ class Main extends React.Component {
       field: 'serviceExpire',
       label: ['即将到期'],
       range: false,
-      value: '3month',
+      value: '1month',
       placeholder: '结束账期',
       options: [
         {
