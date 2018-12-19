@@ -32,18 +32,10 @@ interface State {
   strip: any
   /** 每日呼叫趋势图 */
   char: CrmStat.ReportByDays[]
-  /** 折叠是否隐藏 */
-  extshow: boolean
 }
 
-// interface ValueProps {
-//   agencyId?: string,
-//   salesPerson?: Array<{id: string, name: string}>
-// }
-
 class Main extends React.Component<{}, State> {
-  // public values: ValueProps = {
-  // }
+
   public SalespersonId = APP.keys.EnumSalespersonId
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
@@ -69,8 +61,7 @@ class Main extends React.Component<{}, State> {
       callOutTotalNums: 0,
       averageCallSuccessPercent: 0
     },
-    char: [],
-    extshow: false
+    char: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -292,12 +283,6 @@ class Main extends React.Component<{}, State> {
     })
   }
 
-  // 搜索框折叠
-  public handleSwitch () {
-    this.setState({
-      extshow: !this.state.extshow
-    })
-  }
   public render () {
     const {firms, dataSource, strip, char } = this.state
     return (
@@ -307,16 +292,7 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-        <div>
-          <img
-            src={require(`@/assets/images/${this.state.extshow ? 'up' : 'down'}.svg`)}
-            style={{cursor: 'pointer', float: 'right', marginTop: -5}}
-            width='14'
-            height='14'
-            onClick={this.handleSwitch.bind(this)}
-          />
-        </div>
-        <div style={this.state.extshow ? {display:'block', marginTop: 8} : {display: 'none'}}>
+        <div style={{marginTop: 8}}>
           <Select
             value={this.state.organ}
             className='inline-block mr8'
