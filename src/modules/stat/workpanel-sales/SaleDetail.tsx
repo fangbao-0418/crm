@@ -227,9 +227,8 @@ class Main extends React.Component<{}, State> {
   public fetchList () {
     return getSalesRank(this.payload).then((res: any) => {
       const a = res.data.callDetailInfos
-      const b = res.data.totalCallDetailInfos
-      b.salespersonName = '合计'
-      a.push(b)
+      res.data.totalCallDetailInfos.salespersonName = '合计'
+      a.push(res.data.totalCallDetailInfos)
       const dataSource = a
       this.setState({
         dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),

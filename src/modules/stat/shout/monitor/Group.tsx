@@ -3,7 +3,6 @@ import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getGroupCallMonitors } from '@/modules/stat/api'
 import { PayloadProps } from './index'
-import { changeConfirmLocale } from 'antd/lib/modal/locale'
 interface Props {
   payload: PayloadProps
 }
