@@ -2,8 +2,8 @@ import React from 'react'
 import { Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getCallMonitors } from '@/modules/stat/api'
-import moment from 'moment'
 import { PayloadProps } from './index'
+import _ from 'lodash'
 interface State {
   dataSource: CrmStat.MonitorItemProps[]
   pagination: {
@@ -84,24 +84,30 @@ class Main extends React.Component<Props, State> {
   public fetchList () {
     const { pagination } = this.state
     return getCallMonitors(this.payload).then((res) => {
-      const a = res.data.data
-      res.totalData.salespersonName = '合计'
-      a.push(res.totalData)
-      const dataSource = a
-      pagination.total = res.totalCount
-      pagination.pageCurrent = res.pageCurrent
-      pagination.pageSize = res.pageSize
-      this.setState({
-        dataSource,
-        pagination
-      })
+      if (res && res.data) {
+        const a = res.data.data || []
+        const total = (res.data.pageTotal + 1)
+        if (res.data.pageCurrent === Math.ceil(total / res.data.pageSize)) {
+          res.totalData.salespersonName = '合计'
+          a.push(_.cloneDeep(res.totalData))
+        }
+        pagination.total = total
+        pagination.pageCurrent = res.data.pageCurrent
+        pagination.pageSize = res.data.pageSize
+        this.setState({
+          dataSource: a,
+          pagination
+        })
+      }
     })
   }
   public render () {
     const { pagination } = this.state
+    console.log(this.state.dataSource, 'datasource')
     return (
       <div>
         <Table
+          rowKey='id'
           columns={this.columns}
           dataSource={this.state.dataSource}
           pagination={{

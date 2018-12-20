@@ -24,7 +24,8 @@ const options = {
     //   }
     // },
     '/sys': {
-      target: 'https://x-sys.i-counting.cn',
+      // target: 'https://x-sys.i-counting.cn',
+      target: 'https://icrm.pilipa.cn',
       changeOrigin: true,
       secure: false
     },
