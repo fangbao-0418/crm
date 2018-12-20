@@ -44,6 +44,9 @@ class Main extends React.Component<Props> {
         {
           this.props.type === 'signed' &&
           <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             allowClear={true}
             className='mr5'
             style={{width: 150}}
