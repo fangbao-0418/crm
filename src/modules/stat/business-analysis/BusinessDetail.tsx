@@ -221,6 +221,9 @@ class Main extends React.Component<{}, State> {
       <div>
         <div style={{marginTop: 8}}>
           <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             value={this.state.organ}
             className='inline-block mr8'
             style={{width: 200}}
