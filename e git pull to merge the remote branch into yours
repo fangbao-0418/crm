@@ -1,0 +1,50 @@
+[1mdiff --cc src/modules/common/Main.tsx[m
+[1mindex e1de27b,152b57e..0000000[m
+[1m--- a/src/modules/common/Main.tsx[m
+[1m+++ b/src/modules/common/Main.tsx[m
+[36m@@@ -46,7 -46,7 +46,11 @@@[m [mclass Main extends React.Component<{}, [m
+            <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />[m
+            <Route path='/shout' hidden={!APP.hasPermission('crm_data_call')} component={modules.Shout} />[m
+            <Route path='/workpanel-sales' hidden={!APP.hasPermission('crm_data_work')} component={modules.WorkpanelSales} />[m
+[32m++<<<<<<< HEAD[m
+[32m +          <Route path='/business-analysis' component={modules.BusinessAnalysis} />[m
+[32m++=======[m
+[32m+           <Route path='/business-analysis' hidden={!APP.hasPermission('crm_data_customer')} component={modules.BusinessAnalysis} />[m
+[32m++>>>>>>> [feat] 失效[m
+            <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />[m
+            <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />[m
+          </Switch>}[m
+[1mdiff --cc src/router/load-file.js[m
+[1mindex 8f032f6,acca416..0000000[m
+[1m--- a/src/router/load-file.js[m
+[1m+++ b/src/router/load-file.js[m
+[36m@@@ -7,6 -7,6 +7,10 @@@[m [mexport { default as loadSigned } from '[m
+  /** 呼叫统计 */[m
+  export { default as loadShout } from 'bundle-loader?lazy&name=[name]!@/modules/stat/shout'[m
+  export { default as loadWorkpanelSales } from 'bundle-loader?lazy&name=[name]!@/modules/stat/workpanel-sales'[m
+[32m++<<<<<<< HEAD[m
+[32m +export { default as loadBusinessAnalysis } from 'bundle-loader?lazy&name=[name]!@/modules/stat/business-analysis'[m
+[32m++=======[m
+[32m+ export { default as loadCustomerTrail } from 'bundle-loader?lazy&name=[name]!@/modules/stat/customerpanel-trail'[m
+[32m++>>>>>>> [feat] 失效[m
+  export { default as loadCustomerSet } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/main'[m
+  export { default as loadCustomerSetAssign } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/assign'[m
+[1mdiff --cc src/router/modules.d.ts[m
+[1mindex d78f3aa,d45f14b..0000000[m
+[1m--- a/src/router/modules.d.ts[m
+[1m+++ b/src/router/modules.d.ts[m
+[36m@@@ -20,7 -20,7 +20,11 @@@[m [minterface ModuleProps [m
+    /** 工作仪表盘 */[m
+    WorkpanelSales: RouteComponent[m
+    /** 商机分析 */[m
+[32m++<<<<<<< HEAD[m
+[32m +  BusinessAnalysis: RouteComponent[m
+[32m++=======[m
+[32m+   CustomerpanelTrail: RouteComponent[m
+[32m++>>>>>>> [feat] 失效[m
+    /** 404 */[m
+    Unfound: RouteComponent[m
+  }[m
+* Unmerged path src/modules/stat/business-analysis/Line.tsx
+* Unmerged path src/modules/stat/customerpanel-trail/Line.tsx
+* Unmerged path src/modules/stat/workpanel-sales/Line.tsx
