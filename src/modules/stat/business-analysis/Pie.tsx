@@ -3,7 +3,7 @@ import React from 'react'
 class Main extends React.Component<any> {
   public chart: echarts.ECharts
   public componentDidMount () {
-    const dom: any = this.refs.line
+    const dom: any = this.refs.pie
     this.chart = echarts.init(dom)
     this.renderChart()
   }
@@ -30,7 +30,7 @@ class Main extends React.Component<any> {
       },
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b} ({d}%)'
+        formatter: '{a} <br/>{b} ({c}, {d}%)'
       },
       legend: {
         orient: 'vertical',
@@ -39,7 +39,7 @@ class Main extends React.Component<any> {
       },
       series: [
         {
-          name: '',
+          name: '空置天数',
           type: 'pie',
           radius: ['50%', '70%'],
           avoidLabelOverlap: false,
@@ -77,7 +77,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '250px', width: 400, marginBottom: 10, marginLeft: -100}}></div>
+        <div ref='pie' style={{height: '250px', width: 400, marginBottom: 10, marginLeft: -100}}></div>
       </div>
     )
   }
