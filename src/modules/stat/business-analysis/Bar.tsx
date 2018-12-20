@@ -12,6 +12,15 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const char = this.props.char
+    let max = 0
+    let interval = 1
+    char.map((item: any) => {
+      if (max < item.statusNums) {
+        max = item.statusNums
+      }
+    })
+    interval = Math.ceil(max / 5)
+    max = interval * 5
     const option: echarts.EChartOption = {
       color: ['#39A0FF'],
       title: {
@@ -57,8 +66,9 @@ class Main extends React.Component<any> {
         }
       },
       yAxis: {
-        logBase: 10,
-        type: 'log',
+        max,
+        interval,
+        type: 'value',
         splitLine: {
           show: true,
           lineStyle: {
