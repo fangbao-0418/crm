@@ -13,7 +13,7 @@ class Main extends React.Component<any> {
   public renderChart () {
     const char = this.props.char
     const option: echarts.EChartOption = {
-      color: ['#3398DB'],
+      color: ['#39A0FF'],
       title: {
         text: '商机客户电话状态分布',
         textStyle: {
@@ -82,7 +82,7 @@ class Main extends React.Component<any> {
       series: [{
         name: '客户数量',
         type: 'bar',
-        barWidth: '50%',
+        barWidth: '40%',
         data: char.map((item: any) => {
           return item.statusNums
         })
