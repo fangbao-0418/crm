@@ -174,9 +174,9 @@ class Main extends React.Component<Props> {
                   </div>
                 </div>
                 <div className={styles['order-footer']} style={!!item.isRenewalAble ? {display: 'block'} : {display: 'none'}}>
-                  <span 
+                  <span
                     onClick={() => {
-                      if(!APP.hasPermission('order_orders_continue')) {
+                      if (!APP.hasPermission('order_orders_continue')) {
                         return
                       }
                       window.open(`/shop-order/orders/continue/${item.orderCode}`)
