@@ -3,7 +3,7 @@ import React from 'react'
 class Main extends React.Component<any> {
   public chart: echarts.ECharts
   public componentDidMount () {
-    const dom: any = this.refs.line
+    const dom: any = this.refs.bar
     this.chart = echarts.init(dom)
     this.renderChart()
   }
@@ -95,7 +95,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: 300,  width: 600, marginBottom:'10px'}}></div>
+        <div ref='bar' style={{height: 300,  width: 600, marginBottom:'10px'}}></div>
       </div>
     )
   }
