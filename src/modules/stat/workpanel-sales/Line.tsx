@@ -131,6 +131,9 @@ class Main extends React.Component<any> {
     }
     if (option && typeof option === 'object') {
       this.chart.setOption(option, true)
+      window.addEventListener('resize', () => {
+        this.chart.resize()
+      })
     }
   }
   public render () {

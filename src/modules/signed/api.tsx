@@ -5,6 +5,12 @@ export const fetchList = (payload: SearchProps) => {
     data: payload
   })
 }
+// 预约回访
+export const fetchAppointment = (payload: SearchProps) => {
+  return http(`/crm-manage/v1/api/sign-appoint`, 'GET', {
+    data: payload
+  })
+}
 export const toOther = (payload: {
   customerIdArr: string[]
   principalsId: string

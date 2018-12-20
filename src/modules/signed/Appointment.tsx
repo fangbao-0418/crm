@@ -8,7 +8,7 @@ import SearchName from '@/modules/common/search/SearchName'
 import moment from 'moment'
 import Provider from '@/components/Provider'
 import View from './detail'
-import { fetchList, fetchWorkers } from './api'
+import { fetchAppointment, fetchWorkers } from './api'
 
 type DetailProps = Signed.DetailProps
 
@@ -146,7 +146,7 @@ class Main extends React.Component {
     const pagination = this.state.pagination
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
-    fetchList(this.params).then((res) => {
+    fetchAppointment(this.params).then((res) => {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
