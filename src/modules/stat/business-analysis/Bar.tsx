@@ -82,7 +82,8 @@ class Main extends React.Component<any> {
       series: [{
         name: '客户数量',
         type: 'bar',
-        barWidth: '40%',
+        barWidth: '40',
+        // barMaxWidth: '40%',
         data: char.map((item: any) => {
           return item.statusNums
         })
