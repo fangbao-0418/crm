@@ -221,6 +221,9 @@ class Main extends React.Component<{}, State> {
       <div>
         <div style={{marginTop: 8}}>
           <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             value={this.state.organ}
             className='inline-block mr8'
             style={{width: 200}}
@@ -284,6 +287,7 @@ class Main extends React.Component<{}, State> {
             style={{float: 'right'}}
             icon={<APP.Icon type='export' />}
             title='导出'
+            hidden={!APP.hasPermission('crm_data_business_export')}
             onClick={() => {
               this.export(this.payload)
             }}
