@@ -181,7 +181,7 @@ class Main extends React.Component<{}, State> {
   public fetchList () {
     getBusiness(this.payload).then((res: any) => {
       const a = res.data.salesDetails
-      res.data.totalSalesDetails.salespersonName = '合计'
+      res.data.totalSalesDetails.salesperson = '合计'
       a.push(res.data.totalSalesDetails)
       const dataSource = a
       this.setState({
