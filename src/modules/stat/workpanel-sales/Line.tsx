@@ -5,6 +5,9 @@ class Main extends React.Component<any> {
   public componentDidMount () {
     const dom: any = this.refs.line
     this.chart = echarts.init(dom)
+    window.addEventListener('resize', () => {
+      this.chart.resize()
+    })
     this.renderChart()
   }
   public componentDidUpdate () {
@@ -131,9 +134,6 @@ class Main extends React.Component<any> {
     }
     if (option && typeof option === 'object') {
       this.chart.setOption(option, true)
-      window.addEventListener('resize', () => {
-        this.chart.resize()
-      })
     }
   }
   public render () {
