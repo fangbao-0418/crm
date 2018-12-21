@@ -22,7 +22,7 @@ interface ModuleProps {
   /** 商机分析 */
   BusinessAnalysis: RouteComponent
   /** 业绩仪表盘 */
-  Performance: RouteComponent
+  PerformanceStatistics: RouteComponent
   /** 404 */
   Unfound: RouteComponent
 }

@@ -8,21 +8,30 @@ class Main extends React.Component {
 
   public condition: ConditionOptionProps[] = [
     {
-     field: 'date',
-     label: ['时间'],
-     type: 'date',
-     value: '0',
-     options: [{
-       label: '今天',
-       value: '0'
-     }] 
+      field: 'date',
+      label: ['时间'],
+      type: 'date',
+      value: '0',
+      options: [{
+        label: '今天',
+        value: '0'
+      }, {
+        label: '昨天',
+        value: '-1'
+      }, {
+        label: '本周',
+        value: 'week'
+      }, {
+        label: '本月',
+        value: 'month'
+      }]
     }
   ]
 
-  render () {
+  public render () {
     return (
       <div>
-        <Condition 
+        <Condition
           // onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
