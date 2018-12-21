@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Row, Col, Input, Button, Checkbox, DatePicker, Dropdown, Menu } from 'antd'
+import TextArea from '@/components/textarea'
 import { FormComponentProps } from 'antd/lib/form'
 import { connect } from 'react-redux'
 import Modal from 'pilipa/libs/modal'
@@ -331,15 +332,18 @@ class Main extends React.Component<Props, State> {
                 style={{width: '100%'}}
                 label='经营范围'
               >
-                {
-                  getFieldDecorator(
-                    'businessScope',
-                    {
-                      initialValue: detail.businessScope
-                    }
-                  )(
-                    <Input.TextArea disabled={disabled} />
-                  )
+                {!disabled ? getFieldDecorator(
+                  'businessScope',
+                  {
+                    initialValue: detail.businessScope
+                  }
+                )(
+                  <Input.TextArea disabled={this.state.disabled} />
+                ) :
+                <TextArea
+                  value={detail.businessScope}
+                  disabled={false}
+                />
                 }
               </FormItem>
             </Col>
