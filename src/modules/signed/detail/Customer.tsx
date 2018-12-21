@@ -132,6 +132,7 @@ class Main extends React.Component<Props> {
           />
         </Card>
         <Card
+          title='联系方式'
           rightContent={(APP.hasPermission('crm_sign_myself_detail_contact_save') && !this.state.disabled) && (
             <AddButton
               onClick={this.addLinkMan.bind(this)}
