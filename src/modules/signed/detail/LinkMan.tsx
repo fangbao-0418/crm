@@ -231,7 +231,7 @@ class Main extends React.Component<Props> {
     return (
       <div
         className={styles.linkman}
-        style={{width: '100%', marginTop: -100}}
+        style={{width: '100%'}}
       >
         <Form>
           <Table
