@@ -131,7 +131,6 @@ class Main extends React.Component<Props> {
             disabled={!APP.hasPermission('crm_sign_myself_detail_baseinfo_save') || this.state.disabled}
           />
         </Card>
-        <div style={{marginTop: -25}}>
         <Card
           rightContent={(APP.hasPermission('crm_sign_myself_detail_contact_save') && !this.state.disabled) && (
             <AddButton
@@ -146,7 +145,6 @@ class Main extends React.Component<Props> {
             disabled={!APP.hasPermission('crm_sign_myself_detail_contact_save') || this.state.disabled}
           />
         </Card>
-        </div>
       </div>
     )
   }
