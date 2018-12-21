@@ -122,6 +122,7 @@ export const fetchTQconfig = (): JQuery._Promise<{
   status: number,
   message: string,
   data: {
+    appid: string,
     access_token: string
     uin: string
     strid: string
@@ -132,7 +133,11 @@ export const fetchTQconfig = (): JQuery._Promise<{
 }> => {
   return http(`/crm-manage/v1/api/jssdk-token`).then((res) => {
     APP.isConfigTQ = true
-    res.data = JSON.parse(res.data)
+    try {
+      res.data = JSON.parse(res.data)
+    } catch (e) {
+      res.data = {}
+    }
     return res
   }, (err) => {
     APP.isConfigTQ = false
