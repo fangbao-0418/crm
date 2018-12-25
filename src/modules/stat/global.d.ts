@@ -199,4 +199,26 @@ declare namespace CrmStat {
     /** 本月签约客户数 */
     signCustomerNums: number
   }
+  //客户仪表盘-新签客户
+  export interface CustomerSignItemProps {
+    customerPoolReportDetails: CrmStat.CustomerPoolReportDetails
+  }
+  export interface CustomerPoolReportDetails {
+    /** 来源 */
+    customerSource: string
+    /** 新增数 */
+    newCustomerNums: number
+    /** 未跟进数 */
+    noTrackNums: number
+    /** 跟进数 */
+    trackingNums:number
+    /** 意向数 */
+    intentionNums: number
+    /** 签约数 */
+    signNums: number
+    /** 转换率 */
+    signRate: number
+    /** 周期 */
+    signCycle: number
+  }
 }

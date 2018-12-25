@@ -21,8 +21,10 @@ interface ModuleProps {
   WorkpanelSales: RouteComponent
   /** 商机分析 */
   BusinessAnalysis: RouteComponent
+  /** 客户仪表盘-新签 */
+  CustomerSign: RouteComponent
   /** 业绩仪表盘 */
-  PerformanceStatistics: RouteComponent
+  Performance: RouteComponent
   /** 404 */
   Unfound: RouteComponent
 }

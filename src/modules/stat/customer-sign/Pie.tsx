@@ -5,11 +5,6 @@ class Main extends React.Component<any> {
   public componentDidMount () {
     const dom: any = this.refs.pie
     this.chart = echarts.init(dom)
-    window.addEventListener('resize', () => {
-      if (this.chart && typeof this.chart === 'object') {
-        this.chart.resize()
-      }
-    })
     this.renderChart()
   }
   public componentDidUpdate () {
@@ -17,16 +12,20 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
+    const figure: any[] = []
+    const data = pi.length > 0 && pi.map((item: any, index: any) => {
+      if (index < 8) {
+        figure.push(item.name)
+      }
       return {
-        name: item.levelName,
-        value: item.levelNums
+        name: item.name,
+        value: item.value
       }
     })
-    const option = {
+    const option: echarts.EChartOption = {
       title: {
-        left: '100',
-        text: '商机客户空置天数',
+        left: '20',
+        text: '客户来源分布',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -40,14 +39,16 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        y: 'center'
+        y: 'center',
+        data: figure
+        // bottom: 60
       },
       series: [
         {
-          name: '空置天数',
+          name: '客户来源',
           type: 'pie',
           radius: ['50%', '70%'],
-          center: ['50%', '60%'],
+          center: ['40%', '60%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -83,7 +84,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='pie' style={{height: '250px', width: 450, marginBottom: 10, marginLeft: -100}}></div>
+        <div ref='pie' style={{height: 250}}></div>
       </div>
     )
   }

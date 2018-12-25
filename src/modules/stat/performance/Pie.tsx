@@ -16,17 +16,10 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const pi = this.props.pi
-    const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
-      return {
-        name: item.levelName,
-        value: item.levelNums
-      }
-    })
-    const option = {
+    const option: echarts.EChartOption = {
       title: {
-        left: '100',
-        text: '商机客户空置天数',
+        left: '20',
+        text: '客户来源分布',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -41,13 +34,14 @@ class Main extends React.Component<any> {
         orient: 'vertical',
         x: 'right',
         y: 'center'
+        // bottom: 60
       },
       series: [
         {
-          name: '空置天数',
+          name: '客户来源',
           type: 'pie',
           radius: ['50%', '70%'],
-          center: ['50%', '60%'],
+          center: ['40%', '60%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -72,7 +66,13 @@ class Main extends React.Component<any> {
             borderColor: '#fff'
           },
           color: ['#39A0FF', '#37CBCB', '#4ECB73', '#FBD64A', '#F2637B', '#9760E4', '#ca8622', '#bda29a', '#6e7074', '#c4ccd3', '#61a0a8', '#c23531', '#2f4554', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#546570', '#c4ccd3'],
-          data
+          data: [
+            {value:335, name:'直接访问'},
+            {value:310, name:'邮件营销'},
+            {value:234, name:'联盟广告'},
+            {value:135, name:'视频广告'},
+            {value:1548, name:'搜索引擎'}
+          ]
         }
       ]
     }
@@ -83,7 +83,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='pie' style={{height: '250px', width: 450, marginBottom: 10, marginLeft: -100}}></div>
+        <div ref='pie' style={{height: 250}}></div>
       </div>
     )
   }

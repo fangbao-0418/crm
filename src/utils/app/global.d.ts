@@ -34,10 +34,6 @@ declare namespace APP {
     EnumCallType?: Array<{label: string, value: string}>
     /** 电话挂断状态 */
     EnumHangUpStatus?: Array<{label: string, value: string}>
-    /** 销售人员 */
-    EnumSalespersonId?: Array<{label: string, value: string}>
-    /** 机构 */
-    EnumAgencyId?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {

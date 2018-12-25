@@ -5,6 +5,11 @@ class Main extends React.Component<any> {
   public componentDidMount () {
     const dom: any = this.refs.bar
     this.chart = echarts.init(dom)
+    window.addEventListener('resize', () => {
+      if (this.chart && typeof this.chart === 'object') {
+        this.chart.resize()
+      }
+    })
     this.renderChart()
   }
   public componentDidUpdate () {

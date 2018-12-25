@@ -110,9 +110,9 @@ export const fetchOssToken = () => {
   const customerId = APP.user.companyId
   return http(`/crm-manage/v1/api/write-token/${customerId}`)
 }
-// 根据当前用户获取-->改成不需要传参数接口
+/** 根据当前用户获取当前及以下销售 */
 export const getSalesList = () => {
-  return http(`/user/v1/api/user/list/sale`)
+  return http(`/user/v1/api/user/list/subordinate/login/0`)
 }
 /** 根据机构获取销售列表 */
 export const getSalesByCompany = (companyId: string = APP.user.companyId) => {
