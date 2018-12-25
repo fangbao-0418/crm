@@ -5,11 +5,6 @@ class Main extends React.Component<any> {
   public componentDidMount () {
     const dom: any = this.refs.line
     this.chart = echarts.init(dom)
-    window.addEventListener('resize', () => {
-      if (this.chart && typeof this.chart === 'object') {
-        this.chart.resize()
-      }
-    })
     this.renderChart()
   }
   public componentDidUpdate () {
@@ -19,7 +14,7 @@ class Main extends React.Component<any> {
     const char = this.props.char
     const option: echarts.EChartOption = {
       title: {
-        text: '每日呼叫趋势图',
+        text: '新增客户趋势图',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -37,7 +32,7 @@ class Main extends React.Component<any> {
         }
       },
       legend: {
-        data:['通话量', '接通量'],
+        data: ['新增客户'],
         top: 25
       },
       grid: {
@@ -48,11 +43,11 @@ class Main extends React.Component<any> {
         type: 'category',
         boundaryGap: false,
         data: char.map((item: any) => {
-          return item.totalDate
+          return item.name
         }),
-        axisLine:{
-          lineStyle:{
-            color:'#F2F2F2'
+        axisLine: {
+          lineStyle: {
+            color: '#F2F2F2'
           }
         },
         axisLabel: {
@@ -69,7 +64,7 @@ class Main extends React.Component<any> {
             type: 'solid'
           }
         },
-        axisLine:{
+        axisLine: {
           show: false
         },
         axisTick: {
@@ -77,11 +72,10 @@ class Main extends React.Component<any> {
         }
       },
       series: [{
-        name: '通话量',
-        color: 'red',
+        name: '新增客户',
         type: 'line',
         data: char.map((item: any) => {
-          return item.callTotalNums
+          return item.value
         }),
         itemStyle: {
           color: '#FAD440'
@@ -100,37 +94,8 @@ class Main extends React.Component<any> {
             }, {
               offset: 0.6, color: 'rgba(251,211,55,0.2)'
             }, {
-              offset: 1, color: 'rgba(251,211,55,0.1)' // 100% 处的颜色
-            }],
-            globalCoord: false // 缺省为 false
-          }
-        }
-      }, {
-        name: '接通量',
-        type: 'line',
-        data: char.map((item: any) => {
-          return item.callSuccessNums
-        }),
-        itemStyle: {
-          color: '#4ECB73'
-        },
-        areaStyle:{
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [{
-              offset: 0, color: 'rgba(251,211,55,0.4)' // 0% 处的颜色
-            }, {
-              offset: 0.4, color: 'rgba(251,211,55,0.3)'
-            }, {
-              offset: 0.6, color: 'rgba(251,211,55,0.2)'
-            }, {
-              offset: 1, color: 'rgba(251,211,55,0.1)' // 100% 处的颜色
-            }],
-            globalCoord: false // 缺省为 false
+              offset: 1, color: 'rgba(251,211,55,0)' // 100% 处的颜色
+            }]
           }
         }
       }]
@@ -142,7 +107,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: '300px', marginBottom:'10px'}}></div>
+        <div ref='line' style={{height: 300}}></div>
       </div>
     )
   }

@@ -15,6 +15,8 @@ declare namespace Business {
     current_salesperson?: string
     /* 最后跟进时间 */
     lastTrackTime?: string
+    /** 支付中状态 */
+    payStatus?: number
   }
   export interface SearchProps {
     appointStartTime?: string

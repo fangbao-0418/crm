@@ -1,65 +1,61 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Icon, Table, Row, Col } from 'antd'
+import { Select, Row, Col, Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getFirms, getSalesRank } from '@/modules/stat/api'
+import { getFirms } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Line from './Line'
+import Pie from './Pie'
 import AddButton from '@/modules/common/content/AddButton'
+
 const styles = require('./style')
 
 export interface PayloadProps {
-  agencyId: string
   totalBeginDate: string
   totalEndDate: string
+  agencyId: string
   salespersonId: string
+  customerSource: string
 }
 
 interface State {
-  dataSource: CrmStat.CallDetailInfos[]
+  dataSource: CrmStat.CustomerPoolReportDetails[]
   /** 机构列表 */
   firms: Array<{id: string, name: string}>
   /** 销售列表 */
   sallers: Array<{id: string, name: string}>
+  /** 客户来源列表 */
+  sources: Array<{id: string, name: string}>
   /** 机构初始值 */
   organ: string
-  /** 传入的销售人员 */
-  sale: string
   /** 销售人员初始值 */
   sal: string
-  /** 圆角矩形数据 */
-  strip: any
-  /** 每日呼叫趋势图 */
-  char: CrmStat.ReportByDays[]
+  /** 新增客户统计 */
+  char: any[]
+  /** 来源统计 */
+  pi: any[]
 }
-
-class Main extends React.Component<{}, State> {
+class Main extends React.Component {
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
-
   public payload: PayloadProps = {
-    agencyId: '',
     totalBeginDate: moment().format('YYYY-MM-DD'),
     totalEndDate: moment().format('YYYY-MM-DD'),
-    salespersonId: ''
+    agencyId: '',
+    salespersonId: '',
+    customerSource: ''
   }
 
   public state: State = {
     dataSource: [],
     firms: [],
     sallers: [],
+    sources: [],
     organ: '',
-    sale: '',
     sal: '',
-    strip: {
-      callTotalNums: 0,
-      callSuccessNums: 0,
-      totalCallDuration: 0,
-      callOutTotalNums: 0,
-      averageCallSuccessPercent: 0
-    },
-    char: []
+    char: [],
+    pi: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -84,89 +80,66 @@ class Main extends React.Component<{}, State> {
     }
   ]
 
-  public columns: ColumnProps<CrmStat.CallDetailInfos>[] = [
+  public columns: ColumnProps<CrmStat.CustomerPoolReportDetails>[] = [
     {
       title: '销售',
-      dataIndex: 'callDetailInfos.salespersonName',
-      align: 'left',
-      width: 130,
+      dataIndex: 'customerPoolReportDetails.customerSource',
       render: (text, record) => {
         return (
           <span>
-            {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
-            <span>{record.salespersonName}</span>
-          </span>
+          {/* {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
+          <span>{record.salesperson}</span> */}
+        </span>
         )
       }
     },
     {
-      title: '通话量',
-      dataIndex: 'callTotalNums',
-      width: 130,
+      title: '新签客户',
+      dataIndex: 'customerPoolReportDetails.newCustomerNums',
       render: (text, record) => {
-        return (
-          record.callInTotalNums + record.callOutTotalNums
-        )
+        return record.newCustomerNums
       }
     },
     {
-      title: '接通量',
-      dataIndex: 'callDetailInfos.callSuccessNums',
-      width: 130,
+      title: '记账客户',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          record.callSuccessNums
-        )
+        return record.noTrackNums
       }
     },
     {
-      title: '接通率',
-      dataIndex: 'averageCallSuccessPercent',
-      width: 130,
+      title: '一般人占比',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          (Math.round((record.callSuccessNums / (record.callInTotalNums + record.callOutTotalNums)) * 100) || 0) + '%'
-        )
+        return record.trackingNums
       }
     },
     {
-      title: '通话时长',
-      dataIndex: 'callDetailInfos.totalCallDuration',
-      width: 130,
+      title: '新签总额/万',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          APP.fn.formatDuration(record.totalCallDuration)
-        )
+        return record.intentionNums
       }
     },
     {
-      title: '1"- 30"',
-      dataIndex: 'callDetailInfos.callSuccessLte30SecondNums',
-      width: 130,
+      title: '记账金额/万',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          record.callSuccessLte30SecondNums
-        )
+        return record.signNums
       }
     },
     {
-      title: '30"- 60"',
-      dataIndex: 'callDetailInfos.callSuccessLte60SecondNums',
-      width: 130,
+      title: '增值金额/万',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          record.callSuccessLte60SecondNums
-        )
+        return record.signRate
       }
     },
     {
-      title: '> 60"',
-      dataIndex: 'callDetailInfos.callSuccessGt60SecondNums',
-      width: 130,
+      title: '其他金额/万',
+      dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return (
-          record.callSuccessGt60SecondNums
-        )
+        return record.signCycle
       }
     }
   ]
@@ -183,8 +156,7 @@ class Main extends React.Component<{}, State> {
         organ: res[0].id
       }, () => {
         this.getSales(res[0].id)
-      }
-      )
+      })
     })
   }
 
@@ -194,46 +166,37 @@ class Main extends React.Component<{}, State> {
         return item.id
       })
       const sal = ''
-      // const sale = res.length > 0 ? sales.join(',') : ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
-      // this.payload.salespersonId = sale
       if (res.length === 0) {
         this.setState({
-          strip: {
-            callTotalNums: 0,
-            callSuccessNums: 0,
-            totalCallDuration: 0,
-            callOutTotalNums: 0,
-            averageCallSuccessPercent: 0
-          },
-          char: []
+          char: [],
+          pi: []
         })
       }
       this.setState({
         dataSource,
         sallers: res,
-        // sale,
         sal
       }, () => {
         if (sales.length > 0) {
-          this.fetchList()
+          // this.fetchList()
         }
       })
     })
   }
 
   public fetchList () {
-    return getSalesRank(this.payload).then((res: any) => {
-      const a = res.data.callDetailInfos
-      res.data.totalCallDetailInfos.salespersonName = '合计'
-      a.push(res.data.totalCallDetailInfos)
-      const dataSource = a
-      this.setState({
-        dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
-        strip: res.data,
-        char: res.data.reportByDays
-      })
-    })
+    // getBusiness(this.payload).then((res: any) => {
+    //   const a = res.data.salesDetails
+    //   res.data.totalSalesDetails.salesperson = '合计'
+    //   a.push(res.data.totalSalesDetails)
+    //   const dataSource = a
+    //   this.setState({
+    //     dataSource: dataSource.map((v: any, i: any) => {v.key = i + 1; return v}),
+    //     pi: res.data.reportFreeDays,
+    //     char: res.data.reportPhoneStatuses
+    //   })
+    // })
   }
 
   public onDateChange (value: {[field: string]: { label: string, value: string }}) {
@@ -258,13 +221,13 @@ class Main extends React.Component<{}, State> {
       const val = '-' + (date.getDate() - 1)
       this.payload.totalBeginDate = moment().add(val, 'day').format('YYYY-MM-DD')
     }
-    this.fetchList()
+    // this.fetchList()
   }
-  // 导出
+
   public export (exports: any) {
     const accessToken: any = localStorage.getItem('token')
     fetch(
-      `/sys/crm-manage/v1/api/report/sales/export?agencyId=${exports.agencyId}&totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/customer/export?agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -277,7 +240,7 @@ class Main extends React.Component<{}, State> {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '工作统计表.xlsx'
+      a.download = '销售统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -286,7 +249,6 @@ class Main extends React.Component<{}, State> {
   }
 
   public render () {
-    const {firms, dataSource, strip, char } = this.state
     return (
       <div>
         <Condition
@@ -294,15 +256,16 @@ class Main extends React.Component<{}, State> {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-        <div style={{marginTop: 15}}>
+        <div style={{marginTop: 15, marginBottom: 15}}>
           <Select
+            allowClear={true}
             showSearch
             optionFilterProp='children'
             filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             value={this.state.organ}
             className='inline-block mr8'
             style={{width: 200}}
-            placeholder='请选择机构'
+            placeholder='请输入机构'
             onChange={(value: string) => {
               this.payload.agencyId = value
               this.getSales(value)
@@ -321,98 +284,79 @@ class Main extends React.Component<{}, State> {
           <Select
             allowClear={true}
             value={this.state.sal || undefined}
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             className='inline-block mr8'
             style={{width: 200}}
-            placeholder='请选择销售'
+            placeholder='请输入销售名称'
             onChange={(value: string) => {
               this.payload.salespersonId = value
               this.setState({
-                sal: value,
-                dataSource: []
+                sal: value
+                // dataSource: []
               })
-              this.fetchList()
+              // this.fetchList()
             }}
           >
-          {
-            this.state.sallers.length > 0 && this.state.sallers.map((item) => {
-              return (
-                <Select.Option key={item.id}>{item.name}</Select.Option>
-              )
-            })
-          }
+            {
+              this.state.sallers.length > 0 &&
+              this.state.sallers.map((item) => {
+                return (
+                  <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
           </Select>
         </div>
-
         <div className={styles.pane}>
           <div className={styles.con}>
-            <div className={styles.small}>通话量</div>
-            <div className={styles.big}>{strip.callTotalNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
+            <div className={styles.small}>新签客户</div>
+            <div className={styles.big}>{}</div>
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>呼出量</div>
-            <div className={styles.big}>{strip.callOutTotalNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
+            <div className={styles.small}>新签总额/万</div>
+            <div className={styles.big}>{}</div>
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>接通量</div>
-            <div className={styles.big}>{strip.callSuccessNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
+            <div className={styles.small}>记账金额/万</div>
+            <div className={styles.big}>{}</div>
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>通话率</div>
-            <div className={styles.big}>
-              {Math.round(strip.averageCallSuccessPercent) + '%'}
-            </div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
+            <div className={styles.small}>增值金额/万</div>
+            <div className={styles.big}>{}</div>
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>通话时长</div>
-            <div className={styles.big}>{APP.fn.formatDuration(strip.totalCallDuration)}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
+            <div className={styles.small}>一般人占比</div>
+            <div className={styles.big}>{}</div>
           </div>
         </div>
-
-        <div>
-          <Line char={char}/>
-        </div>
-
+        <Row>
+          <Col span={14}>
+            <Line />
+          </Col>
+          <Col span={8} offset={1}>
+            <Pie />
+          </Col>
+        </Row>
+        <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
         <div style={{marginBottom: 15}}>
-          <span style={{fontSize: 14, color: '#333333'}}>排名</span>
+          <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
             style={{float: 'right'}}
             icon={<APP.Icon type='export' />}
             title='导出'
-            hidden={!APP.hasPermission('crm_data_work_export')}
+            hidden={!APP.hasPermission('crm_data_business_export')}
             onClick={() => {
               this.export(this.payload)
             }}
           />
         </div>
-
-        <div>
-          <Table
-            columns={this.columns}
-            dataSource={dataSource}
-            pagination={false}
-            scroll={{ y: 400 }}
-          />
-        </div>
+        <Table
+          columns={this.columns}
+          dataSource={this.state.dataSource}
+          pagination={false}
+        />
       </div>
     )
   }

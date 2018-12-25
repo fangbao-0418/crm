@@ -136,6 +136,10 @@ export default function (): ColumnProps<Business.DetailProps>[] {
             !record.lastTrackTime &&
             <span className={styles['new-point']}>新</span>
           }
+          {
+            record.payStatus === 1 &&
+            <span className={styles['pay-point']}>支付中</span>
+          }
         </div>
       )
     }

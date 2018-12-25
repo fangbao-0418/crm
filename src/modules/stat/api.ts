@@ -54,3 +54,13 @@ export const getBusiness = (payload: {
 }) => {
   return http(`/crm-manage/v1/api/report/customer`, 'GET', payload)
 }
+/** 客户仪表盘-新签 */
+export const getCustomerSign = (payload: {
+  totalBeginDate: string
+  totalEndDate: string
+  agencyId: string
+  salespersonId: string
+  customerSource: string
+}) => {
+  return http(`/crm-manage/v1/api/report/customer-pool`, 'GET', payload)
+}

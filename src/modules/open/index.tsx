@@ -100,6 +100,10 @@ class Main extends React.Component {
             !record.lastTrackTime &&
             <span className={styles['new-point']}>新</span>
           }
+          {
+            record.payStatus === 1 &&
+            <span className={styles['pay-point']}>支付中</span>
+          }
         </span>
       )
     }

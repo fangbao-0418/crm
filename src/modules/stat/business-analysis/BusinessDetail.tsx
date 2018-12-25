@@ -64,7 +64,7 @@ class Main extends React.Component<{}, State> {
           <span>
             {record.key === this.state.dataSource[this.state.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
             <span>{record.salesperson}</span>
-            </span>
+          </span>
         )
       }
     },
@@ -280,7 +280,7 @@ class Main extends React.Component<{}, State> {
             </Row>
           </div>
         </div>
-          <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
+        <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
