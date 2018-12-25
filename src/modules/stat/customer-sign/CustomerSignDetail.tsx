@@ -386,7 +386,6 @@ class Main extends React.Component {
             <Pie pi={this.state.pi}/>
           </Col>
         </Row>
-        {/* <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/> */}
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
@@ -403,7 +402,6 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           pagination={false}
         />
-        {/* <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 15, marginTop: 15}}/> */}
         <Plat plat={this.state.plat}/>
       </div>
     )
