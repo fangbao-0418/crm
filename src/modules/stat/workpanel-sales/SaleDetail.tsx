@@ -382,7 +382,7 @@ class Main extends React.Component<{}, State> {
             </div> */}
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>通话时长</div>
+            <div className={styles.small}>通话时长  /天:时:分:秒</div>
             <div className={styles.big}>{APP.fn.formatDuration(strip.totalCallDuration)}</div>
             {/* <div className={styles.small}>
               <span>环比</span>
