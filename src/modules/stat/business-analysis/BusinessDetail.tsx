@@ -246,6 +246,9 @@ class Main extends React.Component<{}, State> {
             }
           </Select>
           <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             value={this.state.sal || undefined}
             className='inline-block mr8'
             style={{width: 200}}
