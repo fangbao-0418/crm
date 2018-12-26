@@ -207,6 +207,7 @@ class Main extends React.Component {
       })
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
+      const cityData = res.length > 0 ? this.state.dataSource : []
       if (res.length === 0) {
         this.setState({
           char: [],
@@ -216,6 +217,7 @@ class Main extends React.Component {
       }
       this.setState({
         dataSource,
+        cityData,
         sallers: res,
         sal
       }, () => {
@@ -302,7 +304,7 @@ class Main extends React.Component {
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
-        <div style={{marginTop: 15, marginBottom: 15}}>
+        <div style={{marginTop: 15, marginBottom: 20}}>
           <Select
             allowClear={true}
             showSearch
@@ -380,14 +382,15 @@ class Main extends React.Component {
           </Select>
         </div>
         <Row>
-          <Col span={8}>
-            <div style={{fontSize: 14, color: '#333333', marginBottom: 15}}>城市排名</div>
+          <Col span={12} >
+            <div style={{fontSize: 14, color: '#333333', marginBottom: 10}}>城市排名</div>
             <CityRank cityData={this.state.cityData}/>
           </Col>
-          <Col span={8} offset={6}>
+          <Col span={8} offset={2}>
             <Pie pi={this.state.pi}/>
           </Col>
         </Row>
+        <Line char={this.state.char}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton
@@ -404,7 +407,6 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           pagination={false}
         />
-        <Line char={this.state.char}/>
       </div>
     )
   }

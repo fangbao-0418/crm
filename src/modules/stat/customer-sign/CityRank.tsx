@@ -2,16 +2,18 @@ import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 const styles = require('./style')
+
 class Main extends React.Component<any> {
-  public dataSource = this.props.cityData
   public columns: ColumnProps<CrmStat.TotalByCityDetails>[] = [
     {
       title: '城市排名',
+      width: 300,
+      align: 'left',
       dataIndex: 'totalByCity.name',
       render: (text, record) => {
         return (
           <span>
-            {record.key === this.dataSource[this.dataSource.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
+            {record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
             <span>{record.name}</span>
           </span>
         )
@@ -19,6 +21,7 @@ class Main extends React.Component<any> {
     },
     {
       title: '新增客户',
+      width: 300,
       dataIndex: 'totalByCity.value',
       render: (text, record) => {
         return record.value
@@ -28,12 +31,11 @@ class Main extends React.Component<any> {
 
   public render () {
     return (
-      <div>
+      <div className={styles.tab}>
         <Table
           columns={this.columns}
-          dataSource={this.dataSource}
+          dataSource={this.props.cityData}
           pagination={false}
-          scroll={{y: 300}}
         />
       </div>
     )

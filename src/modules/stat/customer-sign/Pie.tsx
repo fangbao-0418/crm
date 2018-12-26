@@ -17,11 +17,11 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    const figure: any[] = []
+    // const figure: any[] = []
     const data = pi.length > 0 && pi.map((item: any, index: any) => {
-      if (index < 8) {
-        figure.push(item.name)
-      }
+      // if (index < 8) {
+      //   figure.push(item.name)
+      // }
       return {
         name: item.name,
         value: item.value
@@ -30,6 +30,7 @@ class Main extends React.Component<any> {
     const option: echarts.EChartOption = {
       title: {
         left: '20',
+        top: '-5',
         text: '客户来源分布',
         textStyle: {
           fontSize: 14,
@@ -44,8 +45,8 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        y: 'center',
-        data: figure
+        y: 'center'
+        // data: figure
         // bottom: 60
       },
       series: [
@@ -53,7 +54,7 @@ class Main extends React.Component<any> {
           name: '客户来源',
           type: 'pie',
           radius: ['50%', '70%'],
-          center: ['40%', '60%'],
+          center: ['40%', '65%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -89,7 +90,9 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='pie' style={{height: 250}}></div>
+        <div style={{height: 360}}>
+          <div ref='pie' style={{height: 250}}></div>
+        </div>
       </div>
     )
   }
