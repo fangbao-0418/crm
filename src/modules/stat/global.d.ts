@@ -201,7 +201,10 @@ declare namespace CrmStat {
   }
   //客户仪表盘-新签客户
   export interface CustomerSignItemProps {
+    /** 明细 */
     customerPoolReportDetails: CrmStat.CustomerPoolReportDetails
+    /** 按城市统计 */
+    totalByCity: CrmStat.TotalByCityDetails
   }
   export interface CustomerPoolReportDetails {
     /** 来源 */
@@ -220,5 +223,12 @@ declare namespace CrmStat {
     signRate: number
     /** 周期 */
     signCycle: number
+  }
+  export interface TotalByCityDetails {
+    key: number
+    /** 城市排名 */
+    name: string
+    /** 新增客户 */
+    value: number
   }
 }
