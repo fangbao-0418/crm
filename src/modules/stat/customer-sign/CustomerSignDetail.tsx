@@ -207,7 +207,7 @@ class Main extends React.Component {
       })
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
-      const cityData = res.length > 0 ? this.state.dataSource : []
+      const cityData = res.length > 0 ? this.state.cityData : []
       if (res.length === 0) {
         this.setState({
           char: [],
