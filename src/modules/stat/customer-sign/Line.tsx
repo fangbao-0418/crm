@@ -107,7 +107,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: 300}}></div>
+        <div ref='line' style={{height: 300, marginTop: 15}}></div>
       </div>
     )
   }

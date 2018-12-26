@@ -5,9 +5,9 @@ import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getCustomerSign } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import Line from './Line'
+import CityRank from './CityRank'
 import Pie from './Pie'
-import Plat from './Plat'
+import Line from './Line'
 import AddButton from '@/modules/common/content/AddButton'
 
 export interface PayloadProps {
@@ -35,7 +35,7 @@ interface State {
   /** 来源统计 */
   pi: any
   /** 按城市统计 */
-  plat: any
+  cityData: CrmStat.TotalByCityDetails[]
 }
 class Main extends React.Component {
 
@@ -58,13 +58,13 @@ class Main extends React.Component {
     sal: '',
     char: [],
     pi: [],
-    plat: []
+    cityData: []
   }
 
   public condition: ConditionOptionProps[] = [
     {
       field: 'date',
-      label: ['时间'],
+      label: ['创建时间'],
       type: 'date',
       value: '0',
       options: [{
@@ -239,7 +239,8 @@ class Main extends React.Component {
         dataSource,
         char: res.data.totalByNew,
         pi: res.data.totalBySource,
-        plat: res.data.totalByCity
+        plat: res.data.totalByCity,
+        cityData: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
       })
     })
   }
@@ -297,7 +298,7 @@ class Main extends React.Component {
     return (
       <div>
         <Condition
-          style={{marginLeft: -36}}
+          style={{marginLeft: -15}}
           onChange={this.onDateChange.bind(this)}
           dataSource={this.condition}
         />
@@ -379,10 +380,11 @@ class Main extends React.Component {
           </Select>
         </div>
         <Row>
-          <Col span={14}>
-            <Line char={this.state.char}/>
+          <Col span={8}>
+            <div style={{fontSize: 14, color: '#333333', marginBottom: 15}}>城市排名</div>
+            <CityRank cityData={this.state.cityData}/>
           </Col>
-          <Col span={8} offset={1}>
+          <Col span={8} offset={6}>
             <Pie pi={this.state.pi}/>
           </Col>
         </Row>
@@ -402,7 +404,7 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           pagination={false}
         />
-        <Plat plat={this.state.plat}/>
+        <Line char={this.state.char}/>
       </div>
     )
   }
