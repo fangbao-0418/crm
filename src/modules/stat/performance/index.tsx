@@ -5,7 +5,7 @@ class Main extends React.Component {
   public render () {
     return (
       <ContentBox
-        title='客户仪表盘'
+        title='业绩仪表盘'
       >
         <PerformanceDetail />
       </ContentBox>

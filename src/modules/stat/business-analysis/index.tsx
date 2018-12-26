@@ -6,7 +6,7 @@ class Main extends React.Component {
   public render () {
     return (
       <ContentBox
-        title='客户仪表盘'
+        title='商机分析仪表盘'
       >
         <BusinessDetail />
       </ContentBox>
