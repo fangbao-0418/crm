@@ -17,11 +17,11 @@ class Main extends React.Component<any> {
   }
   public renderChart () {
     const pi = this.props.pi
-    // const figure: any[] = []
+    const figure: any[] = []
     const data = pi.length > 0 && pi.map((item: any, index: any) => {
-      // if (index < 8) {
-      //   figure.push(item.name)
-      // }
+      if (index < 8) {
+        figure.push(item.name)
+      }
       return {
         name: item.name,
         value: item.value
@@ -45,8 +45,8 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        y: 'center'
-        // data: figure
+        y: 'center',
+        data: figure
         // bottom: 60
       },
       series: [

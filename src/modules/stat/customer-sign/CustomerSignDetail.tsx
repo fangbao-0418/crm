@@ -8,6 +8,7 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import CityRank from './CityRank'
 import Pie from './Pie'
 import Line from './Line'
+import _ from 'lodash'
 import AddButton from '@/modules/common/content/AddButton'
 
 export interface PayloadProps {
@@ -172,7 +173,7 @@ class Main extends React.Component {
       title: (
         <span>
           签约周期/天
-          <Tooltip placement='top' title='签约/总新增客户(单位:千分之)'>
+          <Tooltip placement='top' title='从创建到签约客户入库,平均的成交转化周期'>
             <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
@@ -233,15 +234,15 @@ class Main extends React.Component {
   }
   public fetchList () {
     getCustomerSign(this.payload).then((res: any) => {
-      const a = res.data.customerPoolReportDetails
-      res.data.totalCustomerPoolReportDetails.customerSource = '合计'
-      a.push(res.data.totalCustomerPoolReportDetails)
-      const dataSource = a
+      const a = _.cloneDeep(res.data.customerPoolReportDetails)
+      if (res.data.totalCustomerPoolReportDetails) {
+        res.data.totalCustomerPoolReportDetails.customerSource = '合计'
+        a.push(res.data.totalCustomerPoolReportDetails)
+      }
       this.setState({
-        dataSource,
+        dataSource: a,
         char: res.data.totalByNew,
         pi: res.data.totalBySource,
-        plat: res.data.totalByCity,
         cityData: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
       })
     })
@@ -397,6 +398,7 @@ class Main extends React.Component {
             style={{float: 'right'}}
             icon={<APP.Icon type='export' />}
             title='导出'
+            hidden={!APP.hasPermission('crm_data_customer_export')}
             onClick={() => {
               this.export(this.payload)
             }}
