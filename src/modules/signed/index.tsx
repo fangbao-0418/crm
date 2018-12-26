@@ -253,6 +253,9 @@ class Main extends React.Component {
         <div>
           <span>请选择跟进人：</span>
           <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             labelInValue
             style={{width:'200px'}}
             onChange={(val: {key: '', label: ''}) => {
