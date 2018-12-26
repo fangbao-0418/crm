@@ -8,6 +8,7 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import CityRank from './CityRank'
 import Pie from './Pie'
 import Line from './Line'
+import _ from 'lodash'
 import AddButton from '@/modules/common/content/AddButton'
 
 export interface PayloadProps {
@@ -233,15 +234,15 @@ class Main extends React.Component {
   }
   public fetchList () {
     getCustomerSign(this.payload).then((res: any) => {
-      const a = res.data.customerPoolReportDetails
-      res.data.totalCustomerPoolReportDetails.customerSource = '合计'
-      a.push(res.data.totalCustomerPoolReportDetails)
-      const dataSource = a
+      const a = _.cloneDeep(res.data.customerPoolReportDetails)
+      if (res.data.totalCustomerPoolReportDetails) {
+        res.data.totalCustomerPoolReportDetails.customerSource = '合计'
+        a.push(res.data.totalCustomerPoolReportDetails)
+      }
       this.setState({
-        dataSource,
+        dataSource: a,
         char: res.data.totalByNew,
         pi: res.data.totalBySource,
-        plat: res.data.totalByCity,
         cityData: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
       })
     })
