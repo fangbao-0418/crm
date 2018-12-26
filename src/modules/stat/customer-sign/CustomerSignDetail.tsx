@@ -173,7 +173,7 @@ class Main extends React.Component {
       title: (
         <span>
           签约周期/天
-          <Tooltip placement='top' title='签约/总新增客户(单位:千分之)'>
+          <Tooltip placement='top' title='从创建到签约客户入库,平均的成交转化周期'>
             <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
