@@ -130,6 +130,8 @@ export const makecall = (phone: string) => {
       if (String(ret.errcode) !== '0') {
         if (ret.errmsg === 'USER_BUSY') {
           APP.error('用户繁忙')
+        } else if (ret.errmsg === 'Timed Out') {
+
         } else {
           APP.error(ret.errmsg)
         }
