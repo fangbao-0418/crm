@@ -289,7 +289,7 @@ class Main extends React.Component {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '销售明细表.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '客户来源明细表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -393,7 +393,7 @@ class Main extends React.Component {
         </Row>
         <Line char={this.state.char}/>
         <div style={{marginBottom: 15}}>
-          <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
+          <span style={{fontSize: 14, color: '#333333'}}>客户来源明细表</span>
           <AddButton
             style={{float: 'right'}}
             icon={<APP.Icon type='export' />}
