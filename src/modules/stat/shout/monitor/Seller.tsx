@@ -116,6 +116,7 @@ class Main extends React.Component<Props, State> {
             current: pagination.pageCurrent,
             showQuickJumper: true,
             showSizeChanger: true,
+            size: 'small',
             showTotal: (total) => {
               return `共计 ${total} 条`
             },
