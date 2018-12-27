@@ -36,7 +36,7 @@ class Main extends React.Component {
         }
       },
       legend: {
-        data: ['新签客户', '记账客户  ']
+        data: ['新签客户', '记账客户']
       },
       grid: {
         left: '5%',
@@ -73,7 +73,7 @@ class Main extends React.Component {
         }
       },
       series: [{
-        name: '新增客户',
+        name: '新签客户',
         type: 'line',
         data: [820, 932, 901, 934, 1290, 1330, 1320],
         itemStyle: {
@@ -94,6 +94,31 @@ class Main extends React.Component {
               offset: 0.6, color: 'rgba(251,211,55,0.2)'
             }, {
               offset: 1, color: 'rgba(251,211,55,0)' // 100% 处的颜色
+            }]
+          }
+        }
+      }, {
+        name: '记账客户',
+        type: 'line',
+        data: [850, 960, 930, 980, 1400, 1600, 1550],
+        itemStyle: {
+          color: '#4ECB73'
+        },
+        areaStyle:{
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+              offset: 0, color: 'rgba(78,203,115,0.4)' // 0% 处的颜色
+            }, {
+              offset: 0.4, color: 'rgba(78,203,115,0.3)'
+            }, {
+              offset: 0.6, color: 'rgba(78,203,115,0.2)'
+            }, {
+              offset: 1, color: 'rgba(78,203,115,0)' // 100% 处的颜色
             }]
           }
         }
