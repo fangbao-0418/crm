@@ -54,7 +54,6 @@ class Main extends React.Component<Business.Props> {
   public fetchList () {
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
-    console.log(data, 'pagination')
     const { pagination } = data
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
@@ -411,7 +410,7 @@ class Main extends React.Component<Business.Props> {
     })
   }
   public render () {
-    const { count } = this.props
+    const { count, selectedTab } = this.props
     // console.log(count, 'count')
     return (
       <ContentBox
@@ -503,7 +502,7 @@ class Main extends React.Component<Business.Props> {
           >
             <Tabs.TabPane tab={<span>全部({count[0]})</span>} key='tab1'>
               {
-                (
+                selectedTab === 'tab1' && (
                   <Tab1
                     columns={this.columns}
                     params={this.params}
@@ -514,7 +513,7 @@ class Main extends React.Component<Business.Props> {
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>已有沟通({count[1]})</span>} key='tab2'>
               {
-                (
+                selectedTab === 'tab2' && (
                   <Tab2
                     columns={this.columns}
                     params={this.params}
@@ -525,7 +524,7 @@ class Main extends React.Component<Business.Props> {
             </Tabs.TabPane>
             <Tabs.TabPane tab={<span>新客资({count[2]})</span>} key='tab3'>
               {
-                (
+                selectedTab === 'tab3' && (
                   <Tab3
                     columns={this.columns}
                     params={this.params}
@@ -549,7 +548,7 @@ class Main extends React.Component<Business.Props> {
               key='tab4'
             >
               {
-                (
+                selectedTab === 'tab4' && (
                   <Tab4
                     columns={this.columns}
                     params={this.params}
