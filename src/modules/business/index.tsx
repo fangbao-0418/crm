@@ -54,6 +54,7 @@ class Main extends React.Component<Business.Props> {
   public fetchList () {
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
+    console.log(data, 'pagination')
     const { pagination } = data
     this.params.pageSize = pagination.pageSize
     this.params.pageCurrent = pagination.current
@@ -118,6 +119,9 @@ class Main extends React.Component<Business.Props> {
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
     const { selectedTab } = this.props
+    const data = this.props[selectedTab]
+    const { pagination } = data
+    pagination.current = 1
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
@@ -133,6 +137,9 @@ class Main extends React.Component<Business.Props> {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
     const { selectedTab } = this.props
+    const data = this.props[selectedTab]
+    const { pagination } = data
+    pagination.current = 1
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
@@ -146,6 +153,9 @@ class Main extends React.Component<Business.Props> {
   }
   public handleSearchType (values: {key: string, value?: string}) {
     const { selectedTab } = this.props
+    const data = this.props[selectedTab]
+    const { pagination } = data
+    pagination.current = 1
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     // this.params.contactPhone = undefined

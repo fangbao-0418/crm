@@ -190,11 +190,13 @@ class Main extends React.Component {
     }
     this.params.intention = values.intention.value || undefined
     this.params.telephoneStatus = values.telephoneStatus.value || undefined
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public handleSearchType (values: any) {
@@ -205,6 +207,7 @@ class Main extends React.Component {
     this.params.customerSource = undefined
     this.params.payTaxesNature = undefined
     this.params[values.key] = values.value || undefined
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public show (record: DetailProps, index: number) {
@@ -325,6 +328,7 @@ class Main extends React.Component {
             pageSize: pagination.pageSize,
             showQuickJumper: true,
             showSizeChanger: true,
+            size: 'small',
             pageSizeOptions: this.pageSizeOptions,
             showTotal (total) {
               return `共计 ${total} 条`

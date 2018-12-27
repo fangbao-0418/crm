@@ -221,6 +221,8 @@ class Main extends React.Component {
         this.paramsleft.storageEndDate = endTime || undefined
       }
     }
+    const pagination = this.state.pagination
+    pagination.current = 1
     this.fetchList()
   }
 
@@ -228,6 +230,8 @@ class Main extends React.Component {
     this.paramsright.customerSource = values.customerSource || undefined
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
+    const pagination = this.state.pagination
+    pagination.current = 1
     this.fetchList()
   }
   public handleSearchType (value: {key: string, value?: string}) {
@@ -240,6 +244,8 @@ class Main extends React.Component {
     this.paramsright.currentSalesperson = undefined
     this.paramsright.contractCode = undefined
     this.paramsright[value.key] = value.value || undefined
+    const pagination = this.state.pagination
+    pagination.current = 1
     this.fetchList()
   }
   public toSale (id?: string) {
