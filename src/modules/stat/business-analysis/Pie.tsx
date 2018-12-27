@@ -71,7 +71,7 @@ class Main extends React.Component<any> {
             borderWidth: 3,
             borderColor: '#fff'
           },
-          color: ['#39A0FF', '#37CBCB', '#4ECB73', '#FBD64A', '#F2637B', '#9760E4', '#ca8622', '#bda29a', '#6e7074', '#c4ccd3', '#61a0a8', '#c23531', '#2f4554', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#546570', '#c4ccd3'],
+          color: ['#39A0FF', '#4ECB73', '#FBD64A', '#37CBCB', '#F2637B', '#9760E4', '#ca8622', '#bda29a', '#6e7074', '#c4ccd3', '#61a0a8', '#c23531', '#2f4554', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#546570', '#c4ccd3'],
           data
         }
       ]

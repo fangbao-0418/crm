@@ -41,6 +41,7 @@ class Main extends React.Component<any> {
           columns={this.columns}
           dataSource={this.props.cityData}
           pagination={false}
+          scroll={{y: 250}}
         />
       </div>
     )
