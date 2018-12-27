@@ -217,11 +217,13 @@ class Main extends React.Component<Customer.Props, States> {
       this.params.createEndDate = createEndDate
     }
     this.params.cityCode = values.cityCode.value || undefined
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public handleSearchType (value: {value?: string, key: string}) {
@@ -231,6 +233,7 @@ class Main extends React.Component<Customer.Props, States> {
     this.params.customerSource = undefined
     this.params.payTaxesNature = undefined
     this.params[value.key] = value.value
+    this.params.pageCurrent = 1
     this.fetchList()
   }
   public add () {
