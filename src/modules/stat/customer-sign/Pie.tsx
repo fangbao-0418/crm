@@ -54,7 +54,7 @@ class Main extends React.Component<any> {
           name: '客户来源',
           type: 'pie',
           radius: ['50%', '70%'],
-          center: ['40%', '65%'],
+          center: ['40%', '61%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -90,7 +90,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div style={{height: 360}}>
+        <div style={{height: 300}}>
           <div ref='pie' style={{height: 250}}></div>
         </div>
       </div>
