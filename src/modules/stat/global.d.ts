@@ -110,8 +110,8 @@ declare namespace CrmStat {
     callSuccessLte60SecondNums: number
     /** 大于60秒接通量 */
     callSuccessGt60SecondNums: number
-    /** 接通率 */
-    averageCallSuccessPercent: number
+    /** 成功接通率 */
+    callSuccessRate: number
   }
   export interface TotalCallDetailInfos {
     key: number

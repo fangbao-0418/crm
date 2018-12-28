@@ -121,10 +121,10 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '接通率',
-      dataIndex: 'averageCallSuccessPercent',
+      dataIndex: 'callSuccessRate',
       width: 130,
       render: (text, record) => {
-        return record.averageCallSuccessPercent
+        return record.callSuccessRate
       }
     },
     {
