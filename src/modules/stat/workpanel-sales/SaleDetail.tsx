@@ -121,7 +121,7 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '接通率',
-      dataIndex: 'callSuccessRate',
+      dataIndex: 'callDetailInfos.callSuccessRate',
       width: 130,
       render: (text, record) => {
         return record.callSuccessRate
