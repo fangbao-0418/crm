@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Row, Col, Table, Tooltip } from 'antd'
+import { Select, Row, Col, Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
@@ -240,7 +240,7 @@ class Main extends React.Component {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = '销售统计表.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '销售统计表.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
@@ -258,7 +258,6 @@ class Main extends React.Component {
         />
         <div style={{marginTop: 15, marginBottom: 15}}>
           <Select
-            allowClear={true}
             showSearch
             optionFilterProp='children'
             filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}

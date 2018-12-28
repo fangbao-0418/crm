@@ -358,7 +358,7 @@ class Main extends React.Component {
           defaultActiveKey='1'
           onChange={this.callBack.bind(this)}
         >
-          <Tabs.TabPane tab='全部客户' key='1'>
+          <Tabs.TabPane tab='我的签约' key='1'>
           <div>
             <Condition
               className='mb10'
