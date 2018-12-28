@@ -230,6 +230,8 @@ class Main extends React.Component {
     this.paramsright.customerSource = values.customerSource || undefined
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
+    this.paramsright.signSalesperson = values.signSalesperson || undefined
+    this.paramsright.currentSalesperson = values.currentSalesperson || undefined
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()
@@ -237,11 +239,9 @@ class Main extends React.Component {
   public handleSearchType (value: {key: string, value?: string}) {
     this.paramsright.customerName = undefined
     this.paramsright.contactPerson = undefined
-    this.paramsright.signSalesperson = undefined
     // this.paramsright.contactPhone = undefined
     this.paramsright.operatingAccouting = undefined
     this.paramsright.areaName = undefined
-    this.paramsright.currentSalesperson = undefined
     this.paramsright.contractCode = undefined
     this.paramsright[value.key] = value.value || undefined
     const pagination = this.state.pagination
@@ -336,7 +336,6 @@ class Main extends React.Component {
   }
 
   public callBack (value: any) {
-    console.log(typeof(value), 'admafaefs')
     this.setState({
       tab: value
     })
@@ -378,11 +377,11 @@ class Main extends React.Component {
                   { value: 'customerName', label: '客户名称'},
                   { value: 'contactPerson', label: '联系人'},
                   // { value: 'customerSource', label: '客户来源'},
-                  { value: 'signSalesperson', label: '签约人'},
+                  // { value: 'signSalesperson', label: '签约人'},
                   // { value: 'contactPhone', label: '联系电话'},
                   { value: 'operatingAccouting', label: '运营会计'},
                   { value: 'areaName', label: '地区'},
-                  { value: 'currentSalesperson', label: '跟进人'},
+                  // { value: 'currentSalesperson', label: '跟进人'},
                   { value: 'contractCode', label: '合同号'}
                 ]}
                 placeholder={''}
@@ -398,9 +397,8 @@ class Main extends React.Component {
               />
             </div>
             <SelectSearch
-              type='signed'
+              type={this.state.tab}
               onChange={(values) => {
-                console.log(values, 'vvvvvvvwwwww')
                 this.handleSelectType(values)
               }}
             />

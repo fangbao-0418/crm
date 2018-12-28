@@ -4,7 +4,7 @@ import ContentBox from '@/modules/common/content'
 import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
 import Modal from 'pilipa/libs/modal'
-import SelectSearch from '@/modules/common/search/SelectSearch'
+import SelectSearch from './SelectSearch'
 import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
@@ -135,6 +135,7 @@ class Main extends React.Component<Business.Props> {
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
+    this.params.currentSalesperson = values.currentSalesperson || undefined
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
     const { pagination } = data
@@ -157,8 +158,6 @@ class Main extends React.Component<Business.Props> {
     pagination.current = 1
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    // this.params.contactPhone = undefined
-    this.params.currentSalesperson = undefined
     this.params[values.key] = values.value || undefined
     this.params.tab = selectedTab.replace('tab', '')
     APP.dispatch<Business.Props>({
@@ -471,9 +470,7 @@ class Main extends React.Component<Business.Props> {
                 style={{paddingTop: '5px'}}
                 options={[
                   { value: 'customerName', label: '客户名称'},
-                  { value: 'contactPerson', label: '联系人'},
-                  // { value: 'contactPhone', label: '联系电话'},
-                  { value: 'currentSalesperson', label: '所属销售'}
+                  { value: 'contactPerson', label: '联系人'}
                 ]}
                 placeholder={''}
                 onKeyDown={(e, val) => {
