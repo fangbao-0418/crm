@@ -131,7 +131,11 @@ class Main extends React.Component<Props, State> {
           optionFilterProp='children'
           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           onChange={(val: {key: '', label: ''}) => {
-            this.values.signSalesperson = val.label
+            if (this.props.type === '1') {
+              this.values.signSalesperson = val ? val.label : undefined
+            } else {
+              this.values.currentSalesperson = val ? val.label : undefined
+            }
             this.props.onChange(this.values)
           }}
         >

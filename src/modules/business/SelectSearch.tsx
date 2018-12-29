@@ -85,7 +85,7 @@ class Main extends React.Component<Props, State> {
           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           labelInValue
           onChange={(val: {key: '', label: ''}) => {
-            this.values.currentSalesperson = val.label
+            this.values.currentSalesperson = val ? val.label : undefined
             this.props.onChange(this.values)
           }}
         >
