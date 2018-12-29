@@ -14,6 +14,8 @@ export interface ConditionOptionProps {
   type?: 'date' | 'select' | 'month'
   /** 时间是否是区间 */
   range?: boolean
+  /** 即将到期月份是不是默认选中第一个月 */
+  ischooseFirstMonth?: boolean
   placeholder?: string | [string, string]
 }
 interface ValueProps {
@@ -170,7 +172,7 @@ class Main extends React.Component<Props> {
               size='small'
               format={'YYYY-MM'}
               onChange={(current) => {
-                item.value = current.format('YYYY-MM')
+                item.value = current ? current.format('YYYY-MM') : (item.ischooseFirstMonth ? '1month' : undefined)
                 this.handleChange(index, item.value)
               }}
             />

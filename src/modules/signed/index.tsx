@@ -80,7 +80,33 @@ class Main extends React.Component {
         }
       ],
       type: 'date'
-    }]
+    },
+    {
+      field: 'serviceExpire',
+      label: ['即将到期'],
+      range: false,
+      placeholder: '结束账期',
+      options: [
+        {
+          label: '全部',
+          value: undefined
+        },
+        {
+          label: '一个月',
+          value: '1month'
+        },
+        {
+          label: '二个月',
+          value: '2month'
+        },
+        {
+          label: '三个月',
+          value: '3month'
+        }
+      ],
+      type: 'month'
+    }
+  ]
 
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
@@ -202,10 +228,12 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    console.log(values, 'values')
+    console.log(values, 'values11')
     this.paramsleft = {}
     let beginTime
     let endTime
+    let startmonth
+    let endmonth
     if (this.state.tab === '1') {
       if (values.date.value) {
         if (values.date.value.indexOf('至') > -1) {
@@ -216,9 +244,32 @@ class Main extends React.Component {
           beginTime = moment().startOf('day').subtract(values.date.value, 'day').format('YYYY-MM-DD')
         }
       }
-      if (values.date.label === '入库时间') {
+      if (values.date) {
         this.paramsleft.storageBeginDate = beginTime || undefined
         this.paramsleft.storageEndDate = endTime || undefined
+      }
+      if (values.serviceExpire.value) {
+        if (values.serviceExpire.value.indexOf('-') > -1) {
+          startmonth = values.serviceExpire.value
+          endmonth = values.serviceExpire.value
+        } else {
+          const val = String(values.serviceExpire.value).slice(0, 1)
+          console.log(val, 'val')
+          if (val === '1') { // 当前月-1
+            startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+            endmonth = moment().subtract(1, 'months').format('YYYY-MM')
+          } else if (val === '2') { // 开始=当前月-1 结束=当前月
+            startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+            endmonth = moment().startOf('month').format('YYYY-MM')
+          } else if (val === '3') { // 开始=当前月-1 结束=当前月+1
+            startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+            endmonth = moment().add(1, 'month').format('YYYY-MM')
+          }
+        }
+      }
+      if (values.serviceExpire) {
+        this.paramsleft.serviceExpireBeginMonth = startmonth || undefined
+        this.paramsleft.serviceExpireEndMonth = endmonth || undefined
       }
     }
     const pagination = this.state.pagination
@@ -376,9 +427,7 @@ class Main extends React.Component {
                 options={[
                   { value: 'customerName', label: '客户名称'},
                   { value: 'contactPerson', label: '联系人'},
-                  // { value: 'customerSource', label: '客户来源'},
                   // { value: 'signSalesperson', label: '签约人'},
-                  // { value: 'contactPhone', label: '联系电话'},
                   { value: 'operatingAccouting', label: '运营会计'},
                   { value: 'areaName', label: '地区'},
                   // { value: 'currentSalesperson', label: '跟进人'},
