@@ -122,3 +122,7 @@ export const getSalesByCompany = (companyId: string = APP.user.companyId) => {
 export const bindCompany = (payload: {token: string, companyId: string}) => {
   return http(`/user/v1/api/user/company/bind`, 'POST', payload)
 }
+/** 所有列表的销售搜索条件接口 1:我的商机、2:我的预约、3:签约客户、4:到期续费、5:预约回访 */
+export const getSales = (tab: 1 | 2 | 3 | 4 | 5) => {
+  return http(`/crm-manage/v1/api/get-salesperson?tab=${tab}`)
+}

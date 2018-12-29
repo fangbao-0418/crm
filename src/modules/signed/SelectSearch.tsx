@@ -1,6 +1,7 @@
 import React from 'react'
 import { Select } from 'antd'
 import { getFirms } from '@/modules/stat/api'
+import { getSales } from '@/modules/common/api'
 const styles = require('./style')
 const Option = Select.Option
 interface Props {
@@ -17,15 +18,33 @@ interface ValueProps {
 interface State {
   /** 机构列表 */
   firms: Array<{id: string, name: string}>
+  sales: Array<{salesPerson: string, saleId: string}>
 }
-class Main extends React.Component<Props> {
+class Main extends React.Component<Props, State> {
   public values: ValueProps = {}
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
   public state: State = {
-    firms: []
+    firms: [],
+    sales: []
   }
   public componentWillMount () {
     this.getFirms()
+    this.handleSalesRequest()
+  }
+  public handleSalesRequest () {
+    let tab: 3 | 4 | 5
+    if (this.props.type === '1') {
+      tab = 3
+    } else if (this.props.type === '2') {
+      tab = 5
+    } else if (this.props.type === '3') {
+      tab = 4
+    }
+    getSales(tab).then((res) => {
+      this.setState({
+        sales: res
+      })
+    })
   }
   public getFirms () {
     getFirms(this.companyTypeList).then((res) => {
@@ -103,35 +122,23 @@ class Main extends React.Component<Props> {
             })
           }
         </Select>
-        {
-          this.props.type === '1' ?
-          <Select
-            allowClear={true}
-            style={{width:'150px'}}
-            placeholder='请选择签约销售'
-            onChange={(val: string) => {
-              this.values.signSalesperson = val
-              this.props.onChange(this.values)
-            }}
-          >
-            <Option key='王敏'>王敏</Option>
-            <Option key='王敏2'>王敏2</Option>
-            <Option key='王敏3'>王敏3</Option>
-          </Select> :
-          <Select
-            allowClear={true}
-            style={{width:'150px'}}
-            placeholder='请选择跟进人'
-            onChange={(val: string) => {
-              this.values.currentSalesperson = val
-              this.props.onChange(this.values)
-            }}
-          >
-            <Option key='王敏'>王敏</Option>
-            <Option key='王敏2'>王敏2</Option>
-            <Option key='王敏3'>王敏3</Option>
-          </Select>
-        }
+        <Select
+          allowClear={true}
+          style={{width:'150px'}}
+          placeholder={this.props.type === '1' ? '请选择签约销售' : '请选择跟进人'}
+          onChange={(val: string) => {
+            this.values.signSalesperson = val
+            this.props.onChange(this.values)
+          }}
+        >
+          {
+            this.state.sales.map((item) => {
+              return (
+                <Option key={item.salesPerson}>{item.salesPerson}</Option>
+              )
+            })
+          }
+        </Select>
       </div>
     )
   }

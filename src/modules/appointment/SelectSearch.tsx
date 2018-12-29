@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input, Select } from 'antd'
+import { getSales } from '@/modules/common/api'
 const Option = Select.Option
 interface ValueProps {
   customerSource?: string
@@ -9,8 +10,24 @@ interface ValueProps {
 interface Props {
   onChange?: (value: ValueProps) => void
 }
-class Main extends React.Component<Props> {
+interface State {
+  sales: Array<{
+    saleId: string
+    salesPerson: string
+  }>
+}
+class Main extends React.Component<Props, State> {
   public values: ValueProps = {}
+  public state: State = {
+    sales: []
+  }
+  public componentWillMount () {
+    getSales(2).then((res) => {
+      this.setState({
+        sales: res
+      })
+    })
+  }
   public render () {
     return (
       <div style={{display: 'inline-block', marginLeft: -35}}>
@@ -67,9 +84,13 @@ class Main extends React.Component<Props> {
             this.props.onChange(this.values)
           }}
         >
-          <Option key='王敏'>王敏</Option>
-          <Option key='王敏2'>王敏2</Option>
-          <Option key='王敏3'>王敏3</Option>
+          {
+            this.state.sales.map((item) => {
+              return (
+                <Option key={item.salesPerson}>{item.salesPerson}</Option>
+              )
+            })
+          }
         </Select>
       </div>
     )

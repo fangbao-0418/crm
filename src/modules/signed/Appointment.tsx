@@ -310,7 +310,7 @@ class Main extends React.Component {
             />
           </div>
           <SelectSearch
-            type='signed'
+            type='2'
             onChange={(values) => {
               this.handleSelectType(values)
             }}

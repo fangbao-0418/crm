@@ -285,10 +285,8 @@ class Main extends React.Component<Props> {
                   {label}
                   <span style={{paddingRight: 5}}>
                     {
-                      label === '即将到期' ? 
-                      <Tooltip placement='top' title='即将到期1个月,指1个月内要完成续费的客户,即截止账期为上个月的所有客户；
-                      即将到期2个月,指2个月内要完成续费的客户,即截止账期为上个月到本月的所有客户；
-                      即将到期3个月,指3个月内要完成续费的客户,即截止账期为上个月到下个月的所有客户；'>
+                      label === '即将到期' ?
+                      <Tooltip placement='top' title='即将到期1个月,指1个月内要完成续费的客户,即截止账期为上个月的所有客户； 即将到期2个月,指2个月内要完成续费的客户,即截止账期为上个月到本月的所有客户； 即将到期3个月,指3个月内要完成续费的客户,即截止账期为上个月到下个月的所有客户；'>
                         <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9', marginLeft: 0}}></i>
                       </Tooltip> :
                       <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>
