@@ -126,15 +126,19 @@ class Main extends React.Component<Props, State> {
           allowClear={true}
           style={{width:'150px'}}
           placeholder={this.props.type === '1' ? '请选择签约销售' : '请选择跟进人'}
-          onChange={(val: string) => {
-            this.values.signSalesperson = val
+          showSearch
+          labelInValue
+          optionFilterProp='children'
+          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          onChange={(val: {key: '', label: ''}) => {
+            this.values.signSalesperson = val.label
             this.props.onChange(this.values)
           }}
         >
           {
             this.state.sales.map((item) => {
               return (
-                <Option key={item.salesPerson}>{item.salesPerson}</Option>
+                <Option key={item.saleId}>{item.salesPerson}</Option>
               )
             })
           }

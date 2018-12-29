@@ -79,15 +79,19 @@ class Main extends React.Component<Props, State> {
           allowClear={true}
           style={{width:'150px'}}
           placeholder='请选择销售'
-          onChange={(val: string) => {
-            this.values.currentSalesperson = val
+          showSearch
+          optionFilterProp='children'
+          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          labelInValue
+          onChange={(val: {key: '', label: ''}) => {
+            this.values.currentSalesperson = val.label
             this.props.onChange(this.values)
           }}
         >
           {
             this.state.sales.map((item) => {
               return (
-                <Option key={item.salesPerson}>{item.salesPerson}</Option>
+                <Option key={item.saleId}>{item.salesPerson}</Option>
               )
             })
           }
