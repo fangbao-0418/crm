@@ -13,6 +13,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import Appointment from './Appointment'
 import Expiration from './Expiration'
+import Nopermission from './Nopermission'
 
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
@@ -409,87 +410,108 @@ class Main extends React.Component {
           onChange={this.callBack.bind(this)}
         >
           <Tabs.TabPane tab='我的签约' key='1'>
-          <div>
-            <Condition
-              className='mb10'
-              dataSource={this.data}
-              onChange={this.handleSearch.bind(this)}
-            />
-            <APP.Icon
-              style={{float: 'right', marginTop: 10}}
-              onClick={this.handleSwitch.bind(this)}
-              type={this.state.extshow ? 'up' : 'down'}
-            />
-            <div style={this.state.extshow ? {display:'block', marginTop: -5, marginBottom: 18} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
-              <SearchName
-                style={{paddingTop: '5px'}}
-                options={[
-                  { value: 'customerName', label: '客户名称'},
-                  { value: 'contactPerson', label: '联系人'},
-                  // { value: 'signSalesperson', label: '签约人'},
-                  { value: 'operatingAccouting', label: '运营会计'},
-                  { value: 'areaName', label: '地区'},
-                  // { value: 'currentSalesperson', label: '跟进人'},
-                  { value: 'contractCode', label: '合同号'}
-                ]}
-                placeholder={''}
-                onKeyDown={(e, val) => {
-                  if (e.keyCode === 13) {
-                    console.log(val, 'onKeyDown')
-                    this.handleSearchType(val)
-                  }
-                }}
-                onSearch={(val) => {
-                  this.handleSearchType(val)
-                }}
-              />
-            </div>
-            <SelectSearch
-              type={this.state.tab}
-              onChange={(values) => {
-                this.handleSelectType(values)
-              }}
-            />
-            </div>
-            </div>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.dataSource}
-              rowSelection={rowSelection}
-              rowKey={'id'}
-              pagination={{
-                onChange: this.handlePageChange.bind(this),
-                onShowSizeChange: this.onShowSizeChange.bind(this),
-                total: pagination.total,
-                current: pagination.current,
-                pageSize: pagination.pageSize,
-                showQuickJumper: true,
-                showSizeChanger: true,
-                pageSizeOptions: this.pageSizeOptions,
-                size: 'small',
-                showTotal (total) {
-                  return `共计 ${total} 条`
-                }
-              }}
-            />
+            {
+              APP.hasPermission('crm_sign_myself') ?
+              <div>
+                <div>
+                  <Condition
+                    className='mb10'
+                    dataSource={this.data}
+                    onChange={this.handleSearch.bind(this)}
+                  />
+                  <APP.Icon
+                    style={{float: 'right', marginTop: 10}}
+                    onClick={this.handleSwitch.bind(this)}
+                    type={this.state.extshow ? 'up' : 'down'}
+                  />
+                  <div style={this.state.extshow ? {display:'block', marginTop: -5, marginBottom: 18} : {display: 'none'}}>
+                  <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+                    <SearchName
+                      style={{paddingTop: '5px'}}
+                      options={[
+                        { value: 'customerName', label: '客户名称'},
+                        { value: 'contactPerson', label: '联系人'},
+                        // { value: 'signSalesperson', label: '签约人'},
+                        { value: 'operatingAccouting', label: '运营会计'},
+                        { value: 'areaName', label: '地区'},
+                        // { value: 'currentSalesperson', label: '跟进人'},
+                        { value: 'contractCode', label: '合同号'}
+                      ]}
+                      placeholder={''}
+                      onKeyDown={(e, val) => {
+                        if (e.keyCode === 13) {
+                          console.log(val, 'onKeyDown')
+                          this.handleSearchType(val)
+                        }
+                      }}
+                      onSearch={(val) => {
+                        this.handleSearchType(val)
+                      }}
+                    />
+                  </div>
+                  <SelectSearch
+                    type={this.state.tab}
+                    onChange={(values) => {
+                      this.handleSelectType(values)
+                    }}
+                  />
+                  </div>
+                </div>
+                <Table
+                  columns={this.columns}
+                  dataSource={this.state.dataSource}
+                  rowSelection={rowSelection}
+                  rowKey={'id'}
+                  pagination={{
+                    onChange: this.handlePageChange.bind(this),
+                    onShowSizeChange: this.onShowSizeChange.bind(this),
+                    total: pagination.total,
+                    current: pagination.current,
+                    pageSize: pagination.pageSize,
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    pageSizeOptions: this.pageSizeOptions,
+                    size: 'small',
+                    showTotal (total) {
+                      return `共计 ${total} 条`
+                    }
+                  }}
+                />
+              </div> :
+              <Nopermission/>
+            }
           </Tabs.TabPane>
           <Tabs.TabPane tab='预约回访' key='2'>
             {
-              this.state.tab === '2' &&
+              (this.state.tab === '2' && APP.hasPermission('crm_sign_huifang')) &&
               <Appointment />
+            }
+            {
+              !APP.hasPermission('crm_sign_huifang') &&
+              <Nopermission/>
             }
           </Tabs.TabPane>
           <Tabs.TabPane tab='到期续费' key='3'>
             {
-              this.state.tab === '3' &&
+              (this.state.tab === '3' && APP.hasPermission('crm_sign_xufei')) &&
               <Expiration />
+            }
+            {
+              !APP.hasPermission('crm_sign_xufei') &&
+              <Nopermission/>
             }
           </Tabs.TabPane>
         </Tabs>
         </div>
         <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' hidden={!APP.hasPermission('crm_sign_myself_list_principals')} onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          {
+            (this.state.tab === '1' && APP.hasPermission('crm_sign_myself_list_principals')) &&
+            <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          }
+          {
+            (this.state.tab === '3' && APP.hasPermission('crm_sign_xufei_list_principals')) &&
+            <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
+          }
         </div>
       </ContentBox>
     )
