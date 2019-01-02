@@ -202,6 +202,13 @@ class Main extends React.Component<Props> {
             const person = _.cloneDeep(this.props.linkMan)
             person.forEach((item) => {
               delete item.key
+              delete item.canCall
+            })
+            APP.dispatch<Customer.Props>({
+              type: 'change customer data',
+              payload: {
+                linkMan: person
+              }
             })
             params.contactPersons = person
             if (this.props.detail.id) {
@@ -471,81 +478,7 @@ class Main extends React.Component<Props> {
             />
           </Col>
         </Row>
-        {/* <Row gutter={8} className='mt10' >
-          <Col span={12}>
-            <FormItem
-            >
-              {getFieldDecorator(
-                'linkMan[0].contactPerson',
-                {
-                  initialValue: this.props.linkMan[0].contactPerson,
-                  rules: [
-                    {
-                      required: true,
-                      message: '主联系人不能为空'
-                    }
-                  ]
-                }
-              )(
-                <Input
-                  maxlength='50'
-                  required
-                  label={'主联系人'}
-                  field='linkMan[0].contactPerson'
-                  disabled={disabled}
-                  addonAfter={
-                    (
-                      <Icon
-                        onClick={this.editLinkMan.bind(this)}
-                        style={{cursor: 'pointer'}}
-                        type='ellipsis'
-                        theme='outlined'
-                      />
-                    )
-                  }
-                  onChange={this.handleChange.bind(this)}
-                  value={this.props.linkMan[0].contactPerson}
-                />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={12} >
-            <FormItem>
-              {getFieldDecorator(
-                'linkMan[0].contactPhone',
-                {
-                  initialValue: this.props.linkMan[0].contactPhone,
-                  rules: [
-                    {
-                      required: true,
-                      message: '主联系电话不能为空'
-                    }
-                  ]
-                }
-              )(
-                <Input
-                  maxlength='11'
-                  required
-                  label='主联系电话'
-                  disabled={disabled}
-                  field='linkMan[0].contactPhone'
-                  onChange={this.handleChange.bind(this)}
-                  value={this.props.linkMan[0].contactPhone}
-                />
-              )}
-            </FormItem>
-          </Col>
-        </Row> */}
         <Row gutter={8} className='mt10'>
-          {/* <Col span={12}>
-            <Input
-              field='legalPerson'
-              label='法人'
-              onChange={this.handleChange.bind(this)}
-              value={this.props.detail.legalPerson}
-              disabled={disabled}
-            />
-          </Col> */}
           <Col span={12}>
             <FormItemLayout
               label='纳税类别'
@@ -598,7 +531,6 @@ class Main extends React.Component<Props> {
             </Col>
           }
         </Row>
-        {/* <Row>{detail.cityName ? 'true' : 'false'}</Row> */}
         {
           this.props.type === 'customer' &&
           <Row gutter={8} className='mt10'>

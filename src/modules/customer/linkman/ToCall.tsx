@@ -7,6 +7,7 @@ interface Props {
   name: string
   detail: Customer.DetailProps
   style?: React.CSSProperties
+  canCall?: boolean
 }
 let init = false
 let el: Element
@@ -62,6 +63,11 @@ class Main extends React.Component<Props> {
         style={this.props.style}
         className={classNames(styles.tel, styles.disabled)}
         onClick={(e: any) => {
+          console.log(this.props.canCall, 'this.props.canCall')
+          if (!this.props.canCall) {
+            APP.error('联系电话请保存后,再拨打!')
+            return
+          }
           if (!/[\d-]{5,13}/.test(this.props.phone)) {
             APP.error('无效电话号码!')
             return

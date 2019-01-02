@@ -97,6 +97,7 @@ class Main extends React.Component<Props> {
     const p = baseinfo.refs.wrappedComponent.save()
     p.then((res: any) => {
       const detail = this.props.detail
+      console.log(detail, '保存提交')
       if (detail.trackRecord) {
         const payload = {
           pageNum: 1,
