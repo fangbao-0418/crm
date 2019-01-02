@@ -42,9 +42,7 @@ class Main extends React.Component {
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public params: Signed.SearchProps = {}
-  public paramsleft: Signed.SearchProps = {
-    serviceExpireEndMonth: moment().startOf('month').add(1, 'months').format('YYYY-MM-DD')
-  }
+  public paramsleft: Signed.SearchProps = {}
   public paramsright: Signed.SearchProps = {}
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public data: ConditionOptionProps[] = [
@@ -52,6 +50,7 @@ class Main extends React.Component {
       field: 'serviceExpire',
       label: ['即将到期'],
       range: false,
+      ischooseFirstMonth: true,
       value: '1month',
       placeholder: '结束账期',
       options: [
@@ -139,7 +138,8 @@ class Main extends React.Component {
   }]
 
   public componentWillMount () {
-    this.fetchList()
+    this.handleSearch()
+    // this.fetchList()
     this.fetchAllWorker()
   }
   public fetchList () {
@@ -185,19 +185,39 @@ class Main extends React.Component {
     this.setState({ selectedRowKeys })
   }
 
-  public handleSearch (values: any) {
+  public handleSearch (values?: any) {
     console.log(values, 'values')
     this.paramsleft = {}
+    let startmonth
     let endmonth
-    if (/month$/.test(values.serviceExpire.value)) {
-      const val = String(values.serviceExpire.value).slice(0, 1)
-      endmonth = moment().startOf('month').add(val, 'month').format('YYYY-MM-DD')
-    } else {
-      endmonth = values.serviceExpire.value
+    if (!values || !values.serviceExpire.value) { // 初始加载默认选中第一个月
+      startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+      endmonth = moment().subtract(1, 'months').format('YYYY-MM')
     }
+    if (values && values.serviceExpire.value) {
+      if (values.serviceExpire.value.indexOf('-') > -1) {
+        startmonth = values.serviceExpire.value
+        endmonth = values.serviceExpire.value
+      } else {
+        const val = String(values.serviceExpire.value).slice(0, 1)
+        console.log(val, 'val')
+        if (val === '1') { // 当前月-1
+          startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+          endmonth = moment().subtract(1, 'months').format('YYYY-MM')
+        } else if (val === '2') { // 开始=当前月-1 结束=当前月
+          startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+          endmonth = moment().startOf('month').format('YYYY-MM')
+        } else if (val === '3') { // 开始=当前月-1 结束=当前月+1
+          startmonth = moment().subtract(1, 'months').format('YYYY-MM')
+          endmonth = moment().add(1, 'month').format('YYYY-MM')
+        }
+      }
+    }
+    this.paramsleft.serviceExpireBeginMonth = startmonth || undefined
     this.paramsleft.serviceExpireEndMonth = endmonth || undefined
     const pagination = this.state.pagination
     pagination.current = 1
+    console.log(this.paramsleft)
     this.fetchList()
   }
 
@@ -205,6 +225,7 @@ class Main extends React.Component {
     this.paramsright.customerSource = values.customerSource || undefined
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
+    this.paramsright.currentSalesperson = values.currentSalesperson || undefined
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()
@@ -216,7 +237,6 @@ class Main extends React.Component {
     // this.paramsright.contactPhone = undefined
     this.paramsright.operatingAccouting = undefined
     this.paramsright.areaName = undefined
-    this.paramsright.currentSalesperson = undefined
     this.paramsright.contractCode = undefined
     this.paramsright[value.key] = value.value || undefined
     const pagination = this.state.pagination
@@ -331,11 +351,11 @@ class Main extends React.Component {
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
                 // { value: 'customerSource', label: '客户来源'},
-                { value: 'signSalesperson', label: '签约人'},
+                // { value: 'signSalesperson', label: '签约人'},
                 // { value: 'contactPhone', label: '联系电话'},
                 { value: 'operatingAccouting', label: '运营会计'},
                 { value: 'areaName', label: '地区'},
-                { value: 'currentSalesperson', label: '跟进人'},
+                // { value: 'currentSalesperson', label: '跟进人'},
                 { value: 'contractCode', label: '合同号'}
               ]}
               placeholder={''}
@@ -351,7 +371,7 @@ class Main extends React.Component {
             />
           </div>
           <SelectSearch
-            type='signed'
+            type='3'
             onChange={(values) => {
               this.handleSelectType(values)
             }}

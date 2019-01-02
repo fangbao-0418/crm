@@ -25,6 +25,7 @@ class Main extends React.Component<Props> {
   public onChange (field: string, value: string, index: number) {
     const linkMan: any[] = this.props.linkMan
     linkMan[index][field] = value
+    console.log(linkMan, 'onChangelinkMan')
     APP.dispatch<Customer.Props>({
       type: 'change customer data',
       payload: {
@@ -45,12 +46,18 @@ class Main extends React.Component<Props> {
         })
       }
     }
+    linkMan.forEach((item) => {
+      if (!item.canCall) {
+        item.canCall = '1'
+      }
+    })
     return linkMan
   }
   public render () {
     const { getFieldDecorator } = this.props.form
     const disabled = this.props.disabled === undefined ? false : this.props.disabled
     const linkMan = this.getLinkMan(disabled)
+    console.log(linkMan, '1211212')
     return (
       <FormItemLayout
         required
@@ -139,15 +146,7 @@ class Main extends React.Component<Props> {
                         getFieldDecorator(
                           `phone-${item.key}`,
                           {
-                            initialValue: (() => {
-                              if (disabled) {
-                                let str = item.contactPhone
-                                str = '' + str
-                                const ary = str.split('')
-                                ary.splice(3, 4, '****')
-                                return ary.join('')
-                              } return item.contactPhone
-                            })(),
+                            initialValue: item.contactPhone,
                             rules: index === 0 ? [
                               {
                                 required: true,
@@ -163,8 +162,11 @@ class Main extends React.Component<Props> {
                             placeholder='请输入联系电话'
                             onChange={(e) => {
                               const value = e.target.value
+                              console.log(value, 'value1212121')
                               e.target.value = value.replace(/[^\d]/g, '')
                               this.onChange('contactPhone', e.target.value, index)
+                              // 如果电话修改 但是没有保存 不允许打电话 给提示
+                              this.onChange('canCall', '0', index)
                             }}
                           />
                         )
@@ -175,9 +177,10 @@ class Main extends React.Component<Props> {
                     <Call
                       style={{
                         position: 'absolute',
-                        right: '-20px',
+                        right: '-18px',
                         top: '9px'
                       }}
+                      canCall={item.canCall === '1' ? true : false}
                       phone={item.contactPhone}
                       name={item.contactPerson}
                       detail={this.props.detail}

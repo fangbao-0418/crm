@@ -1,83 +1,37 @@
 import React from 'react'
-import { Select } from 'antd'
-import { getFirms } from '@/modules/stat/api'
+import { Input, Select } from 'antd'
 import { getSales } from '@/modules/common/api'
 const styles = require('./style')
 const Option = Select.Option
-interface Props {
-  type?: string
-  onChange?: (value: ValueProps) => void
-}
 interface ValueProps {
-  agencyId?: string
   customerSource?: string
   payTaxesNature?: string
-  signSalesperson?: string
   currentSalesperson?: string
 }
+interface Props {
+  onChange?: (value: ValueProps) => void
+}
 interface State {
-  /** 机构列表 */
-  firms: Array<{id: string, name: string}>
-  sales: Array<{salesPerson: string, saleId: string}>
+  sales: Array<{
+    saleId: string
+    salesPerson: string
+  }>
 }
 class Main extends React.Component<Props, State> {
   public values: ValueProps = {}
-  public companyTypeList: string[] = ['Agent', 'DirectCompany']
   public state: State = {
-    firms: [],
     sales: []
   }
   public componentWillMount () {
-    this.getFirms()
-    this.handleSalesRequest()
-  }
-  public handleSalesRequest () {
-    let tab: 3 | 4 | 5
-    if (this.props.type === '1') {
-      tab = 3
-    } else if (this.props.type === '2') {
-      tab = 5
-    } else if (this.props.type === '3') {
-      tab = 4
-    }
-    getSales(tab).then((res) => {
+    getSales(1).then((res) => {
       this.setState({
         sales: res
-      })
-    })
-  }
-  public getFirms () {
-    getFirms(this.companyTypeList).then((res) => {
-      this.setState({
-        firms: res
       })
     })
   }
   public render () {
     return (
       <div className={styles.select}>
-        <Select
-          showSearch
-          optionFilterProp='children'
-          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-          allowClear={true}
-          className='mr5'
-          style={{width: 150}}
-          placeholder='请选择机构'
-          onChange={(value: string) => {
-            this.values.agencyId = value
-            this.props.onChange(this.values)
-          }}
-        >
-          {
-            this.state.firms.length > 0 &&
-            this.state.firms.map((item) => {
-              return (
-                <Option key={item.id} value={item.id}>{item.name}</Option>
-              )
-            })
-          }
-        </Select>
         <Select
           allowClear={true}
           style={{width:'150px'}}
@@ -125,17 +79,13 @@ class Main extends React.Component<Props, State> {
         <Select
           allowClear={true}
           style={{width:'150px'}}
-          placeholder={this.props.type === '1' ? '请选择签约销售' : '请选择跟进人'}
+          placeholder='请选择销售'
           showSearch
-          labelInValue
           optionFilterProp='children'
           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          labelInValue
           onChange={(val: {key: '', label: ''}) => {
-            if (this.props.type === '1') {
-              this.values.signSalesperson = val ? val.label : undefined
-            } else {
-              this.values.currentSalesperson = val ? val.label : undefined
-            }
+            this.values.currentSalesperson = val ? val.label : undefined
             this.props.onChange(this.values)
           }}
         >

@@ -3,7 +3,7 @@ import { Table, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import SelectSearch from '@/modules/common/search/SelectSearch'
+import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import moment from 'moment'
 import { fetchListappoint } from '@/modules/business/api'
@@ -196,6 +196,7 @@ class Main extends React.Component {
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
+    this.params.currentSalesperson = values.currentSalesperson || undefined
     this.params.pageCurrent = 1
     this.fetchList()
   }
@@ -203,7 +204,6 @@ class Main extends React.Component {
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     this.params.contactPhone = undefined
-    this.params.currentSalesperson = undefined
     this.params.customerSource = undefined
     this.params.payTaxesNature = undefined
     this.params[values.key] = values.value || undefined
@@ -292,9 +292,7 @@ class Main extends React.Component {
                 style={{paddingTop: '5px'}}
                 options={[
                   { value: 'customerName', label: '客户名称'},
-                  { value: 'contactPerson', label: '联系人'},
-                  // { value: 'contactPhone', label: '联系电话'},
-                  { value: 'currentSalesperson', label: '所属销售'}
+                  { value: 'contactPerson', label: '联系人'}
                 ]}
                 placeholder={''}
                 onKeyDown={(e, val) => {

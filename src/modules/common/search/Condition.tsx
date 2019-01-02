@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tag, DatePicker, Menu, Dropdown, Icon } from 'antd'
+import { Tag, DatePicker, Menu, Dropdown, Icon, Tooltip } from 'antd'
 import DropDown from 'pilipa/libs/dropdown'
 import classNames from 'classnames'
 import moment from 'moment'
@@ -14,6 +14,8 @@ export interface ConditionOptionProps {
   type?: 'date' | 'select' | 'month'
   /** 时间是否是区间 */
   range?: boolean
+  /** 即将到期月份是不是默认选中第一个月 */
+  ischooseFirstMonth?: boolean
   placeholder?: string | [string, string]
 }
 interface ValueProps {
@@ -170,7 +172,7 @@ class Main extends React.Component<Props> {
               size='small'
               format={'YYYY-MM'}
               onChange={(current) => {
-                item.value = current.format('YYYY-MM')
+                item.value = current ? current.format('YYYY-MM') : (item.ischooseFirstMonth ? '1month' : undefined)
                 this.handleChange(index, item.value)
               }}
             />
@@ -282,7 +284,13 @@ class Main extends React.Component<Props> {
                 <span>
                   {label}
                   <span style={{paddingRight: 5}}>
-                    <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>
+                    {
+                      label === '即将到期' ?
+                      <Tooltip placement='top' title='即将到期1个月,指1个月内要完成续费的客户,即截止账期为上个月的所有客户； 即将到期2个月,指2个月内要完成续费的客户,即截止账期为上个月到本月的所有客户； 即将到期3个月,指3个月内要完成续费的客户,即截止账期为上个月到下个月的所有客户；'>
+                        <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9', marginLeft: 0}}></i>
+                      </Tooltip> :
+                      <Icon type='down' theme='outlined' style={{color: '#ffffff'}}/>
+                    }
                   </span>
                 </span>
               )
