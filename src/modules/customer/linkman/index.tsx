@@ -177,7 +177,7 @@ class Main extends React.Component<Props> {
                     <Call
                       style={{
                         position: 'absolute',
-                        right: '-20px',
+                        right: '-18px',
                         top: '9px'
                       }}
                       canCall={item.canCall === '1' ? true : false}

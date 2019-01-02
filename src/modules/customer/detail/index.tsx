@@ -104,6 +104,7 @@ class Main extends React.Component<Props> {
                 showFold
               >
                 <BaseInfo
+                  showTel={this.props.type === 'open' ? true : false}
                   ref='baseinfo'
                   customerId={this.props.customerId}
                   type={type}
