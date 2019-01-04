@@ -411,7 +411,7 @@ class Main extends React.Component {
         >
           <Tabs.TabPane tab='我的签约' key='1'>
             {
-              APP.hasPermission('crm_sign_myself') ?
+              APP.hasPermission('crm_sign_myself_list_select') ?
               <div>
                 <div>
                   <Condition
