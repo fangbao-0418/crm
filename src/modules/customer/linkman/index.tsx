@@ -35,6 +35,11 @@ class Main extends React.Component<Props> {
   }
   public getLinkMan (disabled: boolean) {
     const linkMan = this.props.linkMan
+    linkMan.forEach((item) => {
+      if (!item.canCall) {
+        item.canCall = '1'
+      }
+    })
     if (disabled) {
       return linkMan
     }
@@ -46,11 +51,6 @@ class Main extends React.Component<Props> {
         })
       }
     }
-    linkMan.forEach((item) => {
-      if (!item.canCall) {
-        item.canCall = '1'
-      }
-    })
     return linkMan
   }
   public render () {
