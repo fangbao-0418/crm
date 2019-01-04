@@ -18,7 +18,6 @@ import Mysign from './Mysign'
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
 interface States {
-  defaultActiveKey: string
   tab: string
 }
 
@@ -30,7 +29,6 @@ class Main extends React.Component {
   public values: ValueProps = {}
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public state: States = {
-    defaultActiveKey: '',
     tab: ''
   }
   public componentWillMount () {
@@ -39,17 +37,14 @@ class Main extends React.Component {
   public setDefaultActiveTab () {
     if (APP.hasPermission('crm_sign_myself_list_select')) {
       this.setState({
-        defaultActiveKey: '1',
         tab: '1'
       })
     } else if (!APP.hasPermission('crm_sign_myself_list_select') && APP.hasPermission('crm_sign_huifang')) {
       this.setState({
-        defaultActiveKey: '2',
         tab: '2'
       })
     } else if (!APP.hasPermission('crm_sign_myself_list_select') && !APP.hasPermission('crm_sign_huifang') && APP.hasPermission('crm_sign_xufei')) {
       this.setState({
-        defaultActiveKey: '3',
         tab: '3'
       })
     }
@@ -69,7 +64,6 @@ class Main extends React.Component {
         <div className='mb12'>
         <Tabs
           animated={false}
-          defaultActiveKey={this.state.defaultActiveKey}
           onChange={this.callBack.bind(this)}
         >
           {
