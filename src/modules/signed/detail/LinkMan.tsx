@@ -98,6 +98,7 @@ class Main extends React.Component<Props> {
                   verticalAlign: 'sub',
                   marginLeft: '4px'
                 }}
+                canCall={true}
                 phone={text}
                 name={record.contactPerson}
                 detail={this.props.detail}
