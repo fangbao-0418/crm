@@ -39,11 +39,11 @@ class Main extends React.Component {
       this.setState({
         tab: '1'
       })
-    } else if (!APP.hasPermission('crm_sign_myself_list_select') && APP.hasPermission('crm_sign_huifang')) {
+    } else if (APP.hasPermission('crm_sign_huifang')) {
       this.setState({
         tab: '2'
       })
-    } else if (!APP.hasPermission('crm_sign_myself_list_select') && !APP.hasPermission('crm_sign_huifang') && APP.hasPermission('crm_sign_xufei')) {
+    } else if (APP.hasPermission('crm_sign_xufei')) {
       this.setState({
         tab: '3'
       })
