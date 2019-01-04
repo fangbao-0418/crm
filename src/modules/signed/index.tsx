@@ -54,92 +54,6 @@ class Main extends React.Component {
       })
     }
   }
-  // public toSale (id?: string) {
-  //   console.log(id, 'id')
-  //   if (!id && !this.state.selectedRowKeys.length) {
-  //     APP.error('请选择客户！')
-  //     return false
-  //   }
-  //   const modal = new Modal({
-  //     content: (
-  //       <div>
-  //         <span>请选择跟进人：</span>
-  //         <Select
-  //           showSearch
-  //           optionFilterProp='children'
-  //           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-  //           labelInValue
-  //           style={{width:'200px'}}
-  //           onChange={(val: {key: '', label: ''}) => {
-  //             this.curSale = val
-  //           }}
-  //         >
-  //           {
-  //             this.state.worders.map((item, index) => {
-  //               return (
-  //                 <Option key={item.id}>{item.name}</Option>
-  //               )
-  //             })
-  //           }
-  //         </Select>
-  //       </div>
-  //     ),
-  //     title: '销售',
-  //     mask: true,
-  //     onOk: () => {
-  //       const params = {
-  //         customerIdArr: id ? [id] : this.state.selectedRowKeys,
-  //         principalsId: this.curSale.key,
-  //         principals: this.curSale.label
-  //       }
-  //       toOther(params).then(() => {
-  //         APP.success('操作成功')
-  //         this.setDefaultActiveTab()
-  //         modal.hide()
-  //       })
-  //     },
-  //     onCancel: () => {
-  //       modal.hide()
-  //     }
-  //   })
-  //   modal.show()
-  // }
-  // public detail (record: Signed.DetailProps, defaultKey?: string) {
-  //   console.log(defaultKey)
-  //   const modal = new Modal({
-  //     content: (
-  //       <Provider>
-  //         <View
-  //           type='signed'
-  //           defaultKey={defaultKey}
-  //           customerId={record.id}
-  //           customerName={record.customerName}
-  //           onClose={() => {
-  //             this.setDefaultActiveTab()
-  //             modal.hide()
-  //           }}
-  //         />
-  //       </Provider>
-  //     ),
-  //     header: null,
-  //     footer: null,
-  //     mask: true,
-  //     maskClosable: false,
-  //     onCancel: () => {
-  //       modal.hide()
-  //     }
-  //   })
-  //   modal.show()
-  // }
-  // public onSelectAllChange (selectedRowKeys: string[]) {
-  //   this.setState({ selectedRowKeys })
-  // }
-  // 搜索框折叠
-  // public handleSwitch () {
-  //   this.setState({
-  //     extshow: !this.state.extshow
-  //   })
-  // }
 
   public callBack (value: any) {
     this.setState({
@@ -148,11 +62,6 @@ class Main extends React.Component {
   }
 
   public render () {
-    // const rowSelection = {
-    //   selectedRowKeys: this.state.selectedRowKeys,
-    //   onChange: this.onSelectAllChange.bind(this)
-    // }
-    // const { pagination } = this.state
     return (
       <ContentBox
         title='签约客户'
@@ -178,12 +87,12 @@ class Main extends React.Component {
               {
                 this.state.tab === '2' &&
                 <Appointment />
-              }         
+              }
             </Tabs.TabPane>
           }
           {
             APP.hasPermission('crm_sign_xufei') &&
-            <Tabs.TabPane tab='到期续费' key='3'>  
+            <Tabs.TabPane tab='到期续费' key='3'>
               {
                 this.state.tab === '3' &&
                 <Expiration />
@@ -192,16 +101,6 @@ class Main extends React.Component {
           }
         </Tabs>
         </div>
-        {/* <div style={{ position: 'relative', bottom: '48px', width: '50%'}}>
-          {
-            (this.state.tab === '1' && APP.hasPermission('crm_sign_myself_list_principals')) &&
-            <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
-          }
-          {
-            (this.state.tab === '3' && APP.hasPermission('crm_sign_xufei_list_principals')) &&
-            <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.toSale.bind(this, '')}>转跟进人</Button>
-          }
-        </div> */}
       </ContentBox>
     )
   }

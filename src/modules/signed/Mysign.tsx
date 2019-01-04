@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Select, Tooltip, Divider, Icon} from 'antd'
+import { Table, Button, Select, Tooltip, Divider, Icon } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
 import ContentBox from '@/modules/common/content'
