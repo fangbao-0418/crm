@@ -191,24 +191,30 @@ class Main extends React.Component<Props> {
       width: '80px',
       align: 'center',
       render: (text, record, index) => {
-        return (
-          <span
-            hidden={this.props.disabled}
-            onClick={() => {
-              const data = this.props.linkMan
-              data.splice(index, 1)
-              APP.dispatch({
-                type: 'change customer data',
-                payload: {
-                  linkMan: data
-                }
-              })
-            }}
-            className='href'
-          >
-            删除
-          </span>
-        )
+        if (record.isSignPerson === 1) {
+          return (
+            <span></span>
+          )
+        } else {
+          return (
+            <span
+              hidden={this.props.disabled}
+              onClick={() => {
+                const data = this.props.linkMan
+                data.splice(index, 1)
+                APP.dispatch({
+                  type: 'change customer data',
+                  payload: {
+                    linkMan: data
+                  }
+                })
+              }}
+              className='href'
+            >
+              删除
+            </span>
+          )
+        }
       }
     }
   ]
