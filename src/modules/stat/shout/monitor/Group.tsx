@@ -67,7 +67,7 @@ class Main extends React.Component<Props, State> {
   public fetchList (payload: PayloadProps = this.payload) {
     return getGroupCallMonitors(payload).then((res) => {
       this.setState({
-        dataSource: res.data
+        dataSource: res
       })
     })
   }
