@@ -156,7 +156,7 @@ class Main extends React.Component {
     width: 180,
     dataIndex: 'lastReleaseTime',
     render: (val) => {
-      return (moment(val).format('YYYY-MM-DD'))
+      return (val ? (moment(val).format('YYYY-MM-DD')) : '')
     }
   }]
   public componentWillMount () {
