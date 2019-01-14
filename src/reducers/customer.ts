@@ -37,7 +37,14 @@ export default handleActions<Customer.Props>({
   'change customer data': (state, { payload }) => {
     payload = Object.assign({}, state, _.cloneDeep(payload))
     payload = _.mergeWith(_.cloneDeep(defaultVal), payload, customizer)
-    const linkMan: any = APP.fn.generateKey(payload.linkMan)
+    let linkMan: any = payload.linkMan || []
+    while(linkMan.length < 1) {
+      linkMan.push({
+        contactPerson: '',
+        contactPhone: ''
+      })
+    }
+    linkMan = APP.fn.generateKey(linkMan)
     linkMan[0].isMainContact = 1
     return {
       ...state,
