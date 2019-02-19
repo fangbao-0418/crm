@@ -59,6 +59,12 @@ const defaultVal: Business.Props = {
   visibled: true
 }
 export default handleActions<Business.Props>({
+  'init business data': (state) => {
+    return {
+      ...state,
+      ...defaultVal
+    }
+  },
   'change business data': (state, { payload }) => {
     payload = Object.assign({}, state, _.cloneDeep(payload))
     payload = _.merge(_.cloneDeep(defaultVal), payload)

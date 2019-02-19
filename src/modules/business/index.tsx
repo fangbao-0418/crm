@@ -48,6 +48,11 @@ class Main extends React.Component<Business.Props> {
     this.fetchCitys()
     this.fetchSales()
   }
+  public componentWillUnmount () {
+    APP.dispatch({
+      type: 'init business data'
+    })
+  }
   public fetchCount () {
     fetchCountAction(this.params)
   }
@@ -410,7 +415,7 @@ class Main extends React.Component<Business.Props> {
   }
   public render () {
     const { count, selectedTab } = this.props
-    // console.log(count, 'count')
+    console.log(selectedTab, 'selectedTab')
     return (
       <ContentBox
         title='我的商机'
@@ -494,7 +499,7 @@ class Main extends React.Component<Business.Props> {
         { this.props.visibled &&
           <Tabs
             animated={false}
-            defaultActiveKey={this.props.selectedTab}
+            defaultActiveKey={selectedTab}
             onChange={this.callback.bind(this)}
           >
             <Tabs.TabPane tab={<span>全部({count[0]})</span>} key='tab1'>
