@@ -19,7 +19,7 @@ interface ValueProps {
   agencyId?: string
   customerSource?: string
   salesPerson?: Array<{id: string, name: string}>
-  city?: {cityCode: string, cityName: string}
+  // city?: {cityCode: string, cityName: string}
   type?: number
 }
 class Main extends React.Component<Props> {
@@ -220,30 +220,30 @@ class Main extends React.Component<Props> {
             type='primary'
             onClick={() => {
               if (this.state.type === 3) { // 转客资池
-                if (this.values.city && this.values.customerSource) {
+                if (this.values.customerSource) {
                   this.values.salesPerson = []
                   this.values.agencyId = ''
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市')
+                  APP.error('请选择客户来源')
                 }
               } else if (this.state.type === 1) { // 转公海
-                if (this.values.city && this.values.customerSource && this.values.agencyId) {
+                if (this.values.customerSource && this.values.agencyId) {
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市／机构')
+                  APP.error('请选择客户来源／机构')
                 }
               } else if (this.state.type === 2) { // 转销售
-                if (this.values.city && this.values.customerSource && this.values.agencyId && this.values.salesPerson && this.values.salesPerson.length > 0) {
+                if (this.values.customerSource && this.values.agencyId && this.values.salesPerson && this.values.salesPerson.length > 0) {
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市／机构／销售')
+                  APP.error('请选择客户来源／机构／销售')
                 }
               }
             }}
