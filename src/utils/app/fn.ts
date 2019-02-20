@@ -156,7 +156,7 @@ export const autocomplete = (str: string, num: number, complement: string = '') 
 }
 
 /** 格式化时长 */
-export const formatDuration = (second: number, arr: any[] = []): string => {
+export const formatDuration = (second: number, arr: any[] = ['00', '00', '00', '00']): string => {
   const m = 60
   const h = m * 60
   const d = h * 24
@@ -166,26 +166,22 @@ export const formatDuration = (second: number, arr: any[] = []): string => {
   let minute = 0
   if (second / d >= 1) {
     day = Math.floor(second / d)
-    arr.push(`${autocomplete(String(day), 2, '0')}`)
+    arr[0] = `${autocomplete(String(day), 2, '0')}`
     dif = second - day * d
     formatDuration(dif, arr)
   } else if (second / h >= 1) {
     hours = Math.floor(second / h)
-    arr.push(`${autocomplete(String(hours), 2, '0')}`)
+    arr[1] = `${autocomplete(String(hours), 2, '0')}`
     dif = second - hours * h
+    console.log(hours, dif, 'h')
     formatDuration(dif, arr)
   } else if (second / m >= 1) {
     minute = Math.floor(second / m)
-    arr.push(`${autocomplete(String(minute), 2, '0')}`)
+    arr[2] = `${autocomplete(String(minute), 2, '0')}`
     dif = second - minute * m
     formatDuration(dif, arr)
   } else {
-    arr.push(`${autocomplete(String(APP.fn.round((second), 0)), 2, '0')}`)
+    arr[3] = `${autocomplete(String(APP.fn.round((second), 0)), 2, '0')}`
   }
-  if (arr.length < 3) {
-    while (3 - arr.length > 0) {
-      arr.unshift('00')
-    }
-  }
-  return arr.join(':')
+  return arr.join(':').replace(/^00:/, '')
 }

@@ -45,7 +45,7 @@ class Main extends React.Component<Props> {
       agencyId: APP.user.companyId, // 需要从登陆信息读取
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
-      salesPersonNames: salesNames.join(','),
+      salesPersonNames: salesNames.join(',')
       // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
       // cityName: this.props.paramsValue.step1.city.cityName || undefined
     }
