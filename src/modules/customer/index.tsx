@@ -17,6 +17,7 @@ import { changeCustomerDetailAction } from './action'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 import { connect } from 'react-redux'
+const styles = require('./style')
 const Option = Select.Option
 type DetailProps = Customer.DetailProps
 interface States {
@@ -661,7 +662,7 @@ class Main extends React.Component<Customer.Props, States> {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
-            <span>所属城市</span>
+            <span className={styles.label}>所属城市</span>
             <Select
               allowClear={true}
               style={{width:'150px'}}
