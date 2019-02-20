@@ -1,14 +1,14 @@
 import React from 'react'
 import { Select, Switch, Button, Tooltip, Radio } from 'antd'
 import { fetchRegion } from '@/modules/common/api'
-import { getCompanyByCitycode } from '../api'
+import { getAllCompany } from '../api'
 import { getSalesByCompany } from '@/modules/common/api'
 const styles = require('../style')
 const Option = Select.Option
 const RadioGroup = Radio.Group
 interface State {
   type: number,
-  citys: Common.RegionProps[]
+  // citys: Common.RegionProps[]
   sales: Array<{id: string, name: string}>
   companys: Array<{id: string, name: string}>
 }
@@ -19,7 +19,7 @@ interface ValueProps {
   agencyId?: string
   customerSource?: string
   salesPerson?: Array<{id: string, name: string}>
-  city?: {cityCode: string, cityName: string}
+  // city?: {cityCode: string, cityName: string}
   type?: number
 }
 class Main extends React.Component<Props> {
@@ -28,19 +28,25 @@ class Main extends React.Component<Props> {
   }
   public state: State = {
     type: 3,
-    citys: [],
+    // citys: [],
     sales: [],
     companys: []
   }
   public componentWillMount () {
-    fetchRegion({level: 2}).then((res) => {
-      this.setState({
-        citys: res
-      })
-    })
+    // fetchRegion({level: 2}).then((res) => {
+    //   this.setState({
+    //     citys: res
+    //   })
+    // })
+    this.getCompany()
   }
-  public getCompany (citycode: string) {
-    getCompanyByCitycode(citycode).then((res) => {
+  public getCompany () {
+    // getCompanyByCitycode(citycode).then((res) => {
+    //   this.setState({
+    //     companys: res
+    //   })
+    // })
+    getAllCompany().then((res) => {
       this.setState({
         companys: res
       })
@@ -101,7 +107,7 @@ class Main extends React.Component<Props> {
             }
           </Select>
         </div>
-        <div className='mt12'>
+        {/* <div className='mt12'>
             <span>选择城市：</span>
             <Select
               showSearch
@@ -127,7 +133,7 @@ class Main extends React.Component<Props> {
                 })
               }
             </Select>
-          </div>
+          </div> */}
           <div>
             <div className='mt12' style={{ textAlign: 'left', marginLeft: 250 }}>
               <span>导入设置：</span>
@@ -151,7 +157,10 @@ class Main extends React.Component<Props> {
                 <div className='mt12'>
                   <span>选择机构：</span>
                   <Select
+                    showSearch
                     style={{width:'200px'}}
+                    optionFilterProp='children'
+                    filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     onChange={(val: string) => {
                       this.values.agencyId = val
                       this.getSales(val)
@@ -211,30 +220,30 @@ class Main extends React.Component<Props> {
             type='primary'
             onClick={() => {
               if (this.state.type === 3) { // 转客资池
-                if (this.values.city && this.values.customerSource) {
+                if (this.values.customerSource) {
                   this.values.salesPerson = []
                   this.values.agencyId = ''
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市')
+                  APP.error('请选择客户来源')
                 }
               } else if (this.state.type === 1) { // 转公海
-                if (this.values.city && this.values.customerSource && this.values.agencyId) {
+                if (this.values.customerSource && this.values.agencyId) {
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市／机构')
+                  APP.error('请选择客户来源／机构')
                 }
               } else if (this.state.type === 2) { // 转销售
-                if (this.values.city && this.values.customerSource && this.values.agencyId && this.values.salesPerson && this.values.salesPerson.length > 0) {
+                if (this.values.customerSource && this.values.agencyId && this.values.salesPerson && this.values.salesPerson.length > 0) {
                   if (this.props.onOk) {
                     this.props.onOk(this.values)
                   }
                 } else {
-                  APP.error('请选择客户来源／城市／机构／销售')
+                  APP.error('请选择客户来源／机构／销售')
                 }
               }
             }}

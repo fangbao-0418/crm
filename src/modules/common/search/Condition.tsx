@@ -55,7 +55,7 @@ class Main extends React.Component<Props> {
     const sourceValues = (this.state ? this.state.values : {}) || {}
     dataSource.forEach((item) => {
       const { field, options } = item
-      values[field] = sourceValues[field] || options[0]
+      values[field] = sourceValues[field]
     })
     return values
   }

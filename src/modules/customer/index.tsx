@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Tooltip, Icon } from 'antd'
+import { Table, Button, Tooltip, Icon, Select } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
@@ -17,6 +17,8 @@ import { changeCustomerDetailAction } from './action'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Import from '@/modules/customer/import'
 import { connect } from 'react-redux'
+const styles = require('./style')
+const Option = Select.Option
 type DetailProps = Customer.DetailProps
 interface States {
   extshow: boolean
@@ -74,14 +76,14 @@ const data: ConditionOptionProps[] = [
       }
     ],
     type: 'date'
-  },
-  {
-    label: ['所属城市'],
-    value: '',
-    field: 'cityCode',
-    type: 'select',
-    options: []
   }
+  // {
+  //   label: ['所属城市'],
+  //   value: '',
+  //   field: 'cityCode',
+  //   type: 'select',
+  //   options: []
+  // }
 ]
 class Main extends React.Component<Customer.Props, States> {
   public params: ParamsProps = {
@@ -145,20 +147,21 @@ class Main extends React.Component<Customer.Props, States> {
   public componentWillMount () {
     fetchCityCount().then((res) => {
       const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
-      const options: Array<{label: string, value: string}> = []
-      cityList.forEach((item) => {
-        options.push({
-          label: `${item.cityName}(${item.rows})`,
-          value: item.cityCode
-        })
-      })
-      data[1].options = options
-      data[1].value = options[0].value
-      console.log(data[1].value, 'data[1].value')
-      this.params.cityCode = data[1].value
+      // const options: Array<{label: string, value: string}> = []
+      // cityList.forEach((item) => {
+      //   options.push({
+      //     label: `${item.cityName}(${item.rows})`,
+      //     value: item.cityCode
+      //   })
+      // })
+      // data[1].options = options
+      // data[1].value = options[0].value
+      // console.log(data[1].value, 'data[1].value')
+      // this.params.cityCode = data[1].value
       this.fetchList()
       this.setState({
-        data
+        // data,
+        cityList
       })
     })
   }
@@ -216,7 +219,7 @@ class Main extends React.Component<Customer.Props, States> {
       this.params.createBeginDate = createBeginDate
       this.params.createEndDate = createEndDate
     }
-    this.params.cityCode = values.cityCode.value || undefined
+    // this.params.cityCode = values.cityCode.value || undefined
     this.params.pageCurrent = 1
     this.fetchList()
   }
@@ -226,12 +229,17 @@ class Main extends React.Component<Customer.Props, States> {
     this.params.pageCurrent = 1
     this.fetchList()
   }
+  public handleSelectCity (val: string) {
+    this.params.cityCode = val || undefined
+    this.params.pageCurrent = 1
+    this.fetchList()
+  }
   public handleSearchType (value: {value?: string, key: string}) {
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     // this.params.contactPhone = undefined
-    this.params.customerSource = undefined
-    this.params.payTaxesNature = undefined
+    // this.params.customerSource = undefined
+    // this.params.payTaxesNature = undefined
     this.params[value.key] = value.value
     this.params.pageCurrent = 1
     this.fetchList()
@@ -654,6 +662,31 @@ class Main extends React.Component<Customer.Props, States> {
             onChange={this.handleSearch.bind(this)}
           />
           <div>
+            <span className={styles.label}>所属城市</span>
+            <Select
+              allowClear={true}
+              style={{width:'150px'}}
+              className='mr5'
+              placeholder='请选择所属城市'
+              onChange={(val: string) => {
+                console.log(val, '城市')
+                this.handleSelectCity(val)
+              }}
+            >
+              {
+                this.state.cityList.map((item) => {
+                  return (
+                    <Option
+                      key={item.cityCode}
+                    >
+                      {item.cityName + '(' + item.rows + ')'}
+                    </Option>
+                  )
+                })
+              }
+            </Select>
+          </div>
+          <div>
             <APP.Icon
               style={{float: 'right', marginTop: -20}}
               onClick={this.handleSwitch.bind(this)}
@@ -667,10 +700,8 @@ class Main extends React.Component<Customer.Props, States> {
                 options={[
                   { value: 'customerName', label: '客户名称'},
                   { value: 'contactPerson', label: '联系人'}
-                  // { value: 'contactPhone', label: '联系电话'}
                 ]}
                 placeholder={''}
-                // onChange={this.handleSearchType.bind(this)}
                 onKeyDown={(e, val) => {
                   if (e.keyCode === 13) {
                     this.handleSearchType(val)

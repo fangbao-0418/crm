@@ -107,6 +107,10 @@ export const allocateAuto = (payload: Array<{id: string, customerName: string, c
 export const getCompanyByCitycode = (citycode: string) => {
   return http(`/user/v1/api/company/list/region/region_city/${citycode}`)
 }
+// 获取所有机构列表直营代理商
+export const getAllCompany = () => {
+  return http(`/user/v1/api/company/list/all`)
+}
 export const makeCall = (payload: {
   customerId: any
   customerName: string
