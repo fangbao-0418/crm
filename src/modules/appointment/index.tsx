@@ -1,15 +1,17 @@
 import React from 'react'
-import { Table, Icon } from 'antd'
+import { Table, Icon, Button, DatePicker, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
 import moment from 'moment'
-import { fetchListappoint } from '@/modules/business/api'
+import { fetchListappoint, appointment, toSales } from '@/modules/business/api'
+import { getSalesByCompany } from '@/modules/common/api'
 import _ from 'lodash'
 import { showDetail } from '@/modules/business/utils'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+import Modal from 'pilipa/libs/modal'
 type DetailProps = Business.DetailProps
 interface States {
   extshow: boolean
@@ -19,6 +21,8 @@ interface States {
     current: number
     pageSize: number
   }
+  selectedRowKeys: string[]
+  sales: Array<{id: string, name: string}>
 }
 const all = [{
   label: '全部',
@@ -36,10 +40,14 @@ class Main extends React.Component {
       total: 0,
       current: this.params.pageCurrent,
       pageSize: this.params.pageSize
-    }
+    },
+    selectedRowKeys: [],
+    sales: []
   }
   public paramsleft: Business.SearchProps = {}
   public paramsright: Business.SearchProps = {}
+  public appointmentTime: string = ''
+  public curSale: {key: string, label: string} = { key: '', label: ''}
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -129,6 +137,7 @@ class Main extends React.Component {
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     this.fetchList()
+    this.fetchSales()
   }
   public fetchList () {
     const pagination = this.state.pagination
@@ -141,6 +150,13 @@ class Main extends React.Component {
         dataSource: res.data
       })
       return res
+    })
+  }
+  public fetchSales () {
+    getSalesByCompany(APP.user.companyId).then((res) => {
+      this.setState({
+        sales: res
+      })
     })
   }
   public handlePageChange (page: number) {
@@ -270,8 +286,118 @@ class Main extends React.Component {
       extshow: !this.state.extshow
     })
   }
+  public onSelectAllChange (selectedRowKeys: string[]) {
+    this.setState({ selectedRowKeys })
+  }
+  public appointmentAll () {
+    const selectedRowKeys = this.state.selectedRowKeys
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择预约时间：</span>
+          <DatePicker
+            placeholder=''
+            format={'YYYY-MM-DD'}
+            onChange={(current) => {
+              this.appointmentTime = current.format('YYYY-MM-DD')
+            }}
+          />
+        </div>
+      ),
+      title: '批量预约',
+      mask: true,
+      maskClosable: false,
+      onOk: () => {
+        if (!this.appointmentTime) {
+          APP.error('请选择预约时间！')
+          return false
+        }
+        const params = { customerIdArr: selectedRowKeys }
+        console.log(params, 'params')
+        const time = this.appointmentTime
+        appointment(params, time).then(() => {
+          this.fetchList()
+          APP.success('预约成功')
+          this.setState({
+            selectedRowKeys: []
+          })
+        })
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
+  public toSale () {
+    const selectedRowKeys = this.state.selectedRowKeys
+    if (!selectedRowKeys.length) {
+      APP.error('请选择客户！')
+      return false
+    }
+    const modal = new Modal({
+      content: (
+        <div>
+          <span>请选择销售：</span>
+          <Select
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            labelInValue
+            style={{width:'200px'}}
+            onChange={(val: {key: '', label: ''}) => {
+              this.curSale = val
+            }}
+          >
+            {
+              this.state.sales.map((item, index) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                )
+              })
+            }
+          </Select>
+        </div>
+      ),
+      title: '销售',
+      mask: true,
+      maskClosable: false,
+      onOk: () => {
+        if (!this.curSale.key) {
+          APP.error('请选择销售！')
+          return false
+        }
+        const saleparams = {
+          customerIdArr: selectedRowKeys,
+          salesperson: this.curSale.label
+        }
+        const saleId = this.curSale.key
+        toSales(saleparams, saleId).then((res) => {
+          this.fetchList()
+          APP.success('操作成功')
+          this.setState({
+            selectedRowKeys: []
+          })
+        })
+        modal.hide()
+      },
+      onCancel: () => {
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public render () {
     const { pagination } = this.state
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedRowKeys,
+      onChange: this.onSelectAllChange.bind(this)
+    }
     return (
       <ContentBox title='我的预约'>
         <div className='mb12'>
@@ -316,6 +442,7 @@ class Main extends React.Component {
         </div>
         <Table
           columns={this.columns}
+          rowSelection={rowSelection}
           dataSource={this.state.dataSource}
           rowKey={'id'}
           pagination={{
@@ -333,6 +460,10 @@ class Main extends React.Component {
             }
           }}
         />
+        <div className='btn-position'>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' onClick={this.toSale.bind(this)}>转销售</Button>
+        </div>
       </ContentBox>
     )
   }
