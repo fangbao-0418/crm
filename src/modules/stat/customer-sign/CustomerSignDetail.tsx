@@ -191,10 +191,10 @@ class Main extends React.Component {
 
   public getFirms () {
     getFirms(this.companyTypeList).then((res) => {
-      this.payload.agencyId = res[0].id
+      // this.payload.agencyId = res[0].id
       this.setState({
-        firms: res,
-        organ: res[0].id
+        firms: res
+        // organ: res[0].id
       }, () => {
         this.getSales(res[0].id)
       })
@@ -311,7 +311,7 @@ class Main extends React.Component {
             showSearch
             optionFilterProp='children'
             filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            value={this.state.organ}
+            // value={this.state.organ}
             className='inline-block mr8'
             style={{width: 200}}
             placeholder='请输入创建机构'
@@ -384,7 +384,7 @@ class Main extends React.Component {
         </div>
         <Row>
           <Col span={12} >
-            <div style={{fontSize: 14, color: '#333333', marginBottom: 10}}>城市排名</div>
+            <div style={{fontSize: 14, color: '#333333', marginBottom: 10}}>机构排名</div>
             <CityRank cityData={this.state.cityData}/>
           </Col>
           <Col span={8} offset={2}>

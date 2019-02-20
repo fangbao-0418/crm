@@ -17,7 +17,7 @@ class Main extends React.Component<any> {
       }
     },
     {
-      title: '城市排名',
+      title: '机构排名',
       width: 300,
       dataIndex: 'totalByCity.name',
       render: (text, record) => {
