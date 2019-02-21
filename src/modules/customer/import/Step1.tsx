@@ -90,6 +90,7 @@ class Main extends React.Component<Props> {
           <span>客户来源：</span>
           <Select
             style={{width:'200px'}}
+            placeholder='请选择客户来源'
             onChange={(val: string) => {
               this.values.customerSource = val
             }}
@@ -158,6 +159,7 @@ class Main extends React.Component<Props> {
                   <span>选择机构：</span>
                   <Select
                     showSearch
+                    placeholder='请选择机构'
                     style={{width:'200px'}}
                     optionFilterProp='children'
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -188,6 +190,7 @@ class Main extends React.Component<Props> {
                   </span>
                   <Select
                     showSearch
+                    placeholder='请选择销售'
                     optionFilterProp='children'
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     labelInValue

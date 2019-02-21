@@ -104,7 +104,10 @@ export default class Main extends React.Component<null, States> {
     dataIndex: 'status'
   }, {
     title: '分配时间',
-    dataIndex: 'distributionTime'
+    dataIndex: 'distributionTime',
+    render: (val) => {
+      return val ? moment(val).format('YYYY-MM-DD') : ''
+    }
   }]
   public state: States = {
     extshow: false,
