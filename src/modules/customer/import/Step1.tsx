@@ -67,7 +67,7 @@ class Main extends React.Component<Props> {
     // }
   }
   public downFile () {
-    const fileUrl = require('@/assets/files/客资导入模板.xlsx')
+    const fileUrl = require('@/assets/files/客资导入模版.xlsx')
     const el = document.createElement('a')
     el.setAttribute('href', fileUrl)
     el.setAttribute('download', '客资导入模版')
