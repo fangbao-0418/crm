@@ -34,7 +34,7 @@ export const getCallDetail = (query: {
 export const getSaller = () => {
   return http(`/user/v1/api/user/list/company/identity/${APP.user.companyId}/sale`)
 }
-/** 根据登陆用户获取机构列表 */
+/** 登录用户下负责的机构列表 */
 export const getFirms = (companyTypeList: string[] = []) => {
   return http(`/user/v1/api/company/login/region`, 'POST', companyTypeList)
 }

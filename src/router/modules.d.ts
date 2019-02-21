@@ -1,8 +1,10 @@
 import { RouteComponentProps } from 'react-router'
 type RouteComponent = React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
 interface ModuleProps {
-  /** 我的客户 */
+  /** 我的客资待分配 */
   Customer: RouteComponent
+  /** 我的客资已分配 */
+  AlreadyAllocatedCustomer: RouteComponent
   /** 商机 */
   Business: RouteComponent
   /** 我的预约 */
