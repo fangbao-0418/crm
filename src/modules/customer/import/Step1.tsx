@@ -182,7 +182,7 @@ class Main extends React.Component<Props> {
               {
                 this.state.type === 2 &&
                 <div className='mt12'>
-                  <span>
+                  <span style={{marginLeft: '-18px'}}>
                     <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中'>
                       <i className='fa fa-exclamation-circle ml5' style={{color: '#FBCD5D', marginRight: 5}}></i>
                     </Tooltip>
