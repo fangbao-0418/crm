@@ -67,7 +67,7 @@ class Main extends React.Component<Props> {
     // }
   }
   public downFile () {
-    const fileUrl = require('@/assets/files/客资导入模板.xlsx')
+    const fileUrl = require('@/assets/files/客资导入模版.xlsx')
     const el = document.createElement('a')
     el.setAttribute('href', fileUrl)
     el.setAttribute('download', '客资导入模版')
@@ -90,6 +90,7 @@ class Main extends React.Component<Props> {
           <span>客户来源：</span>
           <Select
             style={{width:'200px'}}
+            placeholder='请选择客户来源'
             onChange={(val: string) => {
               this.values.customerSource = val
             }}
@@ -158,6 +159,7 @@ class Main extends React.Component<Props> {
                   <span>选择机构：</span>
                   <Select
                     showSearch
+                    placeholder='请选择机构'
                     style={{width:'200px'}}
                     optionFilterProp='children'
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -180,7 +182,7 @@ class Main extends React.Component<Props> {
               {
                 this.state.type === 2 &&
                 <div className='mt12'>
-                  <span>
+                  <span style={{marginLeft: '-18px'}}>
                     <Tooltip placement='top' title='若勾选多个销售，可直接平均分配到各销售库中'>
                       <i className='fa fa-exclamation-circle ml5' style={{color: '#FBCD5D', marginRight: 5}}></i>
                     </Tooltip>
@@ -188,6 +190,7 @@ class Main extends React.Component<Props> {
                   </span>
                   <Select
                     showSearch
+                    placeholder='请选择销售'
                     optionFilterProp='children'
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     labelInValue

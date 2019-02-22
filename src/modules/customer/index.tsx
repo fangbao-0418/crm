@@ -237,9 +237,6 @@ class Main extends React.Component<Customer.Props, States> {
   public handleSearchType (value: {value?: string, key: string}) {
     this.params.customerName = undefined
     this.params.contactPerson = undefined
-    // this.params.contactPhone = undefined
-    // this.params.customerSource = undefined
-    // this.params.payTaxesNature = undefined
     this.params[value.key] = value.value
     this.params.pageCurrent = 1
     this.fetchList()

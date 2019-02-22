@@ -19,13 +19,16 @@ interface State {
   /** 机构列表 */
   firms: Array<{id: string, name: string}>
   sales: Array<{salesPerson: string, saleId: string}>
+  /** tab1当前跟进人 */
+  currentSales: Array<{salesPerson: string, saleId: string}>
 }
 class Main extends React.Component<Props, State> {
   public values: ValueProps = {}
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
   public state: State = {
     firms: [],
-    sales: []
+    sales: [],
+    currentSales: []
   }
   public componentWillMount () {
     this.getFirms()
@@ -33,8 +36,13 @@ class Main extends React.Component<Props, State> {
   }
   public handleSalesRequest () {
     let tab: 3 | 4 | 5
-    if (this.props.type === '1') {
+    if (this.props.type === '1') { // tab1的时候跟进人4和签约销售3都需要展示
       tab = 3
+      getSales(4).then((res) => {
+        this.setState({
+          currentSales: res
+        })
+      })
     } else if (this.props.type === '2') {
       tab = 5
     } else if (this.props.type === '3') {
@@ -125,6 +133,7 @@ class Main extends React.Component<Props, State> {
         <Select
           allowClear={true}
           style={{width:'150px'}}
+          className='mr5'
           placeholder={this.props.type === '1' ? '请选择签约销售' : '请选择跟进人'}
           showSearch
           labelInValue
@@ -147,6 +156,30 @@ class Main extends React.Component<Props, State> {
             })
           }
         </Select>
+        {
+          this.props.type === '1' &&
+          <Select
+            allowClear={true}
+            style={{width:'150px'}}
+            placeholder='请选择跟进人'
+            showSearch
+            labelInValue
+            optionFilterProp='children'
+            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            onChange={(val: {key: '', label: ''}) => {
+              this.values.currentSalesperson = val ? val.label : undefined
+              this.props.onChange(this.values)
+            }}
+          >
+            {
+              this.state.currentSales.map((item) => {
+                return (
+                  <Option key={item.saleId}>{item.salesPerson}</Option>
+                )
+              })
+            }
+          </Select>
+        }
       </div>
     )
   }
