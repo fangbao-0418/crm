@@ -461,8 +461,8 @@ class Main extends React.Component {
           }}
         />
         <div className='btn-position'>
-          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' onClick={this.appointmentAll.bind(this)}>批量预约</Button>
-          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' onClick={this.toSale.bind(this)}>转销售</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' hidden={!APP.hasPermission('crm_business_appointment-detail_list_appoint')} onClick={this.appointmentAll.bind(this)}>批量预约</Button>
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' className='mr5' hidden={!APP.hasPermission('crm_business_appointment-detail_list_distribute')} onClick={this.toSale.bind(this)}>转销售</Button>
         </div>
       </ContentBox>
     )
