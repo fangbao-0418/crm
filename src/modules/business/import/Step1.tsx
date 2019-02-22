@@ -36,7 +36,7 @@ class Main extends React.Component<Props> {
     const fileUrl = require('@/assets/files/商机导入模板.xlsx')
     const el = document.createElement('a')
     el.setAttribute('href', fileUrl)
-    el.setAttribute('download', '客资导入模版')
+    el.setAttribute('download', '商机导入模版')
     el.click()
   }
   public render () {

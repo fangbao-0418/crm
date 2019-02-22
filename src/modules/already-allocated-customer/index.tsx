@@ -240,7 +240,7 @@ export default class Main extends React.Component<null, States> {
               <div className='text-right mt10'>
                 <Button
                   type='ghost'
-                  hidden={!APP.hasPermission('crm_customer_detail_save')}
+                  hidden={!APP.hasPermission('crm_customer-pool-distribution_detail_save')}
                   className='mr5'
                   onClick={() => {
                     instance.save().then(() => {
@@ -256,7 +256,7 @@ export default class Main extends React.Component<null, States> {
                 <Button
                   type='ghost'
                   className='mr5'
-                  hidden={!APP.hasPermission('crm_customer_detail_delete')}
+                  hidden={!APP.hasPermission('crm_customer-pool-distribution_detail_delete')}
                   onClick={() => {
                     deleteCustomer(customerId).then(() => {
                       APP.success('删除成功')
