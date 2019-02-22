@@ -82,6 +82,7 @@ class Main extends React.Component<Props, States> {
           }
         </Select>
         <Select
+          allowClear={true}
           className='mr5'
           style={{width: 150}}
           placeholder='请选择当前状态'
