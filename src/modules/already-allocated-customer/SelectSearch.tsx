@@ -97,10 +97,13 @@ class Main extends React.Component<Props, States> {
           <Option key='已删除'>已删除</Option>
         </Select>
         <Select
+          showSearch
           allowClear={true}
           style={{width:'150px'}}
           className='mr5'
           placeholder='请选择城市'
+          optionFilterProp='children'
+          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           onChange={(value: string) => {
             this.values.cityCode = value
             this.props.onChange(this.values)

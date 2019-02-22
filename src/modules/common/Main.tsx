@@ -40,7 +40,7 @@ class Main extends React.Component<{}, State> {
       >
         {this.state.visible && <Switch>
           <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
-          <Route hidden={!APP.hasPermission('customer-pool-distribution')} path='/already-allocated-customer' component={modules.AlreadyAllocatedCustomer} />
+          <Route path='/already-allocated-customer' component={modules.AlreadyAllocatedCustomer} />
           <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
           <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />
           <Route hidden={!APP.hasPermission('crm_sign_myself')} path='/signed' component={modules.Signed} />
