@@ -110,6 +110,7 @@ class Main extends React.Component<Props, States> {
           }}
         >
           {
+            this.state.cityList.length > 0 &&
             this.state.cityList.map((item) => {
               return (
                 <Option

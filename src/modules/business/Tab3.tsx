@@ -61,6 +61,9 @@ class Main extends React.Component<Props, States> {
         }
       }
     })
+    this.setState({
+      selectedRowKeys: []
+    })
     this.fetchList()
   }
   public onShowSizeChange (current: number, size: number) {
