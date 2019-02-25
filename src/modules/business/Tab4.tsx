@@ -73,6 +73,9 @@ class Main extends React.Component<Props, States> {
         }
       }
     })
+    this.setState({
+      selectedRowKeys: []
+    })
     this.fetchList()
   }
   public render () {

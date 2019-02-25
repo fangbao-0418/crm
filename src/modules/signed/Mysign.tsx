@@ -208,7 +208,8 @@ class Main extends React.Component {
     const { pagination } = this.state
     pagination.current = page
     this.setState({
-      pagination
+      pagination,
+      selectedRowKeys: []
     }, () => {
       this.fetchList()
     })

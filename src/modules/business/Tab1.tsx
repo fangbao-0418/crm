@@ -51,6 +51,9 @@ class Main extends React.Component<Props> {
         }
       }
     })
+    this.setState({
+      selectedRowKeys: []
+    })
     this.fetchList()
   }
   public onShowSizeChange (current: number, size: number) {
@@ -68,6 +71,7 @@ class Main extends React.Component<Props> {
     this.fetchList()
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
+    console.log(selectedRowKeys, 'selectedRowKeys')
     this.setState({ selectedRowKeys })
   }
   public handleSelectAll (key: number) {

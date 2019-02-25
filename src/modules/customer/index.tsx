@@ -179,7 +179,7 @@ class Main extends React.Component<Customer.Props, States> {
     })
   }
   public onSelectAllChange (selectedRowKeys: string[]) {
-    // console.log(selectedRowKeys)
+    console.log(selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
   public handleSearch (values: any) {
@@ -477,6 +477,7 @@ class Main extends React.Component<Customer.Props, States> {
     modal.show()
   }
   public toOrganizationAuto () {
+    console.log(this.state.selectedRowKeys, '自动分配')
     if (!this.state.selectedRowKeys.length) {
       APP.error('请选择需要分配客户')
       return
@@ -528,6 +529,7 @@ class Main extends React.Component<Customer.Props, States> {
     modal.show()
   }
   public toOrganizationByHand () {
+    console.log(this.state.selectedRowKeys, '手动分配')
     if (!this.state.selectedRowKeys.length) {
       APP.error('请选择需要分配客户')
       return
@@ -599,7 +601,8 @@ class Main extends React.Component<Customer.Props, States> {
     pagination.current = page
     this.params.pageCurrent = page
     this.setState({
-      pagination
+      pagination,
+      selectedRowKeys: []
     }, () => {
       this.fetchList()
     })
