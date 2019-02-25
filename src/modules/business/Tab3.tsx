@@ -30,6 +30,9 @@ class Main extends React.Component<Props, States> {
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
       pagination.total = res.pageTotal
+      this.setState({
+        selectedRowKeys: []
+      })
       APP.dispatch<Business.Props>({
         type: 'change business data',
         payload: {
