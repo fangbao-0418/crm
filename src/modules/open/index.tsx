@@ -170,7 +170,8 @@ class Main extends React.Component {
       pagination.current = res.pageCurrent
       this.setState({
         pagination,
-        dataSource: res.data
+        dataSource: res.data,
+        selectedRowKeys: []
       })
       return res
     })

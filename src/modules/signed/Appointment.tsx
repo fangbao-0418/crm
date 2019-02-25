@@ -151,7 +151,8 @@ class Main extends React.Component {
       pagination.total = res.pageTotal
       this.setState({
         pagination,
-        dataSource: res.data
+        dataSource: res.data,
+        selectedRowKeys: []
       })
     })
   }
