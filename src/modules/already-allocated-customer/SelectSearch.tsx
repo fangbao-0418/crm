@@ -30,7 +30,7 @@ class Main extends React.Component<Props, States> {
     })
     getCityByCompany().then((res) => {
       this.setState({
-        cityList: res.data
+        cityList: res
       })
     })
   }
