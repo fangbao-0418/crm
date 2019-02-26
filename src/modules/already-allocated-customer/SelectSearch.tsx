@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input, Select } from 'antd'
 import { getFirms } from '@/modules/stat/api'
-import { fetchCityCount } from '@/modules/customer/api'
+import { getCityByCompany } from './api'
 const Option = Select.Option
 interface ValueProps {
   customerSource?: string
@@ -14,7 +14,7 @@ interface Props {
 }
 interface States {
   companyLisy: Array<{id: string, name: string}>
-  cityList: Array<{cityCode: string, cityName: string, rows: number}>
+  cityList: any
 }
 class Main extends React.Component<Props, States> {
   public values: ValueProps = {}
@@ -28,7 +28,7 @@ class Main extends React.Component<Props, States> {
         companyLisy: res
       })
     })
-    fetchCityCount().then((res) => {
+    getCityByCompany().then((res) => {
       this.setState({
         cityList: res.data
       })
@@ -111,12 +111,12 @@ class Main extends React.Component<Props, States> {
         >
           {
             this.state.cityList.length > 0 &&
-            this.state.cityList.map((item) => {
+            this.state.cityList.map((item: any) => {
               return (
                 <Option
-                  key={item.cityCode}
+                  key={item.regionCity}
                 >
-                  {item.cityName}
+                  {item.regionCityName}
                 </Option>
               )
             })

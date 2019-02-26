@@ -145,22 +145,32 @@ class Main extends React.Component<Customer.Props, States> {
     dataIndex: 'enterStorageTime'
   }]
   public componentWillMount () {
+    this.fetchList()
+    this.getCity()
+    // fetchCityCount().then((res) => {
+    //   const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
+    //   // const options: Array<{label: string, value: string}> = []
+    //   // cityList.forEach((item) => {
+    //   //   options.push({
+    //   //     label: `${item.cityName}(${item.rows})`,
+    //   //     value: item.cityCode
+    //   //   })
+    //   // })
+    //   // data[1].options = options
+    //   // data[1].value = options[0].value
+    //   // console.log(data[1].value, 'data[1].value')
+    //   // this.params.cityCode = data[1].value
+    //   this.fetchList()
+    //   this.setState({
+    //     // data,
+    //     cityList
+    //   })
+    // })
+  }
+  public getCity () {
     fetchCityCount().then((res) => {
       const cityList: Array<{cityCode: string, cityName: string, rows: number}> = res.data
-      // const options: Array<{label: string, value: string}> = []
-      // cityList.forEach((item) => {
-      //   options.push({
-      //     label: `${item.cityName}(${item.rows})`,
-      //     value: item.cityCode
-      //   })
-      // })
-      // data[1].options = options
-      // data[1].value = options[0].value
-      // console.log(data[1].value, 'data[1].value')
-      // this.params.cityCode = data[1].value
-      this.fetchList()
       this.setState({
-        // data,
         cityList
       })
     })
@@ -298,6 +308,7 @@ class Main extends React.Component<Customer.Props, States> {
       },
       onCancel: () => {
         this.fetchList()
+        this.getCity()
         modal.hide()
       }
     })
@@ -634,7 +645,7 @@ class Main extends React.Component<Customer.Props, States> {
     const { pagination } = this.state
     return (
       <ContentBox
-        title='我的客资'
+        title='待分配'
         rightCotent={(
           <div>
             <AddButton
