@@ -41,8 +41,9 @@ class Main extends React.Component<Props> {
         salesNames.push(item.name)
       })
     }
+    console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
     const paramsFile = {
-      agencyId: APP.user.companyId, // 需要从登陆信息读取
+      agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(',')
