@@ -165,6 +165,7 @@ class Main extends React.Component<Props> {
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     onChange={(val: string) => {
                       this.values.agencyId = val
+                      console.log(val, '111111')
                       this.getSales(val)
                     }}
                   >
