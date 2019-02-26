@@ -216,6 +216,10 @@ class Main extends React.Component<Props> {
                   </Select>
                 </div>
               }
+              {
+                this.state.type !== 3 &&
+                <div style={{color: 'red', margin: '5px 0px 0px 80px'}}>选中机构后，仅支持导入同一城市的客资</div>
+              }
             </div>
           </div>
         <div className='text-right mt10'>
