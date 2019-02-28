@@ -143,6 +143,12 @@ class Main extends React.Component<Customer.Props, States> {
       </span>
     ),
     dataIndex: 'enterStorageTime'
+  }, {
+    title: '操作',
+    dataIndex: 'customerId',
+    render: (val, record) => {
+      return <a onClick={() => {this.toOrganization(record)}}>分配</a>
+    }
   }]
   public componentWillMount () {
     this.fetchList()
@@ -540,6 +546,40 @@ class Main extends React.Component<Customer.Props, States> {
     })
     modal.show()
   }
+  public toOrganization (record?: any) {
+    console.log(record)
+    const customerId = [record.customerId]
+    const params = {
+      cityCode: record.cityCode
+    }
+    const modal = new Modal({
+      content: (
+        <Provider>
+          <Allot
+            onClose={() => {
+              this.fetchList()
+              modal.hide()
+            }}
+            selectedRowKeys={customerId}
+            params={params}
+            // pagetotal={this.state.pagination.total}
+          />
+        </Provider>
+      ),
+      title: '分配客资',
+      footer: null,
+      mask: true,
+      maskClosable: false,
+      onOk: () => {
+        modal.hide()
+      },
+      onCancel: () => {
+        this.fetchList()
+        modal.hide()
+      }
+    })
+    modal.show()
+  }
   public toOrganizationByHand () {
     console.log(this.state.selectedRowKeys, '手动分配')
     if (!this.state.selectedRowKeys.length) {
@@ -561,7 +601,7 @@ class Main extends React.Component<Customer.Props, States> {
             }}
             selectedRowKeys={this.state.selectedRowKeys}
             params={this.params}
-            pagetotal={this.state.pagination.total}
+            // pagetotal={this.state.pagination.total}
           />
         </Provider>
       ),

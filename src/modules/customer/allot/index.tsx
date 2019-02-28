@@ -8,7 +8,7 @@ import { getSaleCapacity, allotCustomer, deleteCustomer } from '../api'
 interface Props extends Customer.Props {
   selectedRowKeys: string[]
   params: any
-  pagetotal?: number
+  // pagetotal?: number
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
