@@ -676,6 +676,9 @@ class Main extends React.Component<Customer.Props, States> {
           <div>
             <span className={styles.label}>所属城市</span>
             <Select
+              showSearch
+              optionFilterProp='children'
+              filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
               allowClear={true}
               style={{width:'150px'}}
               className='mr5'

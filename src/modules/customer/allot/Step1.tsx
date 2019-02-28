@@ -90,6 +90,9 @@ class Main extends React.Component<Props> {
               <span>分配销售：</span>
               <Select
                 labelInValue
+                showSearch
+                optionFilterProp='children'
+                filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 style={{width:'200px'}}
                 mode='multiple'
                 onChange={(val: Array<{key: string, label: string, id: string, name: string}>) => {
