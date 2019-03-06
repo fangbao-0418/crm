@@ -63,6 +63,9 @@ class Main extends React.Component<Props, State> {
         return (
           <div>
             <Select
+              showSearch
+              optionFilterProp='children'
+              filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
               labelInValue
               disabled={disabled}
               mode='multiple'
