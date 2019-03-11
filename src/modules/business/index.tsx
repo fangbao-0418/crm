@@ -185,6 +185,13 @@ class Main extends React.Component<Business.Props> {
       }
     })
   }
+  public handleSelectKeys () {
+    const { selectedTab } = this.props
+    const ins: any = this.refs[selectedTab]
+    if (ins && ins.initSelectedRowKeys) {
+      ins.initSelectedRowKeys()
+    }
+  }
   public appointmentAll (selectedRowKeys: string[]) {
     if (!selectedRowKeys.length) {
       APP.error('请选择客户！')
@@ -218,6 +225,7 @@ class Main extends React.Component<Business.Props> {
           this.fetchCount()
           this.fetchList()
           APP.success('预约成功')
+          this.handleSelectKeys()
         })
         modal.hide()
       },
@@ -273,6 +281,7 @@ class Main extends React.Component<Business.Props> {
           this.fetchCount()
           this.fetchList()
           APP.success('操作成功')
+          this.handleSelectKeys()
         })
         modal.hide()
       },
@@ -506,6 +515,9 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab1' && (
                   <Tab1
+                    getInstance={(ref) => {
+                      this.refs.tab1 = ref
+                    }}
                     columns={this.columns}
                     params={this.params}
                     handleSelectAll={this.handleSelectAll.bind(this)}
@@ -517,6 +529,9 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab2' && (
                   <Tab2
+                    getInstance={(ref) => {
+                      this.refs.tab2 = ref
+                    }}
                     columns={this.columns}
                     params={this.params}
                     handleSelectAll={this.handleSelectAll.bind(this)}
@@ -528,6 +543,9 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab3' && (
                   <Tab3
+                    getInstance={(ref) => {
+                      this.refs.tab3 = ref
+                    }}
                     columns={this.columns}
                     params={this.params}
                     handleSelectAll={this.handleSelectAll.bind(this)}
@@ -552,6 +570,9 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab4' && (
                   <Tab4
+                    getInstance={(ref) => {
+                      this.refs.tab4 = ref
+                    }}
                     columns={this.columns}
                     params={this.params}
                     handleSelectAll={this.handleSelectAll.bind(this)}

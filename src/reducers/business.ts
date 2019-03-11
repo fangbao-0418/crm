@@ -52,7 +52,7 @@ const defaultVal: Business.Props = {
       total: 0,
       current: 1,
       pageSize: 15
-    }
+    },
   },
   selectedTab: 'tab1',
   count: [0, 0, 0, 0, -1],

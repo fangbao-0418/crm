@@ -47,8 +47,8 @@ declare namespace Business {
     pageSize: number
   }
   export interface TabDataProps {
-    dataSource?: DetailProps[],
-    pagination?: PaginationProps,
+    dataSource?: DetailProps[]
+    pagination?: PaginationProps
     searchPayload?: SearchProps
   }
   export interface Props {
