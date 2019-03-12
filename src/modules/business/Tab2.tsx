@@ -9,6 +9,7 @@ interface Props extends Business.Props {
   columns: ColumnProps<DetailProps>[]
   params: Business.SearchProps
   handleSelectAll?: (selectedRowKeys: string[], type: number) => void
+  getInstance?: (ref: any) => void
 }
 interface States {
   selectedRowKeys: string[]
@@ -19,7 +20,15 @@ class Main extends React.Component<Props> {
   }
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
+    if (this.props.getInstance) {
+      this.props.getInstance(this)
+    }
     this.fetchList()
+  }
+  public initSelectedRowKeys () {
+    this.setState({
+      selectedRowKeys: []
+    })
   }
   public fetchList () {
     const params = _.cloneDeep(this.props.params)
