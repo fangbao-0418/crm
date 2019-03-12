@@ -4,6 +4,8 @@ import classNames from 'classnames'
 const styles = require('@/stylus/card')
 interface Props {
   title?: string
+  /** 标题样式 */
+  titleClassName?: string
   showFold?: boolean
   rightContent?: JSX.Element
 }
@@ -15,7 +17,7 @@ class Main extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div className={styles.top}>
-          <span className={styles.title}>{this.props.title}</span>
+          <span className={classNames(styles.title, this.props.titleClassName)}>{this.props.title}</span>
           {
             this.props.showFold && (
               <Icon

@@ -13,3 +13,5 @@ export { default as loadCustomerSign } from 'bundle-loader?lazy&name=[name]!@/mo
 export { default as loadPerformance } from 'bundle-loader?lazy&name=[name]!@/modules/stat/performance'
 export { default as loadCustomerSet } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/main'
 export { default as loadCustomerSetAssign } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/assign'
+/** crm设置 */
+export { default as loadSetting } from 'bundle-loader?lazy&name=[name]!@/modules/setting'
