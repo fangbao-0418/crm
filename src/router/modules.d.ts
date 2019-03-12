@@ -27,6 +27,8 @@ interface ModuleProps {
   CustomerSign: RouteComponent
   /** 业绩仪表盘 */
   Performance: RouteComponent
+  /** crm设置 */
+  Setting: RouteComponent
   /** 404 */
   Unfound: RouteComponent
 }

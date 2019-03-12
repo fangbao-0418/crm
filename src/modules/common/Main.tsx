@@ -52,6 +52,7 @@ class Main extends React.Component<{}, State> {
           <Route path='/performance' component={modules.Performance} />
           <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />
           <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />
+          <Route path='/setting' component={modules.Setting} />
         </Switch>}
       </Iframe>
     )
