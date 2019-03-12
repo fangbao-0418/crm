@@ -1,10 +1,19 @@
 import React from 'react'
-import { Row, Col, Form, Input, Button } from 'antd'
+import { Row, Col, Form, Input, Button, Select } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Card from '@/components/Card'
+import { saveEntryone } from '../api'
 const styles = require('./style')
 const FormItem = Form.Item
-type Props = FormComponentProps
+interface Props extends FormComponentProps {
+  record?: Setting.ItemProps
+  /** tq管理员 */
+  tqAdmin?: string
+  /** tq拨打枚举 */
+  tqType?: string
+  /** tq区号 */
+  tqZoneCode?: string
+}
 interface State {
   editable: boolean
 }
@@ -12,9 +21,21 @@ class Main extends React.Component<Props> {
   public state: State = {
     editable: false
   }
+  public onOk () {
+    this.props.form.validateFields((err, vals: Setting.Params) => {
+      console.log(vals, 'vals')
+      vals.agencyId = this.props.record.agencyId
+      saveEntryone(vals).then((res) => {
+        this.setState({
+          editable: false
+        })
+      })
+    })
+  }
   public render () {
     const { editable } = this.state
     const { getFieldDecorator }  = this.props.form
+    const { record } = this.props
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 8 }
@@ -25,68 +46,83 @@ class Main extends React.Component<Props> {
         titleClassName={styles.title}
         rightContent={(
           <div
+            className={styles.right}
             onClick={() => {
               this.setState({
                 editable: true
               })
             }}
           >
-            设置
+            <span className={styles.edit}></span>
+            <span>设置</span>
           </div>
         )}
       >
         {!editable ? (
-          <Row>
-            <Col span={6}><span>销售库容：</span><span>100天</span></Col>
-            <Col span={6}><span>最大跟近期：</span><span>100天</span></Col>
-            <Col span={6}><span>最大保护期：</span><span>100天</span></Col>
-          </Row>
+          <div>
+            <Row className='mb15'>
+              <Col span={6}>
+                <span>{APP.dictionary[`EnumTqType-${record.tqType}`]}</span>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={6}>
+                <span>管理员账号：</span>
+                <span>{record.tqAdmin}</span>
+              </Col>
+              <Col span={6}>
+                <span>电话区号：</span>
+                <span>{record.tqZoneCode}</span>
+              </Col>
+            </Row>
+          </div>
         ) : (
           <Form>
             <div className={styles.box}>
               <FormItem
-                label='第三方呼叫设置'
                 {...formItemLayout}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
-                      <Input />
+                    {getFieldDecorator('tqType', { initialValue: record.tqType })(
+                      <Select
+                      >
+                        {
+                          APP.keys.EnumTqType.map((item) => {
+                            return (
+                              <Select.Option key={item.value}>
+                                {item.label}
+                              </Select.Option>
+                            )
+                          })
+                        }
+                      </Select>
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
               <FormItem
-                label='最大跟近期'
+                label='管理员账号'
                 {...formItemLayout}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
+                    {getFieldDecorator('tqAdmin', { initialValue: record.tqAdmin})(
                       <Input />
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
               <FormItem
-                label='最大保护期'
+                label='电话区号'
                 {...formItemLayout}
                 style={{margin: 0}}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
+                    {getFieldDecorator('tqZoneCode', { initialValue: record.tqZoneCode })(
                       <Input />
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
@@ -95,9 +131,7 @@ class Main extends React.Component<Props> {
               className='mt20'
               type='primary'
               onClick={() => {
-                this.setState({
-                  editable: false
-                })
+                this.onOk()
               }}
             >
               保存
