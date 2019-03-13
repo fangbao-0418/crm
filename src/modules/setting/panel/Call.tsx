@@ -26,9 +26,10 @@ class Main extends React.Component<Props> {
       console.log(vals, 'vals')
       vals.agencyId = this.props.record.agencyId
       saveEntryone(vals).then((res) => {
-        this.setState({
-          editable: false
-        })
+        // this.setState({
+        //   editable: false
+        // })
+        APP.success('设置成功')
       })
     })
   }
@@ -84,7 +85,7 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('tqType', { initialValue: record.tqType })(
+                    {getFieldDecorator('tqType', { initialValue: String(record.tqType) })(
                       <Select
                       >
                         {

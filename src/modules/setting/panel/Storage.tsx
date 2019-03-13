@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Form, Input, Button, Tooltip } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Card from '@/components/Card'
-import { saveEntryone } from '../api'
+import { saveEntryone, saveItems } from '../api'
 const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
@@ -16,15 +16,40 @@ class Main extends React.Component<Props> {
   public state: State = {
     editable: false
   }
+  public componentWillMount () {
+    if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
+      this.setState({
+        editable: true
+      })
+    }
+  }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
       console.log(vals, 'vals')
-      vals.agencyId = this.props.record.agencyId
-      saveEntryone(vals).then((res) => {
-        this.setState({
-          editable: false
+      if (this.props.record && this.props.record.agencyId) { // 单独设置
+        vals.agencyId = this.props.record.agencyId
+        saveEntryone(vals).then((res) => {
+          // this.setState({
+          //   editable: false
+          // })
+          APP.success('设置成功')
         })
-      })
+      } else { // 批量设置
+        const arr: Setting.Params[] = []
+        const ary = this.props.selectedRowKeys
+        ary.forEach((item) => {
+          arr.push({
+            agencyId: item,
+            storageCapacity: vals.storageCapacity,
+            maxTrackDays: vals.maxTrackDays,
+            maxProtectDays: vals.maxProtectDays
+          })
+        })
+        console.log(arr, 'arr')
+        saveItems(arr).then((res) => {
+          APP.success('设置成功')
+        })
+      }
     })
   }
   public render () {

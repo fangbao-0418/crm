@@ -293,7 +293,7 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           rowSelection={rowSelection}
-          rowKey='id'
+          rowKey='agencyId'
           pagination={{
             onChange: this.handlePageChange.bind(this),
             onShowSizeChange: this.onShowSizeChange.bind(this),
