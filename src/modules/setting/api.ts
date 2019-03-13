@@ -16,6 +16,6 @@ export const saveEntryone = (payload: Setting.Params) => {
   return http(`/crm-manage/v1/api/auto_distribute/entryone`, 'POST', payload)
 }
 /** 设置批量保存 */
-export const saveItems = (payload: Setting.Params[]) => {
-  return http(`/crm-manage/v1/api/auto_distribute/entry`, 'POST', payload)
+export const saveItems = (flag: number, payload: Setting.Params[]) => {
+  return http(`/crm-manage/v1/api/auto_distribute/entry?flag=${flag}`, 'POST', payload)
 }

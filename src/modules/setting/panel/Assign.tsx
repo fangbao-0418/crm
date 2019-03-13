@@ -47,7 +47,7 @@ class Main extends React.Component<Props> {
           })
         })
         console.log(arr, 'arr')
-        saveItems(arr).then((res) => {
+        saveItems(2, arr).then((res) => {
           APP.success('设置成功')
         })
       }
