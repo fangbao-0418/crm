@@ -1,10 +1,14 @@
 import React from 'react'
-import { Row, Col, Form, Input, Button } from 'antd'
+import { Row, Col, Form, Input, Button, Tooltip, Switch } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import Card from '@/components/Card'
+import { saveEntryone, saveItems } from '../api'
 const styles = require('./style')
 const FormItem = Form.Item
-type Props = FormComponentProps
+interface Props extends FormComponentProps {
+  record?: Setting.ItemProps
+  selectedRowKeys?: string[]
+}
 interface State {
   editable: boolean
 }
@@ -12,11 +16,49 @@ class Main extends React.Component<Props> {
   public state: State = {
     editable: false
   }
+  public componentWillMount () {
+    if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
+      this.setState({
+        editable: true
+      })
+    }
+  }
+  public onOk () {
+    this.props.form.validateFields((err, vals: Setting.Params) => {
+      console.log(vals, 'vals')
+      vals.isAutoDistribute = vals.isAutoDistribute ? 1 : 0
+      if (this.props.record && this.props.record.agencyId) { // 单独设置
+        vals.agencyId = this.props.record.agencyId
+        saveEntryone(vals).then((res) => {
+          // this.setState({
+          //   editable: false
+          // })
+          APP.success('设置成功')
+        })
+      } else { // 批量设置
+        const arr: Setting.Params[] = []
+        const ary = this.props.selectedRowKeys
+        ary.forEach((item) => {
+          arr.push({
+            agencyId: item,
+            isAutoDistribute: vals.isAutoDistribute,
+            autoDistributeWeight: vals.autoDistributeWeight,
+            autoDistributeMaxNum: vals.autoDistributeMaxNum
+          })
+        })
+        console.log(arr, 'arr')
+        saveItems(2, arr).then((res) => {
+          APP.success('设置成功')
+        })
+      }
+    })
+  }
   public render () {
     const { editable } = this.state
     const { getFieldDecorator }  = this.props.form
+    const record = this.props.record || {}
     const formItemLayout = {
-      labelCol: { span: 4 },
+      labelCol: { span: 5 },
       wrapperCol: { span: 8 }
     }
     return (
@@ -25,68 +67,102 @@ class Main extends React.Component<Props> {
         titleClassName={styles.title}
         rightContent={(
           <div
+            className={styles.right}
             onClick={() => {
               this.setState({
                 editable: true
               })
             }}
           >
-            设置
+            <span className={styles.edit}></span>
+            <span>设置</span>
           </div>
         )}
       >
         {!editable ? (
-          <Row>
-            <Col span={6}><span>销售库容：</span><span>100天</span></Col>
-            <Col span={6}><span>最大跟近期：</span><span>100天</span></Col>
-            <Col span={6}><span>最大保护期：</span><span>100天</span></Col>
-          </Row>
+          <div>
+            <Row className='mb15'>
+              <Col span={6}>
+                <span className='mr10'>自动分配</span>
+                <Switch
+                  defaultChecked={record.isAutoDistribute === 1}
+                  disabled
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={6}>
+                <span>
+                  <Tooltip placement='top' title='自动分配客户量会根据分配权值比例来分，输入范围（1-10）'>
+                    <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+                  </Tooltip>
+                  <span className='ml5'>分配权值：</span>
+                </span>
+                <span>{record.autoDistributeWeight}</span>
+              </Col>
+              <Col span={6}>
+                <span>
+                  <Tooltip placement='top' title='自动分配客户量若达到日最大值上限，则系统不再自动分与该代理商，输入范围 （1-99999）'>
+                    <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+                  </Tooltip>
+                  <span className='ml5'>日分配上限：</span>
+                </span>
+                <span>{record.autoDistributeMaxNum}</span>
+              </Col>
+            </Row>
+          </div>
         ) : (
           <Form>
             <div className={styles.box}>
               <FormItem
-                label='销售库容'
+                label='自动分配'
                 {...formItemLayout}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
-                      <Input />
+                    {getFieldDecorator('isAutoDistribute', { initialValue: record.isAutoDistribute })(
+                      <Switch
+                        defaultChecked={record.isAutoDistribute === 1}
+                      />
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
               <FormItem
-                label='最大跟近期'
+                label={(
+                  <span>
+                    <Tooltip placement='top' title='自动分配客户量会根据分配权值比例来分，输入范围（1-10）'>
+                      <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+                    </Tooltip>
+                    <span className='ml5'>分配权值</span>
+                  </span>
+                )}
                 {...formItemLayout}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
+                    {getFieldDecorator('autoDistributeWeight', { initialValue: record.autoDistributeWeight })(
                       <Input />
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
               <FormItem
-                label='最大保护期'
+                label={(
+                  <span>
+                    <Tooltip placement='top' title='自动分配客户量若达到日最大值上限，则系统不再自动分与该代理商，输入范围 （1-99999）'>
+                      <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+                    </Tooltip>
+                    <span className='ml5'>日分配上限</span>
+                  </span>
+                )}
                 {...formItemLayout}
-                style={{margin: 0}}
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('abc')(
+                    {getFieldDecorator('autoDistributeMaxNum', { initialValue: record.autoDistributeMaxNum })(
                       <Input />
                     )}
-                  </Col>
-                  <Col span={8}>
-                    天
                   </Col>
                 </Row>
               </FormItem>
@@ -95,9 +171,7 @@ class Main extends React.Component<Props> {
               className='mt20'
               type='primary'
               onClick={() => {
-                this.setState({
-                  editable: false
-                })
+                this.onOk()
               }}
             >
               保存

@@ -3,8 +3,21 @@
   .box
     border: 1px solid #E4E4E4
     padding: 20px
+    :global
+      .ant-form-item
+        margin-bottom 12px
   .title
     padding-left: 0!important
     &:before
       display: none
+  .right
+    cursor pointer
+    position relative
+    .edit
+      position absolute
+      top 12px
+      left -20px
+      width 14px
+      height 14px
+      background url('@/assets/images/edit.svg') 0 0 / 100% 100% no-repeat
     
