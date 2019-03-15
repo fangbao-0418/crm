@@ -50,13 +50,20 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              this.setState({
-                editable: true
-              })
+              if (APP.hasPermission('crm_set_customer_save_one_tq')) {
+                this.setState({
+                  editable: true
+                })
+              }
             }}
           >
-            <span className={styles.edit}></span>
-            <span>设置</span>
+            {
+              APP.hasPermission('crm_set_customer_save_one_tq') &&
+              <span>
+                <span className={styles.edit}></span>
+                <span>设置</span>
+              </span>
+            }
           </div>
         )}
       >
@@ -160,6 +167,7 @@ class Main extends React.Component<Props> {
               onClick={() => {
                 this.onOk()
               }}
+              hidden={!APP.hasPermission('crm_set_customer_save_one_tq')}
             >
               保存
             </Button>

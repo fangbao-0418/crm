@@ -11,15 +11,18 @@ interface Props extends FormComponentProps {
 }
 interface State {
   editable: boolean
+  isAll: boolean
 }
 class Main extends React.Component<Props> {
   public state: State = {
-    editable: false
+    editable: false,
+    isAll: false
   }
   public componentWillMount () {
     if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
       this.setState({
-        editable: true
+        editable: true,
+        isAll: true
       })
     }
   }
@@ -78,13 +81,20 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              this.setState({
-                editable: true
-              })
+              if (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) {
+                this.setState({
+                  editable: true
+                })
+              }
             }}
           >
-            <span className={styles.edit}></span>
-            <span>设置</span>
+            {
+              (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) &&
+              <span>
+                <span className={styles.edit}></span>
+                <span>设置</span>
+              </span>
+            }
           </div>
         )}
       >
@@ -181,15 +191,30 @@ class Main extends React.Component<Props> {
                 </Row>
               </FormItem>
             </div>
-            <Button
-              className='mt20'
-              type='primary'
-              onClick={() => {
-                this.onOk()
-              }}
-            >
-              保存
-            </Button>
+            {
+              this.state.isAll ?
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_auto_distribute_save_bulk_distribute')}
+              >
+                保存
+              </Button>
+              :
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_customer_save_one_distribute')}
+              >
+                保存
+              </Button>
+            }
           </Form>
         )}
       </Card>
