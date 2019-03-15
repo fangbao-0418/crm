@@ -11,20 +11,26 @@ interface Props extends FormComponentProps {
 }
 interface State {
   editable: boolean
+  isAll: boolean
 }
 class Main extends React.Component<Props> {
   public state: State = {
-    editable: false
+    editable: false,
+    isAll: false
   }
   public componentWillMount () {
     if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
       this.setState({
-        editable: true
+        editable: true,
+        isAll: true
       })
     }
   }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
+      if (err) {
+        return false
+      }
       console.log(vals, 'vals')
       vals.isAutoDistribute = vals.isAutoDistribute ? 1 : 0
       if (this.props.record && this.props.record.agencyId) { // 单独设置
@@ -61,6 +67,12 @@ class Main extends React.Component<Props> {
       labelCol: { span: 5 },
       wrapperCol: { span: 8 }
     }
+    const validateAutoDistributeWeight = (rule: any, value: any, callback: any) => {
+      if (value > 10) {
+        callback('输入范围为（1-10）')
+        return
+      }
+    }
     return (
       <Card
         title='自动分客设置'
@@ -69,13 +81,20 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              this.setState({
-                editable: true
-              })
+              if (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) {
+                this.setState({
+                  editable: true
+                })
+              }
             }}
           >
-            <span className={styles.edit}></span>
-            <span>设置</span>
+            {
+              (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) &&
+              <span>
+                <span className={styles.edit}></span>
+                <span>设置</span>
+              </span>
+            }
           </div>
         )}
       >
@@ -141,8 +160,13 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('autoDistributeWeight', { initialValue: record.autoDistributeWeight })(
-                      <Input />
+                    {getFieldDecorator('autoDistributeWeight', {
+                      initialValue: record.autoDistributeWeight,
+                      rules:[{
+                        validator: validateAutoDistributeWeight
+                      }]
+                    })(
+                      <Input maxLength={2} placeholder='1-10'/>
                     )}
                   </Col>
                 </Row>
@@ -161,21 +185,36 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('autoDistributeMaxNum', { initialValue: record.autoDistributeMaxNum })(
-                      <Input />
+                      <Input maxLength={5} placeholder='1-99999'/>
                     )}
                   </Col>
                 </Row>
               </FormItem>
             </div>
-            <Button
-              className='mt20'
-              type='primary'
-              onClick={() => {
-                this.onOk()
-              }}
-            >
-              保存
-            </Button>
+            {
+              this.state.isAll ?
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_auto_distribute_save_bulk_distribute')}
+              >
+                保存
+              </Button>
+              :
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_customer_save_one_distribute')}
+              >
+                保存
+              </Button>
+            }
           </Form>
         )}
       </Card>

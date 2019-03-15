@@ -11,15 +11,18 @@ interface Props extends FormComponentProps {
 }
 interface State {
   editable: boolean
+  isAll: boolean
 }
 class Main extends React.Component<Props> {
   public state: State = {
-    editable: false
+    editable: false,
+    isAll: false
   }
   public componentWillMount () {
     if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
       this.setState({
-        editable: true
+        editable: true,
+        isAll: true
       })
     }
   }
@@ -68,13 +71,20 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              this.setState({
-                editable: true
-              })
+              if (APP.hasPermission('crm_set_customer_save_one_store') || this.state.isAll) {
+                this.setState({
+                  editable: true
+                })
+              }
             }}
           >
-            <span className={styles.edit}></span>
-            <span>设置</span>
+            {
+              (APP.hasPermission('crm_set_customer_save_one_store') || this.state.isAll) &&
+              <span>
+                <span className={styles.edit}></span>
+                <span>设置</span>
+              </span>
+            }
           </div>
         )}
       >
@@ -87,7 +97,7 @@ class Main extends React.Component<Props> {
                 </Tooltip>
                 <span className='ml5'>销售库容：</span>
               </span>
-              <span>{record.storageCapacity}天</span>
+              <span>{record.storageCapacity}个</span>
             </Col>
             <Col span={6}>
               <span>
@@ -123,12 +133,14 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('storageCapacity', { initialValue: record.storageCapacity })(
-                      <Input />
+                    {getFieldDecorator('storageCapacity', {
+                      initialValue: record.storageCapacity
+                    })(
+                      <Input maxLength={6} placeholder='0-999999'/>
                     )}
                   </Col>
                   <Col span={8}>
-                    天
+                    个
                   </Col>
                 </Row>
               </FormItem>
@@ -146,7 +158,7 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('maxTrackDays', { initialValue: record.maxTrackDays })(
-                      <Input />
+                      <Input  maxLength={4} placeholder='0-9999'/>
                     )}
                   </Col>
                   <Col span={8}>
@@ -169,7 +181,7 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('maxProtectDays', { initialValue: record.maxProtectDays })(
-                      <Input />
+                      <Input maxLength={4} placeholder='0-9999'/>
                     )}
                   </Col>
                   <Col span={8}>
@@ -178,15 +190,30 @@ class Main extends React.Component<Props> {
                 </Row>
               </FormItem>
             </div>
-            <Button
-              className='mt20'
-              type='primary'
-              onClick={() => {
-                this.onOk()
-              }}
-            >
-              保存
-            </Button>
+            {
+              this.state.isAll ?
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_auto_distribute_save_bulk_store')}
+              >
+                保存
+              </Button>
+              :
+              <Button
+                className='mt20'
+                type='primary'
+                onClick={() => {
+                  this.onOk()
+                }}
+                hidden={!APP.hasPermission('crm_set_customer_save_one_store')}
+              >
+                保存
+              </Button>
+            }
           </Form>
         )}
       </Card>

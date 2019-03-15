@@ -48,14 +48,14 @@ class Main extends React.Component<{}, State> {
           <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />
           <Route hidden={!APP.hasPermission('crm_sign_myself')} path='/signed' component={modules.Signed} />
           <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />
-          <Route path='/shout' hidden={!APP.hasPermission('crm_data_call')} component={modules.Shout} />
-          <Route path='/workpanel-sales' hidden={!APP.hasPermission('crm_data_work')} component={modules.WorkpanelSales} />
-          <Route path='/business-analysis' hidden={!APP.hasPermission('crm_data_business')} component={modules.BusinessAnalysis} />
-          <Route path='/customer-sign' hidden={!APP.hasPermission('crm_data_customer')} component={modules.CustomerSign} />
+          <Route hidden={!APP.hasPermission('crm_data_call')} path='/shout' component={modules.Shout} />
+          <Route hidden={!APP.hasPermission('crm_data_work')} path='/workpanel-sales' component={modules.WorkpanelSales} />
+          <Route hidden={!APP.hasPermission('crm_data_business')} path='/business-analysis' component={modules.BusinessAnalysis} />
+          <Route hidden={!APP.hasPermission('crm_data_customer')} path='/customer-sign' component={modules.CustomerSign} />
           <Route path='/performance' component={modules.Performance} />
+          {/* <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} /> */}
           <Route hidden={!APP.hasPermission('crm_set_customer')} path='/customer-set/index' component={modules.CustomerSet} />
           <Route hidden={!APP.hasPermission('crm_set_customer_diversion')} path='/customer-set/assign' component={modules.CustomerSetAssign} />
-          <Route path='/setting' component={modules.Setting} />
         </Switch>}
       </Iframe>
     )
