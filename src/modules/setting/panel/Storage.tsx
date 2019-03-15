@@ -12,11 +12,20 @@ interface Props extends FormComponentProps {
 interface State {
   editable: boolean
   isAll: boolean
+  /** 销售库容 */
+  storageCapacity?: number
+  /** 最大跟进期 */
+  maxTrackDays?: number
+  /** 最大保护期 */
+  maxProtectDays?: number
 }
 class Main extends React.Component<Props> {
   public state: State = {
     editable: false,
-    isAll: false
+    isAll: false,
+    storageCapacity: this.props.record ? this.props.record.storageCapacity : 0,
+    maxTrackDays: this.props.record ? this.props.record.maxTrackDays : 0,
+    maxProtectDays: this.props.record ? this.props.record.maxProtectDays : 0
   }
   public componentWillMount () {
     if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
@@ -32,9 +41,9 @@ class Main extends React.Component<Props> {
       if (this.props.record && this.props.record.agencyId) { // 单独设置
         vals.agencyId = this.props.record.agencyId
         saveEntryone(vals).then((res) => {
-          // this.setState({
-          //   editable: false
-          // })
+          this.setState({
+            editable: false
+          })
           APP.success('设置成功')
         })
       } else { // 批量设置
@@ -50,13 +59,16 @@ class Main extends React.Component<Props> {
         })
         console.log(arr, 'arr')
         saveItems(1, arr).then((res) => {
+          this.setState({
+            editable: false
+          })
           APP.success('设置成功')
         })
       }
     })
   }
   public render () {
-    const { editable } = this.state
+    const { editable, storageCapacity, maxProtectDays, maxTrackDays } = this.state
     const { getFieldDecorator }  = this.props.form
     const record = this.props.record || {}
     const formItemLayout = {
@@ -71,15 +83,12 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              if (APP.hasPermission('crm_set_customer_save_one_store') || this.state.isAll) {
-                this.setState({
-                  editable: true
-                })
-              }
+              this.setState({
+                editable: true
+              })
             }}
           >
             {
-              (APP.hasPermission('crm_set_customer_save_one_store') || this.state.isAll) &&
               <span>
                 <span className={styles.edit}></span>
                 <span>设置</span>
@@ -97,7 +106,7 @@ class Main extends React.Component<Props> {
                 </Tooltip>
                 <span className='ml5'>销售库容：</span>
               </span>
-              <span>{record.storageCapacity}个</span>
+              <span>{storageCapacity}个</span>
             </Col>
             <Col span={6}>
               <span>
@@ -106,7 +115,7 @@ class Main extends React.Component<Props> {
                 </Tooltip>
                 <span className='ml5'>最大跟近期：</span>
               </span>
-              <span>{record.maxTrackDays}天</span></Col>
+              <span>{maxTrackDays}天</span></Col>
             <Col span={6}>
               <span>
                 <Tooltip placement='top' title='若销售在规定天数内没有完成签单，则客户自动分予组内其他销售 ，输入值范围（0-9999）'>
@@ -114,7 +123,7 @@ class Main extends React.Component<Props> {
                 </Tooltip>
                 <span className='ml5'>最大保护期：</span>
               </span>
-              <span>{record.maxProtectDays}天</span>
+              <span>{maxProtectDays}天</span>
             </Col>
           </Row>
         ) : (
@@ -134,9 +143,17 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('storageCapacity', {
-                      initialValue: record.storageCapacity
+                      initialValue: storageCapacity
                     })(
-                      <Input maxLength={6} placeholder='0-999999'/>
+                      <Input
+                        maxLength={6}
+                        placeholder='0-999999'
+                        onChange={(e) => {
+                          this.setState({
+                            storageCapacity: e.target.value
+                          })
+                        }}
+                      />
                     )}
                   </Col>
                   <Col span={8}>
@@ -157,8 +174,16 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('maxTrackDays', { initialValue: record.maxTrackDays })(
-                      <Input  maxLength={4} placeholder='0-9999'/>
+                    {getFieldDecorator('maxTrackDays', { initialValue: maxTrackDays })(
+                      <Input
+                        maxLength={4}
+                        placeholder='0-9999'
+                        onChange={(e) => {
+                          this.setState({
+                            maxTrackDays: e.target.value
+                          })
+                        }}
+                      />
                     )}
                   </Col>
                   <Col span={8}>
@@ -180,8 +205,16 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('maxProtectDays', { initialValue: record.maxProtectDays })(
-                      <Input maxLength={4} placeholder='0-9999'/>
+                    {getFieldDecorator('maxProtectDays', { initialValue: maxProtectDays })(
+                      <Input
+                        maxLength={4}
+                        placeholder='0-9999'
+                        onChange={(e) => {
+                          this.setState({
+                            maxProtectDays: e.target.value
+                          })
+                        }}
+                      />
                     )}
                   </Col>
                   <Col span={8}>

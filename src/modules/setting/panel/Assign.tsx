@@ -12,11 +12,20 @@ interface Props extends FormComponentProps {
 interface State {
   editable: boolean
   isAll: boolean
+  /** 是否启用自动分配 */
+  isAutoDistribute?: number
+  /** 自动分配权值 */
+  autoDistributeWeight?: string
+  /** 自动分配日最大值 */
+  autoDistributeMaxNum?: string
 }
 class Main extends React.Component<Props> {
   public state: State = {
     editable: false,
-    isAll: false
+    isAll: false,
+    autoDistributeWeight: this.props.record ? this.props.record.autoDistributeWeight : '',
+    autoDistributeMaxNum: this.props.record ? this.props.record.autoDistributeMaxNum : '',
+    isAutoDistribute: this.props.record ? this.props.record.isAutoDistribute : 0
   }
   public componentWillMount () {
     if (this.props.selectedRowKeys && this.props.selectedRowKeys.length > 0) {
@@ -36,9 +45,9 @@ class Main extends React.Component<Props> {
       if (this.props.record && this.props.record.agencyId) { // 单独设置
         vals.agencyId = this.props.record.agencyId
         saveEntryone(vals).then((res) => {
-          // this.setState({
-          //   editable: false
-          // })
+          this.setState({
+            editable: false
+          })
           APP.success('设置成功')
         })
       } else { // 批量设置
@@ -54,13 +63,16 @@ class Main extends React.Component<Props> {
         })
         console.log(arr, 'arr')
         saveItems(2, arr).then((res) => {
+          this.setState({
+            editable: false
+          })
           APP.success('设置成功')
         })
       }
     })
   }
   public render () {
-    const { editable } = this.state
+    const { editable, autoDistributeMaxNum, autoDistributeWeight, isAutoDistribute } = this.state
     const { getFieldDecorator }  = this.props.form
     const record = this.props.record || {}
     const formItemLayout = {
@@ -72,6 +84,7 @@ class Main extends React.Component<Props> {
         callback('输入范围为（1-10）')
         return
       }
+      callback()
     }
     return (
       <Card
@@ -81,15 +94,12 @@ class Main extends React.Component<Props> {
           <div
             className={styles.right}
             onClick={() => {
-              if (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) {
-                this.setState({
-                  editable: true
-                })
-              }
+              this.setState({
+                editable: true
+              })
             }}
           >
             {
-              (APP.hasPermission('crm_set_customer_save_one_distribute') || this.state.isAll) &&
               <span>
                 <span className={styles.edit}></span>
                 <span>设置</span>
@@ -104,7 +114,7 @@ class Main extends React.Component<Props> {
               <Col span={6}>
                 <span className='mr10'>自动分配</span>
                 <Switch
-                  defaultChecked={record.isAutoDistribute === 1}
+                  defaultChecked={isAutoDistribute === 1}
                   disabled
                 />
               </Col>
@@ -117,7 +127,7 @@ class Main extends React.Component<Props> {
                   </Tooltip>
                   <span className='ml5'>分配权值：</span>
                 </span>
-                <span>{record.autoDistributeWeight}</span>
+                <span>{autoDistributeWeight}</span>
               </Col>
               <Col span={6}>
                 <span>
@@ -126,7 +136,7 @@ class Main extends React.Component<Props> {
                   </Tooltip>
                   <span className='ml5'>日分配上限：</span>
                 </span>
-                <span>{record.autoDistributeMaxNum}</span>
+                <span>{autoDistributeMaxNum}</span>
               </Col>
             </Row>
           </div>
@@ -139,7 +149,7 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('isAutoDistribute', { initialValue: record.isAutoDistribute })(
+                    {getFieldDecorator('isAutoDistribute', { initialValue: isAutoDistribute })(
                       <Switch
                         defaultChecked={record.isAutoDistribute === 1}
                       />
@@ -161,12 +171,20 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('autoDistributeWeight', {
-                      initialValue: record.autoDistributeWeight,
+                      initialValue: autoDistributeWeight,
                       rules:[{
                         validator: validateAutoDistributeWeight
                       }]
                     })(
-                      <Input maxLength={2} placeholder='1-10'/>
+                      <Input
+                        maxLength={2}
+                        placeholder='1-10'
+                        onChange={(e) => {
+                          this.setState({
+                            autoDistributeWeight: e.target.value
+                          })
+                        }}
+                      />
                     )}
                   </Col>
                 </Row>
@@ -184,8 +202,16 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('autoDistributeMaxNum', { initialValue: record.autoDistributeMaxNum })(
-                      <Input maxLength={5} placeholder='1-99999'/>
+                    {getFieldDecorator('autoDistributeMaxNum', { initialValue: autoDistributeMaxNum })(
+                      <Input
+                        maxLength={5}
+                        placeholder='1-99999'
+                        onChange={(e) => {
+                          this.setState({
+                            autoDistributeMaxNum: e.target.value
+                          })
+                        }}
+                      />
                     )}
                   </Col>
                 </Row>
