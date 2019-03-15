@@ -25,6 +25,9 @@ class Main extends React.Component<Props> {
   }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
+      if (err) {
+        return false
+      }
       console.log(vals, 'vals')
       vals.isAutoDistribute = vals.isAutoDistribute ? 1 : 0
       if (this.props.record && this.props.record.agencyId) { // 单独设置
@@ -60,6 +63,12 @@ class Main extends React.Component<Props> {
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 8 }
+    }
+    const validateAutoDistributeWeight = (rule: any, value: any, callback: any) => {
+      if (value > 10) {
+        callback('输入范围为（1-10）')
+        return
+      }
     }
     return (
       <Card
@@ -141,8 +150,13 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('autoDistributeWeight', { initialValue: record.autoDistributeWeight })(
-                      <Input />
+                    {getFieldDecorator('autoDistributeWeight', {
+                      initialValue: record.autoDistributeWeight,
+                      rules:[{
+                        validator: validateAutoDistributeWeight
+                      }]
+                    })(
+                      <Input maxLength={2} placeholder='1-10'/>
                     )}
                   </Col>
                 </Row>
@@ -161,7 +175,7 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('autoDistributeMaxNum', { initialValue: record.autoDistributeMaxNum })(
-                      <Input />
+                      <Input maxLength={5} placeholder='1-99999'/>
                     )}
                   </Col>
                 </Row>

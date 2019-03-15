@@ -87,7 +87,7 @@ class Main extends React.Component<Props> {
                 </Tooltip>
                 <span className='ml5'>销售库容：</span>
               </span>
-              <span>{record.storageCapacity}天</span>
+              <span>{record.storageCapacity}个</span>
             </Col>
             <Col span={6}>
               <span>
@@ -123,12 +123,14 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('storageCapacity', { initialValue: record.storageCapacity })(
-                      <Input />
+                    {getFieldDecorator('storageCapacity', {
+                      initialValue: record.storageCapacity
+                    })(
+                      <Input maxLength={6} placeholder='0-999999'/>
                     )}
                   </Col>
                   <Col span={8}>
-                    天
+                    个
                   </Col>
                 </Row>
               </FormItem>
@@ -146,7 +148,7 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('maxTrackDays', { initialValue: record.maxTrackDays })(
-                      <Input />
+                      <Input  maxLength={4} placeholder='0-9999'/>
                     )}
                   </Col>
                   <Col span={8}>
@@ -169,7 +171,7 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('maxProtectDays', { initialValue: record.maxProtectDays })(
-                      <Input />
+                      <Input maxLength={4} placeholder='0-9999'/>
                     )}
                   </Col>
                   <Col span={8}>
