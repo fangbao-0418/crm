@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { connect, DispatchProp } from 'react-redux'
+import Test from './test'
 interface Props extends RouteComponentProps<any>, DispatchProp<any>, Common.Props {}
 Table.defaultProps.locale = {
   emptyText: '暂无数据'
@@ -19,6 +20,7 @@ class App extends React.Component<Props> {
       <LocaleProvider locale={zhCN}>
         <Switch>
           <Route path='/check' />
+          <Route path='/test' component={Test}/>
           <Main></Main>
         </Switch>
       </LocaleProvider>

@@ -3,7 +3,7 @@ import { Switch } from 'react-router-dom'
 import Route from '@/components/Route'
 import { Iframe } from 'pilipa-terrace'
 import modules from '@/router/modules'
-import { fetchEnum } from './api'
+import { fetchEnum, fetchConfig } from './api'
 interface State {
   visible: boolean
 }
@@ -18,7 +18,10 @@ class Main extends React.Component<{}, State> {
         type='crm'
         onChange={(user: Common.UserProps) => {
           if (user && APP.user === undefined) {
-            fetchEnum().then(() => {
+            fetchConfig().then(([res]) => {
+              if (res.status === 200 && res.data) {
+                APP.user.tqType = res.data.tqType
+              }
               this.setState({
                 visible: true
               })
@@ -35,7 +38,6 @@ class Main extends React.Component<{}, State> {
               })
             }
           }
-          APP.user = user
         }}
       >
         {this.state.visible && <Switch>

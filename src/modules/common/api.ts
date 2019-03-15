@@ -26,8 +26,10 @@ export const fetchSmsVerifyCode = (phone: string) => {
 export const fetchUserInfo = () => {
   return Promise.all([
     http(`/user/v1/api/user/info?token=${APP.token}`),
-    fetchPermissionCode()
-  ]).then(([res, res2]) => {
+    fetchPermissionCode(),
+    fetchConfig()
+  ]).then(([res, res2, res3]) => {
+    console.log(res3, 'res3')
     APP.user = res
     APP.user.codes = res2
     APP.dispatch({
@@ -45,6 +47,13 @@ export const fetchUserInfo = () => {
 export const fetchPermissionCode = () => {
   return http(`/user/v1/api/authority/code?token=${APP.token}`)
 }
+/** 获取crm公共配置 */
+export const fetchConfig = () => {
+  return Promise.all([
+    http(`/crm-manage/v1/api/common/config`),
+    fetchEnum()
+  ])
+}
 /** 获取机构管理状态字典 */
 export const fetchOrganStatus = () => {
   return http(`/user/v1/api/company/getCompanyStatus`)
@@ -53,7 +62,7 @@ export const fetchEnum = () => {
   return Promise.all([
     http(`/crm-manage/v1/api/code-text/list`)
     // fetchOrganStatus()
-  ]).then(([res, res2]) => {
+  ]).then(([res]) => {
     const data: any = {}
     // res.data.EnumOrganAgentSource = res2
     for (const key in res.data) {
