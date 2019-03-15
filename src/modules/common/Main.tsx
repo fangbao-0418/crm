@@ -12,6 +12,7 @@ class Main extends React.Component<{}, State> {
     visible: false
   }
   public render () {
+    console.log(this.state.visible, 'render')
     return (
       <Iframe
         env={APP.env}
