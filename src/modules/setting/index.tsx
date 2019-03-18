@@ -177,9 +177,10 @@ class Main extends React.Component {
       selectedRowKeys: []
     })
     const modal = new Modal({
-      title: 'CRM设置',
+      title: `${record.agencyName}`,
       content: <SettingPanel record={record}/>,
       footer: null,
+      maskClosable: false,
       onCancel: () => {
         this.fetchlist()
       }
@@ -190,6 +191,7 @@ class Main extends React.Component {
     const modal = new Modal({
       title: 'CRM设置',
       content: <SettingPanel selectedRowKeys={this.state.selectedRowKeys}/>,
+      maskClosable: false,
       footer: null,
       onCancel: () => {
         this.fetchlist()

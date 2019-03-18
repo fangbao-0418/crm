@@ -31,6 +31,10 @@ class Main extends React.Component<Props> {
       }
       console.log(vals, 'vals')
       vals.agencyId = this.props.record.agencyId
+      if (vals.tqType === '0') {
+        vals.tqAdmin = ''
+        vals.tqZoneCode = ''
+      }
       saveEntryone(vals).then((res) => {
         this.setState({
           editable: false
@@ -78,7 +82,7 @@ class Main extends React.Component<Props> {
               </Col>
             </Row>
             {
-              String(record.tqType) !== '0' &&
+              String(tqType) !== '0' &&
               <div>
                 <Row>
                   <Col span={6}>
@@ -124,7 +128,7 @@ class Main extends React.Component<Props> {
                 </Row>
               </FormItem>
               {
-                String(this.state.tqType) !== '0' &&
+                String(tqType) !== '0' &&
                 <div>
                   <FormItem
                     label='管理员账号'
