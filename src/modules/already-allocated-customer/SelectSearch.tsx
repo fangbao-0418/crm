@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Select } from 'antd'
 import { getFirms } from '@/modules/stat/api'
 import { getCityByCompany } from './api'
+import { getAgencylist } from '@/modules/setting/api'
 const Option = Select.Option
 interface ValueProps {
   customerSource?: string
@@ -13,7 +14,7 @@ interface Props {
   onChange?: (value: ValueProps) => void
 }
 interface States {
-  companyLisy: Array<{id: string, name: string}>
+  companyLisy: Array<{agencyName: string, agencyId: string}>
   cityList: any
 }
 class Main extends React.Component<Props, States> {
@@ -23,9 +24,14 @@ class Main extends React.Component<Props, States> {
     cityList: []
   }
   public componentWillMount () {
-    getFirms(['Agent', 'DirectCompany']).then((res) => {
+    // getFirms(['Agent', 'DirectCompany']).then((res) => {
+    //   this.setState({
+    //     companyLisy: res
+    //   })
+    // })
+    getAgencylist().then((res) => {
       this.setState({
-        companyLisy: res
+        companyLisy: res.data
       })
     })
     getCityByCompany().then((res) => {
@@ -76,7 +82,8 @@ class Main extends React.Component<Props, States> {
             this.state.companyLisy.length > 0 &&
             this.state.companyLisy.map((item) => {
               return (
-                <Option key={item.id}>{item.name}</Option>
+                // <Option key={item.id}>{item.name}</Option>
+                <Option key={item.agencyId}>{item.agencyName}</Option>
               )
             })
           }
