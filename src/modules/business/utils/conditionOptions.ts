@@ -32,13 +32,18 @@ const data: ConditionOptionProps[] = [
     label: ['意向度'],
     value: '',
     field: 'intention',
-    options: all.concat(APP.keys.EnumIntentionality)
+    get options () {
+      return all.concat(APP.keys.EnumIntentionality)
+    }
   },
   {
     field: 'telephoneStatus',
     value: '',
     label: ['电话状态'],
-    options: all.concat(APP.keys.EnumContactStatus)
+    get options () {
+      return all.concat(APP.keys.EnumContactStatus)
+    }
   }
 ]
+
 export default data
