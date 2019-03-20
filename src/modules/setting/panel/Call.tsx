@@ -7,6 +7,9 @@ const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   record?: Setting.ItemProps
+}
+interface State {
+  editable: boolean
   /** tq管理员 */
   tqAdmin?: string
   /** tq拨打枚举 */
@@ -14,33 +17,41 @@ interface Props extends FormComponentProps {
   /** tq区号 */
   tqZoneCode?: string
 }
-interface State {
-  editable: boolean
-}
 class Main extends React.Component<Props> {
   public state: State = {
-    editable: false
+    editable: false,
+    tqType: this.props.record.tqType,
+    tqAdmin: this.props.record.tqAdmin,
+    tqZoneCode: this.props.record.tqZoneCode
   }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
+      if (err) {
+        return false
+      }
       console.log(vals, 'vals')
       vals.agencyId = this.props.record.agencyId
+      if (vals.tqType === '0') {
+        vals.tqAdmin = ''
+        vals.tqZoneCode = ''
+      }
       saveEntryone(vals).then((res) => {
-        // this.setState({
-        //   editable: false
-        // })
+        this.setState({
+          editable: false
+        })
         APP.success('设置成功')
       })
     })
   }
   public render () {
-    const { editable } = this.state
+    const { editable, tqAdmin, tqType, tqZoneCode } = this.state
     const { getFieldDecorator }  = this.props.form
     const { record } = this.props
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 8 }
     }
+    console.log(this.state.tqType, '112')
     return (
       <Card
         title='第三方呼叫设置'
@@ -54,8 +65,12 @@ class Main extends React.Component<Props> {
               })
             }}
           >
-            <span className={styles.edit}></span>
-            <span>设置</span>
+            {
+              <span>
+                <span className={styles.edit}></span>
+                <span>设置</span>
+              </span>
+            }
           </div>
         )}
       >
@@ -63,19 +78,24 @@ class Main extends React.Component<Props> {
           <div>
             <Row className='mb15'>
               <Col span={6}>
-                <span>{APP.dictionary[`EnumTqType-${record.tqType}`]}</span>
+                <span>{APP.dictionary[`EnumTqType-${tqType}`]}</span>
               </Col>
             </Row>
-            <Row>
-              <Col span={6}>
-                <span>管理员账号：</span>
-                <span>{record.tqAdmin}</span>
-              </Col>
-              <Col span={6}>
-                <span>电话区号：</span>
-                <span>{record.tqZoneCode}</span>
-              </Col>
-            </Row>
+            {
+              String(tqType) !== '0' &&
+              <div>
+                <Row>
+                  <Col span={6}>
+                    <span>管理员账号：</span>
+                    <span>{tqAdmin}</span>
+                  </Col>
+                  <Col span={6}>
+                    <span>电话区号：</span>
+                    <span>{tqZoneCode}</span>
+                  </Col>
+                </Row>
+              </div>
+            }
           </div>
         ) : (
           <Form>
@@ -85,8 +105,13 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('tqType', { initialValue: String(record.tqType) })(
+                    {getFieldDecorator('tqType', { initialValue: String(tqType) })(
                       <Select
+                        onSelect={(value) => {
+                          this.setState({
+                            tqType: value
+                          })
+                        }}
                       >
                         {
                           APP.keys.EnumTqType.map((item) => {
@@ -102,31 +127,58 @@ class Main extends React.Component<Props> {
                   </Col>
                 </Row>
               </FormItem>
-              <FormItem
-                label='管理员账号'
-                {...formItemLayout}
-              >
-                <Row gutter={8}>
-                  <Col span={16}>
-                    {getFieldDecorator('tqAdmin', { initialValue: record.tqAdmin})(
-                      <Input />
-                    )}
-                  </Col>
-                </Row>
-              </FormItem>
-              <FormItem
-                label='电话区号'
-                {...formItemLayout}
-                style={{margin: 0}}
-              >
-                <Row gutter={8}>
-                  <Col span={16}>
-                    {getFieldDecorator('tqZoneCode', { initialValue: record.tqZoneCode })(
-                      <Input />
-                    )}
-                  </Col>
-                </Row>
-              </FormItem>
+              {
+                String(tqType) !== '0' &&
+                <div>
+                  <FormItem
+                    label='管理员账号'
+                    {...formItemLayout}
+                  >
+                    <Row gutter={8}>
+                      <Col span={16}>
+                        {getFieldDecorator('tqAdmin', {
+                          initialValue: tqAdmin,
+                          rules:[{
+                            required: true, message: '请输入管理员账号'
+                          }]
+                        })(
+                          <Input
+                            onChange={(e) => {
+                              this.setState({
+                                tqAdmin: e.target.value
+                              })
+                            }}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  </FormItem>
+                  <FormItem
+                    label='电话区号'
+                    {...formItemLayout}
+                    style={{margin: 0}}
+                  >
+                    <Row gutter={8}>
+                      <Col span={16}>
+                        {getFieldDecorator('tqZoneCode', {
+                          initialValue: tqZoneCode,
+                          rules:[{
+                            required: true, message: '请输入电话区号'
+                          }]
+                        })(
+                          <Input
+                            onChange={(e) => {
+                              this.setState({
+                                tqZoneCode: e.target.value
+                              })
+                            }}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  </FormItem>
+                </div>
+              }
             </div>
             <Button
               className='mt20'
@@ -134,6 +186,7 @@ class Main extends React.Component<Props> {
               onClick={() => {
                 this.onOk()
               }}
+              hidden={!APP.hasPermission('crm_set_customer_save_one_tq')}
             >
               保存
             </Button>
