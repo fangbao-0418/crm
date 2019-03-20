@@ -11,6 +11,7 @@ import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
 import { fetchRegion, getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
+import TQAD from '@/modules/common/content/TQAD'
 import Tab1 from './Tab1'
 import Tab2 from './Tab2'
 import Tab3 from './Tab3'
@@ -581,6 +582,7 @@ class Main extends React.Component<Business.Props> {
               }
             </Tabs.TabPane>
           </Tabs>}
+          <TQAD />
       </ContentBox>
     )
   }
