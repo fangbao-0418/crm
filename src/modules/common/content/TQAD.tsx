@@ -1,20 +1,39 @@
 /** TQ商品悬浮广告 */
 import React from 'react'
+import classNames from 'classnames'
 const styles = require('./style')
 class Main extends React.Component {
   public state = {
-    show: localStorage.getItem('tqad') === '-1' ? false : true
+    show: localStorage.getItem('tqad') === '0' ? false : true
+  }
+  public componentDidMount () {
+    setTimeout(() => {
+      localStorage.setItem('tqad', '0')
+      this.setState({
+        show: false
+      })
+    }, 5000)
   }
   public render () {
     const { show } = this.state
-    return show && (
+    return (
       <div
-        className={styles.tqad}
+        className={classNames(styles.tqad, {
+          [styles.fold]: !show
+        })}
+        onClick={() => {
+          if (!show) {
+            localStorage.setItem('tqad', '1')
+            this.setState({
+              show: true
+            })
+          }
+        }}
       >
         <div
           className={styles.close}
           onClick={() => {
-            localStorage.setItem('tqad', '-1')
+            localStorage.setItem('tqad', '0')
             this.setState({
               show: false
             })

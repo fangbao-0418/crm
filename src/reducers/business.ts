@@ -52,9 +52,35 @@ const defaultVal: Business.Props = {
       total: 0,
       current: 1,
       pageSize: 15
-    },
+    }
   },
-  selectedTab: 'tab1',
+  tab5: {
+    dataSource: [],
+    searchPayload: {
+      tab: '5',
+      pageCurrent: 1,
+      pageSize: 15
+    },
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  },
+  tab6: {
+    dataSource: [],
+    searchPayload: {
+      tab: '6',
+      pageCurrent: 1,
+      pageSize: 15
+    },
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 15
+    }
+  },
+  selectedTab: 'tab3',
   count: [0, 0, 0, 0, -1],
   visibled: true
 }

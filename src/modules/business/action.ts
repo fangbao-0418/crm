@@ -4,9 +4,9 @@ import { getRecycleNum, getCustomerNum, getcapacityNum, fetchList } from './api'
 export const fetchCountAction = (payload: Business.SearchProps) => {
   Promise.all([getRecycleNum(payload), getCustomerNum(payload), getcapacityNum()]).then(([res, res2, res3]) => {
     const count = [
-      res2.allNums,
-      res2.trackContactNums,
       res2.newCustomerNums,
+      res2.intentionNums,
+      res2.noIntentionNums,
       res,
       res3.data
     ]

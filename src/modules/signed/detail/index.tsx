@@ -37,7 +37,7 @@ class Main extends React.Component<Props> {
         >
           <Icon type='close' theme='outlined' />
         </span>
-        <Profile type={type} isShowAgent={true} customerName={this.props.customerName}/>
+        <Profile type={type} customerName={this.props.customerName}/>
         <Tabs defaultActiveKey={this.props.defaultKey} onChange={this.callback}>
           <Tabs.TabPane tab={<span style={{color: 'black'}}>客户信息</span>} key='1'>
             <Detail/>

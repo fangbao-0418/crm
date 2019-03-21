@@ -52,11 +52,20 @@ declare namespace Business {
     searchPayload?: SearchProps
   }
   export interface Props {
+    /** 全部 */
     tab1?: TabDataProps,
+    /** 已有沟通已被拆分为有无意向客户 */
     tab2?: TabDataProps,
+    /** 新客资 */
     tab3?: TabDataProps,
+    /** 即将收回 */
     tab4?: TabDataProps,
-    selectedTab?: 'tab1' | 'tab2' | 'tab3' | 'tab4'
+    /** 意向客户 */
+    tab5?: TabDataProps,
+    /** 无意向客户 */
+    tab6?: TabDataProps,
+    /** tab1: 全部, tab2: 已有沟通, tab3: 新客资, tab4: 即将被收回, tab5: 意向客户, tab6: 无意向客户 */
+    selectedTab?: 'tab1' | 'tab2' | 'tab3' | 'tab4' | 'tab5' | 'tab6'
     count?: number[],
     visibled?: boolean
   }

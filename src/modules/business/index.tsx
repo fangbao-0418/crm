@@ -38,7 +38,7 @@ class Main extends React.Component<Business.Props> {
     sales: []
   }
   public data = conditionOptions
-  public params: Business.SearchProps = {tab: '1'}
+  public params: Business.SearchProps = {tab: '3'}
   public appointmentTime: string = ''
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public city: {key: string, label: string } = { key: APP.user.cityCode, label: APP.user.city }
@@ -177,7 +177,7 @@ class Main extends React.Component<Business.Props> {
     this.fetchCount()
     this.fetchList()
   }
-  public callback (value?: 'tab1' | 'tab2' | 'tab3' | 'tab4') {
+  public callback (value?: 'tab1' | 'tab2' | 'tab3' | 'tab4' | 'tab5' | 'tab6') {
     this.params.tab = value.replace('tab', '')
     APP.dispatch<Business.Props>({
       type: 'change business data',
@@ -400,6 +400,13 @@ class Main extends React.Component<Business.Props> {
     })
     modal.show()
   }
+  /**
+   * 操作处理
+   * type === 1 批量预约
+   * type === 2 转销售
+   * type === 3 转公海
+   * type === 4 转客资池
+   */
   public handleSelectAll (selectedRowKeys: string[], type: number) {
     console.log(type)
     console.log(selectedRowKeys)
@@ -485,7 +492,8 @@ class Main extends React.Component<Business.Props> {
                 style={{paddingTop: '5px'}}
                 options={[
                   { value: 'customerName', label: '客户名称'},
-                  { value: 'contactPerson', label: '联系人'}
+                  { value: 'contactPerson', label: '联系人'},
+                  { value: 'contactPhone', label: '联系电话'}
                 ]}
                 placeholder={''}
                 onKeyDown={(e, val) => {
@@ -512,12 +520,12 @@ class Main extends React.Component<Business.Props> {
             defaultActiveKey={selectedTab}
             onChange={this.callback.bind(this)}
           >
-            <Tabs.TabPane tab={<span>全部({count[0]})</span>} key='tab1'>
+            <Tabs.TabPane tab={<span>新客资({count[0]})</span>} key='tab3'>
               {
-                selectedTab === 'tab1' && (
-                  <Tab1
+                selectedTab === 'tab3' && (
+                  <Tab3
                     getInstance={(ref) => {
-                      this.refs.tab1 = ref
+                      this.refs.tab3 = ref
                     }}
                     columns={this.columns}
                     params={this.params}
@@ -526,9 +534,9 @@ class Main extends React.Component<Business.Props> {
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>已有沟通({count[1]})</span>} key='tab2'>
+            <Tabs.TabPane tab={<span>意向客户({count[1]})</span>} key='tab5'>
               {
-                selectedTab === 'tab2' && (
+                selectedTab === 'tab5' && (
                   <Tab2
                     getInstance={(ref) => {
                       this.refs.tab2 = ref
@@ -540,12 +548,12 @@ class Main extends React.Component<Business.Props> {
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>新客资({count[2]})</span>} key='tab3'>
+            <Tabs.TabPane tab={<span>无意向客户({count[2]})</span>} key='tab6'>
               {
-                selectedTab === 'tab3' && (
-                  <Tab3
+                selectedTab === 'tab6' && (
+                  <Tab2
                     getInstance={(ref) => {
-                      this.refs.tab3 = ref
+                      this.refs.tab2 = ref
                     }}
                     columns={this.columns}
                     params={this.params}

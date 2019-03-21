@@ -45,11 +45,19 @@
   position: fixed
   right: 50px
   bottom: 50px
-  width: 100px
-  height: 100px
-  background: url('@/assets/images/tqad.png') 0 0 / 100px 92px no-repeat
+  width: 183px
+  height: 200px
+  background: url('@/assets/images/tqad.png') 0 0 / 183px 170px no-repeat
   cursor: pointer
   z-index: 999
+  transition: all 400ms
+  &.fold
+    width: 30px
+    height: 100px
+    right: 0
+    background: url('@/assets/images/tqad-2.png') 0 0 / 30px 100px no-repeat
+    .close
+      display: none
   .close
     width: 20px
     height: 20px

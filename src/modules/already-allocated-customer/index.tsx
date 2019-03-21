@@ -388,8 +388,9 @@ export default class Main extends React.Component<null, States> {
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
-                  { value: 'customerName', label: '客户名称'},
-                  { value: 'contactPerson', label: '联系人'}
+                  { value: 'customerName', label: '客户名称' },
+                  { value: 'contactPerson', label: '联系人' },
+                  { value: 'contactPhone', label: '联系电话' }
                 ]}
                 placeholder={''}
                 onKeyDown={(e, val) => {

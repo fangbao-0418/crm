@@ -470,7 +470,7 @@ class Main extends React.Component {
                 options={[
                   { value: 'customerName', label: '客户名称'},
                   { value: 'contactPerson', label: '联系人'},
-                  // { value: 'contactPhone', label: '联系电话'},
+                  { value: 'contactPhone', label: '联系电话'},
                   { value: 'lastReleaseSalesperson', label: '释放销售'},
                   { value: 'busSeaMemo', label: '释放原因'}
                 ]}

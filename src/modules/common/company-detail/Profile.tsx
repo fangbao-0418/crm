@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 const styles = require('./style')
 interface Props extends Customer.Props {
-  isShowAgent?: boolean
   type?: 'business' | 'open' | 'customer' | 'signed'
   customerName?: string
 }
@@ -71,13 +70,12 @@ class Main extends React.Component<Props> {
             </span>
           </p>
           {
-            this.props.isShowAgent &&
+            this.props.type === 'signed' &&
             <p>
-              <label>记账状态:</label><span>{detail.accountStatus}</span>
+              <label>当前账期:</label><span>{detail.accountPeriod} {detail.accountPeriod && ('(' + detail.accountStatus + ')')}</span>
               <label style={{marginLeft: '20px'}}>运营会计:</label><span>{detail.accountOpsUsers}</span>
               <label style={{marginLeft: '20px'}}>核算会计:</label><span>{detail.accountAuditUsers}</span>
-              <label style={{marginLeft: '20px'}}>当前账期:</label><span>{detail.accountPeriod}</span>
-              <label style={{marginLeft: '20px'}}>截止账期:</label><span>{detail.serveTimeEnd && moment(detail.serveTimeEnd).format('YYYY-MM')}</span>
+              <label style={{marginLeft: '20px'}}>服务账期:</label>{detail.serveTimeEnd && <span>{moment(detail.serveTimeBegin).format('YYYY-MM')} - {moment(detail.serveTimeEnd).format('YYYY-MM')}</span>}
             </p>
           }
         </div>

@@ -74,8 +74,11 @@ declare namespace Customer {
     accountAuditUsers?: string
     /** 截止账期 */
     serveTimeEnd?: string
+    /** 开始账期 */
+    serveTimeBegin?: string
     /** 所属机构 */
     agencyName?: string
+    clientStatus?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string

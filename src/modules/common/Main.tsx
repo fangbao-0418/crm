@@ -11,8 +11,17 @@ class Main extends React.Component<{}, State> {
   public state: State = {
     visible: false
   }
+  public initCloudCall () {
+    setInterval(() => {
+      APP.fn.jsmcInit(true).catch(() => {
+        //
+      })
+    }, 1000 * 60 * 60 * 2 - 10 * 1000)
+    APP.fn.jsmcInit().catch(() => {
+      //
+    })
+  }
   public render () {
-    console.log(this.state.visible, 'render')
     return (
       <Iframe
         env={APP.env}
@@ -22,22 +31,16 @@ class Main extends React.Component<{}, State> {
             fetchConfig().then(([res]) => {
               if (res.status === 200 && res.data) {
                 APP.user.tqType = res.data.tqType
+                /** 初始化云呼叫 */
+                if (APP.user.tqType === 1) {
+                  this.initCloudCall()
+                }
               }
               this.setState({
                 visible: true
               })
             })
             APP.user = user
-            if (APP.user.enableTq !== false) {
-              setInterval(() => {
-                APP.fn.jsmcInit(true).catch(() => {
-                  //
-                })
-              }, 1000 * 60 * 60 * 2 - 10 * 1000)
-              APP.fn.jsmcInit().catch(() => {
-                //
-              })
-            }
           }
         }}
       >

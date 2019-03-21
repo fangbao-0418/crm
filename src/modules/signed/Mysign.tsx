@@ -1,8 +1,7 @@
 import React from 'react'
-import { Table, Button, Select, Tooltip, Divider, Icon } from 'antd'
+import { Table, Button, Select, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
-import ContentBox from '@/modules/common/content'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
@@ -140,9 +139,9 @@ class Main extends React.Component {
     width: 200,
     dataIndex: 'contactPerson'
   }, {
-    title: '服务账期',
+    title: '客户状态',
     width: 200,
-    dataIndex: 'servePeriod'
+    dataIndex: 'clientStatus'
   }, {
     title: '跟进人',
     width: 200,
@@ -405,8 +404,9 @@ class Main extends React.Component {
             <SearchName
               style={{paddingTop: '5px'}}
               options={[
-                { value: 'customerName', label: '客户名称'},
-                { value: 'contactPerson', label: '联系人'},
+                { value: 'customerName', label: '客户名称' },
+                { value: 'contactPerson', label: '联系人' },
+                { value: 'contactPhone', label: '联系电话' },
                 // { value: 'signSalesperson', label: '签约人'},
                 { value: 'operatingAccouting', label: '运营会计'},
                 { value: 'areaName', label: '地区'},

@@ -1,22 +1,11 @@
 import React from 'react'
-import { Button, Tabs, Select } from 'antd'
-import { ColumnProps } from 'antd/lib/table'
-import Modal from 'pilipa/libs/modal'
+import { Tabs } from 'antd'
 import ContentBox from '@/modules/common/content'
-import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import SelectSearch from './SelectSearch'
-import SearchName from '@/modules/common/search/SearchName'
-import Provider from '@/components/Provider'
-import View from './detail'
-import { fetchList, toOther, fetchWorkers } from './api'
 import _ from 'lodash'
-import moment from 'moment'
 import Appointment from './Appointment'
 import Expiration from './Expiration'
 import Mysign from './Mysign'
 
-type DetailProps = Signed.DetailProps
-const Option = Select.Option
 interface States {
   tab: string
 }
@@ -71,7 +60,7 @@ class Main extends React.Component {
             <Tabs.TabPane tab='我的签约' key='1'>
               {
                 this.state.tab === '1' &&
-                <Mysign/>
+                <Mysign />
               }
             </Tabs.TabPane>
           }
