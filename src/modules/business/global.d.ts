@@ -38,6 +38,7 @@ declare namespace Business {
     customerSource?: string
     payTaxesNature?: string
     currentSalesperson?: string
+    currentSalespersonId?: string
     tab?: string
     [field: string]: any
   }

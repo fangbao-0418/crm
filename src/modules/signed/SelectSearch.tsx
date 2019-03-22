@@ -12,8 +12,8 @@ interface ValueProps {
   agencyId?: string
   customerSource?: string
   payTaxesNature?: string
-  signSalesperson?: string
-  currentSalesperson?: string
+  signSalespersonId?: string
+  currentSalespersonId?: string
 }
 interface State {
   /** 机构列表 */
@@ -141,9 +141,9 @@ class Main extends React.Component<Props, State> {
           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           onChange={(val: {key: '', label: ''}) => {
             if (this.props.type === '1') {
-              this.values.signSalesperson = val ? val.label : undefined
+              this.values.signSalespersonId = val ? val.key : undefined
             } else {
-              this.values.currentSalesperson = val ? val.label : undefined
+              this.values.currentSalespersonId = val ? val.key : undefined
             }
             this.props.onChange(this.values)
           }}
@@ -167,7 +167,7 @@ class Main extends React.Component<Props, State> {
             optionFilterProp='children'
             filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={(val: {key: '', label: ''}) => {
-              this.values.currentSalesperson = val ? val.label : undefined
+              this.values.currentSalespersonId = val ? val.key : undefined
               this.props.onChange(this.values)
             }}
           >
