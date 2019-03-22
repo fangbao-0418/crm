@@ -214,7 +214,7 @@ class Main extends React.Component {
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
-    this.params.currentSalesperson = values.currentSalesperson || undefined
+    this.params.currentSalespersonId = values.currentSalespersonId || undefined
     this.params.pageCurrent = 1
     this.fetchList()
   }

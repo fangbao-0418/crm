@@ -30,8 +30,8 @@ declare namespace Signed {
     contactPhone?: string
     customerSource?: string
     operatingAccouting?: string
-    signSalesperson?: string
-    currentSalesperson?: string
+    signSalespersonId?: string
+    currentSalespersonId?: string
     contractCode?: string
     payTaxesNature?: string
     serviceExpireBeginMonth?: string

@@ -276,8 +276,8 @@ class Main extends React.Component {
     this.paramsright.customerSource = values.customerSource || undefined
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
-    this.paramsright.signSalesperson = values.signSalesperson || undefined
-    this.paramsright.currentSalesperson = values.currentSalesperson || undefined
+    this.paramsright.signSalespersonId = values.signSalespersonId || undefined
+    this.paramsright.currentSalespersonId = values.currentSalespersonId || undefined
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()

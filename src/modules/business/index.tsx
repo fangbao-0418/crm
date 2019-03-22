@@ -141,7 +141,7 @@ class Main extends React.Component<Business.Props> {
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
-    this.params.currentSalesperson = values.currentSalesperson || undefined
+    this.params.currentSalespersonId = values.currentSalespersonId || undefined
     const { selectedTab } = this.props
     const data = this.props[selectedTab]
     const { pagination } = data

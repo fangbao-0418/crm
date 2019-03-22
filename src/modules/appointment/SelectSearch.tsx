@@ -5,7 +5,7 @@ const Option = Select.Option
 interface ValueProps {
   customerSource?: string
   payTaxesNature?: string
-  currentSalesperson?: string
+  currentSalespersonId?: string
 }
 interface Props {
   onChange?: (value: ValueProps) => void
@@ -84,7 +84,7 @@ class Main extends React.Component<Props, State> {
           filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
           labelInValue
           onChange={(val: {key: '', label: ''}) => {
-            this.values.currentSalesperson = val ? val.label : undefined
+            this.values.currentSalespersonId = val ? val.key : undefined
             this.props.onChange(this.values)
           }}
         >
