@@ -27,16 +27,19 @@ class Main extends React.Component {
             this.setState({
               show: true
             })
+          } else {
+            window.open('http://h5.eqxiu.com/ls/Sl2oBYfh')
           }
         }}
       >
         <div
           className={styles.close}
-          onClick={() => {
+          onClick={(e) => {
             localStorage.setItem('tqad', '0')
             this.setState({
               show: false
             })
+            e.stopPropagation()
           }}
         >
         </div>

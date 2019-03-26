@@ -198,7 +198,7 @@ export default class Main extends React.Component<null, States> {
   public handleSelectType (values: any) {
     this.params.customerSource = values.customerSource || undefined
     this.params.agencyId = values.agencyId || undefined
-    this.params.status = values.status || undefined
+    this.params.lifeCycle = values.lifeCycle || undefined
     this.params.cityCode = values.cityCode || undefined
     this.params.pageCurrent = 1
     this.fetchList()

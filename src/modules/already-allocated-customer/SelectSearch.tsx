@@ -7,7 +7,7 @@ const Option = Select.Option
 interface ValueProps {
   customerSource?: string
   agencyId?: string
-  status?: string
+  lifeCycle?: string
   cityCode?: string
 }
 interface Props {
@@ -92,16 +92,23 @@ class Main extends React.Component<Props, States> {
           allowClear={true}
           className='mr5'
           style={{width: 150}}
-          placeholder='请选择当前状态'
+          placeholder='请选择客户状态'
           onChange={(value: string) => {
-            this.values.status = value
+            this.values.lifeCycle = value
             this.props.onChange(this.values)
           }}
         >
-          <Option key='公海'>公海</Option>
-          <Option key='跟进中'>跟进中</Option>
-          <Option key='已签约'>已签约</Option>
-          <Option key='已删除'>已删除</Option>
+          {
+            APP.keys.EnumCustomerLiftCycle.map((item) => {
+              return (
+                <Option
+                  key={item.value}
+                >
+                  {item.label}
+                </Option>
+              )
+            })
+          }
         </Select>
         <Select
           showSearch
