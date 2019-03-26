@@ -11,18 +11,6 @@ const options = {
     errors: true
   },
   proxy: {
-    // '/sys/crm-manage': {
-    //   target: 'http://192.168.170.30:9008',
-    //   pathRewrite: {
-    //     '^/sys/crm-manage/v1': '/v1'
-    //   }
-    // },
-    // '/sys/user': {
-    //   target: 'http://192.168.170.30:9011',
-    //   pathRewrite: {
-    //     '^/sys/user/v1': '/v1'
-    //   }
-    // },
     '/sys': {
       target: 'https://x-sys.i-counting.cn',
       changeOrigin: true,
@@ -37,7 +25,10 @@ const options = {
   // 启用gzip压缩一切服务:
   compress: true,
   host: '0.0.0.0',
-  port: '3001'
+  port: '3001',
+  historyApiFallback: {
+    index: '/index.html'
+  }
 }
 WebpackDevServer.addDevServerEntrypoints(config, options)
 const compiler = webpack(config)

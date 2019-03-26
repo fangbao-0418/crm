@@ -141,7 +141,12 @@ class Main extends React.Component {
   }, {
     title: '客户状态',
     width: 200,
-    dataIndex: 'clientStatus'
+    dataIndex: 'lifeCycle',
+    render: (text) => {
+      return (
+        <span>{APP.dictionary[`EnumCustomerLiftCycle-${text}`]}</span>
+      )
+    }
   }, {
     title: '跟进人',
     width: 200,

@@ -4,10 +4,14 @@ import filters from './filters'
 function handleError (err: JQuery.jqXHR) {
   let res = {}
   const { responseJSON, responseText } = err
+  console.log(err, 'error')
   try {
     res = responseJSON || JSON.parse(responseText)
   } catch (e) {
     console.log(e)
+  }
+  if (err.statusText === 'timeout') {
+    APP.error('请求超时')
   }
   return res
 }

@@ -102,13 +102,18 @@ export default class Main extends React.Component<null, States> {
   }, {
     title: (
       <span>
-        当前状态
+        客户状态
         <Tooltip placement='top' title='公海: 客户在公海里; 跟进中:已分配到销售负责跟进和签约; 已签约:客户已成功签约; 已删除: 客户没成交且已被销售删除;'>
           <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>
       </span>
     ),
-    dataIndex: 'status'
+    dataIndex: 'lifeCycle',
+    render: (text) => {
+      return (
+        <span>{APP.dictionary[`EnumCustomerLiftCycle-${text}`]}</span>
+      )
+    }
   }, {
     title: '分配时间',
     dataIndex: 'distributionTime',
