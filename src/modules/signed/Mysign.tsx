@@ -164,7 +164,7 @@ class Main extends React.Component {
       </span>
     ),
     width: 200,
-    dataIndex: 'enterStorageTime',
+    dataIndex: 'signTime',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
