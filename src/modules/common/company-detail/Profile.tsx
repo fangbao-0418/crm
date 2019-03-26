@@ -75,7 +75,7 @@ class Main extends React.Component<Props> {
               <label>当前账期:</label><span>{detail.accountPeriod} {detail.accountPeriod && ('(' + detail.accountStatus + ')')}</span>
               <label style={{marginLeft: '20px'}}>运营会计:</label><span>{detail.accountOpsUsers}</span>
               <label style={{marginLeft: '20px'}}>核算会计:</label><span>{detail.accountAuditUsers}</span>
-              <label style={{marginLeft: '20px'}}>服务账期:</label>{detail.serveTimeEnd && <span>{moment(detail.serveTimeBegin).format('YYYY-MM')} - {moment(detail.serveTimeEnd).format('YYYY-MM')}</span>}
+              <label style={{marginLeft: '20px'}}>服务账期:</label>{detail.serveTimeEnd && <span>{moment(detail.serveTimeBegin).format('YYYY-MM')} 至 {moment(detail.serveTimeEnd).format('YYYY-MM')}</span>}
             </p>
           }
         </div>
