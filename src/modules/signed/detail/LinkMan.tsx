@@ -61,7 +61,7 @@ class Main extends React.Component<Props> {
                 initialValue: text,
                 rules: [
                   {
-                    required: true,
+                    required: record.isSignPerson === 1 ? false : true,
                     message: '联系人不能为空'
                   }
                 ]
@@ -112,7 +112,7 @@ class Main extends React.Component<Props> {
                 initialValue: text.trim(),
                 rules: [
                   {
-                    required: true,
+                    required: record.isSignPerson === 1 ? false : true,
                     message: '联系电话不能为空'
                   },
                   {
