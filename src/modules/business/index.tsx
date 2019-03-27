@@ -12,7 +12,6 @@ import Import from '@/modules/business/import'
 import { fetchRegion, getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
 import TQAD from '@/modules/common/content/TQAD'
-import Tab1 from './Tab1'
 import Tab2 from './Tab2'
 import Tab3 from './Tab3'
 import Tab4 from './Tab4'
@@ -538,6 +537,7 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab5' && (
                   <Tab2
+                    tabKey='tab5'
                     getInstance={(ref) => {
                       this.refs.tab2 = ref
                     }}
@@ -552,6 +552,7 @@ class Main extends React.Component<Business.Props> {
               {
                 selectedTab === 'tab6' && (
                   <Tab2
+                    tabKey='tab6'
                     getInstance={(ref) => {
                       this.refs.tab2 = ref
                     }}

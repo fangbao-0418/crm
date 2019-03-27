@@ -10,6 +10,7 @@ interface Props extends Business.Props {
   params: Business.SearchProps
   handleSelectAll?: (selectedRowKeys: string[], type: number) => void
   getInstance?: (ref: any) => void
+  tabKey: 'tab5' | 'tab6'
 }
 interface States {
   selectedRowKeys: string[]
@@ -32,7 +33,7 @@ class Main extends React.Component<Props> {
   }
   public fetchList () {
     const params = _.cloneDeep(this.props.params)
-    const pagination = this.props.tab2.pagination
+    const { pagination } = this.props[this.props.tabKey]
     params.pageSize = pagination.pageSize
     params.pageCurrent = pagination.current
     fetchList(params).then((res) => {
@@ -43,7 +44,7 @@ class Main extends React.Component<Props> {
       APP.dispatch<Business.Props>({
         type: 'change business data',
         payload: {
-          tab2: {
+          [this.props.tabKey]: {
             searchPayload: params,
             pagination,
             dataSource: res.data
@@ -61,12 +62,12 @@ class Main extends React.Component<Props> {
     }
   }
   public handlePageChange (page: number) {
-    const { pagination } = this.props.tab2
+    const { pagination } = this.props[this.props.tabKey]
     pagination.current = page
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
-        tab2: {
+        [this.props.tabKey]: {
           pagination
         }
       }
@@ -77,13 +78,13 @@ class Main extends React.Component<Props> {
     this.fetchList()
   }
   public onShowSizeChange (current: number, size: number) {
-    const { pagination } = this.props.tab2
+    const { pagination } = this.props[this.props.tabKey]
     pagination.current = current
     pagination.pageSize = size
     APP.dispatch<Business.Props>({
       type: 'change business data',
       payload: {
-        tab2: {
+        [this.props.tabKey]: {
           pagination
         }
       }
@@ -95,7 +96,7 @@ class Main extends React.Component<Props> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectAllChange.bind(this)
     }
-    const { dataSource, pagination } = this.props.tab2
+    const { dataSource, pagination } = this.props[this.props.tabKey]
     return (
       <div>
         <Table
