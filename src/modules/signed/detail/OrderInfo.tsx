@@ -102,7 +102,7 @@ class Main extends React.Component<Props> {
                     </span>
                   </div>
                   <div className={styles.col}>
-                    <label>签单时间：</label>
+                    <label>下单时间：</label>
                     <span>{item.createTime}</span>
                   </div>
                   <div className={styles.col}>

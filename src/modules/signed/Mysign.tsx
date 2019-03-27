@@ -156,13 +156,13 @@ class Main extends React.Component {
     width: 200,
     dataIndex: 'accountOpsUsers'
   }, {
-    title: '签单销售',
+    title: '合作销售',
     width: 200,
     dataIndex: 'signSalesperson'
   }, {
     title: (
       <span>
-        入库时间
+        合作时间
         <Tooltip placement='top' title='成为签约客户的时间'>
           <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
         </Tooltip>

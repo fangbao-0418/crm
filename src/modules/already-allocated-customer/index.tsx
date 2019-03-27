@@ -72,6 +72,7 @@ export default class Main extends React.Component<null, States> {
   public columns: ColumnProps<ReadyCustomer.DetailProps>[] = [{
     title: '客户名称',
     dataIndex: 'customerName',
+    width: 200,
     render: (val, record, index) => {
       return (
         <span className='href' onClick={this.show.bind(this, record, index)}>{val}</span>
@@ -98,6 +99,7 @@ export default class Main extends React.Component<null, States> {
     }
   }, {
     title: '当前机构',
+    width: 200,
     dataIndex: 'agencyName'
   }, {
     title: (

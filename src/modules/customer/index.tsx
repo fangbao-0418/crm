@@ -105,6 +105,7 @@ class Main extends React.Component<Customer.Props, States> {
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public columns: ColumnProps<DetailProps>[] = [{
     title: '客户名称',
+    width: 200,
     dataIndex: 'customerName',
     render: (val, record, index) => {
       return (

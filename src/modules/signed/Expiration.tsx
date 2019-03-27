@@ -115,7 +115,7 @@ class Main extends React.Component {
     width: 200,
     dataIndex: 'accountOpsUsers'
   }, {
-    title: '签单销售',
+    title: '合作销售',
     width: 200,
     dataIndex: 'signSalesperson'
   }, {
