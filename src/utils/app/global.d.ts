@@ -59,6 +59,7 @@ declare namespace APP {
     formatDuration: (second: number) => string
     /** 四舍五入 */
     round: (num: number, float?: number) => number
+    downFile: (url: string, type?: string) => void
   }
   export const Icon: React.ComponentType<Icon.Props>
   export const fn: GlobalFnProps

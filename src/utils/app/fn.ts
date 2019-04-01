@@ -185,3 +185,29 @@ export const formatDuration = (second: number, arr: any[] = ['00', '00', '00', '
   }
   return arr.join(':').replace(/^00:/, '')
 }
+
+/** 下载文件 */
+export function downFile (url: string, type = 'get') {
+  const xhr: any = new XMLHttpRequest()
+  xhr.open(type, url, true)
+  xhr.setRequestHeader('token', APP.token)
+  xhr.setRequestHeader('from', 4)
+  xhr.responseType = 'blob'
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+        const name = xhr.getResponseHeader('Content-disposition')
+        console.log(name, 'name')
+        const res = name.match(/filename=["']?(.*)["']?/)
+        const filename = decodeURI(res ? res[1] : 'unkonw')
+        const blob = new Blob([xhr.response], {type: 'application/octet-binary'})
+        const fileUrl = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = fileUrl
+        link.download = filename
+        link.click()
+      }
+    }
+  }
+  xhr.send(null)
+}

@@ -5,3 +5,8 @@ export const getReadyCustomerList = (payload: ReadyCustomer.ParamsProps) => {
 export const getCityByCompany = () => {
   return http(`/user/v1/api/company/login/region/city`, 'POST', ['Agent', 'DirectCompany'])
 }
+/** 导出已分配客户数据URL */
+export const getExportDistributionDataURL = (payload: any) => {
+  const query = $.param(payload)
+  return `/sys/crm-manage/v1/api/customer-pool-distribution-export?${query}`
+}

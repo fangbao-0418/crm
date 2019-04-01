@@ -3,7 +3,7 @@ import { Switch } from 'react-router-dom'
 import Route from '@/components/Route'
 import { Iframe } from 'pilipa-terrace'
 import modules from '@/router/modules'
-import { fetchEnum, fetchConfig } from './api'
+import { fetchConfig } from './api'
 interface State {
   visible: boolean
 }
@@ -51,7 +51,8 @@ class Main extends React.Component<{}, State> {
           <Route hidden={!APP.hasPermission('crm_business_appointment')} path='/appointment' component={modules.Appointment} />
           <Route hidden={!APP.hasPermission('crm_sign_myself')} path='/signed' component={modules.Signed} />
           <Route hidden={!APP.hasPermission('crm_sea_manage')} path='/open' component={modules.Open} />
-          <Route hidden={!APP.hasPermission('crm_data_call')} path='/shout' component={modules.Shout} />
+          <Route hidden={!APP.hasPermission('crm_data_call')} path='/shout' exact component={modules.Shout} />
+          <Route hidden={!APP.hasPermission('crm_data_call_detail')} path='/shout/detail' component={modules.Shout} />
           <Route hidden={!APP.hasPermission('crm_data_work')} path='/workpanel-sales' component={modules.WorkpanelSales} />
           <Route hidden={!APP.hasPermission('crm_data_business')} path='/business-analysis' component={modules.BusinessAnalysis} />
           <Route hidden={!APP.hasPermission('crm_data_customer')} path='/customer-sign' component={modules.CustomerSign} />

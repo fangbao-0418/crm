@@ -3,14 +3,16 @@ import { Table, Tooltip, Button } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import moment from 'moment'
+import _ from 'lodash'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
-import { getReadyCustomerList } from './api'
+import { getReadyCustomerList, getExportDistributionDataURL } from './api'
 import { deleteCustomer } from '@/modules/customer/api'
 import SearchName from '@/modules/common/search/SearchName'
 import SelectSearch from './SelectSearch'
 import Modal from 'pilipa/libs/modal'
 import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
+import AddButton from '@/modules/common/content/AddButton'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 const all = [{
   label: '全部',
@@ -372,11 +374,28 @@ export default class Main extends React.Component<null, States> {
     })
     modal.show()
   }
+  public export () {
+    const params = _.cloneDeep(this.params)
+    delete params.pageCurrent
+    delete params.pageSize
+    const url = getExportDistributionDataURL(params)
+    APP.fn.downFile(url)
+  }
   public render () {
     const { pagination } = this.state
     return (
       <ContentBox
         title='已分配'
+        rightCotent={(
+          <AddButton
+            icon={<APP.Icon type='export' size={15} />}
+            hidden={!APP.hasPermission('crm_customer_list_upload')}
+            title='导出'
+            onClick={() => {
+              this.export()
+            }}
+          />
+        )}
       >
         <div className='mb12'>
           <Condition

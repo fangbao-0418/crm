@@ -1,12 +1,17 @@
 import React from 'react'
 import ContentBox from '@/modules/common/content'
 import { Tabs } from 'antd'
+import { RouteComponentProps } from 'react-router'
 import Monitor from './monitor'
 import CallDetail from './CallDetail'
 const TabPane = Tabs.TabPane
-class Main extends React.Component {
+type Props = RouteComponentProps
+class Main extends React.Component<Props> {
   public render () {
-    const defaultActiveKey = APP.hasPermission('crm_data_call_monitors') ? 'monitor' : 'detail'
+    let defaultActiveKey = APP.hasPermission('crm_data_call_monitors') ? 'monitor' : 'detail'
+    if (this.props.location.pathname === '/shout/detail') {
+      defaultActiveKey = 'detail'
+    }
     return (
       <ContentBox
         title='呼叫统计'
