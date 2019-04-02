@@ -375,9 +375,15 @@ export default class Main extends React.Component<null, States> {
     modal.show()
   }
   public export () {
-    const params = _.cloneDeep(this.params)
+    const params: ReadyCustomer.ParamsProps = _.cloneDeep(this.params)
     delete params.pageCurrent
     delete params.pageSize
+    for (let key in params) {
+      console.log(params[key])
+      if (!params[key]) {
+        delete params[key]
+      }
+    }
     const url = getExportDistributionDataURL(params)
     APP.fn.downFile(url)
   }
