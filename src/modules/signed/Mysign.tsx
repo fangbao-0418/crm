@@ -55,7 +55,7 @@ class Main extends React.Component {
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
-      label: ['入库时间'],
+      label: ['合作时间'],
       options: [
         {
           label: '全部',

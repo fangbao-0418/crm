@@ -375,11 +375,11 @@ export default class Main extends React.Component<null, States> {
     modal.show()
   }
   public export () {
+    APP.error('导出执行中...')
     const params: ReadyCustomer.ParamsProps = _.cloneDeep(this.params)
     delete params.pageCurrent
     delete params.pageSize
-    for (let key in params) {
-      console.log(params[key])
+    for (const key in params) {
       if (!params[key]) {
         delete params[key]
       }

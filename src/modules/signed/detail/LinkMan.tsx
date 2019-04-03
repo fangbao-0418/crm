@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { connect } from 'react-redux'
 import ToCall from '@/modules/customer/linkman/ToCall'
+import _ from 'lodash'
 const styles = require('./style')
 type LinkManProps = Customer.LinkManProps
 interface Props extends FormComponentProps {
@@ -17,10 +18,11 @@ interface States {
 }
 const FormItem = Form.Item
 class Main extends React.Component<Props> {
-  public dataSource = [{
-    contactPerson: '',
-    contactPhone: ''
-  }]
+  /** 初始数据 */
+  public initStatus: any  = {
+    contactPerson: {},
+    contactPhone: {}
+  }
   public state: States = {
     dataSource: []
   }
@@ -30,6 +32,7 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPerson',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
+        const initStatus = this.getInitStatus('contactPerson', record, index)
         if (this.props.disabled) {
           return (
             <FormItem>
@@ -61,12 +64,12 @@ class Main extends React.Component<Props> {
                 initialValue: text,
                 rules: [
                   {
-                    required: record.isSignPerson === 1 ? false : true,
+                    required: true,
                     message: '联系人不能为空'
                   }
                 ]
               })(
-                record.isSignPerson === 1 ?
+                (record.isSignPerson === 1 && initStatus) ?
                   <div>
                     <span>
                       {text}
@@ -89,6 +92,7 @@ class Main extends React.Component<Props> {
       dataIndex: 'contactPhone',
       render: (text, record, index) => {
         const { getFieldDecorator } = this.props.form
+        const initStatus = this.getInitStatus('contactPhone', record, index)
         if (this.props.disabled) {
           return (
             <FormItem>
@@ -112,7 +116,7 @@ class Main extends React.Component<Props> {
                 initialValue: text.trim(),
                 rules: [
                   {
-                    required: record.isSignPerson === 1 ? false : true,
+                    required: true,
                     message: '联系电话不能为空'
                   },
                   {
@@ -121,7 +125,7 @@ class Main extends React.Component<Props> {
                   }
                 ]
               })(
-                record.isSignPerson === 1 ?
+                (record.isSignPerson === 1 && initStatus) ?
                   <span>{text.trim()}</span>
                 :
                   <Input
@@ -222,6 +226,21 @@ class Main extends React.Component<Props> {
     if (this.props.getWrappedInstance) {
       this.props.getWrappedInstance(this)
     }
+  }
+  /** 判断签约状态初始值是否存在 */
+  public getInitStatus (field: string, record: any, index: number) {
+    const text = record[field]
+    const initStatus = this.initStatus[field]
+    if (initStatus[index] === undefined) {
+      initStatus[index] = true
+    }
+    if (!this.props.disabled && record.isSignPerson === 1 && !text) {
+      initStatus[index] = false
+    }
+    if (initStatus[index] === false && this.props.disabled) {
+      initStatus[index] = true
+    }
+    return initStatus[index]
   }
   public onChange (index: number, field: string, e: React.SyntheticEvent) {
     const value = $(e.target).val()
