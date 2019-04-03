@@ -3,6 +3,8 @@ import moment from 'moment'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import Group from './Group'
 import Seller from './Seller'
+import { Tabs } from 'antd'
+const TabPane = Tabs.TabPane
 export interface PayloadProps {
   callTimeBeginDate?: string
   callTimeEndDate?: string
@@ -74,37 +76,32 @@ class Main extends React.Component<{}, State> {
     const { type } = this.state
     return (
       <div>
-        <Condition
-          style={{marginLeft: -30}}
-          onChange={this.onChange.bind(this)}
-          dataSource={this.condition}
-        />
-        <span
-          className='href'
-          style={{
-            cursor: 'pointer',
-            fontSize: 12,
-            float: 'right',
-            marginTop: '12px'
-          }}
-          onClick={() => {
-            this.payload.pageCurrent = 1
-            this.setState({
-              type: type === 'group' ? 'seller' : 'group'
-            })
-          }}
+        <Tabs
+          defaultActiveKey='group'
         >
-          切换到{this.state.type === 'seller' ? '小组' : '销售'}统计
-        </span>
-        <div>
-          {
-            type === 'group' ? (
-              <Group ref='group' payload={this.payload} />
-            ) : (
-              <Seller ref='seller' payload={this.payload} />
-            )
-          }
-        </div>
+          <TabPane
+            key='group'
+            tab='坐席监控'
+          >
+            <Condition
+              style={{marginLeft: -30}}
+              onChange={this.onChange.bind(this)}
+              dataSource={this.condition}
+            />
+            <Group ref='group' payload={this.payload} />
+          </TabPane>
+          <TabPane
+            key='seller'
+            tab='技能组监控'
+          >
+            <Condition
+              style={{marginLeft: -30}}
+              onChange={this.onChange.bind(this)}
+              dataSource={this.condition}
+            />
+            <Seller ref='seller' payload={this.payload} />
+          </TabPane>
+        </Tabs>
       </div>
     )
   }
