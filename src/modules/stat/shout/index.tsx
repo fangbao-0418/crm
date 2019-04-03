@@ -14,7 +14,7 @@ class Main extends React.Component<Props> {
     }
     return (
       <ContentBox
-        title={key === 'detail' ? '通话详情' : '呼叫统计'}
+        title={key === 'detail' ? '通话详情' : '坐席监控'}
       >
         {
           key === 'detail' ? <CallDetail /> : <Monitor />
