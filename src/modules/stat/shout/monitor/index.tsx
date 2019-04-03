@@ -88,18 +88,18 @@ class Main extends React.Component<{}, State> {
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Group ref='group' payload={this.payload} />
+            <Seller ref='seller' payload={this.payload} />
           </TabPane>
           <TabPane
             key='seller'
-            tab='技能组监控'
+            tab='小组监控'
           >
             <Condition
               style={{marginLeft: -30}}
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Seller ref='seller' payload={this.payload} />
+            <Group ref='group' payload={this.payload} />
           </TabPane>
         </Tabs>
       </div>
