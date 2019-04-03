@@ -8,34 +8,17 @@ const TabPane = Tabs.TabPane
 type Props = RouteComponentProps
 class Main extends React.Component<Props> {
   public render () {
-    let defaultActiveKey = APP.hasPermission('crm_data_call_monitors') ? 'monitor' : 'detail'
+    let key = APP.hasPermission('crm_data_call_monitors') ? 'monitor' : 'detail'
     if (this.props.location.pathname === '/shout/detail') {
-      defaultActiveKey = 'detail'
+      key = 'detail'
     }
     return (
       <ContentBox
-        title='呼叫统计'
+        title={key === 'detail' ? '通话详情' : '呼叫统计'}
       >
-        <Tabs
-          defaultActiveKey={defaultActiveKey}
-          animated={false}
-        >
-          {
-            APP.hasPermission('crm_data_call_monitors') &&
-            <TabPane
-              tab='坐席监控'
-              key='monitor'
-            >
-              <Monitor />
-            </TabPane>
-          }
-          {
-            APP.hasPermission('crm_data_call_detail') &&
-            <TabPane tab='通话详情' key='detail'>
-              <CallDetail />
-            </TabPane>
-          }
-        </Tabs>
+        {
+          key === 'detail' ? <CallDetail /> : <Monitor />
+        }
       </ContentBox>
     )
   }
