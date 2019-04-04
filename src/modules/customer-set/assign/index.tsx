@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, Select } from 'antd'
 import AddButton from '@/modules/common/content/AddButton'
 import Content from '@/modules/common/content'
 import Card from '@/components/Card'
@@ -8,22 +8,38 @@ import General from './General'
 import Special from './Special'
 import { connect } from 'react-redux'
 import { saveGeneralCapacity } from '../api'
-import { getSalesByCompany } from '@/modules/common/api'
+import { getSalesByCompany, companylist } from '@/modules/common/api'
 interface State {
   diabled: boolean
   sales: Array<{id?: string, name?: string, salespersonId?: string, salespersonName?: string}>
   salesPerson?: Array<{salespersonId: string, salespersonName: string}>
   selectRadio?: number
+  companies?: any[]
 }
 class Main extends React.Component<Customer.Props, State> {
   public state: State = {
     diabled: true,
     sales: [],
     salesPerson: [],
-    selectRadio: -1
+    selectRadio: -1,
+    companies: []
   }
+  public refs: {
+    general: any,
+    special: any
+  }
+  public special: any
+  public companyId: any = APP.user.companyId
   public componentWillMount () {
     this.getSalesList()
+    this.getCompanies()
+  }
+  public getCompanies () {
+    companylist().then((res) => {
+      this.setState({
+        companies: res
+      })
+    })
   }
   public getSalesList () {
     const companyId = APP.user.companyId
@@ -43,8 +59,29 @@ class Main extends React.Component<Customer.Props, State> {
     })
   }
   public render () {
+    const companies = this.state.companies
     return (
       <Content title='分客设置'>
+        {companies.length > 0 && <div>
+          <Select
+            style={{width: 150}}
+            defaultValue={APP.user.companyId}
+            placeholder='请选择机构'
+            onChange={(value) => {
+              this.companyId = value
+              this.refs.general.getSelectSaleList(value)
+              this.special.fetchData(value)
+            }}
+          >
+            {
+              companies.map((item) => {
+                return (
+                  <Select.Option key={item.companyId} >{item.companyName}</Select.Option>
+                )
+              })
+            }
+          </Select>
+        </div>}
         <Card
           title='一般资源分客策略'
           showFold
@@ -52,14 +89,12 @@ class Main extends React.Component<Customer.Props, State> {
             <Button
               type='primary'
               onClick={() => {
-                console.log(this.state.selectRadio, 'this.state.selectRadio')
                 if (!this.state.diabled) {
                   if (this.state.selectRadio === 3) { // 公海
-                    saveGeneralCapacity(1, []).then(() => {
+                    saveGeneralCapacity(1, [], this.companyId).then(() => {
                       APP.success('操作成功')
                     })
                   } else {
-                    console.log(this.state.salesPerson, 'this.state.salesPerson')
                     if (this.state.selectRadio === 2 && !this.state.salesPerson) { // 自定义的时候销售不能为空
                       APP.error('请选择销售')
                       return
@@ -68,7 +103,7 @@ class Main extends React.Component<Customer.Props, State> {
                       this.state.salesPerson = []
                     }
                     if (this.state.selectRadio === 1 || this.state.selectRadio === 2) {
-                      saveGeneralCapacity(0, this.state.salesPerson).then(() => {
+                      saveGeneralCapacity(0, this.state.salesPerson, this.companyId).then(() => {
                         APP.success('操作成功')
                       })
                     }
@@ -84,6 +119,7 @@ class Main extends React.Component<Customer.Props, State> {
           )}
         >
           <General
+            ref='general'
             disabled={this.state.diabled}
             sales={this.state.sales}
             onChange={(values) => {
@@ -121,6 +157,11 @@ class Main extends React.Component<Customer.Props, State> {
           )}
         >
           <Special
+            getInstance={(ins) => {
+              this.refs.special = ins
+              this.special = ins
+              console.log(this.refs, 'refs')
+            }}
             sales={this.state.sales}
             disabled={this.state.diabled}
           />

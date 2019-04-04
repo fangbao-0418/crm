@@ -221,9 +221,10 @@ class Main extends React.Component {
             style={{width: 200  }}
             options={options}
             onChange={(value) => {
-              console.log(value)
               this.params.pageCurrent = 1
-              this.params.cityCode = value[1]
+              if (value instanceof Array) {
+                this.params.cityCode = value[value.length - 1]
+              }
               this.fetchlist()
             }}
             placeholder='请选省市'

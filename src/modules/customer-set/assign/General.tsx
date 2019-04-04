@@ -21,13 +21,15 @@ class Main extends React.Component<Props, State> {
     value: 3,
     selectSales: []
   }
+  public companyId = APP.user.companyId
   public values: ValueProps = {}
   public componentWillMount () {
     this.getSelectSaleList()
   }
-  public getSelectSaleList () {
+  public getSelectSaleList (companyId = this.companyId) {
+    this.companyId = companyId
     const select: Array<{key: string, label: string}> = []
-    fetchGeneralList().then((res) => {
+    fetchGeneralList(companyId).then((res) => {
       if (String(res.isBusSea) === '1') { // 选中公海
         this.setState({
           value: 3

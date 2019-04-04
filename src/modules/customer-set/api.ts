@@ -18,21 +18,21 @@ export const saveAutoAssign = (payload: Customer.AutoAssignProps[]) => {
 export const saveStorageCapacity = (payload: Customer.CapacityProps[]) => {
   return http(`/crm-manage/v1/api/storage_capacity/entry`, 'POST', payload)
 }
-export const fetchSpicalList = () => {
-  return http(`/crm-manage/v1/api/diversion_customer/listSpecial`)
+/** 特殊资源列表查询 */
+export const fetchSpecialList = (agencyId: any = APP.user.companyId) => {
+  return http(`/crm-manage/v1/api/diversion_customer/listSpecial/${agencyId}`)
 }
-export const fetchGeneralList = () => {
-  return http(`/crm-manage/v1/api/diversion_customer/listGeneral`)
+/** 一般资源列表查询 */
+export const fetchGeneralList = (agencyId: any = APP.user.companyId) => {
+  return http(`/crm-manage/v1/api/diversion_customer/listGeneral/${agencyId}`)
 }
-export const saveGeneralCapacity = (type: number, payload: Array<{salespersonId: string, salespersonName: string}>) => {
-  return http(`/crm-manage/v1/api/diversion_customer/entryGeneral/${type}`, 'POST', payload)
+export const saveGeneralCapacity = (type: number, payload: Array<{salespersonId: string, salespersonName: string}>, agencyId?: any) => {
+  agencyId = agencyId !== undefined ? agencyId : APP.user.companyId
+  return http(`/crm-manage/v1/api/diversion_customer/entryGeneral/${type}/${agencyId}`, 'POST', payload)
 }
-export const saveSpecialCapacity = (payload: CustomerSet.SpecialAssetsProps) => {
-  return http(`/crm-manage/v1/api/diversion_customer/entrySpecial`, 'POST', payload)
+export const saveSpecialCapacity = (payload: CustomerSet.SpecialAssetsProps, agencyId: any = APP.user.companyId) => {
+  return http(`/crm-manage/v1/api/diversion_customer/entrySpecial/${agencyId}`, 'POST', payload)
 }
 export const deleteSpecialCapacity = (sourceId: string) => {
   return http(`/crm-manage/v1/api/diversion_customer/deleteSpecial?sourceId=${sourceId}`)
-}
-export const fetchSpecialList = () => {
-  return http(`/crm-manage/v1/api/diversion_customer/listSpecial`)
 }

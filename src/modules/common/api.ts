@@ -10,7 +10,7 @@ export const userLogin = (payload: {
     data: payload
   })
 }
-export const companylist = (token: string) => {
+export const companylist = (token: string = APP.token) => {
   return http(`/user/v1/api/user/company/list?token=${token}`)
 }
 export const userLogout = () => {

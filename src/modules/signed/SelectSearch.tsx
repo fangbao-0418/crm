@@ -134,7 +134,7 @@ class Main extends React.Component<Props, State> {
           allowClear={true}
           style={{width:'150px'}}
           className='mr5'
-          placeholder={this.props.type === '1' ? '请选择签约销售' : '请选择跟进人'}
+          placeholder={this.props.type === '1' ? '请选择合作销售' : '请选择跟进人'}
           showSearch
           labelInValue
           optionFilterProp='children'

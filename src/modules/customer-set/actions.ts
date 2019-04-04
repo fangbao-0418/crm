@@ -1,4 +1,5 @@
 import { fetchStorageCapacity, fetchAutoAssign, fetchSpecialList } from './api'
+import { any } from 'prop-types';
 export const changeCapacityAction = (cityCodeArr?: string, agencyName?: string) => {
   fetchStorageCapacity(cityCodeArr, agencyName).then((res) => {
     APP.dispatch({
@@ -20,8 +21,12 @@ export const changeAutoAssignAction = (cityCodeArr?: string) => {
   })
 }
 
-export const fetchSpecialListAction = (cb?: (res: CustomerSet.SpecialAssetsProps[]) => void) => {
-  fetchSpecialList().then((res: any[]) => {
+export const fetchSpecialListAction = (payload: {
+  companyId?: any,
+  cb?: (res: CustomerSet.SpecialAssetsProps[]) => void
+}) => {
+  const { companyId, cb } = payload
+  fetchSpecialList(companyId).then((res: any[]) => {
     res.map((item, index) => {
       item.key = index
       item.oldSourceId = item.sourceId

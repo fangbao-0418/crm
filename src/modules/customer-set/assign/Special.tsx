@@ -7,6 +7,7 @@ import { fetchSpecialListAction } from '../actions'
 import _ from 'lodash'
 const Option = Select.Option
 interface Props extends Customer.Props {
+  getInstance?: (ins: any) => void
   disabled?: boolean
   sales: Array<{salespersonId?: string, salespersonName?: string}>
 }
@@ -14,6 +15,7 @@ interface State {
   sourceList: {label: string, value: string, disabled?: boolean}[]
 }
 class Main extends React.Component<Props, State> {
+  public companyId = APP.user.companyId
   public sourceList: {label: string, value: string, disabled?: boolean}[] = APP.keys.EnumCustomerSource
   public state: State = {
     sourceList: APP.keys.EnumCustomerSource
@@ -163,15 +165,25 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public componentWillMount () {
-    fetchSpecialListAction((res) => {
-      const sourceList = this.sourceList.filter((item) => {
-        return res.findIndex((item2) => {
-          return String(item2.sourceId) === String(item.value)
-        }) === -1
-      })
-      this.setState({
-        sourceList
-      })
+    if (this.props.getInstance) {
+      this.props.getInstance(this)
+    }
+    this.fetchData()
+  }
+  public fetchData (companyId = this.companyId) {
+    this.companyId = companyId
+    fetchSpecialListAction({
+      companyId,
+      cb: (res) => {
+        const sourceList = this.sourceList.filter((item) => {
+          return res.findIndex((item2) => {
+            return String(item2.sourceId) === String(item.value)
+          }) === -1
+        })
+        this.setState({
+          sourceList
+        })
+      }
     })
   }
   public handleSourceList (value: {key: string, label: string}) {
@@ -201,7 +213,7 @@ class Main extends React.Component<Props, State> {
     const params = _.cloneDeep(spicalAssetsList[index])
     delete params.disabled
     delete params.key
-    saveSpecialCapacity(params).then(() => {
+    saveSpecialCapacity(params, this.companyId).then(() => {
       spicalAssetsList[index].oldSourceId = params.sourceId
       APP.dispatch({
         type: 'change customer data',
