@@ -62,7 +62,7 @@ class Main extends React.Component<Customer.Props, State> {
     const companies = this.state.companies
     return (
       <Content title='分客设置'>
-        {companies.length > 0 && <div>
+        {companies.length > 1 && <div>
           <Select
             style={{width: 150}}
             defaultValue={APP.user.companyId}
