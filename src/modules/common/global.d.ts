@@ -15,6 +15,7 @@ declare namespace Common {
     tqAreaCode: string
     /** tq类型 0: 无, 1: TQ云呼叫, 2: 易米云通, 3: 工作手机 */
     tqType?: 0 | 1 | 2 | 3
+    userType?: 'System' | 'DirectCompany' | 'Agent'
   }
   export type ActionPayload = Props
   export interface RegionProps {

@@ -8,21 +8,20 @@ import General from './General'
 import Special from './Special'
 import { connect } from 'react-redux'
 import { saveGeneralCapacity } from '../api'
-import { getSalesByCompany, companylist } from '@/modules/common/api'
+import { getSalesByCompany, fetchAllCompanyList } from '@/modules/common/api'
+import AllCompany from './AllCompany'
 interface State {
   diabled: boolean
   sales: Array<{id?: string, name?: string, salespersonId?: string, salespersonName?: string}>
   salesPerson?: Array<{salespersonId: string, salespersonName: string}>
   selectRadio?: number
-  companies?: any[]
 }
 class Main extends React.Component<Customer.Props, State> {
   public state: State = {
     diabled: true,
     sales: [],
     salesPerson: [],
-    selectRadio: -1,
-    companies: []
+    selectRadio: -1
   }
   public refs: {
     general: any,
@@ -32,14 +31,6 @@ class Main extends React.Component<Customer.Props, State> {
   public companyId: any = APP.user.companyId
   public componentWillMount () {
     this.getSalesList()
-    this.getCompanies()
-  }
-  public getCompanies () {
-    companylist().then((res) => {
-      this.setState({
-        companies: res
-      })
-    })
   }
   public getSalesList () {
     const companyId = APP.user.companyId
@@ -59,28 +50,17 @@ class Main extends React.Component<Customer.Props, State> {
     })
   }
   public render () {
-    const companies = this.state.companies
     return (
       <Content title='分客设置'>
-        {companies.length > 1 && <div>
-          <Select
-            style={{width: 150}}
-            defaultValue={APP.user.companyId}
-            placeholder='请选择机构'
+        {APP.user.userType === 'System' && <div>
+          <AllCompany
             onChange={(value) => {
-              this.companyId = value
-              this.refs.general.getSelectSaleList(value)
-              this.special.fetchData(value)
+              const key = value.key
+              this.companyId = key
+              this.refs.general.getSelectSaleList(key)
+              this.special.fetchData(key)
             }}
-          >
-            {
-              companies.map((item) => {
-                return (
-                  <Select.Option key={item.companyId} >{item.companyName}</Select.Option>
-                )
-              })
-            }
-          </Select>
+          />
         </div>}
         <Card
           title='一般资源分客策略'

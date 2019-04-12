@@ -135,3 +135,8 @@ export const bindCompany = (payload: {token: string, companyId: string}) => {
 export const getSales = (tab: 1 | 2 | 3 | 4 | 5) => {
   return http(`/crm-manage/v1/api/get-salesperson?tab=${tab}`)
 }
+/** 获取所有机构列表 */
+export const fetchAllCompanyList = () => {
+  return http(`/user/v1/api/company/list/all`)
+}
+
