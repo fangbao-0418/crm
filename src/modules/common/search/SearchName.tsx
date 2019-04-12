@@ -79,7 +79,7 @@ class Main extends React.Component<Props> {
               this.props.onKeyDown(e, _.cloneDeep(this.value))
             }
           }}
-          style={{ width: '50%' }}
+          style={{ width: '65%' }}
           placeholder={this.props.placeholder}
           suffix={
             <Icon

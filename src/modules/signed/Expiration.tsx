@@ -8,6 +8,7 @@ import Modal from 'pilipa/libs/modal'
 import moment from 'moment'
 import Provider from '@/components/Provider'
 import View from './detail'
+import Shrink from 'pilipa/libs/shrink'
 import { fetchList, toOther, fetchWorkers } from './api'
 type DetailProps = Signed.DetailProps
 const Option = Select.Option
@@ -233,6 +234,7 @@ class Main extends React.Component {
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
     this.paramsright.currentSalespersonId = values.currentSalespersonId || undefined
+    this.paramsright.lifeCycle = values.lifeCycle
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()
@@ -339,21 +341,23 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <div>
-        <div>
+        <Shrink
+          height={40}
+        >
           <Condition
             className='mb10'
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
           />
-          <APP.Icon
-            style={{float: 'right', marginTop: 10}}
-            onClick={this.handleSwitch.bind(this)}
-            type={this.state.extshow ? 'up' : 'down'}
-          />
-          <div style={this.state.extshow ? {display:'block', marginTop: -5, marginBottom: 18} : {display: 'none'}}>
-          <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            style={{marginLeft: 18}}
+            type='3'
+            onChange={(values) => {
+              this.handleSelectType(values)
+            }}
+          >
             <SearchName
-              style={{paddingTop: '5px'}}
+              style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginRight: 5}}
               options={[
                 { value: 'customerName', label: '客户名称'},
                 { value: 'contactPerson', label: '联系人'},
@@ -373,15 +377,8 @@ class Main extends React.Component {
                 this.handleSearchType(val)
               }}
             />
-          </div>
-          <SelectSearch
-            type='3'
-            onChange={(values) => {
-              this.handleSelectType(values)
-            }}
-          />
-          </div>
-        </div>
+          </SelectSearch>
+        </Shrink>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}

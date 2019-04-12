@@ -5,6 +5,7 @@ import { getSales } from '@/modules/common/api'
 const styles = require('./style')
 const Option = Select.Option
 interface Props {
+  style?: React.CSSProperties
   type?: string
   onChange?: (value: ValueProps) => void
 }
@@ -14,6 +15,8 @@ interface ValueProps {
   payTaxesNature?: string
   signSalespersonId?: string
   currentSalespersonId?: string
+  /** 客户状态 */
+  lifeCycle?: string
 }
 interface State {
   /** 机构列表 */
@@ -63,7 +66,8 @@ class Main extends React.Component<Props, State> {
   }
   public render () {
     return (
-      <div className={styles.select}>
+      <div className={styles.select} style={this.props.style}>
+        {this.props.children}
         <Select
           showSearch
           optionFilterProp='children'
@@ -161,6 +165,7 @@ class Main extends React.Component<Props, State> {
           <Select
             allowClear={true}
             style={{width:'150px'}}
+            className='mr5'
             placeholder='请选择跟进人'
             showSearch
             labelInValue
@@ -180,6 +185,27 @@ class Main extends React.Component<Props, State> {
             }
           </Select>
         }
+        <Select
+          allowClear={true}
+          style={{width:'150px'}}
+          placeholder='请选择客户状态'
+          onChange={(val: string) => {
+            this.values.lifeCycle = val
+            this.props.onChange(this.values)
+          }}
+        >
+          {
+            APP.keys.EnumCustomerLiftCycle.map((item) => {
+              return (
+                <Option
+                  key={item.value}
+                >
+                  {item.label}
+                </Option>
+              )
+            })
+          }
+        </Select>
       </div>
     )
   }

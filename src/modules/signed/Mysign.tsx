@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Button, Select, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import Modal from 'pilipa/libs/modal'
+import Shrink from 'pilipa/libs/shrink'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
@@ -230,7 +231,6 @@ class Main extends React.Component {
     })
   }
   public handleSearch (values: any) {
-    console.log(values, 'values11')
     this.paramsleft = {}
     let beginTime
     let endTime
@@ -283,6 +283,7 @@ class Main extends React.Component {
     this.paramsright.agencyId = values.agencyId || undefined
     this.paramsright.signSalespersonId = values.signSalespersonId || undefined
     this.paramsright.currentSalespersonId = values.currentSalespersonId || undefined
+    this.paramsright.lifeCycle = values.lifeCycle
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()
@@ -393,21 +394,23 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <div>
-        <div>
+        <Shrink
+          height={68}
+        >
           <Condition
             className='mb10'
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
           />
-          <APP.Icon
-            style={{float: 'right', marginTop: 10}}
-            onClick={this.handleSwitch.bind(this)}
-            type={this.state.extshow ? 'up' : 'down'}
-          />
-          <div style={this.state.extshow ? {display:'block', marginTop: -5, marginBottom: 18} : {display: 'none'}}>
-          <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            style={{marginLeft: 18}}
+            type={'1'}
+            onChange={(values) => {
+              this.handleSelectType(values)
+            }}
+          >
             <SearchName
-              style={{paddingTop: '5px'}}
+              style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginRight: 5}}
               options={[
                 { value: 'customerName', label: '客户名称' },
                 { value: 'contactPerson', label: '联系人' },
@@ -429,15 +432,8 @@ class Main extends React.Component {
                 this.handleSearchType(val)
               }}
             />
-          </div>
-          <SelectSearch
-            type={'1'}
-            onChange={(values) => {
-              this.handleSelectType(values)
-            }}
-          />
-          </div>
-        </div>
+          </SelectSearch>
+        </Shrink>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
