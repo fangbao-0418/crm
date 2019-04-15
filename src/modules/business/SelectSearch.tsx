@@ -32,6 +32,7 @@ class Main extends React.Component<Props, State> {
   public render () {
     return (
       <div className={styles.select}>
+        {this.props.children}
         <Select
           allowClear={true}
           style={{width:'150px'}}

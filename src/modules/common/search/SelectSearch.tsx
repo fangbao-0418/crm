@@ -41,6 +41,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div className={styles.select}>
+        {this.props.children}
         {
           this.props.type === 'signed' &&
           <Select

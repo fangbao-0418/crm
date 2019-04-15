@@ -9,6 +9,7 @@ import AddButton from '@/modules/common/content/AddButton'
 import ToOpenReason from './ToOpenReason'
 import Provider from '@/components/Provider'
 import Import from '@/modules/business/import'
+import Shrink from 'pilipa/libs/shrink'
 import { fetchRegion, getSalesByCompany } from '@/modules/common/api'
 import moment from 'moment'
 import TQAD from '@/modules/common/content/TQAD'
@@ -473,20 +474,21 @@ class Main extends React.Component<Business.Props> {
             </span>
           </div>
         }
-        <div className='mb12'>
+        <Shrink
+          height={95}
+          className='mb12'
+        >
           <Condition
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
           />
-          <div>
-            <APP.Icon
-              style={{float: 'right'}}
-              onClick={this.handleSwitch.bind(this)}
-              type={this.state.extshow ? 'up' : 'down'}
-            />
-          </div>
-          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            onChange={(values) => {
+              console.log(values, 'values')
+              this.handleSelectType(values)
+            }}
+          >
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
@@ -504,15 +506,9 @@ class Main extends React.Component<Business.Props> {
                   this.handleSearchType(val)
                 }}
               />
-            </div>
-            <SelectSearch
-              onChange={(values) => {
-                console.log(values, 'values')
-                this.handleSelectType(values)
-              }}
-            />
-          </div>
-        </div>
+              </div>
+          </SelectSearch>
+        </Shrink>
         { this.props.visibled &&
           <Tabs
             animated={false}

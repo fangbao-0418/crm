@@ -1,7 +1,8 @@
 import React from 'react'
-import { Table, Icon, Button, DatePicker, Select } from 'antd'
+import { Table, Button, DatePicker, Select } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
+import Shrink from 'pilipa/libs/shrink'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SelectSearch from './SelectSearch'
 import SearchName from '@/modules/common/search/SearchName'
@@ -402,20 +403,20 @@ class Main extends React.Component {
     }
     return (
       <ContentBox title='我的预约'>
-        <div className='mb12'>
+        <Shrink
+          className='mb12'
+          height={95}
+        >
           <Condition
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
           />
-          <div>
-            <APP.Icon
-              style={{float: 'right', marginTop: -8}}
-              onClick={this.handleSwitch.bind(this)}
-              type={this.state.extshow ? 'up' : 'down'}
-            />
-          </div>
-          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            onChange={(values) => {
+              this.handleSelectType(values)
+            }}
+          >
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
@@ -435,14 +436,8 @@ class Main extends React.Component {
                 }}
               />
             </div>
-            <SelectSearch
-              onChange={(values) => {
-                console.log(values, 'values')
-                this.handleSelectType(values)
-              }}
-            />
-          </div>
-        </div>
+          </SelectSearch>
+        </Shrink>
         <Table
           columns={this.columns}
           rowSelection={rowSelection}

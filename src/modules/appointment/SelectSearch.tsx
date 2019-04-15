@@ -30,7 +30,8 @@ class Main extends React.Component<Props, State> {
   }
   public render () {
     return (
-      <div style={{display: 'inline-block', marginLeft: -35}}>
+      <div>
+        {this.props.children}
         <Select
           allowClear={true}
           style={{width:'150px'}}

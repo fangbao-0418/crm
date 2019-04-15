@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Button, Tooltip, Icon, Select } from 'antd'
 import moment from 'moment'
 import { ColumnProps } from 'antd/lib/table'
+import Shrink from 'pilipa/libs/shrink'
 import Modal from 'pilipa/libs/modal'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import SelectSearch from '@/modules/common/search/SelectSearch'
@@ -709,7 +710,7 @@ class Main extends React.Component<Customer.Props, States> {
           </div>
         )}
       >
-        <div className='mb12'>
+        <Shrink className='mb12' height={70}>
           <Condition
             dataSource={this.state.data}
             onChange={this.handleSearch.bind(this)}
@@ -742,15 +743,12 @@ class Main extends React.Component<Customer.Props, States> {
               }
             </Select>
           </div>
-          <div>
-            <APP.Icon
-              style={{float: 'right', marginTop: -20}}
-              onClick={this.handleSwitch.bind(this)}
-              type={this.state.extshow ? 'up' : 'down'}
-            />
-          </div>
-          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            onChange={(values) => {
+              this.handleSelectType(values)
+            }}
+          >
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 15px'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
@@ -769,14 +767,8 @@ class Main extends React.Component<Customer.Props, States> {
                 }}
               />
             </div>
-            <SelectSearch
-              onChange={(values) => {
-                console.log(values, 'values')
-                this.handleSelectType(values)
-              }}
-            />
-          </div>
-        </div>
+          </SelectSearch>
+        </Shrink>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}

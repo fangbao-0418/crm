@@ -4,6 +4,7 @@ import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import moment from 'moment'
 import _ from 'lodash'
+import Shrink from 'pilipa/libs/shrink'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import { getReadyCustomerList, getExportDistributionDataURL } from './api'
 import { deleteCustomer } from '@/modules/customer/api'
@@ -403,20 +404,17 @@ export default class Main extends React.Component<null, States> {
           />
         )}
       >
-        <div className='mb12'>
+        <Shrink height={95} className='mb12'>
           <Condition
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
           />
-          <div>
-            <APP.Icon
-              style={{float: 'right', marginTop: -20}}
-              onClick={this.handleSwitch.bind(this)}
-              type={this.state.extshow ? 'up' : 'down'}
-            />
-          </div>
-          <div style={this.state.extshow ? {display:'block'} : {display: 'none'}}>
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
+          <SelectSearch
+            onChange={(values) => {
+              this.handleSelectType(values)
+            }}
+          >
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
@@ -435,14 +433,8 @@ export default class Main extends React.Component<null, States> {
                 }}
               />
             </div>
-            <SelectSearch
-              onChange={(values) => {
-                console.log(values, 'values')
-                this.handleSelectType(values)
-              }}
-            />
-          </div>
-        </div>
+          </SelectSearch>
+        </Shrink>
         <Table
           columns={this.columns}
           dataSource={this.state.dataSource}
