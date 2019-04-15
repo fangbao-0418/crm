@@ -3,10 +3,9 @@ import Profile from '@/modules/common/company-detail/Profile'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Record from '@/modules/customer/Record'
 import Card from '@/components/Card'
-import Tags from '@/components/tags'
 import _ from 'lodash'
 import moment from 'moment'
-import { Button, Input, DatePicker, Icon } from 'antd'
+import { Button, Icon } from 'antd'
 import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
