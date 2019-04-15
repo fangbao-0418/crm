@@ -475,8 +475,7 @@ class Main extends React.Component<Business.Props> {
           </div>
         }
         <Shrink
-          height={95}
-          className='mb12'
+          height={100}
         >
           <Condition
             dataSource={this.data}

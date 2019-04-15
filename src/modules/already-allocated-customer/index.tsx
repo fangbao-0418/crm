@@ -404,7 +404,7 @@ export default class Main extends React.Component<null, States> {
           />
         )}
       >
-        <Shrink height={95} className='mb12'>
+        <Shrink height={100} className='mb12'>
           <Condition
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}

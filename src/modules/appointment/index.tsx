@@ -405,7 +405,7 @@ class Main extends React.Component {
       <ContentBox title='我的预约'>
         <Shrink
           className='mb12'
-          height={95}
+          height={100}
         >
           <Condition
             dataSource={this.data}

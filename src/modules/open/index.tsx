@@ -452,7 +452,7 @@ class Main extends React.Component {
     const { pagination } = this.state
     return (
       <ContentBox title='公海管理'>
-        <Shrink height={95} className='mb12'>
+        <Shrink height={100} className='mb12'>
           <Condition
             dataSource={this.data}
             onChange={this.handleSearch.bind(this)}
