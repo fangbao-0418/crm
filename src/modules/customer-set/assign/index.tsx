@@ -55,7 +55,7 @@ class Main extends React.Component<Customer.Props, State> {
         {APP.user.userType === 'System' && <div>
           <AllCompany
             onChange={(value) => {
-              const key = value.key
+              const key = value
               this.companyId = key
               this.refs.general.getSelectSaleList(key)
               this.special.fetchData(key)
