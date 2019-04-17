@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Tooltip, Icon } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Shrink from 'pilipa/libs/shrink'
@@ -159,6 +159,10 @@ class Main extends React.Component {
     render: (val) => {
       return (val ? (moment(val).format('YYYY-MM-DD')) : '')
     }
+  }, {
+    title: '释放原因',
+    width: 180,
+    dataIndex: 'remark'
   }]
   public componentWillMount () {
     this.fetchList()
@@ -237,16 +241,16 @@ class Main extends React.Component {
   public handleSelectType (values: any) {
     this.params.payTaxesNature = values.payTaxesNature || undefined
     this.params.customerSource = values.customerSource || undefined
+    this.params.busSeaMemo = values.busSeaMemo || undefined
     this.params.pageCurrent = 1
     this.fetchList()
   }
   public handleSearchType (values: any) {
-    console.log(values, 'values')
     this.params.customerName = undefined
     this.params.contactPerson = undefined
     // this.params.contactPhone = undefined
     this.params.lastReleaseSalesperson = undefined
-    this.params.busSeaMemo = undefined
+    // this.params.busSeaMemo = undefined
     this.params[values.key] = values.value || undefined
     this.params.pageCurrent = 1
     this.fetchList()
@@ -458,19 +462,20 @@ class Main extends React.Component {
             onChange={this.handleSearch.bind(this)}
           />
             <SelectSearch
+              type='open'
               onChange={(values) => {
                 this.handleSelectType(values)
               }}
             >
-              <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
+              <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 20}}>
                 <SearchName
                   style={{paddingTop: '5px'}}
                   options={[
                     { value: 'customerName', label: '客户名称'},
                     { value: 'contactPerson', label: '联系人'},
                     { value: 'contactPhone', label: '联系电话'},
-                    { value: 'lastReleaseSalesperson', label: '释放销售'},
-                    { value: 'busSeaMemo', label: '释放原因'}
+                    { value: 'lastReleaseSalesperson', label: '释放销售'}
+                    // { value: 'busSeaMemo', label: '释放原因'}
                   ]}
                   placeholder={''}
                   onKeyDown={(e, val) => {

@@ -4,7 +4,9 @@ import * as fn from './fn'
 import jsmc from '@/utils/jsmc.min'
 import { cookie } from 'pilipa-terrace'
 import Icon from '@/components/icon'
+import * as constants from './constants'
 Object.assign(APP, {
+  constants,
   isConfigTQ: false,
   user: undefined,
   env: process.env.NODE_ENV,

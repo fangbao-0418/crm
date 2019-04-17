@@ -4,13 +4,15 @@ import { getFirms } from '@/modules/stat/api'
 const styles = require('./style')
 const Option = Select.Option
 interface Props {
-  type?: 'signed'
+  type?: 'signed' | 'open'
   onChange?: (value: ValueProps) => void
 }
 interface ValueProps {
   agencyId?: string
   customerSource?: string
   payTaxesNature?: string
+  /** 释放原因 */
+  busSeaMemo?: string
 }
 interface State {
   /** 机构列表 */
@@ -88,6 +90,7 @@ class Main extends React.Component<Props> {
         </Select>
         <Select
           allowClear={true}
+          className='mr5'
           style={{width:'150px'}}
           placeholder='请选择纳税类别'
           onChange={(val: string) => {
@@ -107,6 +110,26 @@ class Main extends React.Component<Props> {
             })
           }
         </Select>
+        {
+          this.props.type === 'open' &&
+          <Select
+            allowClear={true}
+            style={{width: 150}}
+            placeholder='请选择释放原因'
+            onChange={(value: string) => {
+              this.values.busSeaMemo = value
+              this.props.onChange(this.values)
+            }}
+          >
+            {
+              APP.constants.releaseCause.map((item, index) => {
+                return (
+                  <Option title={item.label} key={`busSeaMemo-${index}`} value={item.label}>{item.label}</Option>
+                )
+              })
+            }
+          </Select>
+        }
       </div>
     )
   }

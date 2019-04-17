@@ -61,6 +61,10 @@ declare namespace APP {
     round: (num: number, float?: number) => number
     downFile: (url: string, type?: string) => void
   }
+  interface ConstantsProps {
+    /** 释放原因 */
+    releaseCause: {label: string, value: string}[]
+  }
   export const Icon: React.ComponentType<Icon.Props>
   export const fn: GlobalFnProps
   export let history: CustomHistory
@@ -77,4 +81,5 @@ declare namespace APP {
   export const hasPermission: (code?: string) => boolean
   export const jsmc: any
   export let isConfigTQ: boolean
+  export const constants: ConstantsProps
 }
