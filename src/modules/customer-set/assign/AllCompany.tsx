@@ -2,6 +2,7 @@ import React from 'react'
 import { fetchAllCompanyList } from '@/modules/common/api'
 import { Select } from 'antd'
 interface Props {
+  className?: string
   onChange?: (value: any) => void
 }
 interface State {
@@ -27,6 +28,7 @@ class Main extends React.Component<Props, State> {
     const { companies } = this.state
     return (
       <Select
+        className={this.props.className}
         showSearch
         style={{ width: 200 }}
         placeholder='请选择机构'
@@ -47,7 +49,7 @@ class Main extends React.Component<Props, State> {
         {
           companies.map((item) => {
             return (
-              <Select.Option key={`${item.id}`} value={String(item.id)}>{item.name}</Select.Option>
+              <Select.Option title={item.name} key={`${item.id}`} value={String(item.id)}>{item.name}</Select.Option>
             )
           })
         }

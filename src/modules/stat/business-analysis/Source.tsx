@@ -1,10 +1,6 @@
 import React from 'react'
-interface Props {
-  dataSource: {name: string, value: number}[]
-  title: string
-  seriesName: string
-}
-class Main extends React.Component<Props> {
+
+class Main extends React.Component<any> {
   public chart: echarts.ECharts
   public componentDidMount () {
     const dom: any = this.refs.pie
@@ -20,11 +16,17 @@ class Main extends React.Component<Props> {
     this.renderChart()
   }
   public renderChart () {
-    const data = this.props.dataSource
+    const pi = this.props.pi
+    const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
+      return {
+        name: item.levelName,
+        value: item.levelNums
+      }
+    })
     const option = {
       title: {
-        left: '50%',
-        text: this.props.title,
+        left: '100',
+        text: '客户来源分布',
         textStyle: {
           fontSize: 14,
           fontWeight: 'normal',
@@ -38,19 +40,26 @@ class Main extends React.Component<Props> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        y: 'center',
-        type: 'scroll'
+        y: 'center'
       },
       series: [
         {
-          name: this.props.seriesName,
+          name: '空置天数',
           type: 'pie',
           radius: ['50%', '70%'],
+          center: ['50%', '60%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
               show: false,
               position: 'center'
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                fontSize: '14',
+                fontWeight: 'bold'
+              }
             }
           },
           labelLine: {

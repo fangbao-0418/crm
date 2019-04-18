@@ -49,8 +49,9 @@ export const getSalesRank = (payload: {
 }
 /** 商机仪表盘 */
 export const getBusiness = (payload: {
-  agencyId: string
-  salespersonId: string
+  agencyId?: string
+  salespersonId?: string
+  customerSource?: number
 }) => {
   return http(`/crm-manage/v1/api/report/customer`, 'GET', payload)
 }

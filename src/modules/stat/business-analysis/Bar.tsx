@@ -1,6 +1,8 @@
 import React from 'react'
-
-class Main extends React.Component<any> {
+interface Props {
+  dataSource: any[]
+}
+class Main extends React.Component<Props> {
   public chart: echarts.ECharts
   public componentDidMount () {
     const dom: any = this.refs.bar
@@ -15,16 +17,38 @@ class Main extends React.Component<any> {
   public componentDidUpdate () {
     this.renderChart()
   }
+  public computedData (data: number[] = []): {[k: number]: number[]} {
+    const res: {[k: number]: number[]} = {0: [], 1: []}
+    if (data.length === 0) {
+      return res
+    }
+    const sum = data.reduce((a, b) => a + b)
+    const arr = [0]
+    /** 原始数据 */
+    res[0] = [sum].concat(data)
+    res[0].reduce((a, b, index) => {
+      console.log(index, 'index')
+      arr.push(a - b)
+      return a - b
+    })
+    /** 辅助数据 */
+    res[1] = arr
+    console.log(res, 'res')
+    return res
+  }
   public renderChart () {
-    const char = this.props.char
+    const char = this.props.dataSource
     let max = 0
     char.map((item: any) => {
       if (max < item.statusNums) {
         max = item.statusNums
       }
     })
+    const data = char.map((item: any) => {
+      return item.statusNums
+    })
     max = Math.pow(10, (String(max).length))
-    console.log(max, ';max')
+    const computedData = this.computedData(data)
     const option: echarts.EChartOption = {
       color: ['#39A0FF'],
       title: {
@@ -46,23 +70,24 @@ class Main extends React.Component<any> {
         }
       },
       grid: {
-        left: '3%',
-        right: '4%',
+        left: '1%',
+        right: '1%',
         bottom: '3%',
         containLabel: true
       },
       xAxis: {
         type: 'category',
         boundaryGap: true,
-        data: char.map((item: any) => {
+        data: char.length ? ['总数'].concat(char.map((item: any) => {
           return item.statusName
-        }),
+        })) : [],
         axisLine:{
           lineStyle:{
             color:'#F2F2F2'
           }
         },
         axisLabel: {
+          interval: 0,
           color: '#595959'
         },
         axisTick: {
@@ -73,7 +98,7 @@ class Main extends React.Component<any> {
         logBase: 10,
         max,
         min: 1,
-        type: 'log',
+        type: 'value',
         splitLine: {
           show: true,
           lineStyle: {
@@ -95,12 +120,36 @@ class Main extends React.Component<any> {
         }
       },
       series: [{
-        name: '客户数量',
+        tooltip: {
+          show: false
+        },
+        name: '辅助',
         type: 'bar',
-        barWidth: '40',
-        data: char.map((item: any) => {
-          return item.statusNums
-        })
+        barWidth: '20',
+        stack: '总量',
+        itemStyle: {
+          normal: {
+            barBorderColor: '#FFFFFF',
+            color: '#FFFFFF'
+          },
+          emphasis: {
+            barBorderColor: '#FFFFFF',
+            color: '#FFFFFF'
+          }
+        },
+        data: computedData[1]
+      }, {
+        name: '客户数量',
+        stack: '总量',
+        type: 'bar',
+        barWidth: '20',
+        label: {
+          normal: {
+            show: true,
+            position: 'inside'
+          }
+        },
+        data: computedData[0]
       }]
     }
     if (option && typeof option === 'object') {
@@ -110,7 +159,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='bar' style={{height: 300,  width: 600, marginBottom:'10px'}}></div>
+        <div ref='bar' style={{height: 300,  width: '100%', marginBottom:'10px'}}></div>
       </div>
     )
   }
