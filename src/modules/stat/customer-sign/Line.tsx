@@ -11,9 +11,10 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const char = this.props.char
+    const totalByNew = this.props.totalByNew
     const option: echarts.EChartOption = {
       title: {
+        top: '-5',
         text: '新增客户趋势图',
         textStyle: {
           fontSize: 14,
@@ -33,16 +34,16 @@ class Main extends React.Component<any> {
       },
       legend: {
         data: ['新增客户'],
-        top: 25
+        top: '5%'
       },
       grid: {
-        left: '5%',
-        right: '5%'
+        left: '8%',
+        y2: '15%'
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: char.map((item: any) => {
+        data: totalByNew.map((item: any) => {
           return item.name
         }),
         axisLine: {
@@ -74,7 +75,7 @@ class Main extends React.Component<any> {
       series: [{
         name: '新增客户',
         type: 'line',
-        data: char.map((item: any) => {
+        data: totalByNew.map((item: any) => {
           return item.value
         }),
         itemStyle: {
@@ -107,7 +108,7 @@ class Main extends React.Component<any> {
   public render () {
     return (
       <div>
-        <div ref='line' style={{height: 300, marginTop: 20}}></div>
+        <div ref='line' style={{height: 300}}></div>
       </div>
     )
   }

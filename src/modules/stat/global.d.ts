@@ -211,12 +211,14 @@ declare namespace CrmStat {
   export interface CustomerPoolReportDetails {
     /** 来源 */
     customerSource: string
+    /** 总客资 */
+    customerNums: number
     /** 新增数 */
     newCustomerNums: number
-    /** 未跟进数 */
-    noTrackNums: number
-    /** 跟进数 */
-    trackingNums:number
+    /** 无意向数 */
+    noIntentionNums: number
+    /** 删除数 */
+    deleteNums:number
     /** 意向数 */
     intentionNums: number
     /** 签约数 */
@@ -228,9 +230,11 @@ declare namespace CrmStat {
   }
   export interface TotalByCityDetails {
     key: number
-    /** 城市排名 */
+    /** 机构 */
     name: string
-    /** 新增客户 */
+    /** 新增客户数 */
     value: number
+    /** 省份 */
+    provinceName: string
   }
 }

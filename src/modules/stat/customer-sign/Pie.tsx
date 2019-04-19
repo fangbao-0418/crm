@@ -16,9 +16,9 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const pi = this.props.pi
+    const totalBySource = this.props.totalBySource
     const figure: any[] = []
-    const data = pi.length > 0 && pi.map((item: any, index: any) => {
+    const data = totalBySource.length > 0 && totalBySource.map((item: any, index: any) => {
       if (index < 8) {
         figure.push(item.name)
       }
@@ -29,7 +29,7 @@ class Main extends React.Component<any> {
     })
     const option: echarts.EChartOption = {
       title: {
-        left: '20',
+        left: '20%',
         top: '-5',
         text: '客户来源分布',
         textStyle: {
