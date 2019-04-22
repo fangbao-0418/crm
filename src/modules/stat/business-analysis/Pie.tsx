@@ -23,7 +23,7 @@ class Main extends React.Component<Props> {
     const data = this.props.dataSource
     const option = {
       title: {
-        left: '50%',
+        left: 'center',
         text: this.props.title,
         textStyle: {
           fontSize: 14,
@@ -74,7 +74,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div>
-        <div ref='pie' style={{height: '250px', width: 450, marginBottom: 10, marginLeft: -100}}></div>
+        <div ref='pie' style={{height: '250px'}}></div>
       </div>
     )
   }

@@ -158,16 +158,27 @@ class Main extends React.Component<{}, State> {
       })
     })
   }
-
+  public handleReportFreeDays (data: {statusName: string}[] = []) {
+    const index = data.findIndex((item) => item.statusName === '未知')
+    console.log(index, 'index')
+    if (index !== -1) {
+      const unknow = data[index]
+      const last = data[data.length - 1]
+      data[data.length - 1] = unknow
+      data[index] = last
+    }
+    return data
+  }
   public fetchList () {
     getBusiness(this.payload).then((res: any) => {
       const salesDetails = res.data.salesDetails
       res.data.totalSalesDetails.salesperson = '合计'
       salesDetails.push(res.data.totalSalesDetails)
+      const reportPhoneStatuses = this.handleReportFreeDays(res.data.reportPhoneStatuses)
       this.setState({
         salesDetails: salesDetails.map((v: any, i: any) => {v.key = i + 1; return v}),
         reportFreeDays: this.handleData(res.data.reportFreeDays, {name: 'levelName', value: 'levelNums'}),
-        reportPhoneStatuses: res.data.reportPhoneStatuses,
+        reportPhoneStatuses,
         totalBySource: res.data.totalBySource
       })
     })

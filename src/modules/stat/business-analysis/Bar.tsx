@@ -51,6 +51,7 @@ class Main extends React.Component<Props> {
     const computedData = this.computedData(data)
     const option: echarts.EChartOption = {
       title: {
+        left: 'center',
         text: '商机客户电话状态分布',
         textStyle: {
           fontSize: 14,
@@ -69,7 +70,7 @@ class Main extends React.Component<Props> {
         }
       },
       grid: {
-        left: '1%',
+        left: -10,
         right: '1%',
         bottom: '3%',
         containLabel: true
@@ -94,29 +95,8 @@ class Main extends React.Component<Props> {
         }
       },
       yAxis: {
-        logBase: 10,
-        max,
-        // min: 1,
-        type: 'value',
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: '#F2F2F2',
-            width: 1,
-            type: 'solid'
-          }
-        },
-        axisLine:{
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          textStyle: {
-            color: '#2f4554'
-          }
-        }
+        show: false,
+        type: 'value'
       },
       series: [{
         tooltip: {
@@ -163,7 +143,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div>
-        <div ref='bar' style={{height: 300,  width: '100%', marginBottom:'10px'}}></div>
+        <div ref='bar' style={{height: 300,  width: '100%'}}></div>
       </div>
     )
   }
