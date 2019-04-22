@@ -13,15 +13,6 @@ class Main extends React.Component<any> {
   public renderChart () {
     const totalByNew = this.props.totalByNew
     const option: echarts.EChartOption = {
-      title: {
-        top: '-5',
-        text: '新增客户趋势图',
-        textStyle: {
-          fontSize: 14,
-          fontWeight: 'normal',
-          color: '#333333'
-        }
-      },
       tooltip: {
         show: true,
         trigger: 'axis',
