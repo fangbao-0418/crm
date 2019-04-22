@@ -56,7 +56,7 @@ class Main extends React.Component<Props> {
         label: {show: false},
         itemStyle: {
           normal: {
-            borderColor: '#ccc'
+            borderColor: '#fff'
           }
         },
         regions: [
