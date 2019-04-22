@@ -104,14 +104,14 @@ class Main extends React.Component {
       title: '记账客户',
       dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return record.noTrackNums
+        return record.intentionNums
       }
     },
     {
       title: '一般人占比',
       dataIndex: 'customerPoolReportDetails.noTrackNums',
       render: (text, record) => {
-        return record.trackingNums
+        return record.intentionNums
       }
     },
     {

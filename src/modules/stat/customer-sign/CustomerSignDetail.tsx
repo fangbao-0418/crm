@@ -8,6 +8,7 @@ import Condition, { ConditionOptionProps } from '@/modules/common/search/Conditi
 import CityRank from './CityRank'
 import Pie from './Pie'
 import Line from './Line'
+import AreaDistribution from './AreaDistribution'
 import _ from 'lodash'
 import AddButton from '@/modules/common/content/AddButton'
 
@@ -32,11 +33,11 @@ interface State {
   /** 销售人员初始值 */
   sal: string
   /** 新增客户统计 */
-  char: any
+  totalByNew: any
   /** 来源统计 */
-  pi: any
+  totalBySource: any
   /** 按城市统计 */
-  cityData: CrmStat.TotalByCityDetails[]
+  totalByCity: CrmStat.TotalByCityDetails[]
 }
 class Main extends React.Component {
 
@@ -57,9 +58,9 @@ class Main extends React.Component {
     sources: [],
     organ: '',
     sal: '',
-    char: [],
-    pi: [],
-    cityData: []
+    totalByNew: [],
+    totalBySource: [],
+    totalByCity: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -93,50 +94,43 @@ class Main extends React.Component {
       }
     },
     {
-      title: '新增客户',
+      title: '总客户',
+      dataIndex: 'customerPoolReportDetails.customerNums',
+      render: (text, record) => {
+        return record.customerNums
+      }
+    },
+    {
+      title: '已删除',
+      dataIndex: 'customerPoolReportDetails.deleteNums',
+      render: (text, record) => {
+        return record.deleteNums
+      }
+    },
+    {
+      title: '新客资',
       dataIndex: 'customerPoolReportDetails.newCustomerNums',
       render: (text, record) => {
         return record.newCustomerNums
       }
     },
     {
-      title: (
-        <span>
-          未跟进
-          <Tooltip placement='top' title='还没有跟进记录的新客'>
-            <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
-          </Tooltip>
-        </span>
-      ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
+      title: '无意向客户',
+      dataIndex: 'customerPoolReportDetails.noIntentionNums',
       render: (text, record) => {
-        return record.noTrackNums
+        return record.noIntentionNums
       }
     },
     {
       title: (
         <span>
-          跟进中
-          <Tooltip placement='top' title='有记录写销售在跟进的客户(未签约)'>
-            <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
-          </Tooltip>
-        </span>
-      ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
-      render: (text, record) => {
-        return record.trackingNums
-      }
-    },
-    {
-      title: (
-        <span>
-          意向中
+          意向客户
           <Tooltip placement='top' title='截止到目前意向度大于0的客户(未签约)'>
             <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
       ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
+      dataIndex: 'customerPoolReportDetails.intentionNums',
       render: (text, record) => {
         return record.intentionNums
       }
@@ -144,13 +138,13 @@ class Main extends React.Component {
     {
       title: (
         <span>
-          已签约
+          准签约客户
           <Tooltip placement='top' title='截止到目前已经成为签约客户的客户数'>
             <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
       ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
+      dataIndex: 'customerPoolReportDetails.signNums',
       render: (text, record) => {
         return record.signNums
       }
@@ -158,13 +152,13 @@ class Main extends React.Component {
     {
       title: (
         <span>
-          转化率‰
-          <Tooltip placement='top' title='签约/总新增客户(单位:千分之)'>
+          转化率
+          <Tooltip placement='top' title='签约/总新增客户(单位:百分之)'>
             <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
           </Tooltip>
         </span>
       ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
+      dataIndex: 'customerPoolReportDetails.signRate',
       render: (text, record) => {
         return record.signRate
       }
@@ -178,7 +172,7 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
-      dataIndex: 'customerPoolReportDetails.noTrackNums',
+      dataIndex: 'customerPoolReportDetails.signCycle',
       render: (text, record) => {
         return record.signCycle
       }
@@ -208,17 +202,17 @@ class Main extends React.Component {
       })
       const sal = ''
       const dataSource = res.length > 0 ? this.state.dataSource : []
-      const cityData = res.length > 0 ? this.state.cityData : []
+      const totalByCity = res.length > 0 ? this.state.totalByCity : []
       if (res.length === 0) {
         this.setState({
-          char: [],
-          pi: [],
+          totalByNew: [],
+          totalBySource: [],
           plat: []
         })
       }
       this.setState({
         dataSource,
-        cityData,
+        totalByCity,
         sallers: res,
         sal
       }, () => {
@@ -241,9 +235,9 @@ class Main extends React.Component {
       }
       this.setState({
         dataSource: a,
-        char: res.data.totalByNew,
-        pi: res.data.totalBySource,
-        cityData: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
+        totalByNew: res.data.totalByNew,
+        totalBySource: res.data.totalBySource,
+        totalByCity: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
       })
     })
   }
@@ -297,6 +291,29 @@ class Main extends React.Component {
     })
   }
 
+  public exportCity (exports: any) {
+    const accessToken: any = localStorage.getItem('token')
+    fetch(
+      `/sys/crm-manage/v1/api/report/customer-pool/export-city?totalBeginDate=${exports.totalBeginDate}&totalEndDate=${exports.totalEndDate}&agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}&customerSource=${exports.customerSource}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'token': accessToken,
+          'from': '4'
+        }
+      }
+    )
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '客户来源明细表.xlsx'
+      a.href = url
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    })
+  }
   public render () {
     return (
       <div>
@@ -383,15 +400,13 @@ class Main extends React.Component {
           </Select>
         </div>
         <Row>
-          <Col span={12} >
-            <div style={{fontSize: 14, color: '#333333', marginBottom: 10}}>机构排名</div>
-            <CityRank cityData={this.state.cityData}/>
+          <Col span={14}>
+            <Line totalByNew={this.state.totalByNew}/>
           </Col>
-          <Col span={8} offset={2}>
-            <Pie pi={this.state.pi}/>
+          <Col span={8}>
+            <Pie totalBySource={this.state.totalBySource}/>
           </Col>
         </Row>
-        <Line char={this.state.char}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>客户来源明细表</span>
           <AddButton
@@ -409,6 +424,26 @@ class Main extends React.Component {
           dataSource={this.state.dataSource}
           pagination={false}
         />
+        <Row style={{marginTop: 15}}>
+          <Col span={6}>
+            <div style={{marginBottom: 15}}>
+              <span style={{fontSize: 14, color: '#333333'}}>机构排名</span>
+              <AddButton
+                style={{float: 'right'}}
+                icon={<APP.Icon type='export' />}
+                title='导出'
+                onClick={() => {
+                  this.exportCity(this.payload)
+                }}
+              />
+            </div>
+            <CityRank totalByCity={this.state.totalByCity}/>
+          </Col>
+          <Col span={16} offset={1}>
+            <span style={{fontSize: 14, color: '#333333'}}>客户地域分布（省份）</span>
+            <AreaDistribution style={{height: '400px'}} totalByCity={this.state.totalByCity}/>
+          </Col>
+        </Row>
       </div>
     )
   }
