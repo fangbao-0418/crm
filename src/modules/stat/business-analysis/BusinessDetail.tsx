@@ -184,6 +184,9 @@ class Main extends React.Component<{}, State> {
     })
   }
   public export (exports: any) {
+    if (!this.payload.salespersonId) {
+      this.payload.salespersonId = ''
+    }
     fetch(
       `/sys/crm-manage/v1/api/report/customer/export?agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}`,
       {
