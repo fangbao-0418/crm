@@ -88,7 +88,6 @@ class Main extends React.Component<{}, State> {
       title: '销售',
       dataIndex: 'salesperson',
       width: 130,
-      align: 'left',
       render: (text, record, index) => {
         return (
           <span>
@@ -100,27 +99,39 @@ class Main extends React.Component<{}, State> {
     },
     {
       title: '总客户',
-      dataIndex: 'customerNums'
+      dataIndex: 'customerNums',
+      width: 200,
+      align: 'center'
     },
     {
       title: '已删除',
-      dataIndex: 'deletedNums'
+      dataIndex: 'deletedNums',
+      width: 200,
+      align: 'center'
     },
     {
       title: '新客资',
-      dataIndex: 'newCustomerNums'
+      dataIndex: 'newCustomerNums',
+      width: 200,
+      align: 'center'
     },
     {
       title: '无意向客户',
-      dataIndex: 'noIntentionNums'
+      dataIndex: 'noIntentionNums',
+      width: 200,
+      align: 'center'
     },
     {
       title: '意向客户',
-      dataIndex: 'intentionNums'
+      dataIndex: 'intentionNums',
+      width: 200,
+      align: 'center'
     },
     {
       title: '准签约客户',
-      dataIndex: 'signCustomerNums'
+      dataIndex: 'signCustomerNums',
+      width: 200,
+      align: 'center'
     }
   ]
   public componentWillMount () {

@@ -401,9 +401,11 @@ class Main extends React.Component {
         </div>
         <Row>
           <Col span={14}>
+            <span style={{fontSize: 14, color: '#333333'}}>新增客户趋势图</span>
             <Line totalByNew={this.state.totalByNew}/>
           </Col>
           <Col span={8}>
+            <span style={{fontSize: 14, color: '#333333'}}>客户来源分布</span>
             <Pie totalBySource={this.state.totalBySource}/>
           </Col>
         </Row>

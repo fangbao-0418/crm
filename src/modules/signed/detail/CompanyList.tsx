@@ -25,20 +25,26 @@ export default class extends React.Component<Props> {
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '公司名称',
-    width: 300,
+    width: 450,
     dataIndex: 'customerName'
   }, {
     title: '所属机构',
-    dataIndex: 'agencyName'
+    dataIndex: 'agencyName',
+    width: 350,
+    align: 'center'
   }, {
     title: '签单状态',
     dataIndex: 'status',
+    width: 350,
+    align: 'center',
     render: (val) => {
       return (APP.dictionary[`EnumCustomerStatus-${val}`])
     }
   }, {
     title: '开始账期',
     dataIndex: 'serveTimeBegin',
+    width: 350,
+    align: 'center',
     render: (val) => {
       return (val ? moment(val).format('YYYY-MM-DD') : '')
     }
