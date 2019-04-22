@@ -50,7 +50,6 @@ class Main extends React.Component<Props> {
     max = Math.pow(10, (String(max).length))
     const computedData = this.computedData(data)
     const option: echarts.EChartOption = {
-      color: ['#39A0FF'],
       title: {
         text: '商机客户电话状态分布',
         textStyle: {
@@ -143,10 +142,15 @@ class Main extends React.Component<Props> {
         stack: '总量',
         type: 'bar',
         barWidth: '20',
+        itemStyle: {
+          color: '#39A0FF',
+          borderWidth: 0.5,
+          borderColor: '#39A0FF'
+        },
         label: {
           normal: {
             show: true,
-            position: 'inside'
+            position: 'top'
           }
         },
         data: computedData[0]
