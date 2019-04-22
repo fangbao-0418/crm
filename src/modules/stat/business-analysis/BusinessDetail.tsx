@@ -184,11 +184,13 @@ class Main extends React.Component<{}, State> {
     })
   }
   public export (exports: any) {
-    if (!this.payload.salespersonId) {
-      this.payload.salespersonId = ''
+    const o = {
+      agencyId: exports.agencyId,
+      salespersonId: exports.salespersonId
     }
+    const query = $.param(o)
     fetch(
-      `/sys/crm-manage/v1/api/report/customer/export?agencyId=${exports.agencyId}&salespersonId=${exports.salespersonId}`,
+      `/sys/crm-manage/v1/api/report/customer/export?${query}`,
       {
         headers: {
           'Content-Type': 'application/json',
