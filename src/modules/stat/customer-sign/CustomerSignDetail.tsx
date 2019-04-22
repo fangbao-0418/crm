@@ -432,7 +432,6 @@ class Main extends React.Component {
                 style={{float: 'right'}}
                 icon={<APP.Icon type='export' />}
                 title='导出'
-                // hidden={!APP.hasPermission('crm_data_customer_export')}
                 onClick={() => {
                   this.exportCity(this.payload)
                 }}

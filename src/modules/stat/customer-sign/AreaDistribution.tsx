@@ -37,7 +37,8 @@ class Main extends React.Component<Props> {
           max: maxNum,
           type: 'piecewise',
           left: 'left',
-          text: ['最大值', '最小值'],
+          // text: ['最大值', '最小值'],
+          text: [maxNum, minNum],
           inRange: {
             color: ['#B6D7FA', '#3F90F7']
           },
