@@ -9,10 +9,10 @@ class Main extends React.Component<any> {
       title: '省份',
       width: '37%',
       dataIndex: 'totalByCity.provinceName',
-      render: (text, record) => {
+      render: (text, record, index) => {
         return (
           <span>
-            {record.key === this.props.totalByCity[this.props.totalByCity.length - 1].key ? '' : (record.key > 3 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>)}
+            {index > 2 ? <span className={styles.ran}>{record.key}</span> : <span className={styles.rank}>{record.key}</span>}
             <span>{record.provinceName}</span>
           </span>
         )
