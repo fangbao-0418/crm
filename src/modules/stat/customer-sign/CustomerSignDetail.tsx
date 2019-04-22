@@ -307,7 +307,7 @@ class Main extends React.Component {
     .then((blob) => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '客户来源明细表.xlsx'
+      a.download = exports.totalBeginDate + '~' + exports.totalEndDate + '机构排名.xlsx'
       a.href = url
       document.body.appendChild(a)
       a.click()
