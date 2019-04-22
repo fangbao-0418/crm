@@ -46,7 +46,9 @@ class Main extends React.Component<{}, State> {
 
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
-  public payload: PayloadProps = {}
+  public payload: PayloadProps = {
+    agencyId: APP.user.companyId
+  }
 
   public condition: ConditionOptionProps[] = [
     {

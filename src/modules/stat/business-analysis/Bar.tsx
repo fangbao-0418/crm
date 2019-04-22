@@ -97,7 +97,7 @@ class Main extends React.Component<Props> {
       yAxis: {
         logBase: 10,
         max,
-        min: 1,
+        // min: 1,
         type: 'value',
         splitLine: {
           show: true,
