@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Select, Icon, Table, Row, Col } from 'antd'
+import { Select, Icon, Table, Row, Col, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getSalesRank } from '@/modules/stat/api'
 import { getSalesByCompany } from '@/modules/common/api'
@@ -57,7 +57,8 @@ class Main extends React.Component<{}, State> {
       callSuccessNums: 0,
       totalCallDuration: 0,
       callOutTotalNums: 0,
-      averageCallSuccessPercent: 0
+      averageCallSuccessPercent: 0,
+      trackContactNums: 0
     },
     char: []
   }
@@ -166,6 +167,18 @@ class Main extends React.Component<{}, State> {
           record.callSuccessGt60SecondNums
         )
       }
+    },
+    {
+      title: (
+        <span>
+          跟进次数
+          <Tooltip placement='top' title='写跟进小记或者拨打电话,都计为一次有效跟进.'>
+          <i className='fa fa-info-circle ml5' style={{color: '#C9C9C9'}}></i>
+          </Tooltip>
+        </span>
+      ),
+      width: 120,
+      dataIndex: 'trackContactNums'
     }
   ]
 
@@ -202,7 +215,8 @@ class Main extends React.Component<{}, State> {
             callSuccessNums: 0,
             totalCallDuration: 0,
             callOutTotalNums: 0,
-            averageCallSuccessPercent: 0
+            averageCallSuccessPercent: 0,
+            trackContactNums: 0
           },
           char: []
         })
@@ -354,14 +368,6 @@ class Main extends React.Component<{}, State> {
             </div> */}
           </div>
           <div className={styles.con}>
-            <div className={styles.small}>呼出量</div>
-            <div className={styles.big}>{strip.callOutTotalNums}</div>
-            {/* <div className={styles.small}>
-              <span>环比</span>
-              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
-            </div> */}
-          </div>
-          <div className={styles.con}>
             <div className={styles.small}>接通量</div>
             <div className={styles.big}>{strip.callSuccessNums}</div>
             {/* <div className={styles.small}>
@@ -382,6 +388,14 @@ class Main extends React.Component<{}, State> {
           <div className={styles.con}>
             <div className={styles.small}>通话时长  /天:时:分:秒</div>
             <div className={styles.big}>{APP.fn.formatDuration(strip.totalCallDuration)}</div>
+            {/* <div className={styles.small}>
+              <span>环比</span>
+              <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
+            </div> */}
+          </div>
+          <div className={styles.con}>
+            <div className={styles.small}>跟进次数</div>
+            <div className={styles.big}>{strip.trackContactNums}</div>
             {/* <div className={styles.small}>
               <span>环比</span>
               <span style={{marginLeft: 115}}>30%<Icon type='down' style={{paddingLeft: 5}}></Icon></span>
