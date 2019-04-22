@@ -748,7 +748,7 @@ class Main extends React.Component<Customer.Props, States> {
               this.handleSelectType(values)
             }}
           >
-            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 15px'}}>
+            <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', marginLeft: 15}}>
               <SearchName
                 style={{paddingTop: '5px'}}
                 options={[
