@@ -11,9 +11,13 @@ interface Props {
   onUploaded?: (url?: string) => void
 }
 class Main extends React.Component<Props> {
+  public viewer: Viewer
   public componentDidMount () {
     const el: any = this.refs.img
-    const viewer = new Viewer(el)
+    this.viewer = new Viewer(el)
+  }
+  public componentWillUnmount () {
+    this.viewer.destroy()
   }
   public handleClick () {
     const el = document.createElement('input')
