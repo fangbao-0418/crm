@@ -3,7 +3,7 @@ import moment from 'moment'
 import { Select, Row, Col, Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 import { getFirms, getCustomerSign } from '@/modules/stat/api'
-import { getSalesByCompany } from '@/modules/common/api'
+import { getSalesByCompanyId } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import CityRank from './CityRank'
 import Pie from './Pie'
@@ -196,7 +196,8 @@ class Main extends React.Component {
   }
 
   public getSales (companyId: string) {
-    getSalesByCompany(companyId).then((res) => {
+    getSalesByCompanyId(companyId).then((res) => {
+      console.log(res, 'resperson')
       const sales = res.map((item: any) => {
         return item.id
       })
