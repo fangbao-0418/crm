@@ -55,8 +55,11 @@ class Main extends React.Component<{}, State> {
       field: 'date',
       label: ['创建时间'],
       type: 'date',
-      value: '0',
+      value: '',
       options: [{
+        label: '全部',
+        value: ''
+      }, {
         label: '今日',
         value: '0'
       }, {
@@ -64,10 +67,10 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '7天',
-        value: '-7'
+        value: '-6'
       }, {
         label: '30天',
-        value: '-30'
+        value: '-29'
       }]
     }
   ]
@@ -139,11 +142,17 @@ class Main extends React.Component<{}, State> {
   }
   public onDateChange (value: {[field: string]: {label: string, value: string}}) {
     const date = value.date.value
+    this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
+    console.log(date, 'datedate')
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
+    } else if (date === '') {
+      this.payload.totalBeginDate = undefined
+      this.payload.totalEndDate = undefined
+    } else if (date === '-1') {
+      this.payload.totalEndDate = moment().subtract(1, 'd').format('YYYY-MM-DD')
     } else {
-      this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
       this.payload.totalEndDate = moment().format('YYYY-MM-DD')
     }
     this.fetchList()
