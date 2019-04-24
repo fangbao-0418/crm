@@ -143,10 +143,11 @@ class Main extends React.Component<{}, State> {
   public onDateChange (value: {[field: string]: {label: string, value: string}}) {
     const date = value.date.value
     this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
+    console.log(date, 'datedate')
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
-    } else if (!date) {
+    } else if (date === '') {
       this.payload.totalBeginDate = undefined
       this.payload.totalEndDate = undefined
     } else if (date === '-1') {
