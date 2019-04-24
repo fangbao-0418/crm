@@ -45,7 +45,7 @@ class Main extends React.Component {
       pageSize: this.params.pageSize
     }
   }
-  public pageSizeOptions = ['15', '30', '50', '80', '100', '200', '500']
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public data: ConditionOptionProps[] = [
     {
       field: 'date',

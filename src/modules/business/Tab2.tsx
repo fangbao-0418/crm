@@ -19,7 +19,7 @@ class Main extends React.Component<Props> {
   public state: States = {
     selectedRowKeys: []
   }
-  public pageSizeOptions = ['15', '30', '50', '80', '100', '200', '500']
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
     if (this.props.getInstance) {
       this.props.getInstance(this)
