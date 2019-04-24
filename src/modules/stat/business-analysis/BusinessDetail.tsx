@@ -67,10 +67,10 @@ class Main extends React.Component<{}, State> {
         value: '-1'
       }, {
         label: '7天',
-        value: '-7'
+        value: '-6'
       }, {
         label: '30天',
-        value: '-30'
+        value: '-29'
       }]
     }
   ]
@@ -142,20 +142,16 @@ class Main extends React.Component<{}, State> {
   }
   public onDateChange (value: {[field: string]: {label: string, value: string}}) {
     const date = value.date.value
+    this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
     } else if (!date) {
       this.payload.totalBeginDate = undefined
       this.payload.totalEndDate = undefined
-    } else if (date === '0') {
-      this.payload.totalBeginDate = moment().format('YYYY-MM-DD')
-      this.payload.totalEndDate = moment().format('YYYY-MM-DD')
     } else if (date === '-1') {
-      this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
-      this.payload.totalEndDate = moment().add(date, 'd').format('YYYY-MM-DD')
+      this.payload.totalEndDate = moment().subtract(1, 'd').format('YYYY-MM-DD')
     } else {
-      this.payload.totalBeginDate = moment().add(Number(date) + 1, 'd').format('YYYY-MM-DD')
       this.payload.totalEndDate = moment().format('YYYY-MM-DD')
     }
     this.fetchList()
