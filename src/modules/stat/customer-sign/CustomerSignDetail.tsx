@@ -426,9 +426,10 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           pagination={false}
+          scroll={{y:400}}
         />
         <Row style={{marginTop: 15}}>
-          <Col span={6}>
+          <Col span={8}>
             <div style={{marginBottom: 15}}>
               <span style={{fontSize: 14, color: '#333333'}}>机构排名</span>
               <AddButton
@@ -442,7 +443,7 @@ class Main extends React.Component {
             </div>
             <CityRank totalByCity={this.state.totalByCity}/>
           </Col>
-          <Col span={16} offset={1}>
+          <Col span={14} offset={2}>
             <span style={{fontSize: 14, color: '#333333'}}>客户地域分布（省份）</span>
             <AreaDistribution style={{height: '400px'}} totalByCity={this.state.totalByCity}/>
           </Col>
