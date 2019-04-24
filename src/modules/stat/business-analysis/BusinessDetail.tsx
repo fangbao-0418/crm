@@ -55,10 +55,10 @@ class Main extends React.Component<{}, State> {
       field: 'date',
       label: ['创建时间'],
       type: 'date',
-      value: '',
+      value: 'all',
       options: [{
         label: '全部',
-        value: ''
+        value: 'all'
       }, {
         label: '今日',
         value: '0'
@@ -147,7 +147,7 @@ class Main extends React.Component<{}, State> {
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
-    } else if (date === '') {
+    } else if (date === 'all') {
       this.payload.totalBeginDate = undefined
       this.payload.totalEndDate = undefined
     } else if (date === '-1') {
