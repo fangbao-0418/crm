@@ -204,6 +204,8 @@ class Main extends React.Component<{}, State> {
   }
   public export (exports: any) {
     const o = {
+      totalBeginDate: exports.totalBeginDate,
+      totalEndDate: exports.totalEndDate,
       agencyId: exports.agencyId,
       salespersonId: exports.salespersonId
     }
