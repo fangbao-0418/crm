@@ -88,6 +88,8 @@ class Main extends React.Component {
   public columns: ColumnProps<CrmStat.CustomerPoolReportDetails>[] = [
     {
       title: '客户来源',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.customerSource',
       render: (text, record) => {
         return record.customerSource
@@ -95,6 +97,8 @@ class Main extends React.Component {
     },
     {
       title: '总客户',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.customerNums',
       render: (text, record) => {
         return record.customerNums
@@ -102,6 +106,8 @@ class Main extends React.Component {
     },
     {
       title: '已删除',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.deleteNums',
       render: (text, record) => {
         return record.deleteNums
@@ -109,6 +115,8 @@ class Main extends React.Component {
     },
     {
       title: '新客资',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.newCustomerNums',
       render: (text, record) => {
         return record.newCustomerNums
@@ -116,6 +124,8 @@ class Main extends React.Component {
     },
     {
       title: '无意向客户',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.noIntentionNums',
       render: (text, record) => {
         return record.noIntentionNums
@@ -130,6 +140,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.intentionNums',
       render: (text, record) => {
         return record.intentionNums
@@ -144,6 +156,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signNums',
       render: (text, record) => {
         return record.signNums
@@ -158,6 +172,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signRate',
       render: (text, record) => {
         return record.signRate
@@ -172,6 +188,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signCycle',
       render: (text, record) => {
         return record.signCycle
