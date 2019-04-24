@@ -146,8 +146,8 @@ class Main extends React.Component<{}, State> {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
     } else if (!date) {
-      this.payload.totalBeginDate = ''
-      this.payload.totalEndDate = ''
+      this.payload.totalBeginDate = undefined
+      this.payload.totalEndDate = undefined
     } else if (date === '0') {
       this.payload.totalBeginDate = moment().format('YYYY-MM-DD')
       this.payload.totalEndDate = moment().format('YYYY-MM-DD')
