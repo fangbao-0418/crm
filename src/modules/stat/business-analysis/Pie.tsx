@@ -20,11 +20,15 @@ class Main extends React.Component<Props> {
     this.renderChart()
   }
   public renderChart () {
-    const data = this.props.dataSource
+    const dataSource = this.props.dataSource
     const figure: any[] = []
-    data && data.length > 0 && data.map((item: any, index: any) => {
+    const data = dataSource && dataSource.length > 0 && dataSource.map((item: any, index: any) => {
       if (index < 8) {
         figure.push(item.name)
+      }
+      return {
+        name: item.name,
+        value: item.value
       }
     })
     const option = {
@@ -52,7 +56,7 @@ class Main extends React.Component<Props> {
           name: this.props.seriesName,
           type: 'pie',
           radius: ['35%', '50%'],
-          center: ['50%', '50%'],
+          center: ['50%', '47%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
