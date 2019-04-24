@@ -55,8 +55,11 @@ class Main extends React.Component<{}, State> {
       field: 'date',
       label: ['创建时间'],
       type: 'date',
-      value: '0',
+      value: '',
       options: [{
+        label: '全部',
+        value: ''
+      }, {
         label: '今日',
         value: '0'
       }, {
@@ -142,8 +145,17 @@ class Main extends React.Component<{}, State> {
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
-    } else {
+    } else if (!date) {
+      this.payload.totalBeginDate = ''
+      this.payload.totalEndDate = ''
+    } else if (date === '0') {
+      this.payload.totalBeginDate = moment().format('YYYY-MM-DD')
+      this.payload.totalEndDate = moment().format('YYYY-MM-DD')
+    } else if (date === '-1') {
       this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
+      this.payload.totalEndDate = moment().add(date, 'd').format('YYYY-MM-DD')
+    } else {
+      this.payload.totalBeginDate = moment().add(Number(date) + 1, 'd').format('YYYY-MM-DD')
       this.payload.totalEndDate = moment().format('YYYY-MM-DD')
     }
     this.fetchList()
