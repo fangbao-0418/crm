@@ -139,6 +139,10 @@ export const getSales = (tab: 1 | 2 | 3 | 4 | 5) => {
 export const fetchAllCompanyList = () => {
   return http(`/user/v1/api/company/list/all`)
 }
+/** 登录用户下负责的机构列表 */
+export const fetchSelfCompanyList = (companyTypeList: string[] = []) => {
+  return http(`/user/v1/api/company/login/region`, 'POST', companyTypeList)
+}
 /** 根据公司获得人员的信息（根据公司id获得他下面所有用户的信息） */
 export const getSalesByCompanyId = (companyId: string) => {
   return http(`/user/v1/api/user/list/company/${companyId}`)
