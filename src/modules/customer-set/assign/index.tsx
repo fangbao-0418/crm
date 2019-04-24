@@ -9,7 +9,7 @@ import Special from './Special'
 import { connect } from 'react-redux'
 import { saveGeneralCapacity } from '../api'
 import { getSalesByCompany, fetchAllCompanyList } from '@/modules/common/api'
-import AllCompany from './AllCompany'
+import Company from '@/modules/common/content/Company'
 interface State {
   diabled: boolean
   sales: Array<{id?: string, name?: string, salespersonId?: string, salespersonName?: string}>
@@ -53,7 +53,8 @@ class Main extends React.Component<Customer.Props, State> {
     return (
       <Content title='分客设置'>
         {APP.user.userType === 'System' && <div>
-          <AllCompany
+          <Company
+            type='all'
             onChange={(value) => {
               const key = value
               this.companyId = key

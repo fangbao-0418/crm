@@ -12,6 +12,7 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
+  public props: Props = {type: 'self'}
   public state: State = {
     companies: [],
     value: String(APP.user.companyId)

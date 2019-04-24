@@ -7,7 +7,7 @@ import Bar from './Bar'
 import Pie from './Pie'
 import moment from 'moment'
 import AddButton from '@/modules/common/content/AddButton'
-import AllCompany from '@/modules/customer-set/assign/AllCompany'
+import Company from '@/modules/common/content/Company'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 const styles = require('./style')
 
@@ -143,7 +143,6 @@ class Main extends React.Component<{}, State> {
   public onDateChange (value: {[field: string]: {label: string, value: string}}) {
     const date = value.date.value
     this.payload.totalBeginDate = moment().add(date, 'd').format('YYYY-MM-DD')
-    console.log(date, 'datedate')
     if (date.split('至').length === 2) {
       this.payload.totalBeginDate = date.split('至')[0]
       this.payload.totalEndDate = date.split('至')[1]
@@ -240,7 +239,8 @@ class Main extends React.Component<{}, State> {
           dataSource={this.condition}
         />
         <div style={{marginTop: 8}}>
-          <AllCompany
+          <Company
+            type='self'
             className='mr5'
             onChange={(value: string) => {
               this.payload.agencyId = value
