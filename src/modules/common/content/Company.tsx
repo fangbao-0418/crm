@@ -2,7 +2,7 @@ import React from 'react'
 import { fetchSelfCompanyList, fetchAllCompanyList } from '@/modules/common/api'
 import { Select } from 'antd'
 interface Props {
-  type?: string 
+  type?: string
   className?: string
   onChange?: (value: any) => void
 }
@@ -12,7 +12,6 @@ interface State {
 }
 class Main extends React.Component<Props, State> {
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
-  public props: Props = {type: 'self'}
   public state: State = {
     companies: [],
     value: String(APP.user.companyId)
