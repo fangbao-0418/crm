@@ -38,7 +38,7 @@ interface State {
   totalBySource: Array<{name: string, value: number}>
   /** 按城市统计 */
   totalByCity: CrmStat.TotalByCityDetails[]
-   /** 按城市统计 */
+   /** 按省统计 */
   totalByProvince: Array<{name: string, value: number}>
 }
 class Main extends React.Component {

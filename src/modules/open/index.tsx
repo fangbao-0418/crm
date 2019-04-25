@@ -103,7 +103,7 @@ class Main extends React.Component {
           }
           {
             record.payStatus === 1 &&
-            <span className={styles['pay-point']}>支付中</span>
+            <span className={styles['pay-point']}>下单中</span>
           }
         </span>
       )
