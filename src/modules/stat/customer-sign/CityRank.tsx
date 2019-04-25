@@ -2,12 +2,14 @@ import React from 'react'
 import { Table } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
 const styles = require('./style')
-
-class Main extends React.Component<any> {
+interface Props {
+  totalByCity?: CrmStat.TotalByCityDetails[]
+}
+class Main extends React.Component<Props> {
   public columns: ColumnProps<CrmStat.TotalByCityDetails>[] = [
     {
       title: '省份',
-      width: '37%',
+      width: '35%',
       dataIndex: 'totalByCity.provinceName',
       render: (text, record, index) => {
         return (

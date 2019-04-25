@@ -1,6 +1,8 @@
 import React from 'react'
-
-class Main extends React.Component<any> {
+interface Props {
+  totalByNew?: Array<{name: string, value: number}>
+}
+class Main extends React.Component<Props> {
   public chart: echarts.ECharts
   public componentDidMount () {
     const dom: any = this.refs.line

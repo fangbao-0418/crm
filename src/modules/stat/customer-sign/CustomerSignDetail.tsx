@@ -33,11 +33,13 @@ interface State {
   /** 销售人员初始值 */
   sal: string
   /** 新增客户统计 */
-  totalByNew: any
+  totalByNew: Array<{name: string, value: number}>
   /** 来源统计 */
-  totalBySource: any
+  totalBySource: Array<{name: string, value: number}>
   /** 按城市统计 */
   totalByCity: CrmStat.TotalByCityDetails[]
+   /** 按城市统计 */
+  totalByProvince: Array<{name: string, value: number}>
 }
 class Main extends React.Component {
 
@@ -60,7 +62,8 @@ class Main extends React.Component {
     sal: '',
     totalByNew: [],
     totalBySource: [],
-    totalByCity: []
+    totalByCity: [],
+    totalByProvince: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -256,7 +259,8 @@ class Main extends React.Component {
         dataSource: a,
         totalByNew: res.data.totalByNew,
         totalBySource: res.data.totalBySource,
-        totalByCity: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
+        totalByCity: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v}),
+        totalByProvince: res.data.totalByProvince
       })
     })
   }
@@ -447,7 +451,7 @@ class Main extends React.Component {
           scroll={{y:400}}
         />
         <Row style={{marginTop: 15}}>
-          <Col span={8}>
+          <Col span={9}>
             <div style={{marginBottom: 15}}>
               <span style={{fontSize: 14, color: '#333333'}}>机构排名</span>
               <AddButton
@@ -461,9 +465,9 @@ class Main extends React.Component {
             </div>
             <CityRank totalByCity={this.state.totalByCity}/>
           </Col>
-          <Col span={14} offset={2}>
+          <Col span={14} offset={1}>
             <span style={{fontSize: 14, color: '#333333'}}>客户地域分布（省份）</span>
-            <AreaDistribution style={{height: '400px'}} totalByCity={this.state.totalByCity}/>
+            <AreaDistribution style={{height: '400px'}} totalByProvince={this.state.totalByProvince}/>
           </Col>
         </Row>
       </div>
