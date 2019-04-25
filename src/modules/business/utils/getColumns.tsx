@@ -138,7 +138,7 @@ export default function (): ColumnProps<Business.DetailProps>[] {
           }
           {
             record.payStatus === 1 &&
-            <span className={styles['pay-point']}>支付中</span>
+            <span className={styles['pay-point']}>下单中</span>
           }
         </div>
       )
