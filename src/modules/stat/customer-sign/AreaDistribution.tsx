@@ -3,7 +3,7 @@ import React from 'react'
 interface Props {
   style?: React.CSSProperties
   className?: string
-  totalByCity?: CrmStat.TotalByCityDetails[]
+  totalByProvince?: Array<{name: string, value: number}>
 }
 class Main extends React.Component<Props> {
   public chart: echarts.ECharts
@@ -21,11 +21,13 @@ class Main extends React.Component<Props> {
     this.chart.setOption(this.getOptions())
   }
   public getOptions (): echarts.EChartOption {
-    const minNum = this.props.totalByCity[this.props.totalByCity.length - 1] && this.props.totalByCity[this.props.totalByCity.length - 1].value
-    const maxNum = this.props.totalByCity[0] && this.props.totalByCity[0].value
-    const data: {name: string, value: number}[] = []
-    this.props.totalByCity.map((item) => {
-      data.push({name: item.provinceName.replace(/省|市|自治区|特别行政区|壮族|回族|维吾尔/g, ''), value: item.value})
+    const minNum = this.props.totalByProvince && this.props.totalByProvince[this.props.totalByProvince.length - 1] && this.props.totalByProvince[this.props.totalByProvince.length - 1].value
+    const maxNum = this.props.totalByProvince && this.props.totalByProvince[0] && this.props.totalByProvince[0].value
+    const data: {name: string, value: number}[] = this.props.totalByProvince && this.props.totalByProvince.map((item) => {
+      return ({
+        name: item.name.replace(/省|市|自治区|特别行政区|壮族|回族|维吾尔/g, ''),
+        value: item.value
+      })
     })
     const option: echarts.EChartOption = {
       tooltip : {

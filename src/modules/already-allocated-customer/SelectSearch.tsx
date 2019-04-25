@@ -1,6 +1,5 @@
 import React from 'react'
 import { Input, Select } from 'antd'
-import { getFirms } from '@/modules/stat/api'
 import { getCityByCompany } from './api'
 import { getAgencylist } from '@/modules/setting/api'
 const Option = Select.Option
