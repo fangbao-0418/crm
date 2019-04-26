@@ -33,11 +33,13 @@ interface State {
   /** 销售人员初始值 */
   sal: string
   /** 新增客户统计 */
-  totalByNew: any
+  totalByNew: Array<{name: string, value: number}>
   /** 来源统计 */
-  totalBySource: any
+  totalBySource: Array<{name: string, value: number}>
   /** 按城市统计 */
   totalByCity: CrmStat.TotalByCityDetails[]
+   /** 按省统计 */
+  totalByProvince: Array<{name: string, value: number}>
 }
 class Main extends React.Component {
 
@@ -60,7 +62,8 @@ class Main extends React.Component {
     sal: '',
     totalByNew: [],
     totalBySource: [],
-    totalByCity: []
+    totalByCity: [],
+    totalByProvince: []
   }
 
   public condition: ConditionOptionProps[] = [
@@ -88,6 +91,8 @@ class Main extends React.Component {
   public columns: ColumnProps<CrmStat.CustomerPoolReportDetails>[] = [
     {
       title: '客户来源',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.customerSource',
       render: (text, record) => {
         return record.customerSource
@@ -95,6 +100,8 @@ class Main extends React.Component {
     },
     {
       title: '总客户',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.customerNums',
       render: (text, record) => {
         return record.customerNums
@@ -102,6 +109,8 @@ class Main extends React.Component {
     },
     {
       title: '已删除',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.deleteNums',
       render: (text, record) => {
         return record.deleteNums
@@ -109,6 +118,8 @@ class Main extends React.Component {
     },
     {
       title: '新客资',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.newCustomerNums',
       render: (text, record) => {
         return record.newCustomerNums
@@ -116,6 +127,8 @@ class Main extends React.Component {
     },
     {
       title: '无意向客户',
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.noIntentionNums',
       render: (text, record) => {
         return record.noIntentionNums
@@ -130,6 +143,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.intentionNums',
       render: (text, record) => {
         return record.intentionNums
@@ -144,6 +159,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signNums',
       render: (text, record) => {
         return record.signNums
@@ -158,6 +175,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signRate',
       render: (text, record) => {
         return record.signRate
@@ -172,6 +191,8 @@ class Main extends React.Component {
           </Tooltip>
         </span>
       ),
+      width: 200,
+      align: 'center',
       dataIndex: 'customerPoolReportDetails.signCycle',
       render: (text, record) => {
         return record.signCycle
@@ -238,7 +259,8 @@ class Main extends React.Component {
         dataSource: a,
         totalByNew: res.data.totalByNew,
         totalBySource: res.data.totalBySource,
-        totalByCity: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v})
+        totalByCity: res.data.totalByCity.map((v: any, i: any) => {v.key = i + 1; return v}),
+        totalByProvince: res.data.totalByProvince
       })
     })
   }
@@ -426,9 +448,10 @@ class Main extends React.Component {
           columns={this.columns}
           dataSource={this.state.dataSource}
           pagination={false}
+          scroll={{y:400}}
         />
         <Row style={{marginTop: 15}}>
-          <Col span={6}>
+          <Col span={9}>
             <div style={{marginBottom: 15}}>
               <span style={{fontSize: 14, color: '#333333'}}>机构排名</span>
               <AddButton
@@ -442,9 +465,9 @@ class Main extends React.Component {
             </div>
             <CityRank totalByCity={this.state.totalByCity}/>
           </Col>
-          <Col span={16} offset={1}>
+          <Col span={14} offset={1}>
             <span style={{fontSize: 14, color: '#333333'}}>客户地域分布（省份）</span>
-            <AreaDistribution style={{height: '400px'}} totalByCity={this.state.totalByCity}/>
+            <AreaDistribution style={{height: '400px'}} totalByProvince={this.state.totalByProvince}/>
           </Col>
         </Row>
       </div>

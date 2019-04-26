@@ -47,7 +47,9 @@ class Main extends React.Component<{}, State> {
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
-    agencyId: APP.user.companyId
+    agencyId: APP.user.companyId,
+    totalBeginDate: moment().subtract(29, 'd').format('YYYY-MM-DD'),
+    totalEndDate: moment().format('YYYY-MM-DD')
   }
 
   public condition: ConditionOptionProps[] = [
@@ -55,7 +57,7 @@ class Main extends React.Component<{}, State> {
       field: 'date',
       label: ['创建时间'],
       type: 'date',
-      value: 'all',
+      value: '-29',
       options: [{
         label: '全部',
         value: 'all'
@@ -203,13 +205,21 @@ class Main extends React.Component<{}, State> {
     })
   }
   public export (exports: any) {
+    console.log(exports.totalBeginDate, '1111')
     const o = {
+      totalBeginDate: exports.totalBeginDate,
+      totalEndDate: exports.totalEndDate,
+      agencyId: exports.agencyId,
+      salespersonId: exports.salespersonId
+    }
+    const f = {
       agencyId: exports.agencyId,
       salespersonId: exports.salespersonId
     }
     const query = $.param(o)
+    const query2 = $.param(f)
     fetch(
-      `/sys/crm-manage/v1/api/report/customer/export?${query}`,
+      exports.totalBeginDate === undefined ? `/sys/crm-manage/v1/api/report/customer/export?${query2}` : `/sys/crm-manage/v1/api/report/customer/export?${query}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -291,22 +301,21 @@ class Main extends React.Component<{}, State> {
           }
           </Select>
         </div>
-        <div>
+        <div style={{marginBottom: 40}}>
           <div style={{marginTop: 25}}>
             <Row>
-              <Col span={8}>
+              <Col span={6}>
                 <Pie title='客户来源分布' seriesName='客户来源' dataSource={this.state.totalBySource}/>
               </Col>
-              <Col span={8}>
+              <Col span={10} offset={1}>
                 <Bar dataSource={this.state.reportPhoneStatuses}/>
               </Col>
-              <Col span={8}>
+              <Col span={6} offset={1}>
                 <Pie title='商机客户空置天数' seriesName='空置天数' dataSource={this.state.reportFreeDays}/>
               </Col>
             </Row>
           </div>
         </div>
-        <hr style={{border: '0.5px solid #F2F2F2', marginBottom: 20}}/>
         <div style={{marginBottom: 15}}>
           <span style={{fontSize: 14, color: '#333333'}}>销售明细表</span>
           <AddButton

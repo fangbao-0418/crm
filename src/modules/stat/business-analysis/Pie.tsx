@@ -20,7 +20,17 @@ class Main extends React.Component<Props> {
     this.renderChart()
   }
   public renderChart () {
-    const data = this.props.dataSource
+    const dataSource = this.props.dataSource
+    const figure: any[] = []
+    const data = dataSource && dataSource.length > 0 && dataSource.map((item: any, index: any) => {
+      if (index < 8) {
+        figure.push(item.name)
+      }
+      return {
+        name: item.name,
+        value: item.value
+      }
+    })
     const option = {
       title: {
         left: 'center',
@@ -36,16 +46,17 @@ class Main extends React.Component<Props> {
         formatter: '{a} <br/>{b} ({c}, {d}%)'
       },
       legend: {
-        orient: 'vertical',
-        x: 'right',
-        y: 'center',
-        type: 'scroll'
+        y2: 0,
+        itemWidth: 15, // 设置宽度
+        itemHeight: 10, // 设置高度
+        data: figure
       },
       series: [
         {
           name: this.props.seriesName,
           type: 'pie',
-          radius: ['50%', '70%'],
+          radius: ['35%', '50%'],
+          center: ['50%', '47%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -74,7 +85,7 @@ class Main extends React.Component<Props> {
   public render () {
     return (
       <div>
-        <div ref='pie' style={{height: '250px'}}></div>
+        <div ref='pie' style={{height: '300px'}}></div>
       </div>
     )
   }

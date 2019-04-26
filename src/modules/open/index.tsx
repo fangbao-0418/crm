@@ -45,7 +45,7 @@ class Main extends React.Component {
       pageSize: this.params.pageSize
     }
   }
-  public pageSizeOptions = ['15', '30', '50', '80', '100', '200', '500']
+  public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public data: ConditionOptionProps[] = [
     {
       field: 'date',
@@ -103,7 +103,7 @@ class Main extends React.Component {
           }
           {
             record.payStatus === 1 &&
-            <span className={styles['pay-point']}>支付中</span>
+            <span className={styles['pay-point']}>下单中</span>
           }
         </span>
       )

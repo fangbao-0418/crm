@@ -16,7 +16,18 @@ class Main extends React.Component<any> {
     this.renderChart()
   }
   public renderChart () {
-    const option: echarts.EChartOption = {
+    const pi = this.props.pi
+    const figure: any[] = []
+    const data = pi && pi.length > 0 && pi.map((item: any, index: any) => {
+      if (index < 8) {
+        figure.push(item.levelName)
+      }
+      return {
+        name: item.levelName,
+        value: item.levelNums
+      }
+    })
+    const option = {
       title: {
         left: '20',
         text: '客户来源分布',
@@ -33,8 +44,8 @@ class Main extends React.Component<any> {
       legend: {
         orient: 'vertical',
         x: 'right',
-        y: 'center'
-        // bottom: 60
+        y: 'center',
+        data: figure
       },
       series: [
         {

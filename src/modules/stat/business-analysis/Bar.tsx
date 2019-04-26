@@ -73,6 +73,7 @@ class Main extends React.Component<Props> {
         left: -10,
         right: '1%',
         bottom: '3%',
+        y: '20%',
         containLabel: true
       },
       xAxis: {
@@ -129,6 +130,7 @@ class Main extends React.Component<Props> {
         },
         label: {
           normal: {
+            color: '#000',
             show: true,
             position: 'top'
           }
