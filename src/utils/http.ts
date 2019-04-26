@@ -15,7 +15,8 @@ function handleError (err: JQuery.jqXHR) {
   }
   return res
 }
-$(document).ajaxSend((event, response, options) => {
+let ajaxCount = 0
+function isPass (options: JQuery.AjaxSettings<any>) {
   const disableUrls = [
     '/notification/v1/api/remind/prompt/last/(\\w)+',
     '/notification/v1/api/remind/unread/(\\w)+',
@@ -28,19 +29,23 @@ $(document).ajaxSend((event, response, options) => {
       return true
     }
   })
-  if (index > -1) {
+  return index > -1 ? true : false
+}
+$(document).ajaxSend((event, response, options) => {
+  if (isPass(options)) {
     return
   }
-  store.dispatch({type: 'loading show'})
-  const { ajaxCount } = store.getState().common
+  ajaxCount += 1
   if (ajaxCount > 0 && $('.pilipa-loading').length === 0) {
     loading.show()
   }
 })
 
 $(document).ajaxComplete((event, response, options) => {
-  store.dispatch({type: 'loading hidden'})
-  const { ajaxCount } = store.getState().common
+  if (isPass(options)) {
+    return
+  }
+  ajaxCount -= 1
   if (ajaxCount <= 0) {
     loading.hide()
   }
