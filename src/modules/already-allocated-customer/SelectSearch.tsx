@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Select } from 'antd'
 import { getCityByCompany } from './api'
 import { getAgencylist } from '@/modules/setting/api'
+import Company from '@/modules/common/content/Company'
 const Option = Select.Option
 interface ValueProps {
   customerSource?: string
@@ -65,29 +66,15 @@ class Main extends React.Component<Props, States> {
             })
           }
         </Select>
-        <Select
-          showSearch
-          allowClear={true}
+        <Company
+          type='self'
           className='mr5'
-          style={{width: 150}}
-          placeholder='请选择当前机构'
-          optionFilterProp='children'
-          filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          allowClear
           onChange={(value: string) => {
             this.values.agencyId = value
             this.props.onChange(this.values)
           }}
-        >
-          {
-            this.state.companyLisy.length > 0 &&
-            this.state.companyLisy.map((item) => {
-              return (
-                // <Option key={item.id}>{item.name}</Option>
-                <Option key={item.agencyId}>{item.agencyName}</Option>
-              )
-            })
-          }
-        </Select>
+        />
         <Select
           allowClear={true}
           className='mr5'

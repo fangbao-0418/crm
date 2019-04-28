@@ -47,7 +47,7 @@ class Main extends React.Component<{}, State> {
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
 
   public payload: PayloadProps = {
-    agencyId: APP.user.companyId,
+    agencyId: undefined,
     totalBeginDate: moment().subtract(29, 'd').format('YYYY-MM-DD'),
     totalEndDate: moment().format('YYYY-MM-DD')
   }

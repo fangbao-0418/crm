@@ -52,8 +52,9 @@ class Main extends React.Component<Customer.Props, State> {
   public render () {
     return (
       <Content title='分客设置'>
-        {APP.user.userType === 'System' && <div>
+        {APP.user.companyId === '0' && <div>
           <Company
+            defaultValue={APP.user.companyId}
             type='all'
             onChange={(value) => {
               const key = value

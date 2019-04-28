@@ -1,23 +1,29 @@
 import React from 'react'
 import { fetchSelfCompanyList, fetchAllCompanyList } from '@/modules/common/api'
 import { Select } from 'antd'
-interface Props {
-  type?: string
+import { SelectProps } from 'antd/lib/select'
+interface CompanyProps {
+  id: any
+  name: string
+}
+interface Props extends SelectProps {
+  type?: 'self' | 'all'
   className?: string
   onChange?: (value: any) => void
 }
 interface State {
-  companies: any[]
+  companies: CompanyProps[]
   value: any
 }
 class Main extends React.Component<Props, State> {
   public companyTypeList: string[] = ['Agent', 'DirectCompany']
   public state: State = {
     companies: [],
-    value: String(APP.user.companyId)
+    value: this.props.defaultValue ? String(this.props.defaultValue) : undefined
   }
   public componentWillMount () {
-    if (this.props.type === 'self') {
+    const type = this.props.type || 'all'
+    if (type === 'self') {
       this.getCompaniesSelf()
     } else {
       this.getCompaniesAll()
@@ -46,12 +52,13 @@ class Main extends React.Component<Props, State> {
         style={{ width: 200 }}
         placeholder='请选择机构'
         optionFilterProp='children'
-        value={this.state.value}
+        value={this.state.value !== undefined ? String(this.state.value) : undefined}
+        {...this.props}
         onChange={(value) => {
           this.setState({
             value
           })
-          if (this.props.onChange && value !== undefined) {
+          if (this.props.onChange) {
             this.props.onChange(value)
           }
         }}

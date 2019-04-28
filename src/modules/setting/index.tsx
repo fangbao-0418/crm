@@ -3,11 +3,11 @@ import { Table, Cascader, Select, Tooltip, Button } from 'antd'
 import Content from '@/modules/common/content'
 import { Modal } from 'pilipa'
 import SettingPanel from './panel'
-import { fetchAllRegion, getAgencylist, getList } from './api'
+import { fetchAllRegion, getList } from './api'
+import Company from '@/modules/common/content/Company'
 interface State {
   dataSource: Setting.ItemProps[]
   options: Setting.RegionProps[]
-  agencyList: Setting.AgencyProps[]
   selectedRowKeys: string[]
   pagination: {
     total: number
@@ -15,7 +15,7 @@ interface State {
     pageSize: number
   }
 }
-class Main extends React.Component {
+class Main extends React.Component<{}, State> {
   public params: Setting.SearchParams = {
     pageSize: 15,
     pageCurrent: 1
@@ -102,34 +102,18 @@ class Main extends React.Component {
       current: this.params.pageCurrent,
       pageSize: this.params.pageSize
     },
-    dataSource: [
-      {
-        regionName: 'xxxxx'
-      },
-      {
-        tqType: 'TQ云呼叫'
-      }
-    ],
+    dataSource: [],
     options: [],
-    agencyList: [],
     selectedRowKeys: []
   }
   public componentWillMount () {
     this.getAllArea()
-    this.getAgencyList()
     this.fetchlist()
   }
   public getAllArea () {
     fetchAllRegion().then((res) => {
       this.setState({
         options: res
-      })
-    })
-  }
-  public getAgencyList () {
-    getAgencylist().then((res) => {
-      this.setState({
-        agencyList: res.data
       })
     })
   }
@@ -231,29 +215,19 @@ class Main extends React.Component {
             fieldNames={{label: 'name', value: 'code', children: 'regionList'}}
             showSearch={{ filter }}
           />
-          <Select
-            style={{width: 200}}
-            showSearch
-            allowClear={true}
-            placeholder='请选择机构'
-            className='mr5'
-            optionFilterProp='children'
-            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            onChange={(value: string) => {
-              console.log(value, 'value')
-              this.params.pageCurrent = 1
-              this.params.agencyId = value
-              this.fetchlist()
-            }}
-          >
-            {
-              this.state.agencyList.map((item) => {
-                return (
-                  <Select.Option key={item.agencyId}>{item.agencyName}</Select.Option>
-                )
-              })
-            }
-          </Select>
+          {APP.user.companyId === '0' && (
+            <Company
+              type='self'
+              className='mr5'
+              allowClear
+              onChange={(value: string) => {
+                this.params.pageCurrent = 1
+                this.params.agencyId = value
+                console.log(value, 'company change')
+                this.fetchlist()
+              }}
+            />
+          )}
           <Select
             style={{width: 200}}
             allowClear={true}
