@@ -61,9 +61,6 @@ class Main extends React.Component<Props, State> {
       dataIndex: 'totalRecord.groupNums'
     }
   ]
-  public componentDidMount () {
-    this.fetchList()
-  }
   public fetchList (payload: PayloadProps = this.payload) {
     return getGroupCallMonitors(payload).then((res) => {
       this.setState({
