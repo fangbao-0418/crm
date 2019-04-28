@@ -16,7 +16,7 @@ interface State {
 }
 class Main extends React.Component<{}, State> {
   public state: State = {
-    type: 'seller'
+    type: 'group'
   }
   public payload: PayloadProps = {
     callTimeBeginDate: moment().format('YYYY-MM-DD'),
@@ -50,6 +50,7 @@ class Main extends React.Component<{}, State> {
   }
   public fetchList () {
     let ins: any
+    console.log(this.state.type, 'this.state.type')
     if (this.state.type === 'group') {
       ins = this.refs.group
     } else {
@@ -72,12 +73,21 @@ class Main extends React.Component<{}, State> {
     }
     this.fetchList()
   }
+  public callback (key?: 'group' | 'seller') {
+    console.log(key, 'key')
+    this.setState({
+      type: key
+    }, () => {
+      this.fetchList()
+    })
+  }
   public render () {
     const { type } = this.state
     return (
       <div>
         <Tabs
-          defaultActiveKey='group'
+          defaultActiveKey={type}
+          onChange={(key?: 'group' | 'seller') => this.callback(key)}
         >
           <TabPane
             key='group'
@@ -88,7 +98,7 @@ class Main extends React.Component<{}, State> {
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Seller ref='seller' payload={this.payload} />
+            <Seller ref='group' payload={this.payload} />
           </TabPane>
           <TabPane
             key='seller'
@@ -99,7 +109,7 @@ class Main extends React.Component<{}, State> {
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Group ref='group' payload={this.payload} />
+            <Group ref='seller' payload={this.payload} />
           </TabPane>
         </Tabs>
       </div>
