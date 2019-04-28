@@ -16,7 +16,7 @@ interface State {
 }
 class Main extends React.Component<{}, State> {
   public state: State = {
-    type: 'group'
+    type: 'seller'
   }
   public payload: PayloadProps = {
     callTimeBeginDate: moment().format('YYYY-MM-DD'),
@@ -90,7 +90,7 @@ class Main extends React.Component<{}, State> {
           onChange={(key?: 'group' | 'seller') => this.callback(key)}
         >
           <TabPane
-            key='group'
+            key='seller'
             tab='坐席监控'
           >
             <Condition
@@ -98,10 +98,10 @@ class Main extends React.Component<{}, State> {
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Seller ref='group' payload={this.payload} />
+            <Seller ref='seller' payload={this.payload} />
           </TabPane>
           <TabPane
-            key='seller'
+            key='group'
             tab='小组监控'
           >
             <Condition
@@ -109,7 +109,7 @@ class Main extends React.Component<{}, State> {
               onChange={this.onChange.bind(this)}
               dataSource={this.condition}
             />
-            <Group ref='seller' payload={this.payload} />
+            <Group ref='group' payload={this.payload} />
           </TabPane>
         </Tabs>
       </div>
