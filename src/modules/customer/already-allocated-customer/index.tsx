@@ -15,6 +15,7 @@ import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
 import AddButton from '@/modules/common/content/AddButton'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+import TransactionInfo from '@/modules/business/TransactionInfo'
 const all = [{
   label: '全部',
   value: ''
@@ -255,6 +256,35 @@ export default class Main extends React.Component<null, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
+                <Button
+                  type='ghost'
+                  className='mr5'
+                  onClick={() => {
+                    const modal2 = new Modal({
+                      content: (
+                        <TransactionInfo
+                          signOrderTime=''
+                          signOrderMoney=''
+                          onOk={() => {
+                            modal2.hide()
+                          }}
+                          onCancel={() => {
+                            modal2.hide()
+                          }}
+                        />
+                      ),
+                      title: '成交信息',
+                      mask: true,
+                      footer: null,
+                      onCancel: () => {
+                        modal2.hide()
+                      }
+                    })
+                    modal2.show()
+                  }}
+                >
+                  {record.customerId ? '查看成交信息' : '录入成交信息'}
+                </Button>
                 <Button
                   type='ghost'
                   hidden={!APP.hasPermission('crm_customer-pool-distribution_detail_save')}

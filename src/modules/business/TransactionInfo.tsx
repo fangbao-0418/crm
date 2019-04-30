@@ -3,7 +3,7 @@ import { Button, Form, DatePicker, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import classNames from 'classnames'
 const FormItem = Form.Item
-interface Props extends FormComponentProps{
+interface Props extends FormComponentProps {
   signOrderTime?: string
   signOrderMoney?: string
   onOk?: () => void
