@@ -1,11 +1,11 @@
 
 export { default as loadCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/customer'
-export { default as loadAlreadyAllocatedCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/already-allocated-customer'
+export { default as loadAlreadyAllocatedCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/customer/already-allocated-customer'
 export { default as loadBusiness } from 'bundle-loader?lazy&name=[name]!@/modules/business'
-export { default as loadAppointment } from 'bundle-loader?lazy&name=[name]!@/modules/appointment'
+export { default as loadAppointment } from 'bundle-loader?lazy&name=[name]!@/modules/business/appointment'
 export { default as loadOpen } from 'bundle-loader?lazy&name=[name]!@/modules/open'
 export { default as loadSigned } from 'bundle-loader?lazy&name=[name]!@/modules/signed'
-/** 呼叫统计 */
+/** 统计 */
 export { default as loadShout } from 'bundle-loader?lazy&name=[name]!@/modules/stat/shout'
 export { default as loadWorkpanelSales } from 'bundle-loader?lazy&name=[name]!@/modules/stat/workpanel-sales'
 export { default as loadBusinessAnalysis } from 'bundle-loader?lazy&name=[name]!@/modules/stat/business-analysis'

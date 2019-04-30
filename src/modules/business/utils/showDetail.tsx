@@ -15,7 +15,7 @@ export default function (record: Business.DetailProps, index?: number,
   } = {}) {
   let customerId = record.id
   const that = this
-  let reason: {value: string, label: string} = { value: '', label: ''}
+  const reason: {value: string, label: string} = { value: '', label: ''}
   const modal = new Modal({
     content: (
       <Provider>
@@ -37,27 +37,29 @@ export default function (record: Business.DetailProps, index?: number,
                 onClick={() => {
                   const modal1 = new Modal({
                     content: (
-                      <ToOpenReason onChange={(item) => { reason = item }}/>
+                      <ToOpenReason
+                        onOk={(item) => {
+                          customerId = store.getState().customer.detail.id
+                          console.log(item)
+                          const openparams = {
+                            customerIdArr: [customerId],
+                            bus_sea_memo: reason.label
+                          }
+                          toOpen(openparams).then(() => {
+                            if (operate.refresh) {
+                              operate.refresh()
+                            }
+                            modal1.hide()
+                          })
+                        }}
+                        onCancel={() => {
+                          modal1.hide()
+                        }}
+                      />
                     ),
                     title: '转公海',
                     mask: true,
-                    onOk: () => {
-                      customerId = store.getState().customer.detail.id
-                      if (!reason.label) {
-                        APP.error('请选择原因！')
-                        return false
-                      }
-                      const openparams = {
-                        customerIdArr: [customerId],
-                        bus_sea_memo: reason.label
-                      }
-                      toOpen(openparams).then(() => {
-                        if (operate.refresh) {
-                          operate.refresh()
-                        }
-                      })
-                      modal1.hide()
-                    },
+                    footer: null,
                     onCancel: () => {
                       modal1.hide()
                     }

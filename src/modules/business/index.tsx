@@ -299,27 +299,30 @@ class Main extends React.Component<Business.Props> {
     }
     const modal = new Modal({
       content: (
-        <ToOpenReason onChange={(item) => { this.reason = item }}/>
+        <ToOpenReason
+          onOk={(item) => {
+            console.log(item)
+            const openparams = {
+              customerIdArr: selectedRowKeys,
+              bus_sea_memo: this.reason.label
+            }
+            console.log(selectedRowKeys, 'selectedRowKeys1234543')
+            toOpen(openparams).then(() => {
+              this.fetchCount()
+              this.fetchList()
+              APP.success('操作成功')
+              modal.hide()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
+        />
       ),
       title: '转公海',
       mask: true,
       maskClosable: false,
-      onOk: () => {
-        if (!this.reason.label) {
-          APP.error('请选择原因！')
-          return false
-        }
-        const openparams = {
-          customerIdArr: selectedRowKeys,
-          bus_sea_memo: this.reason.label
-        }
-        toOpen(openparams).then(() => {
-          this.fetchCount()
-          this.fetchList()
-          APP.success('操作成功')
-        })
-        modal.hide()
-      },
+      footer: null,
       onCancel: () => {
         modal.hide()
       }
