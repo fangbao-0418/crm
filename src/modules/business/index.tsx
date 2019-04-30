@@ -189,6 +189,7 @@ class Main extends React.Component<Business.Props> {
   public handleSelectKeys () {
     const { selectedTab } = this.props
     const ins: any = this.refs[selectedTab]
+    console.log(ins, 'ins12344')
     if (ins && ins.initSelectedRowKeys) {
       ins.initSelectedRowKeys()
     }
@@ -312,6 +313,7 @@ class Main extends React.Component<Business.Props> {
               this.fetchList()
               APP.success('操作成功')
               modal.hide()
+              this.handleSelectKeys()
             })
           }}
           onCancel={() => {
@@ -537,7 +539,7 @@ class Main extends React.Component<Business.Props> {
                   <Tab2
                     tabKey='tab5'
                     getInstance={(ref) => {
-                      this.refs.tab2 = ref
+                      this.refs.tab5 = ref
                     }}
                     columns={this.columns}
                     params={this.params}
@@ -552,7 +554,7 @@ class Main extends React.Component<Business.Props> {
                   <Tab2
                     tabKey='tab6'
                     getInstance={(ref) => {
-                      this.refs.tab2 = ref
+                      this.refs.tab6 = ref
                     }}
                     columns={this.columns}
                     params={this.params}
