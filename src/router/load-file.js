@@ -1,4 +1,4 @@
-
+export { default as loadSaleBoard } from 'bundle-loader?lazy&name=[name]!@/modules/sale-board'
 export { default as loadCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/customer'
 export { default as loadAlreadyAllocatedCustomer } from 'bundle-loader?lazy&name=[name]!@/modules/customer/already-allocated-customer'
 export { default as loadBusiness } from 'bundle-loader?lazy&name=[name]!@/modules/business'
