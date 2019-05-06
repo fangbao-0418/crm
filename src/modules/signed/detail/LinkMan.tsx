@@ -47,7 +47,8 @@ class Main extends React.Component<Props> {
               })(
                 <div>
                   <span>
-                    {text || '暂无'}
+                    {text}
+                    {/* {text || '暂无'} */}
                   </span>
                   {
                     record.isSignPerson === 1 &&
