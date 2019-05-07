@@ -51,6 +51,12 @@ declare namespace Setting {
     tqType?: string
     /** tq区号 */
     tqZoneCode?: string
+    /** tq管理员密码 */
+    tqAdminPassword?: string
+    /** tq公司ID */
+    tqCompanyId?: string
+    /** tq公司管理员ID */
+    tqAdminId?: string
   }
   /** 保存设置参数 */
   interface Params {

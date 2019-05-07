@@ -287,8 +287,7 @@ class Main extends React.Component<{}, State> {
           }}
         />
         <div style={{position: 'relative', top: '-45px', width: 200}}>
-          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.showPanelBatch.bind(this)} hidden={!APP.hasPermission('crm_set_auto_distribute_save_bulk_store') || !APP.hasPermission('crm_set_auto_distribute_save_bulk_distribute')}>批量设置</Button>
-          {/* <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.showPanelBatch.bind(this)} >批量设置</Button> */}
+          <Button disabled={this.state.selectedRowKeys.length === 0} type='primary' onClick={this.showPanelBatch.bind(this)} hidden={!(APP.hasPermission('crm_set_auto_distribute_save_bulk_store') || APP.hasPermission('crm_set_auto_distribute_save_bulk_distribute'))}>批量设置</Button>
         </div>
       </Content>
     )
