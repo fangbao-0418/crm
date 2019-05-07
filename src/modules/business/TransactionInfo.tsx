@@ -1,22 +1,24 @@
 import React from 'react'
 import { Button, Form, DatePicker, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
+import { EnterSignInfo } from './api'
 import classNames from 'classnames'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
-  signOrderTime?: string
-  signOrderMoney?: string
+  enterSignTime?: string
+  enterSignMoney?: string
   onOk?: () => void
   onCancel?: () => void
+  customerId?: string
 }
 interface State {
-  signOrderTime?: string
-  signOrderMoney?: string
+  enterSignTime?: string
+  enterSignMoney?: string
 }
 class Main extends React.Component<Props, State> {
   public state: State = {
-    signOrderTime: this.props.signOrderTime,
-    signOrderMoney: this.props.signOrderMoney
+    enterSignTime: this.props.enterSignTime,
+    enterSignMoney: this.props.enterSignMoney
   }
   public render () {
     const formItemLayout: any = {
@@ -36,11 +38,11 @@ class Main extends React.Component<Props, State> {
             {...formItemLayout}
             label='签单时间'
           >
-            {getFieldDecorator('signOrderTime', {
+            {getFieldDecorator('enterSignTime', {
               rules: [{
                 required: true, message: '请选择签单时间'
               }],
-              initialValue: this.state.signOrderTime
+              initialValue: this.state.enterSignTime
             })(
               <DatePicker
                 allowClear={false}
@@ -49,7 +51,7 @@ class Main extends React.Component<Props, State> {
                 format={'YYYY-MM-DD'}
                 onChange={(current) => {
                   this.setState({
-                    signOrderTime: current ? current.format('YYYY-MM-DD') : ''
+                    enterSignTime: current ? current.format('YYYY-MM-DD') : ''
                   })
                 }}
               />
@@ -59,19 +61,19 @@ class Main extends React.Component<Props, State> {
             {...formItemLayout}
             label='签单金额'
           >
-            {getFieldDecorator('signOrderMoney', {
+            {getFieldDecorator('enterSignMoney', {
               rules: [{
                 required: true, message: '请输入签单金额'
               }],
-              initialValue: this.state.signOrderMoney
+              initialValue: this.state.enterSignMoney
             })(
               <div>
                 <Input
-                  value={this.state.signOrderMoney}
+                  value={this.state.enterSignMoney}
                   style={{width: 150}}
                   onChange={(e) => {
                     this.setState({
-                      signOrderMoney: e.target.value
+                      enterSignMoney: e.target.value
                     })
                   }}
                 />
@@ -89,8 +91,16 @@ class Main extends React.Component<Props, State> {
                 if (errs !== null) {
                   return
                 }
-                console.log(this.state.signOrderTime, this.state.signOrderMoney)
-                this.props.onOk()
+                console.log(this.state.enterSignTime, this.state.enterSignMoney)
+                const { enterSignTime, enterSignMoney } = this.state
+                const params = {
+                  customerId: this.props.customerId,
+                  enterSignTime,
+                  enterSignMoney
+                }
+                EnterSignInfo(params).then(() => {
+                  this.props.onOk()
+                })
               })
             }}
           >

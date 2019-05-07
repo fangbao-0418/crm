@@ -263,8 +263,9 @@ export default class Main extends React.Component<null, States> {
                     const modal2 = new Modal({
                       content: (
                         <TransactionInfo
-                          signOrderTime=''
-                          signOrderMoney=''
+                          enterSignTime=''
+                          enterSignMoney=''
+                          customerId={customerId}
                           onOk={() => {
                             modal2.hide()
                           }}

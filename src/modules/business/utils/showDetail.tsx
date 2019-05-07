@@ -38,8 +38,9 @@ export default function (record: Business.DetailProps, index?: number,
                   const modal2 = new Modal({
                     content: (
                       <TransactionInfo
-                        signOrderTime=''
-                        signOrderMoney=''
+                        enterSignTime=''
+                        enterSignMoney=''
+                        customerId={customerId}
                         onOk={() => {
                           modal2.hide()
                         }}
