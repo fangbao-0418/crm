@@ -1,9 +1,28 @@
 import React from 'react'
 import classNames from 'classnames'
 import { Table } from 'antd'
+import { fetchInfo } from './api'
 const styles = require('./style')
 interface State {
   type?: 'CALL' | 'ACHIEVEMENT'
+  dataSource?: {
+    /** 欢迎词 */
+    kanbanWelcoming?: string
+    /** 商机客户 */
+    businessCustomerNums?: string
+    /** 意向客户 */
+    intentionCustomerNums?: string
+    /** 本月新签客户 */
+    signedNums?: string
+    /** 待跟进 */
+    awaitTrackNums?: string
+    /** 今日待回访 */
+    returnVisitNums?: string
+    /** 信息待完善 */
+    infoDegree?: string
+    /** 下单进行中 */
+    signingNums?: string  
+  }
   data?: Array<{rank?: string, naver?: string, sale?: string, num?: string}>
 }
 class Main extends React.Component<{}, State> {
@@ -27,12 +46,20 @@ class Main extends React.Component<{}, State> {
   }]
   public state: State = {
     type: 'CALL',
+    dataSource: {},
     data: [{
       rank: '4',
       naver: '李',
       sale: '张大大',
       num: '50000'
     }]
+  }
+  public componentWillMount () {
+    fetchInfo().then((res) => {
+      this.setState({
+        dataSource: res.data
+      })
+    })
   }
   public render () {
     return (
@@ -53,21 +80,21 @@ class Main extends React.Component<{}, State> {
             <li className={classNames('bg')}>
               <img src={require('@/assets/images/我的商机icon.png')}/>
               <div>
-                <p>我的商机</p>
+                <p>商机客户</p>
                 <p className={styles.num}>19，988</p>
               </div>
             </li>
             <li className={classNames('bg')}>
               <img src={require('@/assets/images/本月完成新签.png')}/>
               <div>
-                <p>本月完成新签</p>
+                <p>意向客户</p>
                 <p className={styles.num}>20</p>
               </div>
             </li>
             <li className={classNames('bg')}>
               <img src={require('@/assets/images/本月跟进.png')}/>
               <div>
-                <p>本月跟进量</p>
+                <p>本月新签客户</p>
                 <p className={styles.num}>5，000</p>
               </div>
             </li>
@@ -75,7 +102,7 @@ class Main extends React.Component<{}, State> {
         </div>
         <ul className={classNames('mt10', styles.middle, 'clear')}>
           <li className={styles.first}>
-            <p>待跟进客户</p>
+            <p>待跟进</p>
             <p className={styles.num}>20</p>
           </li>
           <li className={styles.second}>
@@ -83,11 +110,11 @@ class Main extends React.Component<{}, State> {
             <p className={styles.num}>20</p>
           </li>
           <li className={styles.third}>
-            <p>资料等完善</p>
+            <p>信息待完善</p>
             <p className={styles.num}>20</p>
           </li>
           <li className={styles.forth}>
-            <p>签单待完成</p>
+            <p>下单进行中</p>
             <p className={styles.num}>20</p>
           </li>
         </ul>
