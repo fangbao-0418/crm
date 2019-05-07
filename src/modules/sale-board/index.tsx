@@ -21,7 +21,13 @@ interface State {
     /** 信息待完善 */
     infoDegree?: string
     /** 下单进行中 */
-    signingNums?: string  
+    signingNums?: string
+    /** 今日动态 */
+    conditionToday?: Array<{salespersonName?: string, createTime?: string, customerName?: string}>
+    /** 今天通话排行 */
+    callToday?: Array<{sortNumber?: string, salesperson?: string, value?: string}>
+    /** 今天新签排行 */
+    signedToday?: Array<{sortNumber?: string, salesperson?: string, value?: string}>
   }
   data?: Array<{rank?: string, naver?: string, sale?: string, num?: string}>
 }
