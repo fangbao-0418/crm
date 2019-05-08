@@ -30,7 +30,8 @@ class Main extends React.Component<Props> {
     tqAdmin: this.props.record.tqAdmin,
     tqZoneCode: this.props.record.tqZoneCode,
     tqAdminPassword: this.props.record.tqAdminPassword,
-    tqCompanyId: this.props.record.tqCompanyId
+    tqCompanyId: this.props.record.tqCompanyId,
+    tqAdminId: this.props.record.tqAdminId
   }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
