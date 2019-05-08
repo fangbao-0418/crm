@@ -16,8 +16,9 @@ class Main extends React.Component<Props> {
       2: null,
       3: <Mobile {...this.props} />
     }
+    console.log(APP.user.tqType, node[APP.user.tqType || 0], 'call')
     return (
-      node[APP.user.tqType || 0]
+      node[APP.user.tqType || 0] || null
     )
   }
 }
