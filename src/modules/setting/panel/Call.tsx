@@ -16,13 +16,22 @@ interface State {
   tqType?: string
   /** tq区号 */
   tqZoneCode?: string
+  /** tq管理员密码 */
+  tqAdminPassword?: string
+  /** tq公司ID */
+  tqCompanyId?: string
+  /** tq公司管理员ID */
+  tqAdminId?: string
 }
 class Main extends React.Component<Props> {
   public state: State = {
     editable: false,
     tqType: this.props.record.tqType,
     tqAdmin: this.props.record.tqAdmin,
-    tqZoneCode: this.props.record.tqZoneCode
+    tqZoneCode: this.props.record.tqZoneCode,
+    tqAdminPassword: this.props.record.tqAdminPassword,
+    tqCompanyId: this.props.record.tqCompanyId,
+    tqAdminId: this.props.record.tqAdminId
   }
   public onOk () {
     this.props.form.validateFields((err, vals: Setting.Params) => {
@@ -44,12 +53,12 @@ class Main extends React.Component<Props> {
     })
   }
   public render () {
-    const { editable, tqAdmin, tqType, tqZoneCode } = this.state
+    const { editable, tqAdmin, tqType, tqZoneCode, tqAdminPassword, tqCompanyId, tqAdminId } = this.state
     const { getFieldDecorator }  = this.props.form
     const { record } = this.props
     const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 8 }
+      labelCol: { span: 9 },
+      wrapperCol: { span: 15 }
     }
     console.log(this.state.tqType, '112')
     return (
@@ -85,26 +94,43 @@ class Main extends React.Component<Props> {
               String(tqType) !== '0' &&
               <div>
                 <Row>
-                  <Col span={6}>
+                  <Col span={8}>
                     <span>管理员账号：</span>
                     <span>{tqAdmin}</span>
                   </Col>
-                  <Col span={6}>
+                  <Col span={8}>
                     <span>电话区号：</span>
                     <span>{tqZoneCode}</span>
                   </Col>
                 </Row>
+                {
+                  String(tqType) === '4' &&
+                  <Row>
+                    <Col span={8}>
+                      <span>公司ID：</span>
+                      <span>{tqCompanyId}</span>
+                    </Col>
+                    <Col span={8}>
+                      <span>管理员ID：</span>
+                      <span>{tqAdminId}</span>
+                    </Col>
+                    <Col span={8}>
+                      <span>管理员密码：</span>
+                      <span>{tqAdminPassword}</span>
+                    </Col>
+                  </Row>
+                }
               </div>
             }
           </div>
         ) : (
           <Form>
             <div className={styles.box}>
-              <FormItem
-                {...formItemLayout}
-              >
-                <Row gutter={8}>
-                  <Col span={16}>
+              <Row gutter={8}>
+                <Col span={12}>
+                  <FormItem
+                    {...formItemLayout}
+                  >
                     {getFieldDecorator('tqType', { initialValue: String(tqType) })(
                       <Select
                         onSelect={(value) => {
@@ -124,18 +150,69 @@ class Main extends React.Component<Props> {
                         }
                       </Select>
                     )}
-                  </Col>
-                </Row>
-              </FormItem>
+                  </FormItem>
+                </Col>
+              </Row>
               {
                 String(tqType) !== '0' &&
                 <div>
-                  <FormItem
-                    label='管理员账号'
-                    {...formItemLayout}
-                  >
-                    <Row gutter={8}>
-                      <Col span={16}>
+                  {
+                    String(tqType) === '4' &&
+                    <div>
+                      <Row>
+                        <Col span={12}>
+                          <FormItem
+                            {...formItemLayout}
+                            label='公司ID'
+                          >
+                            {getFieldDecorator('tqCompanyId', {
+                              initialValue: tqCompanyId,
+                              rules:[{
+                                required: true, message: '请输入公司ID'
+                              }]
+                            })(
+                              <Input
+                                onChange={(e) => {
+                                  this.setState({
+                                    tqCompanyId: e.target.value
+                                  })
+                                }}
+                              />
+                            )}
+                          </FormItem>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={12}>
+                          <FormItem
+                            {...formItemLayout}
+                            label='管理员ID'
+                          >
+                            {getFieldDecorator('tqAdminId', {
+                              initialValue: tqAdminId,
+                              rules:[{
+                                required: true, message: '请输入管理员ID'
+                              }]
+                            })(
+                              <Input
+                                onChange={(e) => {
+                                  this.setState({
+                                    tqAdminId: e.target.value
+                                  })
+                                }}
+                              />
+                            )}
+                          </FormItem>
+                        </Col>
+                      </Row>
+                    </div>
+                  }
+                  <Row>
+                    <Col span={12}>
+                      <FormItem
+                        {...formItemLayout}
+                        label='管理员账号'
+                      >
                         {getFieldDecorator('tqAdmin', {
                           initialValue: tqAdmin,
                           rules:[{
@@ -150,16 +227,41 @@ class Main extends React.Component<Props> {
                             }}
                           />
                         )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  {
+                    String(tqType) === '4' &&
+                    <Row>
+                      <Col span={12}>
+                        <FormItem
+                          {...formItemLayout}
+                          label='管理员密码'
+                        >
+                          {getFieldDecorator('tqAdminPassword', {
+                            initialValue: tqAdminPassword,
+                            rules:[{
+                              required: true, message: '请输入管理员密码'
+                            }]
+                          })(
+                            <Input
+                              onChange={(e) => {
+                                this.setState({
+                                  tqAdminPassword: e.target.value
+                                })
+                              }}
+                            />
+                          )}
+                        </FormItem>
                       </Col>
                     </Row>
-                  </FormItem>
-                  <FormItem
-                    label='电话区号'
-                    {...formItemLayout}
-                    style={{margin: 0}}
-                  >
-                    <Row gutter={8}>
-                      <Col span={16}>
+                  }
+                  <Row>
+                    <Col span={12}>
+                      <FormItem
+                        {...formItemLayout}
+                        label='电话区号'
+                      >
                         {getFieldDecorator('tqZoneCode', {
                           initialValue: tqZoneCode,
                           rules:[{
@@ -174,9 +276,9 @@ class Main extends React.Component<Props> {
                             }}
                           />
                         )}
-                      </Col>
-                    </Row>
-                  </FormItem>
+                      </FormItem>
+                    </Col>
+                  </Row>
                 </div>
               }
             </div>
