@@ -1,6 +1,7 @@
 import React from 'react'
 import Cloud from './Cloud'
 import Mobile from './Mobile'
+import MobileNewTab from './MobileNewTab'
 interface Props {
   phone: string
   name: string
@@ -14,7 +15,8 @@ class Main extends React.Component<Props> {
       0: null,
       1: <Cloud {...this.props} />,
       2: null,
-      3: <Mobile {...this.props} />
+      3: <Mobile {...this.props} />,
+      4: <MobileNewTab {...this.props} />
     }
     console.log(APP.user.tqType, node[APP.user.tqType || 0], 'call')
     return (

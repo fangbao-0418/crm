@@ -57,3 +57,12 @@ export const mobilCall = (payload: {
   const query = $.param(payload)
   return http(`/crm-manage/v1/api/work-mobile/makecall?${query}`, 'POST')
 }
+export const mobilCallNewTab = (payload: {
+  customerId: any,
+  customerName: string,
+  contactPhone: string,
+  contactName: string
+}) => {
+  const query = $.param(payload)
+  return http(`/crm-manage/v1/api/work-mobile/makecall-new?${query}`, 'POST')
+}
