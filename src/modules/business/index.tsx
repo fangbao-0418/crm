@@ -48,6 +48,8 @@ class Main extends React.Component<Business.Props> {
     this.fetchCount()
     this.fetchCitys()
     this.fetchSales()
+    // 销售看板 点击公司 需要查询当前公司信息 通过路由隐式穿参
+    // this.handleSearchType({value: '上海梵波生物科技有限公司', key: 'customerName'})
   }
   public componentWillUnmount () {
     APP.dispatch({
