@@ -20,7 +20,7 @@ class Main extends React.Component<Props> {
               <Info
                 enterSignTime={record.enterSignTime}
                 enterSignMoney={record.enterSignMoney}
-                customerId={record.customerId}
+                customerId={record.id}
                 onOk={(params) => {
                   record = Object.assign({}, record, params)
                   APP.dispatch<Customer.Props>({
