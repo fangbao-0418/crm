@@ -59,7 +59,7 @@ export default function (record: Business.DetailProps, index?: number,
                   modal2.show()
                 }}
               >
-                {record.appointmentTime ? '查看成交信息' : '录入成交信息'}
+                {record.enterSignTime ? '查看成交信息' : '录入成交信息'}
               </Button>
               <Button
                 type='ghost'

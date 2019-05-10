@@ -211,7 +211,12 @@ class Main extends React.Component<{}, State> {
                       <p>
                         <span>{item.salespersonName} </span>
                         <span> 将客户</span>
-                        <span className={styles.company} onClick={() => {APP.history.push('/business')}}>{item.customerName}</span>
+                        <span
+                          className={styles.company}
+                          onClick={() => {APP.history.push('/business', {name: item.customerName})}}
+                        >
+                          {item.customerName}
+                        </span>
                         <span>分给你</span>
                       </p>
                       <p>{item.createTime}</p>

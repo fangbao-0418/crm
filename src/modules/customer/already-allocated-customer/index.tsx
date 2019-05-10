@@ -284,7 +284,7 @@ export default class Main extends React.Component<null, States> {
                     modal2.show()
                   }}
                 >
-                  {record.customerId ? '查看成交信息' : '录入成交信息'}
+                  {record.enterSignTime ? '查看成交信息' : '录入成交信息'}
                 </Button>
                 <Button
                   type='ghost'

@@ -29,5 +29,9 @@ declare namespace ReadyCustomer {
     agencyName?: string
     status?: string
     distributionTime?: string
+    /** 录入签单时间 */
+    enterSignTime?: string
+    /** 录入签单金额 */
+    enterSignMoney?: string
   }
 }

@@ -55,6 +55,9 @@ export const getcapacityNum = () => {
 export const verifyMessage = (customerId?: string) => {
   return http(`/crm-manage/v1/api/get-customer-track-status?customerId=${customerId}`)
 }
+export const ViewSignInfo = (customerId?: string) => {
+  return http(`/crm-manage/v1/api/customer/enter-sign-time/${customerId}`, 'GET')
+}
 export const EnterSignInfo = (payload: {
   customerId: string
   enterSignTime: string

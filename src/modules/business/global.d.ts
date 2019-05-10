@@ -17,6 +17,10 @@ declare namespace Business {
     lastTrackTime?: string
     /** 支付中状态 */
     payStatus?: number
+    /** 录入签单时间 */
+    enterSignTime?: string
+    /** 录入签单金额 */
+    enterSignMoney?: string
   }
   export interface SearchProps {
     appointStartTime?: string
