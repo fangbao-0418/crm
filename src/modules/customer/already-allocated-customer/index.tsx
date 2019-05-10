@@ -15,6 +15,7 @@ import Provider from '@/components/Provider'
 import Detail from '@/modules/customer/detail'
 import AddButton from '@/modules/common/content/AddButton'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+import Transaction from '@/modules/business/detail/footer/transaction'
 const all = [{
   label: '全部',
   value: ''
@@ -255,6 +256,7 @@ export default class Main extends React.Component<null, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
+                <Transaction/>
                 <Button
                   type='ghost'
                   hidden={!APP.hasPermission('crm_customer-pool-distribution_detail_save')}

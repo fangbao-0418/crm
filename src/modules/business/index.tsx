@@ -1,5 +1,6 @@
 import React from 'react'
 import { DatePicker, Select, Tabs, Icon } from 'antd'
+import { withRouter, RouteComponentProps } from 'react-router'
 import ContentBox from '@/modules/common/content'
 import Condition from '@/modules/common/search/Condition'
 import SearchName from '@/modules/common/search/SearchName'
@@ -31,7 +32,8 @@ interface States {
   citys: Common.RegionProps[],
   sales: Array<{id: string, name: string}>
 }
-class Main extends React.Component<Business.Props> {
+type Props = RouteComponentProps & Business.Props
+class Main extends React.Component<Props> {
   public state: States = {
     extshow: false,
     citys: [],
@@ -48,6 +50,12 @@ class Main extends React.Component<Business.Props> {
     this.fetchCount()
     this.fetchCitys()
     this.fetchSales()
+    // 销售看板 点击公司 需要查询当前公司信息 通过路由隐式穿参
+    const state = this.props.location.state || {}
+    console.log(state, '1111')
+    if (state && state.name) {
+      this.handleSearchType({value: state.name, key: 'customerName'})
+    }
   }
   public componentWillUnmount () {
     APP.dispatch({
@@ -189,6 +197,7 @@ class Main extends React.Component<Business.Props> {
   public handleSelectKeys () {
     const { selectedTab } = this.props
     const ins: any = this.refs[selectedTab]
+    console.log(ins, 'ins12344')
     if (ins && ins.initSelectedRowKeys) {
       ins.initSelectedRowKeys()
     }
@@ -299,27 +308,31 @@ class Main extends React.Component<Business.Props> {
     }
     const modal = new Modal({
       content: (
-        <ToOpenReason onChange={(item) => { this.reason = item }}/>
+        <ToOpenReason
+          onOk={(item) => {
+            console.log(item)
+            const openparams = {
+              customerIdArr: selectedRowKeys,
+              bus_sea_memo: this.reason.label
+            }
+            console.log(selectedRowKeys, 'selectedRowKeys1234543')
+            toOpen(openparams).then(() => {
+              this.fetchCount()
+              this.fetchList()
+              APP.success('操作成功')
+              modal.hide()
+              this.handleSelectKeys()
+            })
+          }}
+          onCancel={() => {
+            modal.hide()
+          }}
+        />
       ),
       title: '转公海',
       mask: true,
       maskClosable: false,
-      onOk: () => {
-        if (!this.reason.label) {
-          APP.error('请选择原因！')
-          return false
-        }
-        const openparams = {
-          customerIdArr: selectedRowKeys,
-          bus_sea_memo: this.reason.label
-        }
-        toOpen(openparams).then(() => {
-          this.fetchCount()
-          this.fetchList()
-          APP.success('操作成功')
-        })
-        modal.hide()
-      },
+      footer: null,
       onCancel: () => {
         modal.hide()
       }
@@ -534,7 +547,7 @@ class Main extends React.Component<Business.Props> {
                   <Tab2
                     tabKey='tab5'
                     getInstance={(ref) => {
-                      this.refs.tab2 = ref
+                      this.refs.tab5 = ref
                     }}
                     columns={this.columns}
                     params={this.params}
@@ -549,7 +562,7 @@ class Main extends React.Component<Business.Props> {
                   <Tab2
                     tabKey='tab6'
                     getInstance={(ref) => {
-                      this.refs.tab2 = ref
+                      this.refs.tab6 = ref
                     }}
                     columns={this.columns}
                     params={this.params}
