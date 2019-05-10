@@ -6,7 +6,7 @@ import Provider from '@/components/Provider'
 import ToOpenReason from '../ToOpenReason'
 import { toOpen } from '../api'
 import store from '@/store'
-import TransactionInfo from '../TransactionInfo'
+import Transaction from '@/modules/business/detail/footer/transaction'
 export default function (record: Business.DetailProps, index?: number,
   operate: {
     onOk?: () => void
@@ -31,36 +31,7 @@ export default function (record: Business.DetailProps, index?: number,
           customerId={customerId}
           footer={(
             <div className='mt10 text-right'>
-              <Button
-                type='ghost'
-                className='mr5'
-                onClick={() => {
-                  const modal2 = new Modal({
-                    content: (
-                      <TransactionInfo
-                        enterSignTime=''
-                        enterSignMoney=''
-                        customerId={customerId}
-                        onOk={() => {
-                          modal2.hide()
-                        }}
-                        onCancel={() => {
-                          modal2.hide()
-                        }}
-                      />
-                    ),
-                    title: '成交信息',
-                    mask: true,
-                    footer: null,
-                    onCancel: () => {
-                      modal2.hide()
-                    }
-                  })
-                  modal2.show()
-                }}
-              >
-                {record.enterSignTime ? '查看成交信息' : '录入成交信息'}
-              </Button>
+              <Transaction/>
               <Button
                 type='ghost'
                 hidden={!APP.hasPermission('crm_business_mine_detail_sea')}

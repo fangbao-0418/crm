@@ -79,6 +79,10 @@ declare namespace Customer {
     /** 所属机构 */
     agencyName?: string
     clientStatus?: string
+    /** 录入签单时间 */
+    enterSignTime?: string
+    /** 录入签单金额 */
+    enterSignMoney?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string

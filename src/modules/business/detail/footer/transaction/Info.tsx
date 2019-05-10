@@ -1,13 +1,18 @@
 import React from 'react'
 import { Button, Form, DatePicker, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
-import { EnterSignInfo } from './api'
+import { EnterSignInfo } from '@/modules/business/api'
+import moment from 'moment'
 import classNames from 'classnames'
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   enterSignTime?: string
   enterSignMoney?: string
-  onOk?: () => void
+  onOk?: (params: {
+    customerId: any
+    enterSignTime: string
+    enterSignMoney: string
+  }) => void
   onCancel?: () => void
   customerId?: string
 }
@@ -42,7 +47,7 @@ class Main extends React.Component<Props, State> {
               rules: [{
                 required: true, message: '请选择签单时间'
               }],
-              initialValue: this.state.enterSignTime
+              initialValue: moment(this.state.enterSignTime)
             })(
               <DatePicker
                 allowClear={false}
@@ -99,7 +104,7 @@ class Main extends React.Component<Props, State> {
                   enterSignMoney
                 }
                 EnterSignInfo(params).then(() => {
-                  this.props.onOk()
+                  this.props.onOk(params)
                 })
               })
             }}
