@@ -503,7 +503,7 @@ class Main extends React.Component<Props> {
           >
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
               <SearchName
-                initValue={(state && state.name) ? state.name : '' }
+                initValue={(state && state.name) ? state.name : ''}
                 style={{paddingTop: '5px'}}
                 options={[
                   { value: 'customerName', label: '客户名称'},
