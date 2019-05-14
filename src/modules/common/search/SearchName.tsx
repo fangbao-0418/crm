@@ -6,6 +6,7 @@ const InputGroup = Input.Group
 const Option = Select.Option
 interface Props {
   className?: string
+  initValue?: string
   style?: React.CSSProperties
   placeholder?: string
   options?: Array<{
@@ -16,8 +17,14 @@ interface Props {
   onChange?: (value?: {value?: string, key: string}) => void
   onSearch?: (value?: {value?: string, key: string}) => void
 }
+interface State {
+  initValue?: string
+}
 class Main extends React.Component<Props> {
   public value: {key: string, value?: string}
+  public state: State = {
+    initValue: this.props.initValue ? this.props.initValue : ''
+  }
   public render () {
     const options = (this.props.options instanceof Array && this.props.options.length > 0) ? this.props.options : [{value: undefined, label: undefined}]
     const nodes: JSX.Element[] = []
@@ -50,6 +57,7 @@ class Main extends React.Component<Props> {
           {nodes}
         </Select>
         <Input
+          value={this.state.initValue}
           onChange={(e) => {
             if (options.length === 0) {
               return
@@ -60,6 +68,9 @@ class Main extends React.Component<Props> {
               }
             }
             this.value.value = e.target.value.trim()
+            this.setState({
+              initValue: e.target.value.trim()
+            })
             if (this.props.onChange) {
               this.props.onChange(_.cloneDeep(this.value))
             }
