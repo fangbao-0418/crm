@@ -45,7 +45,7 @@ export default function (record: Business.DetailProps, index?: number,
                           console.log(item)
                           const openparams = {
                             customerIdArr: [customerId],
-                            bus_sea_memo: reason.label
+                            bus_sea_memo: item.label
                           }
                           toOpen(openparams).then(() => {
                             if (operate.refresh) {

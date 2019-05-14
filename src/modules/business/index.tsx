@@ -47,14 +47,14 @@ class Main extends React.Component<Props> {
   public reason: {value: string, label: string} = { value: '', label: ''}
   public columns = getColumns.call(this)
   public componentWillMount () {
-    this.fetchCount()
     this.fetchCitys()
     this.fetchSales()
     // 销售看板 点击公司 需要查询当前公司信息 通过路由隐式穿参
     const state = this.props.location.state || {}
-    console.log(state, '1111')
     if (state && state.name) {
       this.handleSearchType({value: state.name, key: 'customerName'})
+    } else {
+      this.fetchCount()
     }
   }
   public componentWillUnmount () {
@@ -313,7 +313,7 @@ class Main extends React.Component<Props> {
             console.log(item)
             const openparams = {
               customerIdArr: selectedRowKeys,
-              bus_sea_memo: this.reason.label
+              bus_sea_memo: item.label
             }
             console.log(selectedRowKeys, 'selectedRowKeys1234543')
             toOpen(openparams).then(() => {
@@ -445,6 +445,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const { count, selectedTab } = this.props
+    const state = this.props.location.state || {}
     console.log(selectedTab, 'selectedTab')
     return (
       <ContentBox
@@ -502,6 +503,7 @@ class Main extends React.Component<Props> {
           >
             <div style={{display: 'inline-block', width: 290, verticalAlign: 'bottom', margin: '0 5px 0 20px'}}>
               <SearchName
+                initValue={(state && state.name) ? state.name : '' }
                 style={{paddingTop: '5px'}}
                 options={[
                   { value: 'customerName', label: '客户名称'},
