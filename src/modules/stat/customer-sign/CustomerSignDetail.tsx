@@ -50,7 +50,7 @@ class Main extends React.Component {
   public payload: PayloadProps = {
     totalBeginDate: moment().format('YYYY-MM-DD'),
     totalEndDate: moment().format('YYYY-MM-DD'),
-    agencyId: '',
+    agencyId: APP.user.companyId,
     salespersonId: '',
     customerSource: ''
   }
