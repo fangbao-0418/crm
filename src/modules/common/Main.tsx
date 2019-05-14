@@ -52,8 +52,8 @@ class Main extends React.Component<{}, State> {
           {/* <Content className={styles['con-index']}>
             <Route hidden={!APP.hasPermission('crm_sale_board')} path='/sale-board' component={modules.SaleBoard} />
           </Content> */}
+          <Route hidden={!APP.hasPermission('crm_sale_board')} path='/sale-board' component={modules.SaleBoard} />
           <Content className='content'>
-            <Route hidden={!APP.hasPermission('crm_sale_board')} path='/sale-board' component={modules.SaleBoard} />
             <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
             <Route hidden={!APP.hasPermission('customer-pool-distribution')} path='/already-allocated-customer' component={modules.AlreadyAllocatedCustomer} />
             <Route hidden={!APP.hasPermission('crm_business_mine')} path='/business' component={modules.Business} />
