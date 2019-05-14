@@ -296,6 +296,7 @@ class Main extends React.Component<{}, State> {
           <Company
             type='self'
             className='mr5'
+            defaultValue={APP.user.companyId}
             onChange={(value: string) => {
               this.payload.agencyId = value
               this.getSales(value)

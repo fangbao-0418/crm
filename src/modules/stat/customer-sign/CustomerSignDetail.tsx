@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Select, Row, Col, Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { getFirms, getCustomerSign } from '@/modules/stat/api'
+import { getCustomerSign } from '@/modules/stat/api'
 import { getSalesByCompanyId } from '@/modules/common/api'
 import Condition, { ConditionOptionProps } from '@/modules/common/search/Condition'
 import CityRank from './CityRank'
@@ -11,6 +11,8 @@ import Line from './Line'
 import AreaDistribution from './AreaDistribution'
 import _ from 'lodash'
 import AddButton from '@/modules/common/content/AddButton'
+import Company from '@/modules/common/content/Company'
+
 
 export interface PayloadProps {
   totalBeginDate: string
@@ -201,22 +203,10 @@ class Main extends React.Component {
   ]
 
   public componentWillMount () {
-    this.getFirms()
+    this.getSales()
   }
 
-  public getFirms () {
-    getFirms(this.companyTypeList).then((res) => {
-      // this.payload.agencyId = res[0].id
-      this.setState({
-        firms: res
-        // organ: res[0].id
-      }, () => {
-        this.getSales(res[0].id)
-      })
-    })
-  }
-
-  public getSales (companyId: string) {
+  public getSales (companyId: string = APP.user.companyId) {
     getSalesByCompanyId(companyId).then((res) => {
       console.log(res, 'resperson')
       const sales = res.map((item: any) => {
@@ -346,30 +336,16 @@ class Main extends React.Component {
           dataSource={this.condition}
         />
         <div style={{marginTop: 15, marginBottom: 20}}>
-          <Select
-            allowClear={true}
-            showSearch
-            optionFilterProp='children'
-            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            // value={this.state.organ}
+          <Company
+            type='self'
             className='inline-block mr8'
-            style={{width: 200}}
-            placeholder='请输入创建机构'
+            defaultValue={APP.user.companyId}
             onChange={(value: string) => {
               this.payload.agencyId = value
               this.getSales(value)
               this.setState({organ: value})
             }}
-          >
-            {
-              this.state.firms.length > 0 &&
-              this.state.firms.map((item) => {
-                return (
-                  <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                )
-              })
-            }
-          </Select>
+          />
           <Select
             allowClear={true}
             showSearch
