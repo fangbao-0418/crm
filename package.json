@@ -58,7 +58,7 @@
     "karma-webpack": "4.0.0-rc.2",
     "lodash.camelcase": "^4.3.0",
     "mini-css-extract-plugin": "^0.4.2",
-    "pilipa-terrace": "^1.0.7",
+    "pilipa-terrace": "^1.0.14-alpha.1",
     "postcss-csso": "^3.0.0",
     "postcss-loader": "^3.0.0",
     "react": "^16.5.1",

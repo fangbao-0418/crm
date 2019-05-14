@@ -85,7 +85,7 @@ class Main extends React.Component<{}, State> {
               <p>
                 <span>{APP.user.roleName}</span>
                 <span> | </span>
-                <span>{APP.user.companyName}-{APP.user.organizationName}</span>
+                <span>{APP.user.organizationName}</span>
               </p>
             </div>
           </div>

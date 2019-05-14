@@ -5000,12 +5000,17 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/pify/download/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-pilipa-terrace@^1.0.7:
-  version "1.0.7"
-  resolved "https://npmregistry.i-counting.cn/pilipa-terrace/-/pilipa-terrace-1.0.7.tgz#5cbfd278a2f6931bd767a44af28af7d649af90ac"
+pilipa-analytics@^1.0.5:
+  version "1.0.10"
+  resolved "https://npmregistry.i-counting.cn/pilipa-analytics/-/pilipa-analytics-1.0.10.tgz#9faa26bd9fff2b85e0673d24e5d1739af23cb050"
+
+pilipa-terrace@^1.0.14-alpha.1:
+  version "1.0.14-alpha.1"
+  resolved "https://npmregistry.i-counting.cn/pilipa-terrace/-/pilipa-terrace-1.0.14-alpha.1.tgz#a546194e3aacae5015ab42389c2eeacec97ffc39"
   dependencies:
     babel-polyfill "^6.26.0"
     classnames "^2.2.5"
+    pilipa-analytics "^1.0.5"
 
 pilipa@^3.0.8-alpha.1:
   version "3.0.8-alpha.1"
