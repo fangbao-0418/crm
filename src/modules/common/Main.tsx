@@ -50,7 +50,7 @@ class Main extends React.Component<{}, State> {
       >
         {this.state.visible && <Switch>
           <Content className={styles['con-index']}>
-            <Route path='/sale-board' component={modules.SaleBoard} />
+            <Route hidden={!APP.hasPermission('crm_sale_board')} path='/sale-board' component={modules.SaleBoard} />
           </Content>
           <Content className='content'>
             <Route hidden={!APP.hasPermission('crm_customer_list')} path='/customer' component={modules.Customer} />
