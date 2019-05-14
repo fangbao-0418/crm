@@ -4,6 +4,7 @@ import { FormComponentProps } from 'antd/lib/form'
 import { EnterSignInfo } from '@/modules/business/api'
 import moment from 'moment'
 import classNames from 'classnames'
+const styles = require('./style')
 const FormItem = Form.Item
 interface Props extends FormComponentProps {
   enterSignTime?: string
@@ -75,6 +76,8 @@ class Main extends React.Component<Props, State> {
               <div>
                 <Input
                   value={this.state.enterSignMoney}
+                  type='number'
+                  className={styles['clear-input-number']}
                   style={{width: 150}}
                   onChange={(e) => {
                     this.setState({
