@@ -35,7 +35,7 @@ interface State {
   conditionTodayList?: Array<{salespersonName?: string, createTime?: string, customerName?: string}>
 }
 class Main extends React.Component<{}, State> {
-  public columns = [{
+  public callColumns = [{
     title: '排名',
     dataIndex: 'sortNumber'
   }, {
@@ -51,6 +51,24 @@ class Main extends React.Component<{}, State> {
     dataIndex: 'salesperson'
   }, {
     title: '通话量',
+    dataIndex: 'value'
+  }]
+  public YJcolumns = [{
+    title: '排名',
+    dataIndex: 'sortNumber'
+  }, {
+    title: '头像',
+    dataIndex: 'salesperson',
+    render: (val: string) => {
+      return (
+        <span className={styles.naver}>{val.slice(0, 1)}</span>
+      )
+    }
+  }, {
+    title: '销售',
+    dataIndex: 'salesperson'
+  }, {
+    title: '新签客户',
     dataIndex: 'value'
   }]
   public state: State = {
@@ -167,7 +185,7 @@ class Main extends React.Component<{}, State> {
                       <p className={styles.circle}>{curData[2] && curData[2].salesperson ? curData[2].salesperson.slice(0, 1) : '未'}</p>
                     </div>
                     <p className={styles.name}>{curData[2] && curData[2].salesperson}</p>
-                    <p className={styles.num}>通话量：{curData[2] && curData[2].value}</p>
+                    <p className={styles.num}>{this.state.type === 'CALL' ? '通话量：' : '新签客户：'}{curData[2] && curData[2].value}</p>
                   </li>
                   <li className={styles.first}>
                     <div>
@@ -175,7 +193,7 @@ class Main extends React.Component<{}, State> {
                       <p className={styles.circle}>{curData[0] && curData[0].salesperson ? curData[0].salesperson.slice(0, 1) : '未'}</p>
                     </div>
                     <p className={styles.name}>{curData[0] && curData[0].salesperson}</p>
-                    <p className={styles.num}>通话量：{curData[0] && curData[0].value}</p>
+                    <p className={styles.num}>{this.state.type === 'CALL' ? '通话量：' : '新签客户：'}{curData[0] && curData[0].value}</p>
                   </li>
                   <li className={classNames(styles['no-first'], styles.second)}>
                     <div className={styles.box}>
@@ -185,13 +203,13 @@ class Main extends React.Component<{}, State> {
                       </p>
                     </div>
                     <p className={styles.name}>{curData[1] && curData[1].salesperson}</p>
-                    <p className={styles.num}>通话量：{curData[1] && curData[1].value}</p>
+                    <p className={styles.num}>{this.state.type === 'CALL' ? '通话量：' : '新签客户：'}{curData[1] && curData[1].value}</p>
                   </li>
                 </ul>
               }
               <div className={classNames('mt20', styles['tab-table'])}>
                 <Table
-                  columns={this.columns}
+                  columns={this.state.type === 'CALL' ? this.callColumns : this.YJcolumns}
                   dataSource={data}
                   pagination={false}
                 />
