@@ -482,7 +482,7 @@ class Main extends React.Component<Props> {
         }
         <Shrink
           height={100}
-          defaultCollapsed={(this.props.location.state && this.props.location.state.name) ? true : false}
+          defaultCollapsed={(this.props.location.state && this.props.location.state.name) ? false : true}
         >
           <Condition
             dataSource={this.data}
