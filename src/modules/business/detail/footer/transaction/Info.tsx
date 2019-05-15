@@ -76,14 +76,17 @@ class Main extends React.Component<Props, State> {
               <div>
                 <Input
                   value={this.state.enterSignMoney}
-                  type='number'
                   maxLength={6}
+                  type='number'
                   className={styles['clear-input-number']}
                   style={{width: 150}}
                   onChange={(e) => {
-                    this.setState({
-                      enterSignMoney: e.target.value
-                    })
+                    const value = e.target.value
+                    if (value.length <= 6) {
+                      this.setState({
+                        enterSignMoney: value
+                      })
+                    }
                   }}
                 />
                 <span> 元</span>
