@@ -48,7 +48,7 @@ class Main extends React.Component<Props, State> {
               rules: [{
                 required: true, message: '请选择签单时间'
               }],
-              initialValue: moment(this.state.enterSignTime)
+              initialValue: this.state.enterSignTime ? moment(this.state.enterSignTime) : ''
             })(
               <DatePicker
                 allowClear={false}
