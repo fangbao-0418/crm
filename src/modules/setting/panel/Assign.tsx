@@ -202,14 +202,17 @@ class Main extends React.Component<Props> {
               >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('autoDistributeMaxNum', { initialValue: autoDistributeMaxNum })(
+                    {getFieldDecorator('autoDistributeMaxNum', { valuePropName: autoDistributeMaxNum })(
                       <Input
                         maxLength={5}
                         placeholder='1-99999'
+                        value={this.state.autoDistributeMaxNum}
                         onChange={(e) => {
-                          this.setState({
-                            autoDistributeMaxNum: e.target.value
-                          })
+                          if (/^[1-9]\d{0,4}$/.test(e.target.value) || !e.target.value) {
+                            this.setState({
+                              autoDistributeMaxNum: e.target.value
+                            })
+                          }
                         }}
                       />
                     )}
