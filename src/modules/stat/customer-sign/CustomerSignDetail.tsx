@@ -453,7 +453,7 @@ class Main extends React.Component {
         <Row style={{marginTop: 15}}>
           <Col span={9}>
             <div style={{marginBottom: 15}}>
-              <span style={{fontSize: 14, color: '#333333'}}>机构排名</span>
+              <span style={{fontSize: 14, color: '#333333'}}>分配机构排名</span>
               <AddButton
                 style={{float: 'right'}}
                 icon={<APP.Icon type='export' />}
