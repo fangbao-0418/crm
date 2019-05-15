@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 interface Props extends Customer.Props {
   onOk?: () => void
   onCancel?: () => void
+  showBtn: boolean
 }
 class Main extends React.Component<Props> {
   public render () {
@@ -13,7 +14,7 @@ class Main extends React.Component<Props> {
     return (
       <Button
         type='ghost'
-        hidden={!(APP.hasPermission('entersigninfo') || APP.hasPermission('entersigninfocustomer'))}
+        hidden={this.props.showBtn}
         className='mr5'
         onClick={() => {
           const modal2 = new Modal({

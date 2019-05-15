@@ -256,7 +256,7 @@ export default class Main extends React.Component<null, States> {
             customerId={customerId}
             footer={(
               <div className='text-right mt10'>
-                <Transaction/>
+                <Transaction showBtn={!APP.hasPermission('entersigninfocustomer')}/>
                 <Button
                   type='ghost'
                   hidden={!APP.hasPermission('crm_customer-pool-distribution_detail_save')}
