@@ -37,9 +37,11 @@ interface State {
 class Main extends React.Component<{}, State> {
   public callColumns = [{
     title: '排名',
+    width: '100px',
     dataIndex: 'sortNumber'
   }, {
     title: '头像',
+    width: '100px',
     dataIndex: 'salesperson',
     render: (val: string) => {
       return (
@@ -48,16 +50,20 @@ class Main extends React.Component<{}, State> {
     }
   }, {
     title: '销售',
+    width: '100px',
     dataIndex: 'salesperson'
   }, {
     title: '通话量',
+    width: '100px',
     dataIndex: 'value'
   }]
   public YJcolumns = [{
     title: '排名',
+    width: '100px',
     dataIndex: 'sortNumber'
   }, {
     title: '头像',
+    width: '100px',
     dataIndex: 'salesperson',
     render: (val: string) => {
       return (
@@ -66,9 +72,11 @@ class Main extends React.Component<{}, State> {
     }
   }, {
     title: '销售',
+    width: '100px',
     dataIndex: 'salesperson'
   }, {
     title: '新签客户',
+    width: '100px',
     dataIndex: 'value'
   }]
   public state: State = {

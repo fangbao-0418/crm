@@ -1,7 +1,7 @@
 import http from '@/utils/http'
 /** 获取省市 */
 export const fetchAllRegion = () => {
-  return http(`/user/v1/api/user/region/0/2`, 'GET')
+  return http(`/user/v1/api/user/region/1/2`, 'GET')
 }
 /** 获取机构列表 */
 export const getAgencylist = () => {
