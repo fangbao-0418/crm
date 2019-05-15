@@ -5012,9 +5012,9 @@ pilipa-terrace@^1.0.14-alpha.1:
     classnames "^2.2.5"
     pilipa-analytics "^1.0.5"
 
-pilipa@^3.0.8-alpha.1:
-  version "3.0.8-alpha.1"
-  resolved "https://npmregistry.i-counting.cn/pilipa/-/pilipa-3.0.8-alpha.1.tgz#e6032bf3676e98034105ff0c7b66835105515368"
+pilipa@^3.0.8-alpha.2:
+  version "3.0.8-alpha.2"
+  resolved "https://npmregistry.i-counting.cn/pilipa/-/pilipa-3.0.8-alpha.2.tgz#bea5dd3db63595036492f277814797a687fd71a7"
   dependencies:
     babel-polyfill "^6.26.0"
     classnames "^2.2.5"

@@ -28,14 +28,12 @@ import { fetchCountAction } from './action'
 import { connect } from 'react-redux'
 const styles = require('./style')
 interface States {
-  extshow: boolean
   citys: Common.RegionProps[],
   sales: Array<{id: string, name: string}>
 }
 type Props = RouteComponentProps & Business.Props
 class Main extends React.Component<Props> {
   public state: States = {
-    extshow: false,
     citys: [],
     sales: []
   }
@@ -437,12 +435,6 @@ class Main extends React.Component<Props> {
       this.toCustomersCity(selectedRowKeys)
     }
   }
-  // 搜索框折叠
-  public handleSwitch () {
-    this.setState({
-      extshow: !this.state.extshow
-    })
-  }
   public render () {
     const { count, selectedTab } = this.props
     const state = this.props.location.state || {}
@@ -490,6 +482,7 @@ class Main extends React.Component<Props> {
         }
         <Shrink
           height={100}
+          defaultCollapsed={(this.props.location.state && this.props.location.state.name) ? false : true}
         >
           <Condition
             dataSource={this.data}
