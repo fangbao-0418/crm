@@ -31,7 +31,7 @@ export default function (record: Business.DetailProps, index?: number,
           customerId={customerId}
           footer={(
             <div className='mt10 text-right'>
-              <Transaction/>
+              <Transaction showBtn={!APP.hasPermission('entersigninfo')}/>
               <Button
                 type='ghost'
                 hidden={!APP.hasPermission('crm_business_mine_detail_sea')}
