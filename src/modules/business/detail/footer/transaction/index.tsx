@@ -22,7 +22,11 @@ class Main extends React.Component<Props> {
                 enterSignMoney={record.enterSignMoney}
                 customerId={record.id}
                 onOk={(params) => {
-                  record = Object.assign({}, record, {})
+                  const payload = {
+                    enterSignTime: params.enterSignTime,
+                    enterSignMoney: params.enterSignMoney
+                  }
+                  record = Object.assign({}, record, payload)
                   APP.dispatch<Customer.Props>({
                     type: 'change customer data',
                     payload: {

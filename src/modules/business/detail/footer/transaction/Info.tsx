@@ -77,6 +77,7 @@ class Main extends React.Component<Props, State> {
                 <Input
                   value={this.state.enterSignMoney}
                   type='number'
+                  maxLength={6}
                   className={styles['clear-input-number']}
                   style={{width: 150}}
                   onChange={(e) => {

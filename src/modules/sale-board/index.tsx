@@ -215,7 +215,7 @@ class Main extends React.Component<{}, State> {
                   </li>
                 </ul>
               }
-              <div className={classNames('mt20', styles['tab-table'])}>
+              <div className={classNames('mt10', styles['tab-table'])}>
                 <Table
                   columns={this.state.type === 'CALL' ? this.callColumns : this.YJcolumns}
                   dataSource={data}
