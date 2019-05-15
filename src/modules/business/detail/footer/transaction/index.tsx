@@ -13,6 +13,7 @@ class Main extends React.Component<Props> {
     return (
       <Button
         type='ghost'
+        hidden={!(APP.hasPermission('entersigninfo') || APP.hasPermission('entersigninfocustomer'))}
         className='mr5'
         onClick={() => {
           const modal2 = new Modal({
