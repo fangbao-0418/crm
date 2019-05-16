@@ -48,6 +48,7 @@ class Main extends React.Component<Props, State> {
     return (
       <Select
         className={this.props.className}
+        allowClear={true}
         showSearch
         style={{ width: 200 }}
         placeholder='请选择机构'
