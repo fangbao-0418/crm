@@ -438,7 +438,8 @@ class Main extends React.Component<Props> {
   public render () {
     const { count, selectedTab } = this.props
     const state = this.props.location.state || {}
-    console.log(selectedTab, 'selectedTab')
+    console.log(this.props, 'props')
+    console.log(this.props[selectedTab].pagination.total, 'total')
     return (
       <ContentBox
         title='我的商机'
@@ -522,7 +523,9 @@ class Main extends React.Component<Props> {
             defaultActiveKey={selectedTab}
             onChange={this.callback.bind(this)}
           >
-            <Tabs.TabPane tab={<span>新客资({count[0]})</span>} key='tab3'>
+            {/* <Tabs.TabPane tab={<span>新客资({count[0]})</span>} key='tab3'> */}
+            {/* <Tabs.TabPane tab={<span>新客资({count[0] > 0 ? '...' : (this.props.tab3.pagination.total > 0 ? this.props.tab3.pagination.total : 0)})</span>} key='tab3'> */}
+            <Tabs.TabPane tab={<span>新客资({this.props.tab3.pagination.total > 0 ? this.props.tab3.pagination.total : (count[0] > 0 ? '...' : 0)})</span>} key='tab3'>
               {
                 selectedTab === 'tab3' && (
                   <Tab3
@@ -536,7 +539,9 @@ class Main extends React.Component<Props> {
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>意向客户({count[1]})</span>} key='tab5'>
+            {/* <Tabs.TabPane tab={<span>意向客户({count[1]})</span>} key='tab5'> */}
+            {/* <Tabs.TabPane tab={<span>意向客户({count[1] > 0 ? '...' : (this.props.tab5.pagination.total > 0 ? this.props.tab5.pagination.total : 0)})</span>} key='tab5'> */}
+            <Tabs.TabPane tab={<span>意向客户({this.props.tab5.pagination.total > 0 ? this.props.tab5.pagination.total : (count[1] > 0 ? '...' : 0)})</span>} key='tab5'>
               {
                 selectedTab === 'tab5' && (
                   <Tab2
@@ -551,7 +556,8 @@ class Main extends React.Component<Props> {
                 )
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<span>无意向客户({count[2]})</span>} key='tab6'>
+            {/* <Tabs.TabPane tab={<span>无意向客户({count[2]})</span>} key='tab6'> */}
+            <Tabs.TabPane tab={<span>无意向客户({this.props.tab6.pagination.total > 0 ? this.props.tab6.pagination.total : (count[2] > 0 ? '...' : 0)})</span>} key='tab6'>
               {
                 selectedTab === 'tab6' && (
                   <Tab2
@@ -570,9 +576,9 @@ class Main extends React.Component<Props> {
               tab={(
                 <span>即将被收回
                   {
-                    count[3] > 0 && (
+                    count[3] > 0 && this.props.tab4.pagination.total > 0 && (
                       <span style={{ color: '#F9B91F'}}>
-                        ({`有${count[3]}个客户即将被收回！`})
+                        ({`有${this.props.tab4.pagination.total}个客户即将被收回！`})
                       </span>
                     )
                   }

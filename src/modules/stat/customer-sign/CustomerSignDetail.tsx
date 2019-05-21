@@ -12,8 +12,6 @@ import AreaDistribution from './AreaDistribution'
 import _ from 'lodash'
 import AddButton from '@/modules/common/content/AddButton'
 import Company from '@/modules/common/content/Company'
-
-
 export interface PayloadProps {
   totalBeginDate: string
   totalEndDate: string
