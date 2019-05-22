@@ -227,30 +227,39 @@ class Main extends React.Component<{}, State> {
           <div className={styles.dynamic}>
             <div className='clear'>
               <span className={classNames(styles.title, 'fl')}>客资动态</span>
-              <span className={classNames(styles.more, 'fr')} onClick={() => APP.history.push('/business')}>查看更多></span>
-            </div>
-            <ul>
               {
-                conditionTodayList.length > 0 && conditionTodayList.map((item, index) => {
-                  return (
-                    <li key={index}>
-                      <p>
-                        <span>{item.salespersonName} </span>
-                        <span> 将客户</span>
-                        <span
-                          className={styles.company}
-                          onClick={() => {APP.history.push('/business', {name: item.customerName})}}
-                        >
-                          {item.customerName}
-                        </span>
-                        <span>分给你</span>
-                      </p>
-                      <p>{item.createTime}</p>
-                    </li>
-                  )
-                })
+                 conditionTodayList.length > 0 && <span className={classNames(styles.more, 'fr')} onClick={() => APP.history.push('/business')}>查看更多></span>
               }
-            </ul>
+            </div>
+            {
+              conditionTodayList.length > 0 ?
+              <ul>
+                {
+                  conditionTodayList.length > 0 && conditionTodayList.map((item, index) => {
+                    return (
+                      <li key={index}>
+                        <p>
+                          <span>{item.salespersonName} </span>
+                          <span> 将客户</span>
+                          <span
+                            className={styles.company}
+                            onClick={() => {APP.history.push('/business', {name: item.customerName})}}
+                          >
+                            {item.customerName}
+                          </span>
+                          <span>分给你</span>
+                        </p>
+                        <p>{item.createTime}</p>
+                      </li>
+                    )
+                  })
+                }
+              </ul>
+              :
+              <div className={styles.bg}>
+                <div>暂无动态</div>
+              </div>
+            }
           </div>
         </div>
       </div>
