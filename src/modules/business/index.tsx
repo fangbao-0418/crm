@@ -601,14 +601,22 @@ class Main extends React.Component<Props> {
             </Tabs.TabPane>
             <Tabs.TabPane
               tab={(
-                <span>即将被收回
-                  {
-                    (this.props.selectedTab === 'tab4' && count[3] > 0 && this.props.tab4.pagination.total > 0) && (
+                <span>
+                  即将被收回({
+                    (this.props.selectedTab === 'tab4' && this.props.tab4.pagination.total > 0) ?
+                    (
                       <span style={{ color: '#F9B91F'}}>
-                        ({`有${this.props.tab4.pagination.total}个客户即将被收回！`})
+                        {`有${this.props.tab4.pagination.total}个客户即将被收回！`}
                       </span>
                     )
-                  }
+                    :
+                    (
+                      count[3] > 0 ?
+                      '...'
+                      :
+                      0
+                    )
+                  })
                 </span>
               )}
               key='tab4'
