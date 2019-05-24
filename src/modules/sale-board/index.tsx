@@ -228,7 +228,10 @@ class Main extends React.Component<{}, State> {
             <div className='clear'>
               <span className={classNames(styles.title, 'fl')}>客资动态</span>
               {
-                 conditionTodayList.length > 0 && <span className={classNames(styles.more, 'fr')} onClick={() => APP.history.push('/business')}>查看更多></span>
+                conditionTodayList.length > 0 &&
+                <span className={classNames(styles.more, 'fr')} onClick={() => APP.history.push('/business')}>
+                  查看更多>
+                </span>
               }
             </div>
             {
