@@ -27,6 +27,7 @@ interface Props extends Customer.Props, FormComponentProps {
   reset?: boolean
   type?: 'business' | 'open' | 'customer' | 'signed'
   showTel?: boolean
+  cityCode?: string
 }
 interface State {
   cityName: string
@@ -72,6 +73,19 @@ class Main extends React.Component<Props> {
     if (this.props.customerId) {
       changeCustomerDetailAction(this.props.customerId)
     }
+    // 客资管理查看详情的时候 选择城市默认请求当前城市的地区
+    if (this.props.type === 'customer' && this.props.customerId && this.props.cityCode) {
+      const cityCode = this.props.cityCode
+      fetchRegion({
+        parentId: cityCode,
+        level: 3
+      }).then((res) => {
+        this.setState({
+          areaList: res
+        })
+      })
+    }
+    // 公害用到
     if (this.props.type !== 'customer') {
       const cityCode = APP.user.cityCode || '110100'
       fetchRegion({
