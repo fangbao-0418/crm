@@ -339,6 +339,7 @@ class Main extends React.Component<Customer.Props, States> {
               this.fetchList()
             }}
             customerId={customerId}
+            cityCode={record.cityCode}
             footer={(
               <div className='text-right mt10'>
                 <Button
