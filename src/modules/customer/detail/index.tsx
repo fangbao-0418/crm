@@ -12,6 +12,7 @@ interface Props {
   customerId: string
   type?: 'business' | 'open' | 'customer' | 'signed'
   detail?: Customer.DetailProps
+  cityCode?: string
   footer?: React.ReactNode
   getWrappedInstance?: (ins?: React.ReactInstance) => void
   onClose?: () => void
@@ -103,6 +104,7 @@ class Main extends React.Component<Props> {
                 showFold
               >
                 <BaseInfo
+                  cityCode={this.props.cityCode}
                   showTel={this.props.type === 'open' ? true : false}
                   ref='baseinfo'
                   customerId={this.props.customerId}
