@@ -83,6 +83,8 @@ declare namespace Customer {
     enterSignTime?: string
     /** 录入签单金额 */
     enterSignMoney?: string
+    /** 来源平台 */
+    sourcePlatform?: string
   }
   export interface AutoAssignProps {
     bigAreaName: string

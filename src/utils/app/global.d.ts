@@ -37,6 +37,8 @@ declare namespace APP {
     EnumHangUpStatus?: Array<{label: string, value: string}>
     /** 客户生命周期 */
     EnumCustomerLiftCycle?: Array<{label: string, value: string}>
+    /** 客资新增-来源平台 */
+    SourcePlatformEnum?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {
