@@ -284,6 +284,7 @@ class Main extends React.Component {
     this.paramsright.signSalespersonId = values.signSalespersonId || undefined
     this.paramsright.currentSalespersonId = values.currentSalespersonId || undefined
     this.paramsright.lifeCycle = values.lifeCycle
+    this.paramsright.infoComplete = values.infoComplete
     const pagination = this.state.pagination
     pagination.current = 1
     this.fetchList()

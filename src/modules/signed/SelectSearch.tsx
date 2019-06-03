@@ -17,6 +17,8 @@ interface ValueProps {
   currentSalespersonId?: string
   /** 客户状态 */
   lifeCycle?: string
+  /** 信息是否完善 */
+  infoComplete?: number
 }
 interface State {
   /** 机构列表 */
@@ -188,6 +190,7 @@ class Main extends React.Component<Props, State> {
         <Select
           allowClear={true}
           style={{width:'150px'}}
+          className='mr5'
           placeholder='请选择客户状态'
           onChange={(val: string) => {
             this.values.lifeCycle = val
@@ -206,6 +209,21 @@ class Main extends React.Component<Props, State> {
             })
           }
         </Select>
+        {
+          this.props.type === '1' &&
+          <Select
+            allowClear={true}
+            style={{width:'150px'}}
+            placeholder='是否完善信息'
+            onChange={(val: number) => {
+              this.values.infoComplete = val
+              this.props.onChange(this.values)
+            }}
+          >
+            <Option value={1}>是</Option>
+            <Option value={0}>否</Option>
+          </Select>
+        }
       </div>
     )
   }

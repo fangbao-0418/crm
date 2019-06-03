@@ -36,6 +36,8 @@ declare namespace Signed {
     payTaxesNature?: string
     serviceExpireBeginMonth?: string
     serviceExpireEndMonth?: string
+    /** 信息是否完善 */
+    infoComplete?: number
     [field: string]: any
   }
 }
