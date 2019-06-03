@@ -111,7 +111,7 @@ class Main extends React.Component<{}, State> {
               <p>
                 <span>{APP.user.roleName}</span>
                 <span> | </span>
-                <span>{APP.user.organizationName}祝你每一天都有新的收获哦祝你每一天都有新的收获哦</span>
+                <span>{APP.user.organizationName}</span>
               </p>
             </div>
           </div>
