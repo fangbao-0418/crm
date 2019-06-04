@@ -73,9 +73,7 @@ export const importFile = (file: File, query: {
     }
   }
   return http(`/crm-manage/v1/api/customer/upload/${type}`, 'POST', {
-    dataType: 'JSON',
     contentType: false,
-    raw: true,
     processData: false,
     data
   })
