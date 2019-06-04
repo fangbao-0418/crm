@@ -429,8 +429,7 @@ class Main extends React.Component<Props> {
               </FormItem>
             </Col>
             <Col span={12}>
-            <FormItem
-              >
+              <FormItem>
                 {getFieldDecorator(
                   'customerSource',
                   {
@@ -542,6 +541,46 @@ class Main extends React.Component<Props> {
                   }}
                 />
               </FormItemLayout>
+            </Col>
+          }
+          {
+            (this.props.type === 'customer' && !this.props.customerId) &&
+            <Col span={12}>
+              <FormItem>
+                {getFieldDecorator(
+                  'sourcePlatform'
+                )(
+                  <FormItemLayout
+                    label='来源平台'
+                  >
+                    <Select
+                      style={{width: '100%'}}
+                      value={this.getSelectValue('sourcePlatform', APP.keys.SourcePlatformEnum)}
+                      onChange={(value) => {
+                        this.handleChange(null, {
+                          key: 'sourcePlatform',
+                          value
+                        })
+                        this.props.form.setFieldsValue({
+                          sourcePlatform: value
+                        })
+                      }}
+                    >
+                      {
+                        APP.keys.SourcePlatformEnum.map((item) => {
+                          return (
+                            <Option
+                              key={item.value}
+                            >
+                              {item.label}
+                            </Option>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormItemLayout>
+                )}
+              </FormItem>
             </Col>
           }
         </Row>
