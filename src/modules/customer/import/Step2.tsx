@@ -1,6 +1,6 @@
 import React from 'react'
 import { Upload, Button } from 'antd'
-import { importFile, checkFile, newimportFile } from '../api'
+import { importFile, checkFile } from '../api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
@@ -20,12 +20,14 @@ interface State {
   info: any
   isCanCheck: boolean
   isCanExport: boolean
+  signal: string
 }
 class Main extends React.Component<Props> {
   public state: State = {
     info: {},
     isCanCheck: false,
-    isCanExport: true
+    isCanExport: false,
+    signal: ''
   }
   public check () {
     console.log('检测')
@@ -51,14 +53,13 @@ class Main extends React.Component<Props> {
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
       type: this.props.paramsValue.step1.type
-      // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
-      // cityName: this.props.paramsValue.step1.city.cityName || undefined
     }
     return checkFile(info.file, paramsFile).then((res) => {
       if (res.status === 200) {
         APP.success('文件检测通过，请导入')
         this.setState({
-          isCanExport: true
+          isCanExport: true,
+          signal: res.data && res.data.signal
         })
       } else {
         APP.error(res.message)
@@ -91,11 +92,9 @@ class Main extends React.Component<Props> {
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
       type: this.props.paramsValue.step1.type,
-      signal: '1'
-      // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
-      // cityName: this.props.paramsValue.step1.city.cityName || undefined
+      signal: this.state.signal
     }
-    return newimportFile(info.file, paramsFile).then((res) => {
+    return importFile(info.file, paramsFile).then((res) => {
       if (res.status === 200) {
         if (this.props.onOk) {
           this.props.onOk(res.data)
@@ -105,41 +104,6 @@ class Main extends React.Component<Props> {
       }
     })
   }
-  // public uploadFile () {
-  //   const info = this.state.info
-  //   const name = info.file.name
-  //   const suffix = name.substr(name.lastIndexOf('.'))
-  //   if (suffix !== '.xls' && suffix !== '.xlsx') {
-  //     APP.error('请上传excel格式文件')
-  //     return
-  //   }
-  //   const ids: string[] = []
-  //   const salesNames: string[] = []
-  //   if (this.props.paramsValue.step1.salesPerson instanceof Array) {
-  //     this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
-  //       ids.push(item.id)
-  //       salesNames.push(item.name)
-  //     })
-  //   }
-  //   console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
-  //   const paramsFile = {
-  //     agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
-  //     customerSource: this.props.paramsValue.step1.customerSource,
-  //     salesPersonIds: ids.join(','),
-  //     salesPersonNames: salesNames.join(',')
-  //     // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
-  //     // cityName: this.props.paramsValue.step1.city.cityName || undefined
-  //   }
-  //   return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
-  //     if (res.status === 200) {
-  //       if (this.props.onOk) {
-  //         this.props.onOk(res.data)
-  //       }
-  //     } else {
-  //       APP.error(res.message)
-  //     }
-  //   })
-  // }
   public render () {
     const props = {
       name: 'file',
@@ -152,7 +116,8 @@ class Main extends React.Component<Props> {
         console.log(info, 'this.info')
         if (info.fileList.length === 0) {
           this.setState({
-            isCanCheck: false
+            isCanCheck: false,
+            isCanExport: false
           })
         } else {
           this.setState({

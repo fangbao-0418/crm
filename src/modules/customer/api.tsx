@@ -69,12 +69,12 @@ export const checkFile = (file: File, query: {
   const data = new FormData()
   // const q = $.param(query)
   data.append('file', file)
-  data.append('uploadCondition', JSON.stringify(query))
-  // for (const key in query) {
-  //   if (query.hasOwnProperty(key)) {
-  //     data.append(key, query[key])
-  //   }
-  // }
+  // data.append('uploadCondition', JSON.stringify(query))
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      data.append(key, query[key])
+    }
+  }
   return http(`/crm-manage/v2/api/customer/upload/check`, 'POST', {
     contentType: false,
     processData: false,
@@ -82,7 +82,7 @@ export const checkFile = (file: File, query: {
   })
 }
 /** 导入 */
-export const newimportFile = (file: File, query: {
+export const importFile = (file: File, query: {
   c?: string,
   cityName?: string,
   agencyId?: string,
@@ -96,12 +96,12 @@ export const newimportFile = (file: File, query: {
   const data = new FormData()
   // const q = $.param(query)
   data.append('file', file)
-  data.append('uploadCondition', JSON.stringify(query))
-  // for (const key in query) {
-  //   if (query.hasOwnProperty(key)) {
-  //     data.append(key, query[key])
-  //   }
-  // }
+  // data.append('uploadCondition', JSON.stringify(query))
+  for (const key in query) {
+    if (query.hasOwnProperty(key)) {
+      data.append(key, query[key])
+    }
+  }
   return http(`/crm-manage/v2/api/customer/upload`, 'POST', {
     contentType: false,
     processData: false,
@@ -109,29 +109,6 @@ export const newimportFile = (file: File, query: {
   })
 }
 
-export const importFile = (file: File, query: {
-  c?: string,
-  cityName?: string,
-  agencyId?: string,
-  salesPersonIds: string,
-  salesPersonNames: string,
-  customerSource: string,
-  [field: string]: string
-}, type: string) => {
-  const data = new FormData()
-  // const q = $.param(query)
-  data.append('file', file)
-  for (const key in query) {
-    if (query.hasOwnProperty(key)) {
-      data.append(key, query[key])
-    }
-  }
-  return http(`/crm-manage/v1/api/customer/upload/${type}`, 'POST', {
-    contentType: false,
-    processData: false,
-    data
-  })
-}
 export const fetchTrackRecords = (id: string, payload: {
   pageNum?: number
   pageSize?: number
