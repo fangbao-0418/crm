@@ -53,6 +53,7 @@ class Main extends React.Component<Props> {
     }
     const paramsFile = {
       agencyId: APP.user.companyId, // 需要从登陆信息读取
+      agencyName: APP.user.companyName,
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
@@ -95,6 +96,7 @@ class Main extends React.Component<Props> {
     }
     const paramsFile = {
       agencyId: APP.user.companyId, // 需要从登陆信息读取
+      agencyName: APP.user.companyName,
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
