@@ -35,10 +35,10 @@ class Main extends React.Component<Props> {
   }
   public save () {
     const id = this.props.detail.id
-    if (this.state.disabled === false) {
-      return
+    if (this.state.disabled !== false) {
+      return Promise.resolve()
     }
-    updateCustomer(id, this.props.detail).then(() => {
+    return updateCustomer(id, this.props.detail).then(() => {
       APP.success('保存成功')
     })
   }
@@ -54,7 +54,7 @@ class Main extends React.Component<Props> {
               type={!this.state.disabled ? 'save' : 'edit'}
               theme='outlined'
               onClick={() => {
-                // console.log(this.state.disabled, 'on click')
+                console.log(this.state.disabled, 'on click')
                 if (this.state.disabled === true) {
                   this.setState({
                     disabled: false
@@ -104,9 +104,13 @@ class Main extends React.Component<Props> {
                     }
                   }
                   this.setState({
-                    disabled: !this.state.disabled
+                    // disabled: !this.state.disabled
                   }, () => {
-                    this.save()
+                    this.save().then(() => {
+                      this.setState({
+                        disabled: !this.state.disabled
+                      })
+                    })
                   })
                 }, () => {
                   if (!this.state.disabled) {
