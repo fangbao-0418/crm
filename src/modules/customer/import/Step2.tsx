@@ -1,6 +1,6 @@
 import React from 'react'
 import { Upload, Button } from 'antd'
-import { importFile } from '../api'
+import { importFile, checkFile, newimportFile } from '../api'
 const Dragger = Upload.Dragger
 const styles = require('./style')
 interface Props {
@@ -18,19 +18,22 @@ interface Props {
 }
 interface State {
   info: any
-  disabled: boolean
+  isCanCheck: boolean
+  isCanExport: boolean
 }
 class Main extends React.Component<Props> {
   public state: State = {
     info: {},
-    disabled: false
+    isCanCheck: false,
+    isCanExport: true
   }
-  public uploadFile () {
+  public check () {
+    console.log('检测')
     const info = this.state.info
     const name = info.file.name
     const suffix = name.substr(name.lastIndexOf('.'))
     if (suffix !== '.xls' && suffix !== '.xlsx') {
-      APP.error('请导入excel格式文件')
+      APP.error('请上传excel格式文件')
       return
     }
     const ids: string[] = []
@@ -46,11 +49,53 @@ class Main extends React.Component<Props> {
       agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
-      salesPersonNames: salesNames.join(',')
+      salesPersonNames: salesNames.join(','),
+      type: this.props.paramsValue.step1.type
       // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
       // cityName: this.props.paramsValue.step1.city.cityName || undefined
     }
-    return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
+    return checkFile(info.file, paramsFile).then((res) => {
+      if (res.status === 200) {
+        APP.success('文件检测通过，请导入')
+        this.setState({
+          isCanExport: true
+        })
+      } else {
+        APP.error(res.message)
+        this.setState({
+          isCanExport: false
+        })
+      }
+    })
+  }
+  public uploadFile () {
+    const info = this.state.info
+    const name = info.file.name
+    const suffix = name.substr(name.lastIndexOf('.'))
+    if (suffix !== '.xls' && suffix !== '.xlsx') {
+      APP.error('请上传excel格式文件')
+      return
+    }
+    const ids: string[] = []
+    const salesNames: string[] = []
+    if (this.props.paramsValue.step1.salesPerson instanceof Array) {
+      this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
+        ids.push(item.id)
+        salesNames.push(item.name)
+      })
+    }
+    console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
+    const paramsFile = {
+      agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
+      customerSource: this.props.paramsValue.step1.customerSource,
+      salesPersonIds: ids.join(','),
+      salesPersonNames: salesNames.join(','),
+      type: this.props.paramsValue.step1.type,
+      signal: '1'
+      // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
+      // cityName: this.props.paramsValue.step1.city.cityName || undefined
+    }
+    return newimportFile(info.file, paramsFile).then((res) => {
       if (res.status === 200) {
         if (this.props.onOk) {
           this.props.onOk(res.data)
@@ -60,6 +105,41 @@ class Main extends React.Component<Props> {
       }
     })
   }
+  // public uploadFile () {
+  //   const info = this.state.info
+  //   const name = info.file.name
+  //   const suffix = name.substr(name.lastIndexOf('.'))
+  //   if (suffix !== '.xls' && suffix !== '.xlsx') {
+  //     APP.error('请上传excel格式文件')
+  //     return
+  //   }
+  //   const ids: string[] = []
+  //   const salesNames: string[] = []
+  //   if (this.props.paramsValue.step1.salesPerson instanceof Array) {
+  //     this.props.paramsValue.step1.salesPerson.forEach((item, index) => {
+  //       ids.push(item.id)
+  //       salesNames.push(item.name)
+  //     })
+  //   }
+  //   console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
+  //   const paramsFile = {
+  //     agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
+  //     customerSource: this.props.paramsValue.step1.customerSource,
+  //     salesPersonIds: ids.join(','),
+  //     salesPersonNames: salesNames.join(',')
+  //     // cityCode: this.props.paramsValue.step1.city.cityCode || undefined,
+  //     // cityName: this.props.paramsValue.step1.city.cityName || undefined
+  //   }
+  //   return importFile(info.file, paramsFile, this.props.paramsValue.step1.type).then((res) => {
+  //     if (res.status === 200) {
+  //       if (this.props.onOk) {
+  //         this.props.onOk(res.data)
+  //       }
+  //     } else {
+  //       APP.error(res.message)
+  //     }
+  //   })
+  // }
   public render () {
     const props = {
       name: 'file',
@@ -72,11 +152,11 @@ class Main extends React.Component<Props> {
         console.log(info, 'this.info')
         if (info.fileList.length === 0) {
           this.setState({
-            disabled: false
+            isCanCheck: false
           })
         } else {
           this.setState({
-            disabled: true
+            isCanCheck: true
           })
         }
         this.setState({
@@ -88,7 +168,7 @@ class Main extends React.Component<Props> {
       <div>
         <div className={styles.step2}>
           <Dragger {...props}>
-            <Button disabled={this.state.disabled} type='primary' className='mr10'>上传文件</Button>
+            <Button disabled={this.state.isCanCheck} type='primary' className='mr10'>上传文件</Button>
           </Dragger>
           {/* <Button className={styles.down} type='ghost' onClick={this.downFile.bind(this)}>下载客户模版</Button>
           {
@@ -100,7 +180,8 @@ class Main extends React.Component<Props> {
         </div>
         <div className='text-right'>
           {/* <Button className='mr5' type='ghost' onClick={() => {this.props.onPre()}}>上一步</Button> */}
-          <Button disabled={!this.state.disabled} type='primary' onClick={this.uploadFile.bind(this)}>导入</Button>
+          <Button disabled={!this.state.isCanCheck} className='mr5' type='primary' onClick={() => this.check()}>检查</Button>
+          <Button disabled={!this.state.isCanExport} type='primary' onClick={this.uploadFile.bind(this)}>导入</Button>
         </div>
       </div>
     )

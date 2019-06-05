@@ -55,6 +55,60 @@ export const updateCustomer = (id: string, payload: Customer.DetailProps) => {
 export const fetchCityCount = () => {
   return http(`/crm-manage/v1/api/customer/stats/by-city`)
 }
+/** 检测上传文件 */
+export const checkFile = (file: File, query: {
+  c?: string,
+  cityName?: string,
+  agencyId?: string,
+  salesPersonIds: string,
+  salesPersonNames: string,
+  customerSource: string,
+  type: string
+  [field: string]: string
+}) => {
+  const data = new FormData()
+  // const q = $.param(query)
+  data.append('file', file)
+  data.append('uploadCondition', JSON.stringify(query))
+  // for (const key in query) {
+  //   if (query.hasOwnProperty(key)) {
+  //     data.append(key, query[key])
+  //   }
+  // }
+  return http(`/crm-manage/v2/api/customer/upload/check`, 'POST', {
+    contentType: false,
+    processData: false,
+    data
+  })
+}
+/** 导入 */
+export const newimportFile = (file: File, query: {
+  c?: string,
+  cityName?: string,
+  agencyId?: string,
+  salesPersonIds: string,
+  salesPersonNames: string,
+  customerSource: string,
+  type: string
+  signal: string
+  [field: string]: string
+}) => {
+  const data = new FormData()
+  // const q = $.param(query)
+  data.append('file', file)
+  data.append('uploadCondition', JSON.stringify(query))
+  // for (const key in query) {
+  //   if (query.hasOwnProperty(key)) {
+  //     data.append(key, query[key])
+  //   }
+  // }
+  return http(`/crm-manage/v2/api/customer/upload`, 'POST', {
+    contentType: false,
+    processData: false,
+    data
+  })
+}
+
 export const importFile = (file: File, query: {
   c?: string,
   cityName?: string,
