@@ -17,6 +17,7 @@ interface Props {
 }
 interface ValueProps {
   agencyId?: string
+  agencyName?: string
   customerSource?: string
   salesPerson?: Array<{id: string, name: string}>
   // city?: {cityCode: string, cityName: string}
@@ -159,14 +160,21 @@ class Main extends React.Component<Props> {
                   <span>选择机构：</span>
                   <Select
                     showSearch
+                    labelInValue
                     placeholder='请选择机构'
                     style={{width:'200px'}}
                     optionFilterProp='children'
                     filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    onChange={(val: string) => {
-                      this.values.agencyId = val
+                    // onChange={(val: string) => {
+                    //   this.values.agencyId = val
+                    //   console.log(val, '111111')
+                    //   this.getSales(val)
+                    // }}
+                    onChange={(val: {key: string, label: string}) => {
+                      this.values.agencyId = val.key
+                      this.values.agencyName = val.label
                       console.log(val, '111111')
-                      this.getSales(val)
+                      this.getSales(val.key)
                     }}
                   >
                     {
