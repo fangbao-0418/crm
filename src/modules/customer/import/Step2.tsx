@@ -8,6 +8,7 @@ interface Props {
   paramsValue: {
     step1?: {
       agencyId?: string
+      agencyName?: string
       customerSource?: string,
       salesPerson?: Array<{id: string, name: string}>,
       // city?: {cityCode: string, cityName: string}
@@ -49,6 +50,7 @@ class Main extends React.Component<Props> {
     console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
     const paramsFile = {
       agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
+      agencyName: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyName : this.props.paramsValue.step1.agencyName,
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
@@ -88,6 +90,7 @@ class Main extends React.Component<Props> {
     console.log(this.props.paramsValue.step1.type , this.props.paramsValue.step1.type === '3', '11')
     const paramsFile = {
       agencyId: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyId : this.props.paramsValue.step1.agencyId, // 需要从登陆信息读取
+      agencyName: String(this.props.paramsValue.step1.type) === '3' ? APP.user.companyName : this.props.paramsValue.step1.agencyName,
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
