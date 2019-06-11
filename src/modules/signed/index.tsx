@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import ContentBox from '@/modules/common/content'
+import { RouteComponentProps } from 'react-router'
 import _ from 'lodash'
 import Appointment from './Appointment'
 import Expiration from './Expiration'
@@ -8,19 +9,27 @@ import Mysign from './Mysign'
 
 interface States {
   tab: string
+  infoComplete?: boolean
 }
 
 interface ValueProps {
   agencyId?: string
 }
-
-class Main extends React.Component {
+type Props = RouteComponentProps
+class Main extends React.Component<Props, States> {
   public values: ValueProps = {}
   public curSale: {key: string, label: string} = { key: '', label: ''}
   public state: States = {
     tab: ''
   }
   public componentWillMount () {
+    console.log(this.props.location, 'this.props.location')
+    console.log(this.props.location.search, 'search')
+    if (this.props.location && this.props.location.search) {
+      this.setState({
+        infoComplete: true
+      })
+    }
     this.setDefaultActiveTab()
   }
   public setDefaultActiveTab () {
@@ -60,7 +69,7 @@ class Main extends React.Component {
             <Tabs.TabPane tab='我的签约' key='1'>
               {
                 this.state.tab === '1' &&
-                <Mysign />
+                <Mysign infoComplete={this.state.infoComplete}/>
               }
             </Tabs.TabPane>
           }

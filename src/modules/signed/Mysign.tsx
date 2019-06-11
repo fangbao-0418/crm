@@ -33,8 +33,10 @@ interface States {
 interface ValueProps {
   agencyId?: string
 }
-
-class Main extends React.Component {
+interface Props {
+  infoComplete?: boolean
+}
+class Main extends React.Component<Props, States> {
   public values: ValueProps = {}
 
   public state: States = {
@@ -185,7 +187,11 @@ class Main extends React.Component {
   }]
 
   public componentWillMount () {
-    this.fetchList()
+    if (this.props.infoComplete) {
+      this.handleSelectType({infoComplete: 0})
+    } else {
+      this.fetchList()
+    }
     this.fetchAllWorker()
   }
   public fetchList () {
@@ -278,6 +284,7 @@ class Main extends React.Component {
   }
 
   public handleSelectType (values: any) {
+    console.log(values, 'this.handleSelectType(values)')
     this.paramsright.customerSource = values.customerSource || undefined
     this.paramsright.payTaxesNature = values.payTaxesNature || undefined
     this.paramsright.agencyId = values.agencyId || undefined
@@ -397,6 +404,7 @@ class Main extends React.Component {
       <div>
         <Shrink
           height={68}
+          defaultCollapsed={this.props.infoComplete ? false : true}
         >
           <Condition
             className='mb10'
@@ -405,6 +413,7 @@ class Main extends React.Component {
           />
           <SelectSearch
             style={{marginLeft: 18}}
+            infoComplete={this.props.infoComplete}
             type={'1'}
             onChange={(values) => {
               this.handleSelectType(values)
