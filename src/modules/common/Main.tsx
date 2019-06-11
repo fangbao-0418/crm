@@ -35,6 +35,7 @@ class Main extends React.Component<{}, State> {
             fetchConfig().then(([res]) => {
               if (res.status === 200 && res.data) {
                 APP.user.tqType = res.data.tqType
+                APP.user.tqZoneCode = res.data.tqZoneCode
                 /** 初始化云呼叫 */
                 if (APP.user.tqType === 1) {
                   this.initCloudCall()

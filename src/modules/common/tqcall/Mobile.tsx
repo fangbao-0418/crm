@@ -21,7 +21,7 @@ class Main extends React.Component<Props> {
     }
     let phone = this.props.phone
     if (phone.length <= 8) {
-      phone = APP.user.tqAreaCode + phone
+      phone = APP.user.tqZoneCode + phone
     }
     const payload = {
       customerId: this.props.detail.id,

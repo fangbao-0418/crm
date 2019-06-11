@@ -12,7 +12,7 @@ declare namespace Common {
     /** 是否支持TQ */
     enableTq?: boolean
     /** 座机区号 */
-    tqAreaCode: string
+    tqZoneCode: string
     /** tq类型 0: 无, 1: TQ云呼叫, 2: 易米云通, 3: 工作手机 */
     tqType?: 0 | 1 | 2 | 3
     userType?: 'System' | 'DirectCompany' | 'Agent'
