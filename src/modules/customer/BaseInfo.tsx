@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Icon, Button, Select, Form } from 'antd'
+import { Row, Col, Icon, Button, Select, Form, DatePicker } from 'antd'
 import AutoComplete from 'pilipa/libs/auto-complete'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import Input from '@/components/input'
@@ -16,6 +16,7 @@ import { addCustomer, addBusinessCustomer, updateCustomer } from './api'
 import { fetchRegion } from '@/modules/common/api'
 import CompanySearch from '@/modules/signed/detail/CompanySearch'
 import LinkMan from './linkman'
+import moment from 'moment'
 const styles = require('./style')
 const Option = Select.Option
 const FormItem = Form.Item
@@ -74,17 +75,17 @@ class Main extends React.Component<Props> {
       changeCustomerDetailAction(this.props.customerId)
     }
     // 客资管理查看详情的时候 选择城市默认请求当前城市的地区
-    if (this.props.type === 'customer' && this.props.customerId && this.props.cityCode) {
-      const cityCode = this.props.cityCode
-      fetchRegion({
-        parentId: cityCode,
-        level: 3
-      }).then((res) => {
-        this.setState({
-          areaList: res
-        })
-      })
-    }
+    // if (this.props.type === 'customer' && this.props.customerId && this.props.cityCode) {
+    //   const cityCode = this.props.cityCode
+    //   fetchRegion({
+    //     parentId: cityCode,
+    //     level: 3
+    //   }).then((res) => {
+    //     this.setState({
+    //       areaList: res
+    //     })
+    //   })
+    // }
     // 公害用到
     if (this.props.type !== 'customer') {
       const cityCode = APP.user.cityCode || '110100'
@@ -260,7 +261,7 @@ class Main extends React.Component<Props> {
       value: value.key
     })
     const detail = this.props.detail
-    detail.areaName = ''
+    // detail.areaName = ''
     detail.cityName = value.title
     APP.dispatch({
       type: 'change customer data',
@@ -268,14 +269,14 @@ class Main extends React.Component<Props> {
         detail
       }
     })
-    fetchRegion({
-      parentId: value.key,
-      level: 3
-    }).then((res) => {
-      this.setState({
-        areaList: res
-      })
-    })
+    // fetchRegion({
+    //   parentId: value.key,
+    //   level: 3
+    // }).then((res) => {
+    //   this.setState({
+    //     areaList: res
+    //   })
+    // })
   }
   public handleAreaChange (value: {key: string, title: string}) {
     if (value.key === undefined) {
@@ -525,6 +526,27 @@ class Main extends React.Component<Props> {
             this.props.type !== 'customer' &&
             <Col span={12}>
               <FormItemLayout
+                label='注册时间'
+              >
+                <DatePicker
+                  placeholder=''
+                  disabled={disabled}
+                  value={detail.registerTime ? moment(detail.registerTime) : undefined}
+                  onChange={(value) => {
+                    const val = value.format('YYYY-MM-DD')
+                    this.handleChange(null, {
+                      key: 'registerTime',
+                      value: val
+                    })
+                  }}
+                />
+              </FormItemLayout>
+            </Col>
+          }
+          {/* {
+            this.props.type !== 'customer' &&
+            <Col span={12}>
+              <FormItemLayout
                 label='地区'
               >
                 <AutoComplete
@@ -542,7 +564,7 @@ class Main extends React.Component<Props> {
                 />
               </FormItemLayout>
             </Col>
-          }
+          } */}
           {
             (this.props.type === 'customer' && !this.props.customerId) &&
             <Col span={12}>
@@ -608,6 +630,24 @@ class Main extends React.Component<Props> {
             </Col>
             <Col span={12}>
               <FormItemLayout
+                label='注册时间'
+              >
+                <DatePicker
+                  placeholder=''
+                  disabled={disabled}
+                  value={detail.registerTime ? moment(detail.registerTime) : undefined}
+                  onChange={(value) => {
+                    const val = value.format('YYYY-MM-DD')
+                    this.handleChange(null, {
+                      key: 'registerTime',
+                      value: val
+                    })
+                  }}
+                />
+              </FormItemLayout>
+            </Col>
+            {/* <Col span={12}>
+              <FormItemLayout
                 label='地区'
               >
                 <AutoComplete
@@ -624,7 +664,7 @@ class Main extends React.Component<Props> {
                   }}
                 />
               </FormItemLayout>
-            </Col>
+            </Col> */}
           </Row>
         }
         <Row gutter={8} className='mt10'>
