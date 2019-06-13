@@ -196,20 +196,15 @@ class Main extends React.Component<{}, State> {
               <p className={styles.num}>{dataSource.infoDegree}</p>
             </li>
           </Link>
-          <Link
-            target='_blank'
-            to={'/shop-order/orders/service'}
-          >
-            <li className={styles.forth}>
-              <p>
-                <span>下单进行中</span>
-                <Tooltip placement='top' title='已下单,还没付款完成的客户'>
-                  <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
-                </Tooltip>
-              </p>
-              <p className={styles.num}>{dataSource.signingNums}</p>
-            </li>
-          </Link>
+          <li className={styles.forth} onClick={() => {window.open('/shop-order/orders/service')}}>
+            <p>
+              <span>下单进行中</span>
+              <Tooltip placement='top' title='已下单,还没付款完成的客户'>
+                <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
+              </Tooltip>
+            </p>
+            <p className={styles.num}>{dataSource.signingNums}</p>
+          </li>
         </ul>
         <div className={classNames('mt10', styles.bottom, 'clear')}>
           <div className={styles.rank}>
