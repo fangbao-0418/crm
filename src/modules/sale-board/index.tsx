@@ -198,7 +198,7 @@ class Main extends React.Component<{}, State> {
           </Link>
           <Link
             target='_blank'
-            to={'/orders/service'}
+            to={'shop-order/orders/service'}
           >
             <li className={styles.forth}>
               <p>
