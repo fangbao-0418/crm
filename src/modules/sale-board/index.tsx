@@ -207,7 +207,7 @@ class Main extends React.Component<{}, State> {
                   <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
                 </Tooltip>
               </p>
-              <p className={styles.num}>{dataSource.awaitTrackNums}</p>
+              <p className={styles.num}>{dataSource.signingNums}</p>
             </li>
           </Link>
         </ul>
