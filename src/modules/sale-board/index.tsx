@@ -128,7 +128,7 @@ class Main extends React.Component<{}, State> {
               <img src={require('@/assets/images/本月完成新签.png')}/>
               <div>
                 <p>意向客户</p>
-                <p className={styles.num}>{dataSource.infoDegree}</p>
+                <p className={styles.num}>{dataSource.intentionCustomerNums}</p>
               </div>
             </li>
             <li className={classNames('bg')}>
@@ -193,7 +193,7 @@ class Main extends React.Component<{}, State> {
                   <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
                 </Tooltip>
               </p>
-              <p className={styles.num}>{dataSource.intentionCustomerNums}</p>
+              <p className={styles.num}>{dataSource.infoDegree}</p>
             </li>
           </Link>
           <Link
@@ -207,7 +207,7 @@ class Main extends React.Component<{}, State> {
                   <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
                 </Tooltip>
               </p>
-              <p className={styles.num}>{dataSource.signingNums}</p>
+              <p className={styles.num}>{dataSource.awaitTrackNums}</p>
             </li>
           </Link>
         </ul>
