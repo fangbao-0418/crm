@@ -171,18 +171,23 @@ class Main extends React.Component<Props> {
                 <Row gutter={8}>
                   <Col span={16}>
                     {getFieldDecorator('autoDistributeWeight', {
-                      initialValue: autoDistributeWeight,
-                      rules:[{
-                        validator: validateAutoDistributeWeight
-                      }]
+                      valuePropName: autoDistributeWeight
+                      // rules:[{
+                      //   validator: validateAutoDistributeWeight
+                      // }]
                     })(
                       <Input
                         maxLength={2}
                         placeholder='1-10'
+                        value={this.state.autoDistributeWeight}
                         onChange={(e) => {
-                          this.setState({
-                            autoDistributeWeight: e.target.value
-                          })
+                          // console.log(/^([1-9]|10)$/.test(e.target.value), e.target.value, 'e.target.value')
+                          if (/^([1-9]|10)$/.test(e.target.value) || !e.target.value) {
+                            // console.log('1111111111')
+                            this.setState({
+                              autoDistributeWeight: e.target.value
+                            })
+                          }
                         }}
                       />
                     )}

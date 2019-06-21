@@ -98,6 +98,10 @@ class Main extends React.Component<Props> {
                       APP.error('请输入社会统一信用代码！')
                       return
                     }
+                    if (this.props.detail.isConfirmed === 0 && this.props.detail.companyInfoSource === 3 && !this.props.detail.businessHoursBegin) {
+                      APP.error('请选择营业开始时间！')
+                      return
+                    }
                     if (this.props.detail.companyInfoSource !== 0 && this.props.detail.isConfirmed === 0 && !(/^[3 | 5]/.test(this.props.detail.unifiedCreditCode))) {
                       APP.error('公司不属于录入范围，请通过天眼查和网址读取！')
                       return

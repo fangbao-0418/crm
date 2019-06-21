@@ -292,12 +292,12 @@ class Main extends React.Component<Props, State> {
                   label='营业期限'
                 >
                   <span>
-                    {moment(detail.businessHoursBegin).format('YYYY年MM月DD日')}
+                    {detail.businessHoursBegin ? moment(detail.businessHoursBegin).format('YYYY年MM月DD日') : null}
                       -
                     {detail.isFixedPeriod === 1 ?
                       '无期限'
                     :
-                      moment(detail.businessHoursEnd).format('YYYY年MM月DD日')
+                      detail.businessHoursEnd ? moment(detail.businessHoursEnd).format('YYYY年MM月DD日') : null
                     }
                   </span>
                 </FormItem>

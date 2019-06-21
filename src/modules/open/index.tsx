@@ -10,7 +10,7 @@ import Modal from 'pilipa/libs/modal'
 import { fetchList, pickCustomer } from './api'
 import { deleteCustomer } from '@/modules/customer/api'
 import Provider from '@/components/Provider'
-import Detail from '@/modules/customer/detail'
+import Detail from '@/modules/customer/detail/open-detail'
 import _ from 'lodash'
 import moment from 'moment'
 const styles = require('@/modules/business/style')

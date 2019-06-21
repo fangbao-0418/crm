@@ -3,9 +3,12 @@ import Profile from '@/modules/common/company-detail/Profile'
 import BaseInfo from '@/modules/customer/BaseInfo'
 import Record from '@/modules/customer/Record'
 import Card from '@/components/Card'
+import Tags from '@/components/tags'
 import _ from 'lodash'
 import moment from 'moment'
-import { Button, Icon } from 'antd'
+import { Button, Icon, Input, DatePicker } from 'antd'
+// import { verifyMessage } from '@/modules/business/api'
+import { fetchTrackRecords } from '@/modules/customer/api'
 import { connect } from 'react-redux'
 const styles = require('./style')
 interface Props {
@@ -18,6 +21,13 @@ interface Props {
   onClose?: () => void
 }
 class Main extends React.Component<Props> {
+  public state = {
+    visible: true,
+    infomation: {
+      isOtherTrack: false,
+      message: ''
+    }
+  }
   public defaultTrackRecord = [
     {
       field: 'tagTelephoneStatus',
@@ -55,6 +65,25 @@ class Main extends React.Component<Props> {
     </div>
   )
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
+  // public componentWillMount () {
+  //   verifyMessage(this.props.customerId).then((res) => {
+  //     this.setState({
+  //       infomation: res
+  //     })
+  //   })
+  // }
+  public componentWillReceiveProps (props: Customer.Props) {
+    if (this.props.detail.id !== props.detail.id) {
+      this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+      this.setState({
+        visible: false
+      }, () => {
+        this.setState({
+          visible: true
+        })
+      })
+    }
+  }
   public componentDidMount () {
     if (this.props.getWrappedInstance) {
       this.props.getWrappedInstance(this)
@@ -63,7 +92,42 @@ class Main extends React.Component<Props> {
   public save () {
     const sourceBaseinfo: any = this.refs.baseinfo
     const baseinfo = sourceBaseinfo.getWrappedInstance()
-    return baseinfo.refs.wrappedComponent.save()
+    const p = baseinfo.refs.wrappedComponent.save()
+    p.then((res: any) => {
+      const detail = this.props.detail
+      console.log(detail, '保存提交')
+      if (detail.trackRecord) {
+        const payload = {
+          pageNum: 1,
+          pageSize: 999
+        }
+        fetchTrackRecords(detail.id, payload).then((res2) => {
+          APP.dispatch<Customer.Props>({
+            type: 'change customer data',
+            payload: {
+              trackRecords: res2.data
+            }
+          })
+        })
+        detail.trackRecord = undefined
+      }
+      APP.dispatch({
+        type: 'change customer data',
+        payload: {
+          detail
+        }
+      })
+      this.trackRecord = _.cloneDeep(this.defaultTrackRecord)
+      this.setState({
+        visible: false
+      }, () => {
+        this.setState({
+          visible: true
+        })
+      })
+      return res
+    })
+    return p
   }
   public disabledDate (current: any) {
     return current && current < moment().subtract(1, 'days').endOf('day')
@@ -83,6 +147,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     const type = this.props.type || 'customer'
+    const {infomation} = this.state
     return (
       <div>
         <span
@@ -113,12 +178,51 @@ class Main extends React.Component<Props> {
               </Card>
             </div>
             <div className={styles.right}>
-              <Record
-                type={type}
-                customerId={this.props.customerId}
-                height={260}
-              />
+              {
+                this.state.visible &&
+                <Card title='跟进小记'>
+                  <Tags
+                    track={infomation.isOtherTrack}
+                    labelSpan={3}
+                    className='mb10'
+                    dataSource={this.trackRecord}
+                    parser={(value) => {
+                      return value[0] ? Number(value[0].value) : undefined
+                    }}
+                    onChange={(value) => {
+                      this.handleChange('trackRecord', value)
+                    }}
+                  />
+                  <Input.TextArea
+                    disabled={infomation.isOtherTrack}
+                    className='mt10'
+                    placeholder='请输入备注'
+                    onChange={(e) => {
+                      console.log(e.target.value, 'textarea change')
+                      this.handleChange('trackRecord.remark', e.target.value)
+                    }}
+                  />
+                  <div className='mt10' >
+                    下次跟进:&nbsp;&nbsp;
+                    <DatePicker
+                      disabled={infomation.isOtherTrack}
+                      placeholder=''
+                      disabledDate={this.disabledDate}
+                      onChange={(date) => {
+                        this.handleChange('trackRecord.appointTime', date.format('YYYY-MM-DD HH:mm:ss'))
+                      }}
+                    />
+                  </div>
+                </Card>
+              }
             </div>
+          </div>
+          <div>
+            <Record
+              type={type}
+              customerId={this.props.customerId}
+              height={260}
+            />
           </div>
         </div>
         <div>

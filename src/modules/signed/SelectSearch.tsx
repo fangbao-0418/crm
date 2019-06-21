@@ -7,6 +7,7 @@ const Option = Select.Option
 interface Props {
   style?: React.CSSProperties
   type?: string
+  infoComplete?: boolean
   onChange?: (value: ValueProps) => void
 }
 interface ValueProps {
@@ -26,6 +27,7 @@ interface State {
   sales: Array<{salesPerson: string, saleId: string}>
   /** tab1当前跟进人 */
   currentSales: Array<{salesPerson: string, saleId: string}>
+  infoComplete?: number
 }
 class Main extends React.Component<Props, State> {
   public values: ValueProps = {}
@@ -33,7 +35,8 @@ class Main extends React.Component<Props, State> {
   public state: State = {
     firms: [],
     sales: [],
-    currentSales: []
+    currentSales: [],
+    infoComplete: this.props.infoComplete ? 0 : undefined
   }
   public componentWillMount () {
     this.getFirms()
@@ -215,7 +218,11 @@ class Main extends React.Component<Props, State> {
             allowClear={true}
             style={{width:'150px'}}
             placeholder='是否完善信息'
+            value={this.state.infoComplete}
             onChange={(val: number) => {
+              this.setState({
+                infoComplete: val
+              })
               this.values.infoComplete = val
               this.props.onChange(this.values)
             }}

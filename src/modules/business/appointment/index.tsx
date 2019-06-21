@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table, Button, DatePicker, Select } from 'antd'
+import { RouteComponentProps } from 'react-router'
 import { ColumnProps } from 'antd/lib/table'
 import ContentBox from '@/modules/common/content'
 import Shrink from 'pilipa/libs/shrink'
@@ -25,11 +26,12 @@ interface States {
   selectedRowKeys: string[]
   sales: Array<{id: string, name: string}>
 }
+type Props = RouteComponentProps
 const all = [{
   label: '全部',
   value: ''
 }]
-class Main extends React.Component {
+class Main extends React.Component<Props, States> {
   public params: Business.SearchProps = {
     pageSize: 15,
     pageCurrent: 1
@@ -137,6 +139,13 @@ class Main extends React.Component {
   }]
   public pageSizeOptions = ['15', '30', '50', '80', '100', '200']
   public componentWillMount () {
+    console.log(this.props.location, 'this.props.location')
+    console.log(this.props.location.search, 'search')
+    if (this.props.location && this.props.location.search) {
+      this.data[0].value = '1'
+      this.params.appointStartTime = moment().format('YYYY-MM-DD')
+      this.params.appointEndDate = moment().format('YYYY-MM-DD')
+    }
     this.fetchList()
     this.fetchSales()
   }

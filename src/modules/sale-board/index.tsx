@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Table } from 'antd'
+import { Link } from 'react-router-dom'
+import { Table, Tooltip } from 'antd'
 import { fetchInfo } from './api'
 import _ from 'lodash'
 const styles = require('./style')
@@ -127,33 +128,81 @@ class Main extends React.Component<{}, State> {
               <img src={require('@/assets/images/本月完成新签.png')}/>
               <div>
                 <p>意向客户</p>
-                <p className={styles.num}>{dataSource.infoDegree}</p>
+                <p className={styles.num}>{dataSource.intentionCustomerNums}</p>
               </div>
             </li>
             <li className={classNames('bg')}>
               <img src={require('@/assets/images/本月跟进.png')}/>
               <div>
-                <p>本月新签客户</p>
+                <p>
+                  <span>本月新签客户</span>
+                  <Tooltip placement='top' title='本月自己和下属的新增的签约客户的数量'>
+                    <i className='fa fa-info-circle ml5'></i>
+                  </Tooltip>
+                </p>
                 <p className={styles.num}>{dataSource.signedNums}</p>
               </div>
             </li>
           </ul>
         </div>
         <ul className={classNames('mt10', styles.middle, 'clear')}>
-          <li className={styles.first}>
-            <p>待跟进</p>
-            <p className={styles.num}>{dataSource.awaitTrackNums}</p>
-          </li>
-          <li className={styles.second}>
-            <p>今日待回访</p>
-            <p className={styles.num}>{dataSource.returnVisitNums}</p>
-          </li>
-          <li className={styles.third}>
-            <p>信息待完善</p>
-            <p className={styles.num}>{dataSource.intentionCustomerNums}</p>
-          </li>
-          <li className={styles.forth}>
-            <p>下单进行中</p>
+          <Link
+            target='_blank'
+            to={'/business'}
+          >
+            <li
+              className={styles.first}
+            >
+              <p>
+                <span>待跟进</span>
+                <Tooltip placement='top' title='还没有跟进的新客资'>
+                  <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
+                </Tooltip>
+              </p>
+              <p className={styles.num}>{dataSource.awaitTrackNums}</p>
+            </li>
+          </Link>
+          <Link
+            target='_blank'
+            to={{
+              pathname: '/appointment',
+              search: '?appointTime=true'
+            }}
+          >
+            <li className={styles.second}>
+              <p>
+                <span>今日待回访</span>
+                <Tooltip placement='top' title='预约今日要回访的客户'>
+                  <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
+                </Tooltip>
+              </p>
+              <p className={styles.num}>{dataSource.returnVisitNums}</p>
+            </li>
+          </Link>
+          <Link
+            target='_blank'
+            to={{
+              pathname: '/signed',
+              search: '?infoComplete=0'
+            }}
+          >
+            <li className={styles.third}>
+              <p>
+                <span>信息待完善</span>
+                <Tooltip placement='top' title='需要通过天眼查完善信息的客户'>
+                  <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
+                </Tooltip>
+              </p>
+              <p className={styles.num}>{dataSource.infoDegree}</p>
+            </li>
+          </Link>
+          <li className={styles.forth} onClick={() => {window.open('/shop-order/orders/service')}}>
+            <p>
+              <span>下单进行中</span>
+              <Tooltip placement='top' title='已下单,还没付款完成的客户'>
+                <i className='fa fa-info-circle ml5' style={{color: '#ffffff'}}></i>
+              </Tooltip>
+            </p>
             <p className={styles.num}>{dataSource.signingNums}</p>
           </li>
         </ul>
