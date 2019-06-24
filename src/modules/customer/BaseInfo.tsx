@@ -48,7 +48,7 @@ class Main extends React.Component<Props> {
     if (this.props.type === 'customer') {
       fetchRegion({
         level: 2
-      }).then((res) => {
+      }).then((res: Common.RegionProps[]) => {
         this.setState({
           cityList: res
         })
@@ -92,7 +92,7 @@ class Main extends React.Component<Props> {
       fetchRegion({
         parentId: cityCode, // 登陆的客户城市对应的地区
         level: 3
-      }).then((res) => {
+      }).then((res: Common.RegionProps[]) => {
         this.setState({
           areaList: res
         })
