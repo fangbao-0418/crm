@@ -33,6 +33,8 @@ interface ModuleProps {
   Setting: RouteComponent
   /** 404 */
   Unfound: RouteComponent
+  /** 客服回访 */
+  CustomerVisit: RouteComponent
 }
 /** 组件模块 */
 declare const modules: ModuleProps

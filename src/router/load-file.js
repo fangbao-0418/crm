@@ -16,3 +16,5 @@ export { default as loadCustomerSet } from 'bundle-loader?lazy&name=[name]!@/mod
 export { default as loadCustomerSetAssign } from 'bundle-loader?lazy&name=[name]!@/modules/customer-set/assign'
 /** crm设置 */
 export { default as loadSetting } from 'bundle-loader?lazy&name=[name]!@/modules/setting'
+/** 客服回访 */
+export { default as loadCustomerVisit } from 'bundle-loader?lazy&name=[name]!@/modules/customer-visit'
