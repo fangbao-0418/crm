@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Switch, Button, Tooltip, Radio } from 'antd'
+import { Select, Switch, Button, Tooltip, Radio, Input } from 'antd'
 import FormItem from '@/components/form/Item1'
 import { getSalesList } from '@/modules/common/api'
 const styles = require('../style')
@@ -16,6 +16,8 @@ interface ValueProps {
   customerSource?: string,
   salesPerson?: Array<{id: string, name: string}>
   type?: number
+  /** 后缀 */
+  customerNameSuffix?: string
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {
@@ -123,6 +125,16 @@ class Main extends React.Component<Props> {
             </Select>
           </div>
         }
+        <div className='mt12'>
+          <span className={styles.label}>导入批次：</span>
+          <Input
+            maxLength={5}
+            style={{width:'200px'}}
+            onChange={(e) => {
+              this.values.customerNameSuffix = e.target.value
+            }}
+          />
+        </div>
         <div className='text-right mt10'>
           <Button
             type='primary'

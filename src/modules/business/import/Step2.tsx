@@ -11,6 +11,8 @@ interface Props {
       customerSource?: string,
       salesPerson?: Array<{id: string, name: string}>
       type?: string
+      /** 后缀 */
+      customerNameSuffix?: string
     }
   }
 }
@@ -59,7 +61,8 @@ class Main extends React.Component<Props> {
       salesPersonNames: salesNames.join(','),
       cityCode: APP.user.cityCode || '', // 需要从登陆信息读取
       cityName: APP.user.city || '', // 需要从登陆信息读取APP.user.city
-      type: this.props.paramsValue.step1.type
+      type: this.props.paramsValue.step1.type,
+      customerNameSuffix: this.props.paramsValue.step1.customerNameSuffix
     }
     console.log(paramsFile, 'paramsFile')
     return checkFile(info.file, paramsFile).then((res) => {
@@ -103,7 +106,8 @@ class Main extends React.Component<Props> {
       cityCode: APP.user.cityCode || '', // 需要从登陆信息读取
       cityName: APP.user.city || '', // 需要从登陆信息读取APP.user.city
       type: this.props.paramsValue.step1.type,
-      signal: this.state.signal
+      signal: this.state.signal,
+      customerNameSuffix: this.props.paramsValue.step1.customerNameSuffix
     }
     console.log(paramsFile, 'paramsFile')
     return importFile(info.file, paramsFile).then((res) => {
