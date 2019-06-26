@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select } from 'antd'
+import { Select, Tabs } from 'antd'
 import classNames from 'classnames'
 import Profile from '@/modules/common/company-detail/Profile'
 import OrderInfo from './OrderInfo'
@@ -16,10 +16,13 @@ interface State {
   menu: Array<{value: number, label: string}>
   /** 当前选中的左侧菜单 */
   curKey: number
+  /** 填写回访默认tab */
+  defaultKey?: string
 }
 class Main extends React.Component {
   public state: State = {
     curKey: 1,
+    defaultKey: '1',
     menu: [{
       value: 1,
       label: '客户信息'
@@ -162,7 +165,21 @@ class Main extends React.Component {
                 </div>
               </div>
               <div className={classNames(styles['right-con'], 'fr')}>
-                3333
+                <div className={styles['visit-con']}>
+                  <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
+                    <Tabs.TabPane tab='客资回访' key='1'>
+                      111
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab='订单回访' key='2'>
+                      2222
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab='服务回访' key='3'>
+                      33333
+                    </Tabs.TabPane>
+                  </Tabs>
+                </div>
+                <div className={styles['records-con']}>
+                </div>
               </div>
             </div>
           </div>
