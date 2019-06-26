@@ -1,6 +1,6 @@
 import React from 'react'
 import { Select } from 'antd'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import Profile from '@/modules/common/company-detail/Profile'
 import OrderInfo from './OrderInfo'
 import WorkList from './WorkList'
@@ -44,7 +44,7 @@ class Main extends React.Component {
       <div className={styles.box}>
         <div className={styles.search}>
           <Select
-            className={classnames(styles.select, 'mr5')}
+            className={classNames(styles.select, 'mr5')}
             showSearch
             allowClear
             value={this.state.anencyId}
@@ -113,8 +113,8 @@ class Main extends React.Component {
             <div className={styles['top-info']}>
               <Profile type='signed'/>
             </div>
-            <div className={classnames('mt15', 'clear')}>
-              <div className={classnames(styles.left, 'fl')}>
+            <div className={classNames('mt15', 'clear')}>
+              <div className={classNames(styles['left-con'], 'fl')}>
                 <div className='clear'>
                   <div className='fl'>
                     {
@@ -122,7 +122,7 @@ class Main extends React.Component {
                         return (
                           <div
                             key={item.value}
-                            className={classnames(styles.menu, item.value === this.state.curKey ? styles.focus : '')}
+                            className={classNames(styles.menu, item.value === this.state.curKey ? styles.focus : '')}
                             onClick={() => {
                               this.setState({
                                 curKey: item.value
@@ -137,31 +137,31 @@ class Main extends React.Component {
                   </div>
                   {
                     this.state.curKey === 1 &&
-                    <div className={classnames(styles.con, 'fl')}>
+                    <div className={classNames(styles.con, 'fl')}>
                       <Detail/>
                     </div>
                   }
                   {
                     this.state.curKey === 2 &&
-                    <div className={classnames(styles.con, 'fl', 'mt15')}>
+                    <div className={classNames(styles.con, 'fl')}>
                       <OrderInfo customerId={this.state.customerId}/>
                     </div>
                   }
                   {
                     this.state.curKey === 3 &&
-                    <div className={classnames(styles.con, 'fl', 'mt15')}>
+                    <div className={classNames(styles.con, 'fl', 'mt15')}>
                       <WorkList customerId={this.state.customerId}/>
                     </div>
                   }
                   {
                     this.state.curKey === 4 &&
-                    <div className={classnames(styles.con, 'fl', 'mt15')}>
+                    <div className={classNames(styles.con, 'fl', 'mt15')}>
                       <OperateList customerId={this.state.customerId}/>
                     </div>
                   }
                 </div>
               </div>
-              <div className={classnames(styles.right, 'fr')}>
+              <div className={classNames(styles['right-con'], 'fr')}>
                 2222
               </div>
             </div>

@@ -52,7 +52,7 @@ class Main extends React.Component<Props> {
         const len: any = []
         const num: any = []
         OrderData.map((value, index) => {
-          len.push(Math.ceil(value.products.length / 4))
+          len.push(Math.ceil(value.products.length / 3))
           num.push(1)
         })
         this.setState({
@@ -67,7 +67,7 @@ class Main extends React.Component<Props> {
     const {numb, length} = this.state
 
     return (
-      <div style={{overflowY: 'auto', maxHeight: 600}}>
+      <div style={{overflowY: 'auto', maxHeight: 600, position: 'relative'}} className='mt15'>
         {
           this.state.OrderData.map((item, index) => {
             return (
@@ -113,7 +113,7 @@ class Main extends React.Component<Props> {
                     <label>状态：</label>
                     <span>{stat[item.status]}</span>
                   </div>
-                  <div className={styles.col}>
+                  <div className={classNames(styles.col, 'ml25')}>
                     <label>服务账期：</label>
                     <span>{item.startDate}-{item.endDate}</span>
                   </div>
@@ -123,7 +123,8 @@ class Main extends React.Component<Props> {
                     !(numb[index] === 1) ?
                     <div
                       className={styles.left}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation()
                         const i = numb[index] - 1
                         numb[index] = i
                         this.setState({
@@ -136,9 +137,9 @@ class Main extends React.Component<Props> {
                   }
                   <div className={styles['order-con']}>
                     {
-                      item.products.filter((children, index1) => index1 >= ((numb[index] - 1) * 4) && index1 < (numb[index] * 4)).map((children, index1) => {
+                      item.products.filter((children, index1) => index1 >= ((numb[index] - 1) * 3) && index1 < (numb[index] * 3)).map((children, index1) => {
                         return (
-                          <div className={styles.con} key={index1}>
+                          <div className={styles['order-item']} key={index1}>
                             <div>{children.productName}*{children.quantity}</div>
                             <div>
                               <span>¥</span>
@@ -152,7 +153,8 @@ class Main extends React.Component<Props> {
                     !(numb[index] === length[index]) ?
                     <div
                       className={styles.right}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation()
                         const i = numb[ index ] + 1
                         numb[ index ] = i
                         this.setState({
