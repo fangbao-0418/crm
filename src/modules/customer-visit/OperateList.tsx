@@ -21,7 +21,7 @@ export default class extends React.Component<Props>  {
   }
   public columns: ColumnProps<DetailProps>[] = [{
     title: '操作人',
-    width: 100,
+    width: 150,
     dataIndex: 'operatorName'
   }, {
     title: '操作时间',

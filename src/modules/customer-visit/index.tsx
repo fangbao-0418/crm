@@ -143,19 +143,19 @@ class Main extends React.Component {
                   }
                   {
                     this.state.curKey === 2 &&
-                    <div className={classnames(styles.con, 'fl')}>
+                    <div className={classnames(styles.con, 'fl', 'mt15')}>
                       <OrderInfo customerId={this.state.customerId}/>
                     </div>
                   }
                   {
                     this.state.curKey === 3 &&
-                    <div className={classnames(styles.con, 'fl')}>
+                    <div className={classnames(styles.con, 'fl', 'mt15')}>
                       <WorkList customerId={this.state.customerId}/>
                     </div>
                   }
                   {
                     this.state.curKey === 4 &&
-                    <div className={classnames(styles.con, 'fl')}>
+                    <div className={classnames(styles.con, 'fl', 'mt15')}>
                       <OperateList customerId={this.state.customerId}/>
                     </div>
                   }
