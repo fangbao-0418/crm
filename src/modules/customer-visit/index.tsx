@@ -2,16 +2,37 @@ import React from 'react'
 import { Select } from 'antd'
 import classnames from 'classnames'
 import Profile from '@/modules/common/company-detail/Profile'
+import OrderInfo from './OrderInfo'
+import WorkList from './WorkList'
+import OperateList from './OperateList'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
+import Detail from './Customer'
 const styles = require('./style')
 interface State {
   anencyId?: string
   customerId?: string
   companyList?: Array<{id?: string, name?: string}>
   customerList?: Array<{id?: string, customerName?: string, agencyName?: string}>
+  menu: Array<{value: number, label: string}>
+  /** 当前选中的左侧菜单 */
+  curKey: number
 }
 class Main extends React.Component {
   public state: State = {
+    curKey: 1,
+    menu: [{
+      value: 1,
+      label: '客户信息'
+    }, {
+      value: 2,
+      label: '订单信息'
+    }, {
+      value: 3,
+      label: '工单信息'
+    }, {
+      value: 4,
+      label: '操作'
+    }],
     companyList: [{id: '1', name: '北京'}],
     customerList: [{id: '593099308379668480', customerName: '北京', agencyName: '121212'}, {id: '592755525066686464', customerName: '北12京', agencyName: 'aaa'}]
   }
@@ -55,7 +76,9 @@ class Main extends React.Component {
               this.setState({
                 customerId: value
               }, () => {
-                this.fetchData()
+                if (this.state.customerId) {
+                  this.fetchData()
+                }
               })
             }}
           >
@@ -90,7 +113,58 @@ class Main extends React.Component {
             <div className={styles['top-info']}>
               <Profile type='signed'/>
             </div>
-            <div></div>
+            <div className={classnames('mt15', 'clear')}>
+              <div className={classnames(styles.left, 'fl')}>
+                <div className='clear'>
+                  <div className='fl'>
+                    {
+                      this.state.menu.length > 0 && this.state.menu.map((item, index) => {
+                        return (
+                          <div
+                            key={item.value}
+                            className={classnames(styles.menu, item.value === this.state.curKey ? styles.focus : '')}
+                            onClick={() => {
+                              this.setState({
+                                curKey: item.value
+                              })
+                            }}
+                          >
+                            {item.label}
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  {
+                    this.state.curKey === 1 &&
+                    <div className={classnames(styles.con, 'fl')}>
+                      <Detail/>
+                    </div>
+                  }
+                  {
+                    this.state.curKey === 2 &&
+                    <div className={classnames(styles.con, 'fl')}>
+                      <OrderInfo customerId={this.state.customerId}/>
+                    </div>
+                  }
+                  {
+                    this.state.curKey === 3 &&
+                    <div className={classnames(styles.con, 'fl')}>
+                      <WorkList customerId={this.state.customerId}/>
+                    </div>
+                  }
+                  {
+                    this.state.curKey === 4 &&
+                    <div className={classnames(styles.con, 'fl')}>
+                      <OperateList customerId={this.state.customerId}/>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div className={classnames(styles.right, 'fr')}>
+                2222
+              </div>
+            </div>
           </div>
         }
       </div>
