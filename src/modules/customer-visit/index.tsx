@@ -3,6 +3,7 @@ import { Select, Tabs } from 'antd'
 import classNames from 'classnames'
 import Profile from '@/modules/common/company-detail/Profile'
 import OrderInfo from './OrderInfo'
+import Record from '@/modules/customer/Record'
 import WorkList from './WorkList'
 import OperateList from './OperateList'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
@@ -178,7 +179,12 @@ class Main extends React.Component {
                     </Tabs.TabPane>
                   </Tabs>
                 </div>
-                <div className={styles['records-con']}>
+                <div className={classNames(styles['records-con'], 'mt15')}>
+                  <Record
+                    type='visit'
+                    customerId={this.state.customerId}
+                    height={180}
+                  />
                 </div>
               </div>
             </div>
