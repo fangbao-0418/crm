@@ -44,7 +44,7 @@ class Main extends React.Component<Props> {
   }
   public render () {
     return (
-      <div className={styles.container}>
+      <div className={styles.container} style={{width: 600}}>
         <Card
           title='工商信息'
           rightContent={

@@ -87,8 +87,8 @@ class Main extends React.Component<Props, State> {
               <Col span={18}>
                 <FormItem
                   style={{marginLeft: '-4px'}}
-                  labelCol={{span: 3}}
-                  wrapperCol={{span: 21}}
+                  labelCol={{span: 4}}
+                  wrapperCol={{span: 20}}
                   label='公司名称'
                 >
                   {!disabled ? getFieldDecorator(
@@ -107,7 +107,7 @@ class Main extends React.Component<Props, State> {
                       <CompanySearch
                         className='inline-block'
                         enterButton={<span style={{fontSize: 12}}>查询</span>}
-                        style={{width: '322px'}}
+                        style={{width: '288px'}}
                         value={detail.customerName}
                         onSelectCompany={(item) => {
                           fetchTianYanDetail(item.id).then((res) => {
