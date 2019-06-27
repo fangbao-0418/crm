@@ -27,7 +27,8 @@ interface ValueProps {
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {
-    type: 3
+    type: 3,
+    customerNameSuffix: ''
   }
   public state: State = {
     type: 3,

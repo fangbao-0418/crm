@@ -6,6 +6,7 @@ import OrderInfo from './OrderInfo'
 import Record from '@/modules/customer/Record'
 import WorkList from './WorkList'
 import OperateList from './OperateList'
+import CustomerVisit from './CustomerVisit'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 import Detail from './Customer'
 const styles = require('./style')
@@ -169,7 +170,7 @@ class Main extends React.Component {
                 <div className={styles['visit-con']}>
                   <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
                     <Tabs.TabPane tab='客资回访' key='1'>
-                      111
+                      <CustomerVisit/>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='订单回访' key='2'>
                       2222
