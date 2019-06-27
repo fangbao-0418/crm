@@ -9,6 +9,7 @@ import OperateList from './OperateList'
 import CustomerVisit from './CustomerVisit'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 import Detail from './Customer'
+import { saveRecords } from './api'
 const styles = require('./style')
 interface State {
   anencyId?: string
@@ -43,6 +44,12 @@ class Main extends React.Component {
   }
   public fetchData () {
     changeCustomerDetailAction(this.state.customerId)
+  }
+  public onOk (params: CustomerVisit.Search) {
+    console.log(params)
+    saveRecords(params).then(() => {
+      changeCustomerDetailAction(this.state.customerId)
+    })
   }
   public render () {
     return (
@@ -170,7 +177,7 @@ class Main extends React.Component {
                 <div className={styles['visit-con']}>
                   <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
                     <Tabs.TabPane tab='客资回访' key='1'>
-                      <CustomerVisit/>
+                      <CustomerVisit customerId={this.state.customerId} onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='订单回访' key='2'>
                       2222
