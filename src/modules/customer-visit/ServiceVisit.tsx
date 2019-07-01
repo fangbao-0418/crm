@@ -60,16 +60,16 @@ class Main extends React.Component<Props, State> {
               }}
             />
             <div>
-              <span>合同信息：</span>
+              <span className='mr10'>确认税额</span>
               <Select
                 allowClear
                 style={{width: 150}}
                 onChange={(value?: string) => {
-                  this.handleChange('contract', value)
+                  this.handleChange('confirmTax', value)
                 }}
               >
                 {
-                  APP.keys.EnumVisitContract.map((item) => {
+                  APP.keys.EnumVisitTax.map((item) => {
                     return (
                       <Select.Option key={item.value}>{item.label}</Select.Option>
                     )
@@ -77,17 +77,17 @@ class Main extends React.Component<Props, State> {
                 }
               </Select>
             </div>
-            <div className='mt5'>
-              <span>是否交接：</span>
+            <div className='mt10'>
+              <span className='mr10'>反馈问题</span>
               <Select
                 allowClear
                 style={{width: 150}}
                 onChange={(value?: string) => {
-                  this.handleChange('handover', value)
+                  this.handleChange('faq', value)
                 }}
               >
                 {
-                  APP.keys.EnumVisitHandover.map((item) => {
+                  APP.keys.EnumVisitFAQ.map((item) => {
                     return (
                       <Select.Option key={item.value}>{item.label}</Select.Option>
                     )
@@ -96,16 +96,16 @@ class Main extends React.Component<Props, State> {
               </Select>
             </div>
             <div>
-              <span>销售专业能力：</span>
+              <span className='mr10'>会计专业能力</span>
               <Rate
                 onChange={(value) => {
                   console.log(value, 'value')
-                  this.handleChange('ability', value)
+                  this.handleChange('profession', value)
                 }}
               />
             </div>
             <div>
-              <span>销售服务态度：</span>
+              <span className='mr10'>会计服务态度</span>
               <Rate
                 onChange={(value) => {
                   console.log(value, 'value')
@@ -114,16 +114,25 @@ class Main extends React.Component<Props, State> {
               />
             </div>
             <div>
-              <span>销售跟进实效：</span>
+              <span className='mr10'>会计回复及时性</span>
               <Rate
                 onChange={(value) => {
                   console.log(value, 'value')
-                  this.handleChange('track', value)
+                  this.handleChange('replyTimely', value)
                 }}
               />
             </div>
             <div>
-              <span style={{lineHeight: '48px'}}>备注：</span>
+              <span className='mr10'>整体满意度</span>
+              <Rate
+                onChange={(value) => {
+                  console.log(value, 'value')
+                  this.handleChange('satisfaction', value)
+                }}
+              />
+            </div>
+            <div>
+              <span style={{lineHeight: '48px'}} className='mr10'>备注</span>
               <Input.TextArea
                 className='mt10'
                 style={{width: 300}}
