@@ -71,7 +71,7 @@ class Main extends React.Component<Props, State> {
               ) : <span>{detail.areaName}</span>}
             </FormItem>
           </Col>
-          <Col span={8}>
+          {/* <Col span={8}>
             <FormItem
               labelCol={{span: 10}}
               wrapperCol={{span: 14}}
@@ -98,7 +98,7 @@ class Main extends React.Component<Props, State> {
                 <span>{APP.dictionary[`EnumPayTaxesNature-${detail.payTaxesNature}`]}</span>
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col span={9}>
           <FormItem
             labelCol={{span: 8}}
