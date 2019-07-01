@@ -117,7 +117,7 @@ class Main extends React.Component<Props, State> {
             })
           }
         </Select>
-        <Select
+        {/* <Select
           allowClear={true}
           style={{width:'150px'}}
           className='mr5'
@@ -138,7 +138,7 @@ class Main extends React.Component<Props, State> {
               )
             })
           }
-        </Select>
+        </Select> */}
         <Select
           allowClear={true}
           style={{width:'150px'}}
