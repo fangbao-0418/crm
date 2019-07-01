@@ -51,6 +51,49 @@ class Main extends React.Component<Props, State> {
         </span>
       )
     }
+    console.log(item.telephoneStatus, `EnumVisitTelStatus-${item.telephoneStatus}`, '111111111')
+    if (item.telephoneStatus > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTelStatus-${item.telephoneStatus}`]}
+        </span>
+      )
+    }
+    if (item.contract > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitContract-${item.contract}`]}
+        </span>
+      )
+    }
+    if (item.handover > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitHandover-${item.handover}`]}
+        </span>
+      )
+    }
+    if (item.confirmTax > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTax-${item.confirmTax}`]}
+        </span>
+      )
+    }
+    if (item.faq > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitFAQ-${item.faq}`]}
+        </span>
+      )
+    }
+    if (item.reason > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTelReason-${item.reason}`]}
+        </span>
+      )
+    }
     if (item.appointTime) {
       nodes.push(
         <span className={styles.tag}>

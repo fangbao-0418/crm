@@ -130,6 +130,13 @@ declare namespace Customer {
     mediaUrl?: string
     phoneAddress?: string
     salespersonName?: string
+    telephoneStatus?: number
+    visitType?: string
+    contract?: number
+    handover?: number
+    confirmTax?: number
+    faq?: number
+    reason?: number
   }
   export interface TianYanDataProps {
     apiName: string

@@ -7,6 +7,7 @@ import Record from '@/modules/customer/Record'
 import WorkList from './WorkList'
 import OperateList from './OperateList'
 import CustomerVisit from './CustomerVisit'
+import OrderVisit from './OrderVisit'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 import Detail from './Customer'
 import { saveRecords } from './api'
@@ -181,7 +182,7 @@ class Main extends React.Component {
                       <CustomerVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='订单回访' key='2'>
-                      2222
+                      <OrderVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='服务回访' key='3'>
                       33333
