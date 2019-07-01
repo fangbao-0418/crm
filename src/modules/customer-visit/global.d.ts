@@ -1,7 +1,7 @@
 declare namespace CustomerVisit {
   export interface Search {
     /** 客服回访类型 0: "销售跟进", 1: "客资回访", 2: "订单回访", 3: "服务回访", 4: "续费回访" */
-    visitType: '0' | '1' | '2' | '3' | '4'
+    visitType?: '0' | '1' | '2' | '3' | '4'
     customerId?: string
     telephoneStatus?: string
     reason?: string
@@ -26,5 +26,6 @@ declare namespace CustomerVisit {
     replyTimely?: string
     /** 满意度 */
     satisfaction?: string
+    [field: string]: any
   }
 }

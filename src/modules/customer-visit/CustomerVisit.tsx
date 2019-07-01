@@ -5,7 +5,6 @@ import _ from 'lodash'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 const styles = require('./style')
 interface Props {
-  customerId: string
   onOk?: (params: CustomerVisit.Search) => void
 }
 interface State {
@@ -24,6 +23,7 @@ class Main extends React.Component<Props, State> {
     }
   ]
   public trackRecord = _.cloneDeep(this.defaultTrackRecord)
+  public values: {visitType?: '0' | '1' | '2' | '3' | '4', telephoneStatus?: string, reason?: string, remark?: string, [field: string]: any} = {visitType: '1'}
   public state: State = {
     visible: true,
     infomation: {
@@ -34,7 +34,11 @@ class Main extends React.Component<Props, State> {
   public handleChange (field: string, value: any) {
     console.log(field, value, '111111')
     if (field === 'trackRecord') {
-      // value = Object.assign({}, detail.trackRecord, value)
+      const f = 'tagTelephoneStatus'
+      const val = value.tagTelephoneStatus
+      this.values[f] = val
+    } else {
+      this.values[field] = value
     }
   }
   public render () {
@@ -85,7 +89,8 @@ class Main extends React.Component<Props, State> {
           <Button
             type='primary'
             onClick={() => {
-              this.props.onOk({visitType: '1'})
+              console.log(this.values, 'values')
+              this.props.onOk(this.values)
             }}
           >
             保存

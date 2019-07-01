@@ -46,6 +46,7 @@ class Main extends React.Component {
     changeCustomerDetailAction(this.state.customerId)
   }
   public onOk (params: CustomerVisit.Search) {
+    params.customerId = this.state.customerId
     console.log(params)
     saveRecords(params).then(() => {
       changeCustomerDetailAction(this.state.customerId)
@@ -177,7 +178,7 @@ class Main extends React.Component {
                 <div className={styles['visit-con']}>
                   <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
                     <Tabs.TabPane tab='客资回访' key='1'>
-                      <CustomerVisit customerId={this.state.customerId} onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
+                      <CustomerVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='订单回访' key='2'>
                       2222
