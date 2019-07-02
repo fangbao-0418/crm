@@ -1,6 +1,7 @@
 import React from 'react'
 import { Select, Tabs } from 'antd'
 import classNames from 'classnames'
+import CustomerSearch from './CustomerSearch'
 import Profile from '@/modules/common/company-detail/Profile'
 import OrderInfo from './OrderInfo'
 import Record from '@/modules/customer/Record'
@@ -11,13 +12,14 @@ import OrderVisit from './OrderVisit'
 import ServiceVisit from './ServiceVisit'
 import { changeCustomerDetailAction } from '@/modules/customer/action'
 import Detail from './Customer'
-import { saveRecords } from './api'
+import { getCustomerList, saveRecords } from './api'
+import { fetchAllCompanyList } from '@/modules/common/api'
 const styles = require('./style')
 interface State {
-  anencyId?: string
+  agencyId?: string
+  defaultName?: string
   customerId?: string
   companyList?: Array<{id?: string, name?: string}>
-  customerList?: Array<{id?: string, customerName?: string, agencyName?: string}>
   menu: Array<{value: number, label: string}>
   /** 当前选中的左侧菜单 */
   curKey: number
@@ -27,6 +29,7 @@ interface State {
 class Main extends React.Component {
   public state: State = {
     curKey: 1,
+    defaultName: '',
     defaultKey: '1',
     menu: [{
       value: 1,
@@ -41,11 +44,26 @@ class Main extends React.Component {
       value: 4,
       label: '操作'
     }],
-    companyList: [{id: '1', name: '北京'}],
-    customerList: [{id: '593099308379668480', customerName: '北京', agencyName: '121212'}, {id: '592755525066686464', customerName: '北12京', agencyName: 'aaa'}]
+    companyList: []
+  }
+  public componentWillMount () {
+    this.getCompanies()
+    console.log(APP.user.userType !== 'System', '11111')
+    if (APP.user.userType !== 'System') {
+      this.setState({
+        agencyId: APP.user.companyId
+      })
+    }
   }
   public fetchData () {
     changeCustomerDetailAction(this.state.customerId)
+  }
+  public getCompanies () {
+    fetchAllCompanyList().then((res) => {
+      this.setState({
+        companyList: res
+      })
+    })
   }
   public onOk (params: CustomerVisit.Search) {
     params.customerId = this.state.customerId
@@ -55,72 +73,47 @@ class Main extends React.Component {
     })
   }
   public render () {
+    const disabled = APP.user.userType === 'System' ? false : true
+    console.log(this.state.agencyId, 'this.state.agencyId')
     return (
       <div className={styles.box}>
         <div className={styles.search}>
           <Select
+            disabled={disabled}
             className={classNames(styles.select, 'mr5')}
             showSearch
             allowClear
-            value={this.state.anencyId}
+            value={this.state.agencyId}
             placeholder='请选择机构'
             optionFilterProp='children'
             filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={(value?: string) => {
               this.setState({
-                anencyId: value
+                agencyId: value
               })
             }}
           >
             {
-              this.state.companyList.map((item) => {
+              this.state.companyList.length && this.state.companyList.map((item) => {
                 return (
-                  <Select.Option key={item.id}>{item.name}</Select.Option>
+                  <Select.Option key={String(item.id)}>{item.name}</Select.Option>
                 )
               })
             }
           </Select>
-          <Select
-            className={styles.select}
-            showSearch
-            allowClear
-            value={this.state.customerId}
-            placeholder='请输入客户名称/联系电话'
-            onChange={(value?: string) => {
-              console.log(value, 'value')
+          <CustomerSearch
+            className='inline-block'
+            agencyId={this.state.agencyId}
+            style={{width: '250px'}}
+            value={this.state.defaultName}
+            onSelectCompany={(item) => { // 选择完客户查询客户详情 需要设置全局customerId 及查询
               this.setState({
-                customerId: value
+                customerId: item.id
               }, () => {
-                if (this.state.customerId) {
-                  this.fetchData()
-                }
+                this.fetchData()
               })
             }}
-          >
-            {
-              this.state.customerList.map((item) => {
-                return (
-                  <Select.Option key={item.id}>
-                    {
-                      this.state.customerId ?
-                      <div>
-                        <span>{item.customerName}</span>
-                        <span>{'(' + item.agencyName + ')'}</span>
-                      </div>
-                      :
-                      <div>
-                        <div>{item.customerName}</div>
-                        <div className={styles.color}>
-                          <span>机构：</span>
-                          <span>{item.agencyName}</span>
-                        </div>
-                      </div>
-                    }
-                  </Select.Option>
-                )
-              })
-            }
-          </Select>
+          />
         </div>
         {
           this.state.customerId &&
