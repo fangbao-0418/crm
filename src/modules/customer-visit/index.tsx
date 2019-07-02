@@ -1,5 +1,6 @@
 import React from 'react'
 import { Select, Tabs } from 'antd'
+import { withRouter, RouteComponentProps } from 'react-router'
 import classNames from 'classnames'
 import CustomerSearch from './CustomerSearch'
 import Profile from '@/modules/common/company-detail/Profile'
@@ -26,7 +27,7 @@ interface State {
   /** 填写回访默认tab */
   defaultKey?: string
 }
-class Main extends React.Component {
+class Main extends React.Component<RouteComponentProps<{name?: string, id?: string}>, State> {
   public state: State = {
     curKey: 1,
     defaultName: '',
@@ -47,6 +48,25 @@ class Main extends React.Component {
     companyList: []
   }
   public componentWillMount () {
+    console.log(this.props.match.params)
+    const id = this.props.match.params.id
+    if (id) {
+      this.setState({
+        defaultName: this.props.match.params.name,
+        customerId: id
+      }, () => {
+        this.fetchData()
+      })
+    }
+    // const state = this.props.location.state || {}
+    // if (state && state.name) {
+    //   this.setState({
+    //     defaultName: state.name,
+    //     customerId: state.id
+    //   }, () => {
+    //     this.fetchData()
+    //   })
+    // }
     this.getCompanies()
     console.log(APP.user.userType !== 'System', '11111')
     if (APP.user.userType !== 'System') {

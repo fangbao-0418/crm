@@ -124,7 +124,9 @@ class Main extends React.Component<Props, States> {
                 src={require(`@/assets/images/follow.svg`)}
                 style={{marginLeft: 10}}
                 hidden={!APP.hasPermission('crm_sign_myself_follow_up')}
-                onClick={this.detail.bind(this, record, '5')}
+                // onClick={this.detail.bind(this, record, '5')}
+                // onClick={() => {APP.history.push('/customer_visit', {name: record.customerName, id: record.id})}}
+                onClick={() => {window.open(`/customer_visit/${record.customerName}/${record.id}`)}}
               />
               <img
                 src={require(`@/assets/images/follow-turn.svg`)}
