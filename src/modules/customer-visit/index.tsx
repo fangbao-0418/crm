@@ -97,119 +97,122 @@ class Main extends React.Component<RouteComponentProps<{name?: string, id?: stri
     console.log(this.state.agencyId, 'this.state.agencyId')
     return (
       <div className={styles.box}>
-        <div className={styles.search}>
-          <Select
-            disabled={disabled}
-            className={classNames(styles.select, 'mr5')}
-            showSearch
-            allowClear
-            value={this.state.agencyId}
-            placeholder='请选择机构'
-            optionFilterProp='children'
-            filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            onChange={(value?: string) => {
-              this.setState({
-                agencyId: value
-              })
-            }}
-          >
-            {
-              this.state.companyList.length && this.state.companyList.map((item) => {
-                return (
-                  <Select.Option key={String(item.id)}>{item.name}</Select.Option>
-                )
-              })
-            }
-          </Select>
-          <CustomerSearch
-            className='inline-block'
-            agencyId={this.state.agencyId}
-            style={{width: '250px'}}
-            value={this.state.defaultName}
-            onSelectCompany={(item) => { // 选择完客户查询客户详情 需要设置全局customerId 及查询
-              this.setState({
-                customerId: item.id
-              }, () => {
-                this.fetchData()
-              })
-            }}
-          />
-        </div>
-        {
-          this.state.customerId &&
-          <div>
+        <div>
+          <div className={styles.search}>
+            <Select
+              disabled={disabled}
+              className={classNames(styles.select, 'mr5')}
+              showSearch
+              allowClear
+              value={this.state.agencyId}
+              placeholder='请选择机构'
+              optionFilterProp='children'
+              filterOption={(input, option) => String(option.props.children).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              onChange={(value?: string) => {
+                this.setState({
+                  agencyId: value
+                })
+              }}
+            >
+              {
+                this.state.companyList.length && this.state.companyList.map((item) => {
+                  return (
+                    <Select.Option key={String(item.id)}>{item.name}</Select.Option>
+                  )
+                })
+              }
+            </Select>
+            <CustomerSearch
+              className='inline-block'
+              agencyId={this.state.agencyId}
+              style={{width: '250px'}}
+              value={this.state.defaultName}
+              onSelectCompany={(item) => { // 选择完客户查询客户详情 需要设置全局customerId 及查询
+                this.setState({
+                  customerId: item.id
+                }, () => {
+                  this.fetchData()
+                })
+              }}
+            />
+          </div>
+          {
+            this.state.customerId &&
             <div className={styles['top-info']}>
               <Profile type='signed'/>
             </div>
-            <div className={classNames('mt15', 'clear')}>
-              <div className={classNames(styles['left-con'], 'fl')}>
-                <div className='clear'>
-                  <div className='fl'>
-                    {
-                      this.state.menu.length > 0 && this.state.menu.map((item, index) => {
-                        return (
-                          <div
-                            key={item.value}
-                            className={classNames(styles.menu, item.value === this.state.curKey ? styles.focus : '')}
-                            onClick={() => {
-                              this.setState({
-                                curKey: item.value
-                              })
-                            }}
-                          >
-                            {item.label}
-                          </div>
-                        )
-                      })
-                    }
+          }
+        </div>
+        {
+          this.state.customerId &&
+          <div className={classNames('mt15', 'clear', styles.maincon)}>
+            <div className={classNames(styles['left-con'], 'fl')}>
+              <div className='clear'>
+                <div className='fl'>
+                  {
+                    this.state.menu.length > 0 && this.state.menu.map((item, index) => {
+                      return (
+                        <div
+                          key={item.value}
+                          className={classNames(styles.menu, item.value === this.state.curKey ? styles.focus : '')}
+                          onClick={() => {
+                            this.setState({
+                              curKey: item.value
+                            })
+                          }}
+                        >
+                          {item.label}
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+                {
+                  this.state.curKey === 1 &&
+                  <div className={classNames(styles.con, 'fl')}>
+                    <Detail/>
                   </div>
-                  {
-                    this.state.curKey === 1 &&
-                    <div className={classNames(styles.con, 'fl')}>
-                      <Detail/>
-                    </div>
-                  }
-                  {
-                    this.state.curKey === 2 &&
-                    <div className={classNames(styles.con, 'fl')}>
-                      <OrderInfo customerId={this.state.customerId}/>
-                    </div>
-                  }
-                  {
-                    this.state.curKey === 3 &&
-                    <div className={classNames(styles.con, 'fl', 'mt15')}>
-                      <WorkList customerId={this.state.customerId}/>
-                    </div>
-                  }
-                  {
-                    this.state.curKey === 4 &&
-                    <div className={classNames(styles.con, 'fl', 'mt15')}>
-                      <OperateList customerId={this.state.customerId}/>
-                    </div>
-                  }
-                </div>
+                }
+                {
+                  this.state.curKey === 2 &&
+                  <div className={classNames(styles.con, 'fl')}>
+                    <OrderInfo customerId={this.state.customerId}/>
+                  </div>
+                }
+                {
+                  this.state.curKey === 3 &&
+                  <div className={classNames(styles.con, 'fl', 'mt15')}>
+                    <WorkList customerId={this.state.customerId}/>
+                  </div>
+                }
+                {
+                  this.state.curKey === 4 &&
+                  <div className={classNames(styles.con, 'fl', 'mt15')}>
+                    <OperateList customerId={this.state.customerId}/>
+                  </div>
+                }
               </div>
-              <div className={classNames(styles['right-con'], 'fr')}>
-                <div className={styles['visit-con']}>
-                  <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
-                    <Tabs.TabPane tab='客资回访' key='1'>
-                      <CustomerVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab='订单回访' key='2'>
-                      <OrderVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab='服务回访' key='3'>
-                      <ServiceVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
-                    </Tabs.TabPane>
-                  </Tabs>
-                </div>
-                <div className={classNames(styles['records-con'], 'mt15')}>
-                  <Record
-                    type='visit'
-                    customerId={this.state.customerId}
-                    height={180}
-                  />
-                </div>
+            </div>
+            <div className={classNames(styles['right-con'], 'fr')}>
+              <div className={styles['visit-con']}>
+                <Tabs defaultActiveKey={this.state.defaultKey} onChange={(key) => {this.setState({defaultKey: key})}}>
+                  <Tabs.TabPane tab='客资回访' key='1'>
+                    <CustomerVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab='订单回访' key='2'>
+                    <OrderVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab='服务回访' key='3'>
+                    <ServiceVisit onOk={(params: CustomerVisit.Search) => this.onOk(params)}/>
+                  </Tabs.TabPane>
+                </Tabs>
+              </div>
+              <div className={classNames(styles['records-con'], 'mt15')}>
+                <Record
+                  type='visit'
+                  customerId={this.state.customerId}
+                  height={180}
+                />
               </div>
             </div>
           </div>

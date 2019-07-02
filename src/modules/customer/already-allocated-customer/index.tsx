@@ -89,7 +89,6 @@ export default class Main extends React.Component<null, States> {
             />
           </span>
         </div>
-        
       )
     }
   }, {
