@@ -7,7 +7,7 @@ const styles = require('./style')
 interface Props extends Customer.Props {
   customerId?: string
   height?: number
-  type?: 'business' | 'open' | 'customer' | 'signed'
+  type?: 'business' | 'open' | 'customer' | 'signed' | 'visit'
 }
 interface State {
   playId?: any
@@ -48,6 +48,49 @@ class Main extends React.Component<Props, State> {
       nodes.push(
         <span className={styles.tag}>
           {APP.dictionary[`EnumFollowUpClassification-${item.tagFollowUpClassification}`]}
+        </span>
+      )
+    }
+    console.log(item.telephoneStatus, `EnumVisitTelStatus-${item.telephoneStatus}`, '111111111')
+    if (item.telephoneStatus > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTelStatus-${item.telephoneStatus}`]}
+        </span>
+      )
+    }
+    if (item.contract > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitContract-${item.contract}`]}
+        </span>
+      )
+    }
+    if (item.handover > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitHandover-${item.handover}`]}
+        </span>
+      )
+    }
+    if (item.confirmTax > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTax-${item.confirmTax}`]}
+        </span>
+      )
+    }
+    if (item.faq > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitFAQ-${item.faq}`]}
+        </span>
+      )
+    }
+    if (item.reason > 0) {
+      nodes.push(
+        <span className={styles.tag}>
+          {APP.dictionary[`EnumVisitTelReason-${item.reason}`]}
         </span>
       )
     }
@@ -124,23 +167,26 @@ class Main extends React.Component<Props, State> {
             }
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab='线索记录' key='3'>
-            <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
-              {
-                clueRecords.length > 0 && clueRecords.map((item, index) => {
-                  return (
-                    <div className={styles.record} key={index}>
-                      <div className={styles['line-height']} style={{color: 'black'}}>
-                        <span style={{marginRight: 10}}>{item.salesperson}</span>
-                        <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
+          {
+            this.props.type !== 'visit' &&
+            <Tabs.TabPane tab='线索记录' key='3'>
+              <div style={{overflowY: 'auto', maxHeight: this.props.height }}>
+                {
+                  clueRecords.length > 0 && clueRecords.map((item, index) => {
+                    return (
+                      <div className={styles.record} key={index}>
+                        <div className={styles['line-height']} style={{color: 'black'}}>
+                          <span style={{marginRight: 10}}>{item.salesperson}</span>
+                          <span>{moment(item.createTime).format('YYYY-MM-DD')}</span>
+                        </div>
+                        <div>{item.remark}</div>
                       </div>
-                      <div>{item.remark}</div>
-                    </div>
-                  )
-                })
-              }
-            </div>
-          </Tabs.TabPane>
+                    )
+                  })
+                }
+              </div>
+            </Tabs.TabPane>
+          }
           {
             ['business', 'open', 'customer'].indexOf(this.props.type) > -1 &&
             <Tabs.TabPane tab='相关公司记录' key='4'>

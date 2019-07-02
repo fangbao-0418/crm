@@ -39,6 +39,18 @@ declare namespace APP {
     EnumCustomerLiftCycle?: Array<{label: string, value: string}>
     /** 客资新增-来源平台 */
     SourcePlatformEnum?: Array<{label: string, value: string}>
+    /** 客服回访未成单原因 */
+    EnumVisitTelReason?: Array<{label: string, value: string}>
+    /** 客服回访-电话状态 */
+    EnumVisitTelStatus?: Array<{label: string, value: string}>
+    /** 客服回访-合同枚举*/
+    EnumVisitContract?: Array<{label: string, value: string}>
+    /** 客服回访-交接信息 */
+    EnumVisitHandover?: Array<{label: string, value: string}>
+    /** 客服回访-确认税额 */
+    EnumVisitTax?: Array<{label: string, value: string}>
+    /** 客服回访-反馈 */
+    EnumVisitFAQ?: Array<{label: string, value: string}>
   }
   type GlobalSessionName = 'token' | 'homepage'
   interface StorageProps {

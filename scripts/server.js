@@ -12,7 +12,7 @@ const options = {
   },
   proxy: {
     '/sys': {
-      target: 'https://dev-b.i-counting.cn',
+      target: 'https://x-b.i-counting.cn',
       changeOrigin: true,
       secure: false
     },

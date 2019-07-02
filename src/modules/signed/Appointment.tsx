@@ -88,7 +88,7 @@ class Main extends React.Component {
               src={require(`@/assets/images/follow.svg`)}
               style={{marginLeft: 10}}
               hidden={!APP.hasPermission('crm_sign_myself_follow_up')}
-              onClick={this.detail.bind(this, record, '5')}
+              onClick={() => {window.open(`/customer_visit/${record.customerName}/${record.id}`)}}
             />
           </span>
         </span>

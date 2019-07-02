@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Switch, Button, Tooltip, Radio } from 'antd'
+import { Select, Switch, Button, Tooltip, Radio, Input } from 'antd'
 import { fetchRegion } from '@/modules/common/api'
 import { getAllCompany } from '../api'
 import { getSalesByCompany } from '@/modules/common/api'
@@ -22,10 +22,13 @@ interface ValueProps {
   salesPerson?: Array<{id: string, name: string}>
   // city?: {cityCode: string, cityName: string}
   type?: number
+  /** 后缀 */
+  customerNameSuffix?: string
 }
 class Main extends React.Component<Props> {
   public values: ValueProps = {
-    type: 3
+    type: 3,
+    customerNameSuffix: ''
   }
   public state: State = {
     type: 3,
@@ -229,6 +232,16 @@ class Main extends React.Component<Props> {
                 this.state.type !== 3 &&
                 <div style={{color: 'red', margin: '5px 0px 0px 80px'}}>选中机构后，仅支持导入同一城市的客资</div>
               }
+              <div className='mt12'>
+                <span>导入批次：</span>
+                <Input
+                  maxLength={5}
+                  style={{width:'200px'}}
+                  onChange={(e) => {
+                    this.values.customerNameSuffix = e.target.value
+                  }}
+                />
+              </div>
             </div>
           </div>
         <div className='text-right mt10'>

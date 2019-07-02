@@ -13,6 +13,8 @@ interface Props {
       salesPerson?: Array<{id: string, name: string}>,
       // city?: {cityCode: string, cityName: string}
       type?: string
+      /** 后缀 */
+      customerNameSuffix?: string
     }
   }
   onOk?: (value?: any) => void
@@ -54,7 +56,8 @@ class Main extends React.Component<Props> {
       customerSource: this.props.paramsValue.step1.customerSource,
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
-      type: this.props.paramsValue.step1.type
+      type: this.props.paramsValue.step1.type,
+      customerNameSuffix: this.props.paramsValue.step1.customerNameSuffix
     }
     return checkFile(info.file, paramsFile).then((res) => {
       if (res.status === 200) {
@@ -95,7 +98,8 @@ class Main extends React.Component<Props> {
       salesPersonIds: ids.join(','),
       salesPersonNames: salesNames.join(','),
       type: this.props.paramsValue.step1.type,
-      signal: this.state.signal
+      signal: this.state.signal,
+      customerNameSuffix: this.props.paramsValue.step1.customerNameSuffix
     }
     return importFile(info.file, paramsFile).then((res) => {
       if (res.status === 200) {

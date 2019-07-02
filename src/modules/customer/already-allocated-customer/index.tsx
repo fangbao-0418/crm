@@ -79,7 +79,16 @@ export default class Main extends React.Component<null, States> {
     width: 200,
     render: (val, record, index) => {
       return (
-        <span className='href' onClick={this.show.bind(this, record, index)}>{val}</span>
+        <div>
+          <span className='href' onClick={this.show.bind(this, record, index)}>{val}</span>
+          <span>
+            <img
+              src={require(`@/assets/images/follow.svg`)}
+              style={{marginLeft: 10}}
+              onClick={() => {window.open(`/customer_visit/${record.customerName}/${record.customerId}`)}}
+            />
+          </span>
+        </div>
       )
     }
   }, {
